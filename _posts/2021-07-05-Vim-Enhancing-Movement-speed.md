@@ -2,7 +2,7 @@
 layout: post
 title:  "Vim: Enhancing Movement Speed"
 date:   2021-07-05 19:54:30 +0530
-image:  /assets/img/vimMove1.png
+image:  /assets/img/vimove.png
 ---
 
 
