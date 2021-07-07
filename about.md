@@ -23,5 +23,7 @@ Techstructive Blog is created with a aim to learn programming and
 You'll aslo find some of my articles written at [GeeksforGeeks](https://auth.geeksforgeeks.org/user/meetgor/articles).
 They maily contain shell scripting(bash), Java, Vim and some random articles as well.
 
-I hope you'll have fun reading my articles, if not please give feedback on the handles from [Contact]({{ "/about/" | relative_url }}) section.
+I hope you'll have fun reading my articles, if not please give feedback on the handles from [Contact]({{ page.contacts.url }}) section.
+
+
 
