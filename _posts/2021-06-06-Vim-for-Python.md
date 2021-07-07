@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "Setting up Vim for Python"
+subtitle: "For the python programmers who need speed!"
 date:   2021-06-06 11:35:25 +0530
 image: https://techstructiveblog.hashnode.dev/_next/image?url=https%3A%2F%2Fcdn.hashnode.com%2Fres%2Fhashnode%2Fimage%2Fupload%2Fv1623332093524%2Fdvd_SENBt.png%3Fw%3D1600%26h%3D840%26fit%3Dcrop%26crop%3Dentropy%26auto%3Dcompress%2Cformat%26format%3Dwebp&w=1920&q=75
 ---
