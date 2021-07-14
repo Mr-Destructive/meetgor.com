@@ -3,6 +3,7 @@ layout: post
 title:  "BASH Scripting Guide - PART - 3"
 subtitle: "Exploring some advance features, underrated tools and utilities in BASH."
 date:   2021-07-12 23:16:13 +0530
+categories: bash
 image: https://cdn.hashnode.com/res/hashnode/image/upload/v1625064683744/LUG0ep1xA.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress
 ---
 
