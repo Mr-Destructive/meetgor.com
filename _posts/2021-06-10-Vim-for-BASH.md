@@ -3,6 +3,7 @@ layout: post
 title:  "Setting up Vim for BASH Scripting"
 subtitle: "VIM + BASH = Killer Speed Automation"
 date:   2021-06-10 04:52:07 +0530
+categories: [bash, vim]
 image: https://techstructiveblog.hashnode.dev/_next/image?url=https%3A%2F%2Fcdn.hashnode.com%2Fres%2Fhashnode%2Fimage%2Fupload%2Fv1623323683461%2FgNzWLnAJ1.png%3Fw%3D1600%26h%3D840%26fit%3Dcrop%26crop%3Dentropy%26auto%3Dcompress%2Cformat%26format%3Dwebp&w=1920&q=75
 ---
 
