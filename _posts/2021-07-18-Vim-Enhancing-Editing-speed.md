@@ -12,6 +12,7 @@ image: https://cdn.hashnode.com/res/hashnode/image/upload/v1625651851743/RK-CxEt
 
 ## Introduction
 Editing/ Writing is a crucial part of any text editor, the swiftness with which one can make changes in a file(s) or a structure is a bit dependent on the editor we use as well. Vim can be a bit hassle for beginners in the initial stage but it becomes second nature soon. It also depends majorly on the level of usage and the area of usage. If you are an advanced programmer, you will use these commands extensively, and might not be a big deal for you, But for a beginner, it might take some time to get used to the workflow in Vim.
+
 This article won't be covering the basics of editing in Vim but the ways to save time on the basic level commands to improve efficiency. That being said, beginners can also read to be aware of the possibilities and tricks in Vim. 
 
 Below are some quick basic commands for getting started in editing and improving the overall workflow. 
