@@ -169,6 +169,7 @@ What would you call BASH without grep or sed man! It's a sad life:( BASH comes w
 GREP or global regular expression print is a tool or command that can find patterns using regular expressions in files/strings or any other piece of data. It's not just printing or searching for the text, besides all that it can also edit the file and store the output in the desired file or any variable by proving some arguments to it. Grep supports Pearl's regular expression as well. There is a lot of customization options and arguments available in grep that can just do anything. It becomes an irreplaceable tool for some complex tasks. 
 
 ![possh.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1626179054053/9ttkV-MZZ.png)
+
 The above code finds the pattern "more text" in the file specified and prints the line to the screen, but we can modify the output we want, extract the output in a file and do all kinds of wizardry with this tool. This is just a basic, to get started example but trust me it's more than you think, this tool is used widely for web scrapping and pattern matching in quite a lot of use cases.
 
 
@@ -210,6 +211,7 @@ This is again one of the best utility out there as it becomes quite remarkable a
 ### find
 Find as the name suggests it is used to find files among the folders and directories in a file system. it becomes quite helpful in complex projects where the directory structure is deep and large. 
 ![possh.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1626181386566/zpP9Yaom4.png)
+
 The command `find *.txt` finds every txt file available on this directory. As simple as it can get. This is surely looking silly and idiotic but it finds its glory in large and complicated codebases. 
 
 ### bc
@@ -217,6 +219,7 @@ bc or basic calculator is a utility tool for performing mathematical and arithme
 
 
 ![possh.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1626182601487/z8X4KeDGG.png)
+
 AWW! I could hear the excitement. That just added new dimensions into BASH. Just creativity and resonance to anything is the limit here. I am using  [REPL.IT](http://repl.it/)  here for using bash as I do not have it on my windows machine :( But that command is truly insane.
 
 ### wc
