@@ -461,7 +461,6 @@ echo $b
 
 ![bashs2.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1625157391350/gHudsNntM4.png)
 
-
 WOW! That is to the point, but that was a lot of hassle using echo but printing nothing! HH? OK, you see certain things can get really annoying when things aren't supported natively. Firstly, we use  | to pipe echo command with awk, the echo command doesn't do anything just a way to use awk command in assigning variables here. Then the general syntax of the awk command is ` awk -options -commands`. In this case, we are using -v as an argument and passing in an as a variable which is equal to a, which is stupid and silly but that is what it is, you can name any variable name you want. Then we simply have to use the variable in the print function which generally evaluates the expressions or other operations and returns to the interpreter. And that is how we print the expression, Phew! that took a while to do some silly things, But hey! that's possible though. 
 
 That is the basic overview of Arithmetic in Bash, you can also perform logical operations in it which is very easy and can be understood on a quick run-through in the  [documentation](https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Arithmetic-Expansion).
