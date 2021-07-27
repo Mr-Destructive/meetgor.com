@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "Scrapping the meaning of a word from "dictionary.com" using BASH script."
+title:  "Scrapping the meaning of a word from dictionary.com using BASH script."
 subtitle: "Using some shell tools and utilities to understand web scrapping and making a script to scrap a webpage."
 date: 2021-07-27 11:45:03 +0530
 categories: bash
-image: https://cdn.hashnode.com/res/hashnode/image/upload/v1627366747402/T3nBhT5R.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress
+image: https://cdn.hashnode.com/res/hashnode/image/upload/v1627367329063/dabJLKcD-.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress
 ---
 
 ![BASH and dictionary.com]({{ page.image | relative_url }})
