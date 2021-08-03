@@ -113,6 +113,8 @@ To print the meaning in the output file, we need to print each line separately a
 
 
 ![dict.gif](https://cdn.hashnode.com/res/hashnode/image/upload/v1627366344193/We_heehuL.gif)
+
+
 ![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1627365131696/YH8Vaqoh_.png)
 
 
@@ -120,6 +122,8 @@ To print the meaning in the output file, we need to print each line separately a
 
 
 ![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1627365304653/A9AXuHDH8.png)
+ 
+
 ## Output Conclusion
 
 From the above output, we have scrapped the meaning of the word `Mathematics`, `code`, and `python`.  It works only for the words which are on the dictionary.com website. We have successfully made a scrapper that scraps the meaning of the input word from the dictionary.com website, 

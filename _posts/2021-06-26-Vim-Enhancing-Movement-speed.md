@@ -124,7 +124,7 @@ People rarely use Tabs as far as I have seen, but they are quite useful and prov
 
 `gT`  -> **move to the previous tab**
 
-`:tabo`  -> **close all the tabs except the current one.
+`:tabo`  -> **close all the tabs except the current one.**
 
 `:tabc`  -> **close the tab.**
 

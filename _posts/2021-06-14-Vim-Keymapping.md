@@ -63,7 +63,7 @@ vmap <C-y> "+y
 The above commands are pasted in the vimrc file. These keymaps once sourced will stay in permanently unless you remove them from the file.
 
 ## Keymap Modifications
- We can also add extra arguments to the keymaps such as noremap and remap and others. In remap, the keymap is recursive which means the key pair will get mapped to the keys mapped already somewhere. The keymap will redefine its map depending on the already existing maps.  It is preferred to use noremap as it will not mix up the existing maps and have a fresh key binding. The mapping in Vim is quite versatile and there are quite a lot of modifications you could do to make your key binding feel and work according to you. So for further un depth understanding of modifications of keymap in Vim you can check out their documentation  [here](https://vim.fandom.com/wiki/Mapping_keys_in_Vim_-_Tutorial_(Part_1%29).
+ We can also add extra arguments to the keymaps such as noremap and remap and others. In remap, the keymap is recursive which means the key pair will get mapped to the keys mapped already somewhere. The keymap will redefine its map depending on the already existing maps.  It is preferred to use noremap as it will not mix up the existing maps and have a fresh key binding. The mapping in Vim is quite versatile and there are quite a lot of modifications you could do to make your key binding feel and work according to you. So for further un depth understanding of modifications of keymap in Vim you can check out their documentation  [here](https://vim.fandom.com/wiki/Mapping_keys_in_Vim_-_Tutorial_(Part_1)).
 
 
 ## Keymapping Usecases
