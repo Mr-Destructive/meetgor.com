@@ -4,14 +4,19 @@ title: Contact
 permalink: /contact/
 ---
 
-## Mr_Destructive
+## Meet Rajesh Gor 
 
-E-mail: mr.destrructive@gmail.com
+### a.k.a
 
-Github: [Mr-Destructive](https://github.com/Mr-Destructive)
+## Mr-Destructive
 
-Twiter: [MeetGor21](https://twitter.com/MeetGor21)
 
-LinkedIn: [MeetGor](https://www.linkedin.com/in/meetgor/)
+### E-mail: gormeet711@gmail.com
+
+### Github: [Mr-Destructive](https://github.com/Mr-Destructive)
+
+### Twiter: [MeetGor21](https://twitter.com/MeetGor21)
+
+### LinkedIn: [MeetGor](https://www.linkedin.com/in/meetgor/)
 
 
