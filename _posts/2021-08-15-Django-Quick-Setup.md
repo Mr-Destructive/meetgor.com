@@ -4,7 +4,7 @@ title:  "Django Quick Setup Script"
 subtitle: "A Quick simple script to set up the Django project."
 date: 2021-08-15 18:50:46 +0530
 categories: django, web-development, python
-image: /assets/img/djqss.png
+image: /assets/img/djangoqss.png
 ---
 
 ![Django: Quick Set-Up]({{ page.image | relative_url }})
