@@ -2,7 +2,7 @@
 layout: post
 title:  "vim: Macros"
 subtitle: "A guide to understand and use macros in Vim"
-date:   2021-02-20 15:05:20 +0530
+date:   2021-09-09 15:32:30 +0530
 categories: vim
 image: 
 ---
@@ -12,7 +12,9 @@ image:
 
 ## Introduction
 
+
+
 ## What is a Macro
 
-## How to create a Macro in vim
+## How to create a Macro in Vim
  
