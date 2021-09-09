@@ -7,7 +7,7 @@ categories: github, open-source
 image: /assets/img/githubissues.png 
 ---
 
-![Find Github Issues]({{ page.image }})
+![Find Github Issues]({{ page.image | relative_url }})
 
 ## Introduction
 
@@ -88,6 +88,8 @@ Similarly, for multiple issues, you can add comma-separated labels as well. Just
 In the rightmost part of the search bar, in the Sort button, you can click on there and find a couple of options like: `newest`, `oldest`, `least commented`, `recently updated`, and so on. If you click on any of them you will see the changes reflected on the list of issues as well as the search bar. 
 
 ![Issues sort](https://cdn.hashnode.com/res/hashnode/image/upload/v1631189621396/jO58HkYxH.png)
+
+**After this the stage is yours, you can look at any issue and Understand its objective, then ask yourself can you solve this issue? if yes then read the contribution guidelines, and the rest is sheer skills like git, programming, documentation, etc. **
 
 ## Conclusion
 
