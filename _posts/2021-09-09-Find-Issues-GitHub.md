@@ -89,7 +89,7 @@ In the rightmost part of the search bar, in the Sort button, you can click on th
 
 ![Issues sort](https://cdn.hashnode.com/res/hashnode/image/upload/v1631189621396/jO58HkYxH.png)
 
-**After this the stage is yours, you can look at any issue and Understand its objective, then ask yourself can you solve this issue? if yes then read the contribution guidelines, and the rest is sheer skills like git, programming, documentation, etc. **
+**After this the stage is yours, you can look at any issue and Understand its objective, then ask yourself can you solve this issue? if yes then read the contribution guidelines, and the rest is sheer skills like git, programming, documentation, etc.**
 
 ## Conclusion
 
