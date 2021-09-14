@@ -3,7 +3,7 @@ layout: post
 title:  "Dev Quotes: A platform for developers to quote and get inspired - Auth0 x Hashnode Hackathon"
 subtitle: "A platform created in a Hackathon for developer to get motivated by some fun and inspireing quotes."
 date: 2021-08-27 23:45:00 +0530
-categories: hashnode, django, web-development, python
+categories: [hashnode, django, web-development, python]
 image: /assets/img/dqhashnode.png
 ---
 

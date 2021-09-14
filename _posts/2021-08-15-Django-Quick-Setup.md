@@ -3,7 +3,7 @@ layout: post
 title:  "Django Quick Setup Script"
 subtitle: "A Quick simple script to set up the Django project."
 date: 2021-08-15 18:50:46 +0530
-categories: django, web-development, python
+categories: [django, web-development, python]
 image: /assets/img/djangoqss.png
 ---
 
