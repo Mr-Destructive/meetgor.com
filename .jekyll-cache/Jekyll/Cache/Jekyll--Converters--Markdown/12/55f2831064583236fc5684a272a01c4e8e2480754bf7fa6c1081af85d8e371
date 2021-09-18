@@ -1,0 +1,132 @@
+I"�=<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1626940723316/nFGNljJi0.png?w=1600&amp;h=840&amp;fit=crop&amp;crop=entropy&amp;auto=compress" alt="Vim Registers" /></p>
+<h2 id="introduction">Introduction</h2>
+
+<p>Have you ever found it difficult to manage and operate text in Vim, especially in Cut/Copy/Paste stuff. You cannot figure out how on earth am I supposed to retrieve my un-saved, un-committed changes in Vim. Then this my dear friend is an article for you. You will learn what are Vim registers and where your deletes and copied stuff resides. This won’t be a comprehensive guide but enough to let you through in performing the wizardry of registers in Vim.</p>
+
+<h2 id="what-are-vim-registers">What are Vim Registers?</h2>
+<p>Vim Registers are memory addresses that store data. Technically they are spaces of memory that Vim can store to retrieve later. It can store text, operations, commands, and anything you can do with text in Vim.</p>
+
+<h2 id="access-vim-register">Access Vim Register</h2>
+<p>To store something in register <code class="language-plaintext highlighter-rouge">x</code> we can use the format <code class="language-plaintext highlighter-rouge">"[register-name][command]</code>. This will perform the command and store the output in the register specified.</p>
+
+<p>A register can be accessed by using the double quotes <code class="language-plaintext highlighter-rouge">"</code> before its name. Let’s say we have stored something in x register we can access its content using “x in the normal mode and lastly we can perform commands here.</p>
+
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1626940084837/x99b92Wsq.gif" alt="vimreg.gif" /></p>
+
+<p>For example, in the above gif, I tanked the selected text using the yank command but I stored it in the register x by prefixing the command with <code class="language-plaintext highlighter-rouge">"x</code>. Hence the command became <code class="language-plaintext highlighter-rouge">"xy</code> and similarly for pasting from the x register we can use <code class="language-plaintext highlighter-rouge">"xp</code>, quite simple, right? But what is the purpose of it? This can really shine in handling multiple files and imagine you lost your yanked text by using yank somewhere else. Vim registers add extra dimensions in storing and retrieving text, it is not used often but can shine really well in certain tricky situations.</p>
+
+<h2 id="commonly-used-vim-registers">Commonly used Vim Registers</h2>
+<p>You will use some Registers daily in Vim if you use it all the time. Some common ones are the clipboard registers/ selection registers <code class="language-plaintext highlighter-rouge">"+</code> and <code class="language-plaintext highlighter-rouge">"*</code>. These are used to perform operations on the content stored in the system clipboard. They come quite handy in copy and paste in Vim from other applications such as Stack Overflow XD. Just kidding, it can be used in any other application on the system. We can add <code class="language-plaintext highlighter-rouge">p</code> or <code class="language-plaintext highlighter-rouge">y</code> after the registers to paste and respectively in Vim, so to paste and yank text to and from Vim, you can use <code class="language-plaintext highlighter-rouge">"+p</code> and <code class="language-plaintext highlighter-rouge">"+y</code>.</p>
+
+<h2 id="types-of-vim-registers">Types of Vim Registers</h2>
+<p>There are many different types of vim registers used for particular needs and also some for custom editing.</p>
+
+<ul>
+  <li>
+    <h3 id="26-named-registers-a-to-z">26 Named registers (<code class="language-plaintext highlighter-rouge">a</code> to <code class="language-plaintext highlighter-rouge">z</code>)</h3>
+  </li>
+</ul>
+
+<p>These are the registers just for you. You can use this for whatever copy/pasting/editing and other creative stuff you could do with this. In the example where we utilized the <code class="language-plaintext highlighter-rouge">x</code> register, which was one of them. We can use a to z any register we want, it just boils down to the ease of the key combination as per preference. <strong>Remember anything you yank into any register will also be stored in the unnamed register (discussed later)</strong>.</p>
+
+<p>Also, if you try to use capital named registers (A-Z), the content will be appended to the lowercase named registers as well along with the unnamed register. Making it a bit safer to work with but messy at the same time.</p>
+
+<ul>
+  <li>
+    <h3 id="10-numbered-registers-0-to-9">10 numbered registers (<code class="language-plaintext highlighter-rouge">0</code> to <code class="language-plaintext highlighter-rouge">9</code>)</h3>
+  </li>
+</ul>
+
+<p>These are the registers updated automatically filled in by Vim, they store the recently yanked or deleted content in the current buffer.</p>
+<ul>
+  <li>The <code class="language-plaintext highlighter-rouge">0</code> register stores the most recent yanked/copied text.</li>
+  <li>The <code class="language-plaintext highlighter-rouge">1</code> register stores the most recent deletion of text.</li>
+  <li>The <code class="language-plaintext highlighter-rouge">2</code> register stores the 2nd most recent deletion.</li>
+</ul>
+
+<p>.. and so on.</p>
+
+<p>The content of the 9th register is flushed away every single time you delete something. The contents are shifted to the next numbered registers every time there is a deletion. For example, If we delete something the content is stored in the <code class="language-plaintext highlighter-rouge">1</code> register but its previous content gets shifted to the <code class="language-plaintext highlighter-rouge">2</code> register, and so on. So we have 9 clipboards for our deletion history. That is undoubtedly a powerful thing.</p>
+
+<ul>
+  <li>
+    <h3 id="selection-and-drop-registers-----and-">Selection and drop registers (<code class="language-plaintext highlighter-rouge">*</code> , <code class="language-plaintext highlighter-rouge">+</code> , and <code class="language-plaintext highlighter-rouge">~</code>)</h3>
+  </li>
+</ul>
+
+<p>As discussed earlier, Selection registers are used for storing the contents of the system clipboard. There are differences in the <code class="language-plaintext highlighter-rouge">*</code> and <code class="language-plaintext highlighter-rouge">+</code> for Unix-like operating systems but they can do similar things. In Unix-like Operating systems, the <code class="language-plaintext highlighter-rouge">*</code> register stores the text from the mouse selection in the X Window, whereas the <code class="language-plaintext highlighter-rouge">+</code> register is used to store the text system clipboard. On Windows and other operating systems besides Unix-like, both of them function similarly.</p>
+
+<p>The Drop register <code class="language-plaintext highlighter-rouge">~</code> is available only for the Gvim version as it stores the text from the last drag and drops/drag down operations performed.</p>
+
+<ul>
+  <li>
+    <h3 id="read-only-registers---and-">Read-only registers (<code class="language-plaintext highlighter-rouge">:</code>, <code class="language-plaintext highlighter-rouge">.</code>, and <code class="language-plaintext highlighter-rouge">%</code>)</h3>
+  </li>
+</ul>
+
+<p>The registers <code class="language-plaintext highlighter-rouge">:</code>, <code class="language-plaintext highlighter-rouge">.</code>, and <code class="language-plaintext highlighter-rouge">%</code> are Read-only, which means you cannot change their content, they are modified and maintained by VIm automatically.</p>
+
+<p>Using the <code class="language-plaintext highlighter-rouge">:</code> register, we can get the content of any register in the Insert mode so that we can copy the contents and edit if we have stored it in some registers. This is quite a neat little feature, not used most of the time but it can become the most powerful tool in corner cases and tricky situations.</p>
+
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1626946965392/KBSZmxOHvi.gif" alt="vimc-r.gif" />
+From the example in the gif, we deleted the line, and hence the content was stored in register 1 so when we press <code class="language-plaintext highlighter-rouge">Ctrl + R</code> in Insert mode, we can now paste in the contents of any register. here we used the register <code class="language-plaintext highlighter-rouge">1</code> to get our content back.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">%</code> register holds the name of the current file, this is really a great and life-saving editor, as it is also used in automating the compilation and running of the source files from Vim itself.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">.</code> register contains the last inserted text, this can also be used in various scenarios. They make Vim a bit polished and well organized.</p>
+
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1626948017124/dQCky3kfC.gif" alt="vimc-r.gif" /></p>
+
+<p>From the above gif, we inserted some text, and using the Read-only register, we inserted the last inserted text to the screen using the <code class="language-plaintext highlighter-rouge">.</code> register and also we used the register <code class="language-plaintext highlighter-rouge">%</code> to get the current file name.</p>
+
+<ul>
+  <li>
+    <h3 id="expression-and-search-pattern-register--">Expression and Search pattern register (<code class="language-plaintext highlighter-rouge">=</code>, <code class="language-plaintext highlighter-rouge">/</code>)</h3>
+  </li>
+</ul>
+
+<p>The register <code class="language-plaintext highlighter-rouge">=</code> is used to perform operations and store them in the register. Vim has some built-in functions and some of them are listed  <a href="https://renenyffenegger.ch/notes/development/vim/script/vimscript/functions/index">here</a>. We can use these functions after we type <code class="language-plaintext highlighter-rouge">Ctrl + R</code> in insert mode and <code class="language-plaintext highlighter-rouge">=</code> to assign it to the register <code class="language-plaintext highlighter-rouge">=</code>. I have used some simple multiplication operations in the above gif, but you can take this further however you like and desire.</p>
+
+<p>The register <code class="language-plaintext highlighter-rouge">/</code> takes searching in Vim even further. We use /pattern in normal mode to search for the pattern. But the actual work is done with help of the register. We actually store the text in the register and Vim accesses it later t find the next pattern or any other operations performed with the pattern. This is again a read-only register but you can change its content using some methods and practices. It is not preferred to change the read-only registers as it can mess up the functions of Vim.</p>
+
+<ul>
+  <li>
+    <h3 id="small-delete-and-the-alternate-file-register---">small delete and the alternate file register (<code class="language-plaintext highlighter-rouge">-</code>, <code class="language-plaintext highlighter-rouge">#</code>)</h3>
+  </li>
+</ul>
+
+<p>Small delete is quite a meaningful and sensible word to put in the context of its functioning. The <code class="language-plaintext highlighter-rouge">-</code> register or small delete register stores the content of some small deletes like characters or words. Basically, anything smaller than a line is small for Vim. If you delete something let’s say a word from a line, it’ll be stored in the <code class="language-plaintext highlighter-rouge">-</code> register.</p>
+
+<p>The ‘#’ register or alternate file register is the register that stores the alternate file in Vim. An alternate file is a file edited before the current file in Vim. If you edited a <code class="language-plaintext highlighter-rouge">file-x</code> and now you are in the <code class="language-plaintext highlighter-rouge">file-y</code>, the <code class="language-plaintext highlighter-rouge">file-x</code> becomes your alternate file.</p>
+
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1626950574633/P7U01Ssy_.gif" alt="vimc-r.gif" /></p>
+
+<p>This example shows how we can use the small delete register to retrieve back the small deletions. Also, we saw the current file and alternate files in Vim and in which registers they are stored.</p>
+
+<ul>
+  <li>
+    <h3 id="unnamed-and-black-hole-register--_">Unnamed and black hole register (<code class="language-plaintext highlighter-rouge">"</code>, <code class="language-plaintext highlighter-rouge">_</code>)</h3>
+  </li>
+</ul>
+
+<p>Unnamed register <code class="language-plaintext highlighter-rouge">"</code>, simply to put in it is a register which stores everything from deletions to yank. It stores the text performed by the d, D, x, X, s, S, c, C, y, Y, some variants of these commands. This is quite good and a bad feature sometimes. It is nice to have such types of registers in hand.</p>
+
+<p>Wear your space goggles as we see will how Black holes work :) Blackhole register is an elegant touch to the series of registers we have. The register acts as a sink for our deletions. We can simply dump anything we don’t care about in this register. This register helps in scenarios where we want to avoid adding stuff from deletions to the named or numbered registers. Isn’t it like Blackholes? Just Swallow the things.</p>
+
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1626951775215/OEanNfA4a.gif" alt="vimc-r.gif" />
+The above example makes it clear that we simply dump the deletion to the <code class="language-plaintext highlighter-rouge">_</code> register and avoid changing the rest of the registers which may replace the deletion and lose the saved configuration or set up of registers. We first deleted the line <code class="language-plaintext highlighter-rouge">solve(s);</code> and dumped the statement <code class="language-plaintext highlighter-rouge">string s = "0110</code> into the black hole register <code class="language-plaintext highlighter-rouge">_</code>, when we retrieve with thee unnamed register <code class="language-plaintext highlighter-rouge">"</code> we get back the deleted statement rather than the dumped statement. Quite neat and elegant.</p>
+
+<h2 id="where-can-you-use-vim-registers">Where can you use Vim registers</h2>
+
+<p>Well, this may differ as per the experience with your programming journey, you may find it useless as a beginner but mind you this is some extraordinary stuff that can boost some development time. You may be tempted to use it the scenarios where there is a huge depth in file systems and the code to be edited is a lot for you. When you have a ton of things to be edited systematically, this concept can add 
+ lights and dimensions to your work and make it comfortable and risk-free.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1626953924487/2bPqejVkT.png" alt="vimregistertable.png" />
+The above chart is quite simple to remember if you are really into making Vim for complex projects and even for staying productive in Vim editor. Hope you find it interesting and easy to remeber.
+This was a small introduction to Vim-registers but is a small topic with extensive usage and skill-dependent concept. Vim is already a customizable editor, registers add an extra dimension to its customizability in editing and programming. Thank you for listening to me. Happy Coding :)</p>
+
+<p><strong>References</strong> :
+ <a href="https://www.baeldung.com/linux/vim-registers">baeldung.com</a>, <a href="https://www.brianstorti.com/vim-registers/">brianstorti.com</a></p>
+:ET

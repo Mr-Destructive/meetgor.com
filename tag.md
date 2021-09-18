@@ -13,7 +13,6 @@ permalink: /tag/
 <details>
 	<summary>
 		<div id="#{{ category_name | slugize }}"></div>
-
     		<h3 class="category-head">#{{ category_name }}</h3>
     		<a name="{{ category_name | slugize }}"></a>
 	</summary>
