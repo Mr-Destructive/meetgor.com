@@ -3,6 +3,7 @@ layout: post
 title:  "My Journey as a Technical Writer"
 subtitle: "How and Why I became started writing articles and became a novice technical writer."
 date:   2021-09-14 19:30:37 +0530
+categories: [hashnode,]
 image: /assets/img/myjourney.png 
 ---
 
