@@ -24,7 +24,7 @@ These are some of the finest and well-supported plugin managers in vim. You can 
 ## JEDI-VIM- Auto completion 
 Firstly I will like to install Jedi for code completion in Python. The plugin can be simple and straightforward to install using any of the above plugin managers. Jedi-Vim provides some neat and clean** syntax analytics and autocompletion for Python in Vim**. You'll find the docs and installation process here  [JEDI-VIM ](https://github.com/davidhalter/jedi-vim) 
 
-## NERDTree-FIle manager
+## NERDTree-File manager
 Next, It would be great if we install a file manager for managing the files and folders in the code directories. We can simply use the Nerdtree plugin for this. NerdTree is quite a **fantastic plugin for file management in Vim**. It simply makes Vim feel like VS Code. The installation and docs can be found here  [NERDTree](https://github.com/preservim/nerdtree).
 
 Nerdtree commands can be longer to write, for that let's start mapping and for that, we can start editing our Vimrc. 
