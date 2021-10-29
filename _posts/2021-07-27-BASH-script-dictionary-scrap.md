@@ -7,8 +7,6 @@ categories: bash
 image: https://cdn.hashnode.com/res/hashnode/image/upload/v1627367329063/dabJLKcD-.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress
 ---
 
-![BASH and dictionary.com]({{ page.image | relative_url }})
-
 ## Introduction
 
 Web Scraping is quite an interesting and powerful tool or skill to have in a Programmer's toolkit.  It helps in analyzing data and getting some information in various formats. Web Scraping is a process in which a user fetches a website's content using some pattern in those HTML tags and the desired content to be fetched or scraped.

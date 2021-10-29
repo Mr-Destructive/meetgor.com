@@ -7,7 +7,6 @@ categories: [python, vim]
 image: https://techstructiveblog.hashnode.dev/_next/image?url=https%3A%2F%2Fcdn.hashnode.com%2Fres%2Fhashnode%2Fimage%2Fupload%2Fv1623332093524%2Fdvd_SENBt.png%3Fw%3D1600%26h%3D840%26fit%3Dcrop%26crop%3Dentropy%26auto%3Dcompress%2Cformat%26format%3Dwebp&w=1920&q=75
 ---
 
-![Vim set up for Python]({{ page.image }})
 ## Introduction
 Vim is quite a powerful text editor which can add performance to the already fast typed language Python. Vim can be highly customizable and efficient to use as it has the power of **adding custom plugins and plugins managers, key mappings**, and the most critical weapon of vim - Access to the terminal straight away.
 This is not a full-featured guide of using vim for python, it's just a quick setup for using python on vim blazingly fast!!

@@ -7,8 +7,6 @@ categories: [hashnode, machine-learning]
 image: /assets/img/ml.png
 ---
 
-![Machine Learning]({{ page.image | relative_url }})
-
 ## Introduction
 
 We all hear about terms like `Machine Learning`, `Artificial Intelligence`, and others, but what do they actually mean and why do you need to care about these as a developer. This won't be a perfect guide in terms of experience but surely enough to get anyone through the basics of Machine Learning.

@@ -6,7 +6,7 @@ date:   2021-06-29 15:21:11 +0530
 categories: vim
 image: https://techstructiveblog.hashnode.dev/_next/image?url=https%3A%2F%2Fcdn.hashnode.com%2Fres%2Fhashnode%2Fimage%2Fupload%2Fv1624873886869%2FjUY_IzcWe.png%3Fw%3D1600%26h%3D840%26fit%3Dcrop%26crop%3Dentropy%26auto%3Dcompress%2Cformat%26format%3Dwebp&w=1920&q=75
 ---
-![]({{ page.image | relative_url }})
+
 ## Vim and Terminal!?
 Vim was made to work with the command line. Many beginners do not understand what are the true capabilities of Vim, myself included:) Vim can run terminal commands without leaving the text editor, open an instance of a terminal, work with shell environments, and other things depending on the use case.
 
@@ -45,4 +45,5 @@ There are many things you can do with terminals surely, but with Vim that even g
 
 
 ![vimpython.gif](https://cdn.hashnode.com/res/hashnode/image/upload/v1624891655340/5f81Dpp_O.gif)
+
 Integrating Terminal into a Text Editor truly lights up the environment for development. It becomes an easy and enjoyable experience to test out the code without wasting much time on the actual execution process. Surely it needs time to set up the environment to speed things, for that understanding of the programming and development environment is required. Happy Viming :)

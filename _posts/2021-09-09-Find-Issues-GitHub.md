@@ -7,8 +7,6 @@ categories: [github, open-source]
 image: /assets/img/githubissues.png 
 ---
 
-![Find Github Issues]({{ page.image | relative_url }})
-
 ## Introduction
 
 Are you stuck in finding an open-source project to contribute to? 

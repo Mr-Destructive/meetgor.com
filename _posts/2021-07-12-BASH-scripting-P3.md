@@ -7,7 +7,6 @@ categories: bash
 image: https://cdn.hashnode.com/res/hashnode/image/upload/v1625064683744/LUG0ep1xA.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress
 ---
 
-![BASH Scripting Guide]({{ page.image | relative_url }})
 
 Bash or shell won't be much popular and powerful if they didn't have some tools and utilities baked in. But even further they are supported natively in Bash, which just makes every task and challenge quite hassle-free to deal with. In this part of the series, I'll try to cover an overview of some quite powerful and robust tools and utilities in Bash(shell in general) and also some of the advanced topics like dictionaries and positional parameters. Enough talk let's dive in.
 
@@ -205,6 +204,7 @@ It turns out, you can not only print the first or last 10 lines but n lines by p
 cURL or client URL is a tool that can be used to transfer data via various network protocols. You might not believe but it is used in cars, televisions, routers, and other embedded systems for exchanging relevant data via appropriate protocols. 
 
 ![possh.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1626181263235/JPocJwoEd.png)
+
 This example depicts how we can fetch data from an API using cURL and extract data in JSON format and use it for relevant tasks.
 This is again one of the best utility out there as it becomes quite remarkable and vintage. Despite being almost 30 years old, it shines bright in the tech world.
 

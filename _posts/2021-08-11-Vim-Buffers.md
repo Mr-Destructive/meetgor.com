@@ -8,8 +8,6 @@ image: /assets/img/vimbuff.png
 
 ---
 
-![Vim: Buffers]({{ page.image | relative_url }})
-
 ## Introduction
 
 

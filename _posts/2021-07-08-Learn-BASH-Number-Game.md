@@ -6,7 +6,7 @@ date:   2021-07-08 19:50:35 +0530
 categories: bash
 image: https://dev-to-uploads.s3.amazonaws.com/uploads/articles/4rqwozbbgga9xg5ne89m.png
 ---
-![BASH NUMBERJACK Game]({{ page.image | relative_url }})
+
 ## Introduction
 
 OK! Learning BASH can be quite confusing without a proper goal in hand. So this will be a pretty good idea to start learning BASH and have a ton of fun. In this little time, we'll make a Number game which I have designed myself last year in C++, which took about 3 months due to lazy research and wasting time. But I was surprised that I made this game within two hours in BASH. You can refer to the game instructions in this  [repository at Github](https://github.com/Mr-Destructive/NumberJack).
@@ -53,6 +53,7 @@ Now we have the number for the rest of the game, we need to generate the list fo
 To generate and **shuffle 10 numbers which should not have any repeated numbers**, as it can have multiple numbers which might be unfair also it might happen that the number chosen by the user might not be present due to repetition. So to avoid that mischief of pseudo-random numbers we have to generate distinct 10 numbers from 0 to 9 in this case. For that, we are gonna use a command in BASH called `shuf` which can create some permutation of the elements in a list/array or a sequence of numbers in an input stream. We are gonna use `shuf` to generate a random sequence of 10 numbers from 0 to 9 using the command `shuf -i 0-9 -n 10`. 
 
 ![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1625748675622/1Li6h3_vX.png)
+
 You can see it generated a list of shuffled numbers between 0 to 9 so there are 10 numbers. We'll store this in result an array to access and print them later. You can refer to  [this](https://www.geeksforgeeks.org/shuf-command-in-linux-with-examples/)  and  [these](https://www.howtoforge.com/linux-shuf-command/)  articles for understanding shuf.  
 
 The main thing is taken care of, now we need to print the list and also print another list to indicate the index of numbers to the user. We will print the list without a for loop using the `@` variable. If you are new to BASH and want a bit guide on BASH please do check out my series on  [BASH scripting](https://techstructiveblog.hashnode.dev/series/bash-scripting), I have this all covered. So using `@` we can print the entire array in BASH. 
@@ -128,4 +129,5 @@ fi
 ```
 
 ![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1625753738352/qBDF1PFQG.png)
+
 This is the final bare-bones script without any help instructions just keeping the script simple. I hope you learned something from the game development in BASH. This is just a fun little project and a cool way of learning certain concepts in BASH such as loops, conditional statements, and arithmetic. Have FUN. Happy CODING :)

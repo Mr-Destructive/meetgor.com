@@ -7,8 +7,6 @@ categories: vim
 image: /assets/img/vimnerdtree.png
 ---
 
-![vim nerdtree]({{ page.image | relative_url }})
-
 ## Introduction
 
 [NERDTree](https://github.com/preservim/nerdtree) is a great plugin in Vim for managing and navigating Files. Some might prefer fzf, telescope, and other plugins for navigation, NERDTree is not a bad option to begin within Vim. NERDTree allows you to even create/delete/move files and folders flawlessly without much effort, so it becomes a much more viable beginner's plugin.

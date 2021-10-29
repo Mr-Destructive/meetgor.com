@@ -7,8 +7,6 @@ categories: [hashnode]
 image: /assets/img/hellowold.png
 ---
 
-![page]({{ page.image }})
-
 ## Introduction
 
 We all have written the hello world programs/applications, it feels really good to write on if you are a beginner, and why not it's definitely a great start. `Hello, world` applications are really quite simple in most cases to achieve, but it should be kind of an achievement to set up the environment and get up and running with a base application. 

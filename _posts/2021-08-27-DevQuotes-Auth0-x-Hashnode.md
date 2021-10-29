@@ -7,8 +7,6 @@ categories: [hashnode, django, web-development, python]
 image: /assets/img/dqhashnode.png
 ---
 
-![DevQuotes]({{ page.image | relative_url }})
-
 ## Introduction
 
 > No one can understand the joy in finishing a personal project, except the dreamer 

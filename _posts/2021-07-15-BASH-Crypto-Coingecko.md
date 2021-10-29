@@ -7,13 +7,12 @@ categories: bash
 image: https://cdn.hashnode.com/res/hashnode/image/upload/v1626331633083/zTSpHCFOu.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress
 ---
 
-![BASH CRYPTO COINGECKO-API]({{ page.image | relative_url }})
-
 ## Introduction
 Cryptocurrency is in such a hype that it is attracting even nerds and terminal fanboys, it is quite comfortable for such people to view the price inside of their terminal, also for normal people to learn about how to interact with an API from the local machine. We are gonna make a script about 20 lines in BASH to extract data from the  [coingecko cryptocurrency API](https://www.coingecko.com/en/api#explore-api) and some tools such as grep and sed. That being said let's start scripting.
 
 
 ![crypsh.gif](https://cdn.hashnode.com/res/hashnode/image/upload/v1626354050031/0BRlM7tfs.gif)
+
 This is how the script will work like. It is not a fancy script just some basic commands to extract data from the API.
 
 ## Getting familiar with the API 

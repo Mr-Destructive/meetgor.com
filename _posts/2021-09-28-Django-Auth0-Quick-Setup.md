@@ -7,14 +7,12 @@ categories: [django, bash, python]
 image: /assets/img/djauth0.png
 ---
 
-![]({{ page.image | relative_url }})
 ## Introduction
 
 
 This is a guide and a walkthrough of how to quickly set up a base Django project with Auth0 as integration for authentication and authorization. I will walk you through the Django setup and how to use and integrate the functionalities of the Auth0.  I will also discuss how why you should be using Auth0 and why I love it.
 
 The script takes `2:44` minutes time to do everything from scratch. From installing virtualenv in python to integrating the Auth0 application. 
-
 
 Here's how the script works:
 

@@ -8,7 +8,6 @@ image: https://techstructiveblog.hashnode.dev/_next/image?url=https%3A%2F%2Fcdn.
 ---
 
 
-![BASH Scripting Guide - 1]({{ page.image | relative_url }})
 
 ## Introduction
 If you are new to BASH and Linux, don't you worry the community is the driving force here. If someone's stuck somewhere, the platforms, forums, and blogs are ready to help anyone there. BASH is a short term of Bourne-Again Shell, it is a shell interface that has much more capabilities and functions than the simple Bourne shell(sh). It has some quite remarkable features and it is even capable of calling itself a programming language in some sense.
@@ -101,6 +100,7 @@ fi
 
 
 ![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1624290844242/8FQgLjIQT.png)
+
 From the above script, we used if-elif-else statements to evaluate different conditions. We hade use -eq to equate the value of the variable to the number we want to compare with. That was self-explanatory logic.
 
 ## Loops
@@ -217,6 +217,7 @@ echo $?
 ```
 
 ![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1624349678664/yDGL3U70C.png)
+
 Here we return the addition of two numbers and we use the internal variable ? to access the exit status of the function. The ? is an internal variable in Bash, which holds the exit status of the last executed command. In this case, it was the function call and its return statement was stored in it.  As said, it can become quite buggy to exit the function scope with wired return statements, so to avoid those we can make use of global variables.
 
 
@@ -232,6 +233,7 @@ echo $n
 ```
 
 ![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1624349769088/VxnjgqETv.png)
+
 In the above program, we use n as a global variable to access out of the function scope. 
 Function in Bash can also return multiple values at once but that can be buggy at times, so I don't recommend that.
 

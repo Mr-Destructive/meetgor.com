@@ -7,8 +7,6 @@ categories: vim
 image: https://cdn.hashnode.com/res/hashnode/image/upload/v1628151057227/gZey9TYHd.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress
 ---
 
-![Vim: Window Splits]({{ page.image | relative_url }})
- 
 ## Introduction
 
 Have you ever been stuck in Vim opening multiple files within a single window? Didn't anyone tell you, you can create multiple windows and split them within a single tab. Definitely, the window splits will be in separate buffers. In this way you can create multiple windows inside of a single Tab, what are Tabs? You can learn some basics about it from my previous article about  [Tabs in Vim](https://mr-destructive.github.io/techstructive-blog/vim/2021/08/03/Vim-Tabs.html). We can either create Vertical or Horizontal splits within the window making it flexible to work with multiple files in Vim. This article will look into the creation, navigation, closing, and rearrangement of Window Splits.

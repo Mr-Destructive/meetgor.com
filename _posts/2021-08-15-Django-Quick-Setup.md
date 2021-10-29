@@ -7,8 +7,6 @@ categories: [django, web-development, python]
 image: /assets/img/djangoqss.png
 ---
 
-![Django: Quick Set-Up]({{ page.image | relative_url }})
-
 ## Introduction
 
 Once you learn something very neatly and understand it very clearly, it feels like you are wasting time doing things over and over again. Same things in setting up a Django project, you feel like you could save those typing minutes by making a script. 

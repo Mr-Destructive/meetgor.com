@@ -8,8 +8,6 @@ image:  https://techstructiveblog.hashnode.dev/_next/image?url=https%3A%2F%2Fcdn
 ---
 
 
-![BASH Scripting Guide - 2]({{ page.image | relative_url }})
-
 # Introduction
 
 In this part, topics such as switch cases, mathematical expression, arrays, and strings. This won't be an in-depth guide to understand each and every concept, but to make users aware of the things and features in Bash. This also would not be an absolute basic guide, I expect to have some basic programming knowledge such as binary systems, logical and mathematical concepts. Don't worry, you won't be bombarded with commands, I'll just explain with easy examples to get started.
@@ -225,6 +223,7 @@ echo "${nums[@]}"
 To get the length of the array, we can use # in the expression `${nums[@]}`, like `${#nums[@]}` to get the number of elements from the array.
 
 ![bashs2.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1625125770005/VzIr8CD7-.png)
+
 Since we had 4 elements in the array, it accurately printed 4. 
 
 ### Inserting and Deleting elements from Array 
@@ -266,6 +265,7 @@ echo "Length of nums = ${#nums[@]}"
 ```
 
 ![bashs2.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1625126770211/LYK2Q0Rp0.png)
+
 There you can see we removed the element using unset. 
 
 ### Splicing an Array
@@ -307,6 +307,7 @@ echo "$s"
 ```
 
 ![bashs2.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1625129318948/02V3bpP1I.png)
+
 Strings are again declared as normal variables but are enclosed in double quotation marks.  And we access them in the exact same way as we do with variables. If you were to use single quotes instead of double quotes Bash would not interpret the variable name as a variable, it would print the name literally and not the value of the variable, So prefer using double quotes in echo and other commands to make variables accessible.
 
 ### Making Substrings
@@ -360,6 +361,7 @@ fi
 ```
 
 ![bashs2.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1625138020711/UWlRN8aPq.png)
+
 ![bashs2.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1625137884154/7bNPkpGd3.png)
 
 From the above code, it is quite clear that the strings as not equal and we compared them with the "equality" operator (=) and checked if that condition was true, and perform commands accordingly. We can also check if the strings are not equal using `!=` operator and we can perform commands based on the desired logic. We also have operators to compare the length of the strings. We can use `\<` operator to check if the first string is less than the second string(compared characters in ASCII).  And check if the first string is greater than the second string using `\>` operator. 

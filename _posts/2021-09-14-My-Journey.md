@@ -7,8 +7,6 @@ categories: [hashnode,]
 image: /assets/img/myjourney.png 
 ---
 
-![My Journey]({{ page.image | relative_url }})
-
 ## Introduction
 
 Hello World! I am Meet Gor, a self-taught web developer, Linux enthusiast, and a newbie technical writer. I am currently studying in an Engineering college pursuing my B. Tech in I.T.  I love to explore new programming languages and technologies, create innovative projects, love to write stories and blogs like this. 

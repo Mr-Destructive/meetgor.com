@@ -7,8 +7,6 @@ categories: [vim]
 image: /assets/img/vim1-comment.png
 ---
 
-![Vim for Programmers:1]({{ page.image | relative_url }})
-
 ## Introduction
 
 We as programmers always fiddle with commenting out code for code testing, documenting the function of code, and most importantly debugging. So you can't wait to comment on a large chunk of code manually, as it is quite a tedious thing to do. Let's do it effectively in Vim.

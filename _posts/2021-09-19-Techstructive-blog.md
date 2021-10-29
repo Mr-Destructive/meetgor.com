@@ -7,8 +7,6 @@ categories: [hashnode,]
 image: /assets/img/tblog.gif
 ---
 
-![]({{ page.image | relative_url }})
-
 ## Introduction
 
 **Hello World!** This is an article in which I'll introduce why Techstructive Blog exists and what it covers in brief. This is just a casual introduction to my blogging niche. P.S. It's not any technical blog but has challenged me enough to write and complete it.  

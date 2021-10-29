@@ -7,7 +7,6 @@ categories: [open-source]
 image: https://gitlab.com/MR_DESTRUCTIVE/tblog-img/-/raw/main/hf2021.png
 ---
 
-![Hacktoberfest-2021](https://gitlab.com/MR_DESTRUCTIVE/tblog-img/-/raw/main/hf2021.png)
 
 ## Introduction
 

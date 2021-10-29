@@ -104,7 +104,7 @@ Moving across files without any plugins or file explorer is often considered tri
 
 and 
 
-`Ctrl + I`  ->  **move in the next file. **
+`Ctrl + I`  ->  **move in the next file.**
 
 We also can use `Ctrl + ^ ` to move the previous two opened files.
 
@@ -135,9 +135,9 @@ People rarely use Tabs as far as I have seen, but they are quite useful and prov
 
 Marks are used for some quite large files and code-bases. It is used to move from one mark(kind of a bookmark) to another using few key commands, marks are generally created when you would go to a particular code block or any part of the file again and again. Some of the quick navigation using maps are the following.
 
-`mn`  ->  **set the current position as mark 'a'.**
+`mn`  ->  **set the current position as mark 'n'.**
 
-` `n`  ->  **jump to the position of mark 'n'.**
+`<backtick>n`  ->  **jump to the position of mark 'n'.**
 
 ` `0`  -> **jump to the position where vim was last exited.**
 
