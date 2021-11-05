@@ -152,7 +152,7 @@ AWK is a command-line utility for manipulating or writing certain operations/pat
 cat temp.md | tr -d '\r\n' > temp.txt
 ```   
 
-After we have added the `\r\n` characters to the end of the file, we simply can use `cat` and `tr` to merge all the lines into a single line. This is how we parse the contents to the API more safely and concisely, of course we need to parse them in a variable by reading the file.       
+After we have added the `\r\n` characters to the end of the file, we simply can use `cat` and `tr` to merge all the lines into a single line. This is how we parse the contents to the API more safely and concisely, of course we need to parse them in a variable by reading the file.
 
 OK, I won't bore anyone with more BASH but that were some of the quite important commands in the script that form the backbone of the cross-posting and handling text with the APIs.
 
