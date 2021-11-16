@@ -19,4 +19,3 @@ permalink: /contact/
 
 ### LinkedIn: [MeetGor](https://www.linkedin.com/in/meetgor/)
 
-
