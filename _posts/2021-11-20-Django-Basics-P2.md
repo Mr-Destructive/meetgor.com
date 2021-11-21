@@ -24,10 +24,13 @@ Mostly the Python installation comes with the option to install `pip`(python's p
 ```
 python get-pip.py   
 ```
+
 Make sure the include the relative path to the file if you are not in the same folder as the file.
 
 So, that should be python setup in your local machine. To check that python was installed correctly, type in `python --version` and `pip --version` to check if they return any version number. IF they do, Congratulations !! You installed Python successfully and if not, don't worry there might be some simple issues that can be googled out and resolved easily. 
    
+---
+
 Let's move on to the actual setting of the Django project set up.   
 
 ## Setting up Virtual Environment in python
@@ -43,6 +46,7 @@ Firstly, install the virtual environment package, it's not mandatory but it keep
 ```
 pip install virtualenv
 ```
+
 You can use `pip3` or `pip -m`, or however you install normal python modules. This just installs the python virtual environment, we need to create a virtual environment in the current folder.
 
 ### Creating a virtual environment
@@ -60,11 +64,13 @@ Here, `venv` can be anything like `env` just for your understanding and simplici
 Now, we need to activate the virtual environment, this means that any thing installed in the prompt with the virtualenv activated will be isolated from the entire system and will be installed on in the virtual environment. To activate the environment, we can use the command :
 
 #### for Linux/macOS :
+
 ```
 source venv/bin/activate
 ```
 
 #### for Windows:
+
 ```
 venv\Scripts\activate
 ```
@@ -90,14 +96,17 @@ For now, we will use the command `startproject` this is one of the [management c
 ```
 django-admin startproject myproject
 ```
+
 Here `myproject` can be your project name. After this, you will see one new folder and one file pop up.
 
 Namely, the `<project-name>` folder and `manage.py` file. We don't have to touch the `manage.py` file but we use it in most of the commands to use the Django functionalities, it is quite similar to the `django-admin` command. 
 
 You can now run your basic server using the command : 
+
 ```
 python manage.py runserver
 ```
+
 OR
 
 You can use `djagno-admin` command, but you need to set certain environment variables and modify the settings.py file as per the project-name. You can use the `django-admin` as the steps given in the django [documentation](https://docs.djangoproject.com/en/3.2/ref/django-admin/#cmdoption-settings).
@@ -112,11 +121,14 @@ Follow the below GIF for a clear understanding of those instructions:
 
 ![Django-basics-part2-setup](https://gitlab.com/MR_DESTRUCTIVE/tblog-img/-/raw/main/djp2.gif)
 
+---
+
 ## Quick-Setup-Script
 
 You can avoid manually typing the commands once you get the idea of the process in setting up a django project by executing a simple shell script (for Linux/macOS) or a batch script (for Windows). The script looks something like:
 
 For Linux/macOS:
+
 ```
 #!/usr/bin/env bash
 
@@ -130,9 +142,11 @@ pip install django
 django-admin startproject $1 .
 clear
 ```
+
 save as commands.sh file
 
 For Windows: 
+
 ```
 mkdir %1 
 cd %1
@@ -143,6 +157,7 @@ call env\Scripts\activate
 pip install django
 django-admin startproject %1 .
 cls
+
 ```   
 save as commands.bat file
 
