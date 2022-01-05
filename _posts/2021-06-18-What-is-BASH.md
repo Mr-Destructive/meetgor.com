@@ -22,12 +22,10 @@ From the above gif, I edited a file without leaving the terminal. That can be la
 ## Applications
 
 Well, Bash has some epic applications, some of them might surprise you but they are indeed liable to call themselves features of Bash. Let's dive in then.
-
  
 ### Automation "of course!"
 
 This is the most known feature of Bash as it stands upright on top of other tools and programs. Bash is most commonly used by system admins to automate repetitive tasks in managing a system. These tasks may include backing up files, managing file structures, monitoring the performance of a system, and debugging any errors and issues in the system on a regular basis to ensure the smooth functioning of a system. So, it makes quite a lot of sense to automate certain tasks that might waste time and effort to do them over and over again. Hence, Bash is the system admin's best friend and also for programmers to automate certain tasks and compilation of programs.
-
 
 ### File handling
 

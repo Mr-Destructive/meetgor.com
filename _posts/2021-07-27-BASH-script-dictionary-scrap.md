@@ -52,7 +52,7 @@ Now we have the content of the webpage on our local machine, we need to search o
 
 We need to find patterns and similarities in the tags that contain the text of the meaning of the specified word. from the analysis of the webpage, we see that the element `<span class="one-click-content css-nnyc96 e1q3nk1v1">` contains the actual meaning. We just need the basic meaning, we may not need examples and long lengthy definitions on our Terminal, So we will go with filtering out the span tag with a class called `one-click-content css-nnyc96 e1q3nk1v1`. To do that we can use the grep command, which can print the text or line matching the specified expression or text. Here we need the span element with the particular class name so we will use regular expressions to find it more effectively.
 
-```
+```shell
 grep -oP '(?<=<span class="one-click-content css-nnyc96 e1q3nk1v1">).*?(?=</span>)' meaning.txt >temp.txt 
 ```
 
@@ -64,20 +64,20 @@ Now, if you think we are done, then it's wrong, the webpage can have internal or
 
 ### Using SED command to remove embedded tags.
 
-```
+```shell
  sed -i 's/<[^>]*>//g' temp.txt >meaning.txt
 ```
 The above command filters the text and removes the HTML tags from the `temp.txt `file using regular expressions. The `-i` command allows us to store the output in a file `meaning.txt`.  We have used Regex to remove `<>` tags from the file and hence anything in between these is also removed and we get the only pure text but it may also contain special characters and symbols. To remove that we'll again use `grep` and filter the fine meaning in our file.
 
 ### Removing Special Characters from the Content using GREP commands.
-```
+```shell
  grep -v '^\s*$\|^\s*\#' temp.txt >meaning.txt
 ```
 
 Now from the above command removes the special characters such as `$,#`, and others from the temp.txt file. We finally store everything filtered in the meaning.txt file. If you understood till here, the next concrete step will be super easy for you, as we will assemble everything here in a shell script.
 
 ## Making the Shell Script
-```
+```bash
 #!/bin/bash
 
 read -p "Enter the word to find meaning : " word

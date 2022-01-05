@@ -22,7 +22,7 @@ You should have a Plugin-Manager for installing this plugin. It's not mandatory 
 To install a plugin using Vundle, you need to configure Vundle first if you have not already done it. You can find the installation docs [here](https://github.com/VundleVim/Vundle.vim). 
 After Vundle has been configured in your vimrc you can simply add `Plugin 'preservim/nerdtree'` between the call begin and end of Vundle, like :
 
-```
+```vim
 call vundle#begin()
   Plugin 'preservim/nerdtree'
 call vundle#end()
@@ -37,7 +37,7 @@ After saving and sourcing the vimrc file, you need to install the plugin using t
 To install a plugin using the Vim-Plug manager, you need to configure Vim-Plug if you have not already configured it in your vimrc. You can find the installation docs at the GitHub README of [Vim-Plug](https://github.com/junegunn/vim-plug).
 After Vim-Plug has been configured in your vimrc you can simply add `Plug 'preservim/nerdtree'` between the call plug begin and end statements. Just like:
 
-```
+```vim
 call plug#begin()
   Plug 'preservim/nerdtree'
 call plug#end()
@@ -57,7 +57,8 @@ git clone https://github.com/preservim/nerdtree.git ~/.vim/bundle/nerdtree
 
 After cloning the repository, you can add this to your vimrc where you have configured it. It's a kind of DIY manager in terms of managing the folders of the plugin.
 
-```
+```vim
+call plug#begin()
 call pathogen#infect()
 syntax on
 filetype plugin indent on
@@ -137,14 +138,14 @@ This is just self-explanatory and beginner-friendly sets of commands, it becomes
 
 You can make a key-binding to open the NERDTree, 
 
-```
+```vim
 nnoremap <C-n> :NERDTree<CR>
 ```
 You can map anything instead of `<C-n>`, most people use `<leader>` but it's easy to use `CTRL+N` for me, it's just personal preference.
 
 If you do not like to open NERDTree again and again, you can keep it open whatsoever using the custom key-binding in your vimrc.
 
-```
+```vim
 autocmd VimEnter * NERDTree
 ```
 This will open the NERDTree automatically for you when you open Vim, Ya I get it, it's not needed every time but most of the time a developer is switching between the files. 
@@ -153,7 +154,7 @@ This will open the NERDTree automatically for you when you open Vim, Ya I get it
 
 We can auto-reload the NERDTree window when there is a change in the file structure, i.e. a file/folder is deleted/created/moved/etc. We again need to set this in our vimrc:
 
-```
+```vim
 autocmd BufEnter NERD_tree_* | execute 'normal R'
 au CursorHold * if exists("t:NerdTreeBufName") | call <SNR>15_refreshRoot() | endif
 ```
@@ -164,7 +165,7 @@ This will reload the NERDTree when the cursor is in the NERDTree's window. This 
 
 We can also reload the NERDTree when we change the directory. The above-mentioned command is not sufficient to do that, we have to add another set of configurations.
 
-```
+```vim
 augroup DIRCHANGE
     au!
     autocmd DirChanged global :NERDTreeCWD
@@ -178,7 +179,7 @@ By adding this to your vimrc, you will refresh the NERDTree every time you enter
 
 You need to close the NERDTree manually each time you want to exit out of it, but this can also be automated just for the sake of simplicity and effectiveness in **QUITTING VIM**.
 
-```
+```vim
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 ```
 This will close the NERDTree window if it is the only open window. That can be frustrating at moments but the majority of the time this is a great addon indeed.
@@ -187,7 +188,7 @@ This will close the NERDTree window if it is the only open window. That can be f
 
 So, we have learned the basics of using and modifying NERDTree according to our needs, to put it together, you can use this snippet directly into your vimrc and enjoy the flawless experience.
 
-```
+```vim
 " Open nerdtree window on opening Vim
 autocmd VimEnter * NERDTree
 

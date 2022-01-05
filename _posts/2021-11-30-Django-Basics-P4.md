@@ -18,7 +18,7 @@ After getting familiar with the folder structure of the Django framework, we'll 
 To create a view or typically-like function, we need to write a function in the `views.py` file inside of the application folder. The function name can be anything but should be a sensible name as far as its usability is concerned. Let's take a basic example of sending an HTTP response of "Hello World".
 
 #### project_name/app_name/views.py
-```
+```python
 from django.http import HttpResponse
 
 def index(request):
@@ -34,7 +34,7 @@ We'll see how to map the views to an URL in Django in the next section
 We need to first create a `urls.py` file in the application folder to create a map of the URL to be mapped with the view. After creating the file in the same app folder as the `views.py`, import the function in the view into the file.
 
 #### project_name/app_name/urls.py
-```
+```python
 from .views import index
 from django.urls import path 
 
@@ -51,7 +51,7 @@ To link the urls of your app to the main project folder, you need to just add a 
 In projectname folder -> urls.py
 
 #### project_name/urls.py
-```
+```python
 from django.contrib import admin
 from django.urls import path, include
 
@@ -109,7 +109,7 @@ Let's create some examples to understand the working of Views and URLs. We'll cr
 We can use the dynamic URLs or placeholder variables to render out the content dynamically. Let's create another set of View and URL map.
 
 #### project_name/app_name/views.py
-```
+```python
 def greet(request, name):
     return HttpResponse("Welcome, " + name)
 ```
@@ -117,7 +117,7 @@ def greet(request, name):
 This view or function takes an additional argument called `name` and in response, it just says `Welcome, name` where the name can be any string. Now after creating the view, we need to map the view to a URL pattern, We'll add a path for this greet function. 
 
 #### project_name/app_name/urls.py
-```
+```python
 path('greet/<str:name>/', greet, name="greet"),
 ```
 
@@ -127,7 +127,7 @@ You'll get an error, 100% if you are blindly following me! Didn't you forget som
 
 Import the greet function from the views like so:
 
-```
+```python
 from .views import index, greet  
 ```
 
@@ -144,7 +144,7 @@ Then, in the URLs, we need to find a way to pass the variable name to the view, 
 We'll use some Python libraries or functions in the Django App. In this way, we'll see it's nearly no-brainer to use Python functions or libraries in the Django framework as indeed all files which we are working with are Python files.
 
 #### project_name/app_name/views.py
-```
+```python
 from random import randint
 
 def dice(request):
@@ -155,7 +155,7 @@ def dice(request):
 This view is using the random module, you can pretty much use other web-compatible modules or libraries. We have used the `random.randint` function to generate the pseudo-random number between 1 and 6. We have used the f-string (`f"{variable}"`)styled Response string as int is not compatible with the response concatenation. So this is the logic of our map, now we'll need to link it to a URL-path. 
 
 #### project_name/app_name/urls.py
-```   
+```python
 path('throw/', dice, name="dice"),
 ```
 

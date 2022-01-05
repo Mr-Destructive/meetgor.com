@@ -129,7 +129,7 @@ You can avoid manually typing the commands once you get the idea of the process 
 
 For Linux/macOS:
 
-```
+```shell
 #!/usr/bin/env bash
 
 mkdir $1
@@ -147,7 +147,7 @@ save as commands.sh file
 
 For Windows: 
 
-```
+```batch
 mkdir %1 
 cd %1
 pip install virtualenv

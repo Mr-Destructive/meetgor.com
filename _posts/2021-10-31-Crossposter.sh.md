@@ -40,7 +40,7 @@ For posting the article you need to provide the following details:
 
 This information is a must for `dev.to` especially the `title`. This should be provide in the same order as given below:
 
-```
+```yaml
 
 ---
 title: The title of the post
@@ -115,7 +115,7 @@ The script mostly leverages `curl`, `sed`, `cat` and some other basic utilities 
 Curl is a life saver command for this project, without this tool, the project might not be as great and efficient. Let's see some quick commands used in the script.
 
 
-```
+```bash
 curl -H "Content-Type: application/json" -H "api-key": \"'"$key"'\" -d '{"content":\"'"$body"'\"}' "$url"
 ```
 
@@ -127,14 +127,14 @@ The wired `$body` is used to parse the value of the variable `body` inside of si
 
 Sed is a super-powerful stream editor, its somewhat similar to Vim without an interface, only commands. We use this tool to manipulate the front-matter for posting on the platforms by parsing them to variables in BASH. We also use to enter the api keys inputted by user from variables into the file at a specific position to retrieve later. 
    
-```
+```bash
 sed -i "1a title: $title" file.txt
 ```   
 
 
 Here, we are appending(`a`) to the 1st line, text `title: $title`, here `$title` is the variable, so we are technically parsing the value of the variable `title`. We are editing the file `file.txt` in-place `-i` i.e. we are editing it live without creating any temp or backup files.       
 
-```
+```bash
 sed -n -e "s/dev.to://p' keys.txt"
 ```
 
@@ -142,13 +142,13 @@ Here we are essentially getting the text after a particular pattern. In this cas
       
 ### Using `awk` for programmatic editing 
 
-```
+```bash
 awk '{print $0"\r\n"}' temp.txt >file.txt
 ```
 
 AWK is a command-line utility for manipulating or writing certain operations/patterns programmatically. We use this tool so as to add `4r4n` to the end of each line, the APIs can't parse the file contents directly so we have to add certain characters before the end of line and do further operations.
 
-```
+```bash
 cat temp.md | tr -d '\r\n' > temp.txt
 ```   
 

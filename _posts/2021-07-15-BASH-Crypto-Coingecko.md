@@ -55,7 +55,7 @@ So, that was the introduction to the Coingecko API, you can now explore various 
 ## Fetching data from the API 
 
 Now, we'll finally start coding. Firstly we'll need input from the user, the coin-id, currency code, and optionally the number of days. We will read the input by using the read command and providing the prompt argument. 
-```
+```bash
 #!/bin/bash
 
 read -p "Enter the coin name: " coin
@@ -69,7 +69,8 @@ I am not inputting the number of days before the equivalent price as it's not ou
 Now we need the golden piece of this script, the cURL command. The command is just pre-written for us XD. But hey we need to modify it a bit. We need to store the output of the cURL command in a fie for modifying it further. We can use piping the command and avoid using files but that would make the command quite big. So, I just use the files to handle and trim the output according to what I need. 
 
 This is the default command that coingecko gave us:
-```
+```bash
+#!/bin/bash
 curl -X 'GET' \
   'https://api.coingecko.com/api/v3/coins/ethereum/market_chart?vs_currency=usd&days=0' \
   -H 'accept: application/json'
@@ -77,7 +78,7 @@ curl -X 'GET' \
 We send a GET request to the API endpoint with the provide URL and we accept the response in the form of JSON. The -X is for providing the option of either GET, POST, or any other API interaction code. But this is a REST API and we do not want to mess up the database by posting, deleting, or updating anything just to GET the data from the API. We use -H to pass the URL to the head and the type of response in this case JSON. 
 
 We'll change the default command to this, 
-```
+```bash
 curl -o temp.json -X 'GET' \
   'https://api.coingecko.com/api/v3/coins/'$coin'/market_chart?vs_currency='$crncy'&days='$days'' \
   -H 'accept: application/json' &> /dev/null
@@ -106,7 +107,7 @@ OR
 the text between `,` and `]],"m`.
 
 It is quite simple to extract the required value, we will use grep and Pearl Regular Expression. 
-```
+```bash
 grep -o -P '(?<=,).*(?=]],"m)' temp.json > price.txt
 
 ```
@@ -114,7 +115,7 @@ We are finding anything between the `,` and `]],"m` from the temp.json file and 
 
 Now we have obtained the result in a crystal clear way, we need to store the price in a variable just for further usage and simplicity.
 We'll use a while loop that iterates over the file until it is End of the File. We'll store the value in the variable in the following way:
-```
+```bash
 while read val
 do
 	p=$val
@@ -129,7 +130,7 @@ If you try to print the values of coins with pretty low value like `shiba-inu` o
 ![coing.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1626351434484/3GeTI-kn0.png)
 
 This is not good-looking, is it? 
-```
+```bash
 price=`printf "%.15f" $p`
 ```
 The above command is quite similar to the C language. We are printing the value in the `p` variable with a precision of 15 decimal values, that is enough for any serious small value coin.
@@ -141,7 +142,7 @@ Now that was much better. That is it! How simple was that. Really BASH has some 
 ## Printing the price 
 
 Finally, we need to print the output, and to keep it simple, we can print using the echo command.
-```
+```bash
 echo "The value of $coin in $crncy is = $price"
 ```
 
@@ -149,7 +150,7 @@ echo "The value of $coin in $crncy is = $price"
 
 
 ## Script
-```
+```bash
 #!/bin/bash
 
 read -p "Enter the coin name : " coin

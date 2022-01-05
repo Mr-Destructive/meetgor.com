@@ -25,7 +25,7 @@ Firstly you can create a folder for all the static files in the root folder. Usu
 
 Next after creating the static folder in the project root folder, we need to configure the `settings.py` file to actually tell Django web server to look for all our static files in that folder. To do that, go to the `settings.py` file, now by this time you would have known where the `settings.py` file is (inside the project-named folder). Add the following at the end of the `settings.py` file.
 
-```
+```python
 # import os
 # STATIC_URL = '/static/'
 
@@ -53,7 +53,7 @@ Let's create a static file and an image to demonstrate the concept of static fil
 
 - css/style.css
 
-```
+```css
 body 
 {
     background-color:#1d1dff;
@@ -100,7 +100,7 @@ The above templating tag will load the `static` tag which allows us to embed the
 
 Now, we can actually access any file with the static folder in our templates with a particular syntax as below:
 
-```
+```html
 <link rel="stylesheet" href="{{ "{% static 'css/style.css'" }} %}">  
 ```   
 Its just a example how to load the file, we are calling the static tag which we have loaded in previously and from there we are referencing the css file. The compact syntax would be : `{{ "{% static  'path-to-file' "}} %}`      
@@ -114,7 +114,7 @@ Let's render the static file which we created earlier i.e. the css file and the 
 Assuming you have a app called `post` in your django project, you can render static files as below:
 
 # templates/home.html 
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -135,7 +135,7 @@ Assuming you have a app called `post` in your django project, you can render sta
 We are loading the static tag and then loading the css file using the tag syntax as explained above.       
 
 # static/css/style.css      
-```
+```css
 body 
 {
     background-color:#1d1dff;
@@ -163,7 +163,7 @@ This is the static file,`style.css` stored inside the css folder of the static f
 
 # post/views.py 
 
-```
+```python
 from django.shortcuts import render
 
 def home(request):
@@ -172,7 +172,7 @@ def home(request):
 The `views.py` file has the function that renders the template `home.html` from the templates folder inside the application specific folder.   
 
 # post/urls.py   
-```
+```python
 from django.urls import path
 from post import views
 
@@ -183,7 +183,7 @@ urlpatterns = [
 This is the application level configuration for the url routes to the views linking the views(functions) from the `views.py` file. The url in this file(code-snippet) is linking the root url('') to the home view in the `views.py` file.
 
 # Blog/urls.py
-```
+```python
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
@@ -199,7 +199,7 @@ The urls file in the project folder is the core configuration for project level 
 Append the following if your templates and static files are not configured properly.
 
 # Blog/settings.py
-```
+```python
 import os   
 
 TEMPLATES = [
@@ -231,7 +231,7 @@ This will also work if you do it with traditional HTML syntax, but I'd explained
 Let's see how static files are rendered in inherited templates. We'll tinker with the `for.html` template created in the [previous part](https://mr-destructive.github.io/techstructive-blog/django/python/web-development/2021/12/14/Django-Basics-P5.html).  
 
 # template/for.html
-```
+```django
 {{ "{% extends 'home.html' "}}%}
 {{ "{% load static "}}%}
 
@@ -247,7 +247,7 @@ Let's see how static files are rendered in inherited templates. We'll tinker wit
 We will have re-load the static tag for each template only if we need to include a new static file in the template. So we use the `{{ "{% load static"}}%}` again as we are loading the static file (image) in this template.
 
 # post/views.py
-```
+```python
 from django.shortcuts import render
 
 def for_demo(request):
@@ -259,7 +259,7 @@ def home(request):
 ```
 
 # post/urls.py
-```
+```python
 from django.urls import path
 from post import views
 

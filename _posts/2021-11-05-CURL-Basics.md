@@ -54,13 +54,13 @@ curl URL arguments
 The above is a basic structure of the curl command. We see the argument
 structure in-depth in the next section. Firstly, let's take a simple curl command with just the URL is given.
 
-```
+```bash
 curl "https://github.com"   
 ```
 From this query to `github.com`, you are literally going to `GitHub.com` and getting a response as the entire HTML source code of the page.
 If you don't want to spam the output in the terminal, you can redirect the output to a file.
 
-```
+```bash
 curl "https://github.com" >temp.html
 ```
 With this command, we store the output of the command in the file temp.html, it can be any other file you like. 
@@ -77,7 +77,7 @@ and baffling, but this shows how customizable the command is.
 - `-H` ( provide Header to the request)
 - `-d` (providing the data e.g. in POST request)
 
-```
+```bash
 curl -s -o "https://github.com" temp.html
 ```
 
@@ -90,7 +90,7 @@ As said, the `curl` command can be well integrated with the other commands using
 
 Let's see how we can convert the `JSON` response to a BASH variable.
 
-```
+```bash
 resp=$(curl -H "api-key: N2vDzMyEeYGTxjUTePhC8bYd" https://dev.to/api/users/me)
 
 echo $resp
@@ -98,12 +98,12 @@ echo $resp
 Here, we are fetching the `JSON` response from the `dev.to` [API](https://developers.forem.com/api/),The wired string `N2vDzMyEeYGTxjUTePhC8bYd` is my [dev.to API token](https://dev.to/settings/account)(don't worry I have revoked it:) ) we have provided an argument `-H` that is a Header for accepting a `Json` response. 
 We can store the contents of the curl command by using the `$( )` and assigning that to the variable name of your choice.
 
-```
+```bash
 username=$(curl -H "api-key: N2vDzMyEeYGTxjUTePhC8bYd" https://dev.to/api/users/me | grep -o -P '(?<=username":").*(?=","name)')
 ```
 Here, we have stored the username from a `JSON` response to the variable username. We have piped the curl command so that we can work with that `JSON` response and modify the contents and then store the final results in a variable.
 In this case, we are using `grep` to filter out the content between the key `username` and `name`, thus we get the value we desired. To see the value you can always run the echo command as below:
-```
+```bash
 echo $username
 ```   
 So, that's how the `curl` command integrates flawlessly with BASH and other shell programming languages. 

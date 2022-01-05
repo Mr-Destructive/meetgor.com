@@ -28,7 +28,7 @@ Next, It would be great if we install a file manager for managing the files and 
 
 Nerdtree commands can be longer to write, for that let's start mapping and for that, we can start editing our Vimrc. 
 
-```
+```vim
 set number
 syntax enable
 filetype indent on
@@ -45,20 +45,20 @@ We move on to the Key mappings for NERDTree and other features. You can make map
 To map in normal mode, we'll its command to be specific:
 
 
-```
+```vim
 nnoremap <C-n> :NERDTree<CR>
 ``` 
 
 This will map CTRL+n to open the NERDTree file manager to the left, saving a bit of time and avoiding frustration. Feel free to add any keymap of your choice, this is just for demonstration. 
 You can further automate NERDTree for switching between tabs because it makes you type CTRL+w twice, you can reduce that to just typing w.
 
-```
+```vim
 nnoremap w:<C-w><C-w>
 ``` 
 
 ## Integrated Terminal Macros
 We can open a terminal window like a split between the editor. We can simply use the command :terminal to split the window horizontally, where the upper split will be terminal and the down window will have the editor. This is quite a neat feature of Vim in that it blends with the terminal so well so that we can switch between the terminal and the editor very quickly. For that, you can create a macro if you need to fire up a terminal again and again.
-```
+```vim
 nnoremap <C-t> :terminal<CR>
 ```
 If you place the above macro in your vimrc and then type Ctrl+t, the exact thing will happen to fire up a terminal split but with fewer keystrokes and without leaving the normal mode. 
@@ -70,7 +70,7 @@ Also, the NERDTree macro can be also fruitful with this as it will make a full-b
 We can automate the process of running python scripts inside of vim. Instead of typing out the entire command for executing python script from vim. We can use keymaps for it as they can significantly boost the time required to run and debug the code. 
 
 
-```
+```vim
 nnoremap py :!python %
 ``` 
 

@@ -29,7 +29,7 @@ Bash dictionaries or hash tables are just like any other hash tables or keymaps 
 
 To declare a dictionary/ hash table, we can simply write `declare -A name`, this will declare an empty hash map for us. Further, we can populate the hash map with keys and values using the same syntax as of array just instead of numbers we can also have strings. 
 
-```
+```bash
 #!/bin/bash
 
 declare -A fruits
@@ -45,7 +45,7 @@ echo "The fruit is $name and its color is ${fruits[$name]} "
 ![possh.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1626167875237/A2TxYPNoS.png)
 
 The above example depicts a way to declare, define and access the key values in a dictionary. The example may look silly but you get the idea. We can also access every key or value using the `@` variable and access the number of key-value pairs using the `#` variable just like an array. 
-```
+```bash
 #!/bin/bash
 
 declare -A fruits
@@ -68,7 +68,7 @@ OK, this is very tricky they are the same variables but used slightly differentl
 Also, you can notice the bash interpreter automatically arranges the map in the alphabetical order of the values and not keys. This is quite a neat little feature that can come in handy a lot of times.
 
 If you want to delete or add any key-value pairs we can do that by the following commands:
-```
+```bash
 #!/bin/bash
 
 declare -A fruits
@@ -102,7 +102,7 @@ The above code example is a bit complex but easy enough to understand. We can de
 
 We often use user input from within the script but there is another way to pass in parameters outside of the script using positional parameters. It basically allows us to pass in arguments or parameters from the command prompt/ shell and inside of the script, we can access them via Positional Parameters ( $1, $2, $3....$9, ${10} and so on).
 
-```
+```bash
 #!/bin/bash
 
 echo "first parameter : " $1
@@ -118,7 +118,7 @@ So we can pass a list of parameters that should be space-separated. We can pass 
 
 If we want to access all the parameters passed to the script, we can use `@` variable. You may know this symbol from the array section of part-II, it is used to access every element in the array. But here it is used to access every parameter passed to the script just behaving like a list of values.
 
-```
+```bash
 #!/bin/bash
 
 echo "The parameters passed are: " $@
@@ -129,7 +129,7 @@ echo "The parameters passed are: " $@
  
 To get the number of the parameters passed to the script, we can use `#` variable. This is also a variable used in the array section for accessing the number of elements in the array, in this case, the number of parameters in the list.
 
-```
+```bash
 #!/bin/bash
 
 echo "The parameters passed are: " $#
@@ -145,7 +145,7 @@ Positional parameters allow to not take explicit input from the user from the sc
 Bash aliases are a great way of reducing the command length and making it much easier to type and work with the scripts or any development-related work. Alias is a file called bash_aliases inside the .bashrc folder that contains our shortcut commands, it has a particular order to map certain commands with others. 
 
 Let's see what is an alias first and then we'll see how to set it up.
-```
+```bash
 alias cdc='cd C:/Users/acer/Desktop/New\ folder/Code/'
 ```
 This will make it viable to just type cdc and I will be in this directory instead of printing all of the jargon. The command we need to use to replace the big command is `cdc`. The right command is the variable assigned the command and the left or its value is the command to be replaced with it.
@@ -155,7 +155,7 @@ This will make it viable to just type cdc and I will be in this directory instea
 This command will definitely defer on your machine and OS as the filesystems are different in each major operating system. We can quickly make other such alias or shortcuts so to speak for making the development process faster and efficient. 
 
 Now let us see how we set up this environment for bash alias, it's quite straightforward. You need to create a hidden file named "bashrc" i.e the file name will be `.bashrc`. This file has to be in the root directory (the folder to which bash defaults). I do not mean the `root` directory in Linux but the repository in which your bash interpreter opens. Once you have created the file put any alias in the file and source the file using the command:
-```
+```bash
 source .bashrc
 ```
 And that would do the trick, you can now test your macro or shortcut by opening a new instance of the terminal. If this doesn't work for you, then you can check  [this article](https://opensource.com/article/19/7/bash-aliases)  for a broader understanding of the setup.

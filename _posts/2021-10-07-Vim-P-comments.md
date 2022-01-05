@@ -26,7 +26,6 @@ To comment on multiple lines of code, we can use the Visual Block mode to select
 4. Enter the comment code (`//`, `#`, or other)
 
 
-
 ![vimcoment.gif](https://cdn.hashnode.com/res/hashnode/image/upload/v1633518136135/06dfBTq2T.gif)
 
 So, using just simple steps you can comment out large chunks of code quite easily and effectively. If you are using some other language that has multiple characters for commenting like `//`, `- -`, etc, you can type in any number of characters while being in insert mode after selecting the lines.
@@ -35,7 +34,6 @@ So, using just simple steps you can comment out large chunks of code quite easil
 ![vimcppcom.gif](https://cdn.hashnode.com/res/hashnode/image/upload/v1633520509953/0q-k2ZHC7.gif)
 
 This might look a bit wired on the first try but just try it every day, It is a life-saving and very satisfying experience once applied in a real-world scenario.
-
 
 
 ## How to uncomment multiple lines effectively
@@ -64,7 +62,7 @@ But in Vim, we can customize that too, just imagine when you just select the chu
 
 Isn't that cool? Well, you just need to copy-paste the below code to your Vimrc file and source it and you are good to go. 
 
-```
+```vim
 function! Comment()
     let ext = tolower(expand('%:e'))
     if ext == 'py' 
@@ -179,7 +177,7 @@ We can use the function `line("'<")` to get the line number of the previous visu
 
 We have to enclose the `normal` command in double-quotes/single quotes. We can simply use the variable again with concatenation.
 
-``` 
+```vim
 exe line("'>")."normal o". cmt2 
 ```  
 

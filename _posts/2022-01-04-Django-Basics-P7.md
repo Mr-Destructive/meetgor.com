@@ -17,7 +17,7 @@ A model is a Django-way(Pythonic) to structure a database for a given applicatio
 
 By creating a model, you don't have to write all the basic SQL queries like 
 
-```
+```sql
 CREATE TABLE NAME(
 attrb1_name type,
 attrb2_name type,
@@ -37,7 +37,7 @@ OK, we'll it's not straightforward as it seems to but still for creating simple 
 
 Here's a basic model for a Blog:
 
-```
+```python
 #from django.db import models
 from django.contrib.auth.models import User
 
@@ -60,7 +60,7 @@ If you want more such examples, let's see more such models :
 
 An E-Mail application core model. Attributes like `sender`, `subject` of the mail, `body` of the mail, `recipients_list` i.e. the `To:` section in a mail system and the `attachment_file` for a file attachment to a mail if any.
 
-```
+```python
 #from django.db import models
 from user import EmailUser
 
@@ -74,7 +74,7 @@ class EMail(models.Model):
 
 A sample model for a note-taking app, consisting of a Note and a Book. A book might be a collection of multiple notes i.e. a single book can have multiple notes so we are using a `ManyToManyField`, what is that? We'll see that shortly.
 
-```
+```python
 from django.db import models
 from user.models import User
 
@@ -163,7 +163,7 @@ Let us set up a model from what we have learned so far.
 
 We'll create a model for a Blog Post again but with more robust fields and structure. 
 
-```
+```python
 #from django.db import models
 from django.contrib.auth.models import User
 

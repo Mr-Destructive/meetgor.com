@@ -24,7 +24,7 @@ The key mapping is broken down by adding the mode to map the key, an optional at
 
 For a basic example let us map c to paste from the clipboard.
 
-```
+```vim
 :map c "+p<CR>
 ```
 
@@ -38,7 +38,7 @@ If you type in map being in the command mode, it will list out the maps. If you 
 
 ## Key Mapping in Modes
 To map a key binding explicitly in the normal mode or any other modes, we have to prefix the word such as n for normal, v for visual or i for insert, and so on. The map will only work in the provided mode so the same keys may have several different maps depending on the current mode, but that can create a bit of confusion so avoid doing that. Let's map a key in the normal mode for example,
-```
+```vim
 :nmap <C-s> :w<CR>    
 ```
 
@@ -46,7 +46,7 @@ This is pretty bad for Vim beginners as it will spoil the real Vim experience of
 
 We can also map certain non-alphabetical keys such as CTRL, ALT, and others, it will help you in saving time to leave a mode and enter the mode again to edit the text. The following is a perfect example of such.
 
-```
+```vim
 :imap <C-c> <ESC>"+pa
 ```
 The above command is **mapped in insert mode** as the mode is set to insert at the command's beginning. The CTRL+c keys are mapped to first Escaping out of insert mode and then pasting from the "+ register which is the device clipboard here. In the end, we again get back to insert mode just to the right of the current cursor position. So, that is how we can map the keys to do the task and save a bit of time. 
@@ -54,7 +54,7 @@ The above command is **mapped in insert mode** as the mode is set to insert at t
 ## Adding Keymaps in vimrc file
 So you can now map in any available modes in Vim and test it out in te=he current buffer, but if you notice when you close the buffer, your custom keymaps will not be functioning as they remain in the buffer until you close it. To make it permanent you need to type the exact map command to the vimrc file. Just don't add ":" as it is not a command mode, it should be only the pure command of the map.
 
-```
+```vim
 nmap <C-s> :w<CR>
 nmap <C-p> "+p
 vmap <C-y> "+y
@@ -70,7 +70,8 @@ Now, it's entirely up to you to make keymaps according to your preference and ch
 
 For some insights, I'd like to give in some cool and productive keymaps which I personally use very frequently in coding a particular programming language. 
 
-```
+```vim
+nmap <C-s> :w<CR>
 nnoremap py :!python %<CR>                          " Python run macro
 nnoremap cpp :!c++ % -o %:r && ./%:r <CR>           " C++ compile and run macro
 nnoremap sh :!chmod +x % && source %<CR>            " Bash sourcing macro 

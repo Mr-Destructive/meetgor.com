@@ -28,7 +28,7 @@ Create a folder `templates` in the base folder, inside the templates folder, cre
 
 **templates\index.html**
 
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,7 +46,7 @@ This is a simple HTML template, with the `<h1>` tags. As Django is a framework, 
 
 Inside the `settings.py` file, we need to locate the `TEMPLATES` section and modify as below:
 
-```
+```python
 import os
 
 TEMPLATES = [
@@ -84,7 +84,7 @@ There are a couple of ways to render templates in Django and some of them are di
 
 The simplest way to render a template is by the following way:
 
-```
+```python
 from django.contrib import admin
 from django.urls import path, include
 
@@ -103,7 +103,7 @@ The `TemplateView` class takes in a couple of arguments, we'll use the `template
 Activate the virtual environment for the proper functioning of the project.
 
 After activating the virtual environment we can run the server as follows:
-```
+```terminal
 python manage.py runserver
 ```
    We can now see the following output and thus, we are now rendering a simple HTML template in Django.
@@ -116,7 +116,7 @@ We can also use the [render function](https://docs.djangoproject.com/en/4.0/topi
 
 Firstly, let's create a view function in the `post/views.py` file, more generally (`app_name/views.py` file). Firstly, we need to import the render function from `django.shortcuts` and then return the function call of render.
 
-```
+```python
 from django.shortcuts import render
 
 def home(request):
@@ -125,7 +125,7 @@ def home(request):
 
 And in the URLs, we'll create a different pattern like for e.g. 'home/'
 
-```
+```python
 from django.urls import path
 from post import views
 
@@ -149,7 +149,7 @@ This is the most common use case for the Django Templating Language/Engine as we
 To show its use cases, we can declare a variable in a view and then parse it in the Template. Though it is not dynamic right now we can later on fetch values from the database and store them in the form of variables in our views. 
 
 **templates/home.html**
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -164,7 +164,7 @@ To show its use cases, we can declare a variable in a view and then parse it in 
 
 
 **post/views.py**
-```
+```python
 from django.shortcuts import render
 
 def variable_demo(request):
@@ -177,7 +177,7 @@ def variable_demo(request):
 As we can see the variable in views is passed as a dictionary in python. The reference key along with a value of the variable as the name of the variable. We will use the key in the templates to parse the value of the variable.
 
 **post/urls.py**
-```
+```python
 from django.urls import path
 from post import views
 
@@ -198,7 +198,7 @@ We can even use the conditional statement in the Template using a very simple sy
 To create a basic if condition in the template, we can understand with the following example.
 
 **app_name/views.py**
-```
+```python
 from django.shortcuts import render
 from random import randint
 
@@ -210,7 +210,7 @@ def if_demo(request):
 Here, we have used the key name as `num` indicating we can give different names to the key which needs to be used in the template to render the values.
 
 **app_name/urls.py**
-```
+```python
 from django.urls import path
 from post import views
 
@@ -220,7 +220,7 @@ urlpatterns = [
 ```
 
 **templates/if_else.html**
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -251,7 +251,7 @@ Now, the most crucial component of the Django templating language is the loops. 
 The syntax of for loop is almost similar to the if-else condition. We just replace the condition with the iterator and the list/object from the view context. `{{ "{% for i in list" }} %}`, also end the for loop like `{{ "{% endfor" }} %}`.
 
 **app_name/views.py**
-```
+```python
 from django.shortcuts import render
 
 def for_demo(request):
@@ -263,7 +263,7 @@ def for_demo(request):
 We have created a simple Python list called `sports` and we parse them to the template using a dictionary object, `sport_list` as the key for storing the value of the `sports` list.
 
 **app_name/urls.py**
-```
+```python
 from django.urls import path
 from post import views
 
@@ -273,7 +273,7 @@ urlpatterns = [
 ```
 
 **templates/for.html**
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -306,7 +306,7 @@ Take, for example, the home.html which consisted of only a `<h1>` tag in it. We 
 To create a `block`, we simply need to write the following syntax before the component which we do not want in other templates:
 
 **templates/home.html**
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -328,7 +328,7 @@ We will see how we can use this template in other templates. We will actually ex
    
 
 **templates/if_else.html**
-```
+```html
 {{ "{% extends 'home.html'"}} %}
 {{ "{% block body" }} %}
     {{ "{{num" }} }}
@@ -347,7 +347,7 @@ To use the blocks or kind of plug in the template content in the `if_else.html` 
 So, when we say `endblock` the last part of the base template is loaded i.e. the closing `body` and `html` tags. This is like plugging the template as it is before and after the block body. 
 
 **app_name/views.py**
-```
+```python
 from django.shortcuts import render
 
 def home(request):
@@ -361,7 +361,7 @@ def if_demo(request):
 ```   
 
 **app_name/urls.py**
-```
+```python
 from django.urls import path
 from post import views
 

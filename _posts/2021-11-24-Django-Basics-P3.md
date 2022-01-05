@@ -17,7 +17,7 @@ We will create a Django project from scratch and understand it from the ground u
 
 After the virtual environment is created and activated, we'll create the project.
 
-```
+```shell
 django-admin startproject Blog .
 ```
 After this command, if we see the directory structure, it should look something like this:
@@ -86,7 +86,7 @@ Some of the common ASGI servers are [Uvicorn](https://www.uvicorn.org/), [Daphne
 
 So, let's create an application to see the structure of the basic app in Django. To create an app, we can use the `startapp` option with the `python manage.py` command followed by the name of the app like:
 
-```
+```shell
 python manage.py startapp name
 ```
 

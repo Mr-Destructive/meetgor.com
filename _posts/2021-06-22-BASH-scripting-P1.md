@@ -27,7 +27,7 @@ Firstly, you should have some basic understanding of Linux commands such as list
 
 ## Understanding a Simple Shell script
 
-```
+```bash
 #!/bin/bash
 echo "Hello World"
 ```
@@ -44,7 +44,7 @@ The core structure of the Bash script is quite simple, we can make the format of
 Definitely, we need variables to store some value which we are gonna use again and again. Bash has variables but without any specific data types, you can store anything in anything. It becomes a mess in comparing to variables and their values :( Though it might be a feature, not a bug sometimes.
 
 Let's create some variables in a Bash script. 
-```
+```bash
 #!/bin/bash
 x=2
 echo $x
@@ -57,7 +57,7 @@ From the above script, we outputted the value of x to the console. We also execu
 
 ## If-else Conditional statements
 If-else conditional statements are quite the fundamentals of any logical operations performed in the programming world, so Bash has them implemented pretty much the same way as other shells do.
-```
+```bash
 #!/bin/bash
 a=9
 if [ $a -lt 10 ];then 
@@ -69,7 +69,7 @@ fi
 
 We use "If", followed by "then" to execute the mentioned commands after that until it hits "fi" or else statement, we'll see else and if-else block after this. That is a basic If statement, here if we are comparing numbers we use -lt for less than, -gt for greater than, -eq for equals to, -ne for not equals to, -le for less than equals to, and -ge for greater than equals to. For string comparison, we use symbols such as < for less than, > for greater than, = for equals to, != for not equals to. 
 
-```
+```bash
 #!/bin/bash
 a="ERROR"
 if [ $a = "ERROR" ]; then
@@ -85,7 +85,7 @@ fi
 
 In the above example, we have used the if-else block, comparing a string with other and using the = operator to compare. It's quite interesting that Bash has string comparison built-in, unlike C/C++ where we have to depend on external libraries. We have used chmod to make the script file executable to anyone using the system. And then we simply put in the path to the file to run it. 
 
-```
+```bash
 #!/bin/bash
 
 c=3
@@ -112,7 +112,7 @@ We have 3 types of loop statements in Bash, they are:
 
 ### For loops
 In for loop, we have the freedom to use in range-bound or C-like for loops. Let us take a look at both of them using examples.
-```
+```bash
 #!/bin/bash
 
 for i in {1..5} 
@@ -125,7 +125,7 @@ done
 
 The above loop was used as a range-based loop, which loops through 1 and 5 inclusive. We use {} to use it as the range. As "then" and "fi" in if conditions, we have "do" and "done" in loops. Between the do and done statements, we can type in the statements we want to loop. 
 
-```
+```bash
 #!/bin/bash
 
 read -p "Enter the number : " n
@@ -144,7 +144,7 @@ The above for loop is a typical C-style for loop which takes 3 arguments, the in
 
 ### While loops
 While loops are used quite commonly in Bash and the syntax is quite straightforward.
-```
+```bash
 #!/bin/bash
 
 read -p "Enter the number : " n
@@ -162,7 +162,7 @@ The above while loop has a condition for the number to be greater than zero. We 
 
 ### Until loops.
 Until loop is a while loop but with the opposite condition, we loop until a certain criterion is not matched. 
-```
+```bash
 #!/bin/bash
 
 read -p "Enter the number : " n
@@ -182,7 +182,7 @@ In the loop, we iterate over and over again until n becomes 0. Until is simply t
 
 Functions are the part and parcel of any script, we don't use it necessarily, but they come in handy quite some times and serve the purpose absolutely well. We can customize what we want to return from the function depending on the needs. 
 
-```
+```bash
 #!/bin/bash
 
 function add(){
@@ -195,7 +195,7 @@ add 3 6
 
 
 In Bash functions, we do not pass arguments inside brackets, we have to pass in parameters as space-separated values after the function name in the function call. This also means that we can pass any number of parameters to a function, but only we should handle them properly. Otherwise, there is no use in passing unlimited parameters to a function. This is really powerful but it needs to be used wisely to have its full potential. Also, it not mandatory to use the keyword "function" before the name, So you could also write just the name and the rest of it as it is.
-```
+```bash
 #!/bin/bash
 
 add(){
@@ -205,7 +205,7 @@ add 3 6
 ```
 The return statement in functions is also quite an important aspect in logical programs. But it is not like returning values from a function, it is like returning the exit status of a function scope, so it can return inappropriate behavior from the shell depending on the return value. 
 
-```
+```bash
 #!/bin/bash
 
 add(){
@@ -221,7 +221,7 @@ echo $?
 Here we return the addition of two numbers and we use the internal variable ? to access the exit status of the function. The ? is an internal variable in Bash, which holds the exit status of the last executed command. In this case, it was the function call and its return statement was stored in it.  As said, it can become quite buggy to exit the function scope with wired return statements, so to avoid those we can make use of global variables.
 
 
-```
+```bash
 #!/bin/bash
 
 add(){

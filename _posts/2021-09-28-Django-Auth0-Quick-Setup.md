@@ -51,7 +51,7 @@ So, who would not love it? I am willing to write and use their service for some 
 ## Set up a Django Project
 
 If you are reading this you already know how to set up a Django project, I assume. But nevertheless, I can just include a quick introduction on how to do it. I have a script to do this. 
-```
+```bash
 #!/usr/bin/env bash
 
 mkdir $1
@@ -70,21 +70,23 @@ But if you want to understand the basics of the Django project setup here is a l
 
 Firstly, create a virtual environment, it's not mandatory but it keeps things simple and easy for your project in correspondence to the entire OS. So in python, we have a module to create the virtual environment pretty easily,
 
-```
+```shell
 pip install virtualenv
 ```
 You can use `pip3` or `pip -m`, or however you install normal python modules. This just installs the python virtual environment, we need to create one in the current folder, so for that navigate to the folder where you want to create the project and enter the following command:
 
-```
+```shell
 virtualenv venv
 ``` 
 
 Here, `venv` can be anything like `env` just for your understanding and simplicity it's a standard name kept for the same. After this, you will see a folder of the same name i.e. `venv` or any other name you have used. This is the folder where python will keep every installation private to the local folder itself. Now, we need to activate the virtual environment, for that we can use the command :
 
-```
+```bash
 # for Linux/macOS :
 source venv/bin/activate
+```
 
+```batch
 # for Windows:
 venv\Scripts\activate
 ```
@@ -92,19 +94,19 @@ After this, your command prompt will have a `(venv)` attached to its start. This
 
 After the virtual environment is set up and activated, you can install Django and get started with it. Firstly, install Django using pip:
 
-```
+```shell
 pip install django
 ```
 After the installation is completed, you can start a Django project in the current folder using the command: 
 
-```
+```shell
 django-admin startproject name
 ```
 Here name can be your project name. After this, you will see one new folder and one file pop up.
 Namely, the `project named` folder and `manage.py` file. So you don't have to touch the `manage.py` file but we use it in most of the commands to use the Django functionalities. 
 
 You can now run your basic server using the command : 
-```
+```shell
 python manage.py runserver
 ```
 There is a base installed/setup of the Django project. Moving on in integrating the Auth0 login functionality in our webpage.
@@ -154,7 +156,7 @@ So, we can now dive into creating the BASH Script to set up the Django x Auth0 a
 
 We can use the `cat` command to append text to a file, using the syntax as below:
 
-```
+```shell
 cat << EOF >> filename
 text
 more text
@@ -173,14 +175,14 @@ We have used this concept in adding configuration and credentials to the `settin
 
 `sed` is a great command, and there is nothing you can't do with it, ok there might be exceptions. We can get write to a file directly (don't display the output) and specify the line number before which we want to append the text. We can then add the text we want and followed by the filename.
 
-```
+```shell
 sed -i '33 i sometext here' filename
 ```
 Here, `33` is the line number in the file which we want to insert before. We have used `'"'` to add a `'` inside a `'`, this might feel a bit wired but that is how it is in BASH. 
 
 Let's say you want to add `print('Hello, World!')` to a particular line, we have to enclose `'` with these `"'`( double and single quotes),
 
-```
+```shell
 sed -i '2i print('"'Hello, World'"')' hello.py
 ```
 This will add the line `print('Hello World')` to the file `hello.py`
@@ -192,14 +194,14 @@ This will add the line `print('Hello World')` to the file `hello.py`
 
 We can even append text to a particular line using sed, we can use some escape characters and regex to add the text from the end of the line.
 
-```
+```shell
 sed -i '2i s/$/ textgoes here /' filename
 ``` 
 Here 2 is any number of line you want to add text to, next `i` a prompt for inserting text and then we have regex like `s/$/ /`, this will put the text enclosed in `/ /` to the end of the line as indicated by `$`.  We have the filename at its usual place as before.
 
 So, lets say, I want to add a comment to the second line in the previous example, I can use the following command to do it:
 
-```
+```shell
 sed -i '2 s/$/ # another comment/' hello.py
 
 ```
@@ -216,14 +218,14 @@ Below is the entire script and is also uploaded on [GitHub](https://github.com/M
 
 You can run the file by parsing the name of your project.
 
-```
+```shell
 bash script.sh mywebsite
 ```
 
 Wait for some 2-3 minutes, and the script will produce the Django application with the Auth0 app integrated. You will have to enter the credentials manually wherever applicable.
 
 
-```
+```bash
 #!/usr/bin/env bash
 
 mkdir $1

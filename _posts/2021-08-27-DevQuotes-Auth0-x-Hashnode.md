@@ -86,13 +86,13 @@ I must tell you using Auth0 was just flawless addition to my app as I have to do
 #### How I used Auth0 with Django
 
 I've used Template tags such as if blocks to verify if the user is authenticated or not. 
-```
+```html
 <div class="login-box auth0-box before">
-		{% if user.is_authenticated %}
+		{{ "{% if user.is_authenticated "}} %}
 		    <a class="btn btn-primary btn-sm tn-logout " href="/logout">Log Out</a>
-		{% else %}
+		{{ "{% else "}} %}
 		    <a class="btn btn-primary btn-sm tn-login " href="/login/auth0">Log In</a>
-	    {% endif %}
+    {{ "{% endif "}} %}
 </div>
 ```
 

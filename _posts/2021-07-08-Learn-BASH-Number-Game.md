@@ -19,7 +19,7 @@ The game is a number based which means it will need Arithmetic operators a lot. 
 
 ## Script Explanation
 The game is quite simple to understand. You just have to select the number beneath your chosen number within 5 seconds in the shell script. We will create a menu-like display in the terminal by simple echo command and formatting. Before the menu, we will have a while loop that will iterate until the user enters 3 which is stored in variable `ch` which is initialized to 0 in the beginning so as to enter the loop for the first time. A while loop starts with the do statement and ends at the done statement.
-```
+```bash
 while [ condition ];
 do 
 # statements
@@ -27,14 +27,14 @@ done
 ```
 For loop can be different based on the scenario. We'll use a range-based for loop to iterate over a range of numbers using the { } operators. For loop also has do as the beginning of the loop and done as the end of the loop.
 
-```
+```bash
 for i in {1..5};
 do 
 #statements
 done
 ```
 We'll also use some If-else statements just to check for the correct user input and checking the exit status. The if statements have `then` to start the block and `fi` to end the if block. 
-```
+```bash
 if [ condition ];
 then
     #statements
@@ -72,7 +72,7 @@ If the index of the number was equal and correct, well done we'll increment the 
 ![numbjackbash.gif](https://cdn.hashnode.com/res/hashnode/image/upload/v1625753634816/CCUD8OD_K.gif)
 
 ## BASH Script
-```
+```bash
 #!/bin/bash
 
 echo -e "\n NumberJack \n"

@@ -13,12 +13,13 @@ Bash Scripting is a powerful skill to have as a programmer because we find Linux
 ## Boilerplate macro
 Setting up a bash script doesn't require much code but still in some cases it can be a bit hassle and to avoid the repetitive task, one can easily set up a macro for the boilerplate BASH script.
 
-```
+```vim
 nnoremap bs i#!/bin/bash/<ESC>o
 ```
 Ok that was pretty dumb but it can scale pretty quickly and it will be nice to tailor it as per needs, here's some snippet with function pre-loaded.
 
-```
+```vim
+nnoremap bs i#!/bin/bash/<ESC>o
 nnoremap bs i#!/bin/bash/<ESC>o<ESC>ofunction main(){<ESC>o<ESC>o}<ESC>ki<S-TAB>
 
 ```
@@ -28,9 +29,11 @@ When the key bs is typed in normal mode, you enter into insert mode as per the c
 
 ## Sourcing Scripts
 So, after creating the file, sourcing the script, and running it can be a bit slow for some people, as you have to go to the terminal and toggle in the permission to run the script and then run, But pull on your seatbelts as this is VIM! You can die due to slowness!
-```
+
+```vim
 nnoremap sh :!chmod +x % && source %
 ```
+
 ![type sh to run script](https://s6.gifyu.com/images/shclip.gif)
 
 When the sh keys are typed in the normal mode, the preceding command after ! (bang) will be executed in the terminal, the && keywords will execute the second command only when the first command is successfully executed.
