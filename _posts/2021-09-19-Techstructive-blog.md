@@ -53,6 +53,6 @@ That might be a good quote applicable to me but I believe in  [PI-Shaped Learnin
 
 ## Conclusion
 
-Phew! that took a while to finish. But hey! Thanks a lot for reading till here. I hope you got my thoughts about the scope of this blog. I owe to continue this blogging journey in the future and improve my as well as the reader's skills and experience.
+Phew! That took a while to finish. But hey! Thanks a lot for reading till here. I hope you got my thoughts about the scope of this blog. I owe to continue this blogging journey in the future and improve my as well as the reader's skills and experience.
 
 Well, until then HAPPY CODING :)

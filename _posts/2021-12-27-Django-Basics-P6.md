@@ -17,7 +17,7 @@ Static files as the name suggests are the files that don't change, your style sh
 
 We have basically 3 types of static files, CSS, Javascript files and media files/static templates,etc. They are all rendered in the same way but as per their conventions and usage. 
 
-You can learn about the theoretical information on [static files](https://docs.djangoproject.com/en/4.0/howto/static-files/) fron the django documentation.
+You can learn about the theoretical information on [static files](https://docs.djangoproject.com/en/4.0/howto/static-files/) from the django documentation.
 
 ## How to configure Static Files
 
@@ -34,7 +34,7 @@ STATICFILES_DIRS = (
 )
 ```   
 
-Ignore the `import os` if you already have imported and the `STATIC_URL` if already there in the file. The `STATICFILES_DIRS` is the configuration that we tell the django environment to look for all our static files in the base/root directory of the project where the `static/` folder is. The `os.path.join()` actually gets the path of the directory in ourr operating system to the folder specified in the case of our project the `BASE_DIR` is the path of the project and we add in the static folder to actually the project path. The final piece and the crucial one is the `"static/"` path, this can be other location where you have created your static folder within the project.
+Ignore the `import os` if you already have imported and the `STATIC_URL` if already there in the file. The `STATICFILES_DIRS` is the configuration that we tell the django environment to look for all our static files in the base/root directory of the project where the `static/` folder is. The `os.path.join()` actually gets the path of the directory in our operating system to the folder specified in the case of our project the `BASE_DIR` is the path of the project and we add in the static folder to actually the project path. The final piece and the crucial one is the `"static/"` path, this can be other location where you have created your static folder within the project.
 
 That's it! Yes, it's that simple. We can now create static files and render them in our templates. 
 
@@ -193,8 +193,7 @@ urlpatterns = [
     path('', include('post.urls')),
 ]
 ```
-The urls file in the project folder is the core configuration for project level url routesto individual applications within the project.
-
+The urls file in the project folder is the core configuration for project level url routes to individual applications within the project.
 
 Append the following if your templates and static files are not configured properly.
 
@@ -269,7 +268,7 @@ urlpatterns = [
         ]
 ```
 
-So, thats the url and view map created, we can now be able to see the result in the `127.0.0.1:8000/for/` url to see the below result:
+So, that's the url and view map created, we can now be able to see the result in the `127.0.0.1:8000/for/` url to see the below result:
 
 ![Static demo for inheritance of tempaltes](https://res.cloudinary.com/dgpxbrwoz/image/upload/v1640622976/blogmedia/static-tempinh_peyjrg.png)
 

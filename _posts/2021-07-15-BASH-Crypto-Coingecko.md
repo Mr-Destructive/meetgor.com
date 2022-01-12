@@ -104,7 +104,7 @@ So, we just need the numbers between `,` and `]],"market_caps"` right?
 
 OR
 
-the text between `,` and `]],"m`.
+The text between `,` and `]],"m`.
 
 It is quite simple to extract the required value, we will use grep and Pearl Regular Expression. 
 ```bash

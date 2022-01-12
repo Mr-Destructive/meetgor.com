@@ -50,7 +50,7 @@ Now we have the content of the webpage on our local machine, we need to search o
 
 ### Finding Tags to Extract content.
 
-We need to find patterns and similarities in the tags that contain the text of the meaning of the specified word. from the analysis of the webpage, we see that the element `<span class="one-click-content css-nnyc96 e1q3nk1v1">` contains the actual meaning. We just need the basic meaning, we may not need examples and long lengthy definitions on our Terminal, So we will go with filtering out the span tag with a class called `one-click-content css-nnyc96 e1q3nk1v1`. To do that we can use the grep command, which can print the text or line matching the specified expression or text. Here we need the span element with the particular class name so we will use regular expressions to find it more effectively.
+We need to find patterns and similarities in the tags that contain the text of the meaning of the specified word. From the analysis of the webpage, we see that the element `<span class="one-click-content css-nnyc96 e1q3nk1v1">` contains the actual meaning. We just need the basic meaning, we may not need examples and long lengthy definitions on our Terminal, So we will go with filtering out the span tag with a class called `one-click-content css-nnyc96 e1q3nk1v1`. To do that we can use the grep command, which can print the text or line matching the specified expression or text. Here we need the span element with the particular class name so we will use regular expressions to find it more effectively.
 
 ```shell
 grep -oP '(?<=<span class="one-click-content css-nnyc96 e1q3nk1v1">).*?(?=</span>)' meaning.txt >temp.txt 
@@ -60,7 +60,7 @@ grep -oP '(?<=<span class="one-click-content css-nnyc96 e1q3nk1v1">).*?(?=</span
 
 The above command will search and return only lines that are contained in the span tags with that particular class name from the meaning.txt file which we appended to fill the webpage's source code. The `-oP` are the arguments that return Only the matching cases and `-P` the coming expression is a Perl Regex. The command will return everything in between those tags. Finally, we are storing the result or output in `temp.txt`. 
 
-Now, if you think we are done, then it's wrong, the webpage can have internal or external links embedded inside of the elements as well, so we need to again filter out the HTML tags from the `temp.txt` file. for that, we will introduce another tool to filter text called `sed` or Stream editor. This tool allows us to filter the stream field and print or store the outcome. The following code will remove the HTML tags from the scrapped text.
+Now, if you think we are done, then it's wrong, the webpage can have internal or external links embedded inside of the elements as well, so we need to again filter out the HTML tags from the `temp.txt` file. For that, we will introduce another tool to filter text called `sed` or Stream editor. This tool allows us to filter the stream field and print or store the outcome. The following code will remove the HTML tags from the scrapped text.
 
 ### Using SED command to remove embedded tags.
 
@@ -77,6 +77,7 @@ The above command filters the text and removes the HTML tags from the `temp.txt 
 Now from the above command removes the special characters such as `$,#`, and others from the temp.txt file. We finally store everything filtered in the meaning.txt file. If you understood till here, the next concrete step will be super easy for you, as we will assemble everything here in a shell script.
 
 ## Making the Shell Script
+
 ```bash
 #!/bin/bash
 

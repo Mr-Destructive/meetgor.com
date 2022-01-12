@@ -175,7 +175,7 @@ The applications of Machines Learning are all around you. Just look carefully, y
 
 This list is quite huge and is increasing every day with new technologies and growing popularity. 
 
-## Can Github Autopilot take away developers' jobs?
+## Can GitHub Copilot take away developers' jobs?
 
 This just doesn't focus on developers, it's every human's job on target this day but really? Is it a matter of concern? 
 I don't think so, because,

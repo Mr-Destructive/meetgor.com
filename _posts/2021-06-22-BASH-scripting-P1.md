@@ -57,6 +57,7 @@ From the above script, we outputted the value of x to the console. We also execu
 
 ## If-else Conditional statements
 If-else conditional statements are quite the fundamentals of any logical operations performed in the programming world, so Bash has them implemented pretty much the same way as other shells do.
+
 ```bash
 #!/bin/bash
 a=9
@@ -101,7 +102,7 @@ fi
 
 ![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1624290844242/8FQgLjIQT.png)
 
-From the above script, we used if-elif-else statements to evaluate different conditions. We hade use -eq to equate the value of the variable to the number we want to compare with. That was self-explanatory logic.
+From the above script, we used if-elif-else statements to evaluate different conditions. We had use -eq to equate the value of the variable to the number we want to compare with. That was self-explanatory logic.
 
 ## Loops
 
@@ -218,7 +219,7 @@ echo $?
 
 ![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1624349678664/yDGL3U70C.png)
 
-Here we return the addition of two numbers and we use the internal variable ? to access the exit status of the function. The ? is an internal variable in Bash, which holds the exit status of the last executed command. In this case, it was the function call and its return statement was stored in it.  As said, it can become quite buggy to exit the function scope with wired return statements, so to avoid those we can make use of global variables.
+Here we return the addition of two numbers and we use the internal variable ? To access the exit status of the function. The ? Is an internal variable in Bash, which holds the exit status of the last executed command. In this case, it was the function call and its return statement was stored in it.  As said, it can become quite buggy to exit the function scope with wired return statements, so to avoid those we can make use of global variables.
 
 
 ```bash

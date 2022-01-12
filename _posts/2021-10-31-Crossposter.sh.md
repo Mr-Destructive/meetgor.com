@@ -102,7 +102,7 @@ Now, once you have configured every thing, you can opt for the `4` choice that i
 
 ## Why use Crossposter.sh?
 
-This can be not so big of an issue for most of the people but it was a good side project to work and learn more about how APIs work and get some ideas on the design of the platform. Though it is quite time saving to cross post on 3 different platforms within a minute or two. You can tailor your own script as per your sppecifications and desire.   
+This can be not so big of an issue for most of the people but it was a good side project to work and learn more about how APIs work and get some ideas on the design of the platform. Though it is quite time saving to cross post on 3 different platforms within a minute or two. You can tailor your own script as per your specifications and desire.   
 
 So, if you are an author on all of the mentioned platforms, please give it a try. Other Platforms are welcome for contributions. If you found any unexpected things, please hit them in the `issues` tab. 
 

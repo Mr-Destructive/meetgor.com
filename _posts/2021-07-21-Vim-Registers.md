@@ -59,7 +59,7 @@ The registers `:`, `.`, and `%` are Read-only, which means you cannot change the
 Using the `:` register, we can get the content of any register in the Insert mode so that we can copy the contents and edit if we have stored it in some registers. This is quite a neat little feature, not used most of the time but it can become the most powerful tool in corner cases and tricky situations. 
 
 ![vimc-r.gif](https://cdn.hashnode.com/res/hashnode/image/upload/v1626946965392/KBSZmxOHvi.gif)
-From the example in the gif, we deleted the line, and hence the content was stored in register 1 so when we press `Ctrl + R` in Insert mode, we can now paste in the contents of any register. here we used the register `1` to get our content back. 
+From the example in the gif, we deleted the line, and hence the content was stored in register 1 so when we press `Ctrl + R` in Insert mode, we can now paste in the contents of any register. Here we used the register `1` to get our content back. 
 
 The `%` register holds the name of the current file, this is really a great and life-saving editor, as it is also used in automating the compilation and running of the source files from Vim itself. 
 
@@ -102,7 +102,7 @@ Well, this may differ as per the experience with your programming journey, you m
 ## Conclusion
 
 ![vimregistertable.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1626953924487/2bPqejVkT.png)
-The above chart is quite simple to remember if you are really into making Vim for complex projects and even for staying productive in Vim editor. Hope you find it interesting and easy to remeber.
+The above chart is quite simple to remember if you are really into making Vim for complex projects and even for staying productive in Vim editor. Hope you find it interesting and easy to remember.
 This was a small introduction to Vim-registers but is a small topic with extensive usage and skill-dependent concept. Vim is already a customizable editor, registers add an extra dimension to its customizability in editing and programming. Thank you for listening to me. Happy Coding :)
 
 **References** :

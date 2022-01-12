@@ -157,7 +157,7 @@ You can even use `: "` and `"` double quotes instead of single quotes
 =#
 ```
 
-### Understanding theCommands / Keymapping
+### Understanding the Commands / Keymapping
 
 **NOTE : You need to go from the top to bottom while commenting on the block of code, otherwise, it would be a mismatch in commenting for specific language syntax. While uncommenting the order doesn't matter.**
 

@@ -22,7 +22,7 @@ My  [first article](https://techstructiveblog.hashnode.dev/why-and-how-you-shoul
 Until I found an **Internship at GeeksforGeeks for a Technical Writer** role.  [Geeksforgeeks](https://www.google.com/aclk?sa=l&ai=DChcSEwj-_8TAq_7yAhUtlUsFHdI4AD4YABAAGgJzZg&ae=2&sig=AOD64_1xL_mUI1OLWumXOK-H1jF4wRP8eg&q&nis=1&adurl&ved=2ahUKEwjSlb_Aq_7yAhXMb30KHXM6BPsQ0Qx6BAgCEAE)  is a start-up for Computer science students to learn and grow with free as well as paid courses and mentors. In a couple of months, I wrote some 10-12 articles about Shell scripting. There I really found my interest and the confidence I wanted.  It was really a great experience working here and loved the freedom it provided to the authors with genuine and constructive feedback along with a decent stipend.  [Here](https://auth.geeksforgeeks.org/user/meetgor/articles)  you can find my work.
 
 ### The start of the `Techstructive Blog` 
-Soon, on June 6th something stuck in my mind that I should write about how to use Vim for doing various things. So, the first idea was what currently I was learning in College i.e Python, I started writing about the Vim set up for python and I completed it within 2 hours. I published it on Hashnode and **from there I never looked back. I started writing an article every 3-4 days**. That summed up for 3 months making 21 articles till September. I also made my personal open-source blog called [`Techstructive Blog`](https://mr-destructive.github.io/techstructive-blog/) using Jekyll and hosted it on Github pages. 
+Soon, on June 6th something stuck in my mind that I should write about how to use Vim for doing various things. So, the first idea was what currently I was learning in College i.e Python, I started writing about the Vim set up for python and I completed it within 2 hours. I published it on Hashnode and **from there I never looked back. I started writing an article every 3-4 days**. That summed up for 3 months making 21 articles till September. I also made my personal open-source blog called [`Techstructive Blog`](https://mr-destructive.github.io/techstructive-blog/) using Jekyll and hosted it on GitHub pages. 
 
 
 ![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1631625512256/eyN6xO92G.png)
@@ -53,7 +53,7 @@ This is really a neglected part when you ask a technical writer as it can really
 
 ## Conclusion
 
-That's been my story soo far. I have grown from a noob coder to a somewhat confident nerd who can quickly write functional scripts, jump in Vim with more speed, and of course, teach someone something that can be helpful. It also is a way for me to relax and enjoy the process of programming. 
+That's been my story so far. I have grown from a noob coder to a somewhat confident nerd who can quickly write functional scripts, jump in Vim with more speed, and of course, teach someone something that can be helpful. It also is a way for me to relax and enjoy the process of programming. 
 
 Thanks a lot if you have been reading till here. 
 **Thank you Hashnode for providing such a great opportunity to create a side hustle here**. As always Happy Coding :)

@@ -51,6 +51,7 @@ So, who would not love it? I am willing to write and use their service for some 
 ## Set up a Django Project
 
 If you are reading this you already know how to set up a Django project, I assume. But nevertheless, I can just include a quick introduction on how to do it. I have a script to do this. 
+
 ```bash
 #!/usr/bin/env bash
 
@@ -173,7 +174,7 @@ We have used this concept in adding configuration and credentials to the `settin
 
 ### Adding text before a particular line using `sed` 
 
-`sed` is a great command, and there is nothing you can't do with it, ok there might be exceptions. We can get write to a file directly (don't display the output) and specify the line number before which we want to append the text. We can then add the text we want and followed by the filename.
+`sed` is a great command, and there is nothing you can't do with it, OK there might be exceptions. We can get write to a file directly (don't display the output) and specify the line number before which we want to append the text. We can then add the text we want and followed by the filename.
 
 ```shell
 sed -i '33 i sometext here' filename

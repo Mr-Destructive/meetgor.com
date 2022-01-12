@@ -17,7 +17,7 @@ Bash also has built-in features such as variables, loops, if-else conditional st
 
 ![Demonstrating bash commands](https://s6.gifyu.com/images/recording1b26b94770ee59bf.gif)
 
-From the above gif, I edited a file without leaving the terminal. That can be lame but powerful in certain conditions. Anyways, that was just an example, but you can see where it can go. It can be extremely powerful for some repetitive tasks in programming or any other tasks. it can be also quite vividly used in the upcoming fields.
+From the above gif, I edited a file without leaving the terminal. That can be lame but powerful in certain conditions. Anyways, that was just an example, but you can see where it can go. It can be extremely powerful for some repetitive tasks in programming or any other tasks. It can be also quite vividly used in the upcoming fields.
  
 ## Applications
 

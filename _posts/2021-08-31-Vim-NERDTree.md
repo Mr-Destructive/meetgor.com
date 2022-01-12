@@ -48,7 +48,7 @@ After saving and sourcing your vimrc file, you need to now install those plugins
 
 #### Pathogen
 
-To install any plugin using Pathogen plugin manager, you need to configure PAthogen in your vimrc if you have not done it already. You can find the installation docs on [Pathogen.vim](https://github.com/tpope/vim-pathogen).
+To install any plugin using Pathogen plugin manager, you need to configure Pathogen in your vimrc if you have not done it already. You can find the installation docs on [Pathogen.vim](https://github.com/tpope/vim-pathogen).
 After Pathogen has been configured in your vimrc, you can clone the git repository of that plugin into your local machine and then activate it using Pathogen. 
 
 ```
@@ -120,7 +120,7 @@ You can create files using the NERDTree window by pressing m inside the particul
 
 	We can list the file/folder i.e to display its properties the read/write/execute permissions, date modified and created, etc.
 
-8. Run system COmmand in this folder. (`s`)
+8. Run system Command in this folder. (`s`)
 
 	We can run system commands or shell/terminal commands using the key `s`, For windows, we open the COMMAND PROMPT, and in Linux and macOS, it is terminal.
 

@@ -143,7 +143,7 @@ django-admin startproject $1 .
 clear
 ```
 
-save as commands.sh file
+Save as commands.sh file
 
 For Windows: 
 

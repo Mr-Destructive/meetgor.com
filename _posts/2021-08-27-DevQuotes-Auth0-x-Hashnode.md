@@ -65,7 +65,7 @@ Some of the main features of the web application are as follows:
 
 > Have the curiosity to learn, rest is automated
 
-The project was made by using various inspirational articles and videos about making a web application. But the idea stuck in my mind when I was thinking about the people who don't get inspired as a developer. Like there is no way you can remain sad about being a developer and keep on dealing with imposter syndrome. Every developer has a perspective of programming but there is an infinite number of opportunities if you are curious enough. Just started making the project and got so much into it that I was literally dreaming about it like I saw parts of the webpage. in my dream and I am making it that was genuinely a thing that powered me to complete it. 
+The project was made by using various inspirational articles and videos about making a web application. But the idea stuck in my mind when I was thinking about the people who don't get inspired as a developer. Like there is no way you can remain sad about being a developer and keep on dealing with imposter syndrome. Every developer has a perspective of programming but there is an infinite number of opportunities if you are curious enough. Just started making the project and got so much into it that I was literally dreaming about it like I saw parts of the webpage. In my dream and I am making it that was genuinely a thing that powered me to complete it. 
 
 The project roughly started on 19th August and almost ended on 26th August, like the actual webpage and its core functionalities. Though on 27th were some styling and extra additions such as the About section and Footer. That was like the most productive week I ever had in my programming journey. That was fun as heck.
 
@@ -102,7 +102,7 @@ I must say, integrating Auth0 is even easier than using Django User Model in som
  
 ### Specifications
 
-I won't go in-depth about the technicalities of the project but would like to address certain things. FIrstly I have mostly used Class-based views for the major part, certain areas are still function-based just for the simplicity of the application and a few of them are handled and documented by Auth0 so just preferred that. 
+I won't go in-depth about the technicalities of the project but would like to address certain things. Firstly I have mostly used Class-based views for the major part, certain areas are still function-based just for the simplicity of the application and a few of them are handled and documented by Auth0 so just preferred that. 
 
 Another thing is about Models, I just have a simple single model called `Quote` which has an Author as a Foreign Key from the Django User Model. I would have also created multiple emojis for the like system but I was too excited and in a rush to see the actual app, So just kept it simple. XD
 ![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1630060555499/246ZKnypP.png) 
@@ -142,7 +142,7 @@ As said, I would like to add more like buttons expressing different emotions. So
 
 >Talk is cheap, show me the code - Linus Torvalds
 
-The source code is available at Github on this  [Link](https://github.com/Mr-Destructive/devquotes). 
+The source code is available at GitHub on this  [Link](https://github.com/Mr-Destructive/devquotes). 
 It's freely open for any contribution after the hackathon(mid-September).  Some of the files such as the environment variables, virtual environments, cached data are not uploaded for security and obvious reasons.
 
 Enough of technical talks, let's see the DEMO,
@@ -167,4 +167,4 @@ It's not a great UI-UX but works and is not too shabby in my opinion considering
 
 Hope you liked the project and hopefully will inspire developers to stay motivated and can focus on their goals more than dealing with imposter syndrome and whatnot. 
 
-Thank you for reading and using the app, for any feedbacks, Twitter handles, comment section, Github issues, LinkedIn messages are all freely open. Thanks. Happy Coding :)
+Thank you for reading and using the app, for any feedbacks, Twitter handles, comment section, GitHub issues, LinkedIn messages are all freely open. Thanks. Happy Coding :)

@@ -10,7 +10,7 @@ image: https://techstructiveblog.hashnode.dev/_next/image?url=https%3A%2F%2Fcdn.
 
 ![]({{ page.image | relative_url }})
 ## Introduction
-OK! Vim and movent are like bread and butter or failed brakes. To become a proficient Vim user, you need to move in Vim very effectively. You don't have to think about doing certain things, your fingertips should automatically move without wasting time thinking about it. I am sure, it takes time and effort but OH! it is so rewarding in the end.  
+OK! Vim and movement are like bread and butter or failed brakes. To become a proficient Vim user, you need to move in Vim very effectively. You don't have to think about doing certain things, your fingertips should automatically move without wasting time thinking about it. I am sure, it takes time and effort but OH! it is so rewarding in the end.  
 
 ### Why H J K L?
 First things first, unmap arrow keys and make a habit of using h,j,k, and l. Yes, this would not make any sense in the initial stage but that will make no sense for not using it later. 
@@ -162,5 +162,5 @@ You can use Caps H J K L to move the leftmost, bottom, uppermost, rightmost spli
 That just was quick to make you enough faster than previous hassles.
 
 
-That was probably it, these were some tricks and shortcuts to move around Vim pretty effectively and smoothly. Moving around Vim can be quite complicated at once, but it's just finding the key shortcuts to make you feel and glid in VIm. There might be quite a lot of shortcuts missing, If you have any quicker shortcuts, Please let me know in the comments.  Happy Viming :)
+That was probably it, these were some tricks and shortcuts to move around Vim pretty effectively and smoothly. Moving around Vim can be quite complicated at once, but it's just finding the key shortcuts to make you feel and glide in VIm. There might be quite a lot of shortcuts missing, If you have any quicker shortcuts, Please let me know in the comments.  Happy Viming :)
 
