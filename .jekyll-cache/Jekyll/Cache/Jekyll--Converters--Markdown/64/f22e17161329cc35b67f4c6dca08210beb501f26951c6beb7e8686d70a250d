@@ -1,0 +1,269 @@
+I"`<h2 id="introduction">Introduction</h2>
+
+<p>After creating templates, it should be rather tempting to add some styles and logic to them. Well yes, we’ll see how to add static files in a web application using django. Static files are not only CSS, but also media/images and Javascript files as well. In this part of the series, we’ll cover the basics of working with static files in django including the configuration, rendering and storing of the static files.</p>
+
+<h2 id="what-are-static-files">What are Static Files?</h2>
+
+<p>Static files as the name suggests are the files that don’t change, your style sheets(css/scss) are not gonna change for every request from the client side, though the template might be dynamic. Also your logo, images in the design will not change unless you re-design it XD So these are the static files that needs to be rendered along with the templates.</p>
+
+<p>We have basically 3 types of static files, CSS, Javascript files and media files/static templates,etc. They are all rendered in the same way but as per their conventions and usage.</p>
+
+<p>You can learn about the theoretical information on <a href="https://docs.djangoproject.com/en/4.0/howto/static-files/">static files</a> from the django documentation.</p>
+
+<h2 id="how-to-configure-static-files">How to configure Static Files</h2>
+
+<p>Firstly you can create a folder for all the static files in the root folder. Usually the convention is <code class="language-plaintext highlighter-rouge">static</code> as the name of the folder. So, if you have created the template folder in the root directory, similar to that static folder can be created in that path.</p>
+
+<p>Next after creating the static folder in the project root folder, we need to configure the <code class="language-plaintext highlighter-rouge">settings.py</code> file to actually tell Django web server to look for all our static files in that folder. To do that, go to the <code class="language-plaintext highlighter-rouge">settings.py</code> file, now by this time you would have known where the <code class="language-plaintext highlighter-rouge">settings.py</code> file is (inside the project-named folder). Add the following at the end of the <code class="language-plaintext highlighter-rouge">settings.py</code> file.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># import os
+# STATIC_URL = '/static/'
+</span>
+<span class="n">STATICFILES_DIRS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">"static/"</span><span class="p">),</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Ignore the <code class="language-plaintext highlighter-rouge">import os</code> if you already have imported and the <code class="language-plaintext highlighter-rouge">STATIC_URL</code> if already there in the file. The <code class="language-plaintext highlighter-rouge">STATICFILES_DIRS</code> is the configuration that we tell the django environment to look for all our static files in the base/root directory of the project where the <code class="language-plaintext highlighter-rouge">static/</code> folder is. The <code class="language-plaintext highlighter-rouge">os.path.join()</code> actually gets the path of the directory in our operating system to the folder specified in the case of our project the <code class="language-plaintext highlighter-rouge">BASE_DIR</code> is the path of the project and we add in the static folder to actually the project path. The final piece and the crucial one is the <code class="language-plaintext highlighter-rouge">"static/"</code> path, this can be other location where you have created your static folder within the project.</p>
+
+<p>That’s it! Yes, it’s that simple. We can now create static files and render them in our templates.</p>
+
+<h2 id="creating-and-storing-static-files">Creating and Storing Static files</h2>
+
+<p>Now this part is customizable and it depends on your preference, how you want to organize the static folder. The convention that I follow is creating separate folders namely for <code class="language-plaintext highlighter-rouge">css</code>, <code class="language-plaintext highlighter-rouge">js</code> and <code class="language-plaintext highlighter-rouge">assets</code>(or <code class="language-plaintext highlighter-rouge">img</code>) mostly. And inside of this folders you can store the respective static files. This also creates the project more scalable in terms of it’s maintenance.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>static\
+  |__css\
+  |__js\
+  |__assets\
+</code></pre></div></div>
+
+<p>Let’s create a static file and an image to demonstrate the concept of static files in django.</p>
+
+<ul>
+  <li>css/style.css</li>
+</ul>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">body</span> 
+<span class="p">{</span>
+    <span class="nl">background-color</span><span class="p">:</span><span class="m">#1d1dff</span><span class="p">;</span>
+    <span class="nl">color</span><span class="p">:</span><span class="no">white</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">h1</span>
+<span class="p">{</span>
+    <span class="nl">text-align</span><span class="p">:</span><span class="nb">center</span>
+    <span class="n">font-family</span><span class="p">:</span> <span class="nb">monospace</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">p</span>
+<span class="p">{</span>
+    <span class="nl">color</span><span class="p">:</span><span class="m">#ff6600</span><span class="p">;</span>
+    <span class="nl">font-weight</span><span class="p">:</span><span class="m">500</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">ul</span>
+<span class="p">{</span>
+    <span class="nl">list-style-type</span><span class="p">:</span><span class="nb">square</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>assets/tbicon.png</li>
+</ul>
+
+<p>Demo Image (that’s my blog icon)</p>
+
+<p><img src="https://github.com/Mr-Destructive/techstructive-blog/blob/gh-pages/assets/img/tbicon.png?raw=true" alt="Demo image" /></p>
+
+<h2 id="rendering-static-files-from-templates">Rendering Static Files from Templates</h2>
+
+<p>So, after configuring and creating the static files, we now can inject them into our templates. If you try to do the traditional way i.e. linking stylesheets/images/script files with HTML, it just won’t work as you expect to and there’s no point in using traditional way while creating a web application with a framework. So, there is a framework specific way to do things which make it easier and efficient for the project.</p>
+
+<p>To render any static file, we need to load the static tag which allows us to embed links for the static files into the templates. This means if the static files are not loaded directly instead in production(deploying our application) the static files are stored in a folder <code class="language-plaintext highlighter-rouge">STATIC_ROOT</code> which the server then loads, we’ll see how that internally works when we get to deployment techniques for Django project.</p>
+
+<p>To load the static files from our configuration, we can simpy include the tag on top of the template.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{% load static %}
+</code></pre></div></div>
+
+<p>The above templating tag will load the <code class="language-plaintext highlighter-rouge">static</code> tag which allows us to embed the links to the static files as explained earlier.</p>
+
+<p>Now, we can actually access any file with the static folder in our templates with a particular syntax as below:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"{% static 'css/style.css' %}"</span><span class="nt">&gt;</span>  
+</code></pre></div></div>
+<p>Its just a example how to load the file, we are calling the static tag which we have loaded in previously and from there we are referencing the css file. The compact syntax would be : <code class="language-plaintext highlighter-rouge">{% static  'path-to-file'  %}</code></p>
+
+<p><strong>NOTE: The path to the static file is relative from the Static folder, i.e. enter the path of the file considering the static folder as the base directory.</strong></p>
+
+<h3 id="demonstration-of-the-static-file">Demonstration of the static file</h3>
+
+<p>Let’s render the static file which we created earlier i.e. the css file and the image into a template.</p>
+
+<p>Assuming you have a app called <code class="language-plaintext highlighter-rouge">post</code> in your django project, you can render static files as below:</p>
+
+<h1 id="templateshomehtml">templates/home.html</h1>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Django Blog<span class="nt">&lt;/title&gt;</span>
+    {% load static  %}
+    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"{% static 'css/style.css'  %}"</span><span class="nt">&gt;</span>  
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>Hello, World!<span class="nt">&lt;/h1&gt;</span>
+    {% block body  %}
+    <span class="nt">&lt;p&gt;</span>This is not going to get inherited <span class="nt">&lt;/p&gt;</span>
+    {% endblock  %}
+    <span class="nt">&lt;p&gt;</span>This will be inherited<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+<p>We are loading the static tag and then loading the css file using the tag syntax as explained above.</p>
+
+<h1 id="staticcssstylecss">static/css/style.css</h1>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">body</span> 
+<span class="p">{</span>
+    <span class="nl">background-color</span><span class="p">:</span><span class="m">#1d1dff</span><span class="p">;</span>
+    <span class="nl">color</span><span class="p">:</span><span class="no">white</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">h1</span>
+<span class="p">{</span>
+    <span class="nl">text-align</span><span class="p">:</span><span class="nb">center</span>
+    <span class="n">font-family</span><span class="p">:</span> <span class="nb">monospace</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">p</span>
+<span class="p">{</span>
+    <span class="nl">color</span><span class="p">:</span><span class="m">#ff6600</span><span class="p">;</span>
+    <span class="nl">font-weight</span><span class="p">:</span><span class="m">500</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">ul</span>
+<span class="p">{</span>
+    <span class="nl">list-style-type</span><span class="p">:</span><span class="nb">square</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>This is the static file,<code class="language-plaintext highlighter-rouge">style.css</code> stored inside the css folder of the static folder. This contains basic (very lame) CSS styling as we can understand.</p>
+
+<h1 id="postviewspy">post/views.py</h1>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">)</span>
+</code></pre></div></div>
+<p>The <code class="language-plaintext highlighter-rouge">views.py</code> file has the function that renders the template <code class="language-plaintext highlighter-rouge">home.html</code> from the templates folder inside the application specific folder.</p>
+
+<h1 id="posturlspy">post/urls.py</h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">post</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">path</span><span class="p">(</span><span class="s">''</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">home</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"home"</span><span class="p">),</span>
+        <span class="p">]</span>
+</code></pre></div></div>
+<p>This is the application level configuration for the url routes to the views linking the views(functions) from the <code class="language-plaintext highlighter-rouge">views.py</code> file. The url in this file(code-snippet) is linking the root url(‘’) to the home view in the <code class="language-plaintext highlighter-rouge">views.py</code> file.</p>
+
+<h1 id="blogurlspy">Blog/urls.py</h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span><span class="p">,</span> <span class="n">include</span>
+<span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">TemplateView</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'admin/'</span><span class="p">,</span> <span class="n">admin</span><span class="p">.</span><span class="n">site</span><span class="p">.</span><span class="n">urls</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">''</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">'post.urls'</span><span class="p">)),</span>
+<span class="p">]</span>
+</code></pre></div></div>
+<p>The urls file in the project folder is the core configuration for project level url routes to individual applications within the project.</p>
+
+<p>Append the following if your templates and static files are not configured properly.</p>
+
+<h1 id="blogsettingspy">Blog/settings.py</h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>   
+
+<span class="n">TEMPLATES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">'BACKEND'</span><span class="p">:</span> <span class="s">'django.template.backends.django.DjangoTemplates'</span><span class="p">,</span>
+        <span class="s">'DIRS'</span><span class="p">:</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">'templates'</span><span class="p">),],</span>
+        <span class="s">'APP_DIRS'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="s">'OPTIONS'</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">'context_processors'</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s">'django.template.context_processors.debug'</span><span class="p">,</span>
+                <span class="s">'django.template.context_processors.request'</span><span class="p">,</span>
+                <span class="s">'django.contrib.auth.context_processors.auth'</span><span class="p">,</span>
+                <span class="s">'django.contrib.messages.context_processors.messages'</span><span class="p">,</span>
+            <span class="p">],</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+<span class="p">]</span>
+<span class="n">STATIC_URL</span> <span class="o">=</span> <span class="s">'/static/'</span>
+<span class="n">STATICFILES_DIRS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">"static/"</span><span class="p">),</span>
+<span class="p">)</span>
+</code></pre></div></div>
+<p>SO, the result of the above code is as simple template as shown in the picture below:</p>
+
+<p><img src="https://res.cloudinary.com/dgpxbrwoz/image/upload/v1640621276/blogmedia/static-1_vu41gf.png" alt="Static file demo" /></p>
+
+<p>This will also work if you do it with traditional HTML syntax, but I’d explained why it’s not recommended to do it while using frameworks.</p>
+
+<p>Let’s see how static files are rendered in inherited templates. We’ll tinker with the <code class="language-plaintext highlighter-rouge">for.html</code> template created in the <a href="https://mr-destructive.github.io/techstructive-blog/django/python/web-development/2021/12/14/Django-Basics-P5.html">previous part</a>.</p>
+
+<h1 id="templateforhtml">template/for.html</h1>
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'home.html'</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="nv">load</span> <span class="nv">static</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">body</span> <span class="cp">%}</span>
+    <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">static</span> <span class="s1">'assets/tbicon.png'</span> <span class="cp">%}</span><span class="s">"</span> <span class="na">height=</span><span class="s">"50px"</span> <span class="na">width=</span><span class="s">"50px"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;ul&gt;</span>
+        <span class="cp">{%</span> <span class="k">for</span> <span class="nv">sport</span> <span class="ow">in</span> <span class="nv">sport_list</span> <span class="cp">%}</span>
+        <span class="nt">&lt;li&gt;</span><span class="cp">{{</span> <span class="nv">sport</span> <span class="cp">}}</span><span class="nt">&lt;/li&gt;</span>
+        <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+    <span class="nt">&lt;/ul&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+<p>We will have re-load the static tag for each template only if we need to include a new static file in the template. So we use the <code class="language-plaintext highlighter-rouge">{% load static%}</code> again as we are loading the static file (image) in this template.</p>
+
+<h1 id="postviewspy-1">post/views.py</h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+
+<span class="k">def</span> <span class="nf">for_demo</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">sports</span> <span class="o">=</span> <span class="p">(</span><span class="s">'football'</span><span class="p">,</span> <span class="s">'cricket'</span><span class="p">,</span> <span class="s">'volleyball'</span><span class="p">,</span> <span class="s">'hockey'</span><span class="p">,</span> <span class="s">'basketball'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'for.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'sport_list'</span><span class="p">:</span> <span class="n">sports</span><span class="p">})</span>
+
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h1 id="posturlspy-1">post/urls.py</h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">post</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">path</span><span class="p">(</span><span class="s">''</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">home</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"home"</span><span class="p">),</span>
+        <span class="n">path</span><span class="p">(</span><span class="s">'for/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">for_demo</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"fordemo"</span><span class="p">),</span>
+        <span class="p">]</span>
+</code></pre></div></div>
+
+<p>So, that’s the url and view map created, we can now be able to see the result in the <code class="language-plaintext highlighter-rouge">127.0.0.1:8000/for/</code> url to see the below result:</p>
+
+<p><img src="https://res.cloudinary.com/dgpxbrwoz/image/upload/v1640622976/blogmedia/static-tempinh_peyjrg.png" alt="Static demo for inheritance of tempaltes" /></p>
+
+<p>The list style has been changed and thus we can see that the CSS from the parent template is also being inherited.</p>
+
+<p>Here is the django project structure which I have created with this series so far:</p>
+
+<p><img src="https://res.cloudinary.com/dgpxbrwoz/image/upload/v1640624705/blogmedia/trr-static_bgt9du.png" alt="Folder tree structure" /></p>
+
+<p>So that has been it for the Static files in Django. Though there are lot of depth for rendering and loading the static files, we’ll explore as we get our grasp in the django and web development terminologies.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>So, from this article, we were able to configure and render static files like CSS/Images and optionally Javascript into the Django application. We covered from ground how to configure, load and structure the folder for storing all the static files at the project level.</p>
+
+<p>Hope you found it helpful and if you have any queries please let me know. We’ll start with the databases probably from the next part in the Django Basics Series. Until then have a great week and as always Happy Coding :)</p>
+:ET

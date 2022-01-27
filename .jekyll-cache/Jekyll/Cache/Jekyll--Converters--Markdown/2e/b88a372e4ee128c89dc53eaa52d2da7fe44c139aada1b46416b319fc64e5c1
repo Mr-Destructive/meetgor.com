@@ -1,0 +1,200 @@
+I"�i<h2 id="introduction">Introduction</h2>
+
+<p>We have seen the basics of Django templating in the previous parts of the series. Now, we can move on to the more backend stuff in Django which deals with the Databases, queries, admin section, and so on. In this particular part, we’ll cover the fundamental part of any application in Django i.e the <code class="language-plaintext highlighter-rouge">Model</code>. We’ll understand what the model is, how to structure one, how to create relationships and add constraints on the fields, etc.</p>
+
+<h2 id="what-ate-models">What ate Models?</h2>
+
+<p>A model is a Django-way(Pythonic) to structure a database for a given application. It is technically a class that can act as a table in a database generally and inside of the class, the properties of it act as the attributes of that database. It’s that simple. Just a blueprint to create a table in a database, don’t worry about what and where is our database. We will explore the database and its configuration in the next part.</p>
+
+<p>By creating a model, you don’t have to write all the basic SQL queries like</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">NAME</span><span class="p">(</span>
+<span class="n">attrb1_name</span> <span class="k">type</span><span class="p">,</span>
+<span class="n">attrb2_name</span> <span class="k">type</span><span class="p">,</span>
+<span class="p">.</span>
+<span class="p">.</span>
+<span class="p">.</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<p>If your application is quite big or is complex in terms of the relations among the entities, writing SQL queries manually is a daunting task and also quite repetitive at times. So Django handles all the SQL crap out of the way for the programmer. So Models are just a Pythonic way to create a table for the project/application’s database.</p>
+
+<h2 id="how-to-create-a-model">How to create a Model?</h2>
+
+<p>Creating a model for an application is as easy as creating a class in python. But hey! It’s more than that as there are other questions to address while designing the class. You need to design the database before defining the fields in the model.</p>
+
+<p>OK, we’ll it’s not straightforward as it seems to but still for creating simple and dummy projects to start with. You can use certain tools like <a href="https://www.lucidchart.com/pages/database-diagram/database-design-tool">lucidchart</a>, <a href="https://dbdiagram.io/home">dbdiagrams.io</a>, and other tools you are comfortable with. It’s important to visualize the database schema or the structure of the application before tinkering with the actual database inside the project. Let’s not go too crazy and design a simple model to understand the process.</p>
+
+<p>Here’s a basic model for a Blog:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#from django.db import models
+</span><span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+<span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">models</span><span class="p">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+    <span class="n">post</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="p">.</span><span class="n">CASCADE</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">'Article'</span><span class="p">)</span>
+    <span class="n">created</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">updated</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Ignore the <code class="language-plaintext highlighter-rouge">from django.db import models</code> as it is already in the file created by Django. If not, please uncomment the line and that should be good to go.
+This is a basic model you might wanna play with but don’t dump it anywhere.</p>
+
+<p>We define or create our models in the application inside the project. Inside the application there is already a file called <code class="language-plaintext highlighter-rouge">models.py</code> just <strong>append</strong> the above code into it. The application can be any application which makes the most sense to you or better create a app if not already created and name it as <code class="language-plaintext highlighter-rouge">article</code> or <code class="language-plaintext highlighter-rouge">post</code> or anything you like.</p>
+
+<p>If you are familiar with Python OOP(object-oriented programming), we have basically inherited the <code class="language-plaintext highlighter-rouge">models.Model</code> class from the <code class="language-plaintext highlighter-rouge">django.db</code> module into our model.</p>
+
+<p>If you want more such examples, let’s see more such models :</p>
+
+<p>An E-Mail application core model. Attributes like <code class="language-plaintext highlighter-rouge">sender</code>, <code class="language-plaintext highlighter-rouge">subject</code> of the mail, <code class="language-plaintext highlighter-rouge">body</code> of the mail, <code class="language-plaintext highlighter-rouge">recipients_list</code> i.e. the <code class="language-plaintext highlighter-rouge">To:</code> section in a mail system and the <code class="language-plaintext highlighter-rouge">attachment_file</code> for a file attachment to a mail if any.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#from django.db import models
+</span><span class="kn">from</span> <span class="nn">user</span> <span class="kn">import</span> <span class="n">EmailUser</span>
+
+<span class="k">class</span> <span class="nc">EMail</span><span class="p">(</span><span class="n">models</span><span class="p">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">sender</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">max_length</span> <span class="o">=</span> <span class="mi">255</span><span class="p">)</span> 
+    <span class="n">subject</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span> <span class="o">=</span> <span class="mi">78</span><span class="p">)</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span> <span class="o">=</span> <span class="mi">40000</span><span class="p">)</span>
+    <span class="n">recipients_list</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">EmailUser</span><span class="p">,</span> <span class="n">related_name</span> <span class="o">=</span> <span class="s">'mail_list'</span><span class="p">)</span>
+    <span class="n">attachment_file</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">FileField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>A sample model for a note-taking app, consisting of a Note and a Book. A book might be a collection of multiple notes i.e. a single book can have multiple notes so we are using a <code class="language-plaintext highlighter-rouge">ManyToManyField</code>, what is that? We’ll see that shortly.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">user.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+<span class="k">class</span> <span class="nc">Notes</span><span class="p">(</span><span class="n">models</span><span class="p">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="p">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">Textfield</span><span class="p">()</span>
+    <span class="n">created</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+    <span class="n">modified</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+    <span class="n">book</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Book</span><span class="p">,</span> <span class="n">related_name</span> <span class="o">=</span> <span class="s">'book'</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Book</span><span class="p">():</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>These are just dummies and are not recommended to use anywhere especially in a serious project. 
+So, we have seen a model, but what are these fields and the constraints like <code class="language-plaintext highlighter-rouge">on_delete</code>, <code class="language-plaintext highlighter-rouge">max_length</code>, and others in the upcoming section on fields.</p>
+
+<h2 id="fields-in-django">Fields in Django</h2>
+
+<p>Fields are technically the attributes of the class which here is the model, but they are further treated as a attribute in a table of a database. So the model becomes a list of attributes which will be then parsed into an actual database.</p>
+
+<p>By creating attributes inside a class we are defining the structure for a table. We have several types of fields defined already by django for the ease of validating and making a constrained setup for the database schema.</p>
+
+<p>Let’s look at some of the types of fields in Django Models.</p>
+
+<h3 id="types-of-fields">Types of Fields</h3>
+
+<p>Django has a lot of fields defined in the models class. If you want to go through all the fields, you read through the django docs <a href="https://docs.djangoproject.com/en/4.0/ref/models/fields/#model-field-types">field references</a>. We can access the fields from the <code class="language-plaintext highlighter-rouge">models</code> module like <code class="language-plaintext highlighter-rouge">name = models.CharField(max_length=10)</code>, this is a example of defining a attributes <code class="language-plaintext highlighter-rouge">name</code> which is a CharField. We can set the max_length which acts a constraint to the attribute as we do not want the name field to be greater than 10 and hence parsing the parameter <code class="language-plaintext highlighter-rouge">max_length</code> to 10.</p>
+
+<p>We have other field types like:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">IntegerField</code> -&gt; for an integer value.</li>
+  <li><code class="language-plaintext highlighter-rouge">TextField</code> -&gt; for long input of text (like text area in html).</li>
+  <li><code class="language-plaintext highlighter-rouge">EmailField</code> -&gt; for an single valid email field.</li>
+  <li><code class="language-plaintext highlighter-rouge">DateField</code> -&gt; for inputting in a date format.</li>
+  <li><code class="language-plaintext highlighter-rouge">URLField</code> -&gt; for input a URL field.</li>
+  <li><code class="language-plaintext highlighter-rouge">BooleanField</code> -&gt; for a boolean value input.</li>
+</ul>
+
+<p>And there are other fields as well which can be used as per requirements.</p>
+
+<p>We also have some other fields which are not directly fields so to speak but are kind of relationship defining fields like:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">ForeignKey</code> -&gt; Define a many-to-one relationship to another model/class.</li>
+  <li><code class="language-plaintext highlighter-rouge">ManyToManyField</code> -&gt; define a many-to-many relationship to another model/class.</li>
+  <li><code class="language-plaintext highlighter-rouge">OneToOneField</code> -&gt; define a one to one relationship between different tables/model/class.</li>
+</ul>
+
+<p>So, that’s about the field types for just a feel of how to structure or design a database table using a model with some types of attributes. We also need to talk about constraints which needs to added to the fields inside the models.</p>
+
+<h3 id="field-optionsarguments">Field Options/Arguments</h3>
+
+<p>We can add constraints and pass arguments to the fields in the models. We can add arguments like <code class="language-plaintext highlighter-rouge">null</code>, <code class="language-plaintext highlighter-rouge">blank</code>, <code class="language-plaintext highlighter-rouge">defualt</code>, <code class="language-plaintext highlighter-rouge">choices</code>, etc.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">null=True/False</code> -&gt; Set a check for the entry in the table as not null in the database.</li>
+  <li><code class="language-plaintext highlighter-rouge">blank=True/False</code> -&gt; Set a check for the input validation to empty or not.</li>
+  <li><code class="language-plaintext highlighter-rouge">unique=True/False</code> -&gt; Set a constraint to make the entry unique throughout the table.</li>
+  <li><code class="language-plaintext highlighter-rouge">defualt=anyvalue</code> -&gt; Set a default value for the field.</li>
+  <li><code class="language-plaintext highlighter-rouge">choices=list</code> -&gt; Set a list of defined choices to select in the field (a list of two valued tuple).</li>
+</ul>
+
+<p>We also have another constraint specific to the fields like <code class="language-plaintext highlighter-rouge">max_length</code> for <code class="language-plaintext highlighter-rouge">CharField</code>, <code class="language-plaintext highlighter-rouge">on_delete</code> for ForeignKey which can be used as a controller for the model when the related model is deleted, <code class="language-plaintext highlighter-rouge">verbose_name</code> to set a different name for referencing the entry in the table/model from the admin section compared to the default name of the model, <code class="language-plaintext highlighter-rouge">verbose_name_plural</code> similar to the <code class="language-plaintext highlighter-rouge">verbose_name</code> but for referencing the entire table/model. Also <code class="language-plaintext highlighter-rouge">auto_now_add</code> and <code class="language-plaintext highlighter-rouge">auto_now</code> for <code class="language-plaintext highlighter-rouge">DateTimeField</code> so as to set the current date-time by default.</p>
+
+<p>More options and arguments that can be passed to the fields in models are given in the django docs <a href="https://docs.djangoproject.com/en/4.0/topics/db/models/#field-options">field options</a></p>
+
+<p>These are some of the options or arguments that we can or need to pass to the fields to set up a constrained schema for our database.</p>
+
+<h3 id="meta-class">Meta class</h3>
+
+<p>Meta class is a nested class inside the model class which is most of the times used for ordering the entries(objects) in the table, managing permissions for accessing the model, add constraints to the models related to the attributes/fields inside it, etc.</p>
+
+<p>You can read about the functionalities of the Meta class in the <a href="https://docs.djangoproject.com/en/4.0/ref/models/options/">documentation</a>.</p>
+
+<h2 id="model-methods">Model methods</h2>
+
+<p>As a class can have functions, so does a model as it is a Python class after all. We can create kind of a helper methods/functions inside the model. The model class provides a helpful <code class="language-plaintext highlighter-rouge">__str__()</code> function which is used to rename an object from the database. We also have other predefined helper functions like <code class="language-plaintext highlighter-rouge">get_absolute_url</code> that generates the URL and returns it for further redirection or rendering.</p>
+
+<p>Also, you can define the custom functions that can be used as to help the attributes inside the model class.</p>
+
+<h2 id="django-orm">Django ORM</h2>
+
+<p>Django has an Object Relational Mapper is the core concept in Django or the component in Django that allows us to interact with the database without the programmer writing SQL/DB queries. It is like a Pythonic way to write and execute sql queries, it basically abstracts away the layer to manually write SQL queries.</p>
+
+<p>We’ll explore the details of how the ORM works under the hood but it’s really interesting and fascinating for a Beginner to make web applications without learning SQL(not recommended though personally). For now, its just magical to see Django handling the DB operations for you. You can get the references for learning about the Queryset in ORM from the <a href="https://docs.djangoproject.com/en/4.0/ref/models/querysets/">docs</a></p>
+
+<h2 id="example-model">Example Model</h2>
+<p>Let us set up a model from what we have learned so far.</p>
+
+<p>We’ll create a model for a Blog Post again but with more robust fields and structure.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#from django.db import models
+</span><span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+<span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">models</span><span class="p">.</span><span class="n">Model</span><span class="p">):</span>
+
+    <span class="n">options</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="s">'draft'</span><span class="p">,</span> <span class="s">'Draft'</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">'published'</span><span class="p">,</span> <span class="s">'Published'</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">slug</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">SlugField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">unique_for_date</span><span class="o">=</span><span class="s">'publish'</span><span class="p">)</span>
+    <span class="n">post</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="p">.</span><span class="n">CASCADE</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">'Posts'</span><span class="p">)</span>
+    <span class="n">created</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">updated</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">option</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">'draft'</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">title</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">(</span><span class="s">'-publish'</span><span class="p">,)</span>
+      
+</code></pre></div></div>
+
+<p>We can see in the above model that we have defined the Meta class which is optional and is generally written to modify how to entries inside the table appear or order with other functionalities as well. We have also added the choices option in the status field which has two choices <code class="language-plaintext highlighter-rouge">Draft</code> and <code class="language-plaintext highlighter-rouge">Publish</code> one which is seen by the django interface and the other to the end-users. We have also added certain fields like slug that will create the URL for the blog post, also certain options like <code class="language-plaintext highlighter-rouge">unique</code> has been set to restrict duplicate entries being posted to the database. The <code class="language-plaintext highlighter-rouge">related_name</code> in the <code class="language-plaintext highlighter-rouge">ForeignKey</code> refers to the name given to the relation from the Article model to the User model in this case.</p>
+
+<p>So, we can see that Django allows us to structure the schema of a database. Though nothing is seen as an end result, when we configure and migrate the model to our database we will see the results of the hard work spent in creating and designing the model.</p>
+
+<h2 id="database-specific-fields">Database Specific fields</h2>
+
+<p>By this time, you will have gotten a feel of what a database might be. Most of the projects are designed around SQL databases but No-SQL databases and others are also used in cases which suite them the most. We have tools to manage this database in SQL we call it the Database Management System (DBMS). It’s just a tool to manage data, but there is not just a single Database management tool out there, there are gazillions and bazillions of them. Most  popular include <code class="language-plaintext highlighter-rouge">MySQL</code>, <code class="language-plaintext highlighter-rouge">PostgreSQL</code>, <code class="language-plaintext highlighter-rouge">SQLite</code>, <code class="language-plaintext highlighter-rouge">Oracle</code>, <code class="language-plaintext highlighter-rouge">Microsoft Access</code>, <code class="language-plaintext highlighter-rouge">Maria DB</code>, and tons of others.</p>
+
+<p>Well, these different DBMS tools are almost similar with a few hiccups here and there. So, different Database tools might have different fields they provide. For Example, in Database <code class="language-plaintext highlighter-rouge">PostgreSQL</code> provides the ListField which <code class="language-plaintext highlighter-rouge">SQLite</code> doesn’t that can be the decision to be taken before creating any project. There might be some fields that some DBMS provide and other doesn’t.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>We understood the basics of creating a model. We didn’t touch on the database yet but the next part is all about configuration and migration so we’ll get hands-on with the databases. We covered how to structure our database, how to write fields in the model, add constraints and logic to them and explore the terminologies in Django like ORM, Database Types, etc.</p>
+
+<p>Thank you for reading the article, if you have any feedback kindly let me know, and until then Happy Coding :)</p>
+:ET
