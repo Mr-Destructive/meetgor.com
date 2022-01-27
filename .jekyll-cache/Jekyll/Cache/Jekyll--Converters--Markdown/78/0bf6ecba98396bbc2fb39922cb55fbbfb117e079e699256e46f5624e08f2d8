@@ -1,0 +1,358 @@
+I"W�<h2 id="introduction">Introduction</h2>
+
+<p>After learning the basics of views and URLs, we can now move on to the next concept i.e. Templates. In Django, Templates are quite an important component for the application as it acts as the <code class="language-plaintext highlighter-rouge">frontend</code> for the web application. With the help of templates and some features provided by Django, it becomes very intuitive and simple to make dynamic web content.
+In this part, we understand what are templates and what is the way to render them.</p>
+
+<h2 id="what-are-templates">What are Templates</h2>
+
+<p>Templates are simply a <code class="language-plaintext highlighter-rouge">html</code> document or kind of a wireframe for content to be displayed for the web app. Templates allow us to render some more relevant pieces of data rather than simple text HTTP responses as we did earlier. We can even re-use certain components of a template in other using the Django Templating Language (more on this later).</p>
+
+<p>So, using HTML templates, we can write a complete Webpage. If you are unfamiliar with HTML, you can check out the basics of HTML with this <a href="https://www.youtube.com/playlist?list=PL081AC329706B2953">playlist</a>.</p>
+
+<p>Even If you are not familiar with HTML, this tutorial might be quite basic and not overwhelm you with all the tags.</p>
+
+<h2 id="creating-templates">Creating Templates</h2>
+
+<p>To create a Template, we can write a simple HTML document like the below:</p>
+
+<p>Create a folder <code class="language-plaintext highlighter-rouge">templates</code> in the base folder, inside the templates folder, create a file <code class="language-plaintext highlighter-rouge">index.html</code></p>
+
+<p><strong>templates\index.html</strong></p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Django Blog<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>Hello, World!<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>This is a simple HTML template, with the <code class="language-plaintext highlighter-rouge">&lt;h1&gt;</code> tags. As Django is a framework, there is a standard for storing all the templates for the project and application. There are a couple of standard of options:</p>
+<ul>
+  <li>One of which is creating a <code class="language-plaintext highlighter-rouge">templates</code> folder in the root folder as discussed earlier, also we need to modify the <code class="language-plaintext highlighter-rouge">project_name/settings.py</code> file.</li>
+</ul>
+
+<p>Inside the <code class="language-plaintext highlighter-rouge">settings.py</code> file, we need to locate the <code class="language-plaintext highlighter-rouge">TEMPLATES</code> section and modify as below:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">TEMPLATES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">'BACKEND'</span><span class="p">:</span> <span class="s">'django.template.backends.django.DjangoTemplates'</span><span class="p">,</span>
+        <span class="s">'DIRS'</span><span class="p">:</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">'templates'</span><span class="p">),],</span>
+        <span class="s">'APP_DIRS'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="s">'OPTIONS'</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">'context_processors'</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s">'django.template.context_processors.debug'</span><span class="p">,</span>
+                <span class="s">'django.template.context_processors.request'</span><span class="p">,</span>
+                <span class="s">'django.contrib.auth.context_processors.auth'</span><span class="p">,</span>
+                <span class="s">'django.contrib.messages.context_processors.messages'</span><span class="p">,</span>
+            <span class="p">],</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+<span class="p">]</span>
+</code></pre></div></div>
+
+<p>In this snippet, we have changed the <code class="language-plaintext highlighter-rouge">DIRS</code> option to search the templates in the folder <code class="language-plaintext highlighter-rouge">templates</code> in the root directory.</p>
+
+<ul>
+  <li>The other standard is creating a templates folder in each application.</li>
+</ul>
+
+<p>We can create the templates folder in each application instead of a single folder.</p>
+
+<h2 id="rendering-templates">Rendering Templates</h2>
+
+<p>After creating a template and making the required settings to make sure Django is able to pick up those templates, we need to work with views and URLs to actually render those templates.</p>
+
+<p>There are a couple of ways to render templates in Django and some of them are discussed below:</p>
+
+<h3 id="using-templateview">Using TemplateView</h3>
+
+<p><a href="https://docs.djangoproject.com/en/3.2/ref/class-based-views/base/#django.views.generic.base.TemplateView">TemplateView</a> is a class which is comes with <code class="language-plaintext highlighter-rouge">django.views.generic</code> library. This class allows us to render a template by providing in the name of the template, arguments or variables to be parsed, and so on.</p>
+
+<p>The simplest way to render a template is by the following way:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span><span class="p">,</span> <span class="n">include</span>
+
+<span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">TemplateView</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'admin/'</span><span class="p">,</span> <span class="n">admin</span><span class="p">.</span><span class="n">site</span><span class="p">.</span><span class="n">urls</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">''</span><span class="p">,</span> <span class="n">TemplateView</span><span class="p">.</span><span class="n">as_view</span><span class="p">(</span><span class="n">template_name</span><span class="o">=</span><span class="s">"index.html"</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">"index"</span><span class="p">),</span>
+<span class="p">]</span>
+</code></pre></div></div>
+
+<p>We need to import the <code class="language-plaintext highlighter-rouge">TemplateView</code> from the <code class="language-plaintext highlighter-rouge">django.core.generic</code> so as to use the class for rendering the template.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">TemplateView</code> class takes in a couple of arguments, we’ll use the <code class="language-plaintext highlighter-rouge">template_name</code> as an argument that takes in the name of the template. Here, we use the <code class="language-plaintext highlighter-rouge">index.html</code> as the template which we created earlier. We don’t need to specify the entire path to the template as we make modifications in the <code class="language-plaintext highlighter-rouge">settings.py</code> file to pick the template from the mentioned directory. We use <code class="language-plaintext highlighter-rouge">as_view</code> function to load the class as a function/view.</p>
+
+<p>Activate the virtual environment for the proper functioning of the project.</p>
+
+<p>After activating the virtual environment we can run the server as follows:</p>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">python manage.py runserver
+</span></code></pre></div></div>
+<p>We can now see the following output and thus, we are now rendering a simple HTML template in Django.</p>
+
+<p><img src="https://res.cloudinary.com/dgpxbrwoz/image/upload/v1639384994/blogmedia/templ1_vbwp5d.png" alt="" /></p>
+
+<h3 id="using-render">Using render</h3>
+
+<p>We can also use the <a href="https://docs.djangoproject.com/en/4.0/topics/http/shortcuts/#render">render function</a> from <code class="language-plaintext highlighter-rouge">django.shortcuts</code> to simply render a template. But we will create a Python function or a View to actually render the template. So, we’ll create a View-URL map as we created in the <a href="https://mr-destructive.github.io/techstructive-blog/django/python/web-development/2021/11/30/Django-Basics-P4.html">previous part</a>.</p>
+
+<p>Firstly, let’s create a view function in the <code class="language-plaintext highlighter-rouge">post/views.py</code> file, more generally (<code class="language-plaintext highlighter-rouge">app_name/views.py</code> file). Firstly, we need to import the render function from <code class="language-plaintext highlighter-rouge">django.shortcuts</code> and then return the function call of render.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="s">'index.html'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>And in the URLs, we’ll create a different pattern like for e.g. ‘home/’</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">post</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">urlpatterns</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">path</span><span class="p">(</span><span class="s">'home/'</span><span class="p">,</span><span class="n">views</span><span class="p">.</span><span class="n">home</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">"home"</span><span class="p">),</span>
+        <span class="p">]</span>
+</code></pre></div></div>
+
+<p>So, after creating the View-URL map and making sure the URL of the app is loaded in the project URLs, we can see the result as a simple HTML template.</p>
+
+<p><img src="https://res.cloudinary.com/dgpxbrwoz/image/upload/v1639386932/blogmedia/templ2_rgoppj.png" alt="" /></p>
+
+<h2 id="django-templating-language">Django Templating Language</h2>
+
+<p>The <a href="https://docs.djangoproject.com/en/3.2/ref/templates/language/">Django Templating Language</a> is Django’s way of making templates more dynamic and easy to write dynamic web applications. We’ll take a brief look at what we can do with this type of Templating Language in Django.</p>
+
+<h3 id="variables">Variables</h3>
+
+<p>This is the most common use case for the Django Templating Language/Engine as we can use the <a href="https://docs.djangoproject.com/en/3.2/ref/templates/language/#variables">variables</a> from the Backend and inject it in the template. We can parse the variable into the template by the syntax : <code class="language-plaintext highlighter-rouge">{{ variable_name }}</code></p>
+
+<p>To show its use cases, we can declare a variable in a view and then parse it in the Template. Though it is not dynamic right now we can later on fetch values from the database and store them in the form of variables in our views.</p>
+
+<p><strong>templates/home.html</strong></p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Django Blog<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>Hello, {{ name }}<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p><strong>post/views.py</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+
+<span class="k">def</span> <span class="nf">variable_demo</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">"Kevin"</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'name'</span><span class="p">:</span><span class="n">name</span><span class="p">})</span>
+    <span class="c1">#The name can be anything, like a database query object, form detail, etc
+</span>
+</code></pre></div></div>
+
+<p>As we can see the variable in views is passed as a dictionary in python. The reference key along with a value of the variable as the name of the variable. We will use the key in the templates to parse the value of the variable.</p>
+
+<p><strong>post/urls.py</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">post</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">urlpatterns</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">path</span><span class="p">(</span><span class="s">'home/'</span><span class="p">,</span><span class="n">views</span><span class="p">.</span><span class="n">home</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">"home"</span><span class="p">),</span>
+        <span class="n">path</span><span class="p">(</span><span class="s">'vardemo/'</span><span class="p">,</span><span class="n">views</span><span class="p">.</span><span class="n">variable_demo</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"var"</span><span class="p">),</span>
+        <span class="p">]</span>
+</code></pre></div></div>
+
+<p><img src="https://res.cloudinary.com/dgpxbrwoz/image/upload/v1639389288/blogmedia/templ3_wvhagw.png" alt="variable demo" /></p>
+
+<p>As we can see, we were able to load the variable into the template using the Django Templating Engine.</p>
+
+<h3 id="conditional-statement">Conditional statement</h3>
+
+<p>We can even use the conditional statement in the Template using a very simple syntax. We can use <code class="language-plaintext highlighter-rouge">{% if condition %}</code> to use certain special kinds of blocks in the Template. We need to end those blocks as well using the syntax <code class="language-plaintext highlighter-rouge">{% endif  %}</code>, here <code class="language-plaintext highlighter-rouge">if</code> can be other blocks which we’ll explore ahead.</p>
+
+<p>To create a basic if condition in the template, we can understand with the following example.</p>
+
+<p><strong>app_name/views.py</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randint</span>
+
+<span class="k">def</span> <span class="nf">if_demo</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+   <span class="n">number</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+   <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'if_else.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'num'</span><span class="p">:</span><span class="n">number</span><span class="p">})</span>
+</code></pre></div></div>
+
+<p>Here, we have used the key name as <code class="language-plaintext highlighter-rouge">num</code> indicating we can give different names to the key which needs to be used in the template to render the values.</p>
+
+<p><strong>app_name/urls.py</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">post</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">path</span><span class="p">(</span><span class="s">'if/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">if_demo</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"ifdemo"</span><span class="p">),</span>
+        <span class="p">]</span>
+</code></pre></div></div>
+
+<p><strong>templates/if_else.html</strong></p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Django Blog<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    {{ num }}
+    {% if num &gt; 5 %}
+        <span class="nt">&lt;h2&gt;</span>It's Greater then 5<span class="nt">&lt;/h2&gt;</span>
+    {% elif num == 5 %}
+        <span class="nt">&lt;h2&gt;</span>It's five!<span class="nt">&lt;/h2&gt;</span>
+    {% else  %}
+        <span class="nt">&lt;h2&gt;</span>It's less than 5<span class="nt">&lt;/h2&gt;</span>
+    {% endif  %}
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+<p><img src="https://res.cloudinary.com/dgpxbrwoz/image/upload/v1639411425/blogmedia/templ3_exj0fv.png" alt="if-else demo" /></p>
+
+<p>So, as we can see that, we can use the if-else conditions in the template and that is already powerful. This can be a bit messy as to handle mathematical operations or conditions into a single condition. This can really be used for really large datasets that can be shimmed down to really less coding and also improve readability.</p>
+
+<h3 id="for-loop">For loop</h3>
+
+<p>Now, the most crucial component of the Django templating language is the loops. We can actually iterate over objects/lists in the template. This becomes a huge concept for actually making a dynamic web application. We n\might want to iterate over all the entries in a database, or any other form of data which can make the app a lot dynamic and feel real-time.</p>
+
+<p>The syntax of for loop is almost similar to the if-else condition. We just replace the condition with the iterator and the list/object from the view context. <code class="language-plaintext highlighter-rouge">{% for i in list %}</code>, also end the for loop like <code class="language-plaintext highlighter-rouge">{% endfor %}</code>.</p>
+
+<p><strong>app_name/views.py</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+
+<span class="k">def</span> <span class="nf">for_demo</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">sports</span> <span class="o">=</span> <span class="p">(</span><span class="s">'football'</span><span class="p">,</span> <span class="s">'cricket'</span><span class="p">,</span> <span class="s">'volleyball'</span><span class="p">,</span> <span class="s">'hockey'</span><span class="p">,</span> <span class="s">'basketball'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'for.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'sport_list'</span><span class="p">:</span> <span class="n">sports</span><span class="p">})</span>
+
+</code></pre></div></div>
+
+<p>We have created a simple Python list called <code class="language-plaintext highlighter-rouge">sports</code> and we parse them to the template using a dictionary object, <code class="language-plaintext highlighter-rouge">sport_list</code> as the key for storing the value of the <code class="language-plaintext highlighter-rouge">sports</code> list.</p>
+
+<p><strong>app_name/urls.py</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">post</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">path</span><span class="p">(</span><span class="s">'for/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">for_demo</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"fordemo"</span><span class="p">),</span>
+        <span class="p">]</span>
+</code></pre></div></div>
+
+<p><strong>templates/for.html</strong></p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Django Blog<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;ul&gt;</span>
+        {% for sport in sport_list %}
+        <span class="nt">&lt;li&gt;&lt;/li&gt;</span>
+        {% endfor %}
+    <span class="nt">&lt;/ul&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p><img src="https://res.cloudinary.com/dgpxbrwoz/image/upload/v1639475328/blogmedia/templ3_q8z8fr.png" alt="for loop demo" /></p>
+
+<p>We have used simple for loop in Pythonic syntax, we use an iterator in this case, <code class="language-plaintext highlighter-rouge">sport</code> acts as an iterator. We use this to store values one by one from the list <code class="language-plaintext highlighter-rouge">sport_list</code> which was earlier passed in the views as a key in the dictionary.</p>
+
+<p>Hence, this is quite scalable and used to fetch the objects/entries in the database and hence making it a lot easier to make a dynamic web application faster.</p>
+
+<h2 id="template-inheritance">Template Inheritance</h2>
+
+<p>So, far we have seen that we need to create the base template again and again like all the basic HTML elements, title, and all the basic structure. But what if, we can reuse a specific template in another and extend the functionality of that template into a new one. This avoids the redundancy of writing the entire basic template or the layout of a web app over and over again.</p>
+
+<p>To do that, Django has the Template inheritance. We can use a template as its basic layout or a specific component in the web application. Again, similar to the for, if-else blocks the syntax for inheriting a template is quite similar.</p>
+
+<p>Take, for example, the home.html which consisted of only a <code class="language-plaintext highlighter-rouge">&lt;h1&gt;</code> tag in it. We can use this kind of template in other templates to really make it the home page. For that, we first need to enclose the template in a <code class="language-plaintext highlighter-rouge">block</code>, which is what allows us to use it in other templates.
+To create a <code class="language-plaintext highlighter-rouge">block</code>, we simply need to write the following syntax before the component which we do not want in other templates:</p>
+
+<p><strong>templates/home.html</strong></p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Django Blog<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>Hello, World!<span class="nt">&lt;/h1&gt;</span>
+    {% block body %}
+    <span class="nt">&lt;p&gt;</span>This is not going to get inherited <span class="nt">&lt;/p&gt;</span>
+    {% endblock %}
+    <span class="nt">&lt;p&gt;</span>This will be inherited<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+<p>In this we have used the <code class="language-plaintext highlighter-rouge">blocks</code> with a name like <code class="language-plaintext highlighter-rouge">body</code> as <code class="language-plaintext highlighter-rouge">{% block body %}</code> this can be anything you like. We end the block with the similar syntax as the for/if blocks as <code class="language-plaintext highlighter-rouge">{% endblock %}</code>. Anything in between the blocks i.e <code class="language-plaintext highlighter-rouge">block block_name</code> and <code class="language-plaintext highlighter-rouge">endblock</code> is not inherited i.e it is unique to this template.</p>
+
+<p>We will see how we can use this template in other templates. We will actually extend this template and use the blocks to render the content in the template.</p>
+
+<p><strong>templates/if_else.html</strong></p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{% extends 'home.html' %}
+{% block body %}
+    {{num }}
+    {% if num &gt; 5 %}
+    <span class="nt">&lt;h2&gt;</span>It's Greater then 5<span class="nt">&lt;/h2&gt;</span>
+    {% elif num == 5 %}
+    <span class="nt">&lt;h2&gt;</span>It's five!<span class="nt">&lt;/h2&gt;</span>
+    {% else %}
+    <span class="nt">&lt;h2&gt;</span>It's less than 5<span class="nt">&lt;/h2&gt;</span>
+    {% endif %}
+{% endblock %}
+</code></pre></div></div>
+<p>So, we first say to Django to extend the <code class="language-plaintext highlighter-rouge">home</code> template i.e. the Django will load the blocks from this template only, remember it will just load and not use the blocks until we explicitly tell it to.</p>
+
+<p>To use the blocks or kind of plug in the template content in the <code class="language-plaintext highlighter-rouge">if_else.html</code> or any other template, we need to again call the <code class="language-plaintext highlighter-rouge">blocks</code>. Here, we need to write the content inside the <code class="language-plaintext highlighter-rouge">blocks</code> to properly parse the blocks as this is an HTML template. The order of opening and closing elements do matter. 
+So, when we say <code class="language-plaintext highlighter-rouge">endblock</code> the last part of the base template is loaded i.e. the closing <code class="language-plaintext highlighter-rouge">body</code> and <code class="language-plaintext highlighter-rouge">html</code> tags. This is like plugging the template as it is before and after the block body.</p>
+
+<p><strong>app_name/views.py</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randint</span>
+
+<span class="k">def</span> <span class="nf">if_demo</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+   <span class="n">number</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+   <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'if_else.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'num'</span><span class="p">:</span><span class="n">number</span><span class="p">})</span>
+</code></pre></div></div>
+
+<p><strong>app_name/urls.py</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">post</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">path</span><span class="p">(</span><span class="s">''</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">home</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"home"</span><span class="p">),</span>
+        <span class="n">path</span><span class="p">(</span><span class="s">'if/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">if_demo</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"ifdemo"</span><span class="p">),</span>
+        <span class="p">]</span>
+</code></pre></div></div>
+<p><img src="https://res.cloudinary.com/dgpxbrwoz/image/upload/v1639479714/blogmedia/tempinher2_enisls.png" alt="" />
+<img src="https://res.cloudinary.com/dgpxbrwoz/image/upload/v1639477721/blogmedia/tempinher_lk0op0.png" alt="template inheritance demo" /></p>
+
+<p><img src="https://res.cloudinary.com/dgpxbrwoz/image/upload/v1639479954/blogmedia/template-inh_lc8szo.gif" alt="" /></p>
+
+<p>The above gif illustrates the example in a neat way. The block is loaded from the given template as the extended template and hence it plugs the block into the frame of the template.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>So, from this part of the series, we were able to understand the concept of Templates in Django, we were able to use variables, loops, conditional statements, and template inheriting in a Django application. In the next part, we’ll try to touch up with the static files and see how to properly structure and configure them.</p>
+
+<p>Thank you for reading, if you didn’t understand any of the examples, please let me know, I’ll be happy to share the code. Happy Coding :)</p>
+:ET
