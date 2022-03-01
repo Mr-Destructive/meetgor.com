@@ -4,7 +4,7 @@ title: "BASH Scripting Guide - PART - 2"
 subtitle: "Parsing and Managing data using Bash"
 date: 2021-07-02 15:57:34 +0530
 tags: ['bash',]
-slug: techstructive-blog/bash-guide-p2
+slug: bash-guide-p2
 image_url: https://techstructiveblog.hashnode.dev/_next/image?url=https%3A%2F%2Fcdn.hashnode.com%2Fres%2Fhashnode%2Fimage%2Fupload%2Fv1624622816540%2FqKKMVHNNA.png%3Fw%3D1600%26h%3D840%26fit%3Dcrop%26crop%3Dentropy%26auto%3Dcompress%2Cformat%26format%3Dwebp&w=1920&q=75
 ---
 
