@@ -3,6 +3,7 @@ templateKey: blog-post
 title : "Django Basics: Folder Structure"
 subtitle: "Understanding the folder structure of Django Projects and Applications"
 date: 2021-11-24 15:45:00 +0530
+status: published
 tags: ['django', 'python', 'web-development']
 slug: django-basics-folder-struct
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1637745125/blogmedia/4_gnddxj.png

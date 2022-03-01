@@ -3,6 +3,7 @@ templateKey: blog-post
 title : "Django Basics: Static Files"
 subtitle: "Loading Static Files in a Django project/app"
 date: 2021-12-27 22:45:00 +0530
+status: published
 tags: ['django', 'python', 'web-development',]
 slug: django-basics-static-files
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1640610003/blogmedia/dj-static-6_pjipoj.png

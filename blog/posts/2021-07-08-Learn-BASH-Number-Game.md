@@ -3,7 +3,8 @@ templateKey: blog-post
 title: "Learning BASH by making a Number game"
 subtitle: "Understaning BASH concepts by making a number game"
 date: 2021-07-08 19:50:35 +0530
-tag: ['bash',]
+status: published
+tags: ['bash',]
 slug: bash-game-numberjack
 image_url: https://dev-to-uploads.s3.amazonaws.com/uploads/articles/4rqwozbbgga9xg5ne89m.png
 ---

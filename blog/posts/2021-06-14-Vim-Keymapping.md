@@ -3,6 +3,7 @@ templateKey: blog-post
 title: "Vim: Keymapping Guide"
 subtitle: A comprehensive guide for getting started with key bindings in Vim
 date: 2021-06-14 15:27:44 +0530
+status: published
 tags: ['vim',]
 slug: vim-keymaps
 image_url: https://techstructiveblog.hashnode.dev/_next/image?url=https%3A%2F%2Fcdn.hashnode.com%2Fres%2Fhashnode%2Fimage%2Fupload%2Fv1624601773589%2FzkWLkFl1r.png%3Fw%3D1600%26h%3D840%26fit%3Dcrop%26crop%3Dentropy%26auto%3Dcompress%2Cformat%26format%3Dwebp&w=1920&q=75

@@ -3,6 +3,7 @@ templateKey: blog-post
 title: "Scrapping the meaning of a word from dictionary.com using BASH script."
 subtitle: "Using some shell tools and utilities to understand web scrapping and making a script to scrap a webpage."
 date: 2021-07-27 11:45:03 +0530
+status: published
 tags: ['bash',]
 slug: bash-dictionary-scrapper
 image_url: https://cdn.hashnode.com/res/hashnode/image/upload/v1627367329063/dabJLKcD-.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress
@@ -63,7 +64,7 @@ The above command will search and return only lines that are contained in the sp
 
 Now, if you think we are done, then it's wrong, the webpage can have internal or external links embedded inside of the elements as well, so we need to again filter out the HTML tags from the `temp.txt` file. For that, we will introduce another tool to filter text called `sed` or Stream editor. This tool allows us to filter the stream field and print or store the outcome. The following code will remove the HTML tags from the scrapped text.
 
-### Using SED command to remove embedded tags.
+### Using SED command to remove embedded 
 
 ```shell
  sed -i 's/<[^>]*>//g' temp.txt >meaning.txt

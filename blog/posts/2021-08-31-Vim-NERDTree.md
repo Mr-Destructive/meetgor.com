@@ -3,6 +3,7 @@ templateKey: blog-post
 title: "Vim: NERDTree"
 subtitle: "Customizing the NERDTree plugin in Vim for enhancing file management and navigation."
 date: 2021-08-31 20:45:06 +0530
+status: published
 tags: ['vim',]
 slug: vim-nerdtree
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643286953/blogmedia/pqolzpdehob0xj3sdohr.png
@@ -67,7 +68,7 @@ filetype plugin indent on
 
 After this, you need to run this command to get docs and help with the plugins,
 
-`:helptags ~/.vim/bundle/nerdtree/doc/` or `:helptags`
+`:help tags ~/.vim/bundle/nerdtree/doc/` or `:help tags`
 
 And there you are done with the plugin installed.
 
