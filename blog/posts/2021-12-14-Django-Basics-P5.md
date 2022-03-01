@@ -3,6 +3,7 @@ templateey: blog-post
 title : "Django Basics: Templates"
 subtitle: "Rendering templates/html docs in the Django project/app"
 date: 2021-12-14 16:45:00 +0530
+status: published
 tags: ['django', 'python', 'web-development']
 slug: django-basics-templates
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1639387566/blogmedia/dj5temp_zukvj7.png

@@ -3,6 +3,7 @@ templateKey: blog-post
 title : "Django Basics: Views and URLS"
 subtitle: "Creating and Understanding working of views and urls in Django"
 date: 2021-11-30 12:03:00 +0530
+status: published
 tags: ['django', 'python', 'web-development',]
 slug: django-basics-views-urls
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1638253939/blogmedia/dj-uv_esbld2.png

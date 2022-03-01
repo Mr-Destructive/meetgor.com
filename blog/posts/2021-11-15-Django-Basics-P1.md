@@ -3,6 +3,7 @@ templateKey: blog-post
 title : "Django Basics: What is it?"
 subtitle: "Understanding what and why of the Django framework"
 date: 2021-11-16 20:45:00 +0530
+status: published
 tags: ['django', 'python', 'web-development',]
 slug: django-basics-intro
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643289206/blogmedia/gbq3rlfat3erbxocn7yn.png

@@ -3,6 +3,7 @@ templateKey: blog-post
 title : "Django Basics: Setup and Installation"
 subtitle: "Setting up environment and installing Django framework"
 date: 2021-11-20 16:30:00 +0530
+status: published
 tags: ['django', 'python', 'web-development',]
 slug: django-basics-setup
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643290071/blogmedia/s8ahlep1e8lmgiboyjhz.png

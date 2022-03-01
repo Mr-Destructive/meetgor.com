@@ -3,6 +3,7 @@ templateKey: blog-post
 title : "What is Machine Learning?"
 subtitle: "Understanding the concept and process of Machine Learning. "
 date: 2021-09-29 15:30:07 +0530
+status: published
 tags: ['hashnode', 'machine-learning',]
 slug: ml-intro
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643288219/blogmedia/uh0xyxjnpp1olfcksbza.png

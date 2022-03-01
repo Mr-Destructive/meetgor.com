@@ -3,6 +3,7 @@ templateKey: blog-post
 title : "Flask and Django - the backend web frameworks"
 subtitle: "Understanding the concept of backend web frameworks like Django and Flask."
 date: 2021-10-24 19:00:00 +0530
+status: published
 tags: ['django', 'flask', 'python', 'web-development',]
 slug: flask-django-frameworks
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643288439/blogmedia/p8smflzd3rjb6scowhmc.png

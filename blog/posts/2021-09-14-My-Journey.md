@@ -3,6 +3,7 @@ templateKey: blog-post
 title: "My Journey as a Technical Writer"
 subtitle: "How and Why I became started writing articles and became a novice technical writer."
 date: 2021-09-14 19:30:37 +0530
+status: published
 tags: ['hashnode',]
 slug: technical-writer-journey
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643287299/blogmedia/dsqgqfz0uk5ldet6dfer.png 
