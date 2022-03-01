@@ -56,6 +56,7 @@ def create_page(
     today=datetime.datetime.today(),
     title="Techstructive Blog",
 ):
+
     def try_filter_date(x):
         try:
             return x["date"]
@@ -63,8 +64,8 @@ def create_page(
             return -1
 
     if filter is not None:
+        posts = reversed(sorted(markata.articles, key=try_filter_date))
         try:
-            posts = markata.articles
             posts = [post for post in posts if eval(filter, post.to_dict(), {})]
         except BaseException as e:
             msg = textwrap.dedent(
@@ -115,7 +116,7 @@ def create_card(post, template=None):
             return textwrap.dedent(
                 f"""
                 <li class='post'>
-                <a href="/{post['slug']}/">
+                <a href="/techstructive-blog/{post['slug']}/">
                     {post['title']}
                 </a>
                 </li>
