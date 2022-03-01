@@ -145,7 +145,7 @@ The [Django Templating Language](https://docs.djangoproject.com/en/3.2/ref/templ
 
 ### Variables
 
-This is the most common use case for the Django Templating Language/Engine as we can use the [variables](https://docs.djangoproject.com/en/3.2/ref/templates/language/#variables) from the Backend and inject it in the template. We can parse the variable into the template by the syntax : `{{ "{{ variable_name " }}}}`
+This is the most common use case for the Django Templating Language/Engine as we can use the [variables](https://docs.djangoproject.com/en/3.2/ref/templates/language/#variables) from the Backend and inject it in the template. We can parse the variable into the template by the syntax : `{{ variable_name " }}}}`
 
 To show its use cases, we can declare a variable in a view and then parse it in the Template. Though it is not dynamic right now we can later on fetch values from the database and store them in the form of variables in our views. 
 
@@ -158,7 +158,7 @@ To show its use cases, we can declare a variable in a view and then parse it in 
     <title>Django Blog</title>
 </head>
 <body>
-    <h1>Hello, {{ "{{ name" }} }}</h1>
+    <h1>Hello, {{ name }}</h1>
 </body>
 </html>
 ```
@@ -194,7 +194,7 @@ As we can see, we were able to load the variable into the template using the Dja
 
 ### Conditional statement
 
-We can even use the conditional statement in the Template using a very simple syntax. We can use `{{ "{% if condition"  }} %}` to use certain special kinds of blocks in the Template. We need to end those blocks as well using the syntax `{{ "{% endif "}} %}`, here `if` can be other blocks which we'll explore ahead.
+We can even use the conditional statement in the Template using a very simple syntax. We can use `{% if condition"  }} %}` to use certain special kinds of blocks in the Template. We need to end those blocks as well using the syntax `{% endif  %}`, here `if` can be other blocks which we'll explore ahead.
 
 To create a basic if condition in the template, we can understand with the following example.
 
@@ -229,14 +229,14 @@ urlpatterns = [
     <title>Django Blog</title>
 </head>
 <body>
-    {{ "{{ num" }} }}
-    {{ "{% if num > 5"  }} %}
+    {{ num }}
+    {% if num > 5 %}
         <h2>It's Greater then 5</h2>
-    {{ "{% elif num == 5" }} %}
+    {% elif num == 5 %}
         <h2>It's five!</h2>
-    {{ "{% else " }} %}
+    {% else %}
         <h2>It's less than 5</h2>
-    {{ "{% endif " }} %}
+    {% endif %}
 </body>
 </html>
 ```
@@ -249,7 +249,7 @@ So, as we can see that, we can use the if-else conditions in the template and th
 
 Now, the most crucial component of the Django templating language is the loops. We can actually iterate over objects/lists in the template. This becomes a huge concept for actually making a dynamic web application. We n\might want to iterate over all the entries in a database, or any other form of data which can make the app a lot dynamic and feel real-time. 
 
-The syntax of for loop is almost similar to the if-else condition. We just replace the condition with the iterator and the list/object from the view context. `{{ "{% for i in list" }} %}`, also end the for loop like `{{ "{% endfor" }} %}`.
+The syntax of for loop is almost similar to the if-else condition. We just replace the condition with the iterator and the list/object from the view context. `{% for i in list %}`, also end the for loop like `{% endfor %}`.
 
 **app_name/views.py**
 ```python
@@ -283,9 +283,9 @@ urlpatterns = [
 </head>
 <body>
     <ul>
-        {{ "{% for sport in sport_list"}} %}
+        {% for sport in sport_list %}
         <li>{{ sport }}</li>
-        {{ "{% endfor" }} %}
+        {% endfor %}
     </ul>
 </body>
 </html>
@@ -316,31 +316,31 @@ To create a `block`, we simply need to write the following syntax before the com
 </head>
 <body>
     <h1>Hello, World!</h1>
-    {{ "{% block body"}} %}
+    {% block body %}
     <p>This is not going to get inherited </p>
-    {{ "{% endblock" }} %}
+    {% endblock %}
     <p>This will be inherited</p>
 </body>
 </html>
 ```
-In this we have used the `blocks` with a name like `body` as `{{ "{% block body" }} %}` this can be anything you like. We end the block with the similar syntax as the for/if blocks as `{{ "{% endblock" }} %}`. Anything in between the blocks i.e `block block_name` and `endblock` is not inherited i.e it is unique to this template.
+In this we have used the `blocks` with a name like `body` as `{% block body %}` this can be anything you like. We end the block with the similar syntax as the for/if blocks as `{% endblock %}`. Anything in between the blocks i.e `block block_name` and `endblock` is not inherited i.e it is unique to this template.
 
 We will see how we can use this template in other templates. We will actually extend this template and use the blocks to render the content in the template.
    
 
 **templates/if_else.html**
 ```html
-{{ "{% extends 'home.html'"}} %}
-{{ "{% block body" }} %}
-    {{ "{{num" }} }}
-    {{ "{% if num > 5"}} %}
+{% extends 'home.html' %}
+{% block body %}
+    {{ num }}
+    {% if num > 5 %}
     <h2>It's Greater then 5</h2>
-    {{ "{% elif num == 5"}} %}
+    {% elif num == 5 %}
     <h2>It's five!</h2>
-    {{ "{% else" }} %}
+    {% else %}
     <h2>It's less than 5</h2>
-    {{ "{% endif" }} %}
-{{ "{% endblock" }} %}
+    {% endif %}
+{% endblock %}
 ```
    So, we first say to Django to extend the `home` template i.e. the Django will load the blocks from this template only, remember it will just load and not use the blocks until we explicitly tell it to. 
 

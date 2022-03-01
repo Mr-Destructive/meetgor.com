@@ -432,13 +432,13 @@ We now, have to join the final piece of the puzzle i.e. to create templates. It'
 <head>
     <meta charset="UTF-8">
     <title>Django Blog</title>
-    {{ "{% load static" }} %}
-    <link rel="stylesheet" href="{{ "{% url 'css/style.css'" }} %}">
+    {% load static %}
+    <link rel="stylesheet" href="{% url 'css/style.css' %}">
 </head>
 <body>
     <h1>Articles</h1>
-   {{ "{% block body" }} %}
-   {{ "{% endblock" }} %}
+   {% block body %}
+   {% endblock %}
 </body>
 </html>
 ```
@@ -477,26 +477,26 @@ ul
 
 The below template is a detail view page, that renders the details of the article. We are using the `object` key from the `context` dictionary provided by default as mentioned [here](). We are also embedding the `Update` and `Delete` buttons to manage the Article. 
 
-This is the time to explain about the dynamic urls in Django. We have used the `{{ "{% url 'updatepost' object.id"}} %}` to create a dynamic url that will redirect to the `updatepost` url and parse with it the id of the object. This is important as the url itself takes the `<pk>` value to update the post. So we just pass the id like a parameter to the URL. This is the way we create dynamic urls in Django templates which is quite similar to static file urls. 
+This is the time to explain about the dynamic urls in Django. We have used the `{% url 'updatepost' object.id %}` to create a dynamic url that will redirect to the `updatepost` url and parse with it the id of the object. This is important as the url itself takes the `<pk>` value to update the post. So we just pass the id like a parameter to the URL. This is the way we create dynamic urls in Django templates which is quite similar to static file urls. 
 
 ```html
 # templates / app_name / post.html
 
-{{ "{% extends 'index.html'"}} %}
+{% extends 'index.html' %}
 
-{{ "{% block body" }} %}
-    <h2>{{ "{{ object.title" }} }}</h2>
-    <p>{{ "{{ object.post" }} }}</p>
+{% block body %}
+    <h2>{{ object.title" }}</h2>
+    <p>{{ object.post" </p>
 
-    <button type="submit" onclick="window.location.href='{{ "{% url 'updatepost' object.id"}} %}'">
+    <button type="submit" onclick="window.location.href='{% url 'updatepost' object.id %}'">
     Update
     </button>
 
-    <button type="submit" onclick="window.location.href='{{ "{% url 'deletepost' object.id" }} %}'">
+    <button type="submit" onclick="window.location.href='{% url 'deletepost' object.id %}'">
     Delete
     </button>
 
-{{ "{% endblock" }} %}
+{% endblock %}
 ```
 ![CRUD API - Detail View](https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643911468/blogmedia/n6z33yu4nq9tjsr6nba2.png)
 
@@ -508,15 +508,15 @@ Here as well we are using the dynamic url by parsing the `article.id` as the `<p
 ```html
 # templates / app_name / list.html
 
-{{ "{% extends 'index.html'"}} %}
+{% extends 'index.html' %}
 
-{{ "{% block body" }} %}
+{% block body %}
     <ul>
-        {{ "{% for article in articles" }} %}
-        <li><a href="{{ "{% url 'detailpost' article.id" }} %}">{{ "{{ article.title" }} }}</a></li>
-        {{ "{% endfor"}} %}
+        {% for article in articles %}
+        <li><a href="{% url 'detailpost' article.id %}">{{ article.title }}</a></li>
+        {% endfor %}
     </ul>
-{{ "{% endblock" }} %}
+{% endblock %}
 ```
 ![CRUD API - Home Page/List View](https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643911630/blogmedia/lakpdkldqwopimhixxya.png)
 
@@ -524,14 +524,14 @@ Here as well we are using the dynamic url by parsing the `article.id` as the `<p
 ```html
 # templates / app_name / article_confirm_delete.html
 
-{{ "{% extends 'index.html'" }} %}
+{% extends 'index.html' %}
 
-{{ "{% block body" }} %}
+{% block body %}
     <form method = "post">
-        {{ "{% csrf_token" }} %}
-        <p> Are you sure to delete Post:<b> {{ "{{ object.title"}} }}</b> ? </p>
+        {% csrf_token %}
+        <p> Are you sure to delete Post:<b> {{ object.title }}</b> ? </p>
         <input type="submit" value="Delete"/>
-{{ "{% endblock" }} %}
+{% endblock %}
 ```
 ![CRUD API - Delete View](https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643911775/blogmedia/qvilf8p3qpj9qfdkpkn4.png)
 
@@ -539,13 +539,13 @@ Here as well we are using the dynamic url by parsing the `article.id` as the `<p
 # templates/ app_name / article_form.html
 
 <form method="POST" enctype="multipart/form-data">
-    {{ "{% csrf_token" }} %}
-    {{ "{{ form.as_p" }} }}
+    {% csrf_token %}
+    {{ form.as_p" }}
     <input type="submit" />
 </form>
 ```
 
-   This is the template that forms the basis for all the forms like Create and Update. We use the template variable `{{ "{{ form"}} }}` to render the form in the template. Additionally we use `.as_p` to make the form fields as a paragraph tag in HTML. The `{{ "{% csrf_token" }} %}` is the Cross site forgery token allowing secure posting of a form. Don't bother about it much it is important for identifying the user posting the data from the site. The final piece of element is the submit button used to submit the form.  
+   This is the template that forms the basis for all the forms like Create and Update. We use the template variable `{{ form }}` to render the form in the template. Additionally we use `.as_p` to make the form fields as a paragraph tag in HTML. The `{% csrf_token %}` is the Cross site forgery token allowing secure posting of a form. Don't bother about it much it is important for identifying the user posting the data from the site. The final piece of element is the submit button used to submit the form.  
 
 ![CRUD API - CREATE View](https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643911374/blogmedia/xbwxtg3ry2x4oegtzxmi.png)
 

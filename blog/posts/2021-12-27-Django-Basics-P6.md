@@ -94,7 +94,7 @@ To render any static file, we need to load the static tag which allows us to emb
 To load the static files from our configuration, we can simpy include the tag on top of the template.
 
 ```
-{{ "{% load static" }} %}
+{% load static %}
 ```
 
 The above templating tag will load the `static` tag which allows us to embed the links to the static files as explained earlier. 
@@ -102,9 +102,9 @@ The above templating tag will load the `static` tag which allows us to embed the
 Now, we can actually access any file with the static folder in our templates with a particular syntax as below:
 
 ```html
-<link rel="stylesheet" href="{{ "{% static 'css/style.css'" }} %}">  
+<link rel="stylesheet" href="{% static 'css/style.css' %}">  
 ```   
-Its just a example how to load the file, we are calling the static tag which we have loaded in previously and from there we are referencing the css file. The compact syntax would be : `{{ "{% static  'path-to-file' "}} %}`      
+Its just a example how to load the file, we are calling the static tag which we have loaded in previously and from there we are referencing the css file. The compact syntax would be : `{% static  'path-to-file'  %}`      
 
 **NOTE: The path to the static file is relative from the Static folder, i.e. enter the path of the file considering the static folder as the base directory.** 
 
@@ -121,14 +121,14 @@ Assuming you have a app called `post` in your django project, you can render sta
 <head>
     <meta charset="UTF-8">
     <title>Django Blog</title>
-    {{ "{% load static " }} %}
-    <link rel="stylesheet" href="{{ "{% static 'css/style.css' "}} %}">  
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">  
 </head>
 <body>
     <h1>Hello, World!</h1>
-    {{ "{% block body "}} %}
+    {% block body %}
     <p>This is not going to get inherited </p>
-    {{ "{% endblock "}} %}
+    {% endblock %}
     <p>This will be inherited</p>
 </body>
 </html>
@@ -232,19 +232,19 @@ Let's see how static files are rendered in inherited templates. We'll tinker wit
 
 # template/for.html
 ```django
-{{ "{% extends 'home.html' "}}%}
-{{ "{% load static "}}%}
+{% extends 'home.html' %}
+{% load static %}
 
-{{ "{% block body "}}%}
-    <img src="{{ "{% static 'assets/tbicon.png' "}}%}" height="50px" width="50px" />
+{% block body %}
+    <img src="{% static 'assets/tbicon.png' %}" height="50px" width="50px" />
     <ul>
-        {{ "{% for sport in sport_list "}}%}
-        <li>{{ "{{ sport "}}}}</li>
-        {{ "{% endfor "}}%}
+        {% for sport in sport_list %}
+        <li>{{ sport }}</li>
+        {% endfor %}
     </ul>
-{{ "{% endblock "}}%}
+{% endblock %}
 ```
-We will have re-load the static tag for each template only if we need to include a new static file in the template. So we use the `{{ "{% load static"}}%}` again as we are loading the static file (image) in this template.
+We will have re-load the static tag for each template only if we need to include a new static file in the template. So we use the `{% load static %}` again as we are loading the static file (image) in this template.
 
 # post/views.py
 ```python

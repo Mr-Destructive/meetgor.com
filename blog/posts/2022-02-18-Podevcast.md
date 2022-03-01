@@ -139,16 +139,16 @@ for i in range(0, len(feed['entries']):
         <title>Podevcast</title>
     </head>
     <body>
-        <h3 class="ep-title">{{ "{{ episode.title" }} }}</h3>
-        <img src="{{ "{{ episode.cover"}} }}">
-        <a class="ep-link" href="{{ "{{ episode.link"}} }}">Episode </a> 
+        <h3 class="ep-title">{{ episode.title }}</h3>
+        <img src="{{ episode.cover }}">
+        <a class="ep-link" href="{{ episode.link }}">Episode </a> 
         <audio controls="enabled" preload="none">
-            <source src="{{ "{{ episode.audiolink"}} }}" type="audio/mpeg">
+            <source src="{{ episode.audiolink }}" type="audio/mpeg">
         </audio>   
     </body>
 </html>
 ```
-We can use `{{ "{{  "}} }}` to access any value parsed to the template via the script. Also, we can make use of `{{ "{% "}} %}` to run loops, conditionals, blocks, and other tags in the template. 
+We can use `{{  }}` to access any value parsed to the template via the script. Also, we can make use of `{% %}` to run loops, conditionals, blocks, and other tags in the template. 
 
 ![Feedparser Illustration](https://res.cloudinary.com/dgpxbrwoz/image/upload/v1645110268/blogmedia/uwdzcwn07oxhppiptem9.png)
 
