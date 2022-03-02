@@ -1,5 +1,5 @@
 ---
-layout: post
+templateKey: blog-post
 title:  "Setting up Vim for Python"
 subtitle: "For the python programmers who need speed!"
 date: 2021-06-06 11:35:25 +0530
