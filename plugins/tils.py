@@ -16,10 +16,11 @@ class MarkataFilterError(RuntimeError):
 def save(markata):
     config = markata.get_plugin_config("feeds")
     if config is None:
-        config["feeds"] = dict()
-    if "archive" not in config.keys():
-        config["archive"] = dict()
-        config["archive"]["filter"] = "templateKey in ['blog-post',] and status.lower()=='published'"
+        config["tils"] = dict()
+    if "tils" not in config.keys():
+        config["tils"] = dict()
+        config["tils"]["filter"] = "True"
+        config["tils"]["filter"] = "templateKey == 'til'"
 
     description = markata.get_config("description") or ""
     url = markata.get_config("url") or ""
@@ -38,7 +39,7 @@ def save(markata):
             )
 
     home = Path(markata.config["output_dir"]) / "index.html"
-    archive = Path(markata.config["output_dir"]) / "archive" / "index.html"
+    archive = Path(markata.config["output_dir"]) / "tils" / "index.html"
     if not home.exists() and archive.exists():
         shutil.copy(str(archive), str(home))
 
@@ -47,14 +48,14 @@ def create_page(
     markata,
     page,
     tags=None,
-    status="published",
+    status="published-til",
     template=None,
     card_template=None,
     filter=None,
     description=None,
     url=None,
     today=datetime.datetime.today(),
-    title="Techstructive Blog",
+    title="Techstructive Tils",
 ):
 
     def try_filter_date(x):
@@ -83,8 +84,8 @@ def create_page(
 
     with open(template) as f:
         template = Template(f.read())
-    output_file = Path(markata.config["output_dir"]) / page / "index.html"
-    canonical_url = f"{url}/{page}/"
+    output_file = Path(markata.config["output_dir"])/ page / "index.html"
+    canonical_url = f"/{url}/{page}/"
     output_file.parent.mkdir(exist_ok=True, parents=True)
 
     with open(output_file, "w+") as f:
@@ -107,7 +108,7 @@ def create_card(post, template=None):
                 f"""
                 <li class='post'>
                 <a href="/techstructive-blog/{post['slug']}/">
-                   <h2 id="title"> {post['title']} </h2>
+                    <h3>{post['title']} - {post['date'].year}-{post['date'].month}-{post['date'].day}</h3>
                 </a>
                 </li>
                 """
@@ -117,7 +118,7 @@ def create_card(post, template=None):
                 f"""
                 <li class='post'>
                 <a href="/techstructive-blog/{post['slug']}/">
-                   <h2 id="title"> {post['title']} </h2>
+                    <h2>{post['title']}</h2>
                 </a>
                 </li>
                 """
