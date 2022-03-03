@@ -106,6 +106,7 @@ def create_card(post, template=None):
             return textwrap.dedent(
                 f"""
                 <li class='post'>
+                <img src="{post['image_url']}" class="cover-image" >
                 <a href="/techstructive-blog/{post['slug']}/">
                    <h2 id="title"> {post['title']} </h2>
                 </a>
