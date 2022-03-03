@@ -108,7 +108,7 @@ def create_card(post, template=None):
                 f"""
                 <li class='post'>
                 <a href="/techstructive-blog/{post['slug']}/">
-                    <h3>{post['title']} - {post['date'].year}-{post['date'].month}-{post['date'].day}</h3>
+                    <h3 id="title">{post['title']} - {post['date'].year}-{post['date'].month}-{post['date'].day}</h3>
                 </a>
                 </li>
                 """
@@ -118,7 +118,7 @@ def create_card(post, template=None):
                 f"""
                 <li class='post'>
                 <a href="/techstructive-blog/{post['slug']}/">
-                    <h2>{post['title']}</h2>
+                    <h2 id="title">{post['title']}</h2>
                 </a>
                 </li>
                 """
