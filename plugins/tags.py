@@ -1,3 +1,8 @@
+from typing import Union, List
+from markata.hookspec import hook_impl
+from string import Template
+from pathlib import Path
+from more_itertools import unique_everseen
 import datetime
 import shutil
 import textwrap
@@ -11,42 +16,50 @@ from markata.hookspec import hook_impl
 class MarkataFilterError(RuntimeError):
     ...
 
-
 @hook_impl
-def save(markata):
-    config = markata.get_plugin_config("feeds")
+def pre_render(markata):
+    config = markata.get_plugin_config("tags")
     if config is None:
-        config["feeds"] = dict()
-    if "archive" not in config.keys():
-        config["archive"] = dict()
-        config["archive"]["filter"] = "templateKey in ['blog-post',] and status.lower()=='published'"
+        config["tags"] = dict()
+    if "tags" not in config.keys():
+        config["tags"] = dict()
+        config["tags"]["filter"] = "templateKey == 'blog-post'"
 
     description = markata.get_config("description") or ""
     url = markata.get_config("url") or ""
 
-    template = Path(__file__).parent / "default_post_template.html"
+    articles = [article for article in markata.iter_articles("tags")]
 
-    for page, page_conf in config.items():
-        if page not in ["cache_expire", "config_key"]:
-            create_page(
-                markata,
-                page,
-                description=description,
-                url=url,
-                template=template,
-                **page_conf,
-            )
+    tags = [ tag for post in articles for tag in post['tags']]
+    tags = list(set(tags))
 
-    home = Path(markata.config["output_dir"]) / "index.html"
-    archive = Path(markata.config["output_dir"]) / "archive" / "index.html"
-    if not home.exists() and archive.exists():
-        shutil.copy(str(archive), str(home))
+    for tag in tags:
+        description = markata.get_config("description") or ""
+        url = markata.get_config("url") or ""
+        template = Path(__file__).parent / "tags_template.html"
+
+        for page, page_conf in config.items():
+            if page not in ['cache_expire', 'config_key']:
+                create_page(
+                    markata,
+                    page,
+                    tag=tag,
+                    description=description,
+                    url=url,
+                    template=template,
+                )
+
+        
+        home = Path(markata.config["output_dir"]) / "index.html"
+        archive = Path(markata.config["output_dir"]) / tag / "index.html"
+        if not archive.exists():
+            shutil.copy(str(archive), str(home))
 
 
 def create_page(
     markata,
     page,
-    tags=None,
+    tag,
     status="published",
     template=None,
     card_template=None,
@@ -63,19 +76,7 @@ def create_page(
         except KeyError:
             return -1
 
-    if filter is not None:
-        posts = reversed(sorted(markata.articles, key=try_filter_date))
-        try:
-            posts = [post for post in posts if eval(filter, post.to_dict(), {})]
-        except BaseException as e:
-            msg = textwrap.dedent(
-                f"""
-                    While processing page='{page}' markata hit the following exception
-                    during filter='{filter}'
-                    {e}
-                    """
-            )
-            raise MarkataFilterError(msg)
+    posts = [post for post in markata.iter_articles("tags") if tag in post['tags']]
 
     cards = [create_card(post, card_template) for post in posts]
     cards.insert(0, "<ul>")
@@ -83,8 +84,8 @@ def create_page(
 
     with open(template) as f:
         template = Template(f.read())
-    output_file = Path(markata.config["output_dir"]) / page / "index.html"
-    canonical_url = f"{url}/{page}/"
+    output_file = Path(markata.config["output_dir"])/ tag / "index.html"
+    canonical_url = f"/{url}/{tag}/"
     output_file.parent.mkdir(exist_ok=True, parents=True)
 
     with open(output_file, "w+") as f:
@@ -94,6 +95,7 @@ def create_page(
                 url=url,
                 description=description,
                 title=title,
+                tag=tag,
                 canonical_url=canonical_url,
                 today=datetime.datetime.today(),
             )
@@ -118,7 +120,7 @@ def create_card(post, template=None):
                 f"""
                 <li class='post'>
                 <a href="/techstructive-blog/{post['slug']}/">
-                   <h2 id="title"> {post['title']} </h2>
+                    <h2 id="title">{post['title']}</h2>
                 </a>
                 </li>
                 """
