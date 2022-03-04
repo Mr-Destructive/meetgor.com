@@ -17,7 +17,7 @@ class MarkataFilterError(RuntimeError):
     ...
 
 @hook_impl
-def pre_render(markata):
+def save(markata):
     config = markata.get_plugin_config("tags")
     if config is None:
         config["tags"] = dict()
