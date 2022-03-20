@@ -56,7 +56,6 @@ def create_page(
     today=datetime.datetime.today(),
     title="Techstructive Blog",
 ):
-
     def try_filter_date(x):
         try:
             return x["date"]
