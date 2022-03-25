@@ -24,11 +24,14 @@ def save(markata):
         config["gfg_articles"]["filter"] = "True"
     template = Path(__file__).parent / "gfg_template.html"
 
+    description = markata.get_config("description") or ""
+
     for page, page_conf in config.items():
         if page not in ["cache_expire", "config_key"]:
             create_page(
                 markata,
                 page,
+                description=description,
                 template=template,
                 **page_conf,
             )
@@ -42,13 +45,14 @@ def get_posts():
     url = "https://auth.geeksforgeeks.org/user/meetgor/articles"
     html_page = urlopen(url)
     soup = bs4.BeautifulSoup(html_page, features="lxml")
-    li = soup.select(".contribute-ol li a")
+    li = list(soup.select(".contribute-ol li a"))
     return li
 
 def create_page(
     markata,
     page,
     tags=None,
+    description=None,
     status="published-gfg",
     template=None,
     card_template=None,
@@ -64,7 +68,7 @@ def create_page(
         except KeyError:
             return -1
 
-    posts = get_posts()[:-7]
+    posts = get_posts()[:-7][::-1]
     cards = [create_card(post, card_template) for post in posts]
     cards.insert(0, "<ul>")
     cards.append("</ul>")
@@ -73,11 +77,16 @@ def create_page(
         template = Template(f.read())
     output_file = Path(markata.config["output_dir"])/ "gfg" / "index.html"
     output_file.parent.mkdir(exist_ok=True, parents=True)
+    canonical_url = f"/{url}/gfg/"
 
     with open(output_file, "w+", encoding="utf-8") as f:
         f.write(
             template.render(
                 body="".join(cards),
+                url=url,
+                description=description,
+                title=title,
+                canonical_url=canonical_url,
                 today=datetime.datetime.today(),
             )
         )
