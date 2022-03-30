@@ -69,6 +69,7 @@ def create_page(
             return -1
 
     posts = get_posts()[:-7][::-1]
+    count = len(posts)
     cards = [create_card(post, card_template) for post in posts]
     cards.insert(0, "<ul>")
     cards.append("</ul>")
@@ -83,6 +84,7 @@ def create_page(
         f.write(
             template.render(
                 body="".join(cards),
+                count=count,
                 url=url,
                 description=description,
                 title=title,

@@ -76,6 +76,7 @@ def create_page(
             )
             raise MarkataFilterError(msg)
 
+    count = len(posts)
     cards = [create_card(post, card_template) for post in posts]
     cards.insert(0, "<ul>")
     cards.append("</ul>")
@@ -90,6 +91,7 @@ def create_page(
         f.write(
             template.render(
                 body="".join(cards),
+                count=count,
                 url=url,
                 description=description,
                 title=title,
