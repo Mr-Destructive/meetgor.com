@@ -49,6 +49,15 @@ autocmd BufWritePost *.py silent !black %
 ```
 
 This looks perfect! 
+
+But still, we need to add a auto-group(`augroup`) that groups the autocmds and by adding `autocmd!` it will clear all the commands from the group. 
+
+```vimscript
+augroup python_format
+    autocmd!
+    autocmd BufWritePost *.py silent !black %
+augroup end
+```
 We can now add it to the vimrc to work all the time.
 
 ## Using pipx 

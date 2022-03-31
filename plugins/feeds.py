@@ -23,7 +23,6 @@ def save(markata):
 
     description = markata.get_config("description") or ""
     url = markata.get_config("url") or ""
-
     template = Path(__file__).parent / "default_post_template.html"
 
     for page, page_conf in config.items():
@@ -110,6 +109,7 @@ def create_card(post, template=None):
                 <img src="{post['image_url']}" class="cover-image" >
                 <a href="/techstructive-blog/{post['slug']}/">
                    <h2 id="title"> {post['title']} </h2>
+                   <span>{ post['date'].strftime('%d-%m-%Y')  }</span>
                 </a>
                 </li>
                 """
