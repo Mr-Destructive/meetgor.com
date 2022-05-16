@@ -4,7 +4,7 @@ title : "What's in Techstructive Blog"
 subtitle: "Explaining my blog's scope and finding my niche as a technical writer."
 date: 2021-09-19 15:00:00 +0530
 status: published
-tags: ['hashnode', 'blog',]
+tags: ['hashnode', ]
 slug: techstructive-blog-init
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643287813/blogmedia/zgblatyqpwdh5oe7817g.png
 ---

@@ -22,7 +22,7 @@ def save(markata):
     if "gfg_articles" not in config.keys():
         config["gfg_articles"] = dict()
         config["gfg_articles"]["filter"] = "True"
-    template = Path(__file__).parent / "gfg_template.html"
+    template = Path(__file__).resolve().parents[1] / "layouts" / "gfg_template.html"
 
     description = markata.get_config("description") or ""
 

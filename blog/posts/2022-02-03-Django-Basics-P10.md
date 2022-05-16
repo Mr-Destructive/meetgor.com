@@ -7,6 +7,7 @@ status: published
 tags: ['django', 'python']
 slug: django-basics-crud-api
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643910006/blogmedia/yp2nvrkqkxmjzcsu0weu.png
+series: Django-Basics
 ---
 
 ## Introduction

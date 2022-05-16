@@ -14,16 +14,16 @@ class MarkataFilterError(RuntimeError):
 
 @hook_impl
 def save(markata):
-    config = markata.get_plugin_config("feeds")
+    config = markata.get_plugin_config("series")
     if config is None:
-        config["feeds"] = dict()
-    if "archive" not in config.keys():
-        config["archive"] = dict()
-        config["archive"]["filter"] = "templateKey in ['blog-post',] and status.lower()=='published'"
+        config["series"] = dict()
+    if "series" not in config.keys():
+        config["series"] = dict()
+        config["series"]["filter"] = "templateKey in ['blog-post',] and status.lower()=='published'"
 
     description = markata.get_config("description") or ""
     url = markata.get_config("url") or ""
-    template = Path(__file__).resolve().parents[1] / "layouts" / "default_post_template.html"
+    template = Path(__file__).resolve().parents[1] / "layouts"/ "series_template.html"
 
     for page, page_conf in config.items():
         if page not in ["cache_expire", "config_key"]:
@@ -37,9 +37,9 @@ def save(markata):
             )
 
     home = Path(markata.config["output_dir"]) / "index.html"
-    archive = Path(markata.config["output_dir"]) / "archive" / "index.html"
-    if not home.exists() and archive.exists():
-        shutil.copy(str(archive), str(home))
+    series = Path(markata.config["output_dir"]) / "series" / "index.html"
+    if not home.exists() and series.exists():
+        shutil.copy(str(series), str(home))
 
 
 def create_page(
@@ -52,6 +52,7 @@ def create_page(
     filter=None,
     description=None,
     url=None,
+    series=None,
     today=datetime.datetime.today(),
     title="Techstructive Blog",
 ):
@@ -75,15 +76,21 @@ def create_page(
             )
             raise MarkataFilterError(msg)
 
+    posts = [post for post in posts if 'series' in post]
+    series_list = []
+    for post in posts:
+        series_list.append(post['series'])
+    series_list = list(set(series_list))
+    
     count = len(posts)
-    cards = [create_card(post, card_template) for post in posts]
+    cards = [create_card(series, card_template) for series in series_list]
     cards.insert(0, "<ul>")
     cards.append("</ul>")
 
     with open(template) as f:
         template = Template(f.read())
     output_file = Path(markata.config["output_dir"]) / page / "index.html"
-    canonical_url = f"{url}/{page}/"
+    canonical_url = f"/{page}/"
     output_file.parent.mkdir(exist_ok=True, parents=True)
 
     with open(output_file, "w+") as f:
@@ -100,35 +107,21 @@ def create_page(
         )
 
 
-def create_card(post, template=None):
+def create_card(series, template=None):
     if template is None:
-        if "date" and "image_url" in post.keys():
-            return textwrap.dedent(
-                f"""
-                <li class='post'>
-                <img src="{post['image_url']}" class="cover-image" >
-                <a href="/techstructive-blog/{post['slug']}/">
-                   <h2 id="title"> {post['title']} </h2>
-                   <span>{ post['date'].strftime('%d-%m-%Y')  }</span>
-                </a>
-                </li>
-                """
-            )
-        else:
-            return textwrap.dedent(
-                f"""
-                <li class='post'>
-                <a href="/techstructive-blog/{post['slug']}/">
-                   <h2 id="title"> {post['title']} </h2>
-                </a>
-                </li>
-                """
-            )
+        series_name = series.replace(" ","-").lower()
+        return textwrap.dedent(
+            f"""
+            <li class='post'>
+            <a href="/techstructive-blog/series/{series_name}/">
+               <h2 id="title"> {series} </h2>
+            </a>
+            </li>
+            """
+        )
     try:
         with open(template) as f:
             template = Template(f.read())
     except FileNotFoundError:
         template = Template(template)
-    post["article_html"] = post.article_html
 
-    return template.render(**post.to_dict())

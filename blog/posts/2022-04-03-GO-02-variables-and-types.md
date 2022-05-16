@@ -7,6 +7,7 @@ status: published
 slug: golang-variables
 tags: ['go',]
 image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1648962610/blog-media/xtrmcfz8vdo7fsv4jjgy.png
+series: "100-days-of-golang"
 ---
 
 ## Introduction

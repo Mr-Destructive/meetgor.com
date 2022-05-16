@@ -7,6 +7,7 @@ status: published
 tags: ['django', 'python', 'web-development',]
 slug: django-basics-setup
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643290071/blogmedia/s8ahlep1e8lmgiboyjhz.png
+series: Django-Basics
 ---
 
 ## Introduction

@@ -25,7 +25,7 @@ def save(markata):
     description = markata.get_config("description") or ""
     url = markata.get_config("url") or ""
 
-    template = Path(__file__).parent / "tils_template.html"
+    template = Path(__file__).resolve().parents[1] / "layouts" / "tils_template.html"
 
     for page, page_conf in config.items():
         if page not in ["cache_expire", "config_key"]:
