@@ -7,6 +7,7 @@ status: published
 tags: ['django', 'python', 'web-development',]
 slug: django-basics-views-urls
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1638253939/blogmedia/dj-uv_esbld2.png
+series: Django-Basics
 ---
 
 ## Introduction

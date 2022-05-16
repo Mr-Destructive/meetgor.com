@@ -7,6 +7,7 @@ status: published
 slug: golang-operators
 tags: ['go',]
 image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1651940594/blog-media/go-013-operators.png
+series: "100-days-of-golang"
 ---
 
 ## Introduction 

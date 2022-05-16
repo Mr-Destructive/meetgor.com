@@ -7,6 +7,7 @@ status: published
 tags: ['django', 'python', 'web-development']
 slug: django-basics-templates
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1639387566/blogmedia/dj5temp_zukvj7.png
+series: Django-Basics
 ---
 
 ## Introduction

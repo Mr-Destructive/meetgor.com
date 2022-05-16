@@ -7,6 +7,7 @@ status: published
 slug: golang-conditionals-loops
 tags: ['go',]
 image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1648998962/blog-media/txkukj98wvuy8kxxt0ok.png
+series: "100-days-of-golang"
 ---
 
 ## Introduction

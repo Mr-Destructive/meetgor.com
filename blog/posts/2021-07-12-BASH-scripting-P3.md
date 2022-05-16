@@ -7,6 +7,7 @@ status: published
 tags: ['bash',]
 slug: bash-guide-p3
 image_url: https://cdn.hashnode.com/res/hashnode/image/upload/v1625064683744/LUG0ep1xA.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress
+series: "BASH Scripting Guide"
 ---
 
 

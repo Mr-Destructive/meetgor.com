@@ -7,6 +7,8 @@ status: published
 tags: ['django', 'python', 'web-development',]
 slug: django-basics-intro
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643289206/blogmedia/gbq3rlfat3erbxocn7yn.png
+series: Django-Basics
+series_description: "Understand the fundamentals of backend web development with Django web framework."
 ---
 
 ## Introduction

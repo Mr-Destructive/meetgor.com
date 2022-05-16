@@ -7,6 +7,8 @@ status: published
 slug: django-deploy-heroku
 tags: ['django', 'web-development', 'python',]
 image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1652599818/blog-media/djang-heroku.png
+series: Django-Deployment
+series_description: "Django Deployment is a series for understanding various platforms for Django project deployment with database attachment. Platforms to be covered: Heroku, Railway, Qovery, Python Anywhere, etc."
 ---
 
 ## Introduction
