@@ -2,10 +2,20 @@ import datetime
 import shutil
 import textwrap
 from pathlib import Path
+from typing import TYPE_CHECKING, Any, List, Optional, Union
 
-from jinja2 import Template
+from jinja2 import Template, Undefined
 
+from markata import Markata
 from markata.hookspec import hook_impl
+
+if TYPE_CHECKING:
+    from frontmatter import Post
+
+
+class SilentUndefined(Undefined):
+    def _fail_with_undefined_error(self, *args, **kwargs):
+        return ""
 
 
 class MarkataFilterError(RuntimeError):
@@ -13,7 +23,10 @@ class MarkataFilterError(RuntimeError):
 
 
 @hook_impl
-def save(markata):
+def save(markata: Markata) -> None:
+    """
+    Creates a new feed page for each page in the config.
+    """
     config = markata.get_plugin_config("feeds")
     if config is None:
         config["feeds"] = dict()
@@ -54,7 +67,7 @@ def create_page(
     url=None,
     today=datetime.datetime.today(),
     title="Techstructive Blog",
-):
+) -> None:
     def try_filter_date(x):
         try:
             return x["date"]

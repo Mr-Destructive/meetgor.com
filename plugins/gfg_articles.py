@@ -14,13 +14,13 @@ class MarkataFilterError(RuntimeError):
     ...
 
 
-@hook_impl 
+@hook_impl
 def save(markata):
     config = markata.get_plugin_config("feeds")
     if config is None:
         config["gfg_articles"] = dict()
     if "gfg_articles" not in config.keys():
-        config["gfg_articles"] = dict()
+        config["gfg_articles"]=dict()
         config["gfg_articles"]["filter"] = "True"
     template = Path(__file__).resolve().parents[1] / "layouts" / "gfg_template.html"
 
@@ -41,12 +41,14 @@ def save(markata):
     if not home.exists() and archive.exists():
         shutil.copy(str(archive), str(home))
 
+
 def get_posts():
     url = "https://auth.geeksforgeeks.org/user/meetgor/articles"
     html_page = urlopen(url)
     soup = bs4.BeautifulSoup(html_page, features="lxml")
     li = list(soup.select(".contribute-ol li a"))
     return li
+
 
 def create_page(
     markata,
@@ -61,7 +63,6 @@ def create_page(
     today=datetime.datetime.today(),
     title="GeeksforGeeks Articles",
 ):
-
     def try_filter_date(x):
         try:
             return x["date"]
@@ -76,7 +77,7 @@ def create_page(
 
     with open(template) as f:
         template = Template(f.read())
-    output_file = Path(markata.config["output_dir"])/ "gfg" / "index.html"
+    output_file = Path(markata.config["output_dir"]) / "gfg" / "index.html"
     output_file.parent.mkdir(exist_ok=True, parents=True)
     canonical_url = f"/{url}/gfg/"
 
@@ -92,6 +93,7 @@ def create_page(
                 today=datetime.datetime.today(),
             )
         )
+
 
 def create_card(post, template=None):
     if template is None:
