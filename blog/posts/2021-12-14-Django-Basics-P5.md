@@ -1,5 +1,5 @@
 ---
-templateey: blog-post
+templateKey: blog-post
 title : "Django Basics: Templates"
 subtitle: "Rendering templates/html docs in the Django project/app"
 date: 2021-12-14 16:45:00 +0530
