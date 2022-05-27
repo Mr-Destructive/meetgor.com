@@ -118,7 +118,7 @@ def create_card(tag, template=None):
         return textwrap.dedent(
             f"""
             <li class='post'>
-            <a href="/techstructive-blog/tag/{tag_name}/">
+            <a href="/tag/{tag_name}/">
                <h2 id="title">#{tag}</h2>
             </a>
             </li>

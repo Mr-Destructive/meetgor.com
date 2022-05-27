@@ -107,7 +107,7 @@ def create_card(post, template=None):
             return textwrap.dedent(
                 f"""
                 <li class='post'>
-                <a href="/techstructive-blog/{post['slug']}/">
+                <a href="/{post['slug']}/">
                     <h3 id="title">{post['title']} - {post['date'].year}-{post['date'].month}-{post['date'].day}</h3>
                 </a>
                 </li>
@@ -117,7 +117,7 @@ def create_card(post, template=None):
             return textwrap.dedent(
                 f"""
                 <li class='post'>
-                <a href="/techstructive-blog/{post['slug']}/">
+                <a href="/{post['slug']}/">
                     <h2 id="title">{post['title']}</h2>
                 </a>
                 </li>

@@ -113,7 +113,7 @@ def create_card(series, template=None):
         return textwrap.dedent(
             f"""
             <li class='post'>
-            <a href="/techstructive-blog/series/{series_name}/">
+            <a href="/series/{series_name}/">
                <h2 id="title"> {series} </h2>
             </a>
             </li>
