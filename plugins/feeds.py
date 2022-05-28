@@ -90,7 +90,7 @@ def create_page(
 
     count = len(posts)
     cards = [create_card(post, card_template) for post in posts]
-    cards.insert(0, "<ul>")
+    cards.insert(0, "<ul class='post-list'>")
     cards.append("</ul>")
 
     with open(template) as f:
