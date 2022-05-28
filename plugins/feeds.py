@@ -37,6 +37,7 @@ def save(markata: Markata) -> None:
     description = markata.get_config("description") or ""
     url = markata.get_config("url") or ""
     template = Path(__file__).resolve().parents[1] / "layouts" / "default_post_template.html"
+    print(config)
 
     for page, page_conf in config.items():
         if page not in ["cache_expire", "config_key"]:
@@ -50,7 +51,7 @@ def save(markata: Markata) -> None:
             )
 
     home = Path(markata.config["output_dir"]) / "index.html"
-    archive = Path(markata.config["output_dir"]) / "archive" / "index.html"
+    archive = Path(markata.config["output_dir"]) / "blog" / "index.html"
     if not home.exists() and archive.exists():
         shutil.copy(str(archive), str(home))
 
@@ -95,11 +96,26 @@ def create_page(
 
     with open(template) as f:
         template = Template(f.read())
-    output_file = Path(markata.config["output_dir"]) / page / "index.html"
+    output_file = Path(markata.config["output_dir"]) / "blog" / "index.html"
+    archive_file = Path(markata.config["output_dir"]) / "archive" / "index.html"
     canonical_url = f"{url}/{page}/"
     output_file.parent.mkdir(exist_ok=True, parents=True)
+    archive_file.parent.mkdir(exist_ok=True, parents=True)
 
     with open(output_file, "w+") as f:
+        f.write(
+            template.render(
+                body="".join(cards),
+                count=count,
+                url=url,
+                description=description,
+                title=title,
+                canonical_url=canonical_url,
+                today=datetime.datetime.today(),
+            )
+        )
+
+    with open(archive_file, "w+") as f:
         f.write(
             template.render(
                 body="".join(cards),
