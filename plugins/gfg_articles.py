@@ -6,7 +6,6 @@ import textwrap
 from pathlib import Path
 
 from jinja2 import Template
-
 from markata.hookspec import hook_impl
 
 
@@ -17,15 +16,14 @@ class MarkataFilterError(RuntimeError):
 @hook_impl
 def save(markata):
     config = markata.get_plugin_config("feeds")
+
     if config is None:
         config["gfg_articles"] = dict()
     if "gfg_articles" not in config.keys():
-        config["gfg_articles"]=dict()
+        config["gfg_articles"] = dict()
         config["gfg_articles"]["filter"] = "True"
     template = Path(__file__).resolve().parents[1] / "layouts" / "gfg_template.html"
-
     description = markata.get_config("description") or ""
-
     for page, page_conf in config.items():
         if page not in ["cache_expire", "config_key"]:
             create_page(
