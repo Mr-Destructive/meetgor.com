@@ -19,11 +19,13 @@ def save(markata):
         config["series"] = dict()
     if "series" not in config.keys():
         config["series"] = dict()
-        config["series"]["filter"] = "templateKey in ['blog-post',] and status.lower()=='published'"
+        config["series"][
+            "filter"
+        ] = "templateKey in ['blog-post',] and status.lower()=='published'"
 
     description = markata.get_config("description") or ""
     url = markata.get_config("url") or ""
-    template = Path(__file__).resolve().parents[1] / "layouts"/ "series_template.html"
+    template = Path(__file__).resolve().parents[1] / "layouts" / "series_template.html"
 
     for page, page_conf in config.items():
         if page not in ["cache_expire", "config_key"]:
@@ -76,12 +78,13 @@ def create_page(
             )
             raise MarkataFilterError(msg)
 
-    posts = [post for post in posts if 'series' in post]
+    posts = [post for post in posts if "series" in post]
     series_list = []
     for post in posts:
-        series_list.append(post['series'])
+        for series in post["series"]:
+            series_list.append(series)
     series_list = list(set(series_list))
-    
+
     count = len(posts)
     cards = [create_card(series, card_template) for series in series_list]
     cards.insert(0, "<ul>")
@@ -109,7 +112,7 @@ def create_page(
 
 def create_card(series, template=None):
     if template is None:
-        series_name = series.replace(" ","-").lower()
+        series_name = series.replace(" ", "-").lower()
         return textwrap.dedent(
             f"""
             <li class='post'>
@@ -124,4 +127,3 @@ def create_card(series, template=None):
             template = Template(f.read())
     except FileNotFoundError:
         template = Template(template)
-

@@ -7,7 +7,7 @@ status: published
 slug: django-deploy-railway
 tags: ["django", "python", "web-development"]
 image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1652942552/blog-media/django-deploy-railway.png
-series: Django-Deployment
+series: [ 'Django-Deployment','Django-Series']
 ---
 
 ## Introduction
