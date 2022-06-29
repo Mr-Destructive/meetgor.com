@@ -19,13 +19,15 @@ def save(markata):
         config["series_index"] = dict()
     if "series" not in config.keys():
         config["series_index"] = dict()
-        config["series_index"]["filter"] = "templateKey in ['blog-post',] and status.lower()=='published'"
+        config["series_index"][
+            "filter"
+        ] = "templateKey in ['blog-post',] and status.lower()=='published'"
 
     articles = [article for article in markata.iter_articles("series")]
 
     series_list = [post for post in articles]
-    series_list = [post for post in series_list if 'series' in post]
-    series_list = [post['series'] for post in series_list]
+    series_list = [post for post in series_list if "series" in post]
+    series_list = [series for post in series_list for series in post["series"]]
     series_list = list(set(series_list))
 
     for series in series_list:
@@ -46,10 +48,16 @@ def save(markata):
                 )
 
         home = Path(markata.config["output_dir"]) / "index.html"
-        series_name = series.replace(" ", "-").lower()
-        series_page = Path(markata.config["output_dir"]) / "series" / series_name / "index.html"
-        if not home.exists() and series_page.exists():
-            shutil.copy(str(series_page), str(home))
+        for series_name in series:
+            series_name = series_name.replace(" ", "-").lower()
+            series_page = (
+                Path(markata.config["output_dir"])
+                / "series"
+                / series_name
+                / "index.html"
+            )
+            if not home.exists() and series_page.exists():
+                shutil.copy(str(series_page), str(home))
 
 
 def create_page(
@@ -86,8 +94,8 @@ def create_page(
             )
             raise MarkataFilterError(msg)
 
-    posts = [post for post in posts if 'series' in post]
-    posts = [post for post in posts if post['series'] == series]
+    posts = [post for post in posts if "series" in post]
+    posts = [post for post in posts if series in post["series"]]
     count = len(posts)
 
     cards = [create_card(post, card_template) for post in posts]
@@ -97,10 +105,11 @@ def create_page(
     with open(template) as f:
         template = Template(f.read())
     series_name = series.replace(" ", "-").lower()
-    series_description = series
     if "series_description" in posts[0]:
         series_description = posts[0]["series_description"]
-    output_file = Path(markata.config["output_dir"]) / "series" / series_name / "index.html"
+    output_file = (
+        Path(markata.config["output_dir"]) / "series" / series_name / "index.html"
+    )
     canonical_url = f"/{url}/{page}/"
     output_file.parent.mkdir(exist_ok=True, parents=True)
 
