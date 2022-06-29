@@ -7,7 +7,7 @@ status: published
 tags: ['python', 'django', 'web-development',]
 slug: django-database-conf
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1642339267/blogmedia/djbasics-8-db_pvulqh.png
-series: Django-Basics
+series: ['Django-Basics','Django-Series']
 ---
 
 ## Introduction

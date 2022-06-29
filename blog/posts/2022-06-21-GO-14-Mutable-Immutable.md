@@ -6,7 +6,7 @@ date: 2022-06-21 21:00:00
 status: published
 slug: golang-mutable-immutable
 tags: ['go',]
-series: "100-days-of-golang"
+series: ['100-days-of-golang',]
 image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1655475846/blog-media/im-mutables-go-14.png
 ---
 
