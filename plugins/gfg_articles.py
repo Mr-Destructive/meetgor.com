@@ -67,7 +67,7 @@ def create_page(
         except KeyError:
             return -1
 
-    posts = get_posts()[:-7][::-1]
+    posts = get_posts()[:-10][::-1]
     count = len(posts)
     cards = [create_card(post, card_template) for post in posts]
     cards.insert(0, "<ul>")
@@ -109,6 +109,5 @@ def create_card(post, template=None):
             template = Template(f.read())
     except FileNotFoundError:
         template = Template(template)
-    post["article_html"] = post.article_html
 
-    return template.render(**post.to_dict())
+    return str(post)
