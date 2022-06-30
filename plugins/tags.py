@@ -16,6 +16,7 @@ from markata.hookspec import hook_impl
 class MarkataFilterError(RuntimeError):
     ...
 
+
 @hook_impl
 def save(markata):
     config = markata.get_plugin_config("tags")
@@ -30,16 +31,18 @@ def save(markata):
 
     articles = [article for article in markata.iter_articles("tags")]
 
-    tags = [ tag for post in articles for tag in post['tags']]
+    tags = [tag for post in articles for tag in post["tags"]]
     tags = list(set(tags))
 
     for tag in tags:
         description = markata.get_config("description") or ""
         url = markata.get_config("url") or ""
-        template = Path(__file__).resolve().parents[1] / "layouts" / "tags_template.html"
+        template = (
+            Path(__file__).resolve().parents[1] / "layouts" / "tags_template.html"
+        )
 
         for page, page_conf in config.items():
-            if page not in ['cache_expire', 'config_key']:
+            if page not in ["cache_expire", "config_key"]:
                 create_page(
                     markata,
                     page,
@@ -49,7 +52,6 @@ def save(markata):
                     template=template,
                 )
 
-        
         home = Path(markata.config["output_dir"]) / "index.html"
 
         archive = Path(markata.config["output_dir"]) / "tag" / tag / "index.html"
@@ -70,22 +72,22 @@ def create_page(
     today=datetime.datetime.today(),
     title="Techstructive Blog",
 ):
-
     def try_filter_date(x):
         try:
             return x["date"]
         except KeyError:
             return -1
 
-    posts = [post for post in markata.iter_articles("tags") if tag in post['tags']]
+    posts = [post for post in markata.iter_articles("tags") if tag in post["tags"]]
 
     cards = [create_card(post, card_template) for post in posts]
     cards.insert(0, "<ul>")
     cards.append("</ul>")
+    count = len(posts)
 
     with open(template) as f:
         template = Template(f.read())
-    output_file = Path(markata.config["output_dir"])/ "tag" / tag / "index.html"
+    output_file = Path(markata.config["output_dir"]) / "tag" / tag / "index.html"
     canonical_url = f"/{url}/{tag}/"
     output_file.parent.mkdir(exist_ok=True, parents=True)
 
@@ -97,6 +99,7 @@ def create_page(
                 description=description,
                 title=title,
                 tag=tag,
+                count=count,
                 canonical_url=canonical_url,
                 today=datetime.datetime.today(),
             )
