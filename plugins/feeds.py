@@ -32,12 +32,15 @@ def save(markata: Markata) -> None:
         config["feeds"] = dict()
     if "archive" not in config.keys():
         config["archive"] = dict()
-        config["archive"]["filter"] = "templateKey in ['blog-post',] and status.lower()=='published'"
+        config["archive"][
+            "filter"
+        ] = "templateKey in ['blog-post',] and status.lower()=='published'"
 
     description = markata.get_config("description") or ""
     url = markata.get_config("url") or ""
-    template = Path(__file__).resolve().parents[1] / "layouts" / "default_post_template.html"
-    print(config)
+    template = (
+        Path(__file__).resolve().parents[1] / "layouts" / "default_post_template.html"
+    )
 
     for page, page_conf in config.items():
         if page not in ["cache_expire", "config_key"]:
