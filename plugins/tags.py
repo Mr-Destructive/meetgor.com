@@ -79,6 +79,7 @@ def create_page(
             return -1
 
     posts = [post for post in markata.iter_articles("tags") if tag in post["tags"]]
+    posts = sorted(posts, key=try_filter_date, reverse=True)
 
     cards = [create_card(post, card_template) for post in posts]
     cards.insert(0, "<ul>")
