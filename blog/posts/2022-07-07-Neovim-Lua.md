@@ -34,7 +34,7 @@ So, I assume you have set up Neovim, If not you need to follow some simple steps
 After your neovim is set up and you have a basic configuration, you can now start to migrate into lua.
 Create a `init.lua` file in the same path as your `init.lua` file is i.e. at `~/.config/nvim` or `~/AppData/Local/nvim/` for Windows. That's why it is recommended to keep the initial configuration vimscript file in a safe place. While migrating from vimscript to lua, once the lua file is created and the next time you restart neovim, the default settings will be from `init.lua` and not `init.vim`, so be prepared.
 
-Firstly, you need to configure some options like `number`, `syntax highlighting, `tabs`, and some `keymaps` of course. We can use the `vim.opt` method to set options in vim using lua syntax. So, certain corresponding vim options would be converted as follows:
+Firstly, you need to configure some options like `number`, `syntax highlighting`, `tabs`, and some `keymaps` of course. We can use the `vim.opt` method to set options in vim using lua syntax. So, certain corresponding vim options would be converted as follows:
 
 If you have the following kind of settings in your vimrc or init.vim:
 
