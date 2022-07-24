@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <title>
+   Techstructive Blog
+  </title>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width" name="viewport"/>
+  <meta content="" name="description"/>
+  <meta content="https://www.meetgor.com/" property="og:url"/>
+  <meta content="website" property="og:type"/>
+  <meta content="Autoformat Python file with Black after saving in Vim" property="og:title"/>
+  <meta content="Automatically format python code in the current file after saving the file in Vim." property="og:description"/>
+  <meta content="https://res.cloudinary.com/techstructive-blog/image/upload/v1653735630/blog-media/tblog-logo.png" property="og:image"/>
+  <meta content="mr-destructive.github.io" property="twitter:domain"/>
+  <meta content="https://www.meetgor.com/" property="twitter:url"/>
+  <meta content="Techstructive Blog" name="twitter:title"/>
+  <meta content="" name="twitter:description"/>
+  <meta content="" name="twitter:image"/>
+  <link href="../tbicon.png" rel="icon" type="image/png"/>
+  <link href="../main.css" rel="stylesheet"/>
+  <meta content="markata 0.2.0" name="generator"/>
+ </head>
+ <body>
+  <nav>
+   <a href="/">
+    <h1 class="text-primary">
+     Techstructive Blog
+    </h1>
+   </a>
+   <ul class="navbar">
+    <li>
+     <a class="navlink" href="/">
+      Home
+     </a>
+    </li>
+    <li>
+     <a class="navlink" href="/blog/">
+      Blog
+     </a>
+    </li>
+    <li>
+     <a class="navlink" href="/projects/">
+      Projects
+     </a>
+    </li>
+   </ul>
+  </nav>
+  <hr/>
+  <article class="blog-post h-entry">
+   <div id="title-wrapper">
+    <a class="u-url" href="/vim-python-black-autoformat/">
+     <h1 class="flair" id="title" style="text-align:right;z-index:2;padding-right:.2rem">
+      Autoformat Python file with Black after saving in Vim
+     </h1>
+    </a>
+    <p>
+     Automatically format python code in the current file after saving the file in Vim.
+    </p>
+    <a href="/vim">
+     #vim
+    </a>
+    <a href="/python">
+     #python
+    </a>
+    <div class="author">
+     <p>
+      <time class="dt-published post-date" datetime="2022-03-29" style="text-align:right;z-index:2">
+       2022-03-29
+      </time>
+     </p>
+     <p>
+      <span class="p-given-name">
+       Meet
+      </span>
+      <span class="p-family-name">
+       Gor
+      </span>
+     </p>
+    </div>
+    <div class="h-card p-author" rel="author">
+     <p class="p-note">
+      Techstructive Blog
+      <a href="https://twitter.com/MeetGor21">
+       @MeetGor21
+      </a>
+     </p>
+     <p>
+      <a alt="edit post url" href="https://github.com/mr-destructive/meetgor.com/edit/gh-pages/blog/tils/2022-03-29-Vim-Python-autoformat.md" title="edit this post">
+       edit
+       <span aria-label="" role="img">
+        ✏️
+       </span>
+      </a>
+     </p>
+    </div>
+   </div>
+   <hr/>
+   <div id="post-body">
+    <p>
+     If you are like me who writes Python very badly, it has empty lines with whitespaces, no proper format in assigning variables, not formatted according to
+     <a href="https://peps.python.org/pep-0008/">
+      PEP 8
+     </a>
+     standards, and you use Vim as your text editor then my friend you need a autocmd badly for it.
+    </p>
+    <h2 id="install-black-in-python">
+     Install Black in Python
+    </h2>
+    <p>
+     Install the
+     <a href="https://pypi.org/project/black/">
+      black
+     </a>
+     package in python globally or locally as per your preferences.
+    </p>
+    <div class="highlight">
+     <pre><span></span><code>pip install black
+</code></pre>
+    </div>
+    <p>
+     OR with pipx
+    </p>
+    <div class="highlight">
+     <pre><span></span><code>pipx install black
+</code></pre>
+    </div>
+    <p>
+     For a detailed guide about running packages with pipx head toward my article on
+     <a href="https://mr-destructive.github.io/techstructive-blog/pipx-intro/">
+      pipx
+     </a>
+     .
+    </p>
+    <h2 id="set-up-autocmd-in-vim">
+     Set up Autocmd in Vim
+    </h2>
+    <p>
+     We can set up a autocmd. What is a autocmd? It is about running commands when certain events occur like running a command when a file is saved, a buffer is opened or closed, and so on. What we want is to run the black command from the shell when the current file is saved.
+    </p>
+    <p>
+     So, we can create a autocmd as follows:
+    </p>
+    <div class="highlight">
+     <pre><span></span><code>autocmd BufWritePost * !black %
+</code></pre>
+    </div>
+    <p>
+     Now, this will run when any type of file is saved, so we will make it specific to python by adding a
+     <code>
+      *.py
+     </code>
+     to add in the autocmd.
+    </p>
+    <div class="highlight">
+     <pre><span></span><code>autocmd BufWritePost *.py !black %
+</code></pre>
+    </div>
+    <p>
+     This works, but it gives a prompt after the command has been executed, to run the command silently we can simply add the silent keyword before the execution of the command from the shell.
+    </p>
+    <div class="highlight">
+     <pre><span></span><code>autocmd BufWritePost *.py silent !black %
+</code></pre>
+    </div>
+    <p>
+     This looks perfect!
+    </p>
+    <p>
+     But still, we need to add a auto-group(
+     <code>
+      augroup
+     </code>
+     ) that groups the autocmds and by adding
+     <code>
+      autocmd!
+     </code>
+     it will clear all the commands from the group.
+    </p>
+    <p>
+    </p>
+    <div class="highlight">
+     <pre><span></span><code>augroup python_format
+    autocmd!
+    autocmd BufWritePost *.py silent !black %
+augroup end
+</code></pre>
+    </div>
+    We can now add it to the vimrc to work all the time.
+    <h2 id="using-pipx">
+     Using pipx
+    </h2>
+    <p>
+     If you have used pipx to install black, you need to setup the autocmd a bit differently.
+    </p>
+    <div class="highlight">
+     <pre><span></span><code>autocmd BufWritePost *.py silent !pipx run black %
+</code></pre>
+    </div>
+    <p>
+     It might be a bit slower than running with global installation, but it is a neat way to run python package.
+    </p>
+    <p>
+     So, that's it we can now write clean and safe python code without breaking a sweat in Vim. Happy Coding :)
+    </p>
+   </div>
+   <hr/>
+   <div id="show">
+   </div>
+  </article>
+  <hr/>
+  <footer>
+   <ul class="social">
+    <li>
+     <a href="https://twitter.com/MeetGor21">
+      Twitter
+      <svg class="svg-icon grey">
+       <use xlink:href="../social-icons.svg#twitter">
+       </use>
+      </svg>
+     </a>
+    </li>
+    <li>
+     <a href="https://www.linkedin.com/in/meetgor/">
+      LinkedIn
+      <svg class="svg-icon grey">
+       <use xlink:href="../social-icons.svg#linkedin">
+       </use>
+      </svg>
+     </a>
+    </li>
+    <li>
+     <a href="https://github.com/Mr-Destructive">
+      GitHub
+      <svg class="svg-icon grey">
+       <use xlink:href="../social-icons.svg#github">
+       </use>
+      </svg>
+     </a>
+    </li>
+    <li>
+     <a href="https://dev.to/mr-destructive">
+      Dev.to
+      <svg class="svg-icon grey">
+       <use xlink:href="../social-icons.svg#devto">
+       </use>
+      </svg>
+     </a>
+    </li>
+    <li>
+     <a href="/rss.xml">
+      RSS
+      <svg class="svg-icon orange">
+       <use xlink:href="../social-icons.svg#rss">
+       </use>
+      </svg>
+     </a>
+    </li>
+    <li>
+     <a class="u-email" href="mailto:gormeet711@gmail.com">
+      Email
+     </a>
+    </li>
+   </ul>
+   Techstructive Blog © 2022
+  </footer>
+ </body>
+</html>

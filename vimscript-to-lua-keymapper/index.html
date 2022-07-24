@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <title>
+   Techstructive Blog
+  </title>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width" name="viewport"/>
+  <meta content="" name="description"/>
+  <meta content="https://www.meetgor.com/" property="og:url"/>
+  <meta content="website" property="og:type"/>
+  <meta content="Map Vimscript Keymaps to Lua with a single function" property="og:title"/>
+  <meta content="Takeout the vimscript keymaps into lua with a single function call in Neovim" property="og:description"/>
+  <meta content="https://res.cloudinary.com/techstructive-blog/image/upload/v1653735630/blog-media/tblog-logo.png" property="og:image"/>
+  <meta content="mr-destructive.github.io" property="twitter:domain"/>
+  <meta content="https://www.meetgor.com/" property="twitter:url"/>
+  <meta content="Techstructive Blog" name="twitter:title"/>
+  <meta content="" name="twitter:description"/>
+  <meta content="" name="twitter:image"/>
+  <link href="../tbicon.png" rel="icon" type="image/png"/>
+  <link href="../main.css" rel="stylesheet"/>
+  <meta content="markata 0.2.0" name="generator"/>
+ </head>
+ <body>
+  <nav>
+   <a href="/">
+    <h1 class="text-primary">
+     Techstructive Blog
+    </h1>
+   </a>
+   <ul class="navbar">
+    <li>
+     <a class="navlink" href="/">
+      Home
+     </a>
+    </li>
+    <li>
+     <a class="navlink" href="/blog/">
+      Blog
+     </a>
+    </li>
+    <li>
+     <a class="navlink" href="/projects/">
+      Projects
+     </a>
+    </li>
+   </ul>
+  </nav>
+  <hr/>
+  <article class="blog-post h-entry">
+   <div id="title-wrapper">
+    <a class="u-url" href="/vimscript-to-lua-keymapper/">
+     <h1 class="flair" id="title" style="text-align:right;z-index:2;padding-right:.2rem">
+      Map Vimscript Keymaps to Lua with a single function
+     </h1>
+    </a>
+    <p>
+     Takeout the vimscript keymaps into lua with a single function call in Neovim
+    </p>
+    <a href="/vim">
+     #vim
+    </a>
+    <a href="/lua">
+     #lua
+    </a>
+    <div class="author">
+     <p>
+      <time class="dt-published post-date" datetime="2022-07-11" style="text-align:right;z-index:2">
+       2022-07-11
+      </time>
+     </p>
+     <p>
+      <span class="p-given-name">
+       Meet
+      </span>
+      <span class="p-family-name">
+       Gor
+      </span>
+     </p>
+    </div>
+    <div class="h-card p-author" rel="author">
+     <p class="p-note">
+      Techstructive Blog
+      <a href="https://twitter.com/MeetGor21">
+       @MeetGor21
+      </a>
+     </p>
+     <p>
+      <a alt="edit post url" href="https://github.com/mr-destructive/meetgor.com/edit/gh-pages/blog/tils/2022-07-11-Neovim-Vim-keymaper.md" title="edit this post">
+       edit
+       <span aria-label="" role="img">
+        ✏️
+       </span>
+      </a>
+     </p>
+    </div>
+   </div>
+   <hr/>
+   <div id="post-body">
+    <h2 id="introduction">
+     Introduction
+    </h2>
+    <p>
+     Are you bored of writing all the keymaps from vimscript to lua? Try the below function to create all your keymaps to lua equivalent maps in Neovim.
+    </p>
+    <p>
+     Take your vimscript keymaps and put them in lua don't write any lua for it ;)
+    </p>
+    <h2 id="the-lua-function">
+     The Lua Function
+    </h2>
+    <p>
+     The below-provided snippet is a lua function that takes in a table of strings(list of strings), the strings will be your keymaps. The function then maps these keymaps using lua functions. You don't have to type out all the keymaps by yourself. It can also print out the lua equivalent function calls required to map the existing keymaps from vimscript to lua runtime in Neovim. Though it won't handle all the options, we have passed in a default value to the keymap.
+    </p>
+    <div class="highlight">
+     <pre><span></span><code><span class="kr">function</span> <span class="nf">key_mapper</span><span class="p">(</span><span class="n">keymaps</span><span class="p">)</span>
+  <span class="kr">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">keymap</span> <span class="kr">in</span> <span class="nb">ipairs</span><span class="p">(</span><span class="n">keymaps</span><span class="p">)</span> <span class="kr">do</span>
+    <span class="kd">local</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">keymap</span><span class="p">:</span><span class="n">sub</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">delimiter</span> <span class="o">=</span> <span class="s2">" "</span>
+    <span class="kd">local</span> <span class="n">lhs</span> <span class="o">=</span> <span class="s1">''</span>
+    <span class="kd">local</span> <span class="n">rhs_parts</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="kd">local</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="kd">local</span> <span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="n">noremap</span> <span class="o">=</span> <span class="kc">true</span><span class="p">}</span>
+    <span class="kr">for</span> <span class="n">matches</span> <span class="kr">in</span> <span class="p">(</span><span class="n">keymap</span><span class="o">..</span><span class="n">delimiter</span><span class="p">):</span><span class="n">gmatch</span><span class="p">(</span><span class="s2">"(.-)"</span><span class="o">..</span><span class="n">delimiter</span><span class="p">)</span> <span class="kr">do</span>
+      <span class="kr">if</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">1</span> <span class="kr">then</span>
+        <span class="n">lhs</span> <span class="o">=</span> <span class="n">matches</span>
+      <span class="kr">end</span>
+      <span class="kr">if</span> <span class="n">m</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="kr">then</span>
+        <span class="nb">table.insert</span><span class="p">(</span><span class="n">rhs_parts</span><span class="p">,</span> <span class="n">matches</span><span class="p">)</span>
+      <span class="kr">end</span>
+      <span class="n">m</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="kr">end</span>
+    <span class="n">rhs</span> <span class="o">=</span> <span class="s1">''</span>
+    <span class="kr">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">p</span> <span class="kr">in</span> <span class="nb">ipairs</span><span class="p">(</span><span class="n">rhs_parts</span><span class="p">)</span> <span class="kr">do</span>
+      <span class="n">rhs</span> <span class="o">=</span> <span class="n">rhs</span> <span class="o">..</span> <span class="s2">" "</span> <span class="o">..</span> <span class="n">p</span>
+    <span class="kr">end</span>
+    <span class="c1">--print("vim.keymap.set(".."\'"..mode.."\'"..", ".."\'"..lhs.."\'"..", ".."\'"..rhs.."\'"..", "..vim.inspect(options)..")")</span>
+    <span class="n">vim</span><span class="p">.</span><span class="n">keymap</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+  <span class="kr">end</span>
+<span class="kr">end</span>
+</code></pre>
+    </div>
+    <p>
+     You can uncomment the print statement
+     <strong>
+      once
+     </strong>
+     to grab the keymaps and paste them into the config file. If you leave it uncommented, it might print every time you open up a new neovim instance. The function can be called like below:
+    </p>
+    <div class="highlight">
+     <pre><span></span><code><span class="n">key_mapper</span><span class="p">({</span>
+  <span class="s1">'nnoremap cpp :!c++ % -o %:r &amp;&amp; %:r&lt;CR&gt;i'</span><span class="p">,</span>
+  <span class="s1">'nnoremap c, :!gcc % -o %:r &amp;&amp; %:r&lt;CR&gt;'</span><span class="p">,</span>
+  <span class="s1">'nnoremap py :!python %&lt;cr&gt;'</span><span class="p">,</span>
+  <span class="s1">'nnoremap go :!go run %&lt;cr&gt;'</span><span class="p">,</span>
+  <span class="s1">'nnoremap sh :!bash %&lt;CR&gt;'</span>
+<span class="p">})</span>
+</code></pre>
+    </div>
+    <p>
+     <img alt="Keymapper demonstration" src="https://res.cloudinary.com/techstructive-blog/image/upload/v1657559501/blog-media/neovim-lua-keymapper.gif"/>
+    </p>
+    <p>
+     We pass in a table of strings, these strings are just the vimscript keymaps. This function call will then map the keymaps into equivalent lua maps. You can customize it as per your needs.
+    </p>
+    <p>
+     For further references, you can check out my
+     <a href="https://github.com/Mr-Destructive/dotfiles">
+      dotfiles
+     </a>
+     on GitHub.
+    </p>
+    <h2 id="how-the-function-works">
+     How the function works
+    </h2>
+    <p>
+     The function is simply a text scrapping from lua strings. We extract the first character in the string for the mode, grab the strings which are space-separated and finally sort out which are lhs and rhs sides of the maps.
+    </p>
+    <p>
+     We iterate over the table in lua with the help of ipairs function which allows us to iterate over an ordered list of items in a table. Using the gmatch function, we find a pattern to split the string with the space as the delimiter. Thereby, we can have separate sets of strings identified as rhs and lhs. We can store them in variables as strings as the lua functions require them as strings.
+    </p>
+    <p>
+     We simply add those variables into the
+     <a href="https://neovim.io/doc/user/lua.html#:~:text=set(%7Bmode%7D%2C%20%7Blhs%7D%2C%20%7Brhs%7D%2C%20%7Bopts%7D)%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20*vim.keymap.set()*">
+      vim.keymap.set
+     </a>
+     or
+     <a href="https://neovim.io/doc/user/api.html#nvim_set_keymap():~:text=nvim_set_keymap(%7Bmode%7D%2C%20%7Blhs%7D%2C%20%7Brhs%7D%2C%20%7B*opts%7D)%20%20%20%20%20%20%20%20%20%20%20%20%20*nvim_set_keymap()*">
+      vim.api.nvim_set_keymap
+     </a>
+     functions. We by default set the value of
+     <code>
+      {noremap: True}
+     </code>
+     to avoid teh recursive mapping of the keys. These option parameter is the one which needs to be a bit more dynamic in terms of wide variety of keymaps.
+    </p>
+    <p>
+     So, this is how we can convert the vimscript keymaps to lua in Neovim. Hope you found this useful. Thanks for reading. Happy Viming :)
+    </p>
+   </div>
+   <hr/>
+   <div id="show">
+   </div>
+  </article>
+  <hr/>
+  <footer>
+   <ul class="social">
+    <li>
+     <a href="https://twitter.com/MeetGor21">
+      Twitter
+      <svg class="svg-icon grey">
+       <use xlink:href="../social-icons.svg#twitter">
+       </use>
+      </svg>
+     </a>
+    </li>
+    <li>
+     <a href="https://www.linkedin.com/in/meetgor/">
+      LinkedIn
+      <svg class="svg-icon grey">
+       <use xlink:href="../social-icons.svg#linkedin">
+       </use>
+      </svg>
+     </a>
+    </li>
+    <li>
+     <a href="https://github.com/Mr-Destructive">
+      GitHub
+      <svg class="svg-icon grey">
+       <use xlink:href="../social-icons.svg#github">
+       </use>
+      </svg>
+     </a>
+    </li>
+    <li>
+     <a href="https://dev.to/mr-destructive">
+      Dev.to
+      <svg class="svg-icon grey">
+       <use xlink:href="../social-icons.svg#devto">
+       </use>
+      </svg>
+     </a>
+    </li>
+    <li>
+     <a href="/rss.xml">
+      RSS
+      <svg class="svg-icon orange">
+       <use xlink:href="../social-icons.svg#rss">
+       </use>
+      </svg>
+     </a>
+    </li>
+    <li>
+     <a class="u-email" href="mailto:gormeet711@gmail.com">
+      Email
+     </a>
+    </li>
+   </ul>
+   Techstructive Blog © 2022
+  </footer>
+ </body>
+</html>
