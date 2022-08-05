@@ -138,7 +138,7 @@ def create_card(post, template=None):
             return textwrap.dedent(
                 f"""
                 <li class='post'>
-                <img src="{post['image_url']}" class="cover-image" >
+                <img loading="lazy" src="{post['image_url']}" class="cover-image" >
                 <a href="/{post['slug']}/">
                    <h2 id="title"> {post['title']} </h2>
                    <span>{ post['date'].strftime('%d-%m-%Y')  }</span>
