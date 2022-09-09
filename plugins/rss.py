@@ -53,8 +53,8 @@ def render(markata: "MarkataRss") -> None:
         fe.summary(article.metadata["long_description"])
         fe.link(href=url + "/" + article["slug"])
         fe.content(article.article_html.translate(dict.fromkeys(range(32))))
-        fe.source(url=article["image_url"], title='cover_image')
         fe.source(url=url + "/" + article["slug"], title='blog_link')
+        fe.source(url=article["image_url"], title='cover_image')
 
     markata.fg = fg
     markata.rss = fg.rss_str(pretty=True)
