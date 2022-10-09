@@ -1,9 +1,9 @@
 import datetime
 import shutil
 import textwrap
-from pathlib import Path
+from pathlib import Path, PosixPath
 
-from jinja2 import Template
+from jinja2 import Template, FileSystemLoader, Environment
 
 from markata.hookspec import hook_impl
 
@@ -103,7 +103,13 @@ def create_page(
     cards.append("</ol>")
 
     with open(template) as f:
-        template = Template(f.read())
+        env = Environment()
+        env.loader = FileSystemLoader('layouts/')
+        #template = env.get_template('series_template.html')
+        if type(template) is PosixPath:
+            template = template.name
+        template = env.get_template(template)
+
     series_name = series.replace(" ", "-").lower()
     if "series_description" in posts[0]:
         series_description = posts[0]["series_description"]

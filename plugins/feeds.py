@@ -104,7 +104,6 @@ def create_page(
     canonical_url = f"{url}/{page}/"
     output_file.parent.mkdir(exist_ok=True, parents=True)
     archive_file.parent.mkdir(exist_ok=True, parents=True)
-
     with open(output_file, "w+") as f:
         f.write(
             template.render(
