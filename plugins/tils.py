@@ -1,9 +1,9 @@
 import datetime
 import shutil
 import textwrap
-from pathlib import Path
+from pathlib import Path, PosixPath
 
-from jinja2 import Template
+from jinja2 import Template, FileSystemLoader, Environment
 
 from markata.hookspec import hook_impl
 
@@ -83,7 +83,13 @@ def create_page(
     cards.append("</ul>")
 
     with open(template) as f:
-        template = Template(f.read())
+        env = Environment()
+        env.loader = FileSystemLoader('layouts/')
+        #template = env.get_template('series_template.html')
+        if type(template) is PosixPath:
+            template = template.name
+        template = env.get_template(template)
+
     output_file = Path(markata.config["output_dir"])/ page / "index.html"
     canonical_url = f"/{url}/{page}/"
     output_file.parent.mkdir(exist_ok=True, parents=True)
