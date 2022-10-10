@@ -6,10 +6,10 @@
 ## A personal blog made with the help of [Markata](https://markata.dev) and GitHub pages.
 
 I write about the things I learn here. Some of the topics for most of the Articles/Blogs are:
-- [Vim](https://meetgor.com/tag/vim)
+- [Django](https://meetgor.com/tag/django)
 - [Golang](https://meetgor.com/tag/go)
 - [Python](https://meetgor.com/tag/python)
-- [Django](https://meetgor.com/tag/django)
+- [Vim](https://meetgor.com/tag/vim)
 - And Programming/Development in general
 
 This is a personal blog made with html/css/markdown, generated using Markata(a Python-plugin based SSG) and hosted on GitHub pages.
