@@ -1,10 +1,10 @@
 import datetime
 import shutil
 import textwrap
-from pathlib import Path
+from pathlib import Path, PosixPath
 from typing import TYPE_CHECKING, Any, List, Optional, Union
 
-from jinja2 import Template, Undefined
+from jinja2 import Environment, FileSystemLoader, Template, Undefined
 
 from markata import Markata
 from markata.hookspec import hook_impl
@@ -97,13 +97,26 @@ def create_page(
     cards.insert(0, "<ul class='post-list'>")
     cards.append("</ul>")
 
+    #with open(template) as f:
+    #    template = Template(f.read())
+
+
     with open(template) as f:
-        template = Template(f.read())
+        env = Environment()
+        env.loader = FileSystemLoader("markata/plugins/")
+        if type(template) is PosixPath:
+            template = template.name
+            if not Path(template).is_file():
+                template = Template(f.read(), undefined=SilentUndefined)
+        print(template)
+        template = env.get_template(template)
+
     output_file = Path(markata.config["output_dir"]) / "blog" / "index.html"
     archive_file = Path(markata.config["output_dir"]) / "archive" / "index.html"
     canonical_url = f"{url}/{page}/"
     output_file.parent.mkdir(exist_ok=True, parents=True)
     archive_file.parent.mkdir(exist_ok=True, parents=True)
+
     with open(output_file, "w+") as f:
         f.write(
             template.render(
