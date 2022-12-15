@@ -6,7 +6,7 @@ status: published
 tags: ['django', 'htmx', 'python']
 date: 2022-07-31 12:30:00
 slug: django-htmx-crud
-image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1659250365/blog-media/django-htmx-crud.png
+image_url: https://meetgor-cdn.pages.dev/django-htmx-crud.png
 series: ['Django-Series',]
 ---
 

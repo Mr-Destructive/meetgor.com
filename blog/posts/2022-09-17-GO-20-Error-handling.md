@@ -7,7 +7,7 @@ status: published
 slug: golang-error-handling
 tags: ['go',]
 series: ['100-days-of-golang',]
-image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1663426595/blog-media/golang-error-handling-20.png
+image_url: https://meetgor-cdn.pages.dev/golang-020-error-handling.png
 ---
 
 ## Introduction

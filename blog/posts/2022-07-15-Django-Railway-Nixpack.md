@@ -6,7 +6,7 @@ date: 2022-07-16 16:15:00
 status: published
 slug: django-deploy-railway-nixpacks
 tags: ['django', 'python', 'railway',]
-image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1657906042/blog-media/nixpacks-railway.png
+image_url: https://meetgor-cdn.pages.dev/django-deploy-railway-nixpacks.png
 series: ['Django-Deployment','Django-Series']
 ---
 

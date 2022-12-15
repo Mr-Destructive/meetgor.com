@@ -7,7 +7,7 @@ status: published
 slug: golang-mutable-immutable
 tags: ['go',]
 series: ['100-days-of-golang',]
-image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1655475846/blog-media/im-mutables-go-14.png
+image_url: https://meetgor-cdn.pages.dev/golang-014-im-mutables.png
 ---
 
 ## Introduction 

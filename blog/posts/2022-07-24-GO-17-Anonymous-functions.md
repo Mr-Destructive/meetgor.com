@@ -7,7 +7,7 @@ status: published
 slug: golang-anonymous-functions
 tags: ['go',]
 series: ['100-days-of-golang',]
-image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1658667311/blog-media/anonymous_functions-golang-17.png
+image_url: https://meetgor-cdn.pages.dev/golang-017-anonymous-functions.png
 ---
 
 ## Introduction

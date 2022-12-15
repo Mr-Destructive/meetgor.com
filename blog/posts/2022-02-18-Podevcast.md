@@ -6,7 +6,7 @@ date: 2022-02-18 22:30:00 +0530
 status: published
 tags: ['python', 'hashnode']
 slug: podevcast-project
-image_url: https://raw.githubusercontent.com/Mr-Destructive/meetgor.cdn/main/media/yn7ohn1o0squi4ml7ehg.png
+image_url: https://meetgor-cdn.pages.dev/podevcast-python.png
 ---
 
 ## Introduction

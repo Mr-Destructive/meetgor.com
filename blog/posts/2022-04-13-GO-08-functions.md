@@ -6,7 +6,7 @@ date: 2022-04-13 09:00:00
 status: published
 slug: golang-functions
 tags: ['go',]
-image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1649872583/blog-media/r8dh0qrcuzptgrn2uyty.png
+image_url: https://meetgor-cdn.pages.dev/golang-008-functions.png
 series: ['100-days-of-golang',]
 ---
 

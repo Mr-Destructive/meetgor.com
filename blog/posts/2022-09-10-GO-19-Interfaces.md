@@ -7,7 +7,7 @@ status: published
 slug: golang-interfaces
 tags: ['go',]
 series: ['100-days-of-golang',]
-image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1661355622/blog-media/interfaces-19-golang.png
+image_url: https://meetgor-cdn.pages.dev/golang-019-interfaces.png
 ---
 
 ## Introduction

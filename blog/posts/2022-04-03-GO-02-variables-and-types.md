@@ -6,7 +6,7 @@ date: 2022-04-03 10:45:00
 status: published
 slug: golang-variables
 tags: ['go',]
-image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1648962610/blog-media/xtrmcfz8vdo7fsv4jjgy.png
+image_url: https://meetgor-cdn.pages.dev/golang-002-variables-types.png
 series: ['100-days-of-golang',]
 ---
 
