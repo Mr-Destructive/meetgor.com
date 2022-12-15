@@ -6,7 +6,7 @@ date: 2022-07-09 20:30:00
 status: published
 slug: neovim-vimscript-to-lua
 tags: ['vim', 'lua',]
-image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1657373118/blog-media/vimtolua.png
+image_url: https://meetgor-cdn.pages.dev/vimtolua.png
 ---
 
 ## Introduction

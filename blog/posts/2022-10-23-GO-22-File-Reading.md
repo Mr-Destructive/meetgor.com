@@ -7,7 +7,7 @@ status: published
 slug: golang-file-read
 tags: ['go',]
 series: ['100-days-of-golang',]
-image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1666544863/blog-media/golang-22-file-read.png
+image_url: https://meetgor-cdn.pages.dev/golang-022-file-read.png
 ---
 
 ## Introduction

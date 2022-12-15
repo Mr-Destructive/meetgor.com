@@ -6,7 +6,7 @@ date: 2022-08-07 20:30:00
 status: published 
 slug: pgcli-pg-from-terminal
 tags: ['postgres','python', 'DBMS']
-image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1659884380/blog-media/pgcli-postgres-from-terminal.png
+image_url: https://meetgor-cdn.pages.dev/python-pkg-pgcli-postgres-from-terminal.png
 ---
 
 ## Introduction
