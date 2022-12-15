@@ -7,7 +7,7 @@ status: published
 slug: golang-config-file-read
 tags: ['go',]
 series: ['100-days-of-golang',]
-image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1667324623/blog-media/golang-23-config-files.png
+image_url: https://meetgor-cdn.pages.dev/golang-023-config-files.png
 ---
 
 ## Reading specific file types (JSON, YAML, TOML)

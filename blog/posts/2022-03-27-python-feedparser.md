@@ -6,7 +6,7 @@ date: 2022-03-26 15:45:00
 status: published
 slug: python-feedparser
 tags: ['python',]
-image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1648373330/blog-media/nnr0gjk0n0wmauvu5yo4.png
+image_url: https://meetgor-cdn.pages.dev/python-pkg-feedparser.png
 ---
 
 ## Introduction
