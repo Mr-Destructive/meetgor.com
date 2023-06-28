@@ -1,12 +1,13 @@
 import datetime
+from re import template
 import shutil
 import textwrap
 from pathlib import Path, PosixPath
 from typing import TYPE_CHECKING, Any, List, Optional, Union
 
-from jinja2 import Environment, FileSystemLoader, Template, Undefined
+from jinja2 import Environment, FileSystemLoader, Template, Undefined, exceptions
 
-from markata import Markata
+from markata import Markata, os
 from markata.hookspec import hook_impl
 
 if TYPE_CHECKING:
@@ -21,6 +22,9 @@ class SilentUndefined(Undefined):
 class MarkataFilterError(RuntimeError):
     ...
 
+template = (
+    Path(__file__).resolve().parents[1] / "layouts" / "default_post_template.html"
+)
 
 @hook_impl
 def save(markata: Markata) -> None:
@@ -38,18 +42,22 @@ def save(markata: Markata) -> None:
 
     description = markata.get_config("description") or ""
     url = markata.get_config("url") or ""
+    #template = markata.get_plugin_config("feeds").get("template") \
+    #        or Path(__file__).resolve().parents[1] / "layouts" / "default_post_template.html"
     template = (
         Path(__file__).resolve().parents[1] / "layouts" / "default_post_template.html"
     )
 
     for page, page_conf in config.items():
+        template = Path(__file__).resolve().parents[1] / "layouts" / "default_post_template.html"
         if page not in ["cache_expire", "config_key"]:
+            if markata.get_plugin_config("feeds")[page].get("template"):
+                template = Path(__file__).resolve().parents[1] / markata.get_plugin_config("feeds")[page].get("template") 
             create_page(
                 markata,
                 page,
                 description=description,
                 url=url,
-                template=template,
                 **page_conf,
             )
 
@@ -64,7 +72,7 @@ def create_page(
     page,
     tags=None,
     status="published",
-    template=None,
+    template=template,
     card_template=None,
     filter=None,
     description=None,
@@ -97,10 +105,12 @@ def create_page(
     cards.insert(0, "<ul class='post-list'>")
     cards.append("</ul>")
 
-    #with open(template) as f:
-    #    template = Template(f.read())
+    with open(template) as f:
+        template = Template(f.read())
 
-
+    #if template != Path(__file__).resolve().parents[1] / "layouts" / "default_post_template.html":
+    #    template = str(Path(__file__).resolve().parents[1] / markata.get_plugin_config("feeds")[page].get("template"))
+    """
     with open(template) as f:
         env = Environment()
         env.loader = FileSystemLoader("markata/plugins/")
@@ -108,8 +118,10 @@ def create_page(
             template = template.name
             if not Path(template).is_file():
                 template = Template(f.read(), undefined=SilentUndefined)
-        print(template)
+            else:
+                template = str(Path(__file__).resolve().parents[1] / template)
         template = env.get_template(template)
+    """
 
     output_file = Path(markata.config["output_dir"]) / "blog" / "index.html"
     archive_file = Path(markata.config["output_dir"]) / "archive" / "index.html"
