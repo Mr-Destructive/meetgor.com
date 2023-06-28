@@ -14,7 +14,7 @@ class MarkataFilterError(RuntimeError):
 
 @hook_impl
 def save(markata):
-    config = markata.get_plugin_config("feeds")
+    config = markata.get_plugin_config("tils")
     if config is None:
         config["tils"] = dict()
     if "tils" not in config.keys():
@@ -25,7 +25,7 @@ def save(markata):
     description = markata.get_config("description") or ""
     url = markata.get_config("url") or ""
 
-    template = Path(__file__).resolve().parents[1] / "layouts" / "tils_template.html"
+    template = Path(__file__).resolve().parents[1] / "layouts" / "default_post_template.html"
 
     for page, page_conf in config.items():
         if page not in ["cache_expire", "config_key"]:
