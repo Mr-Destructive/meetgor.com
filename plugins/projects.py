@@ -41,14 +41,12 @@ def save(markata):
                 
             # Add card to projects page
             project_cards.append(f"""
-            <li class='post'>
-                <div class="project">
-                    <img src="{post['cover_image']}" class="cover-image">
-                    <h1>{post['title']}</h1>
-                    <p>{post['description']}</p>
-                    <a href="/projects/{project_slug}">View Project</a>
-                </div>
-            </li>
+            <section class="project-card">
+                <img src="{post['cover_image']}" alt="{post['title']}">
+                <h2>{post['title']}</h2>
+                <p>{post['description']}</p>
+                <a href="#">View Details</a>
+            </section>
             """)
     body = body + "".join(project_cards) + "</ul>"
             
