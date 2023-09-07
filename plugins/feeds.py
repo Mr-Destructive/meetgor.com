@@ -71,7 +71,7 @@ def create_page(
     markata,
     page,
     tags=None,
-    status="published",
+    status="",
     template=template,
     card_template=None,
     filter=None,
