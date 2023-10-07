@@ -24,9 +24,10 @@ def save(markata):
     project_cards = []
     for post in markata.articles:
         if post['templateKey'] == 'project':
-            project_slug = post['slug']
+            project_slug = post.get('slug')
             project_page = Path(projects_dir) / project_slug 
             project_page.mkdir(exist_ok=True, parents=True)
+            post['cover_image'] = post.get('cover_image', 'https://github.com/Mr-Destructive/meetgor.com/blob/gh-pages/static/tbicon.png?raw=true')
             
             # Create project page
             with open(project_page / 'index.html', 'w') as f:
@@ -36,6 +37,7 @@ def save(markata):
                         cover_image=post['cover_image'],
                         body=post.content,
                         today=datetime.datetime.today(),
+                        github_link=post['github_link'],
                     )
                 )
                 
@@ -45,7 +47,7 @@ def save(markata):
                 <img src="{post['cover_image']}" alt="{post['title']}">
                 <h2>{post['title']}</h2>
                 <p>{post['description']}</p>
-                <a href="#">View Details</a>
+                <a href="{post['slug']}">View Details</a>
             </section>
             """)
     body = body + "".join(project_cards) + "</ul>"
