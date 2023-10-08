@@ -20,7 +20,18 @@ def save(markata):
     with open(project_template_file, 'r') as f:
         project_template = Template(f.read())
     
-    body = "<ul class='project-list'>"
+    projects = [post for post in markata.articles if post['templateKey'] == 'project']
+    tags = []
+    for project in projects:
+        tags = tags + project['tags']
+    tags = list(set(tags))
+    tags.sort()
+    body = ""
+    for tag in tags:
+        body += f"""
+        <a href="#{tag}">{tag}</a> |
+        """
+    body += "<ul class='project-list'>"
     project_cards = []
     for post in markata.articles:
         if post['templateKey'] == 'project':
