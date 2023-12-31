@@ -27,11 +27,12 @@ def save(markata):
     tags = list(set(tags))
     tags.sort()
     body = ""
+    body += "<ul class='tag-list'>"
     for tag in tags:
         body += f"""
         <a href="#{tag}">{tag}</a> |
         """
-    body += "<ul class='project-list'>"
+    body += "</ul><ul class='project-list'>"
     project_cards = []
     for post in markata.articles:
         if post['templateKey'] == 'project':
@@ -58,7 +59,7 @@ def save(markata):
                 <img src="{post['cover_image']}" alt="{post['title']}">
                 <h2>{post['title']}</h2>
                 <p>{post['description']}</p>
-                <a href="{post['slug']}">View Details</a>
+                <button><a href="{post['slug']}">View Details</a></button>
             </section>
             """)
     body = body + "".join(project_cards) + "</ul>"
