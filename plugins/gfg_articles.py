@@ -1,11 +1,13 @@
 import bs4
+import requests
 from urllib.request import urlopen
 import datetime
 import shutil
 import textwrap
-from pathlib import Path
+from pathlib import Path, PosixPath
+ 
+from jinja2 import Template, FileSystemLoader, Environment
 
-from jinja2 import Template
 from markata.hookspec import hook_impl
 
 
@@ -42,9 +44,13 @@ def save(markata):
 
 def get_posts():
     url = "https://auth.geeksforgeeks.org/user/meetgor/articles"
-    html_page = urlopen(url)
+    resp = requests.get(url)
+    if resp:
+        html_page = resp.content
+    else:
+        raise MarkataFilterError("Failed to get posts")
     soup = bs4.BeautifulSoup(html_page, features="lxml")
-    li = list(soup.select(".contribute-ol li a"))
+    li = list(soup.select("#contribute div .card .card-content a"))
     return li
 
 
@@ -74,7 +80,12 @@ def create_page(
     cards.append("</ul>")
 
     with open(template) as f:
-        template = Template(f.read())
+        env = Environment()
+        env.loader = FileSystemLoader('layouts/')
+        #template = env.get_template('series_template.html')
+        if type(template) is PosixPath:
+            template = template.name
+        template = env.get_template(template)
     output_file = Path(markata.config["output_dir"]) / "gfg" / "index.html"
     output_file.parent.mkdir(exist_ok=True, parents=True)
     canonical_url = f"/{url}/gfg/"
