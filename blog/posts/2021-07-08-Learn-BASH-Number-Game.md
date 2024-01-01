@@ -6,7 +6,7 @@ date: 2021-07-08 19:50:35 +0530
 status: published
 tags: ['bash',]
 slug: bash-game-numberjack
-image_url: https://dev-to-uploads.s3.amazonaws.com/uploads/articles/4rqwozbbgga9xg5ne89m.png
+image_url: https://meetgor-cdn.pages.dev/bash-script-game.webp
 ---
 
 ## Introduction

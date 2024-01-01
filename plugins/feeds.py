@@ -60,6 +60,13 @@ def save(markata: Markata) -> None:
                 url=url,
                 **page_conf,
             )
+            create_yearly_pages(
+                markata,
+                page,
+                description=description,
+                url=url,
+                **page_conf,
+            )
 
     home = Path(markata.config["output_dir"]) / "index.html"
     archive = Path(markata.config["output_dir"]) / "blog" / "index.html"
@@ -79,6 +86,8 @@ def create_page(
     url=None,
     today=datetime.datetime.today(),
     title="Techstructive Blog",
+    year=None,
+    posts=None,
 ) -> None:
     def try_filter_date(x):
         try:
@@ -102,6 +111,7 @@ def create_page(
 
     count = len(posts)
     cards = [create_card(post, card_template) for post in posts]
+
     cards.insert(0, "<ul class='post-list'>")
     cards.append("</ul>")
 
@@ -123,11 +133,20 @@ def create_page(
         template = env.get_template(template)
     """
 
-    output_file = Path(markata.config["output_dir"]) / "blog" / "index.html"
-    archive_file = Path(markata.config["output_dir"]) / "archive" / "index.html"
+    if year:
+        output_file = Path(markata.config["output_dir"]) / "blog" / str(year) /  "index.html"
+        archive_file = Path(markata.config["output_dir"]) / "archive" / str(year) / "index.html"
+    else:
+        output_file = Path(markata.config["output_dir"]) / "blog" / "index.html"
+        archive_file = Path(markata.config["output_dir"]) / "archive" / "index.html"
     canonical_url = f"{url}/{page}/"
     output_file.parent.mkdir(exist_ok=True, parents=True)
     archive_file.parent.mkdir(exist_ok=True, parents=True)
+
+    if year and page in ["archive", "blog"]:
+        years = give_years([])
+    else:
+        years = give_years(posts)
 
     with open(output_file, "w+") as f:
         f.write(
@@ -137,10 +156,15 @@ def create_page(
                 url=url,
                 description=description,
                 title=title,
+                years=years,
                 canonical_url=canonical_url,
                 today=datetime.datetime.today(),
             )
         )
+    #cards.insert(0, "<ul>")
+    #cards.append("</ul>")
+    #for y in years.keys():
+    #    cards.append(f"<li><a href='/blog/{y}/'>{y}</a></li>")
 
     with open(archive_file, "w+") as f:
         f.write(
@@ -148,11 +172,74 @@ def create_page(
                 body="".join(cards),
                 count=count,
                 url=url,
+                years=years,
                 description=description,
                 title=title,
                 canonical_url=canonical_url,
                 today=datetime.datetime.today(),
             )
+        )
+
+def give_years(posts):
+    years = {}
+    if not posts:
+        markata = Markata()
+        posts = [post for post in markata.articles if post["status"] == "published"]
+    for post in posts:
+        year = post["date"].year
+        if year not in years:
+            years[year] = []
+        years[year].append(post)
+    return sorted(years.keys())
+
+def create_yearly_pages(
+    markata,
+    page,
+    description=None,
+    url=None,
+    today=datetime.datetime.today(),
+    title="Techstructive Blog",
+    filter=None,
+    year=None,
+) -> None:
+    # Group posts by year
+    posts_by_year = {}
+    for post in markata.articles:
+        year = post["date"].year
+        if year not in posts_by_year:
+            posts_by_year[year] = []
+        posts_by_year[year].append(post)
+
+    def try_filter_date(x):
+        try:
+            return x["date"]
+        except KeyError:
+            return -1
+
+    if filter is not None:
+        posts_by_year = {
+            year: reversed(sorted(posts, key=try_filter_date))
+            for year, posts in posts_by_year.items()
+        }
+        try:
+            posts_by_year = {
+                year: [post for post in posts if eval(filter, post.to_dict(), {})]
+                for year, posts in posts_by_year.items()
+            }
+        except BaseException as e:
+            msg = textwrap.dedent(
+                f"""
+                    While processing page='{page}' markata hit the following exception
+                    during filter='{filter}'
+                    {e}
+                    """
+            )
+            raise MarkataFilterError(msg)
+    # Create a page for each year
+    for year, posts in posts_by_year.items():
+        create_page(
+            markata, page, posts=posts, 
+            description=description, url=url, title=title, year=year
         )
 
 

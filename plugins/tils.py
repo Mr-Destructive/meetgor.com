@@ -98,6 +98,7 @@ def create_page(
         f.write(
             template.render(
                 body="".join(cards),
+                count=len(posts),
                 url=url,
                 description=description,
                 title=title,
