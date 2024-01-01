@@ -1,7 +1,7 @@
 import datetime
-from jinja2 import Template
+from pathlib import Path, PosixPath
 from markata.hookspec import hook_impl
-from pathlib import Path
+from jinja2 import Template, FileSystemLoader, Environment
 
 @hook_impl 
 def save(markata):
@@ -16,9 +16,18 @@ def save(markata):
     )
     with open(template_file, 'r') as f:
         template = Template(f.read())
+
+    with open(template_file) as f:
+        env = Environment()
+        env.loader = FileSystemLoader('layouts/')
+        if type(template_file) is PosixPath:
+            template = template_file.name
+        template = env.get_template(template)
+
     
     with open(project_template_file, 'r') as f:
         project_template = Template(f.read())
+
     
     projects = [post for post in markata.articles if post['templateKey'] == 'project']
     tags = []
