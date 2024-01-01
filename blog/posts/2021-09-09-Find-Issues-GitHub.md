@@ -6,7 +6,7 @@ date:   2021-09-09 17:42:30 +0530
 status: published
 tags: ['github','open-source']
 slug: find-filter-github-issues
-image_url: https://res.cloudinary.com/techstructive-blog/image/upload/v1646376525/blog-media/mwjogbs4fmtixoax6g5e.png
+image_url: https://meetgor-cdn.pages.dev/github-filter-issues.png
 ---
 
 ## Introduction

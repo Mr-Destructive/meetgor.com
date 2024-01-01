@@ -6,7 +6,7 @@ date: 2021-07-12 23:16:13 +0530
 status: published
 tags: ['bash',]
 slug: bash-guide-p3
-image_url: https://cdn.hashnode.com/res/hashnode/image/upload/v1625064683744/LUG0ep1xA.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress
+image_url: https://meetgor-cdn.pages.dev/bash-scripting-guide-p3.webp
 series: ["BASH Scripting Guide",]
 ---
 

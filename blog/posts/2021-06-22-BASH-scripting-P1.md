@@ -6,7 +6,7 @@ date: 2021-06-22 16:37:28 +0530
 status: published
 tags: ['bash',]
 slug: bash-guide-p1
-image_url: https://techstructiveblog.hashnode.dev/_next/image?url=https%3A%2F%2Fcdn.hashnode.com%2Fres%2Fhashnode%2Fimage%2Fupload%2Fv1624622852575%2FuCjZ01780.png%3Fw%3D1600%26h%3D840%26fit%3Dcrop%26crop%3Dentropy%26auto%3Dcompress%2Cformat%26format%3Dwebp&w=1920&q=75 
+image_url: https://meetgor-cdn.pages.dev/bash-scripting-guide-p1.webp
 series: ["BASH Scripting Guide",]
 series_description: "BASH scripting, exploring the concpets and some general use-cases of certain commands and tools. Coverig from simple concpets to complex statements in BASH."
 ---
