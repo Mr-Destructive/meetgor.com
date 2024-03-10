@@ -187,6 +187,155 @@ In the above example, the body is read chunkwise buffers and obtained as a slice
 
 The entire body is then stored in the buffer as a slice of bytes. So, we have to cast it into a string to see the contents. So, this is how we can read the contents of a body in a response in chunks.
 
+### Parsing the JSON body with structs
+
+If we have the structure of the response body already decided, then we can define a struct for the response body and then we can [Unmarshal](https://doc.akka.io/docs/akka-http/current/common/unmarshalling.html#unmarshalling:~:text=Unmarshalling,type%20T.) / deserialize/unpickle. This means we can convert the bytes representation of the data into a Golang-specific structure which is called a high-level representation of the data. We can parse the JSON body into a defined struct using [Unmarshal](https://pkg.go.dev/encoding/json#Unmarshal) or [Decode](https://pkg.go.dev/encoding/json#Decoder.Decode) methods in the [json](https://pkg.go.dev/encoding/json) package.
+
+Let's look at both the methods.
+
+#### Using Unmarshal
+
+The `Unmarshal` method takes in two parameters i.e. the body in bytes and the reference of the object that we want to unmarshal into. The method returns an error if there is a discrepancy in the returned JSON or the structure defined it is unable to deserialize the JSON object into the defined structure.
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+)
+
+type Product struct {
+	ID                 int      `json:"id"`
+	Title              string   `json:"title"`
+	Description        string   `json:"description"`
+	Price              float64  `json:"price"`
+	DiscountPercentage float64  `json:"discountPercentage"`
+	Rating             float64  `json:"rating"`
+	Stock              int      `json:"stock"`
+	Brand              string   `json:"brand"`
+	Category           string   `json:"category"`
+    Thumbnail          string   `json:"thumbnail,omitempty"`
+    Images             []string `json:"-"`
+}
+
+func main() {
+	reqURL := "https://dummyjson.com/products/1"
+	resp, err := http.Get(reqURL)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	var data Product
+	if err := json.Unmarshal(body, &data); err != nil {
+		panic(err)
+	}
+
+	fmt.Println(data)
+	fmt.Println(data.Title)
+}
+```
+
+```bash
+$ go run main.go
+
+{1 iPhone 9 An apple mobile which is nothing like apple 549 12.96 4.69 94 Apple smartphones https://cdn.dummyjson.com/product-images/1/thumbnail.jpg []}
+iPhone 9
+```
+
+In the above example, we have defined a structure called Product with fields such as `ID`, `Title`, `Description`, etc. We use the JSON tag to specify how each field should be encoded to or decoded from JSON. These tags guide the Golang JSON encoders and decoders to correctly map JSON data to struct fields and vice versa. The `omitempty` option in a struct tag instructs the encoder to omit the field from the JSON output if the field's value is the zero value for its type (e.g., 0 for integers, "" for strings, nil for pointers, slices, and maps). This is useful for reducing the size of the JSON output by excluding empty or default-valued fields.
+
+Conversely, the `-` option in a struct tag tells the encoder and decoder to completely ignore the field. It will not be included in encoded JSON, nor will it be populated when decoding JSON into a struct. This is particularly useful for excluding fields that are meant for internal use only and should not be exposed through JSON.
+
+Therefore, `omitempty` is used to control the inclusion of fields in the JSON output based on their values, while `-` is used to exclude fields from both encoding and decoding from JSON.
+
+We send the `GET` request to the api `https://dummyjson.com/products/1`. The response from the request is read into a slice of bytes with [io.ReadAll](https://pkg.go.dev/io#ReadAll) that takes in a [io.Reader](https://pkg.go.dev/io#Reader) object in this case it is the `resp.Body` and it returns a slice of byte and error if any issue arises while reading in the body. Further, we can use the [Unmarshal](https://pkg.go.dev/encoding/json#Unmarshal) method to parse the slice of body `body` into the struct `Product` with the variable `data`, the reference to `&data` indicates that the method will directly mutate/change this variable and populate the object with the fields from the body.
+
+
+So in a gist, to convert the JSON body into a golang native structure with `Unmarshal` with the following steps:
+
+- Read the body into a slice of bytes using `io.ReadAll`
+- Create an object of the struct
+- Pass the body as a slice of bytes and the reference of that object (struct instance) into the Unmarshal method
+- Access the object with the fields in the struct
+
+In the output response, we can see the object is populated with the fields from the body. The `Title` field is accessed using the `data.Title` as we do with a normal golang struct. The `Images` field is not populated because we have always ignored/omitted from the json tag with `-`.
+
+#### Using Decoder
+
+Similar to the `Unmarshal` we can use the [Decoder](https://pkg.go.dev/encoding/json#Decoder) to parse the body into a struct. However, the parameters it takes are a bit different and it is a two-step process. We first create a [Decoder](https://pkg.go.dev/encoding/json#Decoder) object using the [NewDecoder](https://pkg.go.dev/encoding/json#NewDecoder) method, which takes in a `io.Reader` object, luckily the body from the response is already in that structure, so we can directly pass that `resp.Body` into the `NewDecoder` method. The second step is to decode the data into the object, here as well, we need to create the object of the struct and parse the reference to the object to the [Decode](https://pkg.go.dev/encoding/json#Decoder.Decode) method. The `Decode` method converts the bytes parsed in the `resp.Body` from the `Decoder` object and populates the fields of the object provided in the reference struct.
+
+So the steps for deserializing the json object into the struct with the decode method are:
+
+- Create a decoder with `NewDecoder` method and pass the `resp.Body` as the parameter which is an `io.Reader` object
+- Create an object of the struct
+- Decode the body into that object using the `decoder.Decode` method
+- Access the object with the fields in the struct
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
+type Product struct {
+	ID                 int     `json:"id"`
+	Title              string  `json:"title"`
+	Description        string  `json:"description"`
+	Price              float64 `json:"price"`
+	DiscountPercentage float64 `json:"discountPercentage"`
+	Rating             float64 `json:"rating"`
+	Stock              int     `json:"stock"`
+	Brand              string  `json:"brand"`
+	Category           string  `json:"category"`
+    Thumbnail          string   `json:"thumbnail,omitempty"`
+    Images             []string `json:"-"`
+}
+
+func main() {
+	reqURL := "https://dummyjson.com/products/1"
+	resp, err := http.Get(reqURL)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	var data Product
+	decoder := json.NewDecoder(resp.Body)
+    err = decoder.Decode(&data)
+    if err != nil {
+        panic(err)
+    }
+
+	fmt.Println(data)
+	fmt.Println(data.Title)
+}
+```
+
+```bash
+$ go run main.go
+
+{1 iPhone 9 An apple mobile which is nothing like apple 549 12.96 4.69 94 Apple smartphones https://cdn.dummyjson.com/product-images/1/thumbnail.jpg []}
+iPhone 9
+```
+
+
+We have first defined the struct `Product` with the `json:"id"` tag. As explained earlier, we have used the json tags to identify the fields from the json data to the structures while encoding and decoding.
+In the above example, we have sent a `GET` request to the api endpoint `https://dummyjson.com/products/1`, and we have created a new decoder with the `NewDecoder` method with the `resp.Body` as the parameter. The `data` is created as a `Product` instance. The reference to `data` is parsed to the `Decode` method from the `decoder` instance as `&data`. This method will either return `nil` or an `error`. Thereafter, we can check for errors and then only access the data object with its populated fields from the response body.
+
+There is a certain difference between the `Unmarshal` and `Decode` methods. The difference is just a slight performance improvement in the `NewDecoder` and `Decode` methods. Though it is not significant, having a little info about it might be handy in your use case. Read here for more info : [To Unmarshal or Decode](https://dev.to/jpoly1219/to-unmarshal-or-to-decode-json-processing-in-go-explained-5870)
+
 ## Adding Headers to a GET Request
 
 We can even add headers before sending a `GET` request to a URL. By creating a `Request` object with the `NewRequest` method and adding a [Header](https://pkg.go.dev/net/http#Header) with the [Add](https://pkg.go.dev/net/http#Header.Add) method. The `Add` method will take in two parameters i.e. the key of the header, and the value of the header both as strings.
@@ -244,6 +393,12 @@ $ go run web/methods/get/header.go
 That's it from the 33rd part of the series, all the source code for the examples are linked in the GitHub on the [100 days of Golang](https://github.com/Mr-Destructive/100-days-of-golang/tree/main/web/methods/get/) repository.
 
 [100-days-of-golang](https://github.com/Mr-Destructive/100-days-of-golang)
+
+## References
+
+- [To Unmarshal or Decode](https://dev.to/jpoly1219/to-unmarshal-or-to-decode-json-processing-in-go-explained-5870)
+- [Golang JSON tutorial](https://drstearns.github.io/tutorials/gojson/)
+- [Golang OmitEmpty](https://www.sohamkamani.com/golang/omitempty/)
 
 ## Conclusion
 
