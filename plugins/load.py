@@ -1,5 +1,6 @@
 """Default load plugin."""
 import time
+from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Callable, List, Optional
 
@@ -48,6 +49,7 @@ def get_post(path: Path, markata: "Markata") -> Optional[Callable]:
         "path": str(path),
         "description": "",
         "content": "",
+        "date": datetime.now(),
         "edit_link": (markata.get_config("blog_github_link") or "https://github.com/")
         + "edit/"
         + (markata.get_config("blog_branch") or "main")

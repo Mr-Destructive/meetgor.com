@@ -65,7 +65,6 @@ def save(markata):
             # Add card to projects page
             project_cards.append(f"""
             <section class="project-card">
-                <img src="{post['cover_image']}" alt="{post['title']}">
                 <h2>{post['title']}</h2>
                 <p>{post['description']}</p>
                 <button><a href="{post['slug']}">View Details</a></button>

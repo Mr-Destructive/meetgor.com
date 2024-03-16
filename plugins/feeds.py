@@ -52,12 +52,13 @@ def save(markata: Markata) -> None:
         template = Path(__file__).resolve().parents[1] / "layouts" / "default_post_template.html"
         if page not in ["cache_expire", "config_key"]:
             if markata.get_plugin_config("feeds")[page].get("template"):
-                template = Path(__file__).resolve().parents[1] / markata.get_plugin_config("feeds")[page].get("template") 
+                template = Path(__file__).resolve().parents[1] / markata.get_plugin_config("feeds")[page].get("template")
             create_page(
                 markata,
                 page,
                 description=description,
                 url=url,
+                template=template,
                 **page_conf,
             )
             create_yearly_pages(
