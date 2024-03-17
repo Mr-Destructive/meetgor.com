@@ -44,7 +44,10 @@ def save(markata):
 
 def get_posts():
     url = "https://auth.geeksforgeeks.org/user/meetgor/articles"
-    resp = requests.get(url)
+    try:
+        resp = requests.get(url)
+    except Exception as e:
+        return []
     if resp:
         html_page = resp.content
     else:
