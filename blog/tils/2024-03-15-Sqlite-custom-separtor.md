@@ -43,7 +43,7 @@ In this case, I  tried to add the flag in the cli which is pretty straight forwa
 
 Currently, the command that `turso db create` uses under the hood for creating a db from a csv file is:
 
-```bsah
+```bash
 sqlite3 "-csv" "dbName" ".import <FileName> <TableName>"
 ```
 
