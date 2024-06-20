@@ -1,6 +1,7 @@
 ---
 templateKey: index
-title: Meet Rajesh Gor
+image_url: "https://github.com/Mr-Destructive/meetgor.com/blob/gh-pages/static/tbicon.png?raw=true"
+author: ""
 ---
 
 ## A Backend Developer that lives in the terminal
@@ -8,7 +9,7 @@ title: Meet Rajesh Gor
 ### About Me
 
 - Hi 👋, I am Meet also known as Mr. Destructive.
-- I am an I.T. student and based in India.
+- I am an I.T. student based in India.
 - Started my programming journey as a self-taught developer learning about the fundamentals with C and Javascript.
 - Moving ahead in my academic career, I was able to pick up **Python** and **C/C++** as my primary languages.
 - On a self-taught route, I started learning about **Golang** and contributed to open source [libraries](https://github.com/search?q=language%3Ago+user%3Amr-destructive+&type=repositories&s=stars&o=desc) and [projects](https://github.com/search?q=language%3Ago+author%3Amr-destructive++is%3Apr+is%3Amerged&type=pullrequests).
@@ -31,9 +32,12 @@ title: Meet Rajesh Gor
 ### Experience
 
 - **Docsumo**
+    - Junior Baackend Engineer
+    - June 2024 - Present
     - Python Intern
-    - November 2023 - Present
+    - November 2023 - June 2024
         - Research and Development for fraud detection in Bank statements
+        - Developed Bank Statement Analytics Feature
 
 - **The Solar Labs**
     - Backend Developer Intern
