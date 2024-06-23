@@ -88,8 +88,8 @@ def create_page(
 
     count = len(posts)
     cards = [create_card(series, card_template) for series in series_list]
-    cards.insert(0, "<ul>")
-    cards.append("</ul>")
+    cards.insert(0, "<ol class='list-post'>")
+    cards.append("</ol>")
 
     with open(template) as f:
         env = Environment()
