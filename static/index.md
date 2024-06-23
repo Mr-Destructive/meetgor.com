@@ -54,10 +54,10 @@ author: ""
 
 ### Contact
 
-- GitHub: [@mr-destructive](https://github.com/meetgor)
+- GitHub: [@mr-destructive](https://github.com/Mr-Destructive)
 - Twitter: [@meetgor21](https://twitter.com/meetgor21)
 - Linkedin: [meetgor](https://www.linkedin.com/in/meetgor/)
-- Dev.to: [@mr_destructive](https://dev.to/meetgor)
+- Dev.to: [@mr_destructive](https://dev.to/mr_destructive)
 - Mastodon: [@mr_destructive](https://fosstodon.org/@Mr_Destructive)
 
 ### Credits
