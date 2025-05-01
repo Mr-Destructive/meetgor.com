@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Techstructive Blog | Golang: File Write by  Meet Rajesh Gor</title>
+<script src="/script.js"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width" name="viewport"/>
+<meta content="Techstructive Blog - Personal Blog of Meet Gor" name="description"/>
+<meta content="blog, web-development, backend-developer" name="keywords"/>
+<meta content="Meet Rajesh Gor" name="author"/>
+<meta content="https://www.meetgor.com/" property="og:url"/>
+<meta content="website" property="og:type"/>
+<meta content="Golang: File Write" property="og:title"/>
+<meta content="Using system calls to write files in Golang. Performig writing, appending, deleting, replacing operations to a file" property="og:description"/>
+<meta content="https://meetgor-cdn.pages.dev/golang-024-file-write.png" property="og:image"/>
+<meta content="meetgor.com" property="twitter:domain"/>
+<meta content="https://www.meetgor.com/" property="twitter:url"/>
+<meta content="Techstructive Blog" name="twitter:title"/>
+<meta content="" name="twitter:description"/>
+<meta content="https://meetgor-cdn.pages.dev/golang-024-file-write.png" name="twitter:image"/>
+<link href="/tbicon.png" rel="icon" type="image/png"/>
+<style>
+</style>
+<script async="" crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4627844420729409">
+</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+<style>
+.theme-switch input {
+    display:none;
+}
+
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+}
+
+.slider:before {
+    background-color: #fff;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 26px;
+}
+
+input:checked + .slider {
+    background-color: #343434;
+}
+input:checked + .slider:before {
+    background-color: #848484;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+</style>
+<meta content="markata 0.7.4" name="generator"/></head>
+<body>
+<div class="nav">
+<a href="/blog">
+<p class="text-primary">Techstructive Blog </p>
+</a>
+<nav>
+<a href="/">Home</a>
+<a href="/blog">Blog</a>
+<a href="/projects">Projects</a>
+<label class="theme-switch" for="checkbox-theme" id="theme-switch" title="light/dark mode toggle">
+<input id="checkbox-theme" type="checkbox"/>
+<div class="slider round"> </div>
+</label>
+</nav>
+</div>
+<section class="title">
+<div id="cover-wrapper">
+<a href=""><img alt="cover image for article" class="thumbnail" src="https://meetgor-cdn.pages.dev/golang-024-file-write.png"/></a>
+</div>
+<h1 class="text-primary" id="title">
+        Golang: File Write
+        
+        
+      </h1>
+<a alt="edit post url" href="https://github.com/mr-destructive/meetgor.com/edit/gh-pages/blog/posts/2022-12-18-GO-24-File-Write.md" title="edit this post">
+              Edit
+          </a>
+<p>Published on December 18, 2022</p>
+<p>Author: Meet Rajesh Gor</p>
+<a href="/tag/go">#go</a>
+</section>
+<main>
+<h2>Introduction<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>In the 24th post of the series, we will be taking a look at how we can perform write operations to a file using golang. We will be using the <code>os</code> package in most operations along with <code>bufio</code> text manipulations. We will be performing write operations like appending, deleting, and replacing a file using golang. We will be heavily leveraging standard library packages like <code>os</code>, <code>bufio</code>, <code>bytes</code> and <code>fmt</code>. We will also be looking into overwriting and string formatting to a file.</p>
+<h2>Write to a File<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>The first part of this section is the basic write operation to a file, we assume we are writing to a fresh file and overriding the contents of the existing file. The next section will cover the appending of content to the file and so on. In this example, we will see how we perform basic writing operations to write a string, a slice of string to a file.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"log"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"os"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">HandleError</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">str</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">"Hi, I am a gopher!\n"</span><span class="w"></span>
+<span class="w">	</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">OpenFile</span><span class="p">(</span><span class="s">"abc.txt"</span><span class="p">,</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">O_WRONLY</span><span class="p">,</span><span class="w"> </span><span class="mo">0660</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// f, err := os.Create("abc.txt")</span><span class="w"></span>
+<span class="w">	</span><span class="nx">HandleError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">str</span><span class="p">))</span><span class="w"></span>
+<span class="w">	</span><span class="nx">HandleError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">defer</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">bash</div>
+<div class="highlight"><pre><span></span>$ cat abc.txt
+
+$ go run main.go
+
+$ cat abc.txt
+Hi, I am a gopher!
+</pre></div>
+
+</pre>
+<p>So, we have used a simple golang script to write to a file that exists/has already been created. If you don't want errors while having to write on a file that does not exist, use the <a href="https://pkg.go.dev/os#Create">Create</a> method instead which is similar to the <code>Open</code> method but creates a file if it doesn't exist. We use the <a href="https://pkg.go.dev/os#File.Write">Write</a> method to overwrite contents to the file, it takes in a parameter as a slice of byte, so we typecast the string <code>str</code> into <code>[]byte</code> using the <code>[]byte(str)</code> syntax. Thereby we write the contents of the string into the file. We use the defer keyword for closing the file at the end of the script or the end of the main function scope.</p>
+<h3>Write slice of strings to file<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>We can even write slice of string to file using a for loop and appending each string with a new line character.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"log"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"os"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">HandleError</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">Create</span><span class="p">(</span><span class="s">"abc.txt"</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="c1">//f, err := os.Open("abc.txt", os.O_WRONLY, 0660)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">langs</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"golang"</span><span class="p">,</span><span class="w"> </span><span class="s">"python"</span><span class="p">,</span><span class="w"> </span><span class="s">"rust"</span><span class="p">,</span><span class="w"> </span><span class="s">"javascript"</span><span class="p">,</span><span class="w"> </span><span class="s">"ruby"</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">lang</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">langs</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">WriteString</span><span class="p">(</span><span class="nx">lang</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"\n"</span><span class="p">)</span><span class="w"></span>
+<span class="w">		</span><span class="nx">HandleError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="k">defer</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">plaintext</div>
+<div class="highlight"><pre><span></span>$ cat abc.txt
+
+$ go run main.go
+
+$ cat abc.txt
+golang
+python
+rust
+javascript
+ruby
+</pre></div>
+
+</pre>
+<p>We have used the <a href="https://pkg.go.dev/os#File.WriteString">WriteString</a> method which will take in a string as a parameter instead of a slice of bytes. So, we don't have to type cast into slice of bytes. So, as we can see we have written the string slice into a file.</p>
+<h3>Over Write<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>The minimal code to write to a file is the <a href="https://pkg.go.dev/os#WriteFile">WriteFile</a> function in the <a href="https://pkg.go.dev/os">os</a> package, it overrides the content of the file with the provided slice of bytes, the name of the file, and the necessary permission to write. The funciton additionally creates a file if it does not exist, which is one less reason for the error. Though it returns an error object, the error might be created due to not right permissions to write to the file, encoding issues, etc.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"log"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"os"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">data</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">{</span><span class="mi">115</span><span class="p">,</span><span class="w"> </span><span class="mi">111</span><span class="p">,</span><span class="w"> </span><span class="mi">109</span><span class="p">,</span><span class="w"> </span><span class="mi">101</span><span class="p">,</span><span class="w"> </span><span class="mi">65</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">WriteFile</span><span class="p">(</span><span class="s">"test.txt"</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="p">,</span><span class="w"> </span><span class="mo">0660</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">s</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">"Hello"</span><span class="w"></span>
+<span class="w">	</span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">WriteFile</span><span class="p">(</span><span class="s">"test.txt"</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">s</span><span class="p">),</span><span class="w"> </span><span class="mo">0660</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">plaintext</div>
+<div class="highlight"><pre><span></span>$ go run main.go
+2022/12/17 19:24:13 &lt;nil&gt;
+2022/12/17 19:24:13 &lt;nil&gt;
+
+$ cat test.txt
+Hello
+</pre></div>
+
+</pre>
+<p>So, we have used the <code>WriteFile</code> method two times in the script, it first takes in a slice of bytes as it is defined as <code>data</code> which corresponds to <code>115 -&gt; s</code>, <code>111 -&gt; o</code>, <code>65 -&gt; A</code>, ASCII mapped to strings. The slice of bytes can be taken as a string like <code>someA</code> as the literal value of the underlying slice of the byte. So, we take that slice of byte and parse it to the second parameter of the WriteFile function. The first parameter is a string path of the file we want to write the contents to, the third parameter is the file permission. We have set it as <code>0660</code> indicating read(4) + write(2) to the group and the user and no permission to the other users. The function will return an error if any, or else it simply overwrites the data in the file.</p>
+<p>In this case, we have called the <code>WriteFile</code> method with string <code>s</code> type cast to slice of bytes at the end of the script so we see the file has contents as <code>Hello</code> instead of <code>someA</code>. If we reverse the action, we don't see the <code>Hello</code> string in the file.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"log"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"os"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">s</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">"Hello"</span><span class="w"></span>
+<span class="w">	</span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">WriteFile</span><span class="p">(</span><span class="s">"test.txt"</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">s</span><span class="p">),</span><span class="w"> </span><span class="mo">0660</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">data</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">{</span><span class="mi">115</span><span class="p">,</span><span class="w"> </span><span class="mi">111</span><span class="p">,</span><span class="w"> </span><span class="mi">109</span><span class="p">,</span><span class="w"> </span><span class="mi">101</span><span class="p">,</span><span class="w"> </span><span class="mi">65</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">WriteFile</span><span class="p">(</span><span class="s">"test.txt"</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="p">,</span><span class="w"> </span><span class="mo">0660</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">plaintext</div>
+<div class="highlight"><pre><span></span>$ go run main.go
+2022/12/17 19:24:13 &lt;nil&gt;
+2022/12/17 19:24:13 &lt;nil&gt;
+
+$ cat test.txt
+someA
+</pre></div>
+
+</pre>
+<p>As we can see the <code>Hello</code> has been overwritten by <code>someA</code>.</p>
+<h3>Write formatted string<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>We can even use fmt to write formatted strings to a file. Just like we can take inputs with <code>Scanf</code>, we can use <a href="https://pkg.go.dev/fmt#Fprint">Fprint</a> and other similar functions like <a href="https://pkg.go.dev/fmt#Fprintf">Fprintf</a>, and <a href="https://pkg.go.dev/fmt#Fprintln">Fprintln</a> functions to print/add contents to the file.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"fmt"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"log"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"os"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">HandleErr</span><span class="p">(</span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">Create</span><span class="p">(</span><span class="s">"temp.txt"</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">HandleErr</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="nx">lang</span><span class="p">,</span><span class="w"> </span><span class="nx">exp</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">"John"</span><span class="p">,</span><span class="w"> </span><span class="s">"go"</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="w"></span>
+<span class="w">	</span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Fprint</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="s">"Hi, I am "</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="s">"\n"</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">HandleErr</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Fprintf</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="s">"Language of choice: %s.\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">lang</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">HandleErr</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Fprintln</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="s">"Having"</span><span class="p">,</span><span class="w"> </span><span class="nx">exp</span><span class="p">,</span><span class="w"> </span><span class="s">"years of experience."</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">HandleErr</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">defer</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">plaintext</div>
+<div class="highlight"><pre><span></span>$ cat temp.txt
+cat: temp.txt: No such file or directory
+
+$ go run format.go
+
+$ cat test.txt
+Hi, I am John.
+Language of choice: go.
+Having 2 years of experience.
+</pre></div>
+
+</pre>
+<p>So, we can see that we have used all three methods having their own use cases, we can use <code>Fprint</code> for simple strings, <code>Fprintf</code> for formatting the block of a string with multiple placeholders, and the <code>Fprintln</code> which works simply like <code>Fprint</code> but it adds a new line itself, we don't need to specify it explicitly.</p>
+<h3>Append<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>If we want to append text to a file, we can use the <a href="https://pkg.go.dev/os#OpenFile">OpenFile</a> function and provide a few parameters to append the contents instead of overwriting.</p>
+<p>Here, we have two steps, open the file and then write the contents in the file. So while opening the file, we provide a few options as parameters to make the fine-tuned system call like only open for read, write or append modes. These options are defined as constant int values in the <a href="https://pkg.go.dev/os#pkg-constants">os package</a>.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"log"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"os"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">HandleError</span><span class="p">(</span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">s</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">"Hello"</span><span class="w"></span>
+<span class="w">	</span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">WriteFile</span><span class="p">(</span><span class="s">"test.txt"</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">s</span><span class="p">),</span><span class="w"> </span><span class="mo">0660</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">HandleError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">s</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">"World"</span><span class="w"></span>
+<span class="w">	</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">OpenFile</span><span class="p">(</span><span class="s">"test.txt"</span><span class="p">,</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">O_APPEND</span><span class="p">|</span><span class="nx">os</span><span class="p">.</span><span class="nx">O_WRONLY</span><span class="p">,</span><span class="w"> </span><span class="mo">0660</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">HandleError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">WriteString</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">HandleError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">defer</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">plaintext</div>
+<div class="highlight"><pre><span></span>$ go run main.go
+
+$ cat test.txt
+HelloWorld
+</pre></div>
+
+</pre>
+<p>So, from the above example, we are able to append text into a file, we have first added the <code>Hello</code> world string into the file using the <code>WriteFile</code> method to indicate we overwrite the previous contents of the file. We then use the <a href="https://pkg.go.dev/os#OpenFile">OpenFile</a> method to open a file provided in the first parameter as a string path. The second parameter is the options to be passed for performing operations on the opened file, we always have to use them <code>defer</code> to close the file or other resource-locking operations.</p>
+<p>We have specified the <code>os.O_WRONLY</code> and the <code>os.O_APPEND</code> options indicating we want to write to the file while the file is open and specifically append to the file. So this is fine-tuning the opened file operation. We can use the ReadFile or WriteFile operation which is just used for simple read and write operations respectively.</p>
+<p>We use the <a href="https://pkg.go.dev/os#File.WriteString">WriteString</a> method, but we can even use the <a href="https://pkg.go.dev/os#File.Write">Write</a> method to write a slice of byte instead. This is just used for exploring the different options in the file types of the os package.</p>
+<h3>Append at a specific line<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>We can also add content to a specific line or a portion of the file. There are no direct functions in golang to do the same, we will have to do some manual fine-tuning of file operations to append a particular text at a specific line.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="s">"bufio"</span><span class="w"></span>
+<span class="w">    </span><span class="s">"bytes"</span><span class="w"></span>
+<span class="w">    </span><span class="s">"log"</span><span class="w"></span>
+<span class="w">    </span><span class="s">"os"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">HandleError</span><span class="p">(</span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/* test.txt</span>
+<span class="cm">    Hi</span>
+<span class="cm">    Hello</span>
+<span class="cm">    World</span>
+<span class="cm">    Gopher</span>
+<span class="cm">    */</span><span class="w"></span>
+<span class="w">	</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">OpenFile</span><span class="p">(</span><span class="s">"test.txt"</span><span class="p">,</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">O_RDWR</span><span class="p">,</span><span class="w"> </span><span class="mo">0660</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">defer</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span><span class="w"></span>
+<span class="w">	</span><span class="nx">HandleError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">m</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">bufio</span><span class="p">.</span><span class="nx">NewScanner</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">bytes_till</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">	</span><span class="c1">// line to be appended</span><span class="w"></span>
+<span class="w">	</span><span class="nx">line_till</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">2</span><span class="w"></span>
+<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">lines_after</span><span class="w"> </span><span class="kt">string</span><span class="w"></span>
+<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">lines_till</span><span class="w"> </span><span class="kt">string</span><span class="w"></span>
+<span class="w">	</span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">m</span><span class="p">.</span><span class="nx">Scan</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">line</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">m</span><span class="p">.</span><span class="nx">Text</span><span class="p">()</span><span class="w"></span>
+<span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="nx">line_till</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">			</span><span class="nx">bytes_till</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nx">bytes</span><span class="p">.</span><span class="nx">Count</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">line</span><span class="p">),</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">{})</span><span class="w"></span>
+<span class="w">			</span><span class="k">if</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">				</span><span class="nx">lines_till</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">"\n"</span><span class="w"></span>
+<span class="w">			</span><span class="p">}</span><span class="w"></span>
+<span class="w">			</span><span class="nx">lines_till</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nx">line</span><span class="w"></span>
+<span class="w">		</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">			</span><span class="nx">lines_after</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">"\n"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">line</span><span class="w"></span>
+<span class="w">		</span><span class="p">}</span><span class="w"></span>
+<span class="w">		</span><span class="nx">i</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="nx">HandleError</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">Err</span><span class="p">())</span><span class="w"></span>
+<span class="w">	</span><span class="nx">insert_text</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">lines_till</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"\nInserted content"</span><span class="w"></span>
+<span class="w">	</span><span class="nx">insert_text_bytes</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">bytes</span><span class="p">.</span><span class="nx">Count</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">insert_text</span><span class="p">),</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">{})</span><span class="w"></span>
+<span class="w">	</span><span class="nx">lines_after_bytes</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">bytes</span><span class="p">.</span><span class="nx">Count</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">lines_after</span><span class="p">),</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">{})</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">WriteFile</span><span class="p">(</span><span class="s">"test.txt"</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">insert_text</span><span class="p">),</span><span class="w"> </span><span class="mo">0660</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">HandleError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">WriteAt</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">lines_after</span><span class="p">),</span><span class="w"> </span><span class="nb">int64</span><span class="p">(</span><span class="nx">lines_after_bytes</span><span class="p">)</span><span class="o">+</span><span class="nb">int64</span><span class="p">(</span><span class="nx">insert_text_bytes</span><span class="p">))</span><span class="w"></span>
+<span class="w">	</span><span class="nx">HandleError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/* test.txt</span>
+<span class="cm">    Hi</span>
+<span class="cm">    Hello</span>
+<span class="cm">    Inserted content</span>
+<span class="cm">    World</span>
+<span class="cm">    Gopher</span>
+<span class="cm">    */</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">plaintext</div>
+<div class="highlight"><pre><span></span>$ cat test.txt 
+Hi
+Hello
+World
+Gophers
+
+$ go run append.go 
+
+$ cat test.txt 
+Hi
+Hello
+Inserted content
+World
+Gophers
+</pre></div>
+
+</pre>
+<p>We have inserted <code>Inserted content</code> after the second line because the <code>line_till</code> the variable is set to <code>2</code></p>
+<p>So, in the above example, we have used a bunch of packages to append a string or any form of text to a particular line. We first read the contents of the file, by using the <code>OpenFile</code> method which will open the file with certain permissions. We need to close the file at the end of the script so we simply use the <code>defer</code> keyword before the <code>f.Close()</code> method call. We then start to scan the file buffer, by creating a <code>Scanner</code> object with the <code>NewScanner</code> method. Then, with the scanner object of the file content, we then can use the <code>Scan()</code> method to scan the file contents line by line. By converting the content at each line from a slice of bytes to a string using the <code>Text</code>, we append to a string <code>line</code>, this will be used for keeping the count of bytes for appending text before the newly inserted text.</p>
+<p>The <code>line_till</code> variable is used for the line number from which we want to append to the text after.</p>
+<p>We count the bytes for the current line and add it to the <code>bytes_till</code> variable indicating the number of bytes there before appending content. We have a simple if-else check for the first line that is for appending a new line of characters. We append the lines into a single string <code>lines_till</code>. The string <code>insert_text</code> is created by appending all the lines before the line number <code>line_till</code> with the actual content to be inserted. We calculate the number of bytes using the <a href="https://pkg.go.dev/bytes#Count">Count</a> method in the bytes package. The separator is kept blank. The <code>lines_after</code> is also been created as a single string of lines after the line number in the file.</p>
+<p>We add the <code>insert_text</code> (lines before + inserted text) into the file using the <code>WriteFile</code> which will override the contents of the file. Then we append the <code>lines_after</code> string as a slice of bytes to the <code>insert_text_bytes + lines_after_bytes</code> so we get the byte number position to append the <code>lines_after</code> string.</p>
+<p>In short, we basically overwrite the file by creating two strings (slice of bytes) one which has the lines before the line number with the text to be inserted and the second string has all the lines after the line number.</p>
+<h2>Replace text in a file<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>Using the <a href="https://pkg.go.dev/bytes#Replace">bytes.Replace</a> method, we can first read all the bytes and replace the old with the new text, and store them as a slice of bytes. We then write these slices of bytes to the file again, so we first read the contents into slices of bytes, replace the content of the byte and then overwrite the contents with the slice of bytes. It's quite simple.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"bytes"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"log"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"os"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">HandleError</span><span class="p">(</span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">filename</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">"test.txt"</span><span class="w"></span>
+<span class="w">	</span><span class="nx">file</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">ReadFile</span><span class="p">(</span><span class="nx">filename</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">HandleError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">old_text</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">"Hello\nWorld"</span><span class="w"></span>
+<span class="w">	</span><span class="nx">new_text</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">"Bye"</span><span class="w"></span>
+<span class="w">	</span><span class="nx">new_content</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">bytes</span><span class="p">.</span><span class="nx">Replace</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">old_text</span><span class="p">),</span><span class="w"> </span><span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">new_text</span><span class="p">),</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">WriteFile</span><span class="p">(</span><span class="nx">filename</span><span class="p">,</span><span class="w"> </span><span class="nx">new_content</span><span class="p">,</span><span class="w"> </span><span class="mo">0660</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">HandleError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">plaintext</div>
+<div class="highlight"><pre><span></span>$ cat test.txt
+Hi
+Hello
+World
+Gophers
+
+$ go run main.go
+
+
+$ cat test.txt
+Hi
+Bye
+Gophers
+</pre></div>
+
+</pre>
+<p>As we can see we have replaced <code>Hello\nWorld</code> it with <code>Bye</code>. So, the [Replace] method in the bytes package takes in the parameters like the slice of bytes which should be the actual contents of the file, the old text to be replaced with again as a slice of bytes, and the new text to replace also as the slice of bytes, the final parameter is the number of replacements to be made. Here <code>-1</code> indicates there are no limits on how many replacements can be done, it can be <code>1</code>, <code>2</code> for replacing the first n occurrence of the old text, depending on how many times you want to replace the content in the file.</p>
+<h2>Delete Text from a File<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>We can use the <a href="https://pkg.go.dev/os#File.Truncate">os.Truncate</a> method to delete the contents of the file. The <code>Truncate</code> method takes in the parameters like the file path string and the size of the file to truncate or set to. If we set the second parameter to <code>0</code>, the file size will be zero and all the contents will be deleted or removed.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"log"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"os"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/* test.txt</span>
+<span class="cm">    Hi</span>
+<span class="cm">    Hello</span>
+<span class="cm">    World</span>
+<span class="cm">    Gophers</span>
+<span class="cm">    */</span><span class="w"></span>
+<span class="w">	</span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">Truncate</span><span class="p">(</span><span class="s">"test.txt"</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/* test.txt is empty</span>
+<span class="cm">    */</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">plaintext</div>
+<div class="highlight"><pre><span></span>$ cat test.txt
+Hi
+Hello
+World
+Gophers
+
+$ go run delete.go
+
+$ cat test.txt
+</pre></div>
+
+</pre>
+<p>As we can see that the contents of the file are emptied if we set the second parameter(size) of the <code>Truncate</code> method as 0.</p>
+<p>We can also set the value of the size as the number of bytes to keep, so instead of <code>0</code> we can set it to <code>n</code> positive integer to only save the first <code>n</code> bytes in the file.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"log"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"os"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/* test.txt</span>
+<span class="cm">    Hi</span>
+<span class="cm">    Hello</span>
+<span class="cm">    World</span>
+<span class="cm">    Gophers</span>
+<span class="cm">    */</span><span class="w"></span>
+<span class="w">	</span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">Truncate</span><span class="p">(</span><span class="s">"test.txt"</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/* test.txt </span>
+<span class="cm">    Hi</span>
+<span class="cm">    Hel</span>
+<span class="cm">    */</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">plaintext</div>
+<div class="highlight"><pre><span></span>$ cat test.txt
+Hi
+Hello
+World
+Gophers
+
+$ go run delete.go
+
+$ cat test.txt
+Hi
+Hel
+</pre></div>
+
+</pre>
+<p>So, in the above example, if we set the size parameter to the Truncate method as <code>6</code>, it will keep the size of the file to 6 bytes. So we only see <code>Hi\nHel</code>, the new line is a single byte. The rest of the content is deleted. This is how we previously deleted all the bytes from the file by setting the size to <code>0</code>.</p>
+<p>That's it from this part. Reference for all the code examples and commands can be found in the <a href="https://github.com/mr-destructive/100-days-of-golang/tree/main/scripts/files/write/">100 days of Golang</a> GitHub repository.</p>
+<h2>Conclusion<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>So, from this section of the series, we were able to perform write operations on a file using golang. We used the packages from the standard library and performed operations like write, append, overwrite, delete and replace to a simple text file, but it could have been any file format.</p>
+<p>Thank you for reading. If you have any queries, questions, or feedback, you can let me know in the discussion below or on my social handles. Happy Coding :)</p>
+</main>
+<div id="comments">
+<script async="" crossorigin="anonymous" data-category="Q&amp;A" data-category-id="DIC_kwDOHZ6V_s4CRfn4" data-emit-metadata="0" data-input-position="bottom" data-lang="en" data-mapping="pathname" data-reactions-enabled="1" data-repo="Mr-Destructive/meetgor.com" data-repo-id="R_kgDOHZ6V_g" data-strict="0" data-theme="dark_high_contrast" src="https://giscus.app/client.js">
+</script>
+</div>
+<!-- 
+          <script src="/copy.js"></script>
+      -->
+<footer>
+        © 2025
+        <ul class="social">
+<li>
+<a href="https://twitter.com/MeetGor21">Twitter
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#twitter"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="https://www.linkedin.com/in/meetgor/">LinkedIn
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#linkedin"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="https://github.com/Mr-Destructive">GitHub
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#github"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="https://dev.to/mr_destructive">Dev.to
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#devto"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="/rss.xml">RSS
+            <svg class="svg-icon orange">
+<use xlink:href="/social-icons.svg#rss"></use>
+</svg>
+</a>
+</li>
+<li>
+<a class="u-email" href="mailto:gormeet711@gmail.com">Email</a>
+</li>
+</ul>
+</footer>
+<style>
+
+:root {
+    --color-bg: #1f2022;
+    --color-bg-2: #161718;
+    --color-bg-code: #123456;
+    --color-text: #eefbfe;
+    --color-text-2: #00ffff;
+    --color-code-text: white;
+    --color-link: #fb30c4;
+    --color-accent: #f1fa8c;
+    --overlay-brightness: .85;
+    --body-width: 1000px;
+    --syntax-background-color: #08090a;
+    --syntax-text-color: #f8f8f2;
+    --syntax-comment-color: #808080;
+    --syntax-declaration-color: #f39c12;
+    --syntax-literal-color: #dda0dd;
+    --syntax-error-color: #f9690e;
+    --syntax-name-color: #7ed07e;
+    --syntax-string-color: #f2ca27;
+}
+
+[data-theme="dark"] {
+    --color-bg: #1f2022;
+    --color-bg-2: #161718;
+    --color-bg-code: black;
+    --color-text: #eefbfe;
+    --color-text-2: #00ffff;
+    --color-code-text: white;
+    --color-link: #fb30c4;
+    --color-accent: #f1fa8c;
+    --overlay-brightness: .85;
+    --body-width: 1000px;
+    --animation-one: white;
+    --animation-two: #eeeeee;
+    --animation-three: #dddddd;
+    --animation-four: #aaaaaa;
+    --animation-five: grey;
+    --animation-six: grey;
+    --animation-seven: #eeeeee;
+    --animation-eight: white;
+}
+[data-theme="light"] {
+    --color-bg: #cfefff;
+    --color-bg-2: #c8d2db;
+    --color-bg-code: #00001a;
+    --color-text: #1f2022;
+    --color-text-2: #000030;
+    --color-code-text: white;
+    --color-link: #fb30c4;
+    --color-accent: #ffeb00;
+    --overlay-brightness: 1.0;
+    --animation-one: grey;
+    --animation-two: #aaaaaa;
+    --animation-three: #dddddd;
+    --animation-four: black;
+    --animation-five: black;
+    --animation-six: #dddddd;
+    --animation-seven: #aaaaaa;
+    --animation-eight: grey;
+}
+
+html  {
+    font-family: "Space Mono", monospace;
+    background: var(--color-bg);
+    color: var(--color-text);
+    contain: paint;
+}
+
+a {
+    color: var(--color-link);
+}
+main a {
+    max-width: 100%;
+}
+.heading-permalink {
+    font-size: .7em;
+}
+body {
+    max-width: var(--body-width);
+    margin: 5rem auto;
+    padding: 0 .5rem;
+    font-size: 1rem;
+    line-height: 1.56;
+}
+blockquote {
+    background: var(--color-bg);
+    filter: brightness(var(--overlay-brightness));
+    border-left: 4px solid var(--color-accent);
+    border-radius: 4px;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #f1fa8c,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+    padding-left: 1rem;
+    margin: 1rem;
+}
+li.post {
+   /* list-style-type: None; */
+    padding: .2rem 0;
+}
+pre.wrapper{
+  padding: 0;
+  box-shadow: 0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin: 2rem;
+}
+pre {
+    margin:0;
+    padding: 1rem;
+    min-width: -webkit-fill-available;
+    max-width: fit-content;
+    overflow-x: auto;
+}
+
+pre .filepath {
+  margin:0;
+  padding-left: 1rem;
+  border-radius: 4px 4px 0 0;
+  background: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+pre .filepath p{
+  margin:0
+}
+
+pre .filepath .right{
+  display: flex;
+  gap: .2rem;
+  align-items: center;
+}
+
+pre::-webkit-scrollbar {
+    height: 4px;
+    background-color: transparent;
+}
+
+pre::-webkit-scrollbar-thumb {
+    background-color: #d3d3d32e;
+    border-radius: 2px;
+}
+
+pre::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.copy-wrapper {
+    background: none;
+    position: absolute;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    justify-content: flex-end;
+}
+button.copy {
+    z-index: 100;
+    background: none;
+    fill: #ffffff45;
+    border: none;
+    width: 32px;
+    align-self: flex-end;
+    top: 0;
+    right: 0;
+    margin: 0.5rem 0.2rem;
+}
+button.copy:hover {
+    fill:white
+}
+
+a.help {
+    fill: #ffffff45;
+}
+a.help:hover {
+    fill: white;
+}
+a.help svg{
+    height:24px;
+    width:24px;
+}
+code {
+  font-family: monospace;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background-color: var(--color-bg-code);
+  color: var(--color-code-text);
+}
+.highlight  {
+    background: var(--color-bg-code);
+    color: var(--color-code-text);
+    filter: brightness(var(--overlay-brightness));
+    border-radius: 0 0 4px 4px;
+}
+
+.highlight .c { color: var(--syntax-comment-color); } /* Comment */
+.highlight .err { color: var(--syntax-error-color); } /* Error */
+.highlight .k { color: var(--syntax-declaration-color); } /* Keyword */
+.highlight .l { color: var(--syntax-literal-color); } /* Literal */
+.highlight .n { color: var(--syntax-name-color); } /* Name */
+.highlight .o { color: var(--syntax-declaration-color); } /* Operator */
+.highlight .p { color: var(--syntax-literal-color); } /* Punctuation */
+.highlight .cm { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Multiline */
+.highlight .cp { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Preproc */
+.highlight .c1 { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Single */
+.highlight .cs { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Special */
+.highlight .gd { color: var(--syntax-literal-color); font-weight: bold; } /* Generic.Deleted */
+.highlight .ge { color: var(--syntax-error-color); font-style: italic; } /* Generic.Emph */
+.highlight .gr { color: #ff0000; } /* Generic.Error */
+.highlight .gh { color: var(--syntax-declaration-color); font-weight: bold; } /* Generic.Heading */
+.highlight .gi { color: var(--syntax-name-color); } /* Generic.Inserted */
+.highlight .go { color: var(--syntax-declaration-color); } /* Generic.Output */
+.highlight .gp { color: var(--syntax-literal-color); font-weight: bold; } /* Generic.Prompt */
+.highlight .gs { color: var(--syntax-declaration-color); font-weight: bold; } /* Generic.Strong */
+.highlight .gu { color: var(--syntax-declaration-color); font-weight: bold; } /* Generic.Subheading */
+.highlight .gt { color: var(--syntax-declaration-color); } /* Generic.Traceback */
+.highlight .kc { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Constant */
+.highlight .kd { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Declaration */
+.highlight .kn { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Namespace */
+.highlight .kp { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Pseudo */
+.highlight .kr { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Reserved */
+.highlight .kt { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Type */
+.highlight .ld { color: var(--syntax-literal-color); font-style: italic; } /* Literal.Date */
+.highlight .m { color: var(--syntax-literal-color); } /* Literal.Number */
+.highlight .s { color: var(--syntax-string-color); } /* Literal.String */
+
+/* Tab style starts here */
+.tabbed-set {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 1em 0;
+    border-radius: 0.1rem;
+}
+
+.tabbed-set > input {
+    display: none;
+}
+
+.tabbed-set label {
+    width: auto;
+    padding: 0.9375em 1.25em 0.78125em;
+    font-weight: 700;
+    font-size: 0.84em;
+    white-space: nowrap;
+    border-bottom: 0.15rem solid transparent;
+    border-top-left-radius: 0.1rem;
+    border-top-right-radius: 0.1rem;
+    cursor: pointer;
+    transition: background-color 250ms, color 250ms;
+}
+
+.tabbed-set .tabbed-content {
+    width: 100%;
+    display: none;
+    box-shadow: 0 -.05rem #ddd;
+}
+
+.tabbed-set input {
+    position: absolute;
+    opacity: 0;
+}
+
+/* fonts */
+h1 {
+    font-weight: 700;
+}
+
+h1#title a {
+    font-size: 16px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-top: 3rem;
+    color: var(--color-text-2);
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-top: 5rem;
+}
+
+h2 {
+    font-size: 1.63rem;
+    margin-top: 5rem;
+}
+
+p {
+    font-size: 21px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+@media only screen and (max-width: 700px) {
+p {
+    font-size: 18px;
+}
+}
+
+@media only screen and (max-width: 600px) {
+p {
+    font-size: 16px;
+}
+}
+
+@media only screen and (max-width: 500px) {
+p {
+    font-size: 14px;
+}
+}
+
+@media only screen and (max-width: 400px) {
+p {
+    font-size: 12px;
+}
+}
+
+
+pre {
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 18.5714px;
+}
+
+a {
+    font-weight: 600;
+    text-decoration-color: var(--color-accent);
+    color: var(--color-link);
+    padding: .3rem .5rem;
+    display: inline-block;
+}
+
+.admonition, details {
+    box-shadow: 0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+    margin: 5rem 0;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-align: left;
+    padding: 0;
+    border: 0;
+}
+.admonition {
+    padding-bottom: 1rem;
+}
+
+details[open] {
+    padding-bottom: .5rem;
+}
+
+.admonition p{
+    padding: .2rem .6rem;
+}
+
+.admonition-title, .details-title, summary {
+    background: var(--color-bg-2);
+    padding: 0;
+    margin: 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+summary:hover {
+    cursor: pointer;
+}
+
+summary.admonition-title, summary.details-title {
+    padding: .5rem;
+    padding-left: 1rem;
+}
+
+.note {
+    border-left: 4px solid #f1fa8c;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #f1fa8c,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.note > .admonition-title {
+    border-bottom: 1px solid #3c3d2d;
+}
+
+.abstract {
+    border-left: 4px solid #8be9fd;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #8be9fd,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.abstract > .admonition-title {
+    border-bottom: 1px solid #2c3a3f;
+}
+.info {
+    border-left: 4px solid;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #8bb0fd,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.info > .admonition-title {
+    border-bottom: 1px solid #2c313f;
+}
+
+.tip {
+    border-left: 4px solid #008080;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #008080,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.tip > .admonition-title {
+    border-bottom: 1px solid #1b2a2b;
+}
+.success {
+    border-left: 4px solid #50fa7b;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #50fa7b,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.success > .admonition-title {
+    border-bottom: 1px solid #263e2b;
+}
+
+.question {
+    border-left: 4px solid #a7fcbd;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #a7fcbd,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.question > .admonition-title {
+    border-bottom: 1px solid #303e35;
+}
+
+.warning {
+    border-left: 4px solid #ffb86c;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #ffb86c,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.warning > .admonition-title {
+    border-bottom: 1px solid #3f3328;
+}
+
+.failure {
+    border-left: 4px solid #b23b3b;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #b23b3b,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.failure > .admonition-title {
+    border-bottom: 1px solid #34201f;
+}
+
+.danger {
+    border-left: 4px solid #ff5555;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #ff5555,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.danger > .admonition-title {
+    border-bottom: 1px solid #402523;
+}
+
+.bug {
+    border-left: 4px solid #b2548a;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #b2548a,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.bug > .admonition-title {
+    border-bottom: 1px solid #32232c;
+}
+
+.example {
+    border-left: 4px solid #bd93f9;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #bd93f9,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.example > .admonition-title {
+    border-bottom: 1px solid #332d3e;
+}
+
+.source {
+    border-left: 4px solid #bd93f9;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #bd93f9,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.source > .admonition-title {
+    border-bottom: 1px solid #332d3e;
+}
+
+.quote {
+    border-left: 4px solid #999;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #999,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.quote > .admonition-title {
+    border-bottom: 1px solid #2d2e2f;
+}
+
+table {
+    margin: 1rem 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: block;
+    max-width: -moz-fit-content;
+    max-width: fit-content;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+table thead th {
+    border: solid 1px var(--color-text);
+    padding: 10px;
+    text-align: left;
+}
+
+table tbody td {
+    border: solid 1px var(--color-text);
+    padding: 10px;
+}
+.theme-switch {
+    z-index: 10;
+    display: inline-block;
+    height: 34px;
+    position: relative;
+    width: 60px;
+
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 1rem;
+    margin-left: auto;
+    position: fixed;
+    right: 1rem;
+    top: 1rem;
+}
+
+.theme-switch input {
+    display:none;
+}
+
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+}
+
+.slider:before {
+    background-color: #fff;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 26px;
+}
+
+input:checked + .slider {
+    background-color: #343434;
+}
+input:checked + .slider:before {
+    background-color: #848484;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+main p img {
+    width: 100%;
+    width: -moz-available;
+    width: -webkit-fill-available;
+    width: fill-available;
+}
+
+details>* {
+    margin: 1rem;
+}
+
+.admonition>* {
+    margin: 1rem;
+}
+
+p.admonition-title, summary {
+    margin: 0;
+    padding-left:1.2rem;
+}
+
+.small {
+    font-size: .9rem;
+    color: #888;
+}
+
+admonition+admonition{
+    margin-top:20rem;
+}
+
+::-webkit-scrollbar {
+    height: 12px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #d3d3d32e;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+.nav{
+    position: sticky;
+    top: 0;
+    background-color: var(--color-bg);
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 5;
+}
+.social{
+    display: flex;
+    list-style-type: none;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+img {
+    max-width: 100%;
+    width: 80%;
+    vertical-align: middle;
+}
+
+.thumbnail {
+    width:100%; height: 30%;
+    border-radius:25px;
+    transition:box-shadow 1s ease;
+}
+
+.thumbnail:hover {
+    box-shadow:0px 0px 0px 8px #ff6600;
+}
+.svg-icon { width: 16px; height: 16px; display: inline-flex; fill: #ffffff; padding-right: 5px; vertical-align: text-top; }
+
+.text-primary {
+	color: #fff;
+	font-size: 1.8rem;
+	font-weight: 700;
+	text-align: center;
+	width: 100%;
+	line-height: 1.6;
+	background-image: linear-gradient(90deg, var(--animation-one), var(--animation-two), var(--animation-three), var(--animation-four), var(--animation-five), var(--animation-six), var(--animation-seven), var(--animation-eight));
+	background-size: 200%;
+	color: transparent;
+	-webkit-text-fill-color: transparent;
+	-webkit-background-clip: text;
+	background-clip: text;
+	animation: animate 20s infinite alternate;
+}
+@keyframes animate {
+	0% {
+		background-position: 0%;
+	}
+	100% {
+		background-position: 400%;
+	}
+}
+
+pre, code { font-size: 15px; border: 1px solid #e8e8e8; border-radius: 3px; background-color: var(--color-bg-code); }
+
+code { padding: 1px 5px; color: #ffffff; }
+
+pre { padding: 8px 12px; overflow-x: auto; }
+
+pre > code { border: 0; padding-right: 0; padding-left: 0; }
+
+.language-bar{
+    height: 3em;
+    text-align: justify;
+    padding: 1em 0 1px 1em;
+    color: var(--color-code-text)
+}
+
+        </style>
+</body>
+</html>

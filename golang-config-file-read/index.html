@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Techstructive Blog | Golang: JSON YAML TOML (config) File Reading. by  Meet Rajesh Gor</title>
+<script src="/script.js"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width" name="viewport"/>
+<meta content="Techstructive Blog - Personal Blog of Meet Gor" name="description"/>
+<meta content="blog, web-development, backend-developer" name="keywords"/>
+<meta content="Meet Rajesh Gor" name="author"/>
+<meta content="https://www.meetgor.com/" property="og:url"/>
+<meta content="website" property="og:type"/>
+<meta content="Golang: JSON YAML TOML (config) File Reading." property="og:title"/>
+<meta content="Reading specific files used generally for configuration and storing data, as well as for web development. Reading file formats like JSON, YAML, TOML, CSV, and XML." property="og:description"/>
+<meta content="https://meetgor-cdn.pages.dev/golang-023-config-files.png" property="og:image"/>
+<meta content="meetgor.com" property="twitter:domain"/>
+<meta content="https://www.meetgor.com/" property="twitter:url"/>
+<meta content="Techstructive Blog" name="twitter:title"/>
+<meta content="" name="twitter:description"/>
+<meta content="https://meetgor-cdn.pages.dev/golang-023-config-files.png" name="twitter:image"/>
+<link href="/tbicon.png" rel="icon" type="image/png"/>
+<style>
+</style>
+<script async="" crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4627844420729409">
+</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+<style>
+.theme-switch input {
+    display:none;
+}
+
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+}
+
+.slider:before {
+    background-color: #fff;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 26px;
+}
+
+input:checked + .slider {
+    background-color: #343434;
+}
+input:checked + .slider:before {
+    background-color: #848484;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+</style>
+<meta content="markata 0.7.4" name="generator"/></head>
+<body>
+<div class="nav">
+<a href="/blog">
+<p class="text-primary">Techstructive Blog </p>
+</a>
+<nav>
+<a href="/">Home</a>
+<a href="/blog">Blog</a>
+<a href="/projects">Projects</a>
+<label class="theme-switch" for="checkbox-theme" id="theme-switch" title="light/dark mode toggle">
+<input id="checkbox-theme" type="checkbox"/>
+<div class="slider round"> </div>
+</label>
+</nav>
+</div>
+<section class="title">
+<div id="cover-wrapper">
+<a href=""><img alt="cover image for article" class="thumbnail" src="https://meetgor-cdn.pages.dev/golang-023-config-files.png"/></a>
+</div>
+<h1 class="text-primary" id="title">
+        Golang: JSON YAML TOML (config) File Reading.
+        
+        
+      </h1>
+<a alt="edit post url" href="https://github.com/mr-destructive/meetgor.com/edit/gh-pages/blog/posts/2022-11-01-GO-23-Config-File-Read.md" title="edit this post">
+              Edit
+          </a>
+<p>Published on November 01, 2022</p>
+<p>Author: Meet Rajesh Gor</p>
+<a href="/tag/go">#go</a>
+</section>
+<main>
+<h2>Reading specific file types (JSON, YAML, TOML)<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>In the previous post, we have seen how to read files in golang, in this extended post of that part, we will look into reading some specific files used for configuration and storing data like JSON, YAML, TOML, CSV, etc.</p>
+<p>We will see how to read files and get individual pieces in the files. We'll use packages like <code>os</code>, <code>ioutil</code> and <code>encoding</code> to perform reading operations on file and file objects.</p>
+<h3>Reading a JSON File<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>Golang has built-in support for reading JSON files, but still, we can and need to have low-level controls on how to parse and extract content from the file.</p>
+<p>Let's say we have a <code>json</code> file named <code>blog.json</code>, we can use the <a href="https://pkg.go.dev/encoding/json">encoding/json</a> package to convert the JSON data into a GO object (an object that is native and understandable to go). The <a href="https://pkg.go.dev/encoding/json#Unmarshal">Unmarshal</a> function is used to convert the slice of bytes from the file, into a map object.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">json</div>
+<div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Golang Blog Series"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"22nd October 2022"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"go"</span><span class="p">,</span><span class="w"> </span><span class="s2">"files"</span><span class="p">],</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"words"</span><span class="p">:</span><span class="w"> </span><span class="mi">1500</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"published"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<p>The above is a simple JSON file, this file has a few types of key-value pairs like string, list, integer, and boolean. But we can also have nested objects and a list of those nested objects.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"encoding/json"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"log"</span><span class="w"></span>
+<span class="w">    </span><span class="s">"os"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">ReadFile</span><span class="p">(</span><span class="s">"blog.json"</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}</span><span class="w"></span>
+<span class="w">	</span><span class="nx">json</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">f</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">data</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">k</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span><span class="w"> </span><span class="s">":"</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<p><strong>I have removed the time stamp from the logs below so as to clearly see the output. We can use <code>fmt</code> to print the simple things while keeping consistent with the rest of the snippets in the series.</strong></p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>$ go run json.go
+
+map[date:22nd October 2022 published:true tags:[go files] title:Golang Blog Series words:1500]
+published : true
+title : Golang Blog Series
+date : 22nd October 2022
+tags : [go files]
+words : 1500
+</pre></div>
+
+</pre>
+<p>The file is read using the <a href="https://pkg.go.dev/os#ReadFile">os.ReadFile</a> method, that takes in a string as a path to the file and returns a slice of bytes or an error if there was an issue in reading the file. The parsed slice of byte is than passed as the first argument to the <code>Unmarshal</code> method in the <code>encoding/json</code> package. The second parameter is the output reference where the parsed JSON will be stored or returned. The function does not return the parsed content instead returns an error if there arose any while parsing the JSON content.</p>
+<p>As we can see we have got a map of <code>string</code> with an <code>interface</code>. The interface is used because the value of the key can be anything. There is no fixed value like a <code>string</code>, <code>int</code>, <code>bool</code>, or a nested <code>map</code>, <code>slice</code>. Hence we have mapped the JSON object as a map of <code>string</code> with an <code>interface</code>. The type of the value is identified with the interface it has attached to it. Let's take a look what is the type of each value in the map.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>published : true
+bool
+
+title : Golang Blog Series
+string
+
+date : 22nd October 2022
+string
+
+tags : [go files]
+[]interface {}
+
+words : 1500
+float64
+</pre></div>
+
+</pre>
+<p>Here, we can see it has correctly identified the string type of the fields like bool in case of true or false, a string for string type of values, the fourth field however has a list interface attached to it. The default precedence for <code>float64</code> over integer is the reason the <code>1500</code> value is of type <code>float64</code>.</p>
+<h3>Reading a YAML File<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>Though there is no standard package for parsing/unmarshaling <code>YAML</code> files in golang, it's quite easy to use a third-party package and use it to read YAML files.</p>
+<p>The package <a href="https://pkg.go.dev/gopkg.in/yaml.v3">gopkg.in/yaml.v3</a> is used for encoding and decoding YAML files. We'll be just using it for decoding a YAML file by reading it and converting the file object into native Go objects like maps, lists, strings, etc.</p>
+<p>The below steps can be used for setting up the package and installing the YAML package locally.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>go mod init &lt;your_project_package_name&gt;
+go get gopkg.in/yaml.v3
+</pre></div>
+
+</pre>
+<p>This should create two files namely <code>go.mod</code> and <code>go.sum</code> with the dependency of the <code>gopkg.in/yaml.v3</code> package.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">yml</div>
+<div class="highlight"><pre><span></span>title: "Golang Blog Series"
+date: "22nd October 2022"
+tags: ["go", "files"]
+published: false
+words: 1500
+</pre></div>
+
+</pre>
+<p>The above file is a simple YAML config, we'll follow similar kind of examples for the dummy files used in the examples.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"log"</span><span class="w"></span>
+<span class="w">    </span><span class="s">"os"</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">yaml</span><span class="w"> </span><span class="s">"gopkg.in/yaml.v3"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">ReadFile</span><span class="p">(</span><span class="s">"blog.yaml"</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+
+<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">yaml</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">data</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">k</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span><span class="w"> </span><span class="s">":"</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>$ go run yaml.go
+
+map[date:22nd October 2022 published:false tags:[go files] title:Golang Blog Series words:1500]
+published : false
+words : 1500
+title : Golang Blog Series
+date : 22nd October 2022
+tags : [go files]
+</pre></div>
+
+</pre>
+<p>The above code and output demonstrate the usage of the <code>yaml.v3</code> package for reading a YAML file.</p>
+<p>Firstly, we read the file into a single-string object with the <a href="https://pkg.go.dev/os#ReadFile">os.ReadFile()</a> method. The method will return a <code>[]byte</code> (slice of byte) or an error. If there is an error, we simply log or panic out of the program, else we can use the <a href="https://pkg.go.dev/gopkg.in/yaml.v3#Unmarshal">yaml.Unmarshal</a> method to convert the string/slice of the byte into a map or a pre-defined struct. In this example, we just keep things simple by storing the file content as <code>map [string, interface{}]</code>, i.e. a map of <code>string</code> and an <code>interface</code>. The key for YAML can be only a string or an integer. It can't have unrestricted data types like the value can have. Though if you want to be unrestrictive, you can use a map of <code>map[interface{}]interface{}</code> to make the key any shape you like to have.</p>
+<p>So, we have created a variable called <code>data</code> as a map of <code>string</code> and <code>interface{}</code>, basically key can be a string and the value can be any type of interface depending on the parsed literally from the file object. The <code>Unmarshal</code> function takes in two parameters, the first being the slice of byte i.e. the file contents, and the second being the output variable. Now, the method does not return the parsed YAML, it can return an error if there arose, so we need to set the second parameter as a pointer to the object into which we want to store the parsed YAML.</p>
+<p>In the example, we have called <code>Unmarshal(f, &amp;data)</code> which will fetch the contents from the slice of bytes <code>f</code> and output the parsed YAML from the slice of bytes into the memory location of <code>data</code> and hence using <code>&amp;data</code> indicating the pointer to the variable(fetch the memory address).</p>
+<p>So, that is how we obtain the map of keys and values from the YAML config, thereafter, you can iterate on the map, access the keys and values, type caste them as per requirement, and basically have control over what processing needs to be done to the parsed YAML content.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>published : false
+bool
+
+words : 1500
+int
+
+title : Golang Blog Series
+string
+
+date : 22nd October 2022
+string
+
+tags : [go files]
+[]interface {}
+</pre></div>
+
+</pre>
+<p>I have just printed the types of the values in the above output as <code>log.Printf("%T", v)</code>, we can see the types are being correctly recognized and being parsed. The last object is indeed a <code>slice</code> so it has an interface of the slice(array) attached to it.</p>
+<h3>Reading a TOML file<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>YAML and TOML are almost identical, though toml has more restrictive configuration options, but is more readable than YAML, as YAML can get complicated pretty quickly. Though both of them have their pros and cons, YAML is used everywhere in the DevOps world, configs, whereas TOML is the format of choice for python packaging, and static site generation configs.</p>
+<p>Let's see how we can use golang to read TOML files.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>$ go mod init &lt;your_project_package_name&gt;
+$ go get github.com/pelletier/go-toml
+</pre></div>
+
+</pre>
+<p>The above commands are used for setting up a golang package or project and installing the <a href="https://pkg.go.dev/github.com/pelletier/go-toml">go-toml</a> package. Once the above commands are done executing, it will generate <code>go.mod</code> and <code>go.sum</code> files used for storing dependencies and packages installed for the project locally.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">toml</div>
+<div class="highlight"><pre><span></span><span class="k">[blog]</span><span class="w"></span>
+<span class="n">name</span><span class="o">=</span><span class="s">'techstructive-blog'</span><span class="w"></span>
+<span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s">'go'</span><span class="p">,</span><span class="s">'django'</span><span class="p">,</span><span class="s">'vim'</span><span class="p">]</span><span class="w"></span>
+<span class="n">author</span><span class="o">=</span><span class="s">'meet gor'</span><span class="w"></span>
+<span class="n">active</span><span class="o">=</span><span class="kc">true</span><span class="w"></span>
+
+<span class="k">[author]</span><span class="w"></span>
+<span class="n">name</span><span class="o">=</span><span class="s">'Meet Gor'</span><span class="w"></span>
+<span class="n">github</span><span class="o">=</span><span class="s">'mr-destructive'</span><span class="w"></span>
+<span class="n">twitter</span><span class="o">=</span><span class="s">'meetgor21'</span><span class="w"></span>
+<span class="n">posts</span><span class="o">=</span><span class="mi">80</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<p>The above is the sample file <code>blog.toml</code> which we will use to read in the go script below. The toml file has a similar structure as we have seen in the previous examples. We have different data types like string, boolean, integer, and list.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"log"</span><span class="w"></span>
+<span class="w">    </span><span class="s">"os"</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">toml</span><span class="w"> </span><span class="s">"github.com/pelletier/go-toml"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">ReadFile</span><span class="p">(</span><span class="s">"blog.toml"</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+
+<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kd">interface</span><span class="p">{}]</span><span class="kd">interface</span><span class="p">{}</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">toml</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">data</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">k</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span><span class="w"> </span><span class="s">":"</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">		</span><span class="k">switch</span><span class="w"> </span><span class="nx">t</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">v</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="k">case</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}:</span><span class="w"></span>
+<span class="w">			</span><span class="k">for</span><span class="w"> </span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">t</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">				</span><span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="s">":"</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="p">)</span><span class="w"></span>
+<span class="w">			</span><span class="p">}</span><span class="w"></span>
+<span class="w">		</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>$ go run toml.go
+
+map[author:map[github:mr-destructive name:Meet Gor posts:80 twitter:meetgor21] blog:map[active:true author:meet gor
+
+name:techstructive-blog tags:[go django vim]]]
+
+blog : map[active:true author:meet gor name:techstructive-blog tags:[go django vim]]
+name : techstructive-blog
+tags : [go django vim]
+author : meet gor
+active : true
+
+author : map[github:mr-destructive name:Meet Gor posts:80 twitter:meetgor21]
+
+name : Meet Gor
+github : mr-destructive
+twitter : meetgor21
+posts : 80
+</pre></div>
+
+</pre>
+<p>So, in the above example and output, the YAML file was read and the key-value pairs inside them were read. The first thing we do is read the file <code>blog.toml</code> with <code>ioutil</code> package, with the <code>ReadFile</code> function. The function takes in the string as the path to the file to be read and returns a slice of byte. We use this slice of byte as a parameter to the <a href="https://pkg.go.dev/github.com/pelletier/go-toml#Unmarshal">Unmarshal</a> method. The second paramter for the <code>Unmarshal</code> is the output variable(usually a pointer to a variable), we have created a map of <code>interface{]</code> with an <code>interface</code> as we see there can be nested keys which hold the name of the config.</p>
+<p>The variable <code>data</code> is a map of <code>interface{}</code> to an <code>interface{}</code>, and we parse the memory address to the <code>data</code> variable to the <code>Unmarshal</code> method. Thereby the parsed <code>TOML</code> content is stored in the data variable.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>name : techstructive-blog
+string
+
+tags : [go django vim]
+[]interface{}
+
+author : meet gor
+string
+
+active : true
+bool
+
+name : Meet Gor
+string
+
+github : mr-destructive
+string
+
+twitter : meetgor21
+string
+
+posts : 80
+int64
+</pre></div>
+
+</pre>
+<p>The above is a verbose output for the type of the values as parsed by golang, we have <code>string</code>, <code>bool</code>, <code>int64</code>, and a <code>slice</code> (list with interface{} attached with it). Only types like <code>string</code>, <code>bool</code>, <code>int</code>, <code>float64</code> can be parsed from the Unmarshal function, other than these types, the type will have an interface attached to it.</p>
+<p>In such cases, where the type of value is not among the 4 types(string, bool, int float), we can use a pre-defined struct to parse the content from the file. Though it would require a strict structure and predictable response from the parsed file.</p>
+<h3>Reading CSV file<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>We can even read a CSV file in golang, we have seen in the previous post, we have used custom delimiters in the parsing of the file.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">csv</div>
+<div class="highlight"><pre><span></span>id,name,posts,exp
+21,jim,23,2
+33,kevin,39,1
+45,james,70,2
+56,chris,89,3
+</pre></div>
+
+</pre>
+<p>The above file is a sample csv file, though the size is too small, we can use it as an example.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"encoding/csv"</span><span class="w"></span>
+<span class="w">    </span><span class="s">"log"</span><span class="w"></span>
+<span class="w">    </span><span class="s">"os"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">Open</span><span class="p">(</span><span class="s">"temp.csv"</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">check_error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">reader</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">csv</span><span class="p">.</span><span class="nx">NewReader</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">n</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">reader</span><span class="p">.</span><span class="nx">ReadAll</span><span class="p">()</span><span class="w"></span>
+<span class="w">	</span><span class="nx">check_error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">line</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">line</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">			</span><span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span><span class="w"></span>
+<span class="w">		</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>$ go run main.go
+id
+name
+posts
+exp
+21
+jim
+23
+2
+33
+kevin
+39
+1
+45
+james
+70
+2
+56
+chris
+89
+3
+</pre></div>
+
+</pre>
+<p>The CSV package has a <a href="https://pkg.go.dev/encoding/csv#NewReader">NewReader</a> method that accepts an <code>io.Reader</code> and returns a <code>Reader</code> object. After parsing the reader, we use the <a href="https://pkg.go.dev/encoding/csv#Reader.ReadAll">ReadAll</a> method to return a 2d string or an error if there exists an error while parsing the content. You can get a detailed explanation of the CSV parsing and reading in the <a href="https://www.meetgor.com/golang-file-read/#Read%20File%20by%20a%20delimiter">previous post</a>.</p>
+<h3>Reading CSV from URL<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>The CSV file can also be read from the URL, the content of the file is a <code>response.Body</code> in place of the file object reference, in the previous example, the <a href="https://pkg.go.dev/os#Open">os.Open()</a> method returns a <a href="https://pkg.go.dev/os#File">os.File</a> object.</p>
+<p>We use the <code>http.Get(string)</code> method to get the response from the URL for reading the CSV file present on the web.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"encoding/csv"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"log"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"net/http"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">url</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">"https://github.com/woocommerce/woocommerce/raw/master/sample-data/sample_products.csv"</span><span class="w"></span>
+<span class="w">	</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">		</span><span class="k">return</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">defer</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">reader</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">csv</span><span class="p">.</span><span class="nx">NewReader</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">n</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">reader</span><span class="p">.</span><span class="nx">ReadAll</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">line</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">line</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">			</span><span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span><span class="w"></span>
+<span class="w">		</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>$ go run csv.go
+&lt;feff&gt;ID
+Type
+SKU
+Name
+Published
+Is featured?
+Visibility in catalog
+Short description
+Description
+Date sale price starts
+Date sale price ends
+...
+...
+...
+</pre></div>
+
+</pre>
+<p>So, that's how we can read a CSV file from the URL. By fetching the CSV URL <code>https://github.com/woocommerce/woocommerce/raw/master/sample-data/sample_products.csv</code> from the <a href="https://pkg.go.dev/net/http#Client.Get">http.Get</a> method, this will get us the <a href="https://pkg.go.dev/net/http#Response">response.Body</a> that contains the actual CSV file content. The response than can be parsed to the <code>csv.NewReader(*Os.File).ReadAll()</code> i.e. <a href="https://pkg.go.dev/encoding/csv#Reader.ReadAll">reader.ReadAll()</a>. The function returns a multidimensional slice <code>[][]slice</code> that can be iterated and parsed as per requirement.</p>
+<h3>Reading XML file<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>XML is the de facto standard for RSS feeds, it is widely used in many places and is still all over the web. We'll see an example to read an XML file locally, but as we saw in the above example, we can also read an RSS link from the web.</p>
+<p>Just like CSV, we have <a href="https://pkg.go.dev/encoding/xml">encoding/xml</a>, and the standard library has all the functions used for parsing the XML files.</p>
+<p>We will be using a local XML file called <code>rss.xml</code>, and reading the contents from the tags in the file.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">xml</div>
+<div class="highlight"><pre><span></span><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
+<span class="nt">&lt;channel&gt;</span>
+<span class="nt">&lt;title&gt;</span>Meet Gor<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;description&gt;</span>Techstructive Blog Feed<span class="nt">&lt;/description&gt;</span>
+<span class="nt">&lt;item&gt;</span>
+<span class="nt">&lt;title&gt;</span>Why and How to make and use Vim as a text editor and customizable IDE<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;link&gt;</span>https://www.meetgor.com/vim-text-editor-ide<span class="nt">&lt;/link&gt;</span>
+<span class="nt">&lt;/item&gt;</span>
+<span class="nt">&lt;item&gt;</span>
+<span class="nt">&lt;title&gt;</span>Setting up Vim for Python<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;link&gt;</span>https://www.meetgor.com/vim-for-python<span class="nt">&lt;/link&gt;</span>
+<span class="nt">&lt;/item&gt;</span>
+<span class="nt">&lt;/channel&gt;</span>
+</pre></div>
+
+</pre>
+<p>The above example is a short part of my blog's <a href="https://www.meetgor.com/rss">rss</a> feed. I have just trimmed the unwanted part and will be just using the tags that we want to fetch.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"encoding/xml"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"log"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"os"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">Channel</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">XMLName</span><span class="w">     </span><span class="nx">xml</span><span class="p">.</span><span class="nx">Name</span><span class="w"> </span><span class="s">`xml:"channel"`</span><span class="w"></span>
+<span class="w">	</span><span class="nx">Title</span><span class="w">       </span><span class="kt">string</span><span class="w">   </span><span class="s">`xml:"title"`</span><span class="w"></span>
+<span class="w">	</span><span class="nx">Description</span><span class="w"> </span><span class="kt">string</span><span class="w">   </span><span class="s">`xml:"description"`</span><span class="w"></span>
+<span class="w">	</span><span class="nx">Item</span><span class="w">        </span><span class="p">[]</span><span class="nx">Item</span><span class="w">   </span><span class="s">`xml:"item"`</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">Item</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">XMLName</span><span class="w"> </span><span class="nx">xml</span><span class="p">.</span><span class="nx">Name</span><span class="w"> </span><span class="s">`xml:"item"`</span><span class="w"></span>
+<span class="w">	</span><span class="nx">Title</span><span class="w">   </span><span class="kt">string</span><span class="w">   </span><span class="s">`xml:"title"`</span><span class="w"></span>
+<span class="w">	</span><span class="nx">Link</span><span class="w">    </span><span class="kt">string</span><span class="w">   </span><span class="s">`xml:"link"`</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">check_error</span><span class="p">(</span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">ReadFile</span><span class="p">(</span><span class="s">"rss.xml"</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">check_error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">defer</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">d</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Channel</span><span class="p">{}</span><span class="w"></span>
+<span class="w">	</span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">xml</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">d</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">check_error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">item</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">d</span><span class="p">.</span><span class="nx">Item</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">Title</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>$ go run xml.go
+
+{{ channel} Meet Gor Techstructive Blog Feed [{{ item} Why and How to make and use Vim as a text editor and customizable IDE https://www.meetgor.com/vim-text-editor-ide} {{ item} Setting up Vim for Python https://www.meetgor.com/vim-for-python}]}
+
+Why and How to make and use Vim as a text editor and customizable IDE
+Setting up Vim for Python
+</pre></div>
+
+</pre>
+<p>The above example uses a couple of <code>struct</code> like <code>Channel</code> and <code>Item</code> that stores the tag data like <code>title</code>, <code>description</code>, <code>link</code>, etc. Unlike the JSON, YAML, and toml files, XML can't parse the content directly we need a structure to parse into. And that's fine as XML is not much dynamic in terms of config, we usually have standard tags and elements which can be pre-defined in a struct type.</p>
+<p>In this example, the RSS feed has a <code>Channel</code> tag with <code>title</code>, <code>description</code>, and <code>item</code>.</p>
+<p><strong>NOTE: Use Title case for the fields of the structs. It will make the fields public, I spent a few hours debugging that really :)</strong></p>
+<p>So, we define the <code>Channel</code> struct with fields like <code>Title</code> as a string which is a tag in the file as <code>xml:"title"</code>. This means the title in the tag of the XML will be stored in the field as a string in the attribute name as <code>Title</code>. Similarly, we have fields like <code>Description</code> and <code>Item[]</code> this is a list or multiple of <code>item</code> tags that might be present in the XML file. The <code>XMLName</code> is used for identifying the parent tag for the struct, so we use <code>channel</code> for the first struct as it is the first tag appearing of the hierarchy in the XML file.</p>
+<p>So, we create an object for the root structure as <code>Channel{}</code> (an empty object instantiated). The <code>xml.Unmarshal</code> function is parsed with the content of the file as <code>data</code> which is a slice of byte as we have seen in the previous examples. The slice of byte is then used in the <code>Unmarshal</code> method as the first parameter and the reference of an empty <code>Channel</code> object as the second parameter. The second parameter will be to store the parsed XML content from the file.</p>
+<p>I have a few examples on the GitHub repository covering the reading of files from a URL for the CSV, and XML files. But, this concept in the example, can be applied to JSON, YAML, and other file formats as well.</p>
+<p>That's it from this part. Reference for all the code examples and commands can be found in the <a href="https://github.com/Mr-Destructive/100-days-of-golang/tree/main/scripts/files/read/config_files">100 days of Golang</a> GitHub repository.</p>
+<h2>Conclusion<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>So, that's it from this post, we covered how to read specific configuration files like <code>JSON</code>, <code>CSV</code>, <code>YAML</code>, <code>TOML</code>, and <code>XML</code>. We saw how to read a local file and also touched on the concept to read contents from a file on the web with a URL. We also saw how we can use pre-defined structs to parse content from a file, especially for XML.</p>
+<p>Thank you for reading. If you have any queries, questions, or feedback, you can let me know in the discussion below or on my social handles. Happy Coding :)</p>
+</main>
+<div id="comments">
+<script async="" crossorigin="anonymous" data-category="Q&amp;A" data-category-id="DIC_kwDOHZ6V_s4CRfn4" data-emit-metadata="0" data-input-position="bottom" data-lang="en" data-mapping="pathname" data-reactions-enabled="1" data-repo="Mr-Destructive/meetgor.com" data-repo-id="R_kgDOHZ6V_g" data-strict="0" data-theme="dark_high_contrast" src="https://giscus.app/client.js">
+</script>
+</div>
+<!-- 
+          <script src="/copy.js"></script>
+      -->
+<footer>
+        © 2025
+        <ul class="social">
+<li>
+<a href="https://twitter.com/MeetGor21">Twitter
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#twitter"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="https://www.linkedin.com/in/meetgor/">LinkedIn
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#linkedin"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="https://github.com/Mr-Destructive">GitHub
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#github"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="https://dev.to/mr_destructive">Dev.to
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#devto"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="/rss.xml">RSS
+            <svg class="svg-icon orange">
+<use xlink:href="/social-icons.svg#rss"></use>
+</svg>
+</a>
+</li>
+<li>
+<a class="u-email" href="mailto:gormeet711@gmail.com">Email</a>
+</li>
+</ul>
+</footer>
+<style>
+
+:root {
+    --color-bg: #1f2022;
+    --color-bg-2: #161718;
+    --color-bg-code: #123456;
+    --color-text: #eefbfe;
+    --color-text-2: #00ffff;
+    --color-code-text: white;
+    --color-link: #fb30c4;
+    --color-accent: #f1fa8c;
+    --overlay-brightness: .85;
+    --body-width: 1000px;
+    --syntax-background-color: #08090a;
+    --syntax-text-color: #f8f8f2;
+    --syntax-comment-color: #808080;
+    --syntax-declaration-color: #f39c12;
+    --syntax-literal-color: #dda0dd;
+    --syntax-error-color: #f9690e;
+    --syntax-name-color: #7ed07e;
+    --syntax-string-color: #f2ca27;
+}
+
+[data-theme="dark"] {
+    --color-bg: #1f2022;
+    --color-bg-2: #161718;
+    --color-bg-code: black;
+    --color-text: #eefbfe;
+    --color-text-2: #00ffff;
+    --color-code-text: white;
+    --color-link: #fb30c4;
+    --color-accent: #f1fa8c;
+    --overlay-brightness: .85;
+    --body-width: 1000px;
+    --animation-one: white;
+    --animation-two: #eeeeee;
+    --animation-three: #dddddd;
+    --animation-four: #aaaaaa;
+    --animation-five: grey;
+    --animation-six: grey;
+    --animation-seven: #eeeeee;
+    --animation-eight: white;
+}
+[data-theme="light"] {
+    --color-bg: #cfefff;
+    --color-bg-2: #c8d2db;
+    --color-bg-code: #00001a;
+    --color-text: #1f2022;
+    --color-text-2: #000030;
+    --color-code-text: white;
+    --color-link: #fb30c4;
+    --color-accent: #ffeb00;
+    --overlay-brightness: 1.0;
+    --animation-one: grey;
+    --animation-two: #aaaaaa;
+    --animation-three: #dddddd;
+    --animation-four: black;
+    --animation-five: black;
+    --animation-six: #dddddd;
+    --animation-seven: #aaaaaa;
+    --animation-eight: grey;
+}
+
+html  {
+    font-family: "Space Mono", monospace;
+    background: var(--color-bg);
+    color: var(--color-text);
+    contain: paint;
+}
+
+a {
+    color: var(--color-link);
+}
+main a {
+    max-width: 100%;
+}
+.heading-permalink {
+    font-size: .7em;
+}
+body {
+    max-width: var(--body-width);
+    margin: 5rem auto;
+    padding: 0 .5rem;
+    font-size: 1rem;
+    line-height: 1.56;
+}
+blockquote {
+    background: var(--color-bg);
+    filter: brightness(var(--overlay-brightness));
+    border-left: 4px solid var(--color-accent);
+    border-radius: 4px;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #f1fa8c,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+    padding-left: 1rem;
+    margin: 1rem;
+}
+li.post {
+   /* list-style-type: None; */
+    padding: .2rem 0;
+}
+pre.wrapper{
+  padding: 0;
+  box-shadow: 0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin: 2rem;
+}
+pre {
+    margin:0;
+    padding: 1rem;
+    min-width: -webkit-fill-available;
+    max-width: fit-content;
+    overflow-x: auto;
+}
+
+pre .filepath {
+  margin:0;
+  padding-left: 1rem;
+  border-radius: 4px 4px 0 0;
+  background: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+pre .filepath p{
+  margin:0
+}
+
+pre .filepath .right{
+  display: flex;
+  gap: .2rem;
+  align-items: center;
+}
+
+pre::-webkit-scrollbar {
+    height: 4px;
+    background-color: transparent;
+}
+
+pre::-webkit-scrollbar-thumb {
+    background-color: #d3d3d32e;
+    border-radius: 2px;
+}
+
+pre::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.copy-wrapper {
+    background: none;
+    position: absolute;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    justify-content: flex-end;
+}
+button.copy {
+    z-index: 100;
+    background: none;
+    fill: #ffffff45;
+    border: none;
+    width: 32px;
+    align-self: flex-end;
+    top: 0;
+    right: 0;
+    margin: 0.5rem 0.2rem;
+}
+button.copy:hover {
+    fill:white
+}
+
+a.help {
+    fill: #ffffff45;
+}
+a.help:hover {
+    fill: white;
+}
+a.help svg{
+    height:24px;
+    width:24px;
+}
+code {
+  font-family: monospace;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background-color: var(--color-bg-code);
+  color: var(--color-code-text);
+}
+.highlight  {
+    background: var(--color-bg-code);
+    color: var(--color-code-text);
+    filter: brightness(var(--overlay-brightness));
+    border-radius: 0 0 4px 4px;
+}
+
+.highlight .c { color: var(--syntax-comment-color); } /* Comment */
+.highlight .err { color: var(--syntax-error-color); } /* Error */
+.highlight .k { color: var(--syntax-declaration-color); } /* Keyword */
+.highlight .l { color: var(--syntax-literal-color); } /* Literal */
+.highlight .n { color: var(--syntax-name-color); } /* Name */
+.highlight .o { color: var(--syntax-declaration-color); } /* Operator */
+.highlight .p { color: var(--syntax-literal-color); } /* Punctuation */
+.highlight .cm { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Multiline */
+.highlight .cp { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Preproc */
+.highlight .c1 { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Single */
+.highlight .cs { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Special */
+.highlight .gd { color: var(--syntax-literal-color); font-weight: bold; } /* Generic.Deleted */
+.highlight .ge { color: var(--syntax-error-color); font-style: italic; } /* Generic.Emph */
+.highlight .gr { color: #ff0000; } /* Generic.Error */
+.highlight .gh { color: var(--syntax-declaration-color); font-weight: bold; } /* Generic.Heading */
+.highlight .gi { color: var(--syntax-name-color); } /* Generic.Inserted */
+.highlight .go { color: var(--syntax-declaration-color); } /* Generic.Output */
+.highlight .gp { color: var(--syntax-literal-color); font-weight: bold; } /* Generic.Prompt */
+.highlight .gs { color: var(--syntax-declaration-color); font-weight: bold; } /* Generic.Strong */
+.highlight .gu { color: var(--syntax-declaration-color); font-weight: bold; } /* Generic.Subheading */
+.highlight .gt { color: var(--syntax-declaration-color); } /* Generic.Traceback */
+.highlight .kc { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Constant */
+.highlight .kd { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Declaration */
+.highlight .kn { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Namespace */
+.highlight .kp { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Pseudo */
+.highlight .kr { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Reserved */
+.highlight .kt { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Type */
+.highlight .ld { color: var(--syntax-literal-color); font-style: italic; } /* Literal.Date */
+.highlight .m { color: var(--syntax-literal-color); } /* Literal.Number */
+.highlight .s { color: var(--syntax-string-color); } /* Literal.String */
+
+/* Tab style starts here */
+.tabbed-set {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 1em 0;
+    border-radius: 0.1rem;
+}
+
+.tabbed-set > input {
+    display: none;
+}
+
+.tabbed-set label {
+    width: auto;
+    padding: 0.9375em 1.25em 0.78125em;
+    font-weight: 700;
+    font-size: 0.84em;
+    white-space: nowrap;
+    border-bottom: 0.15rem solid transparent;
+    border-top-left-radius: 0.1rem;
+    border-top-right-radius: 0.1rem;
+    cursor: pointer;
+    transition: background-color 250ms, color 250ms;
+}
+
+.tabbed-set .tabbed-content {
+    width: 100%;
+    display: none;
+    box-shadow: 0 -.05rem #ddd;
+}
+
+.tabbed-set input {
+    position: absolute;
+    opacity: 0;
+}
+
+/* fonts */
+h1 {
+    font-weight: 700;
+}
+
+h1#title a {
+    font-size: 16px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-top: 3rem;
+    color: var(--color-text-2);
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-top: 5rem;
+}
+
+h2 {
+    font-size: 1.63rem;
+    margin-top: 5rem;
+}
+
+p {
+    font-size: 21px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+@media only screen and (max-width: 700px) {
+p {
+    font-size: 18px;
+}
+}
+
+@media only screen and (max-width: 600px) {
+p {
+    font-size: 16px;
+}
+}
+
+@media only screen and (max-width: 500px) {
+p {
+    font-size: 14px;
+}
+}
+
+@media only screen and (max-width: 400px) {
+p {
+    font-size: 12px;
+}
+}
+
+
+pre {
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 18.5714px;
+}
+
+a {
+    font-weight: 600;
+    text-decoration-color: var(--color-accent);
+    color: var(--color-link);
+    padding: .3rem .5rem;
+    display: inline-block;
+}
+
+.admonition, details {
+    box-shadow: 0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+    margin: 5rem 0;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-align: left;
+    padding: 0;
+    border: 0;
+}
+.admonition {
+    padding-bottom: 1rem;
+}
+
+details[open] {
+    padding-bottom: .5rem;
+}
+
+.admonition p{
+    padding: .2rem .6rem;
+}
+
+.admonition-title, .details-title, summary {
+    background: var(--color-bg-2);
+    padding: 0;
+    margin: 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+summary:hover {
+    cursor: pointer;
+}
+
+summary.admonition-title, summary.details-title {
+    padding: .5rem;
+    padding-left: 1rem;
+}
+
+.note {
+    border-left: 4px solid #f1fa8c;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #f1fa8c,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.note > .admonition-title {
+    border-bottom: 1px solid #3c3d2d;
+}
+
+.abstract {
+    border-left: 4px solid #8be9fd;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #8be9fd,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.abstract > .admonition-title {
+    border-bottom: 1px solid #2c3a3f;
+}
+.info {
+    border-left: 4px solid;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #8bb0fd,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.info > .admonition-title {
+    border-bottom: 1px solid #2c313f;
+}
+
+.tip {
+    border-left: 4px solid #008080;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #008080,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.tip > .admonition-title {
+    border-bottom: 1px solid #1b2a2b;
+}
+.success {
+    border-left: 4px solid #50fa7b;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #50fa7b,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.success > .admonition-title {
+    border-bottom: 1px solid #263e2b;
+}
+
+.question {
+    border-left: 4px solid #a7fcbd;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #a7fcbd,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.question > .admonition-title {
+    border-bottom: 1px solid #303e35;
+}
+
+.warning {
+    border-left: 4px solid #ffb86c;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #ffb86c,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.warning > .admonition-title {
+    border-bottom: 1px solid #3f3328;
+}
+
+.failure {
+    border-left: 4px solid #b23b3b;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #b23b3b,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.failure > .admonition-title {
+    border-bottom: 1px solid #34201f;
+}
+
+.danger {
+    border-left: 4px solid #ff5555;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #ff5555,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.danger > .admonition-title {
+    border-bottom: 1px solid #402523;
+}
+
+.bug {
+    border-left: 4px solid #b2548a;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #b2548a,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.bug > .admonition-title {
+    border-bottom: 1px solid #32232c;
+}
+
+.example {
+    border-left: 4px solid #bd93f9;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #bd93f9,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.example > .admonition-title {
+    border-bottom: 1px solid #332d3e;
+}
+
+.source {
+    border-left: 4px solid #bd93f9;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #bd93f9,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.source > .admonition-title {
+    border-bottom: 1px solid #332d3e;
+}
+
+.quote {
+    border-left: 4px solid #999;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #999,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.quote > .admonition-title {
+    border-bottom: 1px solid #2d2e2f;
+}
+
+table {
+    margin: 1rem 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: block;
+    max-width: -moz-fit-content;
+    max-width: fit-content;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+table thead th {
+    border: solid 1px var(--color-text);
+    padding: 10px;
+    text-align: left;
+}
+
+table tbody td {
+    border: solid 1px var(--color-text);
+    padding: 10px;
+}
+.theme-switch {
+    z-index: 10;
+    display: inline-block;
+    height: 34px;
+    position: relative;
+    width: 60px;
+
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 1rem;
+    margin-left: auto;
+    position: fixed;
+    right: 1rem;
+    top: 1rem;
+}
+
+.theme-switch input {
+    display:none;
+}
+
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+}
+
+.slider:before {
+    background-color: #fff;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 26px;
+}
+
+input:checked + .slider {
+    background-color: #343434;
+}
+input:checked + .slider:before {
+    background-color: #848484;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+main p img {
+    width: 100%;
+    width: -moz-available;
+    width: -webkit-fill-available;
+    width: fill-available;
+}
+
+details>* {
+    margin: 1rem;
+}
+
+.admonition>* {
+    margin: 1rem;
+}
+
+p.admonition-title, summary {
+    margin: 0;
+    padding-left:1.2rem;
+}
+
+.small {
+    font-size: .9rem;
+    color: #888;
+}
+
+admonition+admonition{
+    margin-top:20rem;
+}
+
+::-webkit-scrollbar {
+    height: 12px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #d3d3d32e;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+.nav{
+    position: sticky;
+    top: 0;
+    background-color: var(--color-bg);
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 5;
+}
+.social{
+    display: flex;
+    list-style-type: none;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+img {
+    max-width: 100%;
+    width: 80%;
+    vertical-align: middle;
+}
+
+.thumbnail {
+    width:100%; height: 30%;
+    border-radius:25px;
+    transition:box-shadow 1s ease;
+}
+
+.thumbnail:hover {
+    box-shadow:0px 0px 0px 8px #ff6600;
+}
+.svg-icon { width: 16px; height: 16px; display: inline-flex; fill: #ffffff; padding-right: 5px; vertical-align: text-top; }
+
+.text-primary {
+	color: #fff;
+	font-size: 1.8rem;
+	font-weight: 700;
+	text-align: center;
+	width: 100%;
+	line-height: 1.6;
+	background-image: linear-gradient(90deg, var(--animation-one), var(--animation-two), var(--animation-three), var(--animation-four), var(--animation-five), var(--animation-six), var(--animation-seven), var(--animation-eight));
+	background-size: 200%;
+	color: transparent;
+	-webkit-text-fill-color: transparent;
+	-webkit-background-clip: text;
+	background-clip: text;
+	animation: animate 20s infinite alternate;
+}
+@keyframes animate {
+	0% {
+		background-position: 0%;
+	}
+	100% {
+		background-position: 400%;
+	}
+}
+
+pre, code { font-size: 15px; border: 1px solid #e8e8e8; border-radius: 3px; background-color: var(--color-bg-code); }
+
+code { padding: 1px 5px; color: #ffffff; }
+
+pre { padding: 8px 12px; overflow-x: auto; }
+
+pre > code { border: 0; padding-right: 0; padding-left: 0; }
+
+.language-bar{
+    height: 3em;
+    text-align: justify;
+    padding: 1em 0 1px 1em;
+    color: var(--color-code-text)
+}
+
+        </style>
+</body>
+</html>

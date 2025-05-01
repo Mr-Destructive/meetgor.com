@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Techstructive Blog | Django Blog DevLog: Load Frontmatter data into Template/Model Form Fields by  Meet Rajesh Gor</title>
+<script src="/script.js"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width" name="viewport"/>
+<meta content="Techstructive Blog - Personal Blog of Meet Gor" name="description"/>
+<meta content="blog, web-development, backend-developer" name="keywords"/>
+<meta content="Meet Rajesh Gor" name="author"/>
+<meta content="https://www.meetgor.com/" property="og:url"/>
+<meta content="website" property="og:type"/>
+<meta content="Django Blog DevLog: Load Frontmatter data into Template/Model Form Fields" property="og:title"/>
+<meta content="Rendering frontatter from content field into the Template Form field using HTMX and frontmatter libraries" property="og:description"/>
+<meta content="/tbicon.png" property="og:image"/>
+<meta content="meetgor.com" property="twitter:domain"/>
+<meta content="https://www.meetgor.com/" property="twitter:url"/>
+<meta content="Techstructive Blog" name="twitter:title"/>
+<meta content="" name="twitter:description"/>
+<meta content="" name="twitter:image"/>
+<link href="/tbicon.png" rel="icon" type="image/png"/>
+<style>
+</style>
+<script async="" crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4627844420729409">
+</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+<style>
+.theme-switch input {
+    display:none;
+}
+
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+}
+
+.slider:before {
+    background-color: #fff;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 26px;
+}
+
+input:checked + .slider {
+    background-color: #343434;
+}
+input:checked + .slider:before {
+    background-color: #848484;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+</style>
+<meta content="markata 0.7.4" name="generator"/></head>
+<body>
+<div class="nav">
+<a href="/blog">
+<p class="text-primary">Techstructive Blog </p>
+</a>
+<nav>
+<a href="/">Home</a>
+<a href="/blog">Blog</a>
+<a href="/projects">Projects</a>
+<label class="theme-switch" for="checkbox-theme" id="theme-switch" title="light/dark mode toggle">
+<input id="checkbox-theme" type="checkbox"/>
+<div class="slider round"> </div>
+</label>
+</nav>
+</div>
+<section class="title">
+<h1 class="text-primary" id="title">
+        Django Blog DevLog: Load Frontmatter data into Template/Model Form Fields
+        
+        
+      </h1>
+<a alt="edit post url" href="https://github.com/mr-destructive/meetgor.com/edit/gh-pages/blog/tils/2022-08-01-Django-Frontmatter-forms.md" title="edit this post">
+              Edit
+          </a>
+<p>Published on August 01, 2022</p>
+<p>Author: Meet Rajesh Gor</p>
+<a href="/tag/django">#django</a>
+<a href="/tag/htmx">#htmx</a>
+<a href="/tag/python">#python</a>
+</section>
+<main>
+<h2>Introduction<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>I have an Article Form where I load my post into it directly, it might have frontmatter. So what I wish to achieve is when I paste in the content, the frontmatter should be picked up and it should render the form fields like <code>title</code>, <code>description</code>, and then also remove the frontmatter from the content.</p>
+<p>To do that, we will require a model to work with and a form based on that model. We will exclude a few fields from that model so as to process these attributes on the server side. I am working on my Blog project which is a simple Django application.  You can get the source code for the project on the <a href="https://github.com/mr-destructive/techstructive-blog/">GitHub repository</a>.</p>
+<h2>Django Project Context<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>The techstructive-blog is a django project, which has a couple of applications currently, not in a good situation. There are apps like <code>article</code>, <code>blog</code>, and <code>user</code>. This project has templates and static folder in the base directory. The project is deployed on <a href="https://www.railway.app">railway</a> this is an always under development project, you can check out the <a href="https://django-blog.up.railway.app">techstructive-blog</a>. We can get the bits and pieces of the project details required for understanding what I want to do with the following sections.</p>
+<h3>Article Model<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>We have an <code>Article</code> model with attributes like <code>title</code>, <code>description</code>,  <code>author</code> as a Foreign Key to the user model, and a few other attributes which is not related to what we are trying to achieve right now or at least don't require an explanation. We have a model method called <code>get_absolute_url</code> for getting a URL in order to redirect the client when the model instance is created or updated from the backend. You can definitely check out the details of these small components or templates in the project repository.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">python</div>
+<div class="highlight"><pre><span></span><span class="c1"># articles/models.py</span>
+
+
+<span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">TimeStampedModel</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Article_Status</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">TextChoices</span><span class="p">):</span>
+        <span class="n">DRAFT</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">"DRAFT"</span><span class="p">,</span>
+            <span class="n">_</span><span class="p">(</span><span class="s2">"Draft"</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">PUBLISHED</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">"PUBLISHED"</span><span class="p">,</span>
+            <span class="n">_</span><span class="p">(</span><span class="s2">"Published"</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">max_length</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+        <span class="n">choices</span><span class="o">=</span><span class="n">Article_Status</span><span class="o">.</span><span class="n">choices</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">Article_Status</span><span class="o">.</span><span class="n">DRAFT</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">blog</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Blog</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s2">"author"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+
+    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>      
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s1">'articles:article-detail'</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)])</span>
+</pre></div>
+
+</pre>
+<p>In the below snippet, we have the forms defined in the article application for creating or updating of article instance.  We will be using model forms as our form data should contain fields related to a model in this case the <code>Article</code> model. So when we inherit the <code>forms.ModelForm</code> in our custom <code>ArticleForm</code> we simply need to specify the model and it will take in all the attributes of that model by default, but if we specify the <code>fields</code> or <code>exclude</code> tuples, it will include only or exclude only the provided list of attributes from the model.</p>
+<p>We have also added the widgets for the form fields which will allow us to customize the way the fields in the template/form will render. We can specify the HTML attributes like <code>width</code>, <code>height</code>, <code>style</code>, etc.</p>
+<h3>Article Form<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">python</div>
+<div class="highlight"><pre><span></span><span class="c1"># article/forms.py</span>
+
+
+<span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Article</span>
+
+
+<span class="k">class</span> <span class="nc">ArticleForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Article</span>
+        <span class="n">exclude</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">"created"</span><span class="p">,</span>
+            <span class="s2">"updated"</span><span class="p">,</span>
+            <span class="s2">"author"</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">widgets</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"title"</span><span class="p">:</span> <span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span>
+                <span class="n">attrs</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">"class"</span><span class="p">:</span> <span class="s2">"form-control"</span><span class="p">,</span>
+                    <span class="s2">"style"</span><span class="p">:</span> <span class="s2">"max-width: 450px; align: center;"</span><span class="p">,</span>
+                    <span class="s2">"placeholder"</span><span class="p">:</span> <span class="s2">"Title"</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">),</span>
+            <span class="s2">"description"</span><span class="p">:</span> <span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span>
+                <span class="n">attrs</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">"class"</span><span class="p">:</span> <span class="s2">"form-control"</span><span class="p">,</span>
+                    <span class="s2">"style"</span><span class="p">:</span> <span class="s2">"max-width: 900px; "</span><span class="p">,</span>
+                    <span class="s2">"placeholder"</span><span class="p">:</span> <span class="s2">"Description"</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">),</span>
+            <span class="s2">"content"</span><span class="p">:</span> <span class="n">forms</span><span class="o">.</span><span class="n">Textarea</span><span class="p">(</span>
+                <span class="n">attrs</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">"class"</span><span class="p">:</span> <span class="s2">"form-control post-body"</span><span class="p">,</span>
+                    <span class="s2">"id"</span><span class="p">:</span> <span class="s2">"text-content"</span><span class="p">,</span>
+                    <span class="s2">"style"</span><span class="p">:</span> <span class="s2">"max-width:900px;"</span><span class="p">,</span>
+                    <span class="s2">"hx-post"</span><span class="p">:</span> <span class="s2">"/article/meta/"</span><span class="p">,</span>
+                    <span class="s2">"placeholder"</span><span class="p">:</span> <span class="s2">"Content"</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">),</span>
+            <span class="s2">"blog"</span><span class="p">:</span> <span class="n">forms</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
+                <span class="n">attrs</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">"class"</span><span class="p">:</span> <span class="s2">"form-control"</span><span class="p">,</span>
+                    <span class="s2">"placeholder"</span><span class="p">:</span> <span class="s2">"Blog Publication"</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">),</span>
+        <span class="p">}</span>
+</pre></div>
+
+</pre>
+<p>So, these are my models and form files in the article app. Using htmx and without any javascript I want to update the form so that it picks up the front matter in the content field which is a text area and fills the title, description other attributes automatically for me.</p>
+<p>This can be done in a lot of ways, but I will be sharing one of the ways that I recently used in my blog project. This process involves creating a class-based view and adding a <code>POST</code> method that won't post any data to the backend but will send necessary data to the view.</p>
+<p>Let's see the process before diving into any of the code:</p>
+<h2>Gist of the Process<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<ul>
+<li>Attach a <code>hx-post</code> attribute to the form field for sending the request to a view</li>
+<li>When the request is sent, the data is loaded with <code>request.POST</code>, it is cleaned and converted in python-readable format with json.</li>
+<li>Once we have the data, we try to use the <code>frontmatter.loads</code> function that will load the content and if we have a frontmatter in the text, it will load it as a <code>frontmatter.POST</code> object.</li>
+<li>We will extract <code>title</code>, <code>description</code>, and other data fields from the object.</li>
+<li>We will initialize a Form instance of Article, with the initial data values as the extracted data from the frontmatter.</li>
+<li>Now we have two options:
+<ul>
+<li>If the article instance already exists i.e. we are updating the article</li>
+<li>Else we are creating a new article</li>
+</ul>
+</li>
+</ul>
+<p>Accordingly, we will load the form in the respective templates i.e. <code>update.html</code> for updating the existing articles and <code>article-form.html</code> for a new article.</p>
+<h2>Adding HTMX Magic<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>If you'd have seen we have a <code>hx-post</code> attribute in the <code>article/forms.py</code> file, the <code>content</code> widget has a <code>hx-post</code> attribute which sends a post request to the <code>article/meta/</code> URL route. This route we will bind to the <code>ArticleMetaView</code> which we will define in a few moments. This is usually sent once we change a certain text in the content field, so we can modify it as per your requirement with <code>hx-trigger</code> that can enable us to specify the trigger event or the type of trigger we want. Further, you can read from the <a href="https://htmx.org/docs/#trigger-modifiers">htmx docs</a> about these triggers and other attributes.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">python</div>
+<div class="highlight"><pre><span></span><span class="c1"># article/urls.py</span>
+
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">app_name</span> <span class="o">=</span> <span class="s2">"articles"</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">ArticleCreateView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s2">"article-create"</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">"&lt;int:pk&gt;/"</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">ArticleDetailView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s2">"article-detail"</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">"delete/&lt;int:pk&gt;/"</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">ArticleDetailView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s2">"article-delete"</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">"edit/&lt;int:pk&gt;"</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">ArticleDetailView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s2">"article-update"</span><span class="p">),</span>
+
+    <span class="c1"># the new view that we will create</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">"meta/"</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">ArticleMetaView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s2">"article-meta"</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+
+</pre>
+<h2>Capture Frontmatter Meta-data View<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>Along with the Create, Detail/List, Update, Delete View, I will create a separate class called <code>ArticleMetaView</code> that will fetch the form fields and render the templates again but this time it will fill in the frontmatter meta-data in the fields if the content is parsed with the relvant frontmatter.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">python</div>
+<div class="highlight"><pre><span></span><span class="c1"># articles/view.py</span>
+
+<span class="k">class</span> <span class="nc">ArticleMetaView</span><span class="p">(</span><span class="n">View</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Article</span>
+
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)))</span>
+        <span class="n">loaded_frontmatter</span> <span class="o">=</span> <span class="n">frontmatter</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">'content'</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+       <span class="c1"># frontmatter has keys i.e. attributes like title, description, etc.</span>
+        <span class="k">if</span> <span class="nb">dict</span><span class="p">(</span><span class="n">loaded_frontmatter</span><span class="p">):</span>
+            <span class="n">article_title</span> <span class="o">=</span> <span class="n">loaded_frontmatter</span><span class="p">[</span><span class="s1">'title'</span><span class="p">]</span>
+            <span class="n">article_description</span> <span class="o">=</span> <span class="n">loaded_frontmatter</span><span class="p">[</span><span class="s1">'description'</span><span class="p">]</span>
+            <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">(</span><span class="n">initial</span><span class="o">=</span><span class="p">{</span><span class="s1">'title'</span><span class="p">:</span> <span class="n">article_title</span><span class="p">,</span> 
+            <span class="s1">'description'</span><span class="p">:</span> <span class="n">article_description</span><span class="p">,</span> <span class="s1">'content'</span><span class="p">:</span> <span class="n">loaded_frontmatter</span><span class="o">.</span><span class="n">content</span><span class="p">})</span>
+            <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'form'</span><span class="p">:</span> <span class="n">form</span><span class="p">}</span>
+            <span class="n">article_list</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">article_title</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">article_list</span><span class="p">:</span>
+                <span class="n">article</span> <span class="o">=</span> <span class="n">article_list</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+                <span class="n">context</span><span class="p">[</span><span class="s1">'article'</span><span class="p">]</span> <span class="o">=</span> <span class="n">article</span>
+                <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">'articles/edit_article.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">'articles/article_form.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+        <span class="n">article_list</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">'title'</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+       
+       <span class="c1"># if the article title has been already taken i.e. we are updating an article</span>
+
+        <span class="k">if</span> <span class="n">article_list</span><span class="p">:</span>
+            <span class="n">article</span> <span class="o">=</span> <span class="n">article_list</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+            <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+            <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'form'</span><span class="p">:</span> <span class="n">form</span><span class="p">}</span>
+            <span class="n">context</span><span class="p">[</span><span class="s1">'article'</span><span class="p">]</span> <span class="o">=</span> <span class="n">article</span>
+            <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">'articles/edit_article.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'form'</span><span class="p">:</span> <span class="n">form</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">'articles/article_form.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</pre></div>
+
+</pre>
+<p>In the above <code>ArticleMetaView</code> we have created a <code>post</code> method as we want to get hold of the content from the form. So, we start by extracting and converting the <code>request.body</code> data into an appropriate type for easily working with python. So, the <code>request.body</code> will contain the data like <code>csrf_token</code>, <code>form_data</code>, etc. received from the frontend template. We store the received data as <code>data</code> and now from this data, we can load the content field which will have the content information.</p>
+<p>Firstly we will extract the <code>request.body</code> which will contain the data from the form as we have made a <code>POST</code> request to this endpoint. For doing that we need to parse the content in a apropriate format such that it is python friendly. So we wrap the <code>request.body</code> into json format and then decode it back into the json string. This will give us the dict of the request data.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">python</div>
+<div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)))</span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>{'csrfmiddlewaretoken': ['bSYJxD39XH509tD1tZGd0WU21PUaKaLeqjjGbyzRvLXF4P8iIxb5l0fmTWVFjELQ'], 'title': ['test2'], 'description': ['test'], 'content': ['test something'], 'status': ['DRAFT'], 'blog': ['']}
+</pre></div>
+
+</pre>
+<p>So, this will grab the request data as a dict, we can then extract the data from this as it has data from the Form fields. We are interested in the content field in the Form, so we can get it by specifying the key <code>content</code> from the extracted data. But as we can see the data doesn't contain the actual data instead it is wrapped in a list i.e. <code>['test something']</code>, so we will have to index it and then fetch it.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">python</div>
+<div class="highlight"><pre><span></span><span class="n">content_string</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">'content'</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+
+</pre>
+<p>This will give us the exact content field as a string. So, we can now move into extracting the frontmatter from the fields.</p>
+<p>Now, we can use the <a href="https://python-frontmatter.readthedocs.io/en/latest/index.html">frontmatter</a> library to parse the content into the <a href="https://python-frontmatter.readthedocs.io/en/latest/api.html#frontmatter.loads">loads</a> funciton and extract the frontmatter if it is present in the content field. The frontmatter library has a <code>loads</code> function which takes in a string and can give out a <a href="https://python-frontmatter.readthedocs.io/en/latest/api.html#post-objects">frontmatter.Post</a> object. The loads function is differnet from the <a href="https://python-frontmatter.readthedocs.io/en/latest/api.html#frontmatter.load">load</a> function as the load frunciton is for reading data from a stream of bytes i.e. a file or othe related byte object. The differnece is subtle but it took a read at the <a href="https://python-frontmatter.readthedocs.io/en/latest/api.html#module-frontmatter">documentation</a>.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">python</div>
+<div class="highlight"><pre><span></span><span class="n">post</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">'content'</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">loaded_frontmatter</span> <span class="o">=</span> <span class="n">frontmatter</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+</pre></div>
+
+</pre>
+<p>This wil load the content and give us a <code>frontmatter.Post</code> as said earlier. This will contain a dict with all the frontmatter if it has any and will by default parse the non-frontmatter data i.e. the remaining text into the <code>content</code> key. We need a chack if the Form field had any fronmatter this can be checked by the <code>dict(loaded_frontmatter)</code> which will return None if it cannot load the frontmatter.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">python</div>
+<div class="highlight"><pre><span></span><span class="n">loaded_frontmatter</span> <span class="o">=</span> <span class="n">frontmatter</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">'content'</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="k">if</span> <span class="nb">dict</span><span class="p">(</span><span class="n">loaded_frontmatter</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">loaded_frontmatter</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>dict_keys(['templateKey', 'title', 'description', 'date', 'status'])
+</pre></div>
+
+</pre>
+<p>So once we have the frontmatter loaded we can get specific keys from it and initialize the form vaues to them. But we have made clear distictions that we want to perform a specific task if we have frontmatter keys in the content field of the Form else we can do something else.</p>
+<p>First let's handle the loading of the frontmatter into the form. For doing that we will get all the required attributes from the frontmatter like <code>title</code>, <code>description</code>, <code>content</code>, etc which can be accessed normally as we extract the value from a key in a dict.</p>
+<p>Once we have got those keys, we can start filling in the Form data with initial values. The <a href="https://docs.djangoproject.com/en/4.0/topics/forms/modelforms/">Django Model form</a> takes in a parameter like <a href="https://docs.djangoproject.com/en/4.0/topics/forms/modelforms/#providing-initial-values">initial</a> which can be a dict of the fiields along with the value that can be used for rendering the form initially when we load the template.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">python</div>
+<div class="highlight"><pre><span></span><span class="n">article_title</span> <span class="o">=</span> <span class="n">loaded_frontmatter</span><span class="p">[</span><span class="s1">'title'</span><span class="p">]</span>
+<span class="n">article_description</span> <span class="o">=</span> <span class="n">loaded_frontmatter</span><span class="p">[</span><span class="s1">'description'</span><span class="p">]</span>
+
+<span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">(</span><span class="n">initial</span><span class="o">=</span><span class="p">{</span><span class="s1">'title'</span><span class="p">:</span> <span class="n">article_title</span><span class="p">,</span> <span class="s1">'description'</span><span class="p">:</span> <span class="n">article_description</span><span class="p">,</span> <span class="s1">'content'</span><span class="p">:</span> <span class="n">loaded_frontmatter</span><span class="o">.</span><span class="n">content</span><span class="p">})</span>
+</pre></div>
+
+</pre>
+<p>This will take in a <code>ArticleForm</code> and fill the initial values like <code>title</code>, <code>description</code>, etc which we have provided in the dict with the values. Now, we need to parse this form in the current template or re-render the template. But before that, we need to parse this context into the template. We will create a dict with <code>form</code> as the key which can be used to render in the template.</p>
+<p>Also, we have a two ways here, either the user is creating a new article or it is updating a existing article. We need to make sure that we preserve the initial fields in the form as we are updating the existing article. So, we can filter the article objects as per the title of the current title and then if we find a article with that title, we will parse the context with that article object.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">python</div>
+<div class="highlight"><pre><span></span><span class="n">article_list</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">article_title</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">article_list</span><span class="p">:</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">article_list</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+    <span class="n">context</span><span class="p">{</span>
+      <span class="s1">'form'</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
+      <span class="s1">'article'</span><span class="p">:</span> <span class="n">article</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">'articles/edit_article.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+<span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'form'</span><span class="p">:</span> <span class="n">form</span><span class="p">}</span>
+<span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">'articles/article_form.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</pre></div>
+
+</pre>
+<p>Now, we have form data along with the article instance used for rendering the form with appropriate content. So, this will work for editing an already existing article. For a new article, we have to simply parse the form to the template and it will render the title picked from the fotnmatter or leave it empty.</p>
+<p>Similarly, for the article with no frontmatter we will iterate over the article and if the article's title already exist, we will render the article data with the form else render the form with the parsed title and other meta-data in the form.</p>
+<video controls="" height="450" width="800">
+<source src="https://res.cloudinary.com/techstructive-blog/video/upload/v1659370006/blog-media/frontmatter-load-htmx.mp4" type="video/mp4"/>
+</video>
+<p>So that is how we render the form data with frontmatter into appropriate meta-data in the form. We have used Django forms and make use of HTMX for the dynamic updation of form.</p>
+<div class="prevnext">
+<style type="text/css">
+    :root {
+      --prevnext-color-text: #eefbfe;
+      --prevnext-color-angle: #ff6600;
+      --prevnext-subtitle-brightness: 3;
+    }
+    [data-theme="light"] {
+      --prevnext-color-text: #1f2022;
+      --prevnext-color-angle: #ffeb00;
+      --prevnext-subtitle-brightness: 3;
+    }
+    [data-theme="dark"] {
+      --prevnext-color-text: #eefbfe;
+      --prevnext-color-angle: #ff6600;
+      --prevnext-subtitle-brightness: 3;
+    }
+    .prevnext {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: flex-start;
+    }
+    .prevnext a {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      text-decoration: none;
+    }
+    a.next {
+      justify-content: flex-end;
+    }
+    .prevnext a:hover {
+      background: #00000006;
+    }
+    .prevnext-subtitle {
+      color: var(--prevnext-color-text);
+      filter: brightness(var(--prevnext-subtitle-brightness));
+      font-size: .8rem;
+    }
+    .prevnext-title {
+      color: var(--prevnext-color-text);
+      font-size: 1rem;
+    }
+    .prevnext-text {
+      max-width: 30vw;
+    }
+    </style>
+<pre><code>&lt;a class='prev' href='/libsql-query-remote-db'&gt;
+
+    &lt;svg width="50px" height="50px" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"&gt;
+        &lt;path d="M13.5 8.25L9.75 12L13.5 15.75" stroke="var(--prevnext-color-angle)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"&gt; &lt;/path&gt;
+    &lt;/svg&gt;
+    &lt;div class='prevnext-text'&gt;
+        &lt;p class='prevnext-subtitle'&gt;prev&lt;/p&gt;
+        &lt;p class='prevnext-title'&gt;LibSQL: Query a remote Turso database with cURL&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/a&gt;
+
+&lt;a class='next' href='/python-chain-assignment-gotcha'&gt;
+
+    &lt;div class='prevnext-text'&gt;
+        &lt;p class='prevnext-subtitle'&gt;next&lt;/p&gt;
+        &lt;p class='prevnext-title'&gt;Gotcha with Chained Assignment in Python&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;svg width="50px" height="50px" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"&gt;
+        &lt;path d="M10.5 15.75L14.25 12L10.5 8.25" stroke="var(--prevnext-color-angle)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"&gt;&lt;/path&gt;
+    &lt;/svg&gt;
+&lt;/a&gt;
+</code></pre>
+</div>
+</main>
+<div id="comments">
+<script async="" crossorigin="anonymous" data-category="Q&amp;A" data-category-id="DIC_kwDOHZ6V_s4CRfn4" data-emit-metadata="0" data-input-position="bottom" data-lang="en" data-mapping="pathname" data-reactions-enabled="1" data-repo="Mr-Destructive/meetgor.com" data-repo-id="R_kgDOHZ6V_g" data-strict="0" data-theme="dark_high_contrast" src="https://giscus.app/client.js">
+</script>
+</div>
+<!-- 
+          <script src="/copy.js"></script>
+      -->
+<footer>
+        © 2025
+        <ul class="social">
+<li>
+<a href="https://twitter.com/MeetGor21">Twitter
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#twitter"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="https://www.linkedin.com/in/meetgor/">LinkedIn
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#linkedin"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="https://github.com/Mr-Destructive">GitHub
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#github"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="https://dev.to/mr_destructive">Dev.to
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#devto"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="/rss.xml">RSS
+            <svg class="svg-icon orange">
+<use xlink:href="/social-icons.svg#rss"></use>
+</svg>
+</a>
+</li>
+<li>
+<a class="u-email" href="mailto:gormeet711@gmail.com">Email</a>
+</li>
+</ul>
+</footer>
+<style>
+
+:root {
+    --color-bg: #1f2022;
+    --color-bg-2: #161718;
+    --color-bg-code: #123456;
+    --color-text: #eefbfe;
+    --color-text-2: #00ffff;
+    --color-code-text: white;
+    --color-link: #fb30c4;
+    --color-accent: #f1fa8c;
+    --overlay-brightness: .85;
+    --body-width: 1000px;
+    --syntax-background-color: #08090a;
+    --syntax-text-color: #f8f8f2;
+    --syntax-comment-color: #808080;
+    --syntax-declaration-color: #f39c12;
+    --syntax-literal-color: #dda0dd;
+    --syntax-error-color: #f9690e;
+    --syntax-name-color: #7ed07e;
+    --syntax-string-color: #f2ca27;
+}
+
+[data-theme="dark"] {
+    --color-bg: #1f2022;
+    --color-bg-2: #161718;
+    --color-bg-code: black;
+    --color-text: #eefbfe;
+    --color-text-2: #00ffff;
+    --color-code-text: white;
+    --color-link: #fb30c4;
+    --color-accent: #f1fa8c;
+    --overlay-brightness: .85;
+    --body-width: 1000px;
+    --animation-one: white;
+    --animation-two: #eeeeee;
+    --animation-three: #dddddd;
+    --animation-four: #aaaaaa;
+    --animation-five: grey;
+    --animation-six: grey;
+    --animation-seven: #eeeeee;
+    --animation-eight: white;
+}
+[data-theme="light"] {
+    --color-bg: #cfefff;
+    --color-bg-2: #c8d2db;
+    --color-bg-code: #00001a;
+    --color-text: #1f2022;
+    --color-text-2: #000030;
+    --color-code-text: white;
+    --color-link: #fb30c4;
+    --color-accent: #ffeb00;
+    --overlay-brightness: 1.0;
+    --animation-one: grey;
+    --animation-two: #aaaaaa;
+    --animation-three: #dddddd;
+    --animation-four: black;
+    --animation-five: black;
+    --animation-six: #dddddd;
+    --animation-seven: #aaaaaa;
+    --animation-eight: grey;
+}
+
+html  {
+    font-family: "Space Mono", monospace;
+    background: var(--color-bg);
+    color: var(--color-text);
+    contain: paint;
+}
+
+a {
+    color: var(--color-link);
+}
+main a {
+    max-width: 100%;
+}
+.heading-permalink {
+    font-size: .7em;
+}
+body {
+    max-width: var(--body-width);
+    margin: 5rem auto;
+    padding: 0 .5rem;
+    font-size: 1rem;
+    line-height: 1.56;
+}
+blockquote {
+    background: var(--color-bg);
+    filter: brightness(var(--overlay-brightness));
+    border-left: 4px solid var(--color-accent);
+    border-radius: 4px;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #f1fa8c,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+    padding-left: 1rem;
+    margin: 1rem;
+}
+li.post {
+   /* list-style-type: None; */
+    padding: .2rem 0;
+}
+pre.wrapper{
+  padding: 0;
+  box-shadow: 0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin: 2rem;
+}
+pre {
+    margin:0;
+    padding: 1rem;
+    min-width: -webkit-fill-available;
+    max-width: fit-content;
+    overflow-x: auto;
+}
+
+pre .filepath {
+  margin:0;
+  padding-left: 1rem;
+  border-radius: 4px 4px 0 0;
+  background: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+pre .filepath p{
+  margin:0
+}
+
+pre .filepath .right{
+  display: flex;
+  gap: .2rem;
+  align-items: center;
+}
+
+pre::-webkit-scrollbar {
+    height: 4px;
+    background-color: transparent;
+}
+
+pre::-webkit-scrollbar-thumb {
+    background-color: #d3d3d32e;
+    border-radius: 2px;
+}
+
+pre::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.copy-wrapper {
+    background: none;
+    position: absolute;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    justify-content: flex-end;
+}
+button.copy {
+    z-index: 100;
+    background: none;
+    fill: #ffffff45;
+    border: none;
+    width: 32px;
+    align-self: flex-end;
+    top: 0;
+    right: 0;
+    margin: 0.5rem 0.2rem;
+}
+button.copy:hover {
+    fill:white
+}
+
+a.help {
+    fill: #ffffff45;
+}
+a.help:hover {
+    fill: white;
+}
+a.help svg{
+    height:24px;
+    width:24px;
+}
+code {
+  font-family: monospace;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background-color: var(--color-bg-code);
+  color: var(--color-code-text);
+}
+.highlight  {
+    background: var(--color-bg-code);
+    color: var(--color-code-text);
+    filter: brightness(var(--overlay-brightness));
+    border-radius: 0 0 4px 4px;
+}
+
+.highlight .c { color: var(--syntax-comment-color); } /* Comment */
+.highlight .err { color: var(--syntax-error-color); } /* Error */
+.highlight .k { color: var(--syntax-declaration-color); } /* Keyword */
+.highlight .l { color: var(--syntax-literal-color); } /* Literal */
+.highlight .n { color: var(--syntax-name-color); } /* Name */
+.highlight .o { color: var(--syntax-declaration-color); } /* Operator */
+.highlight .p { color: var(--syntax-literal-color); } /* Punctuation */
+.highlight .cm { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Multiline */
+.highlight .cp { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Preproc */
+.highlight .c1 { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Single */
+.highlight .cs { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Special */
+.highlight .gd { color: var(--syntax-literal-color); font-weight: bold; } /* Generic.Deleted */
+.highlight .ge { color: var(--syntax-error-color); font-style: italic; } /* Generic.Emph */
+.highlight .gr { color: #ff0000; } /* Generic.Error */
+.highlight .gh { color: var(--syntax-declaration-color); font-weight: bold; } /* Generic.Heading */
+.highlight .gi { color: var(--syntax-name-color); } /* Generic.Inserted */
+.highlight .go { color: var(--syntax-declaration-color); } /* Generic.Output */
+.highlight .gp { color: var(--syntax-literal-color); font-weight: bold; } /* Generic.Prompt */
+.highlight .gs { color: var(--syntax-declaration-color); font-weight: bold; } /* Generic.Strong */
+.highlight .gu { color: var(--syntax-declaration-color); font-weight: bold; } /* Generic.Subheading */
+.highlight .gt { color: var(--syntax-declaration-color); } /* Generic.Traceback */
+.highlight .kc { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Constant */
+.highlight .kd { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Declaration */
+.highlight .kn { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Namespace */
+.highlight .kp { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Pseudo */
+.highlight .kr { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Reserved */
+.highlight .kt { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Type */
+.highlight .ld { color: var(--syntax-literal-color); font-style: italic; } /* Literal.Date */
+.highlight .m { color: var(--syntax-literal-color); } /* Literal.Number */
+.highlight .s { color: var(--syntax-string-color); } /* Literal.String */
+
+/* Tab style starts here */
+.tabbed-set {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 1em 0;
+    border-radius: 0.1rem;
+}
+
+.tabbed-set > input {
+    display: none;
+}
+
+.tabbed-set label {
+    width: auto;
+    padding: 0.9375em 1.25em 0.78125em;
+    font-weight: 700;
+    font-size: 0.84em;
+    white-space: nowrap;
+    border-bottom: 0.15rem solid transparent;
+    border-top-left-radius: 0.1rem;
+    border-top-right-radius: 0.1rem;
+    cursor: pointer;
+    transition: background-color 250ms, color 250ms;
+}
+
+.tabbed-set .tabbed-content {
+    width: 100%;
+    display: none;
+    box-shadow: 0 -.05rem #ddd;
+}
+
+.tabbed-set input {
+    position: absolute;
+    opacity: 0;
+}
+
+/* fonts */
+h1 {
+    font-weight: 700;
+}
+
+h1#title a {
+    font-size: 16px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-top: 3rem;
+    color: var(--color-text-2);
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-top: 5rem;
+}
+
+h2 {
+    font-size: 1.63rem;
+    margin-top: 5rem;
+}
+
+p {
+    font-size: 21px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+@media only screen and (max-width: 700px) {
+p {
+    font-size: 18px;
+}
+}
+
+@media only screen and (max-width: 600px) {
+p {
+    font-size: 16px;
+}
+}
+
+@media only screen and (max-width: 500px) {
+p {
+    font-size: 14px;
+}
+}
+
+@media only screen and (max-width: 400px) {
+p {
+    font-size: 12px;
+}
+}
+
+
+pre {
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 18.5714px;
+}
+
+a {
+    font-weight: 600;
+    text-decoration-color: var(--color-accent);
+    color: var(--color-link);
+    padding: .3rem .5rem;
+    display: inline-block;
+}
+
+.admonition, details {
+    box-shadow: 0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+    margin: 5rem 0;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-align: left;
+    padding: 0;
+    border: 0;
+}
+.admonition {
+    padding-bottom: 1rem;
+}
+
+details[open] {
+    padding-bottom: .5rem;
+}
+
+.admonition p{
+    padding: .2rem .6rem;
+}
+
+.admonition-title, .details-title, summary {
+    background: var(--color-bg-2);
+    padding: 0;
+    margin: 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+summary:hover {
+    cursor: pointer;
+}
+
+summary.admonition-title, summary.details-title {
+    padding: .5rem;
+    padding-left: 1rem;
+}
+
+.note {
+    border-left: 4px solid #f1fa8c;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #f1fa8c,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.note > .admonition-title {
+    border-bottom: 1px solid #3c3d2d;
+}
+
+.abstract {
+    border-left: 4px solid #8be9fd;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #8be9fd,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.abstract > .admonition-title {
+    border-bottom: 1px solid #2c3a3f;
+}
+.info {
+    border-left: 4px solid;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #8bb0fd,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.info > .admonition-title {
+    border-bottom: 1px solid #2c313f;
+}
+
+.tip {
+    border-left: 4px solid #008080;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #008080,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.tip > .admonition-title {
+    border-bottom: 1px solid #1b2a2b;
+}
+.success {
+    border-left: 4px solid #50fa7b;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #50fa7b,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.success > .admonition-title {
+    border-bottom: 1px solid #263e2b;
+}
+
+.question {
+    border-left: 4px solid #a7fcbd;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #a7fcbd,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.question > .admonition-title {
+    border-bottom: 1px solid #303e35;
+}
+
+.warning {
+    border-left: 4px solid #ffb86c;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #ffb86c,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.warning > .admonition-title {
+    border-bottom: 1px solid #3f3328;
+}
+
+.failure {
+    border-left: 4px solid #b23b3b;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #b23b3b,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.failure > .admonition-title {
+    border-bottom: 1px solid #34201f;
+}
+
+.danger {
+    border-left: 4px solid #ff5555;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #ff5555,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.danger > .admonition-title {
+    border-bottom: 1px solid #402523;
+}
+
+.bug {
+    border-left: 4px solid #b2548a;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #b2548a,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.bug > .admonition-title {
+    border-bottom: 1px solid #32232c;
+}
+
+.example {
+    border-left: 4px solid #bd93f9;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #bd93f9,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.example > .admonition-title {
+    border-bottom: 1px solid #332d3e;
+}
+
+.source {
+    border-left: 4px solid #bd93f9;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #bd93f9,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.source > .admonition-title {
+    border-bottom: 1px solid #332d3e;
+}
+
+.quote {
+    border-left: 4px solid #999;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #999,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.quote > .admonition-title {
+    border-bottom: 1px solid #2d2e2f;
+}
+
+table {
+    margin: 1rem 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: block;
+    max-width: -moz-fit-content;
+    max-width: fit-content;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+table thead th {
+    border: solid 1px var(--color-text);
+    padding: 10px;
+    text-align: left;
+}
+
+table tbody td {
+    border: solid 1px var(--color-text);
+    padding: 10px;
+}
+.theme-switch {
+    z-index: 10;
+    display: inline-block;
+    height: 34px;
+    position: relative;
+    width: 60px;
+
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 1rem;
+    margin-left: auto;
+    position: fixed;
+    right: 1rem;
+    top: 1rem;
+}
+
+.theme-switch input {
+    display:none;
+}
+
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+}
+
+.slider:before {
+    background-color: #fff;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 26px;
+}
+
+input:checked + .slider {
+    background-color: #343434;
+}
+input:checked + .slider:before {
+    background-color: #848484;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+main p img {
+    width: 100%;
+    width: -moz-available;
+    width: -webkit-fill-available;
+    width: fill-available;
+}
+
+details>* {
+    margin: 1rem;
+}
+
+.admonition>* {
+    margin: 1rem;
+}
+
+p.admonition-title, summary {
+    margin: 0;
+    padding-left:1.2rem;
+}
+
+.small {
+    font-size: .9rem;
+    color: #888;
+}
+
+admonition+admonition{
+    margin-top:20rem;
+}
+
+::-webkit-scrollbar {
+    height: 12px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #d3d3d32e;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+.nav{
+    position: sticky;
+    top: 0;
+    background-color: var(--color-bg);
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 5;
+}
+.social{
+    display: flex;
+    list-style-type: none;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+img {
+    max-width: 100%;
+    width: 80%;
+    vertical-align: middle;
+}
+
+.thumbnail {
+    width:100%; height: 30%;
+    border-radius:25px;
+    transition:box-shadow 1s ease;
+}
+
+.thumbnail:hover {
+    box-shadow:0px 0px 0px 8px #ff6600;
+}
+.svg-icon { width: 16px; height: 16px; display: inline-flex; fill: #ffffff; padding-right: 5px; vertical-align: text-top; }
+
+.text-primary {
+	color: #fff;
+	font-size: 1.8rem;
+	font-weight: 700;
+	text-align: center;
+	width: 100%;
+	line-height: 1.6;
+	background-image: linear-gradient(90deg, var(--animation-one), var(--animation-two), var(--animation-three), var(--animation-four), var(--animation-five), var(--animation-six), var(--animation-seven), var(--animation-eight));
+	background-size: 200%;
+	color: transparent;
+	-webkit-text-fill-color: transparent;
+	-webkit-background-clip: text;
+	background-clip: text;
+	animation: animate 20s infinite alternate;
+}
+@keyframes animate {
+	0% {
+		background-position: 0%;
+	}
+	100% {
+		background-position: 400%;
+	}
+}
+
+pre, code { font-size: 15px; border: 1px solid #e8e8e8; border-radius: 3px; background-color: var(--color-bg-code); }
+
+code { padding: 1px 5px; color: #ffffff; }
+
+pre { padding: 8px 12px; overflow-x: auto; }
+
+pre > code { border: 0; padding-right: 0; padding-left: 0; }
+
+.language-bar{
+    height: 3em;
+    text-align: justify;
+    padding: 1em 0 1px 1em;
+    color: var(--color-code-text)
+}
+
+        </style>
+</body>
+</html>

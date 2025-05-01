@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Techstructive Blog | Golang: Channels by  Meet Rajesh Gor</title>
+<script src="/script.js"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width" name="viewport"/>
+<meta content="Techstructive Blog - Personal Blog of Meet Gor" name="description"/>
+<meta content="blog, web-development, backend-developer" name="keywords"/>
+<meta content="Meet Rajesh Gor" name="author"/>
+<meta content="https://www.meetgor.com/" property="og:url"/>
+<meta content="website" property="og:type"/>
+<meta content="Golang: Channels" property="og:title"/>
+<meta content="Understanding the core of concurrency in Go with channels and go routines. Exploring various patterns used in concurrent operations." property="og:description"/>
+<meta content="https://meetgor-cdn.pages.dev/golang-031-channels.png" property="og:image"/>
+<meta content="meetgor.com" property="twitter:domain"/>
+<meta content="https://www.meetgor.com/" property="twitter:url"/>
+<meta content="Techstructive Blog" name="twitter:title"/>
+<meta content="" name="twitter:description"/>
+<meta content="https://meetgor-cdn.pages.dev/golang-031-channels.png" name="twitter:image"/>
+<link href="/tbicon.png" rel="icon" type="image/png"/>
+<style>
+</style>
+<script async="" crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4627844420729409">
+</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+<style>
+.theme-switch input {
+    display:none;
+}
+
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+}
+
+.slider:before {
+    background-color: #fff;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 26px;
+}
+
+input:checked + .slider {
+    background-color: #343434;
+}
+input:checked + .slider:before {
+    background-color: #848484;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+</style>
+<meta content="markata 0.7.4" name="generator"/></head>
+<body>
+<div class="nav">
+<a href="/blog">
+<p class="text-primary">Techstructive Blog </p>
+</a>
+<nav>
+<a href="/">Home</a>
+<a href="/blog">Blog</a>
+<a href="/projects">Projects</a>
+<label class="theme-switch" for="checkbox-theme" id="theme-switch" title="light/dark mode toggle">
+<input id="checkbox-theme" type="checkbox"/>
+<div class="slider round"> </div>
+</label>
+</nav>
+</div>
+<section class="title">
+<div id="cover-wrapper">
+<a href=""><img alt="cover image for article" class="thumbnail" src="https://meetgor-cdn.pages.dev/golang-031-channels.png"/></a>
+</div>
+<h1 class="text-primary" id="title">
+        Golang: Channels
+        
+        
+      </h1>
+<a alt="edit post url" href="https://github.com/mr-destructive/meetgor.com/edit/gh-pages/blog/posts/2023-08-28-GO-31-Channels.md" title="edit this post">
+              Edit
+          </a>
+<p>Published on August 28, 2023</p>
+<p>Author: Meet Rajesh Gor</p>
+<a href="/tag/go">#go</a>
+</section>
+<main>
+<h2>Introduction<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>In this part of the series, we will be continuing with the concurrency features of golang with channels. In the last post, we covered the fundamentals of go routines and wait groups. By leveraging those understood concepts, we will explore channels to communicate the data between various go routines.</p>
+<h2>What are Channels<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>A golang Channel is like a pipe that lets goroutines communicate. It lets you pass values from one goroutine to another. Channels are typed i.e. you declare them with <code>chan</code> keyword followed by the type to be sent and received (e.g. <code>chan int</code>). The <code>chan</code> type specifies the type of values that will be passed through the channel. We will explore the detailed technicalities soon. Right now, we need to just focus on what problem is channels solving.</p>
+<p>In the previous article, we worked with go routines and wait groups which allowed us to process tasks asynchronously. However, if we wanted to access the data in between the processes, we would have to tweak the core functionality or might require global variables, however, in real-world applications, the environment is quite constrained. We would require a way to communicate data between those go routines. Channels are made just for that(more than that), but in essence, it solves that exact problem.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"fmt"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">defer</span><span class="w"> </span><span class="nb">close</span><span class="p">(</span><span class="nx">ch</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">message</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">"Hello, Gophers!"</span><span class="w"></span>
+<span class="w">		</span><span class="nx">ch</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nx">message</span><span class="w"></span>
+<span class="w">	</span><span class="p">}()</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">msg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&lt;-</span><span class="nx">ch</span><span class="w"></span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<p>In the above code example, the channel <code>ch</code> is created of type <code>string</code> and a message is sent to the channel inside a go routine as <code>ch &lt;- message</code>, and the message is retrieved from the channel as <code>&lt;-ch</code>.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">bash</div>
+<div class="highlight"><pre><span></span>$ go run main.go
+
+Hello, Gophers!
+</pre></div>
+
+</pre>
+<p>Channels have two key properties:</p>
+<ul>
+<li>Send and receive operations block until both sides are ready(i.e. there is a sender and a receiver for a channel). This allows goroutines to synchronize without explicit locks or condition variables.</li>
+<li>Channels are typed, so only values of the specified type can be sent and received. This provides type safety.</li>
+</ul>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="s">"fmt"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">message</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">"Hello, Gophers!"</span><span class="w"></span>
+<span class="w">        </span><span class="nx">ch</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nx">message</span><span class="w"></span>
+<span class="w">    </span><span class="p">}()</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="o">&lt;-</span><span class="nx">ch</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="o">&lt;-</span><span class="nx">ch</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<p>In the same example, if we tried to add the second receiver i.e. <code>&lt;-ch</code>, it would result in a deadlock/block forever since there is no second message sent into the channel. Only one value i.e. "Hello Gophers!" was sent as a <code>message</code> into the channel, and that was received by the first receiver as <code>&lt;-ch</code>, however in the next receiver, there is no sender.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">bash</div>
+<div class="highlight"><pre><span></span>$ go run main.go
+
+Hello, Gophers!
+fatal error: all goroutines are asleep - deadlock!
+
+goroutine <span class="m">1</span> <span class="o">[</span>chan receive<span class="o">]</span>:
+main.main<span class="o">()</span>
+        /home/meet/code/100-days-of-golang/scripts/channels/main.go:16 +0x125
+<span class="nb">exit</span> status <span class="m">2</span>
+</pre></div>
+
+</pre>
+<p>To sum up the deadlock concept in unbuffered channels:</p>
+<ul>
+<li>The main goroutine is waiting at the second receive operation for a second message that will never arrive (was never sent).</li>
+<li>The anonymous goroutine is waiting for someone to read from the channel so it can proceed with sending the second message.</li>
+</ul>
+<h2>Buffered Channels<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>In Go, you can create both buffered and unbuffered channels. An unbuffered channel has no capacity to hold data, it relies on immediate communication between the sender and receiver. However, you can create a buffered channel by specifying a capacity when using the make function, like <code>ch := make(chan int, 5)</code> will create a channel with a capacity of <code>5</code> i.e. it can store a certain number of values without an immediate receiver. A buffered channel allows you to send multiple values to the channel without an immediate receiver, up to its capacity. After that, it will block until the receiver retrieves values.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"fmt"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"sync"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">buffchan</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">wg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">{}</span><span class="w"></span>
+<span class="w">	</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Add</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">n</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">			</span><span class="nx">buffchan</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nx">n</span><span class="w"></span>
+<span class="w">			</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Done</span><span class="p">()</span><span class="w"></span>
+<span class="w">		</span><span class="p">}(</span><span class="nx">i</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Wait</span><span class="p">()</span><span class="w"></span>
+<span class="w">	</span><span class="nb">close</span><span class="p">(</span><span class="nx">buffchan</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">c</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">buffchan</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">bash</div>
+<div class="highlight"><pre><span></span>$ go run channels.go
+<span class="m">1</span>
+<span class="m">2</span>
+
+$ go run channels.go
+<span class="m">2</span>
+<span class="m">1</span>
+</pre></div>
+
+</pre>
+<p>In this code snippet, we create a buffered channel ch with a capacity of 2. We send two values to the channel, and even though there's no immediate receiver, the code doesn't block. If we were to send a third value, it would lead to a deadlock because there is no receiver to free up space in the buffer.</p>
+<h2>Closing Channels<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>Closing a channel is important to signal to the receiver that no more data will be sent. It's achieved using the built-in close function. After closing a channel, any further attempts to send data will result in a panic. On the receiving side, if a channel is closed and there's no more data to receive, the receive operation will yield the zero value for the channel's type.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"fmt"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">			</span><span class="nx">ch</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nx">i</span><span class="w"></span>
+<span class="w">		</span><span class="p">}</span><span class="w"></span>
+<span class="w">		</span><span class="nb">close</span><span class="p">(</span><span class="nx">ch</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}()</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">num</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">ch</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Received:"</span><span class="p">,</span><span class="w"> </span><span class="nx">num</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<p>In this example, a goroutine sends numbers to the channel and then closes it. The main routine receives these numbers using a for-range loop. When the channel is closed and all values are received, the loop will terminate automatically. Keep in mind that only a sender can close the channel, to indicate the receiver to not wait for further values from the channel.</p>
+<h2>Select Statement for Channels<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>The select statement is used for handling multiple channels. There are a few operations that can be checked with a case statement in the select block.</p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Channel Operation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Sending</td>
+<td>chan &lt;- value</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Receiving</td>
+<td>&lt;- chan</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>So, we can either check if there is a sender or a receiver available for a channel with a case statement just like a switch statement.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"fmt"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"sync"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">sendMessage</span><span class="p">(</span><span class="nx">ch</span><span class="w"> </span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">message</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">wg</span><span class="w"> </span><span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="k">defer</span><span class="w"> </span><span class="nx">wg</span><span class="p">.</span><span class="nx">Done</span><span class="p">()</span><span class="w"></span>
+<span class="w">	</span><span class="nx">ch</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nx">message</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">wg</span><span class="w"> </span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">ch1</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">ch2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Add</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="nx">sendMessage</span><span class="p">(</span><span class="nx">ch1</span><span class="p">,</span><span class="w"> </span><span class="s">"Hello, Gophers!"</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="nx">sendMessage</span><span class="p">(</span><span class="nx">ch2</span><span class="p">,</span><span class="w"> </span><span class="s">"Hello, Hamsters!"</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="k">defer</span><span class="w"> </span><span class="nx">wg</span><span class="p">.</span><span class="nx">Done</span><span class="p">()</span><span class="w"></span>
+<span class="w">		</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Wait</span><span class="p">()</span><span class="w"></span>
+<span class="w">		</span><span class="nb">close</span><span class="p">(</span><span class="nx">ch1</span><span class="p">)</span><span class="w"></span>
+<span class="w">		</span><span class="nb">close</span><span class="p">(</span><span class="nx">ch2</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}()</span><span class="w"></span>
+<span class="w">	</span><span class="nx">ch1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">"new message to c1"</span><span class="w"></span>
+<span class="w">	</span><span class="nx">ch2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">"new message to c2"</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">select</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="o">&lt;-</span><span class="nx">ch1</span><span class="p">:</span><span class="w"></span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Received from ch1"</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="nx">ch1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">"new message to c1"</span><span class="p">:</span><span class="w"></span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Sent to ch1"</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="o">&lt;-</span><span class="nx">ch2</span><span class="p">:</span><span class="w"></span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Received from ch2"</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="nx">ch2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">"new message to c2"</span><span class="p">:</span><span class="w"></span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Sent to ch2"</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">bash</div>
+<div class="highlight"><pre><span></span>$ go run channels.go
+Sent to ch1
+
+$ go run simple.go
+Received from ch1
+
+$ go run simple.go
+Received from ch2
+
+$ go run simple.go
+Sent to ch2
+
+$ go run simple.go
+Received from ch1
+</pre></div>
+
+</pre>
+<p>The order of the messages is not guaranteed, the operation which is performed first based on the go routine will be only logged.</p>
+<p>In the simple example above, we have created two channels <code>ch1</code> and <code>ch2</code>, and sent two messages to them using two go routines. The main routine then waits for the messages to be received from the channels. We close the channels when the sending is done and simply check for the 4 cases i.e. the send on channel 1, receive on channel 1, and similarly for channel 2. So, that is how we can use the select statement to check which operation is being performed on the different channels, and this forms the basis for the communication between channels. We get more ease in the flow while working with channels.</p>
+<p>Below is an example to test which <code>url</code> or a web server is responding first to the request.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"fmt"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"net/http"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"sync"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">pingGoogle</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">wg</span><span class="w"> </span><span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="k">defer</span><span class="w"> </span><span class="nx">wg</span><span class="p">.</span><span class="nx">Done</span><span class="p">()</span><span class="w"></span>
+<span class="w">	</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">"http://google.com"</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">c</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nx">res</span><span class="p">.</span><span class="nx">Status</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">pingDuckDuckGo</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">wg</span><span class="w"> </span><span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="k">defer</span><span class="w"> </span><span class="nx">wg</span><span class="p">.</span><span class="nx">Done</span><span class="p">()</span><span class="w"></span>
+<span class="w">	</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">"https://duckduckgo.com"</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">c</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nx">res</span><span class="p">.</span><span class="nx">Status</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">pingBraveSearch</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">wg</span><span class="w"> </span><span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="k">defer</span><span class="w"> </span><span class="nx">wg</span><span class="p">.</span><span class="nx">Done</span><span class="p">()</span><span class="w"></span>
+<span class="w">	</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">"https://search.brave.com"</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">c</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nx">res</span><span class="p">.</span><span class="nx">Status</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">gogChan</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">ddgChan</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">braveChan</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">wg</span><span class="w"> </span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="w"></span>
+<span class="w">	</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Add</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="nx">pingDuckDuckGo</span><span class="p">(</span><span class="nx">ddgChan</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="nx">pingGoogle</span><span class="p">(</span><span class="nx">gogChan</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="nx">pingBraveSearch</span><span class="p">(</span><span class="nx">braveChan</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">openChannels</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">3</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Wait</span><span class="p">()</span><span class="w"></span>
+<span class="w">		</span><span class="nb">close</span><span class="p">(</span><span class="nx">gogChan</span><span class="p">)</span><span class="w"></span>
+<span class="w">		</span><span class="nb">close</span><span class="p">(</span><span class="nx">ddgChan</span><span class="p">)</span><span class="w"></span>
+<span class="w">		</span><span class="nb">close</span><span class="p">(</span><span class="nx">braveChan</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}()</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">openChannels</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="k">select</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="k">case</span><span class="w"> </span><span class="nx">msg1</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&lt;-</span><span class="nx">gogChan</span><span class="p">:</span><span class="w"></span>
+<span class="w">			</span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">ok</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">				</span><span class="nx">openChannels</span><span class="o">--</span><span class="w"></span>
+<span class="w">			</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">				</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Google responded:"</span><span class="p">,</span><span class="w"> </span><span class="nx">msg1</span><span class="p">)</span><span class="w"></span>
+<span class="w">			</span><span class="p">}</span><span class="w"></span>
+<span class="w">		</span><span class="k">case</span><span class="w"> </span><span class="nx">msg2</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&lt;-</span><span class="nx">ddgChan</span><span class="p">:</span><span class="w"></span>
+<span class="w">			</span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">ok</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">				</span><span class="nx">openChannels</span><span class="o">--</span><span class="w"></span>
+<span class="w">			</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">				</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"DuckDuckGo responded:"</span><span class="p">,</span><span class="w"> </span><span class="nx">msg2</span><span class="p">)</span><span class="w"></span>
+<span class="w">			</span><span class="p">}</span><span class="w"></span>
+<span class="w">		</span><span class="k">case</span><span class="w"> </span><span class="nx">msg3</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&lt;-</span><span class="nx">braveChan</span><span class="p">:</span><span class="w"></span>
+<span class="w">			</span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">ok</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">				</span><span class="nx">openChannels</span><span class="o">--</span><span class="w"></span>
+<span class="w">			</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">				</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"BraveSearch responded:"</span><span class="p">,</span><span class="w"> </span><span class="nx">msg3</span><span class="p">)</span><span class="w"></span>
+<span class="w">			</span><span class="p">}</span><span class="w"></span>
+<span class="w">		</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<p>The above example shows how to use a select statement to wait for multiple channels to be ready before proceeding with the next operation. With this example, we can get the channel that sent the response first i.e. which search engine in this case responded to the ping first. Just a bit exaggerated example but it helps in understanding the concept of the <code>select</code> statement.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">bash</div>
+<div class="highlight"><pre><span></span>$ go run <span class="k">select</span>-chan.go
+
+DuckDuckGo responded: <span class="m">200</span> OK
+Google responded: <span class="m">200</span> OK
+BraveSearch responded: <span class="m">200</span> OK
+
+
+$ go run <span class="k">select</span>-chan.go
+
+DuckDuckGo responded: <span class="m">200</span> OK
+BraveSearch responded: <span class="m">200</span> OK
+Google responded: <span class="m">200</span> OK
+</pre></div>
+
+</pre>
+<p>Let's break each of the steps down:</p>
+<ul>
+<li><code>pingDuckDuckGo(ddgChan, &amp;wg)</code> is a method which sends data to the channel <code>ddgChan</code>.</li>
+<li><code>pingGoogle(gogChan, &amp;wg)</code> is a method that sends data to the channel <code>gogChan</code>.</li>
+<li><code>pingBraveSearch(braveChan, &amp;wg)</code> is a method that sends data to the channel <code>braveChan</code>.</li>
+<li>We wait for each go routine to finish using <code>wg.Wait()</code> and close the channels.</li>
+<li>Finally, we close the channels <code>gogChan</code>, <code>ddgChan</code>, and <code>braveChan</code> to pick up the data from the channel as <code>&lt;-chan</code> with the select case block.</li>
+<li>The select case will pick the first channel that is ready to receive data. Hence we get the output based on the order of which the channel responded first.</li>
+<li>We use the <code>!ok</code> condition to check if the channel is closed or not, we have a <code>openChannels</code> variable to keep track of the number of open channels, if there are no channels open, we simply break out of the infinite loop.</li>
+</ul>
+<h2>Directional Channels<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>Channels can also be designated as "send-only" or "receive-only" to enforce certain communication patterns and enhance safety. This is done by specifying the direction when defining the channel type.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"fmt"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"sync"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">receiver</span><span class="p">(</span><span class="nx">ch</span><span class="w"> </span><span class="o">&lt;-</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">wg</span><span class="w"> </span><span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">ch</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Received:"</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Done</span><span class="p">()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">sender</span><span class="p">(</span><span class="nx">ch</span><span class="w"> </span><span class="kd">chan</span><span class="o">&lt;-</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">wg</span><span class="w"> </span><span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Sent:"</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">)</span><span class="w"></span>
+<span class="w">		</span><span class="nx">ch</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nx">i</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="nb">close</span><span class="p">(</span><span class="nx">ch</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Done</span><span class="p">()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">wg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">{}</span><span class="w"></span>
+<span class="w">	</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Add</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="nx">receiver</span><span class="p">(</span><span class="nx">ch</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="nx">sender</span><span class="p">(</span><span class="nx">ch</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Wait</span><span class="p">()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<p>In the above example, we have created a channel <code>ch</code> and sent 10 values to it using two-go routines. The main routine is waiting for the goroutines to finish before closing the channel. The <code>sender</code> sends values <code>0</code> through <code>9</code>, and the <code>receiver</code> prints whenever a value is received. In the <code>sender</code> method, we only accept the channel to send data as <code>chan&lt;-</code>, and in the <code>receiver</code> method, the channel parameter is set to only read from the channel as <code>&lt;-chan</code>.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">bash</div>
+<div class="highlight"><pre><span></span>$ go run send-recv.go
+
+Sent: <span class="m">0</span>
+Received: <span class="m">0</span>
+Sent: <span class="m">1</span>
+Sent: <span class="m">2</span>
+Received: <span class="m">1</span>
+Received: <span class="m">2</span>
+Sent: <span class="m">3</span>
+Sent: <span class="m">4</span>
+Received: <span class="m">3</span>
+Received: <span class="m">4</span>
+Sent: <span class="m">5</span>
+Sent: <span class="m">6</span>
+Received: <span class="m">5</span>
+Received: <span class="m">6</span>
+Sent: <span class="m">7</span>
+Sent: <span class="m">8</span>
+Received: <span class="m">7</span>
+Received: <span class="m">8</span>
+Sent: <span class="m">9</span>
+Received: <span class="m">9</span>
+</pre></div>
+
+</pre>
+<p>When we define a parameter as a write-only channel means that the function can only send data into that channel. It cannot read data from it or close it. This pattern is helpful when you want to make sure that the function is solely responsible for producing data and not consuming or interacting with the channel's current state.</p>
+<p>When we define a parameter as a read-only channel, it means that the function can only receive data from that channel. It cannot close the channel or send data into it. This pattern is useful when we want to ensure that the function only consumes data from the channel without modifying it or interfering with the sender's logic.</p>
+<p>Additionally, the compiler will catch code trying to send on a read-only channel or receive from a write-only one.</p>
+<h2>Common Channel Usage Pattern<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>There are a variety of ways in which channels can be used in Go. In this section, we'll explore some of the most common patterns for using channels in Go. Some of the most useful and idiomatic channel usage patterns include pipelines, fan-in and fan-out, etc.</p>
+<h3>Async Await pattern for Channels<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>In Go, goroutines and channels enable an elegant async/await style. A goroutine can execute a task asynchronously, while the main thread awaits the result using a channel.</p>
+<p>The async-await pattern in Go involves initiating multiple tasks concurrently, each with its own goroutine, and then awaiting their completion before proceeding. Channels are used to communicate between these goroutines, allowing them to work independently and provide results to the main routine when ready.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"fmt"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"net/http"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">fetchURL</span><span class="p">(</span><span class="nx">url</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">ch</span><span class="w"> </span><span class="kd">chan</span><span class="o">&lt;-</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span><span class="w"></span>
+<span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">			</span><span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">		</span><span class="p">}</span><span class="w"></span>
+<span class="w">		</span><span class="k">defer</span><span class="w"> </span><span class="nx">res</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span><span class="w"></span>
+<span class="w">		</span><span class="nx">ch</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="o">*</span><span class="nx">res</span><span class="w"></span>
+<span class="w">	</span><span class="p">}()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">task</span><span class="p">(</span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Task"</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Start"</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">url</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">"http://google.com"</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">respCh</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">fetchURL</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span><span class="w"> </span><span class="nx">respCh</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">task</span><span class="p">(</span><span class="s">"A"</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">task</span><span class="p">(</span><span class="s">"B"</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">response</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&lt;-</span><span class="nx">respCh</span><span class="w"></span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Response Status:"</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">Status</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Done"</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">bash</div>
+<div class="highlight"><pre><span></span>$ go run async.go
+Start
+Task A
+Task B
+Response Status: <span class="m">200</span> OK
+Done
+</pre></div>
+
+</pre>
+<p>In the above example, we have created a function <code>fetchURL</code> which takes a URL and a channel as an argument. The channel <code>respCh</code> is used to communicate between the goroutines. The function fires up a goroutine that fetches the request, we send a <code>GET</code> request to the provided URL and send the response to the provided channel.  In the main function, we access the <code>response</code> by receiving the data from the channel as <code>&lt;-respCh</code>. Before doing this, we can do any other task simultaneously, like <code>task("A")</code> and <code>task("B")</code> which just prints some string(it could be anything). But this should be before we pull in from the channel, anything after the access will be blocked i.e. will be executed sequentially.</p>
+<h3>Pipeline pattern for Channels<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>The pipeline pattern is used to chain together a sequence of processing stages, each stage consumes input, processes data, and passes the output to the next stage. This type of pattern can be achieved by chaining different channels from one go routine to another.</p>
+<p><img alt="Pipeline pattern flow using channels in golang" src="https://meetgor-cdn.pages.dev/100-days-of-golang/channels-pipelines-pattern.png"/></p>
+<p>So, the pipeline pattern using channels in Go, data flows sequentially through multiple stages: Stage 1 reads input and sends to Channel A, Stage 2 receives from Channel A and sends to Channel B, and Stage 3 receives from Channel B and produces the final output.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"fmt"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"sync"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">generate</span><span class="p">(</span><span class="nx">nums</span><span class="w"> </span><span class="p">[]</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">out</span><span class="w"> </span><span class="kd">chan</span><span class="o">&lt;-</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">wg</span><span class="w"> </span><span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Stage 1"</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">nums</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Number:"</span><span class="p">,</span><span class="w"> </span><span class="nx">n</span><span class="p">)</span><span class="w"></span>
+<span class="w">		</span><span class="nx">out</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nx">n</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="nb">close</span><span class="p">(</span><span class="nx">out</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Done</span><span class="p">()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">square</span><span class="p">(</span><span class="nx">in</span><span class="w"> </span><span class="o">&lt;-</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">out</span><span class="w"> </span><span class="kd">chan</span><span class="o">&lt;-</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">wg</span><span class="w"> </span><span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Stage 2"</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">in</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">sq</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">n</span><span class="w"></span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Square:"</span><span class="p">,</span><span class="w"> </span><span class="nx">sq</span><span class="p">)</span><span class="w"></span>
+<span class="w">		</span><span class="nx">out</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nx">sq</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="nb">close</span><span class="p">(</span><span class="nx">out</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Done</span><span class="p">()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nb">print</span><span class="p">(</span><span class="nx">in</span><span class="w"> </span><span class="o">&lt;-</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">wg</span><span class="w"> </span><span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">in</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Done</span><span class="p">()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">input</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">}</span><span class="w"></span>
+
+<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">wg</span><span class="w"> </span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="w"></span>
+<span class="w">	</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Add</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">stage1</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">stage2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="nx">generate</span><span class="p">(</span><span class="nx">input</span><span class="p">,</span><span class="w"> </span><span class="nx">stage1</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="nx">square</span><span class="p">(</span><span class="nx">stage1</span><span class="p">,</span><span class="w"> </span><span class="nx">stage2</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="nb">print</span><span class="p">(</span><span class="nx">stage2</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Wait</span><span class="p">()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<p>In the above example, we have created a sequence of processing stages, each stage consumes input, processes data, and passes the output to the next stage. We can consider the functions <code>generate</code>, <code>square</code>, and <code>print</code> as stages <code>1</code>, <code>2</code>, and <code>3</code> respectively.</p>
+<ul>
+<li>The generate function, takes in the input as a slice of integers, an unbuffered channel, and the waitgroup b reference, the function basically iterates over the numbers in the slice and sends it to the channel provided in the parameters.</li>
+<li>The square function takes in the stage1 channel that the channel from the stage1, as well as its own channel as <code>stage2</code> (remember the <code>stage1</code> channel has sent the numbers via the generating function).</li>
+<li>The square function then iterates over the number sent from the channel <code>stage1</code> as <code>in</code> and squares it and sends it to the channel provided as <code>stage2</code> as the <code>out</code> channel.</li>
+<li>The print function takes in the stage2 channel as an argument and iterates over the number sent from the channel <code>stage2</code> and prints it.</li>
+</ul>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>$ go run pipeline.go
+Stage 1
+Number: 1
+Stage 2
+Square: 1
+1
+Number: 2
+Number: 3
+Square: 4
+Square: 9
+Number: 4
+4
+9
+Square: 16
+16
+Number: 5
+Square: 25
+25
+</pre></div>
+
+</pre>
+<p>So, we can see the order of the execution, both the pipelines started synchronously, However, they perform the operation only when the data is sent from the previous channel. We first print the <code>number</code> from the <code>generate</code> function, then print the squared value in the <code>square</code> function, and finally print it as <code>Square: value</code> in the print function.</p>
+<h3>Fan-In pattern for Channels<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>The Fan-In pattern is used for combining data from multiple sources into a single stream for unified processing, often using a shared data structure to aggregate the data. We can create the fan-in pattern by merging multiple input channels into a single output channel.</p>
+<p><img alt="Fan-in pattern flow using channels in golang" src="https://meetgor-cdn.pages.dev/100-days-of-golang/channels-fan-in-pattern.png"/></p>
+<p>The fan-in pattern is when multiple input channels (A, B, C) are read concurrently, and their data is merged into a single output channel (M).</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"fmt"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"io/ioutil"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"sync"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">readFile</span><span class="p">(</span><span class="nx">file</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">ch</span><span class="w"> </span><span class="kd">chan</span><span class="o">&lt;-</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">content</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ioutil</span><span class="p">.</span><span class="nx">ReadFile</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Reading from"</span><span class="p">,</span><span class="w"> </span><span class="nx">file</span><span class="p">,</span><span class="w"> </span><span class="s">"as :: "</span><span class="p">,</span><span class="w"> </span><span class="nb">string</span><span class="p">(</span><span class="nx">content</span><span class="p">))</span><span class="w"></span>
+<span class="w">	</span><span class="nx">ch</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nb">string</span><span class="p">(</span><span class="nx">content</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nb">close</span><span class="p">(</span><span class="nx">ch</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">merge</span><span class="p">(</span><span class="nx">chs</span><span class="w"> </span><span class="o">...&lt;-</span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">wg</span><span class="w"> </span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="w"></span>
+<span class="w">	</span><span class="nx">out</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">""</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">chs</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">		</span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">&lt;-</span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">			</span><span class="k">for</span><span class="w"> </span><span class="nx">s</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">c</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">				</span><span class="nx">out</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nx">s</span><span class="w"></span>
+<span class="w">			</span><span class="p">}</span><span class="w"></span>
+<span class="w">			</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Done</span><span class="p">()</span><span class="w"></span>
+<span class="w">		</span><span class="p">}(</span><span class="nx">ch</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Wait</span><span class="p">()</span><span class="w"></span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">out</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">ch1</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="nx">ch2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="nx">readFile</span><span class="p">(</span><span class="s">"data/f1.txt"</span><span class="p">,</span><span class="w"> </span><span class="nx">ch1</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="nx">readFile</span><span class="p">(</span><span class="s">"data/f2.txt"</span><span class="p">,</span><span class="w"> </span><span class="nx">ch2</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">merged</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">merge</span><span class="p">(</span><span class="nx">ch1</span><span class="p">,</span><span class="w"> </span><span class="nx">ch2</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">merged</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<p>In the above example, the <code>readFile</code> function reads the contents of the file and sends it to the channels <code>ch1</code> and <code>ch2</code> from different go routines. The <code>readFile</code> takes in the channel as send only channel which reads the file and sends the content to the channel as <code>ch &lt;- string(content)</code>. The <code>merge</code> function takes in <code>2</code> it can also be <code>n</code> number of channels to parse from as indicated as <code>...&lt;-chan</code>, it iterates over each channel, and for each channel, it reads the contents, and appends as a single string.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">bash</div>
+<div class="highlight"><pre><span></span>$ go run fan-in.go
+
+Reading from data/f1.txt as ::  This is from file <span class="m">1</span>
+Reading from data/f2.txt as ::  This is from file <span class="m">2</span>
+
+This is from file <span class="m">1</span>
+This is from file <span class="m">2</span>
+
+
+$ go run fan-in.go
+Reading from data/f2.txt as ::  This is from file <span class="m">2</span>
+Reading from data/f1.txt as ::  This is from file <span class="m">1</span>
+
+This is from file <span class="m">2</span>
+This is from file <span class="m">1</span>
+</pre></div>
+
+</pre>
+<p>So, this is how the fan-in pattern works, We create multiple channels and combine the results into a single stream of data(in this example a single string).</p>
+<h3>Fan-Out Pattern for Channels<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>The Fan-Out pattern involves taking data from a single source and distributing it to multiple workers or processing units for parallel or concurrent handling. Fan-out design splits an input channel into multiple output channels, it is used to distribute branches of work or data across concurrent processes.</p>
+<p><img alt="Fan-Out pattern flow using channels in golang" src="https://meetgor-cdn.pages.dev/100-days-of-golang/channels-fan-out-pattern.png"/></p>
+<p>The fan-out pattern is when data from a single input channel (A) is distributed to multiple worker channels (X, Y, Z) for parallel processing.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">go</div>
+<div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">	</span><span class="s">"fmt"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"os"</span><span class="w"></span>
+<span class="w">	</span><span class="s">"sync"</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">readFile</span><span class="p">(</span><span class="nx">file</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">ch</span><span class="w"> </span><span class="kd">chan</span><span class="o">&lt;-</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">wg</span><span class="w"> </span><span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="k">defer</span><span class="w"> </span><span class="nx">wg</span><span class="p">.</span><span class="nx">Done</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">content</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">ReadFile</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"Error reading from %s: %v\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">file</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">		</span><span class="k">return</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">ch</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nb">string</span><span class="p">(</span><span class="nx">content</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="nx">files</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"data/f1.txt"</span><span class="p">,</span><span class="w"> </span><span class="s">"data/f2.txt"</span><span class="p">}</span><span class="w"></span>
+
+<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">wg</span><span class="w"> </span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="w"></span>
+<span class="w">	</span><span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">files</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">		</span><span class="k">go</span><span class="w"> </span><span class="nx">readFile</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="nx">ch</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">wg</span><span class="p">.</span><span class="nx">Wait</span><span class="p">()</span><span class="w"></span>
+<span class="w">		</span><span class="nb">close</span><span class="p">(</span><span class="nx">ch</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}()</span><span class="w"></span>
+
+<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">fileData</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="w"></span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">content</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">ch</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="nx">fileData</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">fileData</span><span class="p">,</span><span class="w"> </span><span class="nx">content</span><span class="p">)</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"Read %d files\n"</span><span class="p">,</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">fileData</span><span class="p">))</span><span class="w"></span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"Contents:\n%s"</span><span class="p">,</span><span class="w"> </span><span class="nx">fileData</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
+</pre>
+<p>In the above example, we create a single channel <code>ch</code> as our single source, we loop over all the files, and create go routines calling the <code>readFile</code> function. The <code>readFile</code> function takes in the filename, channel, and the WaitGroup reference, the function reads the file and sends the content to the channel as <code>ch &lt;- content</code>. The <code>readFile</code> is called concurrently for all the files, Here we have done a fan-out of the task into multiple go routines, then in the main function, we iterate over the channel and receive the content.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">bash</div>
+<div class="highlight"><pre><span></span>$ go run fan-out.go
+
+Read <span class="m">2</span> files
+Contents:
+<span class="o">[</span>This is from file <span class="m">2</span>
+ This is from file <span class="m">1</span>
+<span class="o">]</span>
+
+
+$ go run fan-out.go
+
+Read <span class="m">2</span> files
+Contents:
+<span class="o">[</span>This is from file <span class="m">1</span>
+ This is from file <span class="m">2</span>
+<span class="o">]</span>
+</pre></div>
+
+</pre>
+<p>Here's a brief summary of the fan-out pattern from the example provided:</p>
+<ul>
+<li>Multiple files are read concurrently using goroutines. This "fans out" the work.</li>
+<li>The <code>readFile</code> function runs in a goroutine to process each file separately.</li>
+<li>WaitGroup coordinates the goroutines.</li>
+<li>A shared channel ch collects the results from each goroutine.</li>
+<li>The main goroutine reads from the channel and aggregates the results.</li>
+<li>Channel is closed and ranged over to collect results cleanly.</li>
+</ul>
+<p>I have a few more patterns to demonstrate that have been provided in the GitHub on the <a href="https://github.com/Mr-Destructive/100-days-of-golang/tree/main/scripts/channels/patterns/">100 days of Golang</a> repository.</p>
+<p>That's it from the 31st part of the series, all the source code for the examples are linked in the GitHub on the <a href="https://github.com/Mr-Destructive/100-days-of-golang/tree/main/scripts/channels">100 days of Golang</a> repository.</p>
+<h2>References<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<ul>
+<li><a href="https://go.dev/ref/spec#Channel_types">Channels</a></li>
+<li><a href="https://go.dev/doc/effective_go#channels">Effective Go: Channels</a></li>
+<li><a href="https://mariocarrion.com/2021/08/19/learning-golang-concurrency-patterns-fan-in-fan-out.html">Fan-In and Fan-Out</a></li>
+<li><a href="https://go101.org/article/channel.html">Go 101: Channels</a></li>
+</ul>
+<h2>Conclusion<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>So, from this part of the series, we were able to understand the fundamentals of channels in golang. By using the core concepts from the previous posts like go routines and wait groups, we were able to work with channels in golang. We wrote a few examples for different patterns using concurrency concepts with channels. Patterns like pipelines, fan-in, fan-out, async, and some usage of select statements for channels were explored in this section.</p>
+<p>Hopefully, you found this section helpful, if you have any comments or feedback, please let me know in the comments section or on my social handles. Thank you for reading. Happy Coding :)</p>
+</main>
+<div id="comments">
+<script async="" crossorigin="anonymous" data-category="Q&amp;A" data-category-id="DIC_kwDOHZ6V_s4CRfn4" data-emit-metadata="0" data-input-position="bottom" data-lang="en" data-mapping="pathname" data-reactions-enabled="1" data-repo="Mr-Destructive/meetgor.com" data-repo-id="R_kgDOHZ6V_g" data-strict="0" data-theme="dark_high_contrast" src="https://giscus.app/client.js">
+</script>
+</div>
+<!-- 
+          <script src="/copy.js"></script>
+      -->
+<footer>
+        © 2025
+        <ul class="social">
+<li>
+<a href="https://twitter.com/MeetGor21">Twitter
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#twitter"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="https://www.linkedin.com/in/meetgor/">LinkedIn
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#linkedin"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="https://github.com/Mr-Destructive">GitHub
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#github"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="https://dev.to/mr_destructive">Dev.to
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#devto"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="/rss.xml">RSS
+            <svg class="svg-icon orange">
+<use xlink:href="/social-icons.svg#rss"></use>
+</svg>
+</a>
+</li>
+<li>
+<a class="u-email" href="mailto:gormeet711@gmail.com">Email</a>
+</li>
+</ul>
+</footer>
+<style>
+
+:root {
+    --color-bg: #1f2022;
+    --color-bg-2: #161718;
+    --color-bg-code: #123456;
+    --color-text: #eefbfe;
+    --color-text-2: #00ffff;
+    --color-code-text: white;
+    --color-link: #fb30c4;
+    --color-accent: #f1fa8c;
+    --overlay-brightness: .85;
+    --body-width: 1000px;
+    --syntax-background-color: #08090a;
+    --syntax-text-color: #f8f8f2;
+    --syntax-comment-color: #808080;
+    --syntax-declaration-color: #f39c12;
+    --syntax-literal-color: #dda0dd;
+    --syntax-error-color: #f9690e;
+    --syntax-name-color: #7ed07e;
+    --syntax-string-color: #f2ca27;
+}
+
+[data-theme="dark"] {
+    --color-bg: #1f2022;
+    --color-bg-2: #161718;
+    --color-bg-code: black;
+    --color-text: #eefbfe;
+    --color-text-2: #00ffff;
+    --color-code-text: white;
+    --color-link: #fb30c4;
+    --color-accent: #f1fa8c;
+    --overlay-brightness: .85;
+    --body-width: 1000px;
+    --animation-one: white;
+    --animation-two: #eeeeee;
+    --animation-three: #dddddd;
+    --animation-four: #aaaaaa;
+    --animation-five: grey;
+    --animation-six: grey;
+    --animation-seven: #eeeeee;
+    --animation-eight: white;
+}
+[data-theme="light"] {
+    --color-bg: #cfefff;
+    --color-bg-2: #c8d2db;
+    --color-bg-code: #00001a;
+    --color-text: #1f2022;
+    --color-text-2: #000030;
+    --color-code-text: white;
+    --color-link: #fb30c4;
+    --color-accent: #ffeb00;
+    --overlay-brightness: 1.0;
+    --animation-one: grey;
+    --animation-two: #aaaaaa;
+    --animation-three: #dddddd;
+    --animation-four: black;
+    --animation-five: black;
+    --animation-six: #dddddd;
+    --animation-seven: #aaaaaa;
+    --animation-eight: grey;
+}
+
+html  {
+    font-family: "Space Mono", monospace;
+    background: var(--color-bg);
+    color: var(--color-text);
+    contain: paint;
+}
+
+a {
+    color: var(--color-link);
+}
+main a {
+    max-width: 100%;
+}
+.heading-permalink {
+    font-size: .7em;
+}
+body {
+    max-width: var(--body-width);
+    margin: 5rem auto;
+    padding: 0 .5rem;
+    font-size: 1rem;
+    line-height: 1.56;
+}
+blockquote {
+    background: var(--color-bg);
+    filter: brightness(var(--overlay-brightness));
+    border-left: 4px solid var(--color-accent);
+    border-radius: 4px;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #f1fa8c,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+    padding-left: 1rem;
+    margin: 1rem;
+}
+li.post {
+   /* list-style-type: None; */
+    padding: .2rem 0;
+}
+pre.wrapper{
+  padding: 0;
+  box-shadow: 0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin: 2rem;
+}
+pre {
+    margin:0;
+    padding: 1rem;
+    min-width: -webkit-fill-available;
+    max-width: fit-content;
+    overflow-x: auto;
+}
+
+pre .filepath {
+  margin:0;
+  padding-left: 1rem;
+  border-radius: 4px 4px 0 0;
+  background: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+pre .filepath p{
+  margin:0
+}
+
+pre .filepath .right{
+  display: flex;
+  gap: .2rem;
+  align-items: center;
+}
+
+pre::-webkit-scrollbar {
+    height: 4px;
+    background-color: transparent;
+}
+
+pre::-webkit-scrollbar-thumb {
+    background-color: #d3d3d32e;
+    border-radius: 2px;
+}
+
+pre::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.copy-wrapper {
+    background: none;
+    position: absolute;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    justify-content: flex-end;
+}
+button.copy {
+    z-index: 100;
+    background: none;
+    fill: #ffffff45;
+    border: none;
+    width: 32px;
+    align-self: flex-end;
+    top: 0;
+    right: 0;
+    margin: 0.5rem 0.2rem;
+}
+button.copy:hover {
+    fill:white
+}
+
+a.help {
+    fill: #ffffff45;
+}
+a.help:hover {
+    fill: white;
+}
+a.help svg{
+    height:24px;
+    width:24px;
+}
+code {
+  font-family: monospace;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background-color: var(--color-bg-code);
+  color: var(--color-code-text);
+}
+.highlight  {
+    background: var(--color-bg-code);
+    color: var(--color-code-text);
+    filter: brightness(var(--overlay-brightness));
+    border-radius: 0 0 4px 4px;
+}
+
+.highlight .c { color: var(--syntax-comment-color); } /* Comment */
+.highlight .err { color: var(--syntax-error-color); } /* Error */
+.highlight .k { color: var(--syntax-declaration-color); } /* Keyword */
+.highlight .l { color: var(--syntax-literal-color); } /* Literal */
+.highlight .n { color: var(--syntax-name-color); } /* Name */
+.highlight .o { color: var(--syntax-declaration-color); } /* Operator */
+.highlight .p { color: var(--syntax-literal-color); } /* Punctuation */
+.highlight .cm { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Multiline */
+.highlight .cp { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Preproc */
+.highlight .c1 { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Single */
+.highlight .cs { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Special */
+.highlight .gd { color: var(--syntax-literal-color); font-weight: bold; } /* Generic.Deleted */
+.highlight .ge { color: var(--syntax-error-color); font-style: italic; } /* Generic.Emph */
+.highlight .gr { color: #ff0000; } /* Generic.Error */
+.highlight .gh { color: var(--syntax-declaration-color); font-weight: bold; } /* Generic.Heading */
+.highlight .gi { color: var(--syntax-name-color); } /* Generic.Inserted */
+.highlight .go { color: var(--syntax-declaration-color); } /* Generic.Output */
+.highlight .gp { color: var(--syntax-literal-color); font-weight: bold; } /* Generic.Prompt */
+.highlight .gs { color: var(--syntax-declaration-color); font-weight: bold; } /* Generic.Strong */
+.highlight .gu { color: var(--syntax-declaration-color); font-weight: bold; } /* Generic.Subheading */
+.highlight .gt { color: var(--syntax-declaration-color); } /* Generic.Traceback */
+.highlight .kc { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Constant */
+.highlight .kd { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Declaration */
+.highlight .kn { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Namespace */
+.highlight .kp { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Pseudo */
+.highlight .kr { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Reserved */
+.highlight .kt { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Type */
+.highlight .ld { color: var(--syntax-literal-color); font-style: italic; } /* Literal.Date */
+.highlight .m { color: var(--syntax-literal-color); } /* Literal.Number */
+.highlight .s { color: var(--syntax-string-color); } /* Literal.String */
+
+/* Tab style starts here */
+.tabbed-set {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 1em 0;
+    border-radius: 0.1rem;
+}
+
+.tabbed-set > input {
+    display: none;
+}
+
+.tabbed-set label {
+    width: auto;
+    padding: 0.9375em 1.25em 0.78125em;
+    font-weight: 700;
+    font-size: 0.84em;
+    white-space: nowrap;
+    border-bottom: 0.15rem solid transparent;
+    border-top-left-radius: 0.1rem;
+    border-top-right-radius: 0.1rem;
+    cursor: pointer;
+    transition: background-color 250ms, color 250ms;
+}
+
+.tabbed-set .tabbed-content {
+    width: 100%;
+    display: none;
+    box-shadow: 0 -.05rem #ddd;
+}
+
+.tabbed-set input {
+    position: absolute;
+    opacity: 0;
+}
+
+/* fonts */
+h1 {
+    font-weight: 700;
+}
+
+h1#title a {
+    font-size: 16px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-top: 3rem;
+    color: var(--color-text-2);
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-top: 5rem;
+}
+
+h2 {
+    font-size: 1.63rem;
+    margin-top: 5rem;
+}
+
+p {
+    font-size: 21px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+@media only screen and (max-width: 700px) {
+p {
+    font-size: 18px;
+}
+}
+
+@media only screen and (max-width: 600px) {
+p {
+    font-size: 16px;
+}
+}
+
+@media only screen and (max-width: 500px) {
+p {
+    font-size: 14px;
+}
+}
+
+@media only screen and (max-width: 400px) {
+p {
+    font-size: 12px;
+}
+}
+
+
+pre {
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 18.5714px;
+}
+
+a {
+    font-weight: 600;
+    text-decoration-color: var(--color-accent);
+    color: var(--color-link);
+    padding: .3rem .5rem;
+    display: inline-block;
+}
+
+.admonition, details {
+    box-shadow: 0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+    margin: 5rem 0;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-align: left;
+    padding: 0;
+    border: 0;
+}
+.admonition {
+    padding-bottom: 1rem;
+}
+
+details[open] {
+    padding-bottom: .5rem;
+}
+
+.admonition p{
+    padding: .2rem .6rem;
+}
+
+.admonition-title, .details-title, summary {
+    background: var(--color-bg-2);
+    padding: 0;
+    margin: 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+summary:hover {
+    cursor: pointer;
+}
+
+summary.admonition-title, summary.details-title {
+    padding: .5rem;
+    padding-left: 1rem;
+}
+
+.note {
+    border-left: 4px solid #f1fa8c;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #f1fa8c,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.note > .admonition-title {
+    border-bottom: 1px solid #3c3d2d;
+}
+
+.abstract {
+    border-left: 4px solid #8be9fd;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #8be9fd,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.abstract > .admonition-title {
+    border-bottom: 1px solid #2c3a3f;
+}
+.info {
+    border-left: 4px solid;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #8bb0fd,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.info > .admonition-title {
+    border-bottom: 1px solid #2c313f;
+}
+
+.tip {
+    border-left: 4px solid #008080;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #008080,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.tip > .admonition-title {
+    border-bottom: 1px solid #1b2a2b;
+}
+.success {
+    border-left: 4px solid #50fa7b;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #50fa7b,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.success > .admonition-title {
+    border-bottom: 1px solid #263e2b;
+}
+
+.question {
+    border-left: 4px solid #a7fcbd;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #a7fcbd,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.question > .admonition-title {
+    border-bottom: 1px solid #303e35;
+}
+
+.warning {
+    border-left: 4px solid #ffb86c;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #ffb86c,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.warning > .admonition-title {
+    border-bottom: 1px solid #3f3328;
+}
+
+.failure {
+    border-left: 4px solid #b23b3b;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #b23b3b,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.failure > .admonition-title {
+    border-bottom: 1px solid #34201f;
+}
+
+.danger {
+    border-left: 4px solid #ff5555;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #ff5555,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.danger > .admonition-title {
+    border-bottom: 1px solid #402523;
+}
+
+.bug {
+    border-left: 4px solid #b2548a;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #b2548a,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.bug > .admonition-title {
+    border-bottom: 1px solid #32232c;
+}
+
+.example {
+    border-left: 4px solid #bd93f9;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #bd93f9,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.example > .admonition-title {
+    border-bottom: 1px solid #332d3e;
+}
+
+.source {
+    border-left: 4px solid #bd93f9;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #bd93f9,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.source > .admonition-title {
+    border-bottom: 1px solid #332d3e;
+}
+
+.quote {
+    border-left: 4px solid #999;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #999,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.quote > .admonition-title {
+    border-bottom: 1px solid #2d2e2f;
+}
+
+table {
+    margin: 1rem 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: block;
+    max-width: -moz-fit-content;
+    max-width: fit-content;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+table thead th {
+    border: solid 1px var(--color-text);
+    padding: 10px;
+    text-align: left;
+}
+
+table tbody td {
+    border: solid 1px var(--color-text);
+    padding: 10px;
+}
+.theme-switch {
+    z-index: 10;
+    display: inline-block;
+    height: 34px;
+    position: relative;
+    width: 60px;
+
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 1rem;
+    margin-left: auto;
+    position: fixed;
+    right: 1rem;
+    top: 1rem;
+}
+
+.theme-switch input {
+    display:none;
+}
+
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+}
+
+.slider:before {
+    background-color: #fff;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 26px;
+}
+
+input:checked + .slider {
+    background-color: #343434;
+}
+input:checked + .slider:before {
+    background-color: #848484;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+main p img {
+    width: 100%;
+    width: -moz-available;
+    width: -webkit-fill-available;
+    width: fill-available;
+}
+
+details>* {
+    margin: 1rem;
+}
+
+.admonition>* {
+    margin: 1rem;
+}
+
+p.admonition-title, summary {
+    margin: 0;
+    padding-left:1.2rem;
+}
+
+.small {
+    font-size: .9rem;
+    color: #888;
+}
+
+admonition+admonition{
+    margin-top:20rem;
+}
+
+::-webkit-scrollbar {
+    height: 12px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #d3d3d32e;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+.nav{
+    position: sticky;
+    top: 0;
+    background-color: var(--color-bg);
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 5;
+}
+.social{
+    display: flex;
+    list-style-type: none;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+img {
+    max-width: 100%;
+    width: 80%;
+    vertical-align: middle;
+}
+
+.thumbnail {
+    width:100%; height: 30%;
+    border-radius:25px;
+    transition:box-shadow 1s ease;
+}
+
+.thumbnail:hover {
+    box-shadow:0px 0px 0px 8px #ff6600;
+}
+.svg-icon { width: 16px; height: 16px; display: inline-flex; fill: #ffffff; padding-right: 5px; vertical-align: text-top; }
+
+.text-primary {
+	color: #fff;
+	font-size: 1.8rem;
+	font-weight: 700;
+	text-align: center;
+	width: 100%;
+	line-height: 1.6;
+	background-image: linear-gradient(90deg, var(--animation-one), var(--animation-two), var(--animation-three), var(--animation-four), var(--animation-five), var(--animation-six), var(--animation-seven), var(--animation-eight));
+	background-size: 200%;
+	color: transparent;
+	-webkit-text-fill-color: transparent;
+	-webkit-background-clip: text;
+	background-clip: text;
+	animation: animate 20s infinite alternate;
+}
+@keyframes animate {
+	0% {
+		background-position: 0%;
+	}
+	100% {
+		background-position: 400%;
+	}
+}
+
+pre, code { font-size: 15px; border: 1px solid #e8e8e8; border-radius: 3px; background-color: var(--color-bg-code); }
+
+code { padding: 1px 5px; color: #ffffff; }
+
+pre { padding: 8px 12px; overflow-x: auto; }
+
+pre > code { border: 0; padding-right: 0; padding-left: 0; }
+
+.language-bar{
+    height: 3em;
+    text-align: justify;
+    padding: 1em 0 1px 1em;
+    color: var(--color-code-text)
+}
+
+        </style>
+</body>
+</html>

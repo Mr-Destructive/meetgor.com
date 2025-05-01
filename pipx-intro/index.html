@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Techstructive Blog | Pipx: A python package consumption tool for CLI packages by  Meet Rajesh Gor</title>
+<script src="/script.js"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width" name="viewport"/>
+<meta content="Techstructive Blog - Personal Blog of Meet Gor" name="description"/>
+<meta content="blog, web-development, backend-developer" name="keywords"/>
+<meta content="Meet Rajesh Gor" name="author"/>
+<meta content="https://www.meetgor.com/" property="og:url"/>
+<meta content="website" property="og:type"/>
+<meta content="Pipx: A python package consumption tool for CLI packages" property="og:title"/>
+<meta content="Exploring the pipx package in python to run CLI tools globally in an isolated environment" property="og:description"/>
+<meta content="https://meetgor-cdn.pages.dev/python-pkg-pipx.png" property="og:image"/>
+<meta content="meetgor.com" property="twitter:domain"/>
+<meta content="https://www.meetgor.com/" property="twitter:url"/>
+<meta content="Techstructive Blog" name="twitter:title"/>
+<meta content="" name="twitter:description"/>
+<meta content="https://meetgor-cdn.pages.dev/python-pkg-pipx.png" name="twitter:image"/>
+<link href="/tbicon.png" rel="icon" type="image/png"/>
+<style>
+</style>
+<script async="" crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4627844420729409">
+</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+<style>
+.theme-switch input {
+    display:none;
+}
+
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+}
+
+.slider:before {
+    background-color: #fff;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 26px;
+}
+
+input:checked + .slider {
+    background-color: #343434;
+}
+input:checked + .slider:before {
+    background-color: #848484;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+</style>
+<meta content="markata 0.7.4" name="generator"/></head>
+<body>
+<div class="nav">
+<a href="/blog">
+<p class="text-primary">Techstructive Blog </p>
+</a>
+<nav>
+<a href="/">Home</a>
+<a href="/blog">Blog</a>
+<a href="/projects">Projects</a>
+<label class="theme-switch" for="checkbox-theme" id="theme-switch" title="light/dark mode toggle">
+<input id="checkbox-theme" type="checkbox"/>
+<div class="slider round"> </div>
+</label>
+</nav>
+</div>
+<section class="title">
+<div id="cover-wrapper">
+<a href=""><img alt="cover image for article" class="thumbnail" src="https://meetgor-cdn.pages.dev/python-pkg-pipx.png"/></a>
+</div>
+<h1 class="text-primary" id="title">
+        Pipx: A python package consumption tool for CLI packages
+        
+        
+      </h1>
+<a alt="edit post url" href="https://github.com/mr-destructive/meetgor.com/edit/gh-pages/blog/posts/2022-03-20-Pipx.md" title="edit this post">
+              Edit
+          </a>
+<p>Published on March 20, 2022</p>
+<p>Author: Meet Rajesh Gor</p>
+<a href="/tag/python">#python</a>
+</section>
+<main>
+<h2>Introduction<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>Previously, I explored the <a href="https://mr-destructive.github.io/techstructive-blog/pipenv-intro/">pipenv</a> as a python package management tool and this week it is time for exploring a python CLI package isolation tool called <code>pipx</code>. It is a really simple and powerful tool for running commands as an executable from an isolated environment. Those commands should be associated with a python package that has CLI. In pipx, we install the package once and we can use the package anywhere on our system isolated from other virtual environments.</p>
+<p>In this article, We will explore the pipx package/tool in python. From installation to setting up your environment and removing some friction in your python workflow. This won't be an in-depth guide of pipx, though we would cover a few python packages that can be easily used in your environment.</p>
+<h2>What is Pipx<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>Pipx is a python package that works similar to <code>pip</code> but it is quite specific to the usage. It can run CLI commands of any python package from anywhere on your system. It uses its own virtual environment for managing the packages and the python version.</p>
+<p><strong>NOTE</strong></p>
+<ul>
+<li>Pipx is a tool to install and execute CLI commands provided in the python packages</li>
+<li>Pipx is not a python package management tool like pip or pipenv.</li>
+</ul>
+<p>Pipx is similar to <code>npx</code> for nodejs. Though the major difference is that pipx runs and installs all packages/tools globally unlike npx.</p>
+<h2>Install Pipx<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p><strong>Pipx requires Python 3.6 or above.</strong></p>
+<ul>
+<li>You can install it normally like a python package with pip:</li>
+</ul>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pip install pipx
+</pre></div>
+
+</pre>
+<p>To find out if pipx was successfully installed, you can simply type in the command:</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pipx --version
+</pre></div>
+
+</pre>
+<p>If it gives a number and no errors, it has been successfully installed in your system globally.</p>
+<h2>Pipx Commands<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>The primary commands that pipx can use are:</p>
+<ol>
+<li>pipx install</li>
+<li>pipx list</li>
+<li>pipx run</li>
+<li>pipx inject</li>
+<li>pipx uninstall</li>
+</ol>
+<p>For further command options for a specific use case, you can use the <code>pipx -h</code> command to get the detailed list of commands and options available in pipx.</p>
+<p>Also, the documentation of pipx is really incredibly beginner-friendly. You can follow up with the article from the <a href="https://pypa.github.io/pipx/">documentation</a> webpage or the <a href="https://github.com/pypa/pipx/">GitHub</a> repository. The documentation and the webpage are simple single-page websites that really make learning the tool easier and it also has a well-documented package.</p>
+<h3>Pipx Install Command<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>Pipx can install packages in a virtual environment specific to the package provided. This means that you will have different virtual envs for each package you install and not a single virtual env for a project, it creates and makes the package venvs accessible globally. The next step after installing the package in a different venv is to make that package commands accessible via the PATH environment variable.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pipx install &lt;package_name&gt;
+</pre></div>
+
+</pre>
+<p>If say we install <a href="https://pypi.org/project/pgcli/">pgcli</a>, a package for interacting with postgres database using python in the Command line. We will simply enter the following commands:</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pipx install pgcli
+</pre></div>
+
+</pre>
+<p><img alt="install package with pipx" src="https://res.cloudinary.com/techstructive-blog/image/upload/v1647783261/blog-media/du830o3fbqogvkaesxnq.png"/></p>
+<p>We can use the package pgcli globally in our system. So, we have access to the databases in the local Postgres server. We can run the commands as normally as we want using the pgcli by just prefixing with <code>pipx run</code>.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pipx run pgcli &lt;local_database_name&gt; -U postgres
+</pre></div>
+
+</pre>
+<p><img alt="PGCLI demonstration GIF" src="https://res.cloudinary.com/techstructive-blog/image/upload/v1647782221/blog-media/dfpwlxkh5ybqj5pdos8d.gif"/></p>
+<p>This is a really cool way to interact with CLI applications without installing separately or globally, using pipx the virtual environment for the specific package makes it a clean and persistent behavior for running the commands anywhere in the system.</p>
+<p>If you want to know more about pgcli tool/package in Python, you can it's <a href="https://www.pgcli.com/docs">documentation</a> webpage or the <a href="https://github.com/dbcli/pgcli">GitHub</a> repository.</p>
+<h4>Pipx Default PATH<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h4>
+<p>The default path at which pipx stores the virtual environments for each package is by default the <code>~/.local/pipx/venvs</code>(here ~ refers to the root/default directory), the documentation says that it can be changed by editing the environment variable <code>PIPX_HOME</code>.</p>
+<p>The default path at which pipx stores the binaries/command apps for each package is stored in the path <code>~/.local/bin</code>, even this path can be modified by editing the environment variable <code>PIPX_BIN_DIR</code></p>
+<h3>Pipx List Command<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>Pipx list command simply lists the executables or the commands you can run with pipx. This command will display the commands associated with the packages that are installed in the pipx environment.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pipx list
+</pre></div>
+
+</pre>
+<p><img alt="Pipx list output" src="https://res.cloudinary.com/techstructive-blog/image/upload/v1647782349/blog-media/qu95nynklbuceqqd9qke.png"/></p>
+<p>This command gives a detailed list of the commands associated with their respective packages. It also gives the meta-information like the Python version in which the package was installed.</p>
+<h3>Pipx Run Command<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>The most useful command in pipx has to be <code>pipx run</code>, this command can execute provide package along with the specified command associated with the package.</p>
+<p>The structure of the command is as follows:</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pipx run &lt;package_name&gt; &lt;command&gt;
+</pre></div>
+
+</pre>
+<p>The pipx documentation refers to the <code>command</code> as an <code>APP</code>, as it is an executable created from the package specification.</p>
+<p>If the APP/command name is not matching the <code>package_name</code>(most of the time it won't), you need to add an argument to the run command.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pipx run --spec &lt;package_name&gt; &lt;command&gt;
+</pre></div>
+
+</pre>
+<p>The <code>--spec</code> option allows specifying a certain package to be used while running the command/APP. Using this option with the <code>pipx run</code> command, we can run package-specific commands. For example, if we want to run an ipython from the terminal, without messing up the current environment i.e. without installing any package. You can do that by using pipx.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pipx install dailydotdev-bookmark-cli
+
+pipx run --spec dailydotdev-bookmark-cli bookamrks
+</pre></div>
+
+</pre>
+<p><img alt="dailydotdev-bookmark-cli demo" src="https://res.cloudinary.com/techstructive-blog/image/upload/v1647782547/blog-media/vsfmwlzazqtosuwttexb.gif"/></p>
+<p>This is my shameless plug of installing my <a href="https://github.com/Mr-Destructive/bookmarks-cli">first python package</a>. The command used for the CLI is totally not related to the package name and hence we have to use the <code>--spec</code> option.</p>
+<h2>Install and Run packages from Pipx<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>Any python package which provide a Command Line Interface can be installed and run with pipx. Some of the packages like <a href="https://docs.pytest.org/en/7.1.x/contents.html">pytest</a>, <a href="https://pipenv-fork.readthedocs.io/en/latest/install.html">pipenv</a>, <a href="https://github.com/Textualize/rich-cli">rich-cli</a>, <a href="https://github.com/psf/black">Black code formatter</a>, <a href="https://markata.dev/">markata</a> and many others.
+You can install any of the packages which do have a cli to interact with on the go with pipx.</p>
+<h3>Running Ipython shell<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>We can use <a href="https://pypi.org/project/ipython/">Ipython</a> shell from pipx as an isolated environment. We simply install the package first, after installing the package it creates the virtual environment. Creating a separate virtual environment registers the app/command binaries into the PATH environment of the system so that they can be accessed globally.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pipx install ipython
+
+pipx run ipython
+</pre></div>
+
+</pre>
+<p><img alt="IPython pipx demo" src="https://res.cloudinary.com/techstructive-blog/image/upload/v1647782651/blog-media/ssgymybn0dwi8ocs6xpf.png"/></p>
+<p>For further documentation on ipython using the CLI, you can refer to the <a href="https://github.com/ipython/ipython">GitHub</a> link or the <a href="https://ipython.org/ipython-doc/3/interactive/reference.html#command-line-usage">documentation</a> page.</p>
+<h3>Reading an IPYNB file from pipx with JUT<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>If you just want to read an ipynb file from the terminal, you can do that using <a href="https://pypi.org/project/jut/">jut</a> by specifying the command:</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pipx install jut
+
+pipx run jut &lt;notebook.ipynb&gt;
+</pre></div>
+
+</pre>
+<p><img alt="jut pipx demo" src="https://res.cloudinary.com/techstructive-blog/image/upload/v1647782686/blog-media/ddm5uiqarjjmedhqvcsk.png"/></p>
+<p>You can find more information on JUT via their official <a href="https://github.com/kracekumar/jut">GitHub</a> repository.</p>
+<h3>Using rich-cli to display text using pipx<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>We can even use <a href="https://pypi.org/project/rich-cli/">Rich-CLI</a> to print rich content in the project. Rich-CLI as the name suggests is a CLI for the Rich package in python. It is really intuitive and simple to use. If we want to take snaps of the rich content of a markdown file, source file, dataset, etc. rich-cli is a tool that can quickly do that. Use pipx to install the package globally and simply run wherever required in an isolated environment.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pipx install rich-cli
+
+pipx run --spec rich-cli rich "[blue]Hello[/], [yellow]World[/]!" --print
+</pre></div>
+
+</pre>
+<p><img alt="rich-cli pipx demo" src="https://res.cloudinary.com/techstructive-blog/image/upload/v1647782738/blog-media/xvdyhxjpj2hsghl2x1ng.png"/></p>
+<p>This will give you a colorful display of "Hello, World" without you messing up your current project. Pipx has an isolated environment so it doesn't tinker with your local virtual environment or project. Though you can use your current project to use those CLI to execute commands which might require the source file in the project.</p>
+<p>We can even print the markdown file in a rich format, simply using pipx and rich-cli. There are a lot of things we can do with rich-cli.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pipx run rich-cli &lt;markdown_file.md&gt;
+</pre></div>
+
+</pre>
+<p><img alt="rich-cli markdown demo" src="https://res.cloudinary.com/techstructive-blog/image/upload/v1647785474/blog-media/bwmvucrcgrtgwdv58ffj.png"/></p>
+<p>For further reading on the rich-cli package, you visit their <a href="https://github.com/Textualize/rich-cli">GitHub</a> link and the <a href="https://github.com/Textualize/rich-cli/blob/main/README.md">Documentation</a> Readme.</p>
+<h3>Using pytest to perform a test for the current project<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p><a href="https://pypi.org/project/pytest/">Pytest</a> allows writing simple and scalable tests for Python apps, libraries, and packages. We can use it to write tests in the project without adding it as a dependency in the python environment. Simply install the package with pipx and run the tests in an isolated environment.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pipx install pytest
+
+pipx run pytest temp.py
+</pre></div>
+
+</pre>
+<p><img alt="Pytest pipx demo" src="https://res.cloudinary.com/techstructive-blog/image/upload/v1647782771/blog-media/qutb0bxzlnwctl9mbuon.png"/></p>
+<p>Here, we can see the pytest was performed on the <code>temp.py</code> file which can be any application file for your project. This gave us results without installing pytest in our application's virtual environment. This becomes really convenient to run certain package commands whose package should not be a dependency on your project in the virtual environment.</p>
+<p>You can visit Pytest's <a href="https://github.com/pytest-dev/pytest/">GitHub</a>, <a href="https://docs.pytest.org/en/stable/">Documentation</a> and their <a href="https://pytest.org/">Home Page</a>.</p>
+<h3>Using Black (Python code formatter)<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>We can use pipx to even format the python source files using <a href="https://pypi.org/project/black/">black</a>. We don't have to install <code>black</code> as a dependency in the project. Pipx will simply install black in its isolated environment and run the specified command.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pipx install black
+
+pipx run black temp.py
+</pre></div>
+
+</pre>
+<p><img alt="Black pipx demo" src="https://res.cloudinary.com/techstructive-blog/image/upload/v1647782823/blog-media/dtnae85fvgae2y4aiqkg.png"/></p>
+<p>Black is a code formatter in Python, it basically edits your source python files for any incorrect python semantics and syntax, it corrects/formats them without a compromise. You can visit the <a href="https://github.com/psf/black">GitHub</a>, <a href="https://black.readthedocs.io/en/stable">Documentation</a> or the Black package <a href="https://black.vercel.app/">Playground webpage</a>.</p>
+<h3>Using httpie (curl equivalent in Python)<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>We can use the <a href="https://pypi.org/project/httpie/">httpie</a> package in python which is a CLI tool for HTTP clients. It is very similar to the <code>curl</code> command in Linux. We can even use that with pipx to test out API endpoints or any website that you might be working with without leaving the terminal. For further details on the httpie package, you can visit their <a href="https://httpie.io/">Home page</a>, <a href="https://github.com/httpie">GitHub</a>, or <a href="https://pypi.org/project/httpie/">PyPI webpage</a>.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pipx install httpie
+
+pipx run --spec httpie http -v dev.to
+</pre></div>
+
+</pre>
+<p><img alt="httpie pipx demo" src="https://res.cloudinary.com/techstructive-blog/image/upload/v1647782857/blog-media/jbaudm3pbnnsjtzy5ok7.png"/></p>
+<p>Here, we can see the package simply gives a simple output of the headers of the request. It is smart enough to understand the web link as <code>https://dev.to</code> unlike CURL which needs to have an exact match.</p>
+<h3>Running Markata blog with pipx<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>As said, every package that bundles itself with a CLI can be installed and run from anywhere. So, <a href="https://pypi.org/project/markata/">markata</a> which is a plugin-driven static site generator which is a python package also bundles with a CLI. Using the base app(markata) we can run its associated commands like <code>build</code>, <code>list</code>, etc. I use this to build my blog.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pipx install markata
+
+pipx run markata build
+</pre></div>
+
+</pre>
+<p><img alt="Markata pipx demo" src="https://res.cloudinary.com/techstructive-blog/image/upload/v1647783021/blog-media/cygzwixyzwv4wwsccbfc.gif"/></p>
+<p>You can visit the Markata's <a href="https://markata.dev/">documentation</a> web page or the <a href="https://github.com/WaylonWalker/markata">GitHub</a> repository for further insights on the Static site generator.</p>
+<p><strong>If you want to explore more packages that you can use with pipx, then you can look at the docs guide <a href="https://pypa.github.io/pipx/programs-to-try/">programs-to-try</a> section.</strong></p>
+<h2>Conclusion<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>So, from this simple introduction, we were able to understand the basics of pipx which is a python package for isolating and running CLI-specific package commands. We saw how to setup pipx, install packages, run the commands from the package and interact with the virtual environment that it creates for each package we install.</p>
+<p>Thank you for reading, if you have any comments, suggestions, feedback please let me know in the comments. Happy Coding :)</p>
+</main>
+<div id="comments">
+<script async="" crossorigin="anonymous" data-category="Q&amp;A" data-category-id="DIC_kwDOHZ6V_s4CRfn4" data-emit-metadata="0" data-input-position="bottom" data-lang="en" data-mapping="pathname" data-reactions-enabled="1" data-repo="Mr-Destructive/meetgor.com" data-repo-id="R_kgDOHZ6V_g" data-strict="0" data-theme="dark_high_contrast" src="https://giscus.app/client.js">
+</script>
+</div>
+<!-- 
+          <script src="/copy.js"></script>
+      -->
+<footer>
+        © 2025
+        <ul class="social">
+<li>
+<a href="https://twitter.com/MeetGor21">Twitter
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#twitter"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="https://www.linkedin.com/in/meetgor/">LinkedIn
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#linkedin"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="https://github.com/Mr-Destructive">GitHub
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#github"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="https://dev.to/mr_destructive">Dev.to
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#devto"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="/rss.xml">RSS
+            <svg class="svg-icon orange">
+<use xlink:href="/social-icons.svg#rss"></use>
+</svg>
+</a>
+</li>
+<li>
+<a class="u-email" href="mailto:gormeet711@gmail.com">Email</a>
+</li>
+</ul>
+</footer>
+<style>
+
+:root {
+    --color-bg: #1f2022;
+    --color-bg-2: #161718;
+    --color-bg-code: #123456;
+    --color-text: #eefbfe;
+    --color-text-2: #00ffff;
+    --color-code-text: white;
+    --color-link: #fb30c4;
+    --color-accent: #f1fa8c;
+    --overlay-brightness: .85;
+    --body-width: 1000px;
+    --syntax-background-color: #08090a;
+    --syntax-text-color: #f8f8f2;
+    --syntax-comment-color: #808080;
+    --syntax-declaration-color: #f39c12;
+    --syntax-literal-color: #dda0dd;
+    --syntax-error-color: #f9690e;
+    --syntax-name-color: #7ed07e;
+    --syntax-string-color: #f2ca27;
+}
+
+[data-theme="dark"] {
+    --color-bg: #1f2022;
+    --color-bg-2: #161718;
+    --color-bg-code: black;
+    --color-text: #eefbfe;
+    --color-text-2: #00ffff;
+    --color-code-text: white;
+    --color-link: #fb30c4;
+    --color-accent: #f1fa8c;
+    --overlay-brightness: .85;
+    --body-width: 1000px;
+    --animation-one: white;
+    --animation-two: #eeeeee;
+    --animation-three: #dddddd;
+    --animation-four: #aaaaaa;
+    --animation-five: grey;
+    --animation-six: grey;
+    --animation-seven: #eeeeee;
+    --animation-eight: white;
+}
+[data-theme="light"] {
+    --color-bg: #cfefff;
+    --color-bg-2: #c8d2db;
+    --color-bg-code: #00001a;
+    --color-text: #1f2022;
+    --color-text-2: #000030;
+    --color-code-text: white;
+    --color-link: #fb30c4;
+    --color-accent: #ffeb00;
+    --overlay-brightness: 1.0;
+    --animation-one: grey;
+    --animation-two: #aaaaaa;
+    --animation-three: #dddddd;
+    --animation-four: black;
+    --animation-five: black;
+    --animation-six: #dddddd;
+    --animation-seven: #aaaaaa;
+    --animation-eight: grey;
+}
+
+html  {
+    font-family: "Space Mono", monospace;
+    background: var(--color-bg);
+    color: var(--color-text);
+    contain: paint;
+}
+
+a {
+    color: var(--color-link);
+}
+main a {
+    max-width: 100%;
+}
+.heading-permalink {
+    font-size: .7em;
+}
+body {
+    max-width: var(--body-width);
+    margin: 5rem auto;
+    padding: 0 .5rem;
+    font-size: 1rem;
+    line-height: 1.56;
+}
+blockquote {
+    background: var(--color-bg);
+    filter: brightness(var(--overlay-brightness));
+    border-left: 4px solid var(--color-accent);
+    border-radius: 4px;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #f1fa8c,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+    padding-left: 1rem;
+    margin: 1rem;
+}
+li.post {
+   /* list-style-type: None; */
+    padding: .2rem 0;
+}
+pre.wrapper{
+  padding: 0;
+  box-shadow: 0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin: 2rem;
+}
+pre {
+    margin:0;
+    padding: 1rem;
+    min-width: -webkit-fill-available;
+    max-width: fit-content;
+    overflow-x: auto;
+}
+
+pre .filepath {
+  margin:0;
+  padding-left: 1rem;
+  border-radius: 4px 4px 0 0;
+  background: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+pre .filepath p{
+  margin:0
+}
+
+pre .filepath .right{
+  display: flex;
+  gap: .2rem;
+  align-items: center;
+}
+
+pre::-webkit-scrollbar {
+    height: 4px;
+    background-color: transparent;
+}
+
+pre::-webkit-scrollbar-thumb {
+    background-color: #d3d3d32e;
+    border-radius: 2px;
+}
+
+pre::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.copy-wrapper {
+    background: none;
+    position: absolute;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    justify-content: flex-end;
+}
+button.copy {
+    z-index: 100;
+    background: none;
+    fill: #ffffff45;
+    border: none;
+    width: 32px;
+    align-self: flex-end;
+    top: 0;
+    right: 0;
+    margin: 0.5rem 0.2rem;
+}
+button.copy:hover {
+    fill:white
+}
+
+a.help {
+    fill: #ffffff45;
+}
+a.help:hover {
+    fill: white;
+}
+a.help svg{
+    height:24px;
+    width:24px;
+}
+code {
+  font-family: monospace;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background-color: var(--color-bg-code);
+  color: var(--color-code-text);
+}
+.highlight  {
+    background: var(--color-bg-code);
+    color: var(--color-code-text);
+    filter: brightness(var(--overlay-brightness));
+    border-radius: 0 0 4px 4px;
+}
+
+.highlight .c { color: var(--syntax-comment-color); } /* Comment */
+.highlight .err { color: var(--syntax-error-color); } /* Error */
+.highlight .k { color: var(--syntax-declaration-color); } /* Keyword */
+.highlight .l { color: var(--syntax-literal-color); } /* Literal */
+.highlight .n { color: var(--syntax-name-color); } /* Name */
+.highlight .o { color: var(--syntax-declaration-color); } /* Operator */
+.highlight .p { color: var(--syntax-literal-color); } /* Punctuation */
+.highlight .cm { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Multiline */
+.highlight .cp { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Preproc */
+.highlight .c1 { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Single */
+.highlight .cs { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Special */
+.highlight .gd { color: var(--syntax-literal-color); font-weight: bold; } /* Generic.Deleted */
+.highlight .ge { color: var(--syntax-error-color); font-style: italic; } /* Generic.Emph */
+.highlight .gr { color: #ff0000; } /* Generic.Error */
+.highlight .gh { color: var(--syntax-declaration-color); font-weight: bold; } /* Generic.Heading */
+.highlight .gi { color: var(--syntax-name-color); } /* Generic.Inserted */
+.highlight .go { color: var(--syntax-declaration-color); } /* Generic.Output */
+.highlight .gp { color: var(--syntax-literal-color); font-weight: bold; } /* Generic.Prompt */
+.highlight .gs { color: var(--syntax-declaration-color); font-weight: bold; } /* Generic.Strong */
+.highlight .gu { color: var(--syntax-declaration-color); font-weight: bold; } /* Generic.Subheading */
+.highlight .gt { color: var(--syntax-declaration-color); } /* Generic.Traceback */
+.highlight .kc { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Constant */
+.highlight .kd { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Declaration */
+.highlight .kn { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Namespace */
+.highlight .kp { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Pseudo */
+.highlight .kr { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Reserved */
+.highlight .kt { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Type */
+.highlight .ld { color: var(--syntax-literal-color); font-style: italic; } /* Literal.Date */
+.highlight .m { color: var(--syntax-literal-color); } /* Literal.Number */
+.highlight .s { color: var(--syntax-string-color); } /* Literal.String */
+
+/* Tab style starts here */
+.tabbed-set {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 1em 0;
+    border-radius: 0.1rem;
+}
+
+.tabbed-set > input {
+    display: none;
+}
+
+.tabbed-set label {
+    width: auto;
+    padding: 0.9375em 1.25em 0.78125em;
+    font-weight: 700;
+    font-size: 0.84em;
+    white-space: nowrap;
+    border-bottom: 0.15rem solid transparent;
+    border-top-left-radius: 0.1rem;
+    border-top-right-radius: 0.1rem;
+    cursor: pointer;
+    transition: background-color 250ms, color 250ms;
+}
+
+.tabbed-set .tabbed-content {
+    width: 100%;
+    display: none;
+    box-shadow: 0 -.05rem #ddd;
+}
+
+.tabbed-set input {
+    position: absolute;
+    opacity: 0;
+}
+
+/* fonts */
+h1 {
+    font-weight: 700;
+}
+
+h1#title a {
+    font-size: 16px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-top: 3rem;
+    color: var(--color-text-2);
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-top: 5rem;
+}
+
+h2 {
+    font-size: 1.63rem;
+    margin-top: 5rem;
+}
+
+p {
+    font-size: 21px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+@media only screen and (max-width: 700px) {
+p {
+    font-size: 18px;
+}
+}
+
+@media only screen and (max-width: 600px) {
+p {
+    font-size: 16px;
+}
+}
+
+@media only screen and (max-width: 500px) {
+p {
+    font-size: 14px;
+}
+}
+
+@media only screen and (max-width: 400px) {
+p {
+    font-size: 12px;
+}
+}
+
+
+pre {
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 18.5714px;
+}
+
+a {
+    font-weight: 600;
+    text-decoration-color: var(--color-accent);
+    color: var(--color-link);
+    padding: .3rem .5rem;
+    display: inline-block;
+}
+
+.admonition, details {
+    box-shadow: 0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+    margin: 5rem 0;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-align: left;
+    padding: 0;
+    border: 0;
+}
+.admonition {
+    padding-bottom: 1rem;
+}
+
+details[open] {
+    padding-bottom: .5rem;
+}
+
+.admonition p{
+    padding: .2rem .6rem;
+}
+
+.admonition-title, .details-title, summary {
+    background: var(--color-bg-2);
+    padding: 0;
+    margin: 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+summary:hover {
+    cursor: pointer;
+}
+
+summary.admonition-title, summary.details-title {
+    padding: .5rem;
+    padding-left: 1rem;
+}
+
+.note {
+    border-left: 4px solid #f1fa8c;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #f1fa8c,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.note > .admonition-title {
+    border-bottom: 1px solid #3c3d2d;
+}
+
+.abstract {
+    border-left: 4px solid #8be9fd;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #8be9fd,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.abstract > .admonition-title {
+    border-bottom: 1px solid #2c3a3f;
+}
+.info {
+    border-left: 4px solid;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #8bb0fd,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.info > .admonition-title {
+    border-bottom: 1px solid #2c313f;
+}
+
+.tip {
+    border-left: 4px solid #008080;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #008080,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.tip > .admonition-title {
+    border-bottom: 1px solid #1b2a2b;
+}
+.success {
+    border-left: 4px solid #50fa7b;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #50fa7b,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.success > .admonition-title {
+    border-bottom: 1px solid #263e2b;
+}
+
+.question {
+    border-left: 4px solid #a7fcbd;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #a7fcbd,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.question > .admonition-title {
+    border-bottom: 1px solid #303e35;
+}
+
+.warning {
+    border-left: 4px solid #ffb86c;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #ffb86c,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.warning > .admonition-title {
+    border-bottom: 1px solid #3f3328;
+}
+
+.failure {
+    border-left: 4px solid #b23b3b;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #b23b3b,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.failure > .admonition-title {
+    border-bottom: 1px solid #34201f;
+}
+
+.danger {
+    border-left: 4px solid #ff5555;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #ff5555,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.danger > .admonition-title {
+    border-bottom: 1px solid #402523;
+}
+
+.bug {
+    border-left: 4px solid #b2548a;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #b2548a,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.bug > .admonition-title {
+    border-bottom: 1px solid #32232c;
+}
+
+.example {
+    border-left: 4px solid #bd93f9;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #bd93f9,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.example > .admonition-title {
+    border-bottom: 1px solid #332d3e;
+}
+
+.source {
+    border-left: 4px solid #bd93f9;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #bd93f9,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.source > .admonition-title {
+    border-bottom: 1px solid #332d3e;
+}
+
+.quote {
+    border-left: 4px solid #999;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #999,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.quote > .admonition-title {
+    border-bottom: 1px solid #2d2e2f;
+}
+
+table {
+    margin: 1rem 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: block;
+    max-width: -moz-fit-content;
+    max-width: fit-content;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+table thead th {
+    border: solid 1px var(--color-text);
+    padding: 10px;
+    text-align: left;
+}
+
+table tbody td {
+    border: solid 1px var(--color-text);
+    padding: 10px;
+}
+.theme-switch {
+    z-index: 10;
+    display: inline-block;
+    height: 34px;
+    position: relative;
+    width: 60px;
+
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 1rem;
+    margin-left: auto;
+    position: fixed;
+    right: 1rem;
+    top: 1rem;
+}
+
+.theme-switch input {
+    display:none;
+}
+
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+}
+
+.slider:before {
+    background-color: #fff;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 26px;
+}
+
+input:checked + .slider {
+    background-color: #343434;
+}
+input:checked + .slider:before {
+    background-color: #848484;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+main p img {
+    width: 100%;
+    width: -moz-available;
+    width: -webkit-fill-available;
+    width: fill-available;
+}
+
+details>* {
+    margin: 1rem;
+}
+
+.admonition>* {
+    margin: 1rem;
+}
+
+p.admonition-title, summary {
+    margin: 0;
+    padding-left:1.2rem;
+}
+
+.small {
+    font-size: .9rem;
+    color: #888;
+}
+
+admonition+admonition{
+    margin-top:20rem;
+}
+
+::-webkit-scrollbar {
+    height: 12px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #d3d3d32e;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+.nav{
+    position: sticky;
+    top: 0;
+    background-color: var(--color-bg);
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 5;
+}
+.social{
+    display: flex;
+    list-style-type: none;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+img {
+    max-width: 100%;
+    width: 80%;
+    vertical-align: middle;
+}
+
+.thumbnail {
+    width:100%; height: 30%;
+    border-radius:25px;
+    transition:box-shadow 1s ease;
+}
+
+.thumbnail:hover {
+    box-shadow:0px 0px 0px 8px #ff6600;
+}
+.svg-icon { width: 16px; height: 16px; display: inline-flex; fill: #ffffff; padding-right: 5px; vertical-align: text-top; }
+
+.text-primary {
+	color: #fff;
+	font-size: 1.8rem;
+	font-weight: 700;
+	text-align: center;
+	width: 100%;
+	line-height: 1.6;
+	background-image: linear-gradient(90deg, var(--animation-one), var(--animation-two), var(--animation-three), var(--animation-four), var(--animation-five), var(--animation-six), var(--animation-seven), var(--animation-eight));
+	background-size: 200%;
+	color: transparent;
+	-webkit-text-fill-color: transparent;
+	-webkit-background-clip: text;
+	background-clip: text;
+	animation: animate 20s infinite alternate;
+}
+@keyframes animate {
+	0% {
+		background-position: 0%;
+	}
+	100% {
+		background-position: 400%;
+	}
+}
+
+pre, code { font-size: 15px; border: 1px solid #e8e8e8; border-radius: 3px; background-color: var(--color-bg-code); }
+
+code { padding: 1px 5px; color: #ffffff; }
+
+pre { padding: 8px 12px; overflow-x: auto; }
+
+pre > code { border: 0; padding-right: 0; padding-left: 0; }
+
+.language-bar{
+    height: 3em;
+    text-align: justify;
+    padding: 1em 0 1px 1em;
+    color: var(--color-code-text)
+}
+
+        </style>
+</body>
+</html>

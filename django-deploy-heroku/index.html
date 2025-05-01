@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Techstructive Blog | Django + PostgreSQL Deployment on Heroku by  Meet Rajesh Gor</title>
+<script src="/script.js"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width" name="viewport"/>
+<meta content="Techstructive Blog - Personal Blog of Meet Gor" name="description"/>
+<meta content="blog, web-development, backend-developer" name="keywords"/>
+<meta content="Meet Rajesh Gor" name="author"/>
+<meta content="https://www.meetgor.com/" property="og:url"/>
+<meta content="website" property="og:type"/>
+<meta content="Django + PostgreSQL Deployment on Heroku" property="og:title"/>
+<meta content="Django projects are quite easy to build and simple to understand, you might have created a Django application and wanted to show it to the world? You can deploy" property="og:description"/>
+<meta content="https://meetgor-cdn.pages.dev/django-deploy-heroku.png" property="og:image"/>
+<meta content="meetgor.com" property="twitter:domain"/>
+<meta content="https://www.meetgor.com/" property="twitter:url"/>
+<meta content="Techstructive Blog" name="twitter:title"/>
+<meta content="" name="twitter:description"/>
+<meta content="https://meetgor-cdn.pages.dev/django-deploy-heroku.png" name="twitter:image"/>
+<link href="/tbicon.png" rel="icon" type="image/png"/>
+<style>
+</style>
+<script async="" crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4627844420729409">
+</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+<style>
+.theme-switch input {
+    display:none;
+}
+
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+}
+
+.slider:before {
+    background-color: #fff;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 26px;
+}
+
+input:checked + .slider {
+    background-color: #343434;
+}
+input:checked + .slider:before {
+    background-color: #848484;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+</style>
+<meta content="markata 0.7.4" name="generator"/></head>
+<body>
+<div class="nav">
+<a href="/blog">
+<p class="text-primary">Techstructive Blog </p>
+</a>
+<nav>
+<a href="/">Home</a>
+<a href="/blog">Blog</a>
+<a href="/projects">Projects</a>
+<label class="theme-switch" for="checkbox-theme" id="theme-switch" title="light/dark mode toggle">
+<input id="checkbox-theme" type="checkbox"/>
+<div class="slider round"> </div>
+</label>
+</nav>
+</div>
+<section class="title">
+<div id="cover-wrapper">
+<a href=""><img alt="cover image for article" class="thumbnail" src="https://meetgor-cdn.pages.dev/django-deploy-heroku.png"/></a>
+</div>
+<h1 class="text-primary" id="title">
+        Django + PostgreSQL Deployment on Heroku
+        
+        
+      </h1>
+<a alt="edit post url" href="https://github.com/mr-destructive/meetgor.com/edit/gh-pages/blog/posts/2022-05-15-Django-Deploy-Heroku.md" title="edit this post">
+              Edit
+          </a>
+<p>Published on May 15, 2022</p>
+<p>Author: Meet Rajesh Gor</p>
+<a href="/tag/django">#django</a>
+<a href="/tag/web-development">#web-development</a>
+<a href="/tag/python">#python</a>
+</section>
+<main>
+<h2>Introduction<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>Django projects are quite easy to build and simple to understand, you might have created a Django application and wanted to show it to the world? You can deploy a basic Django application with a database(PostgreSQL) with Heroku. It provides a decent free tier with some great features and add-ons. A free tier Heroku account has a limitation of 5 apps, limited data in the database, limited connections to the server per month, and so on.</p>
+<p>Though the free tier is not a great option for bigger applications, it suits really well for smaller scale and ide projects, so we will be looking into the details of how to deploy a Django application to <a href="https://heroku.com/">Heroku</a> which is a Platform as Service (PaS).</p>
+<p>This series will be an extension of the series <a href="https://techstructiveblog.hashnode.dev/series/django-basics">Django basics</a> which covered the basics of the Django framework, we covered from basic Django fundamentals to building a CRUD API. In this series, we will be exploring some platforms for giving a better understanding of how things work and understanding a few components that were left as default while understanding the basics of Django. Let's get started with <a href="https://techstructiveblog.hashnode.dev/series/django-deployment">Django Deployment</a>!</p>
+<h2>Creating a Django Application<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>For deploying an app, we definitely need an app, we need to create a basic Django application to deploy on the web. We'll be creating a simple blog application with a couple of views and a simple model structure. As for the database, we'll be using Postgres as Heroku has an add-on for it and it is pretty easy to configure.</p>
+<h3>Set up a virtual environment<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>We need to set up a virtual environment in order to keep the Django project neat and tidy by managing the project-specific dependencies and packages. We can use the <a href="https://pypi.org/project/virtualenv/">virtualenv</a> package to isolate a python project from the rest of the system.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span># install the virtualenv package
+pip install virtualenv
+
+# create a virtual env for the project
+virtualenv .venv
+
+# activate the virtualenv
+Windows:
+.venv\Scripts\activate
+
+Linux/macOS:
+source .venv/bin/activate
+</pre></div>
+
+</pre>
+<p>This will set up the project nicely for a Django project, you now install the core Django package and get started with creating a Django application.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">bash</div>
+<div class="highlight"><pre><span></span><span class="c1"># install django</span>
+pip install django
+
+<span class="c1"># start a django project</span>
+django-admin startproject blog .
+
+<span class="nb">cd</span> blog
+
+<span class="c1"># create a application in django project</span>
+python manage.py createapp api
+
+<span class="c1"># Create some models, views, URLs, templates</span>
+
+<span class="c1"># run the server</span>
+python manag.py runserver
+</pre></div>
+
+</pre>
+<p>We assume you already have a Django project configured with some basic URLs, views and templates or static files as per your project and requirements, for this tutorial I will be using the simple blog application from my previous Django tutorials as a reference. You can follow along with my <a href="https://techstructiveblog.hashnode.dev/series/django-basics">Django Basics</a> series and refer to the Blog Application project on <a href="https://github.com/Mr-Destructive/django-blog">GitHub</a>.</p>
+<h2>Configuring the Django Application<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>Make sure to create and activate the virtual environment for this django project. This should be done to manage the dependencies and packages used in the project. If you are not aware of the virtual environment and django setup, you can follow up with this <a href="https://mr-destructive.github.io/techstructive-blog/django-setup-script/">post</a>.</p>
+<h3>Creating a runtime.txt file<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>Now, Firstly we need to specify which type and version of language we are using. Since Django is a Python-based web framework, we need to select the python version in a text file.</p>
+<p><strong>runtime.txt</strong></p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>python-3.9.5
+</pre></div>
+
+</pre>
+<p>Here, the version can be anything as per your project and the packages installed.</p>
+<h3>Creating requirements.txt file<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>We'll first create a <code>requirements.txt</code> file for storing all the dependencies and packages installed in the application. This will help in installing dependencies while deploying the application. We can either use a <code>requirements.txt</code> file using <code>virtualenv</code> or a <code>Pipfile</code> using Pipenv. Both serve the same purpose but a bit differently.</p>
+<p>Assuming you are in an isolated virtual environment for this Django project, you can create a requirements.txt file using the below command:</p>
+<p>Make sure the virtualenv is activated before running the command:</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pip freeze &gt; requirements.txt
+</pre></div>
+
+</pre>
+<p>This will create a simple text file that contains the package names along with the versions used in the current virtual environment. A simple Django requirements file would look something like this:</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>asgiref==3.4.1
+Django==3.2.11
+pytz==2021.3
+sqlparse==0.4.2
+typing_extensions==4.0.1
+</pre></div>
+
+</pre>
+<p><img alt="image.png" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652614060461/kPTZ9R8Xp.png"/></p>
+<p>This is vanilla Django without any additional dependencies but if you have integrated other functionalities like Django Rest Framework, PostgreSQL, Crispy Forms, Schedulers, etc. there might be additional dependencies that become quite crucial for the smooth working of the project.</p>
+<p>If you are using pipenv, you don't need to make any efforts to manually activate and manage virtual environment, the dependencies are installed and taken care of by the pipenv installer. You just need to make sure to install any package with <code>pipenv install</code> and not <code>pip install</code> for better and improved package tracking.</p>
+<p>So, that's all we need to take care of packages and keep a list of these integrated packages for the project. You need to update the requirements.txt file every time you install any new package or modify the dependencies for a project. Simply use the command <code>pip freeze &gt; requirements.txt</code> in the activated virtual environment.</p>
+<h3>Creating a Procfile<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>Next up, we have the <code>Procfile</code>, a procfile is a special file that holds information about the processes to be run to start or activate the project. In our case, for django we need a web process that can manage the server.</p>
+<p>A Procfile is a simple file without any extension, make sure to write <code>Procfile</code> as it is as the name of the file in the root folder of the project. Inside the file add the following contents:</p>
+<p><strong>Procfile</strong></p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">Procfile</div>
+<div class="highlight"><pre><span></span><span class="nl">web</span><span class="p">:</span><span class="w"> </span>gunicorn<span class="w"> </span><span class="err">&lt;</span>project_name<span class="err">&gt;</span>.wsgi<span class="w"></span>
+</pre></div>
+
+</pre>
+<p>As we can see we have defined the <code>web</code> process using <code>gunicorn</code>, <a href="https://pypi.org/project/gunicorn/">Gunicorn</a> is a python package that helps in creating WSGI HTTP Server for the UNIX operating systems. So, we need to install the package and update the package dependency list.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pip install gunicorn
+
+pip freeze &gt; requirements.txt
+</pre></div>
+
+</pre>
+<p>That would be good to go for creating and serving up the project while deploying the project on Heroku.</p>
+<h2>Creating a Heroku App<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>A Heroku App is basically like your Django Project, you can create apps for deploying your django projects on Heroku. You are limited to 5 apps on the Free tier but that can be expanded on the paid plans.</p>
+<p><img alt="image.png" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652456732519/cyOQZ3UZK.png"/></p>
+<p>The name of your heroku app should be unique globally, you need to try a few combinations before a good one fits your project. This name has no significance on your django project code, though it would be the name from which you would access the web application as a name <code>&lt;app-name&gt;.herokuapp.com</code>.</p>
+<p>So, choose it wisely if you are not attaching a custom domain. You can attach a custom domain, you can navigate to the <code>domain</code> section in the settings tab.</p>
+<h2>Setting up the database<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>To set up and configure a database in django on Heroku, we need to manually acquire and attach a PostgreSQL add-on to the heroku app.</p>
+<ul>
+<li>Firstly locate to the Resources Tab in your Heroku app.</li>
+<li>Search <code>postgres</code> in the Add-ons Search bar</li>
+<li>Click on the <code>Heroku Postgres</code> Add-on</li>
+<li>Submit the Order Form and you have the add-on enabled in the app.</li>
+</ul>
+<p><img alt="image.png" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652456842273/ijeWsVdOf.png"/></p>
+<p><img alt="image.png" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652456877447/dLG30ac_m.png"/></p>
+<p>Alternately, you can use the Heroku CLI,</p>
+<h3>Heroku CLI Setup<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>You can use the Heroku CLI which is a command-line interface for managing and creating Heroku applications.  You need to first install the CLI by heading towards the <a href="https://devcenter.heroku.com/articles/heroku-command-line">heroku documentation</a>. Once the CLI is installed, you need to login into your Heroku account by entering the following command:</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>heroku login
+</pre></div>
+
+</pre>
+<p><img alt="image.png" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652605604920/HnTr2KbTi.png"/></p>
+<p>This will allow us to work with heroku commands and manage our heroku application from the command line itself. The below command will create a add-on for <code>heroku-postgres</code> for the application provided as the parameter options</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>heroku addons:create heroku-postgresql:hobby-dev --app &lt;app_name&gt;
+</pre></div>
+
+</pre>
+<p><img alt="image.png" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652507166978/i1IJ5EGjJ.png"/></p>
+<p>This should hopefully add a fresh instance of a postgres database for your heroku app. You can now configure the database for your project, we simply need the Database URL from the heroku app dashboard. We'll see how to configure the environment variables in Django for Heroku to keep your secrets like the <code>SECRET_KEY</code>, <code>DATABSE_URL</code>, etc.</p>
+<p>If you want MySQL as a database, you can check out the <a href="https://devcenter.heroku.com/articles/cleardb">ClearDB</a> Add-On for Heroku to simply attach it like Postgres on your Heroku application. Also, if you wish to add <a href="https://www.mongodb.com/compatibility/mongodb-and-django">MongoDB</a> into your Django application on Heroku, you can use <a href="https://devcenter.heroku.com/articles/ormongo">Object Rocket</a>(OR Mongo). It is not available in the free tier though, unlike PostgreSQL and MySQL.</p>
+<h2>Configuring Environment Variables<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>We need to keep our secrets for the django project out of the deployed code and in a safe place, we can create environment variables and keep them in a <code>.env</code> file which will be git-ignored. We do not want this <code>.env</code> file to be open source and thus should not be committed.</p>
+<p>We first need to create a new secret key if you already have a GitHub repository, chances are you would have committed the default secret key open for the world to see, it is an insecure way of deploying django apps in production.</p>
+<p>So, open up a terminal and launch a python REPL:</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>python
+
+import secrets
+secrets.token_hex(24)
+</pre></div>
+
+</pre>
+<p><img alt="image.png" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652512239319/5AACaTGOD.png"/></p>
+<p>This should generate a secret key that only you know now. So, just copy the key without the quotes and create a file <code>.env</code> in the root project folder.</p>
+<p><strong>.env</strong></p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>SECRET_KEY=76419fd6885a677f802fd1d2b5acd0188e23e001042b05a8
+</pre></div>
+
+</pre>
+<p>The <code>.env</code> file should also be added to the <code>.gitignore</code> file, so simply append the following in the <code>.gitignore</code> file</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>.env
+</pre></div>
+
+</pre>
+<p>This file is only created to test the project locally, so we need to also make this key available on heroku. For doing that we need to add Config Variables to the heroku app.</p>
+<ul>
+<li>Locate to the Settings Tab in your Heroku Application Dashboard</li>
+<li>We have the <code>Config Vars</code> section in the located tab
+= We need to reveal those variables and we will be able to see all the variables.</li>
+</ul>
+<p><img alt="image.png" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652456988713/5VM6E29_o.png"/></p>
+<p>We already have a <code>DATABASE_URL</code> variable declared when we attached the <code>django-postgres</code> database to our application. We will now add one more variable to the Application, i.e. the <code>SECRET_KEY</code>. Simply, enter the name of the key and also enter the value of the key, so basically a key-value pair. Simply click on the <code>Add</code> button and this will add the variable to your application.</p>
+<p><img alt="image.png" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652515244870/LRyPzJr41.png"/></p>
+<p>You also need to copy the <code>DATABSE_URL</code> into our local setup file(<code>.env</code> file). Copy the Database URL and paste it into the <code>.env</code> file as follows:</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">env</div>
+<div class="highlight"><pre><span></span>DATABASE_URL=postgres://sjxgipufegmgsw:78cbb568e@ec2-52-4-104-184.compute-1.amazonaws.com:5432/dbmuget
+</pre></div>
+
+</pre>
+<p>The format for the postgres URL is as follows:</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>postgresql://[user[:password]@][netloc][:port][/dbname]
+</pre></div>
+
+</pre>
+<p>We have now created environment variables for our django application and also added config vars in the heroku app, we now need a way to parse these environment variables into the Django project.</p>
+<h3>Parsing Environment variables using python-dotenv<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>We will use <a href="https://pypi.org/project/python-dotenv/">python-dotenv</a> to parse variables into the django settings configurations like <code>SECRET_KEY</code> and <code>DATABASES</code>.</p>
+<ul>
+<li>Install <code>python-dotenv</code> with pip with the command :</li>
+</ul>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pip install python-dotenv
+</pre></div>
+
+</pre>
+<p>We need to then modify the default variables in the <code>settings.py</code> file. Firstly, we will load in the <code>.env</code> file for accessing the environment variables for the configuration of the project.</p>
+<p>Append the following code, to the top of the <code>settings.py</code> file, make sure don't override the configuration so remove unnecessary imports and configurations.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">python</div>
+<div class="highlight"><pre><span></span><span class="c1"># &lt;project_name&gt;/settings.py</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
+
+<span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
+
+<span class="n">load_dotenv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s2">".env"</span><span class="p">))</span>
+</pre></div>
+
+</pre>
+<p>We have imported the package <code>dotenv</code> basically the <code>python-dotenv</code> into the <code>settings.py</code> file and the module <code>os</code> for loading the <code>.env</code> file. The <code>load_dotenv</code> function helps in loading the <code>key-value</code> pairs which are the configuration variables that can act as actual environment variables. We provide in a file to the <a href="https://saurabh-kumar.com/python-dotenv/">load_dotenv</a> function which is the <code>.env</code> file in our case, you can pick up any location for the <code>.env</code> file but make sure to change the location while parsing the file into the <code>load_dotenv</code> function.</p>
+<p>After loading the variables into the <code>settings.py</code> file, we now need to access those variables and set the appropriate variables the configuration from the variables received from the <code>load_dotenv</code> function. The <code>os.getenv</code> function to access the environment variables. The <code>os.getenv</code> function takes a parameter as the <code>key</code> for the environment variable and returns the value of the environment variable.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">python</div>
+<div class="highlight"><pre><span></span><span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">"SECRET_KEY"</span><span class="p">)</span>
+</pre></div>
+
+</pre>
+<p>We have secretly configured the <code>SECRET_KEY</code> for the django project. If you have any other variables as simple key-value pairs like <code>AUTH</code> passwords, username, etc. you can use this method to get the configuration variables.</p>
+<h3>Loading Database configuration<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h3>
+<p>Databases are a bit different as compared to other simple configurations in django. We need to make a few adjustments to the default database configuration. We will install another package <code>dj-database-url</code> to configure <code>DATABASE_URL</code>. Since the databse_url has a few components we need a way to extract the details like the <code>hostname</code>, <code>port</code>, <code>database_name</code>, and <code>password</code>. Using the <code>dj-database-url</code> package we have a few functions that can serve the purpose.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pip install dj-database-url
+</pre></div>
+
+</pre>
+<p>At the end of your <code>settings.py</code> file, append the following code.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">python</div>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dj_database_url</span>
+
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">"DATABASE_URL"</span><span class="p">)</span>
+
+<span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"default"</span><span class="p">:</span> <span class="n">dj_database_url</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">conn_max_age</span><span class="o">=</span><span class="mi">1800</span><span class="p">),</span>
+<span class="p">}</span>
+</pre></div>
+
+</pre>
+<p>We would need an adapter for making migrations to the <code>PostgreSQL</code> database i.e. the <code>psycopg2</code> package. This is a mandatory step if you are working with <code>postgres</code> database. This can be installed with the simple pip install:</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pip install psycopg2
+
+# If it does not work try
+pip install psycopg2-binary
+
+
+# if still error persists try installing setuptools
+pip install -U setuptools
+pip install psycopg2
+</pre></div>
+
+</pre>
+<p>Now, that we have configured the database, we can now apply migrations to the fresh database of postgres provided by heroku. We will simply run the migrate command and in the heroku app the PostgreSQL database would have been modified and an appropriate schema should be applied.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>python manage.py migrate
+</pre></div>
+
+</pre>
+<p><img alt="image.png" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652602284553/oTtGev28-.png"/></p>
+<p>Make sure to update the <code>requirements.txt</code> file before pushing the project to Heroku for making sure everything works as expected. Since we have installed a few additional packages that are directly used in the <code>settings.py</code> file, we need to run the <code>pip freeze</code> command to update the <code>requiremnets.txt</code> file.</p>
+<h2>Serving Static Files<a alt="id" class="heading-permalink" href="#None" title="link to #None"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 05.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 00 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.9051.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.9850 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1.111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 00 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 00-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.9925.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 00 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 10-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.9750 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.9823.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 01.602-1.198z"></path></svg></a></h2>
+<p>Now, if you have some static files like <code>CSS</code>, <code>Javascript</code>, or <code>images</code>, you need to configure the staticfiles in order to serve them from the heroku server. We will require another config variable for collecting the static files from the selected repository.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">python</div>
+<div class="highlight"><pre><span></span><span class="n">STATIC_URL</span> <span class="o">=</span> <span class="s2">"static/"</span>
+<span class="n">STATICFILES_DIRS</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s2">"static"</span><span class="p">)]</span>
+<span class="n">STATIC_ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s2">"staticfiles"</span><span class="p">)</span>
+</pre></div>
+
+</pre>
+<p>Here, if you have served your static files from the <code>static</code> folder in the root directory of your django project, you can add the above code in the <a href="http://settings.py">settings.py</a> file. We will collect all static files in the folder along with the default static files provided by django in the <code>staticfiles</code> directory. Run the following command if you want to test whether the static files are properly collected and served.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>python manage.py collectstatic 
+</pre></div>
+
+</pre>
+<p><img alt="image.png" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652600828657/JgL4nLuiL.png"/></p>
+<p>So, this command will collect all the static files and store them in a single place. We see that the files from the admin section are also copied as well as the custom static files from the project configuration. Now, we can move on to set the config variable for the heroku app.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>DISABLE_COLLECTSTATIC = 0
+</pre></div>
+
+</pre>
+<p>We can set the <code>DISABLE_COLLECTSTATIC</code> variable as <code>0</code> or <code>1</code> indicating whether to disable it or not. We have currently enabled the static file collection while deploying the app but you can set it to <code>1</code> to disable the collection of static files.</p>
+<p><img alt="image.png" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652613798420/mbqzf1Kqd.png"/></p>
+<p>Since I first tested the application on heroku, the static files don't work as expected, we need another package to make sure the staticfiles are served property. We will be installing the <code>whitenoise</code> package which serves as the middleware for serving the static files.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+
+<div class="highlight"><pre><span></span>pip install whitenoise
+</pre></div>
+
+</pre>
+<p>Add the whitenoise middleware <code>whitenoise.middleware.WhiteNoiseMiddleware</code> to the <code>MIDDLEWARE</code> list in the <code>settings.py</code> file.</p>
+<pre class="wrapper">
+
+<div class="copy-wrapper">
+
+<button class="copy" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)" title="copy code to clipboard"><svg id="Layer_1" style="enable-background:new 0 0 115.77 122.88" version="1.1" viewbox="0 0 115.77 122.88" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path></g></svg></button>
+</div>
+        
+<div class="language-bar">python</div>
+<div class="highlight"><pre><span></span><span class="n">MIDDLEWARE</span> <span class="o">=</span> <span class="p">[</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="o">...</span>
+    <span class="s1">'whitenoise.middleware.WhiteNoiseMiddleware'</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="err">```</span>
+
+<span class="n">That</span> <span class="n">should</span> <span class="n">be</span> <span class="n">enough</span> <span class="n">to</span> <span class="n">make</span> <span class="n">the</span> <span class="n">most</span> <span class="n">of</span> <span class="n">the</span> <span class="n">deployment</span> <span class="n">on</span> <span class="n">heroku</span><span class="o">.</span> <span class="n">You</span> <span class="n">will</span> <span class="n">have</span> <span class="n">to</span> <span class="n">make</span> <span class="n">a</span> <span class="n">few</span> <span class="n">adjustments</span> <span class="k">as</span> <span class="n">per</span> <span class="n">your</span> <span class="n">requirements</span> <span class="ow">and</span> <span class="n">project</span><span class="o">.</span>
+
+<span class="c1">## Deploy from GitHub</span>
+
+<span class="n">We</span> <span class="n">are</span> <span class="n">now</span> <span class="nb">all</span> <span class="nb">set</span> <span class="n">to</span> <span class="n">deploy</span> <span class="n">the</span> <span class="n">application</span> <span class="n">on</span> <span class="n">Heroku</span><span class="p">,</span> <span class="n">we</span> <span class="n">can</span> <span class="n">use</span> <span class="n">the</span> <span class="err">`</span><span class="n">Connect</span> <span class="n">to</span> <span class="n">GitHub</span><span class="err">`</span> <span class="ow">or</span> <span class="err">`</span><span class="n">Heroku</span> <span class="n">CLI</span><span class="err">`</span> <span class="n">to</span> <span class="n">push</span> <span class="n">the</span> <span class="n">code</span> <span class="n">into</span> <span class="n">production</span><span class="o">.</span> <span class="n">Heroku</span> <span class="n">CLI</span> <span class="ow">is</span> <span class="n">quite</span> <span class="n">easy</span> <span class="k">with</span> <span class="n">a</span> <span class="n">few</span> <span class="n">sets</span> <span class="n">of</span> <span class="n">commands</span> <span class="n">but</span> <span class="k">if</span> <span class="n">your</span> <span class="n">project</span> <span class="ow">is</span> <span class="n">deployed</span> <span class="n">on</span> <span class="n">GitHub</span><span class="p">,</span> <span class="n">you</span> <span class="n">can</span> <span class="n">straightaway</span> <span class="n">let</span> <span class="n">the</span> <span class="n">deployment</span> <span class="n">start</span> <span class="n">the</span> <span class="n">build</span> <span class="n">on</span> <span class="n">a</span> <span class="n">push</span> <span class="n">to</span> <span class="n">a</span> <span class="n">specific</span> <span class="n">branch</span><span class="o">.</span> <span class="n">This</span> <span class="n">becomes</span> <span class="n">quite</span> <span class="n">automotive</span> <span class="ow">and</span> <span class="n">easy</span> <span class="n">to</span> <span class="n">scale</span> <span class="k">while</span> <span class="n">deploying</span> <span class="n">a</span> <span class="n">large</span><span class="o">-</span><span class="n">scale</span> <span class="n">application</span><span class="o">.</span> 
+
+<span class="err">```</span>
+<span class="n">pip</span> <span class="n">freeze</span> <span class="o">&gt;</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+<span class="err">```</span>
+
+<span class="n">This</span> <span class="n">step</span> <span class="ow">is</span> <span class="n">quite</span> <span class="n">important</span> <span class="n">because</span> <span class="n">you</span> <span class="n">need</span> <span class="n">to</span> <span class="n">make</span> <span class="n">sure</span> <span class="n">that</span> <span class="nb">all</span> <span class="n">the</span> <span class="n">packages</span> <span class="n">are</span> <span class="n">listed</span> <span class="ow">in</span> <span class="n">the</span> <span class="err">`</span><span class="n">requirements</span><span class="o">.</span><span class="n">txt</span><span class="err">`</span> <span class="n">file</span> <span class="k">else</span> <span class="n">you</span> <span class="n">will</span> <span class="n">have</span> <span class="n">to</span> <span class="n">wait</span> <span class="k">for</span> <span class="n">the</span> <span class="n">build</span> <span class="n">to</span> <span class="n">fail</span> <span class="ow">and</span> <span class="n">redeploy</span><span class="o">.</span>
+
+<span class="n">Make</span> <span class="n">sure</span> <span class="n">the</span> <span class="n">server</span> <span class="ow">is</span> <span class="n">running</span> <span class="n">first</span> <span class="n">on</span> <span class="n">your</span> <span class="n">local</span> <span class="n">machine</span><span class="p">,</span> <span class="n">remember</span> <span class="n">the</span> <span class="n">server</span> <span class="n">will</span> <span class="n">be</span> <span class="nb">set</span> <span class="n">up</span> <span class="kn">from</span> <span class="nn">scratch</span> <span class="n">but</span> <span class="n">the</span> <span class="n">database</span> <span class="n">will</span> <span class="n">already</span> <span class="n">have</span> <span class="n">applied</span> <span class="n">migrations</span> <span class="k">if</span> <span class="n">you</span> <span class="n">have</span> <span class="n">applied</span> <span class="n">migrations</span> <span class="n">before</span> <span class="n">after</span> <span class="n">connecting</span> <span class="n">the</span> <span class="n">Heroku</span> <span class="n">Postgres</span> <span class="n">database</span><span class="o">.</span>
+ 
+<span class="err">```</span>
+<span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">collectstatic</span>
+
+<span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">runserver</span>
+<span class="err">```</span>
+
+<span class="n">This</span> <span class="n">will</span> <span class="nb">set</span> <span class="n">up</span> <span class="n">the</span> <span class="n">origin</span> <span class="n">of</span> <span class="n">the</span> <span class="n">remote</span> <span class="n">repository</span> <span class="n">that</span> <span class="n">will</span> <span class="n">be</span> <span class="n">pushing</span> <span class="n">the</span> <span class="n">project</span> <span class="n">code</span><span class="o">.</span> <span class="n">Next</span><span class="p">,</span> <span class="n">make</span> <span class="n">sure</span> <span class="n">to</span> <span class="n">commit</span> <span class="n">the</span> <span class="n">code</span> <span class="n">which</span> <span class="n">will</span> <span class="n">contain</span> <span class="nb">all</span> <span class="n">the</span> <span class="n">required</span> <span class="n">stuff</span> <span class="k">for</span> <span class="n">deploying</span> <span class="n">the</span> <span class="n">code</span><span class="o">.</span>
+
+<span class="n">Checklist</span> <span class="k">for</span> <span class="n">deploying</span> <span class="n">the</span> <span class="n">code</span>
+
+<span class="err">```</span>
+<span class="o">-</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+<span class="o">-</span> <span class="n">Procfile</span>
+<span class="o">-</span> <span class="n">runtime</span><span class="o">.</span><span class="n">txt</span>
+<span class="o">-</span> <span class="n">django</span><span class="o">-</span><span class="n">project</span>
+<span class="o">-</span> <span class="n">environment</span> <span class="n">variables</span> <span class="o">/</span> <span class="n">config</span> <span class="n">variables</span> 
+<span class="o">-</span> <span class="n">static</span> <span class="n">file</span> <span class="n">configuration</span>
+<span class="o">-</span> <span class="n">database</span> <span class="n">configuration</span>
+<span class="o">-</span> <span class="n">migrate</span> <span class="n">schema</span> <span class="n">of</span> <span class="n">database</span> 
+<span class="o">-</span> <span class="n">gitignore</span> <span class="n">file</span> <span class="k">for</span> <span class="n">ignoring</span> <span class="n">virtualenvs</span><span class="p">,</span> <span class="o">.</span><span class="n">env</span> <span class="n">file</span><span class="p">,</span> <span class="n">staticfiles</span><span class="p">,</span> <span class="n">etc</span>
+<span class="err">```</span>
+
+<span class="n">here</span><span class="s1">'s a sample `.gitignore` for a minimal django project.</span>
+
+<span class="err">```</span><span class="n">gitignore</span>
+<span class="o">.</span><span class="n">env</span><span class="o">/</span>
+<span class="o">.</span><span class="n">venv</span><span class="o">/</span>
+<span class="n">env</span><span class="o">/</span>
+<span class="n">venv</span><span class="o">/</span>
+<span class="o">*.</span><span class="n">env</span>
+
+<span class="o">*.</span><span class="n">pyc</span>
+<span class="n">db</span><span class="o">.</span><span class="n">sqlite3</span>
+<span class="n">staticfiles</span><span class="o">/</span>
+<span class="err">```</span>
+
+<span class="n">If</span> <span class="n">you</span> <span class="n">want</span> <span class="n">a</span> <span class="n">full</span><span class="o">-</span><span class="n">fledged</span> <span class="err">`</span><span class="o">.</span><span class="n">gitignore</span><span class="err">`</span> <span class="k">for</span> <span class="n">a</span> <span class="nb">complex</span> <span class="n">django</span> <span class="n">project</span><span class="p">,</span> <span class="n">you</span> <span class="n">can</span> <span class="n">take</span> <span class="n">the</span> <span class="n">reference</span> <span class="kn">from</span> <span class="nn">Jose</span> <span class="n">Padilla</span><span class="s1">'s [gitignore Template](https://github.com/jpadilla/django-project-template/blob/master/.gitignore) for a django project.  </span>
+
+<span class="c1">### Git Commit the Django Project</span>
+<span class="err">```</span>
+<span class="n">git</span> <span class="n">status</span> 
+
+<span class="n">git</span> <span class="n">add</span> <span class="o">.</span>
+
+<span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s2">"config for heroku deployment"</span>
+<span class="err">```</span>
+<span class="n">Carefully</span> <span class="n">check</span> <span class="n">the</span> <span class="n">status</span> <span class="n">of</span> <span class="n">the</span> <span class="n">git</span> <span class="n">repository</span> <span class="n">before</span> <span class="n">committing</span> <span class="ow">and</span> <span class="n">make</span> <span class="n">sure</span> <span class="n">you</span> <span class="n">don</span><span class="s1">'t forget anything by mistake, it won'</span><span class="n">t</span> <span class="n">a</span> <span class="n">big</span> <span class="n">problem</span> <span class="n">but</span> <span class="n">it</span> <span class="n">would</span> <span class="n">mess</span> <span class="n">up</span> <span class="n">the</span> <span class="n">build</span> <span class="n">process</span><span class="o">.</span>
+
+
+<span class="err">!</span><span class="p">[</span><span class="n">image</span><span class="o">.</span><span class="n">png</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">cdn</span><span class="o">.</span><span class="n">hashnode</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">res</span><span class="o">/</span><span class="n">hashnode</span><span class="o">/</span><span class="n">image</span><span class="o">/</span><span class="n">upload</span><span class="o">/</span><span class="n">v1652613991525</span><span class="o">/</span><span class="n">hxQgtGOoM</span><span class="o">.</span><span class="n">png</span><span class="p">)</span>
+
+<span class="n">After</span> <span class="n">committing</span> <span class="n">the</span> <span class="n">code</span><span class="p">,</span> <span class="n">we</span> <span class="n">can</span> <span class="n">now</span> <span class="n">push</span> <span class="n">the</span> <span class="n">code</span> <span class="n">to</span> <span class="n">GitHub</span><span class="o">.</span> <span class="n">We</span> <span class="n">first</span> <span class="n">need</span> <span class="n">to</span> <span class="nb">set</span> <span class="n">the</span> <span class="n">remote</span> <span class="n">repository</span> <span class="n">reference</span> <span class="n">to</span> <span class="n">be</span> <span class="n">able</span> <span class="n">to</span> <span class="n">push</span> <span class="n">the</span> <span class="n">code</span> <span class="n">to</span> <span class="n">it</span><span class="o">.</span> 
+
+<span class="err">```</span>
+<span class="n">git</span> <span class="n">remote</span> <span class="n">add</span> <span class="n">origin</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/&lt;</span><span class="n">username</span><span class="o">&gt;/&lt;</span><span class="n">repo_name</span><span class="o">&gt;</span>
+<span class="err">```</span>
+<span class="n">This</span> <span class="n">will</span> <span class="nb">set</span> <span class="n">up</span> <span class="n">the</span> <span class="err">`</span><span class="n">origin</span><span class="err">`</span> <span class="k">as</span> <span class="n">the</span> <span class="n">remote</span> <span class="n">repository</span> <span class="n">on</span> <span class="n">GitHub</span><span class="o">.</span> <span class="n">Once</span> <span class="n">the</span> <span class="n">remote</span> <span class="n">repository</span> <span class="ow">is</span> <span class="n">created</span><span class="p">,</span> <span class="n">we</span> <span class="n">can</span> <span class="n">move</span> <span class="n">into</span> <span class="n">the</span> <span class="n">push</span> <span class="n">of</span> <span class="n">the</span> <span class="n">git</span> <span class="n">repository</span> <span class="n">that</span> <span class="n">will</span> <span class="n">trigger</span> <span class="n">the</span> <span class="n">build</span><span class="o">.</span> <span class="n">First</span><span class="p">,</span> <span class="n">navigate</span> <span class="n">to</span> <span class="n">the</span> <span class="err">`</span><span class="n">Deploy</span><span class="err">`</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">heroku</span> <span class="n">app</span><span class="s1">'s dashboard where we want to connect the `GitHub` repository and allow the automatic deploy from a branch in this case we have chosen the `main` branch.</span>
+
+<span class="n">Due</span> <span class="n">to</span> <span class="n">some</span> <span class="err">`</span><span class="n">Heroku</span><span class="err">`</span> <span class="n">Internal</span> <span class="n">Server</span> <span class="n">Issues</span><span class="p">,</span> <span class="n">the</span> <span class="n">GitHub</span> <span class="n">integration</span> <span class="n">seems</span> <span class="n">to</span> <span class="n">have</span> <span class="n">broken</span> <span class="ow">and</span> <span class="n">isn</span><span class="s1">'t working as of May 2022, but it might work later. </span>
+
+<span class="n">Below</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">screenshot</span> <span class="n">of</span> <span class="n">my</span> <span class="n">previous</span> <span class="n">project</span> <span class="n">deployed</span> <span class="n">to</span> <span class="n">Heroku</span> <span class="n">using</span> <span class="n">a</span> <span class="n">GitHub</span> <span class="n">repository</span><span class="o">.</span>
+
+<span class="err">!</span><span class="p">[</span><span class="n">image</span><span class="o">.</span><span class="n">png</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">cdn</span><span class="o">.</span><span class="n">hashnode</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">res</span><span class="o">/</span><span class="n">hashnode</span><span class="o">/</span><span class="n">image</span><span class="o">/</span><span class="n">upload</span><span class="o">/</span><span class="n">v1652605497382</span><span class="o">/</span><span class="mi">5</span><span class="n">VuQUQ0t0</span><span class="o">.</span><span class="n">png</span><span class="p">)</span>
+
+<span class="err">```</span>
+<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">main</span>
+<span class="err">```</span>
+
+<span class="n">This</span> <span class="n">will</span> <span class="n">prompt</span> <span class="n">you</span> <span class="k">for</span> <span class="n">your</span> <span class="n">GitHub</span> <span class="n">credentials</span> <span class="ow">and</span> <span class="n">will</span> <span class="n">deploy</span> <span class="n">the</span> <span class="n">commits</span> <span class="n">to</span> <span class="n">the</span> <span class="n">remote</span> <span class="n">repository</span> <span class="n">on</span> <span class="n">GitHub</span><span class="o">.</span> <span class="n">This</span> <span class="n">push</span> <span class="n">on</span> <span class="n">the</span> <span class="n">main</span> <span class="n">branch</span> <span class="n">should</span> <span class="n">also</span> <span class="n">trigger</span> <span class="n">the</span> <span class="n">build</span> <span class="n">process</span> <span class="n">of</span> <span class="n">the</span> <span class="n">heroku</span> <span class="n">app</span> <span class="k">for</span> <span class="n">this</span> <span class="n">django</span> <span class="n">project</span><span class="o">.</span> <span class="n">You</span> <span class="n">can</span> <span class="n">navigate</span> <span class="n">to</span> <span class="n">the</span> <span class="n">Activity</span> <span class="n">section</span> <span class="k">for</span> <span class="n">the</span> <span class="n">Build</span> <span class="n">logs</span><span class="o">.</span> 
+
+<span class="n">If</span> <span class="n">you</span> <span class="n">have</span> <span class="n">followed</span> <span class="n">the</span> <span class="n">article</span> <span class="n">well</span><span class="p">,</span> <span class="ow">and</span> <span class="n">your</span> <span class="n">repository</span> <span class="n">has</span> <span class="nb">all</span> <span class="n">the</span> <span class="n">correct</span> <span class="n">configurations</span><span class="p">,</span> <span class="n">the</span> <span class="n">build</span> <span class="n">will</span> <span class="n">succeed</span><span class="p">,</span> <span class="k">else</span> <span class="n">chances</span> <span class="n">are</span> <span class="n">you</span> <span class="n">might</span> <span class="n">have</span> <span class="n">missed</span> <span class="n">a</span> <span class="n">few</span> <span class="n">things</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">app</span> <span class="n">might</span> <span class="n">have</span> <span class="n">crashed</span><span class="o">.</span> <span class="n">You</span> <span class="n">can</span> <span class="n">debug</span> <span class="n">your</span> <span class="n">application</span> <span class="n">build</span> <span class="k">with</span> <span class="n">the</span> <span class="n">simple</span> <span class="n">heroku</span> <span class="n">CLI</span> <span class="n">command</span><span class="p">:</span>
+
+<span class="err">```</span>
+<span class="n">heroku</span> <span class="n">logs</span> <span class="o">--</span><span class="n">tail</span> <span class="o">-</span><span class="n">a</span> <span class="o">&lt;</span><span class="n">app_name</span><span class="o">&gt;</span>
+<span class="err">```</span>
+
+<span class="n">This</span> <span class="n">can</span> <span class="n">be</span> <span class="n">quite</span> <span class="n">handy</span> <span class="ow">and</span> <span class="n">saves</span> <span class="n">a</span> <span class="n">lot</span> <span class="n">of</span> <span class="n">time</span> <span class="ow">in</span> <span class="n">understanding</span> <span class="n">what</span> <span class="n">went</span> <span class="n">wrong</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">build</span><span class="o">.</span> <span class="n">It</span> <span class="n">might</span> <span class="n">be</span> <span class="n">related</span> <span class="n">to</span> <span class="n">database</span> <span class="n">migration</span><span class="p">,</span> <span class="n">static</span> <span class="n">files</span><span class="p">,</span> <span class="n">python</span> <span class="n">package</span> <span class="ow">not</span> <span class="n">found</span><span class="p">,</span> <span class="ow">and</span> <span class="n">some</span> <span class="n">silly</span> <span class="n">mistakes</span> <span class="ow">and</span> <span class="n">errors</span> <span class="n">that</span> <span class="n">can</span> <span class="n">be</span> <span class="n">fixed</span> <span class="n">after</span> <span class="n">committing</span> <span class="n">the</span> <span class="n">code</span> <span class="ow">and</span> <span class="n">pushing</span> <span class="n">it</span> <span class="n">to</span> <span class="n">GitHub</span> <span class="n">again</span><span class="o">.</span>
+
+<span class="n">If</span> <span class="n">you</span> <span class="n">do</span> <span class="ow">not</span> <span class="n">want</span> <span class="n">a</span> <span class="n">GitHub</span> <span class="n">repository</span><span class="p">,</span> <span class="n">you</span> <span class="n">can</span> <span class="n">directly</span> <span class="n">push</span> <span class="n">the</span> <span class="n">code</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">local</span> <span class="n">git</span> <span class="n">repository</span> <span class="n">to</span> <span class="n">the</span> <span class="n">remote</span> <span class="n">heroku</span> <span class="n">app</span> <span class="n">center</span><span class="o">.</span> <span class="n">This</span> <span class="n">will</span> <span class="n">require</span> <span class="n">us</span> <span class="n">the</span> <span class="n">Heroku</span> <span class="n">CLI</span><span class="o">.</span>
+
+<span class="c1">## Heroku CLI</span>
+
+<span class="n">We</span> <span class="n">can</span> <span class="n">use</span> <span class="n">the</span> <span class="n">heroku</span> <span class="n">CLI</span> <span class="k">for</span> <span class="n">pushing</span> <span class="n">the</span> <span class="n">code</span> <span class="n">via</span> <span class="n">the</span> <span class="n">simple</span> <span class="n">git</span> <span class="n">repository</span><span class="o">.</span> <span class="n">We</span> <span class="n">can</span> <span class="n">push</span> <span class="n">the</span> <span class="n">references</span> <span class="n">via</span> <span class="n">the</span> <span class="n">branch</span> <span class="ow">and</span> <span class="n">a</span> <span class="n">remote</span> <span class="n">repository</span> <span class="n">on</span> <span class="n">heroku</span> <span class="n">to</span> <span class="n">build</span> <span class="n">our</span> <span class="n">app</span><span class="o">.</span>  <span class="n">For</span> <span class="n">this</span><span class="p">,</span> <span class="n">we</span> <span class="n">assume</span> <span class="n">you</span> <span class="n">have</span> <span class="n">heroku</span> <span class="n">installed</span> <span class="ow">and</span> <span class="n">logged</span> <span class="ow">in</span><span class="o">.</span> <span class="n">We</span> <span class="n">will</span> <span class="n">require</span> <span class="n">the</span> <span class="n">django</span> <span class="n">project</span> <span class="n">code</span> <span class="ow">and</span> <span class="n">heroku</span> <span class="n">cli</span> <span class="n">to</span> <span class="n">build</span> <span class="n">the</span> <span class="n">django</span> <span class="n">web</span> <span class="n">application</span><span class="o">.</span>
+
+<span class="err">```</span><span class="n">bash</span>
+<span class="n">heroku</span> <span class="n">git</span><span class="p">:</span><span class="n">remote</span> <span class="o">-</span><span class="n">a</span> <span class="o">&lt;</span><span class="n">heroku_app_name</span><span class="o">&gt;</span>
+
+<span class="c1"># for my case</span>
+<span class="n">heroku</span> <span class="n">git</span><span class="p">:</span><span class="n">remote</span> <span class="o">-</span><span class="n">a</span> <span class="n">blog</span><span class="o">-</span><span class="n">django</span><span class="o">-</span><span class="n">dep</span>
+<span class="err">```</span>
+
+<span class="err">!</span><span class="p">[</span><span class="n">image</span><span class="o">.</span><span class="n">png</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">cdn</span><span class="o">.</span><span class="n">hashnode</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">res</span><span class="o">/</span><span class="n">hashnode</span><span class="o">/</span><span class="n">image</span><span class="o">/</span><span class="n">upload</span><span class="o">/</span><span class="n">v1652614221069</span><span class="o">/</span><span class="n">vCAKD0zsz</span><span class="o">.</span><span class="n">png</span><span class="p">)</span>
+
+<span class="n">After</span> <span class="n">this</span><span class="p">,</span> <span class="n">you</span> <span class="n">can</span> <span class="n">commit</span> <span class="n">your</span> <span class="n">code</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">project</span> <span class="k">as</span> <span class="n">git</span> <span class="n">repository</span><span class="o">.</span> <span class="n">We</span> <span class="n">have</span> <span class="n">added</span> <span class="n">the</span> <span class="n">remote</span> <span class="n">repository</span> <span class="n">location</span> <span class="n">on</span> <span class="n">heroku</span><span class="p">,</span> <span class="n">we</span> <span class="n">can</span> <span class="n">now</span> <span class="n">simply</span> <span class="n">push</span> <span class="n">the</span> <span class="n">code</span> <span class="n">to</span> <span class="n">the</span> <span class="n">remote</span> <span class="n">repository</span><span class="o">.</span>
+
+<span class="err">```</span>
+<span class="n">git</span> <span class="n">push</span> <span class="n">heroku</span> <span class="n">main</span>
+<span class="err">```</span>
+
+<span class="err">!</span><span class="p">[</span><span class="n">image</span><span class="o">.</span><span class="n">png</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">cdn</span><span class="o">.</span><span class="n">hashnode</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">res</span><span class="o">/</span><span class="n">hashnode</span><span class="o">/</span><span class="n">image</span><span class="o">/</span><span class="n">upload</span><span class="o">/</span><span class="n">v1652614125785</span><span class="o">/</span><span class="n">uEzFQ9VvQ</span><span class="o">.</span><span class="n">png</span><span class="p">)</span>
+
+<span class="n">Here</span><span class="p">,</span> <span class="err">`</span><span class="n">heroku</span><span class="err">`</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">remote</span> <span class="n">repository</span> <span class="n">location</span> <span class="ow">and</span> <span class="err">`</span><span class="n">main</span><span class="err">`</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">branch</span> <span class="n">of</span> <span class="n">the</span> <span class="n">repository</span><span class="o">.</span> <span class="n">This</span> <span class="n">will</span> <span class="n">push</span> <span class="n">the</span> <span class="n">code</span> <span class="n">to</span> <span class="n">the</span> <span class="n">repository</span> <span class="ow">and</span> <span class="n">thereafter</span> <span class="n">create</span> <span class="n">a</span> <span class="n">build</span> <span class="n">to</span> <span class="n">deploy</span> <span class="n">the</span> <span class="n">Django</span> <span class="n">project</span> <span class="k">as</span> <span class="n">a</span> <span class="n">Heroku</span> <span class="n">application</span><span class="o">.</span>
+
+<span class="err">!</span><span class="p">[</span><span class="n">image</span><span class="o">.</span><span class="n">png</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">cdn</span><span class="o">.</span><span class="n">hashnode</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">res</span><span class="o">/</span><span class="n">hashnode</span><span class="o">/</span><span class="n">image</span><span class="o">/</span><span class="n">upload</span><span class="o">/</span><span class="n">v1652614381808</span><span class="o">/</span><span class="n">kYTmB3EO2p</span><span class="o">.</span><span class="n">png</span><span class="p">)</span>
+
+<span class="n">You</span> <span class="n">can</span> <span class="n">hit</span> <span class="n">the</span> <span class="err">`</span><span class="n">Open</span> <span class="n">App</span><span class="err">`</span> <span class="n">button</span> <span class="n">on</span> <span class="n">the</span> <span class="n">top</span> <span class="n">right</span> <span class="n">corner</span> <span class="ow">and</span> <span class="n">there</span> <span class="n">should</span> <span class="n">be</span> <span class="n">your</span> <span class="n">deployed</span> <span class="n">Django</span> <span class="n">application</span><span class="o">.</span> 
+
+<span class="err">!</span><span class="p">[</span><span class="n">image</span><span class="o">.</span><span class="n">png</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">cdn</span><span class="o">.</span><span class="n">hashnode</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">res</span><span class="o">/</span><span class="n">hashnode</span><span class="o">/</span><span class="n">image</span><span class="o">/</span><span class="n">upload</span><span class="o">/</span><span class="n">v1652610395538</span><span class="o">/</span><span class="n">xjUiODhoK</span><span class="o">.</span><span class="n">png</span><span class="p">)</span>
+
+
+<span class="c1">## A Few Tricks and Gotchas</span>
+
+<span class="n">There</span> <span class="n">are</span> <span class="n">a</span> <span class="n">few</span> <span class="n">tricks</span> <span class="ow">and</span> <span class="n">issues</span> <span class="n">that</span> <span class="n">you</span> <span class="n">might</span> <span class="n">pop</span> <span class="n">into</span> <span class="k">while</span> <span class="n">deploying</span> <span class="n">a</span> <span class="n">django</span> <span class="n">project</span> <span class="n">on</span> <span class="n">heroku</span><span class="p">,</span> <span class="n">especially</span> <span class="n">the</span> <span class="n">build</span> <span class="n">process</span><span class="o">.</span> <span class="n">It</span> <span class="n">requires</span> <span class="n">a</span> <span class="n">few</span> <span class="n">iterations</span> <span class="n">to</span> <span class="n">get</span> <span class="n">the</span> <span class="n">complete</span> <span class="n">app</span> <span class="n">setup</span><span class="o">.</span>
+
+<span class="c1">### Run command from the Dashboard console</span>
+
+<span class="n">If</span> <span class="n">you</span> <span class="n">don</span><span class="s1">'t have heroku CLI set up and want to fix a few things on the pushed code to the heroku app, you can use the `Run Console` option from the `More` Tab on the top right corner of theApplication dashboard. This is a great way to run migrations, configure static files or tweak a few things here and there without messing up the code on GitHub or the remote git repositories. </span>
+
+<span class="err">!</span><span class="p">[</span><span class="n">image</span><span class="o">.</span><span class="n">png</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">cdn</span><span class="o">.</span><span class="n">hashnode</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">res</span><span class="o">/</span><span class="n">hashnode</span><span class="o">/</span><span class="n">image</span><span class="o">/</span><span class="n">upload</span><span class="o">/</span><span class="n">v1652614775294</span><span class="o">/</span><span class="n">lgDPwr2yr</span><span class="o">.</span><span class="n">png</span><span class="p">)</span>
+
+
+<span class="err">!</span><span class="p">[</span><span class="n">image</span><span class="o">.</span><span class="n">png</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">cdn</span><span class="o">.</span><span class="n">hashnode</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">res</span><span class="o">/</span><span class="n">hashnode</span><span class="o">/</span><span class="n">image</span><span class="o">/</span><span class="n">upload</span><span class="o">/</span><span class="n">v1652614821950</span><span class="o">/</span><span class="n">uTzQVB8sC</span><span class="o">.</span><span class="n">png</span><span class="p">)</span>
+
+
+<span class="err">!</span><span class="p">[</span><span class="n">image</span><span class="o">.</span><span class="n">png</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">cdn</span><span class="o">.</span><span class="n">hashnode</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">res</span><span class="o">/</span><span class="n">hashnode</span><span class="o">/</span><span class="n">image</span><span class="o">/</span><span class="n">upload</span><span class="o">/</span><span class="n">v1652614845269</span><span class="o">/</span><span class="n">BkZhu3SGH</span><span class="o">.</span><span class="n">png</span><span class="p">)</span>
+
+<span class="c1">### Deploy with Docker </span>
+
+<span class="n">You</span> <span class="n">can</span> <span class="n">even</span> <span class="n">use</span> <span class="n">the</span> <span class="n">docker</span> <span class="n">container</span> <span class="n">to</span> <span class="n">deploy</span> <span class="n">a</span> <span class="n">Django</span> <span class="n">application</span> <span class="n">on</span> <span class="n">Heroku</span><span class="o">.</span> <span class="n">It</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">great</span> <span class="n">way</span> <span class="n">of</span> <span class="n">learning</span> <span class="n">a</span> <span class="n">lot</span> <span class="n">of</span> <span class="n">deployment</span> <span class="n">strategies</span> <span class="ow">and</span> <span class="n">techniques</span> <span class="n">using</span> <span class="n">Docker</span><span class="o">.</span> <span class="n">You</span><span class="s1">'ll get familiar with interesting concepts like virtualization, and containerization, and also learn Docker on the way. You can follow this tutorial on [Deploying Django applications with Docker on Heroku](https://testdriven.io/blog/deploying-django-to-heroku-with-docker/). Also, you can check out the official Heroku documentation for [deploying python applications](https://devcenter.heroku.com/articles/deploying-python).</span>
+
+<span class="c1">### What are Dynos?</span>
+
+<span class="n">Dynos</span> <span class="n">are</span> <span class="n">simply</span> <span class="n">web</span> <span class="n">processes</span> <span class="ow">or</span> <span class="n">workers</span> <span class="n">that</span> <span class="n">serve</span> <span class="n">your</span> <span class="n">web</span> <span class="n">application</span><span class="o">.</span> <span class="n">Dynos</span> <span class="ow">in</span> <span class="n">Heroku</span> <span class="n">are</span> <span class="n">allocated</span> <span class="n">based</span> <span class="n">on</span> <span class="n">the</span> <span class="n">build</span> <span class="n">process</span><span class="p">,</span> <span class="n">once</span> <span class="n">the</span> <span class="n">slug</span> <span class="ow">is</span> <span class="n">created</span> <span class="n">a</span> <span class="n">dyno</span> <span class="ow">is</span> <span class="n">created</span> <span class="k">as</span> <span class="n">it</span> <span class="n">runs</span> <span class="n">on</span> <span class="n">a</span> <span class="n">VM</span> <span class="n">container</span><span class="o">.</span> <span class="n">This</span> <span class="n">simply</span> <span class="n">means</span> <span class="n">there</span> <span class="n">are</span> <span class="n">limitations</span> <span class="n">on</span> <span class="n">how</span> <span class="n">to</span> <span class="n">use</span> <span class="n">the</span> <span class="n">web</span> <span class="n">application</span> <span class="ow">and</span> <span class="n">its</span> <span class="n">sleep</span> <span class="n">process</span><span class="o">.</span> <span class="n">The</span> <span class="n">hobby</span> <span class="n">tier</span> <span class="ow">is</span> <span class="n">sufficient</span> <span class="k">for</span> <span class="n">normal</span> <span class="n">testing</span> <span class="n">projects</span> <span class="ow">and</span> <span class="n">side</span> <span class="n">projects</span> <span class="n">though</span> <span class="n">you</span> <span class="n">will</span> <span class="n">have</span> <span class="n">to</span> <span class="n">pay</span> <span class="ow">and</span> <span class="n">move</span> <span class="n">into</span> <span class="n">advance</span> <span class="n">tiers</span> <span class="n">to</span> <span class="n">increase</span> <span class="n">the</span> <span class="n">dyno</span> <span class="n">allocations</span> <span class="ow">and</span> <span class="n">scaling</span> <span class="n">of</span> <span class="n">those</span> <span class="n">web</span> <span class="n">processes</span><span class="o">.</span> 
+
+<span class="n">It</span><span class="s1">'s not a simple thing to understand but to keep it simple, it might be a container to process the client'</span><span class="n">s</span> <span class="n">request</span> <span class="ow">and</span> <span class="n">serve</span> <span class="n">the</span> <span class="n">page</span> <span class="k">for</span> <span class="n">a</span> <span class="n">finite</span> <span class="n">duration</span> <span class="n">of</span> <span class="n">the</span> <span class="n">interaction</span><span class="o">.</span> <span class="n">Also</span><span class="p">,</span> <span class="n">your</span> <span class="n">application</span> <span class="n">will</span> <span class="n">sleep</span> <span class="n">after</span> <span class="n">half</span> <span class="n">an</span> <span class="n">hour</span><span class="p">,</span> <span class="k">if</span> <span class="n">you</span> <span class="k">try</span> <span class="n">to</span> <span class="n">reload</span> <span class="n">the</span> <span class="n">application</span> <span class="n">every</span> <span class="n">half</span> <span class="n">an</span> <span class="n">hour</span> <span class="n">it</span> <span class="n">will</span> <span class="n">consume</span> <span class="n">your</span> <span class="n">resource</span> <span class="n">allocation</span> <span class="k">for</span> <span class="n">the</span> <span class="n">month</span> <span class="ow">and</span> <span class="n">this</span> <span class="ow">is</span> <span class="n">how</span> <span class="n">the</span> <span class="n">tiers</span> <span class="ow">and</span> <span class="n">divided</span> <span class="k">for</span> <span class="n">paid</span> <span class="n">services</span> <span class="n">on</span> <span class="n">Heroku</span><span class="o">.</span> <span class="n">You</span> <span class="n">can</span> <span class="n">check</span> <span class="n">out</span> <span class="n">the</span> <span class="n">detail</span> <span class="n">over</span> <span class="p">[</span><span class="n">here</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">heroku</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">pricing</span><span class="c1">#containers).</span>
+
+<span class="c1">## Conclusion</span>
+
+<span class="n">So</span><span class="p">,</span> <span class="n">that</span> <span class="ow">is</span> <span class="n">one</span> <span class="n">of</span> <span class="n">the</span> <span class="n">ways</span> <span class="n">we</span> <span class="n">can</span> <span class="n">deploy</span> <span class="n">a</span> <span class="n">Django</span> <span class="n">application</span> <span class="n">on</span> <span class="n">Heroku</span> <span class="k">with</span> <span class="n">the</span> <span class="n">PostgreSQL</span> <span class="n">database</span><span class="o">.</span> <span class="n">You</span> <span class="n">can</span> <span class="n">find</span> <span class="n">the</span> <span class="p">[</span><span class="n">django</span><span class="o">-</span><span class="n">blog</span> <span class="n">project</span><span class="p">]</span> <span class="n">on</span> <span class="p">[</span><span class="n">GitHub</span><span class="p">]</span> <span class="k">for</span> <span class="n">following</span> <span class="n">along</span> <span class="k">with</span> <span class="n">the</span> <span class="n">deployment</span> <span class="n">process</span><span class="o">.</span>  <span class="n">In</span> <span class="n">the</span> <span class="nb">next</span> <span class="n">few</span> <span class="n">parts</span> <span class="n">of</span> <span class="n">the</span> <span class="n">series</span><span class="p">,</span> <span class="n">we</span> <span class="n">will</span> <span class="n">be</span> <span class="n">hopefully</span> <span class="n">covering</span> <span class="n">other</span> <span class="n">platforms</span> <span class="n">where</span> <span class="n">you</span> <span class="n">can</span> <span class="n">deploy</span> <span class="n">a</span> <span class="n">Django</span> <span class="n">o</span> <span class="n">application</span><span class="o">.</span>
+
+<span class="n">Hopefully</span><span class="p">,</span> <span class="n">you</span> <span class="n">liked</span> <span class="n">the</span> <span class="n">above</span> <span class="n">tutorial</span><span class="p">,</span> <span class="k">if</span> <span class="n">you</span> <span class="n">have</span> <span class="nb">any</span> <span class="n">questions</span><span class="o">.</span> <span class="n">feedback</span><span class="p">,</span> <span class="ow">or</span> <span class="n">queries</span><span class="p">,</span> <span class="n">you</span> <span class="n">can</span> <span class="n">contact</span> <span class="n">me</span> <span class="n">on</span> <span class="n">the</span> <span class="n">Social</span> <span class="n">handles</span> <span class="n">provided</span> <span class="n">below</span><span class="o">.</span> <span class="n">Thank</span> <span class="n">you</span> <span class="k">for</span> <span class="n">reading</span> <span class="ow">and</span> <span class="n">till</span> <span class="n">the</span> <span class="nb">next</span> <span class="n">post</span> <span class="n">Happy</span> <span class="n">Coding</span> <span class="p">:)</span>
+</pre></div>
+
+</pre>
+</main>
+<div id="comments">
+<script async="" crossorigin="anonymous" data-category="Q&amp;A" data-category-id="DIC_kwDOHZ6V_s4CRfn4" data-emit-metadata="0" data-input-position="bottom" data-lang="en" data-mapping="pathname" data-reactions-enabled="1" data-repo="Mr-Destructive/meetgor.com" data-repo-id="R_kgDOHZ6V_g" data-strict="0" data-theme="dark_high_contrast" src="https://giscus.app/client.js">
+</script>
+</div>
+<!-- 
+          <script src="/copy.js"></script>
+      -->
+<footer>
+        © 2025
+        <ul class="social">
+<li>
+<a href="https://twitter.com/MeetGor21">Twitter
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#twitter"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="https://www.linkedin.com/in/meetgor/">LinkedIn
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#linkedin"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="https://github.com/Mr-Destructive">GitHub
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#github"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="https://dev.to/mr_destructive">Dev.to
+                <svg class="svg-icon grey">
+<use xlink:href="/social-icons.svg#devto"></use>
+</svg>
+</a>
+</li>
+<li>
+<a href="/rss.xml">RSS
+            <svg class="svg-icon orange">
+<use xlink:href="/social-icons.svg#rss"></use>
+</svg>
+</a>
+</li>
+<li>
+<a class="u-email" href="mailto:gormeet711@gmail.com">Email</a>
+</li>
+</ul>
+</footer>
+<style>
+
+:root {
+    --color-bg: #1f2022;
+    --color-bg-2: #161718;
+    --color-bg-code: #123456;
+    --color-text: #eefbfe;
+    --color-text-2: #00ffff;
+    --color-code-text: white;
+    --color-link: #fb30c4;
+    --color-accent: #f1fa8c;
+    --overlay-brightness: .85;
+    --body-width: 1000px;
+    --syntax-background-color: #08090a;
+    --syntax-text-color: #f8f8f2;
+    --syntax-comment-color: #808080;
+    --syntax-declaration-color: #f39c12;
+    --syntax-literal-color: #dda0dd;
+    --syntax-error-color: #f9690e;
+    --syntax-name-color: #7ed07e;
+    --syntax-string-color: #f2ca27;
+}
+
+[data-theme="dark"] {
+    --color-bg: #1f2022;
+    --color-bg-2: #161718;
+    --color-bg-code: black;
+    --color-text: #eefbfe;
+    --color-text-2: #00ffff;
+    --color-code-text: white;
+    --color-link: #fb30c4;
+    --color-accent: #f1fa8c;
+    --overlay-brightness: .85;
+    --body-width: 1000px;
+    --animation-one: white;
+    --animation-two: #eeeeee;
+    --animation-three: #dddddd;
+    --animation-four: #aaaaaa;
+    --animation-five: grey;
+    --animation-six: grey;
+    --animation-seven: #eeeeee;
+    --animation-eight: white;
+}
+[data-theme="light"] {
+    --color-bg: #cfefff;
+    --color-bg-2: #c8d2db;
+    --color-bg-code: #00001a;
+    --color-text: #1f2022;
+    --color-text-2: #000030;
+    --color-code-text: white;
+    --color-link: #fb30c4;
+    --color-accent: #ffeb00;
+    --overlay-brightness: 1.0;
+    --animation-one: grey;
+    --animation-two: #aaaaaa;
+    --animation-three: #dddddd;
+    --animation-four: black;
+    --animation-five: black;
+    --animation-six: #dddddd;
+    --animation-seven: #aaaaaa;
+    --animation-eight: grey;
+}
+
+html  {
+    font-family: "Space Mono", monospace;
+    background: var(--color-bg);
+    color: var(--color-text);
+    contain: paint;
+}
+
+a {
+    color: var(--color-link);
+}
+main a {
+    max-width: 100%;
+}
+.heading-permalink {
+    font-size: .7em;
+}
+body {
+    max-width: var(--body-width);
+    margin: 5rem auto;
+    padding: 0 .5rem;
+    font-size: 1rem;
+    line-height: 1.56;
+}
+blockquote {
+    background: var(--color-bg);
+    filter: brightness(var(--overlay-brightness));
+    border-left: 4px solid var(--color-accent);
+    border-radius: 4px;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #f1fa8c,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+    padding-left: 1rem;
+    margin: 1rem;
+}
+li.post {
+   /* list-style-type: None; */
+    padding: .2rem 0;
+}
+pre.wrapper{
+  padding: 0;
+  box-shadow: 0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin: 2rem;
+}
+pre {
+    margin:0;
+    padding: 1rem;
+    min-width: -webkit-fill-available;
+    max-width: fit-content;
+    overflow-x: auto;
+}
+
+pre .filepath {
+  margin:0;
+  padding-left: 1rem;
+  border-radius: 4px 4px 0 0;
+  background: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+pre .filepath p{
+  margin:0
+}
+
+pre .filepath .right{
+  display: flex;
+  gap: .2rem;
+  align-items: center;
+}
+
+pre::-webkit-scrollbar {
+    height: 4px;
+    background-color: transparent;
+}
+
+pre::-webkit-scrollbar-thumb {
+    background-color: #d3d3d32e;
+    border-radius: 2px;
+}
+
+pre::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.copy-wrapper {
+    background: none;
+    position: absolute;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    justify-content: flex-end;
+}
+button.copy {
+    z-index: 100;
+    background: none;
+    fill: #ffffff45;
+    border: none;
+    width: 32px;
+    align-self: flex-end;
+    top: 0;
+    right: 0;
+    margin: 0.5rem 0.2rem;
+}
+button.copy:hover {
+    fill:white
+}
+
+a.help {
+    fill: #ffffff45;
+}
+a.help:hover {
+    fill: white;
+}
+a.help svg{
+    height:24px;
+    width:24px;
+}
+code {
+  font-family: monospace;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background-color: var(--color-bg-code);
+  color: var(--color-code-text);
+}
+.highlight  {
+    background: var(--color-bg-code);
+    color: var(--color-code-text);
+    filter: brightness(var(--overlay-brightness));
+    border-radius: 0 0 4px 4px;
+}
+
+.highlight .c { color: var(--syntax-comment-color); } /* Comment */
+.highlight .err { color: var(--syntax-error-color); } /* Error */
+.highlight .k { color: var(--syntax-declaration-color); } /* Keyword */
+.highlight .l { color: var(--syntax-literal-color); } /* Literal */
+.highlight .n { color: var(--syntax-name-color); } /* Name */
+.highlight .o { color: var(--syntax-declaration-color); } /* Operator */
+.highlight .p { color: var(--syntax-literal-color); } /* Punctuation */
+.highlight .cm { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Multiline */
+.highlight .cp { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Preproc */
+.highlight .c1 { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Single */
+.highlight .cs { color: var(--syntax-comment-color); font-style: italic; } /* Comment.Special */
+.highlight .gd { color: var(--syntax-literal-color); font-weight: bold; } /* Generic.Deleted */
+.highlight .ge { color: var(--syntax-error-color); font-style: italic; } /* Generic.Emph */
+.highlight .gr { color: #ff0000; } /* Generic.Error */
+.highlight .gh { color: var(--syntax-declaration-color); font-weight: bold; } /* Generic.Heading */
+.highlight .gi { color: var(--syntax-name-color); } /* Generic.Inserted */
+.highlight .go { color: var(--syntax-declaration-color); } /* Generic.Output */
+.highlight .gp { color: var(--syntax-literal-color); font-weight: bold; } /* Generic.Prompt */
+.highlight .gs { color: var(--syntax-declaration-color); font-weight: bold; } /* Generic.Strong */
+.highlight .gu { color: var(--syntax-declaration-color); font-weight: bold; } /* Generic.Subheading */
+.highlight .gt { color: var(--syntax-declaration-color); } /* Generic.Traceback */
+.highlight .kc { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Constant */
+.highlight .kd { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Declaration */
+.highlight .kn { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Namespace */
+.highlight .kp { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Pseudo */
+.highlight .kr { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Reserved */
+.highlight .kt { color: var(--syntax-declaration-color); font-weight: bold; } /* Keyword.Type */
+.highlight .ld { color: var(--syntax-literal-color); font-style: italic; } /* Literal.Date */
+.highlight .m { color: var(--syntax-literal-color); } /* Literal.Number */
+.highlight .s { color: var(--syntax-string-color); } /* Literal.String */
+
+/* Tab style starts here */
+.tabbed-set {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 1em 0;
+    border-radius: 0.1rem;
+}
+
+.tabbed-set > input {
+    display: none;
+}
+
+.tabbed-set label {
+    width: auto;
+    padding: 0.9375em 1.25em 0.78125em;
+    font-weight: 700;
+    font-size: 0.84em;
+    white-space: nowrap;
+    border-bottom: 0.15rem solid transparent;
+    border-top-left-radius: 0.1rem;
+    border-top-right-radius: 0.1rem;
+    cursor: pointer;
+    transition: background-color 250ms, color 250ms;
+}
+
+.tabbed-set .tabbed-content {
+    width: 100%;
+    display: none;
+    box-shadow: 0 -.05rem #ddd;
+}
+
+.tabbed-set input {
+    position: absolute;
+    opacity: 0;
+}
+
+/* fonts */
+h1 {
+    font-weight: 700;
+}
+
+h1#title a {
+    font-size: 16px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-top: 3rem;
+    color: var(--color-text-2);
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-top: 5rem;
+}
+
+h2 {
+    font-size: 1.63rem;
+    margin-top: 5rem;
+}
+
+p {
+    font-size: 21px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+@media only screen and (max-width: 700px) {
+p {
+    font-size: 18px;
+}
+}
+
+@media only screen and (max-width: 600px) {
+p {
+    font-size: 16px;
+}
+}
+
+@media only screen and (max-width: 500px) {
+p {
+    font-size: 14px;
+}
+}
+
+@media only screen and (max-width: 400px) {
+p {
+    font-size: 12px;
+}
+}
+
+
+pre {
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 18.5714px;
+}
+
+a {
+    font-weight: 600;
+    text-decoration-color: var(--color-accent);
+    color: var(--color-link);
+    padding: .3rem .5rem;
+    display: inline-block;
+}
+
+.admonition, details {
+    box-shadow: 0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+    margin: 5rem 0;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-align: left;
+    padding: 0;
+    border: 0;
+}
+.admonition {
+    padding-bottom: 1rem;
+}
+
+details[open] {
+    padding-bottom: .5rem;
+}
+
+.admonition p{
+    padding: .2rem .6rem;
+}
+
+.admonition-title, .details-title, summary {
+    background: var(--color-bg-2);
+    padding: 0;
+    margin: 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+summary:hover {
+    cursor: pointer;
+}
+
+summary.admonition-title, summary.details-title {
+    padding: .5rem;
+    padding-left: 1rem;
+}
+
+.note {
+    border-left: 4px solid #f1fa8c;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #f1fa8c,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.note > .admonition-title {
+    border-bottom: 1px solid #3c3d2d;
+}
+
+.abstract {
+    border-left: 4px solid #8be9fd;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #8be9fd,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.abstract > .admonition-title {
+    border-bottom: 1px solid #2c3a3f;
+}
+.info {
+    border-left: 4px solid;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #8bb0fd,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.info > .admonition-title {
+    border-bottom: 1px solid #2c313f;
+}
+
+.tip {
+    border-left: 4px solid #008080;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #008080,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.tip > .admonition-title {
+    border-bottom: 1px solid #1b2a2b;
+}
+.success {
+    border-left: 4px solid #50fa7b;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #50fa7b,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.success > .admonition-title {
+    border-bottom: 1px solid #263e2b;
+}
+
+.question {
+    border-left: 4px solid #a7fcbd;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #a7fcbd,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.question > .admonition-title {
+    border-bottom: 1px solid #303e35;
+}
+
+.warning {
+    border-left: 4px solid #ffb86c;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #ffb86c,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.warning > .admonition-title {
+    border-bottom: 1px solid #3f3328;
+}
+
+.failure {
+    border-left: 4px solid #b23b3b;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #b23b3b,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.failure > .admonition-title {
+    border-bottom: 1px solid #34201f;
+}
+
+.danger {
+    border-left: 4px solid #ff5555;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #ff5555,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.danger > .admonition-title {
+    border-bottom: 1px solid #402523;
+}
+
+.bug {
+    border-left: 4px solid #b2548a;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #b2548a,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.bug > .admonition-title {
+    border-bottom: 1px solid #32232c;
+}
+
+.example {
+    border-left: 4px solid #bd93f9;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #bd93f9,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.example > .admonition-title {
+    border-bottom: 1px solid #332d3e;
+}
+
+.source {
+    border-left: 4px solid #bd93f9;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #bd93f9,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.source > .admonition-title {
+    border-bottom: 1px solid #332d3e;
+}
+
+.quote {
+    border-left: 4px solid #999;
+    box-shadow:
+        -0.8rem 0rem 1rem -1rem #999,
+        0.2rem 0rem 1rem rgb(0, 0, 0, .4);
+}
+.quote > .admonition-title {
+    border-bottom: 1px solid #2d2e2f;
+}
+
+table {
+    margin: 1rem 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: block;
+    max-width: -moz-fit-content;
+    max-width: fit-content;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+table thead th {
+    border: solid 1px var(--color-text);
+    padding: 10px;
+    text-align: left;
+}
+
+table tbody td {
+    border: solid 1px var(--color-text);
+    padding: 10px;
+}
+.theme-switch {
+    z-index: 10;
+    display: inline-block;
+    height: 34px;
+    position: relative;
+    width: 60px;
+
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 1rem;
+    margin-left: auto;
+    position: fixed;
+    right: 1rem;
+    top: 1rem;
+}
+
+.theme-switch input {
+    display:none;
+}
+
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+}
+
+.slider:before {
+    background-color: #fff;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 26px;
+}
+
+input:checked + .slider {
+    background-color: #343434;
+}
+input:checked + .slider:before {
+    background-color: #848484;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+main p img {
+    width: 100%;
+    width: -moz-available;
+    width: -webkit-fill-available;
+    width: fill-available;
+}
+
+details>* {
+    margin: 1rem;
+}
+
+.admonition>* {
+    margin: 1rem;
+}
+
+p.admonition-title, summary {
+    margin: 0;
+    padding-left:1.2rem;
+}
+
+.small {
+    font-size: .9rem;
+    color: #888;
+}
+
+admonition+admonition{
+    margin-top:20rem;
+}
+
+::-webkit-scrollbar {
+    height: 12px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #d3d3d32e;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+.nav{
+    position: sticky;
+    top: 0;
+    background-color: var(--color-bg);
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 5;
+}
+.social{
+    display: flex;
+    list-style-type: none;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+img {
+    max-width: 100%;
+    width: 80%;
+    vertical-align: middle;
+}
+
+.thumbnail {
+    width:100%; height: 30%;
+    border-radius:25px;
+    transition:box-shadow 1s ease;
+}
+
+.thumbnail:hover {
+    box-shadow:0px 0px 0px 8px #ff6600;
+}
+.svg-icon { width: 16px; height: 16px; display: inline-flex; fill: #ffffff; padding-right: 5px; vertical-align: text-top; }
+
+.text-primary {
+	color: #fff;
+	font-size: 1.8rem;
+	font-weight: 700;
+	text-align: center;
+	width: 100%;
+	line-height: 1.6;
+	background-image: linear-gradient(90deg, var(--animation-one), var(--animation-two), var(--animation-three), var(--animation-four), var(--animation-five), var(--animation-six), var(--animation-seven), var(--animation-eight));
+	background-size: 200%;
+	color: transparent;
+	-webkit-text-fill-color: transparent;
+	-webkit-background-clip: text;
+	background-clip: text;
+	animation: animate 20s infinite alternate;
+}
+@keyframes animate {
+	0% {
+		background-position: 0%;
+	}
+	100% {
+		background-position: 400%;
+	}
+}
+
+pre, code { font-size: 15px; border: 1px solid #e8e8e8; border-radius: 3px; background-color: var(--color-bg-code); }
+
+code { padding: 1px 5px; color: #ffffff; }
+
+pre { padding: 8px 12px; overflow-x: auto; }
+
+pre > code { border: 0; padding-right: 0; padding-left: 0; }
+
+.language-bar{
+    height: 3em;
+    text-align: justify;
+    padding: 1em 0 1px 1em;
+    color: var(--color-code-text)
+}
+
+        </style>
+</body>
+</html>
