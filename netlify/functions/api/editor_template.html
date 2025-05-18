@@ -1,0 +1,279 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Post</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --bg-color: {{ .Themes.Default.Bg }};
+            --text-color: {{ .Themes.Default.Text }};
+            --secondary-text-color: {{ .Themes.Default.SecondaryText }};
+            --link-normal: {{ .Themes.Default.Link.Normal }};
+            --link-hover: {{ .Themes.Default.Link.Hover }};
+            --link-active: {{ .Themes.Default.Link.Active }};
+            --quote-color: {{ .Themes.Default.Quotes }};
+            --code-bg-color: {{ .Themes.Default.CodeBlocks.Bg }};
+            --code-border-color: {{ .Themes.Default.CodeBlocks.Border }};
+            --code-text-color: {{ .Themes.Default.Code.Text }};
+            --code-comment-color: {{ .Themes.Default.Code.Comment }};
+            --code-keyword-color: {{ .Themes.Default.Code.Keyword }};
+            --code-string-color: {{ .Themes.Default.Code.String }};
+            --code-number-color: {{ .Themes.Default.Code.Number }};
+            --code-variable-color: {{ .Themes.Default.Code.Variable }};
+            --code-function-color: {{ .Themes.Default.Code.Function }};
+        }
+
+        .secondary-theme{
+            --bg-color: {{ .Themes.Secondary.Bg }};
+            --text-color: {{ .Themes.Secondary.Text }};
+            --secondary-text-color: {{ .Themes.Secondary.SecondaryText }};
+            --link-normal: {{ .Themes.Secondary.Link.Normal }};
+            --link-hover: {{ .Themes.Secondary.Link.Hover }};
+            --link-active: {{ .Themes.Secondary.Link.Active }};
+            --quote-color: {{ .Themes.Secondary.Quotes }};
+            --code-bg-color: {{ .Themes.Secondary.CodeBlocks.Bg }};
+            --code-border-color: {{ .Themes.Secondary.CodeBlocks.Border }};
+            --code-text-color: {{ .Themes.Secondary.Code.Text }};
+            --code-comment-color: {{ .Themes.Secondary.Code.Comment }};
+            --code-keyword-color: {{ .Themes.Secondary.Code.Keyword }};
+            --code-string-color: {{ .Themes.Secondary.Code.String }};
+            --code-number-color: {{ .Themes.Secondary.Code.Number }};
+            --code-variable-color: {{ .Themes.Secondary.Code.Variable }};
+            --code-function-color: {{ .Themes.Secondary.Code.Function }};
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+        }
+
+        h1, h2, h3 {
+            color: var(--secondary-text-color);
+        }
+
+        .Site-title {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .Site-title a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .Site-title a:hover {
+            color: var(--hover-color);
+        }
+
+        .Post-meta {
+            color: var(--secondary-text);
+            font-size: 0.9rem;
+            margin: 1rem 0;
+        }
+
+        article {
+            margin: 2rem 0;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        code {
+            font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        p code {
+            background-color: var(--inline-code-bg);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+        }
+
+        blockquote {
+            border-left: 3px solid var(--accent-color);
+            margin: 1.5rem 0;
+            padding-left: 1rem;
+            color: var(--secondary-text);
+        }
+
+        a {
+            color: var(--link-normal);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--hover-color);
+        }
+
+        .Hljs-comment { color: var(--code-comment); } 
+        .Hljs-keyword { color: var(--code-keyword); }
+        .Hljs-string { color: var(--code-string); }
+        .Hljs-number { color: var(--code-number); }
+        .Hljs-function { color: var(--code-function); }
+        .Hljs-variable { color: var(--code-variable); }
+
+        button, .Button {
+            background-color: var(--accent-color);
+            border: none;
+            border-radius: 6px;
+            color: var(--bg-color);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.2s ease;
+        }
+
+        button:hover, .Button:hover {
+            background-color: var(--hover-color);
+        }
+
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            pre {
+                margin: 1rem -1rem;
+                border-radius: 0;
+            }
+        }
+        #theme-toggle {
+            background-color: var(--link-normal);
+            border: none;
+            border-radius: 6px;
+            color: var(--bg-color);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+            padding: 0.5rem 1.5rem;
+            transition: background-color 0.2s ease;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--link-hover);
+        }
+    .markdown-preview {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-top: 10px;
+        min-height: 200px;
+        background-color: #f9f9f9;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+    }
+
+        input, textarea {
+            background-color: var(--input-bg);
+            color: var(--input-text);
+            border: 1px solid var(--secondary-text-color);
+        }
+    </style>
+    <script src="../theme.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.4"></script>
+</head>
+<body class="">
+    <button id="theme-toggle" class="p-2 rounded-md shadow-lg ">Toggle Theme</button>
+    <a href="/{{ .Config.Blog.PrefixURL }}" class="hover:underline mb-4">Back to Home</a>
+    <div class="container mx-auto p-8 rounded-lg shadow-lg max-w-4xl">
+        <h1 class="text-3xl font-semibold text-center mb-6">Add Post</h1>
+        <form id="postForm">
+            <div class="mb-4">
+                <label for="title" class="block text-lg font-medium">Title:</label>
+                <input type="text" name="title" id="title" class="w-full p-2 border rounded-md shadow-sm" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="metadata" class="block text-lg font-medium">Metadata (JSON):</label>
+                <textarea name="metadata" id="metadata" rows="4" class="w-full p-2 border rounded-md shadow-sm" placeholder='{"key": "value"}'></textarea>
+            </div>
+
+            <div class="mb-4">
+                <label for="content" class="block text-lg font-medium">Body (Markdown):</label>
+                <textarea name="content" id="content" rows="6" class="w-full p-2 border rounded-md shadow-sm"></textarea>
+            </div>
+
+            <div class="mb-4">
+                <label for="username" class="block text-lg font-medium">Username:</label>
+                <input type="text" name="username" id="username" class="w-full p-2 border rounded-md shadow-sm" required>
+            </div>
+
+            <div class="mb-6">
+                <label for="password" class="block text-lg font-medium">Password:</label>
+                <input type="password" name="password" id="password" class="w-full p-2 border rounded-md shadow-sm" required>
+            </div>
+
+            <button type="submit" class="w-full p-3 bg-blue-500 text-white rounded-md shadow-lg focus:outline-none focus:ring-2 hover:bg-blue-600">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("postForm").addEventListener("submit", async function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = {
+                title: document.getElementById("title").value,
+                metadata: document.getElementById("metadata").value ? JSON.parse(document.getElementById("metadata").value) : {},
+                content: document.getElementById("content").value,
+                username: document.getElementById("username").value,
+                password: document.getElementById("password").value
+            };
+
+            try {
+                const response = await fetch("{{ .Config.Blog.CloudFunction.base_url }}/.netlify/functions/api", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Origin": "https://dev.meetgor.com",
+                        "Referer": "https://dev.meetgor.com/"
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log("Success:", result);
+                alert("Post submitted successfully!");
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Failed to submit post. Check console for details.");
+            }
+        });
+    </script>
+    <script>
+        function previewMarkdown() {
+            const markdownContent = document.getElementById("content").value;
+            const preview = document.getElementById("markdownPreview");
+            preview.innerHTML = marked.parse(markdownContent); // Use the 'marked' library to parse markdown
+        }
+    </script>
+</body>
+</html>

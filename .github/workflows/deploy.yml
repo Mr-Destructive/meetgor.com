@@ -4,55 +4,33 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - gh-pages
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
+      - uses: actions/checkout@v2
       - name: Get current date
         id: date
-        run: echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
-      - name: Cache markata cache
-        uses: actions/cache@v3
+      - name: Set up Golang 1.23.3
+        uses: actions/setup-go@v5
         with:
-          path: .markata.cache
-          key: ${{ runner.os }}-${{ hashFiles('markata.toml') }}-${{ steps.date.outputs.date }}-markata
-          restore-keys: |
-            ${{ runner.os }}-${{ hashFiles('markata.toml') }}-markata
+          go-version: 1.23.3
 
-      - name: Cache npm
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      - name: install dependencies
+        run: go mod download && go mod tidy
 
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10.16'
+      - name: build ssg
+        run: go run main.go
 
-      - name: Install markata dependencies
-        run: pip install -r requirements.txt
-
-      - name: Run markata
-        run: markata build
-
-      - name: sw-version
-        run: |
-          export checksum=$(checksumdir markout)
-          cat static/sw.js | envsubst > markout/sw.js
-
-      - name: Deploy to GitHub Pages
-        uses: crazy-max/ghaction-github-pages@v3
-        with:
-          target_branch: markout
-          build_dir: markout
-          jekyll: false
+      - name: GitHub Pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: crazy-max/ghaction-github-pages@v3
+        with:
+          target_branch: gh-pages
+          build_dir: public
+          jekyll: false
