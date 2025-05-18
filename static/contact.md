@@ -1,9 +1,8 @@
 ---
-templateKey: contact
-author: ""
+type: static
+title: Contact
+slug: contact
 ---
-
-## Contact
 
 - 📧 **Mail**: [gormeet711@gmail.com](mailto:gormeet711@gmail.com)  
 - 🐙 **GitHub**: [Mr-Destructive](https://github.com/Mr-Destructive)  
