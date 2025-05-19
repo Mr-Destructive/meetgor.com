@@ -29,4 +29,4 @@ This also puts Appwrite in a special place for developers, they love their commu
 
 The other competition was with Cloudflare too, I am not saying Appwrite is competing with Cloudflare. Cloudflare is solving a different problem, but even being the big player in cloud, having great ecosystem for developers, it lacks the richness in support for different programming languages and runtimes. Appwrite has solved one problem at its core and are one of the best Full-Stack provider for cloud as well as self-hosted services.
 
-People said, PHP was dead! For those people, Appwrite exists in 2025! And is almost competing with standards of Vercel.
+> People said, PHP was dead! For those people, Appwrite exists in 2025! And is almost competing with standards of Vercel.
