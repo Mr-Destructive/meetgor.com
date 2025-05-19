@@ -2,7 +2,7 @@
 type: thoughts
 status: published
 title: "Appwrite is now Full-Stack-as-a-Service with Sites"
-description: "Appwrite just launched hosting of static sites (ssr, ssg, spa). This puts appwrite in a great position for being a fullstack solution. End to End developer stack for building applications.
+description: "Appwrite just launched hosting of static sites (ssr, ssg, spa). This puts appwrite in a great position for being a fullstack solution. End to End developer stack for building applications."
 ---
 
 ## What is (was) Appwrite
