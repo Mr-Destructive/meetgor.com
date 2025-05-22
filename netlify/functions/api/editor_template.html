@@ -229,6 +229,9 @@
             </div>
 
             <button type="submit" class="w-full p-3 bg-blue-500 text-white rounded-md shadow-lg focus:outline-none focus:ring-2 hover:bg-blue-600">Submit</button>
+            <button id="triggerBuildBtn" class="w-full mt-2 p-3 bg-green-500 hover:bg-green-600 text-white rounded-md shadow-lg focus:outline-none focus:ring-2">Trigger Build</button>
+            <button id="syncDbBtn" class="w-full mt-2 p-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md shadow-lg focus:outline-none focus:ring-2">Sync DB</button>
+            <div id="adminActionsMessages" class="mt-4 p-4 border rounded-md"></div>
         </form>
     </div>
 
@@ -265,6 +268,84 @@
             } catch (error) {
                 console.error("Error:", error);
                 alert("Failed to submit post. Check console for details.");
+            }
+        });
+
+        async function triggerBuild(event) {
+            event.preventDefault();
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const messagesDiv = document.getElementById("adminActionsMessages");
+            messagesDiv.className = 'mt-4 p-4 border rounded-md text-gray-700 border-gray-300'; // Reset to default/info
+            messagesDiv.textContent = "Triggering build...";
+
+            try {
+                const response = await fetch("/api/trigger-build", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    const errorResult = result.message || `HTTP error! Status: ${response.status}`;
+                    throw new Error(errorResult);
+                }
+                messagesDiv.className = 'mt-4 p-4 border rounded-md text-green-700 border-green-500 bg-green-50';
+                messagesDiv.textContent = "Build triggered successfully: " + (result.message || "Done.");
+                console.log("Build trigger success:", result);
+            } catch (error) {
+                messagesDiv.className = 'mt-4 p-4 border rounded-md text-red-700 border-red-500 bg-red-50';
+                messagesDiv.textContent = "Failed to trigger build: " + error.message;
+                console.error("Build trigger error:", error);
+            }
+        }
+
+        async function syncDB(event) {
+            event.preventDefault();
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const messagesDiv = document.getElementById("adminActionsMessages");
+            messagesDiv.className = 'mt-4 p-4 border rounded-md text-gray-700 border-gray-300'; // Reset to default/info
+            messagesDiv.textContent = "Syncing DB...";
+
+            try {
+                const response = await fetch("/api/sync-db", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    const errorResult = result.message || `HTTP error! Status: ${response.status}`;
+                    throw new Error(errorResult);
+                }
+                messagesDiv.className = 'mt-4 p-4 border rounded-md text-green-700 border-green-500 bg-green-50';
+                messagesDiv.textContent = "DB synced successfully: " + (result.message || "Done.");
+                console.log("DB sync success:", result);
+            } catch (error) {
+                messagesDiv.className = 'mt-4 p-4 border rounded-md text-red-700 border-red-500 bg-red-50';
+                messagesDiv.textContent = "Failed to sync DB: " + error.message;
+                console.error("DB sync error:", error);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const triggerBuildButton = document.getElementById("triggerBuildBtn");
+            if(triggerBuildButton) {
+                triggerBuildButton.addEventListener("click", triggerBuild);
+            }
+
+            const syncDbButton = document.getElementById("syncDbBtn");
+            if(syncDbButton) {
+                syncDbButton.addEventListener("click", syncDB);
             }
         });
     </script>
