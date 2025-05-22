@@ -78,12 +78,14 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 	dbString := fmt.Sprintf("libsql://%s?authToken=%s", dbName, dbToken)
 	db, err := sql.Open("libsql", dbString)
 	if err != nil {
+		log.Printf("Error in Connection: %v", err)
 		return errorResponse(http.StatusInternalServerError, "Database connection failed"), nil
 	}
 	defer db.Close()
 
 	queries := libsqlssg.New(db)
 	if _, err := db.ExecContext(ctx, plugins.DDL); err != nil {
+		log.Printf("Error in DDL: %v", err)
 		return errorResponse(http.StatusInternalServerError, "Database connection failed"), nil
 	}
 
@@ -192,10 +194,12 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 	post, err := plugins.CreatePostPayload(payload, int(user.ID), user.Name)
 	log.Printf("Post: %v", post)
 	if err != nil {
+		log.Printf("Error in CreatePostPayload: %v", err)
 		return errorResponse(http.StatusInternalServerError, "Database connection failed"), nil
 	}
 	_, err = queries.CreatePost(ctx, post)
 	if err != nil {
+		log.Printf("Error in CreatePost: %v", err)
 		return errorResponse(http.StatusInternalServerError, "Database connection failed"), nil
 	}
 
