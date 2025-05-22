@@ -1,0 +1,93 @@
+name: Update Content from Database
+
+on:
+  repository_dispatch:
+    types: [content-update]
+
+jobs:
+  update_files:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Grant write permissions to GITHUB_TOKEN for this job
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        # By default, actions/checkout checks out the ref that triggered the workflow.
+        # For repository_dispatch, this is typically the default branch (e.g., main).
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Process and Write Content
+        env:
+          PAYLOAD: ${{ toJSON(github.event.client_payload) }}
+        run: |
+          echo "Starting content update process..."
+          
+          # Access timestamp
+          TIMESTAMP=$(echo "$PAYLOAD" | jq -r '.Timestamp')
+          if [ "$TIMESTAMP" == "null" ] || [ -z "$TIMESTAMP" ]; then
+            echo "Error: Timestamp not found or is null in payload."
+            exit 1
+          fi
+          echo "Payload timestamp: $TIMESTAMP"
+
+          # Access posts JSON (this should be a JSON string representing an array)
+          POSTS_JSON=$(echo "$PAYLOAD" | jq -r '.Posts') # Get the Posts array as a JSON string
+
+          # Check if Posts is null or not a valid array.
+          # The trigger lambda is expected to not run if there are no posts,
+          # but defensive checking is good.
+          if [ "$POSTS_JSON" == "null" ]; then
+            echo "No posts found in payload (Posts key was null). Only updating timestamp."
+          elif ! echo "$POSTS_JSON" | jq -e '. | type == "array"' > /dev/null; then
+            echo "Error: Posts data is not a valid JSON array."
+            # Depending on requirements, one might exit 1 here or proceed to only update timestamp
+            echo "Only updating timestamp due to invalid Posts data."
+          else
+            # Process posts if POSTS_JSON is a valid array and not empty
+            if [ "$(echo "$POSTS_JSON" | jq 'length')" -gt 0 ]; then
+              echo "$POSTS_JSON" | jq -c '.[]' | while IFS= read -r post_json; do
+                FILE_PATH=$(echo "$post_json" | jq -r '.Path')
+                CONTENT=$(echo "$post_json" | jq -r '.Content')
+
+                if [ "$FILE_PATH" == "null" ] || [ -z "$FILE_PATH" ]; then
+                  echo "Skipping post due to empty or null path."
+                  continue
+                fi
+                # Content can be an empty string (e.g. for a file that should be empty)
+                # but jq -r '.Content' will output "null" if the key is present with a JSON null value.
+                # If content is critical, check for null explicitly.
+                if [ "$CONTENT" == "null" ]; then
+                  echo "Warning: Content for $FILE_PATH is null. Writing empty file."
+                  CONTENT="" # Default to empty string if JSON null
+                fi
+                
+                echo "Processing file: $FILE_PATH"
+                # Create directory structure if it doesn't exist
+                mkdir -p "$(dirname "$FILE_PATH")"
+                # Write content to file
+                echo "$CONTENT" > "$FILE_PATH"
+                echo "Successfully wrote $FILE_PATH"
+              done
+            else
+              echo "Posts array is empty. No files to write. Only updating timestamp."
+            fi
+          fi
+          
+          echo "Writing timestamp file with value: $TIMESTAMP"
+          echo "$TIMESTAMP" > .last_build_timestamp
+          echo "Content update process finished."
+
+      - name: Commit and Push Updates
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Content: Auto-update from database trigger"
+          # commit_user_name: github-actions[bot] # Default is fine
+          # commit_user_email: github-actions[bot]@users.noreply.github.com # Default is fine
+          # file_pattern: # Default is to add all changed files, which is fine here.
+          # branch: # Default is to push to the branch that triggered the workflow.
+          # push_options: # No force push needed.
+        env:
+          # Ensures the action uses the GITHUB_TOKEN with the permissions defined at the job level
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -3,199 +3,587 @@ package main
 import (
 	"bytes"
 	"context"
+	"database/sql"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
+	"regexp"
 	"strings"
+	"time"
 
+	htmltomarkdown "github.com/JohannesKaufmann/html-to-markdown/v2"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	_ "github.com/tursodatabase/libsql-client-go/libsql"
 )
 
-// Helper function to create standardized APIGatewayProxyResponse with CORS headers
-func createResponse(statusCode int, body string) events.APIGatewayProxyResponse {
-	headers := map[string]string{
-		"Access-Control-Allow-Origin":  "*",
-		"Access-Control-Allow-Headers": "Content-Type, Authorization, X-Trigger-Secret",
-		"Access-Control-Allow-Methods": "POST, OPTIONS",
+const (
+	githubUsername   = "mr-destructive"
+	githubRepoName   = "mr-destructive.github.io"
+	githubBranch     = "main"
+	timestampFileURL = "https://raw.githubusercontent.com/%s/%s/%s/.last_build_timestamp"
+	githubApiUrlBase = "https://api.github.com/repos/%s/%s/dispatches"
+	githubEventType  = "content-update"
+
+	// Time constants
+	githubTimeout = 20 * time.Second
+
+	// Default old timestamp for fallback
+	defaultOldTime = "2000-01-01T00:00:00Z"
+)
+
+// Post represents a blog post/content item from the database
+type Post struct {
+	ID          string `json:"id"`
+	Title       string `json:"title"`
+	HTMLContent string `json:"html_content"`
+	Slug        string `json:"slug"`
+	CreatedAt   string `json:"created_at"`
+	UpdatedAt   string `json:"updated_at"`
+	Type        string `json:"type"`
+	PublishedAt string `json:"published_at,omitempty"`
+	Status      string `json:"status,omitempty"`
+}
+
+// WorkflowPost represents content to be sent to GitHub Action
+type WorkflowPost struct {
+	Path    string `json:"path"`
+	Content string `json:"content"`
+}
+
+// GitHubActionPayload represents the complete payload for GitHub dispatch
+type GitHubActionPayload struct {
+	Timestamp string         `json:"timestamp"`
+	Posts     []WorkflowPost `json:"posts"`
+}
+
+// Config holds all configuration values
+type Config struct {
+	GitHubPAT            string
+	NetlifyTriggerSecret string
+	TursoDBURL           string
+	TursoAuthToken       string
+}
+
+// ProcessPost converts a post to markdown with frontmatter
+func ProcessPost(post Post) (string, error) {
+	// Convert HTML to Markdown
+	markdownContent, err := htmltomarkdown.ConvertString(post.HTMLContent)
+	if err != nil {
+		return "", fmt.Errorf("failed to convert HTML to markdown: %w", err)
 	}
+
+	// Generate frontmatter
+	frontmatter := generateFrontmatter(post)
+
+	return frontmatter + markdownContent, nil
+}
+
+// generateFrontmatter creates YAML frontmatter for the post
+func generateFrontmatter(post Post) string {
+	// Ensure we have valid dates
+	date := post.CreatedAt
+	if !isValidRFC3339(date) {
+		log.Printf("Warning: Invalid CreatedAt for post %s, using current time", post.ID)
+		date = time.Now().UTC().Format(time.RFC3339)
+	}
+
+	lastmod := post.UpdatedAt
+	if !isValidRFC3339(lastmod) {
+		lastmod = date // Fall back to creation date
+	}
+
+	// Escape quotes in title
+	title := strings.ReplaceAll(post.Title, "\"", "\\\"")
+
+	// Build frontmatter
+	var frontmatter strings.Builder
+	frontmatter.WriteString("---\n")
+	frontmatter.WriteString(fmt.Sprintf("title: \"%s\"\n", title))
+	frontmatter.WriteString(fmt.Sprintf("date: %s\n", date))
+	frontmatter.WriteString(fmt.Sprintf("lastmod: %s\n", lastmod))
+	frontmatter.WriteString(fmt.Sprintf("slug: %s\n", post.Slug))
+	frontmatter.WriteString(fmt.Sprintf("type: %s\n", post.Type))
+
+	// Add published_at if available
+	if post.PublishedAt != "" && isValidRFC3339(post.PublishedAt) {
+		frontmatter.WriteString(fmt.Sprintf("publishedAt: %s\n", post.PublishedAt))
+	}
+
+	// Add status if available
+	if post.Status != "" {
+		frontmatter.WriteString(fmt.Sprintf("status: %s\n", post.Status))
+	}
+
+	frontmatter.WriteString("---\n\n")
+
+	return frontmatter.String()
+}
+
+// loadConfig loads and validates environment variables
+func loadConfig() (*Config, error) {
+	config := &Config{
+		GitHubPAT:            os.Getenv("GITHUB_PAT_FOR_TRIGGER"),
+		NetlifyTriggerSecret: os.Getenv("NETLIFY_TRIGGER_SECRET"),
+		TursoDBURL:           os.Getenv("TURSO_DATABASE_URL"),
+		TursoAuthToken:       os.Getenv("TURSO_AUTH_TOKEN"),
+	}
+
+	// Validate required fields
+	if config.GitHubPAT == "" {
+		return nil, fmt.Errorf("GITHUB_PAT_FOR_TRIGGER is required")
+	}
+	if config.TursoDBURL == "" {
+		return nil, fmt.Errorf("TURSO_DATABASE_URL is required")
+	}
+	if config.TursoAuthToken == "" {
+		return nil, fmt.Errorf("TURSO_AUTH_TOKEN is required")
+	}
+
+	return config, nil
+}
+
+// createResponse creates standardized API Gateway response with CORS headers
+func createResponse(statusCode int, body string) events.APIGatewayProxyResponse {
 	return events.APIGatewayProxyResponse{
 		StatusCode: statusCode,
-		Headers:    headers,
-		Body:       body,
+		Headers: map[string]string{
+			"Access-Control-Allow-Origin":  "*",
+			"Access-Control-Allow-Headers": "Content-Type, Authorization, X-Trigger-Secret",
+			"Access-Control-Allow-Methods": "POST, OPTIONS",
+			"Content-Type":                 "application/json",
+		},
+		Body: body,
 	}
 }
 
-func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	log.Println("Trigger function called")
+// createErrorResponse creates a JSON error response
+func createErrorResponse(statusCode int, message string) events.APIGatewayProxyResponse {
+	errorBody := map[string]string{"error": message}
+	body, _ := json.Marshal(errorBody)
+	return createResponse(statusCode, string(body))
+}
 
-	// Handle OPTIONS request for CORS preflight
-	if request.HTTPMethod == "OPTIONS" {
-		log.Println("Handling OPTIONS request")
-		return createResponse(http.StatusOK, ""), nil
+// createSuccessResponse creates a JSON success response
+func createSuccessResponse(message string, data interface{}) events.APIGatewayProxyResponse {
+	response := map[string]interface{}{
+		"message": message,
+	}
+	if data != nil {
+		response["data"] = data
+	}
+	body, _ := json.Marshal(response)
+	return createResponse(http.StatusOK, string(body))
+}
+
+// validateTriggerSecret checks the X-Trigger-Secret header if configured
+func validateTriggerSecret(request events.APIGatewayProxyRequest, expectedSecret string) bool {
+	if expectedSecret == "" {
+		return true // No validation required
 	}
 
-	// Method Check: Ensure the request method is POST
-	if request.HTTPMethod != "POST" {
-		log.Printf("Method not allowed: %s", request.HTTPMethod)
-		return createResponse(http.StatusMethodNotAllowed, "Method Not Allowed"), nil
+	// Check for the header (case-insensitive)
+	requestSecret := getHeaderValue(request.Headers, "X-Trigger-Secret")
+	return requestSecret == expectedSecret
+}
+
+// getHeaderValue gets header value case-insensitively
+func getHeaderValue(headers map[string]string, key string) string {
+	// Try exact match first
+	if val, ok := headers[key]; ok {
+		return val
 	}
 
-	// Retrieve Environment Variables
-	githubPat := os.Getenv("GITHUB_PAT_FOR_TRIGGER")
-	netlifyTriggerSecret := os.Getenv("NETLIFY_TRIGGER_SECRET") // Optional
-	ghOwner := os.Getenv("GH_OWNER")
-	ghRepo := os.Getenv("GH_REPO")
-	ghBranch := os.Getenv("GH_BRANCH") // New environment variable for branch
-
-	if ghBranch == "" {
-		ghBranch = "main" // Default to "main" if not set
-		log.Println("GH_BRANCH not set, defaulting to 'main'")
+	// Try lowercase
+	if val, ok := headers[strings.ToLower(key)]; ok {
+		return val
 	}
 
-	if githubPat == "" || ghOwner == "" || ghRepo == "" {
-		log.Println("Error: Missing required environment variables (GITHUB_PAT_FOR_TRIGGER, GH_OWNER, or GH_REPO)")
-		return createResponse(http.StatusInternalServerError, "Internal Server Error: Missing configuration"), nil
+	return ""
+}
+
+// generateSlug creates a URL-friendly slug from title
+func generateSlug(title string) string {
+	if title == "" {
+		return ""
 	}
 
-	// Security Check (if NETLIFY_TRIGGER_SECRET is set)
-	if netlifyTriggerSecret != "" {
-		log.Println("NETLIFY_TRIGGER_SECRET is set, checking X-Trigger-Secret header")
-		requestSecret := ""
-		// Headers can be multi-value, but for X-Trigger-Secret we expect a single value.
-		// Also, header names are case-insensitive. APIGatewayProxyRequest normalizes them to lowercase.
-		if val, ok := request.Headers["x-trigger-secret"]; ok {
-			requestSecret = val
-		} else if val, ok := request.Headers["X-Trigger-Secret"]; ok { // Check uppercase just in case
-			requestSecret = val
+	// Convert to lowercase
+	slug := strings.ToLower(title)
+
+	// Replace spaces and special characters with hyphens
+	reg := regexp.MustCompile(`[^a-z0-9]+`)
+	slug = reg.ReplaceAllString(slug, "-")
+
+	// Remove leading/trailing hyphens
+	slug = strings.Trim(slug, "-")
+
+	return slug
+}
+
+// determineFilePath determines the file path based on post type and slug
+func determineFilePath(post Post) string {
+	slug := post.Slug
+	if slug == "" {
+		slug = generateSlug(post.Title)
+		if slug == "" {
+			slug = fmt.Sprintf("post-%s", post.ID) // Ultimate fallback
 		}
+	}
 
+	var baseDir string = "posts/"
+	folderPost := strings.ToLower(post.Type)
+	return fmt.Sprintf("%s%s/%s.md", baseDir, folderPost, slug)
+}
 
-		if requestSecret != netlifyTriggerSecret {
-			log.Printf("Unauthorized: Invalid or missing X-Trigger-Secret. Expected: %s, Got: %s", netlifyTriggerSecret, requestSecret)
-			return createResponse(http.StatusUnauthorized, "Unauthorized: Invalid trigger secret"), nil
+// isValidRFC3339 checks if a string is a valid RFC3339 timestamp
+func isValidRFC3339(timeStr string) bool {
+	if timeStr == "" {
+		return false
+	}
+	_, err := time.Parse(time.RFC3339, timeStr)
+	return err == nil
+}
+
+// parseTimestamp attempts to parse various timestamp formats to RFC3339
+func parseTimestamp(timeStr string) (string, error) {
+	if timeStr == "" {
+		return "", fmt.Errorf("empty timestamp")
+	}
+
+	// Try RFC3339 first
+	if t, err := time.Parse(time.RFC3339, timeStr); err == nil {
+		return t.UTC().Format(time.RFC3339), nil
+	}
+
+	// Try common database formats
+	formats := []string{
+		"2006-01-02 15:04:05",         // MySQL/PostgreSQL
+		"2006-01-02T15:04:05",         // ISO without timezone
+		"2006-01-02 15:04:05.000000",  // With microseconds
+		"2006-01-02T15:04:05.000000Z", // ISO with microseconds
+	}
+
+	for _, format := range formats {
+		if t, err := time.Parse(format, timeStr); err == nil {
+			return t.UTC().Format(time.RFC3339), nil
 		}
-		log.Println("X-Trigger-Secret validated successfully")
 	}
 
-	// Construct GitHub API URL
-	githubApiUrl := fmt.Sprintf("https://api.github.com/repos/%s/%s/actions/workflows/deploy.yml/dispatches", ghOwner, ghRepo)
-	log.Printf("GitHub API URL: %s", githubApiUrl)
+	return "", fmt.Errorf("unparseable timestamp format: %s", timeStr)
+}
 
-	// Make API Call to GitHub
-	// Create a JSON request body
-	requestBodyMap := map[string]string{"ref": ghBranch}
-	jsonBody, err := json.Marshal(requestBodyMap)
+// getPostModificationTime returns the effective modification time for comparison
+func getPostModificationTime(post Post) (time.Time, error) {
+	// Prefer UpdatedAt, fall back to CreatedAt
+	timeStr := post.UpdatedAt
+	if timeStr == "" {
+		timeStr = post.CreatedAt
+	}
+
+	if timeStr == "" {
+		return time.Time{}, fmt.Errorf("no valid timestamp found for post %s", post.ID)
+	}
+
+	// Parse the timestamp
+	normalizedTime, err := parseTimestamp(timeStr)
 	if err != nil {
-		log.Printf("Error marshalling JSON request body: %v", err)
-		return createResponse(http.StatusInternalServerError, "Internal Server Error: Could not create request to GitHub"), nil
+		return time.Time{}, fmt.Errorf("failed to parse timestamp for post %s: %w", post.ID, err)
 	}
 
-	// Create a new HTTP POST request to the GitHub API URL
-	req, err := http.NewRequestWithContext(context.Background(), "POST", githubApiUrl, bytes.NewBuffer(jsonBody))
+	return time.Parse(time.RFC3339, normalizedTime)
+}
+
+// fetchLastBuildTimestamp retrieves the last build timestamp from GitHub
+func fetchLastBuildTimestamp(githubPAT string) (time.Time, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), githubTimeout)
+	defer cancel()
+
+	url := fmt.Sprintf(timestampFileURL, githubUsername, githubRepoName, githubBranch)
+
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
-		log.Printf("Error creating GitHub API request: %v", err)
-		return createResponse(http.StatusInternalServerError, "Internal Server Error: Could not create request to GitHub"), nil
+		return time.Time{}, fmt.Errorf("failed to create request: %w", err)
 	}
 
-	// Set headers
-	req.Header.Set("Authorization", fmt.Sprintf("token %s", githubPat))
-	req.Header.Set("Accept", "application/vnd.github.v3+json")
-	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", githubPAT))
+	req.Header.Set("Accept", "application/vnd.github.v3.raw")
 
-	log.Printf("Dispatching GitHub Action for branch: %s", ghBranch)
-
-	// Execute the HTTP request
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Printf("Error sending request to GitHub API: %v", err)
-		// Check if the error is due to context deadline exceeded or cancellation, which might indicate a timeout
-		if err == context.DeadlineExceeded {
-			return createResponse(http.StatusGatewayTimeout, "Bad Gateway: GitHub API request timed out"), nil
-		}
-		return createResponse(http.StatusBadGateway, "Bad Gateway: Error communicating with GitHub"), nil
+		return time.Time{}, fmt.Errorf("failed to fetch timestamp: %w", err)
 	}
 	defer resp.Body.Close()
 
-	// If the GitHub API returns a non-successful status code (e.g., not 204 No Content)
-	if resp.StatusCode != http.StatusNoContent {
-		responseBodyBytes, _ := os.ReadAll(resp.Body) // Read body for logging
-		log.Printf("Error from GitHub API: StatusCode %d, Body: %s", resp.StatusCode, string(responseBodyBytes))
-		return createResponse(http.StatusBadGateway, fmt.Sprintf("Bad Gateway: GitHub API responded with %d", resp.StatusCode)), nil
+	if resp.StatusCode == http.StatusNotFound {
+		log.Println("Timestamp file not found, using default old timestamp")
+		return time.Parse(time.RFC3339, defaultOldTime)
 	}
 
-	log.Println("Build triggered successfully via GitHub API.")
-	return createResponse(http.StatusOK, "Build triggered successfully."), nil
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return time.Time{}, fmt.Errorf("GitHub API error: %d - %s", resp.StatusCode, string(body))
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return time.Time{}, fmt.Errorf("failed to read response: %w", err)
+	}
+
+	timestampStr := strings.TrimSpace(string(body))
+	timestamp, err := time.Parse(time.RFC3339, timestampStr)
+	if err != nil {
+		return time.Time{}, fmt.Errorf("invalid timestamp format '%s': %w", timestampStr, err)
+	}
+
+	return timestamp, nil
+}
+
+// fetchPostsFromDB retrieves posts from Turso database
+func fetchPostsFromDB(dbURL, authToken string) ([]Post, error) {
+
+	// Connect to Turso
+	db, err := sql.Open("libsql", dbURL)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create database connection: %w", err)
+	}
+
+	defer db.Close()
+
+	// Query for posts - only fetch published posts or posts without status
+	query := `
+		SELECT 
+			id, 
+			title, 
+			html_content, 
+			COALESCE(slug, '') as slug,
+			type, 
+			published_at,
+			updated_at, 
+			created_at,
+			COALESCE(status, 'published') as status
+		FROM posts 
+		WHERE COALESCE(status, 'published') IN ('published', 'public')
+		ORDER BY COALESCE(updated_at, created_at) DESC
+		LIMIT 1000`
+
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, fmt.Errorf("failed to execute query: %w", err)
+	}
+	defer rows.Close()
+
+	var posts []Post
+	for rows.Next() {
+		var p Post
+		var publishedAt sql.NullString
+
+		err := rows.Scan(
+			&p.ID, &p.Title, &p.HTMLContent, &p.Slug, &p.Type,
+			&publishedAt, &p.UpdatedAt, &p.CreatedAt, &p.Status,
+		)
+		if err != nil {
+			log.Printf("Error scanning row: %v", err)
+			continue
+		}
+
+		// Handle nullable published_at
+		if publishedAt.Valid {
+			if normalized, err := parseTimestamp(publishedAt.String); err == nil {
+				p.PublishedAt = normalized
+			}
+		}
+
+		// Normalize timestamps
+		if normalized, err := parseTimestamp(p.CreatedAt); err == nil {
+			p.CreatedAt = normalized
+		} else {
+			log.Printf("Warning: Invalid CreatedAt for post %s: %s", p.ID, p.CreatedAt)
+			continue // Skip posts with invalid creation dates
+		}
+
+		if normalized, err := parseTimestamp(p.UpdatedAt); err == nil {
+			p.UpdatedAt = normalized
+		} else {
+			p.UpdatedAt = p.CreatedAt // Fall back to creation date
+		}
+
+		// Validate required fields
+		p.Title = strings.TrimSpace(p.Title)
+		p.HTMLContent = strings.TrimSpace(p.HTMLContent)
+
+		if p.Title == "" || p.HTMLContent == "" {
+			log.Printf("Skipping post %s: missing title or content", p.ID)
+			continue
+		}
+
+		posts = append(posts, p)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("error iterating rows: %w", err)
+	}
+
+	log.Printf("Fetched %d valid posts from database", len(posts))
+	return posts, nil
+}
+
+// triggerGitHubAction sends a repository dispatch event to GitHub
+func triggerGitHubAction(githubPAT string, payload GitHubActionPayload) error {
+	ctx, cancel := context.WithTimeout(context.Background(), githubTimeout)
+	defer cancel()
+
+	dispatchURL := fmt.Sprintf(githubApiUrlBase, githubUsername, githubRepoName)
+
+	// Create dispatch payload
+	dispatchPayload := map[string]interface{}{
+		"event_type":     githubEventType,
+		"client_payload": payload,
+	}
+
+	body, err := json.Marshal(dispatchPayload)
+	if err != nil {
+		return fmt.Errorf("failed to marshal payload: %w", err)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "POST", dispatchURL, bytes.NewBuffer(body))
+	if err != nil {
+		return fmt.Errorf("failed to create request: %w", err)
+	}
+
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", githubPAT))
+	req.Header.Set("Accept", "application/vnd.github.v3+json")
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return fmt.Errorf("failed to send request: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusNoContent {
+		respBody, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("GitHub API error: %d - %s", resp.StatusCode, string(respBody))
+	}
+
+	return nil
+}
+
+// handler is the main Netlify function handler
+func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	log.Printf("Content sync function called: %s %s", request.HTTPMethod, request.Path)
+
+	// Handle CORS preflight
+	if request.HTTPMethod == "OPTIONS" {
+		return createResponse(http.StatusOK, ""), nil
+	}
+
+	// Validate HTTP method
+	if request.HTTPMethod != "POST" {
+		return createErrorResponse(http.StatusMethodNotAllowed, "Only POST method is allowed"), nil
+	}
+
+	// Load configuration
+	config, err := loadConfig()
+	if err != nil {
+		log.Printf("Configuration error: %v", err)
+		return createErrorResponse(http.StatusInternalServerError, "Server configuration error"), nil
+	}
+
+	// Validate trigger secret
+	if !validateTriggerSecret(request, config.NetlifyTriggerSecret) {
+		log.Println("Unauthorized: Invalid or missing trigger secret")
+		return createErrorResponse(http.StatusUnauthorized, "Invalid or missing trigger secret"), nil
+	}
+
+	// Fetch last build timestamp
+	lastBuildTime, err := fetchLastBuildTimestamp(config.GitHubPAT)
+	if err != nil {
+		log.Printf("Error fetching last build timestamp: %v", err)
+		// Use default old time to ensure we process content
+		lastBuildTime, _ = time.Parse(time.RFC3339, defaultOldTime)
+	}
+	log.Printf("Last build timestamp: %s", lastBuildTime.Format(time.RFC3339))
+
+	// Fetch posts from database
+	posts, err := fetchPostsFromDB(config.TursoDBURL, config.TursoAuthToken)
+	if err != nil {
+		log.Printf("Database error: %v", err)
+		return createErrorResponse(http.StatusInternalServerError, "Failed to fetch content from database"), nil
+	}
+
+	// Process posts that have been modified since last build
+	var workflowPosts []WorkflowPost
+	var processedCount int
+
+	for _, post := range posts {
+		postTime, err := getPostModificationTime(post)
+		if err != nil {
+			log.Printf("Skipping post %s: %v", post.ID, err)
+			continue
+		}
+
+		// Only process posts modified after last build
+		if !postTime.After(lastBuildTime) {
+			continue
+		}
+
+		log.Printf("Processing updated post: %s (%s)", post.ID, post.Title)
+
+		// Convert to markdown with frontmatter
+		content, err := htmltomarkdown.ConvertString(post.HTMLContent)
+		if err != nil {
+			log.Printf("Error processing post %s: %v", post.ID, err)
+			continue
+		}
+
+		// Determine file path
+		filePath := determineFilePath(post)
+
+		workflowPosts = append(workflowPosts, WorkflowPost{
+			Path:    filePath,
+			Content: content,
+		})
+		processedCount++
+	}
+
+	// Check if we have any content to update
+	if len(workflowPosts) == 0 {
+		log.Println("No new or updated content found")
+		return createSuccessResponse("No new content to update", map[string]interface{}{
+			"last_build_time": lastBuildTime.Format(time.RFC3339),
+			"posts_checked":   len(posts),
+		}), nil
+	}
+
+	// Create GitHub Action payload
+	currentTimestamp := time.Now().UTC().Format(time.RFC3339)
+	payload := GitHubActionPayload{
+		Timestamp: currentTimestamp,
+		Posts:     workflowPosts,
+	}
+
+	// Trigger GitHub Action
+	if err := triggerGitHubAction(config.GitHubPAT, payload); err != nil {
+		log.Printf("Failed to trigger GitHub Action: %v", err)
+		return createErrorResponse(http.StatusBadGateway, "Failed to trigger content build"), nil
+	}
+
+	log.Printf("Successfully triggered GitHub Action with %d posts", len(workflowPosts))
+
+	return createSuccessResponse("Content update triggered successfully", map[string]interface{}{
+		"timestamp":       currentTimestamp,
+		"posts_updated":   len(workflowPosts),
+		"posts_checked":   len(posts),
+		"last_build_time": lastBuildTime.Format(time.RFC3339),
+	}), nil
 }
 
 func main() {
-	// Check if running locally
-	if _, ok := os.LookupEnv("NETLIFY_LOCAL"); ok {
-		http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-			// Simulate APIGatewayProxyRequest for local testing
-			var body []byte
-			if r.Body != nil {
-				body, _ = os.ReadAll(r.Body)
-				r.Body.Close() // Close the original body
-				r.Body = http.MaxBytesReader(w, bytes.NewReader(body), 1024*1024) // Restore body for next read if any
-			}
-
-			// Convert http.Header to map[string]string and map[string][]string
-			headers := make(map[string]string)
-			multiValueHeaders := make(map[string][]string)
-			for k, v := range r.Header {
-				headers[strings.ToLower(k)] = v[0] // APIGatewayProxyRequest headers are typically lowercase
-				multiValueHeaders[strings.ToLower(k)] = v
-			}
-
-
-			req := events.APIGatewayProxyRequest{
-				HTTPMethod:        r.Method,
-				Path:              r.URL.Path,
-				Headers:           headers,
-				MultiValueHeaders: multiValueHeaders,
-				Body:              string(body),
-			}
-			// Call the handler
-			resp, err := handler(req)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-
-			// Set headers
-			for k, v := range resp.Headers {
-				w.Header().Set(k, v)
-			}
-			w.WriteHeader(resp.StatusCode)
-			fmt.Fprint(w, resp.Body)
-		})
-		log.Println("Running trigger function locally on port 9999")
-		log.Fatal(http.ListenAndServe(":9999", nil))
-	} else {
-		lambda.Start(handler)
-	}
+	lambda.Start(handler)
 }
-
-// Helper function to convert http.Header to map[string]string (no longer directly used by handler)
-// func convertHeaders(h http.Header) map[string]string {
-// 	headers := make(map[string]string)
-// 	for k, v := range h {
-// 		headers[k] = v[0] // Take the first value for simplicity
-// 	}
-// 	return headers
-// }
-
-// Helper function to read request body (no longer directly used by handler)
-// func getBody(r *http.Request) string {
-// 	body, err := os.ReadAll(r.Body)
-// 	if err != nil {
-// 		log.Printf("Error reading request body: %v", err)
-// 		return ""
-// 	}
-// 	defer r.Body.Close()
-// 	return string(body)
-// }
