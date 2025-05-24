@@ -19,7 +19,7 @@ import (
 
 const (
 	githubUsername   = "mr-destructive"
-	githubRepoName   = "mr-destructive.github.io"
+	githubRepoName   = "meetgor.com"
 	githubBranch     = "main"
 	timestampFileURL = "https://raw.githubusercontent.com/%s/%s/%s/.last_build_timestamp"
 	githubApiUrlBase = "https://api.github.com/repos/%s/%s/dispatches"
