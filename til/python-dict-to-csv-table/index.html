@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:url" content="meetgor.com/til/python-dict-to-csv-table">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Meet Gor | Turn Python dictionary into a neat CSV table">
+    <meta property="og:description" content="Exploring how to write python dict/key-value pairs and a table-like structure to a CSV file.">
+    <meta property="twitter:domain" content="meetgor.com">
+    <meta property="twitter:url" content="meetgor.com/til/python-dict-to-csv-table">
+    <meta name="twitter:title" content="Turn Python dictionary into a neat CSV table">
+    <meta name="twitter:description" content="Exploring how to write python dict/key-value pairs and a table-like structure to a CSV file.">
+    
+        <meta property="og:image" content="tbicon.png">
+        <meta name="twitter:image" content="tbicon.png">
+        <meta name="twitter:image" content="../tbicon.png">
+    
+    <link rel="icon" href="../tbicon.png" type="image/png">
+    <link rel="icon" href="tbicon.png" type="image/png">
+
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+    });
+    </script>
+    <title>Meet Gor | Turn Python dictionary into a neat CSV table</title>
+    <style>
+            :root {
+                --bg-color: #ffffff;
+                --text-color: #333333;
+                --secondary-text-color: ;
+                --link-normal: #007bff;
+                --link-hover: #0056b3;
+                --link-active: #003a75;
+                --quote-color: #999999;
+                --code-bg-color: #dddddd;
+                --code-border-color: #ced4da;
+                --code-text-color: #444444;
+                --code-comment-color: #808080;
+                --code-keyword-color: #008000;
+                --code-string-color: #000080;
+                --code-number-color: #000000;
+                --code-variable-color: #000000;
+                --code-function-color: #000000;
+            }
+
+             
+            .secondary-theme {
+                --bg-color: #121212;
+                --text-color: #ffffff;
+                --secondary-text-color: #00ffff;
+                --link-normal: #ff6600;
+                --link-hover: #4682b4;
+                --link-active: #00008b;
+                --quote-color: #a9a9a9;
+                --code-bg-color: #333333;
+                --code-border-color: #444444;
+                --code-text-color: #ffffff;
+                --code-comment-color: #b0b0b0;
+                --code-keyword-color: #32cd32;
+                --code-string-color: #ff6347;
+                --code-number-color: #d3d3d3;
+                --code-variable-color: #b0e0e6;
+                --code-function-color: #ff4500;
+            }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+            line-height: 1.6;
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--secondary-text-color);
+        }
+
+        .site-title {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .site-title a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .site-title a:hover {
+            color: var(--hover-color);
+        }
+
+        .Post-meta {
+            color: var(--secondary-text);
+            font-size: 0.9rem;
+            margin: 1rem 0;
+        }
+
+        article {
+            margin: 2rem 0;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        code {
+            font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        p code {
+            background-color: var(--inline-code-bg);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+        }
+
+        blockquote {
+            border-left: 3px solid var(--accent-color);
+            margin: 1.5rem 0;
+            padding-left: 1rem;
+            color: var(--secondary-text);
+        }
+
+        a {
+            color: var(--link-normal);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--hover-color);
+        }
+
+        .Hljs-comment { color: var(--code-comment); } 
+        .Hljs-keyword { color: var(--code-keyword); }
+        .Hljs-string { color: var(--code-string); }
+        .Hljs-number { color: var(--code-number); }
+        .Hljs-function { color: var(--code-function); }
+        .Hljs-variable { color: var(--code-variable); }
+
+        button, .Button {
+            background-color: var(--accent-color);
+            border: none;
+            border-radius: 6px;
+            color: var(--bg-color);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.2s ease;
+        }
+
+        button:hover, .Button:hover {
+            background-color: var(--hover-color);
+        }
+
+
+         
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            pre {
+                margin: 1rem -1rem;
+                border-radius: 0;
+            }
+        }
+
+        code {
+          font-family: monospace;
+          padding: 2px 4px;
+          border-radius: 4px;
+        }
+
+pre {
+    background-color: var(--code-bg-color, #f5f5f5);
+    border: 1px solid var(--code-border-color, #d1d1d1);
+    border-radius: 6px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+}
+
+code {
+    font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    font-size: 0.9em;
+    color: var(--code-text-color, #fff);
+}
+
+p code {
+    color: var(--code-text-color, #000);
+    background-color: var(--code-bg-color, #444444);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+}
+
+ 
+.Hljs-comment { color: var(--code-comment-color, #7d7d7d); }
+.Hljs-keyword { color: var(--code-keyword-color, #005cc5); }
+.Hljs-string { color: var(--code-string-color, #d73a49); }
+.Hljs-number { color: var(--code-number-color, #e36209); }
+.Hljs-variable { color: var(--code-variable-color, #6f42c1); }
+.Hljs-function { color: var(--code-function-color, #005cc5); }
+
+ 
+.secondary-theme pre {
+    background-color: var(--code-bg-color, #1e1e1e);
+    border: 1px solid var(--code-border-color, #3c3c3c);
+}
+
+.secondary-theme .Hljs-comment { color: var(--code-comment-color, #6a737d); }
+.secondary-theme .Hljs-keyword { color: var(--code-keyword-color, #569cd6); }
+.secondary-theme .Hljs-string { color: var(--code-string-color, #ce9178); }
+.secondary-theme .Hljs-number { color: var(--code-number-color, #b5cea8); }
+.secondary-theme .Hljs-variable { color: var(--code-variable-color, #9cdcfe); }
+.secondary-theme .Hljs-function { color: var(--code-function-color, #dcdcaa); }
+
+pre {
+    background: var(--code-bg-color, #1e1e1e);
+    border: 1px solid var(--code-border-color, #3c3c3c);
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+
+ 
+code {
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.9em;
+    color: var(--code-text-color, #ffffff);
+}
+
+ 
+p code {
+    background-color: var(--code-bg-color, #333);
+    color: var(--code-text-color, #ffcb6b);
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+ 
+.Hljs-comment { color: var(--code-comment-color, #6a737d); font-style: italic; }
+.Hljs-keyword { color: var(--code-keyword-color, #c678dd); font-weight: bold; }
+.Hljs-string { color: var(--code-string-color, #98c379); }
+.Hljs-number { color: var(--code-number-color, #d19a66); }
+.Hljs-variable { color: var(--code-variable-color, #e06c75); }
+.Hljs-function { color: var(--code-function-color, #61afef); }
+
+ 
+.copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.copy-btn:hover {
+    background: #45a049;
+}
+
+.copy-btn.copied {
+    background: #ffa500;
+}
+
+blockquote {
+    border-left: 4px solid var(--quote-color);
+    background-color: rgba(255, 255, 255, 0.05);  
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: var(--secondary-text-color);
+    border-radius: 6px;
+    position: relative;
+}
+
+blockquote::before {
+    content: "“";  
+    font-size: 2rem;
+    color: var(--quote-color);
+    position: absolute;
+    top: 0;
+    left: 10px;
+}
+
+blockquote::after {
+    content: "”";  
+    font-size: 2rem;
+    color: var(--quote-color);
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+}
+
+ 
+blockquote cite {
+    display: block;
+    text-align: right;
+    font-size: 0.9em;
+    margin-top: 0.5rem;
+    color: var(--secondary-text-color);
+    font-style: normal;
+}
+        #editor, #editor-edit {
+            background-color: #4CAF50;  
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #editor i {
+            margin-right: 5px;  
+        }
+        #editor-edit i {
+            margin-right: 5px;  
+        }
+    </style>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+
+        
+        const currentTheme = localStorage.getItem("theme") || "light";
+
+        
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/dracula.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            setSyntaxTheme("secondary");
+        } else {
+            setSyntaxTheme("light");
+        }
+
+        
+        themeToggle.addEventListener("click", () => {
+            if (body.classList.contains("secondary-theme")) {
+                body.classList.remove("secondary-theme");
+                localStorage.setItem("theme", "light");
+                setSyntaxTheme("light");
+            } else {
+                body.classList.add("secondary-theme");
+                localStorage.setItem("theme", "secondary");
+                setSyntaxTheme("secondary");
+            }
+        });
+    });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("pre").forEach((pre) => {
+                const button = document.createElement("button");
+                button.classList.add("copy-btn");
+                button.textContent = "Copy";
+
+                button.addEventListener("click", () => {
+                    const code = pre.querySelector("code");
+                    if (!code) return;
+
+                    const textToCopy = code.innerText || code.textContent;
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        button.textContent = "Copied!";
+                        button.classList.add("copied");
+
+                        setTimeout(() => {
+                            button.textContent = "Copy";
+                            button.classList.remove("copied");
+                        }, 1500);
+                    });
+                });
+
+                pre.appendChild(button);
+            });
+        });
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+    
+    <link rel="icon" href="../../tbicon.png" type="image/png">
+</head>
+<body>
+    <header class="header">
+        <h1 class="site-title animated-gradient-text"><a href="/">Meet Gor</a></h1>
+        <div class="theme-switch">
+          <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+          <label for="theme-toggle"></label>
+        </div>
+    </header>
+
+    <main class="container">
+        <article class="blog-post">
+            <h1>Turn Python dictionary into a neat CSV table</h1>
+            <div class="post-meta">
+                Published on 📅 <time datetime="2024-03-20">2024-03-20</time>
+            </div>
+            <div class="post-meta">
+                Type: <a href="/til">til</a>
+            </div>
+            <div class="post-meta">
+                <span class="post-series-label"> 🏷️ Tags:</span>
+                
+                <a href="/tags/python">#python</a>
+                
+            </div>
+            
+            <div class="post-meta">
+                
+            </div>
+            <hr>
+            <div class="post-content">
+                <h2>Populating a Python dict having a table-like structure to a CSV</h2>
+<p>Today, I want to share with you a neat trick I recently discovered for populating a CSV file with data in a table-like structure using Python.</p>
+<h3>Writing Key-Value Pairs to a CSV Row</h3>
+<p>Firstly, let's discuss the <code>write_key_value</code> function. This function allows us to write key-value pairs to a CSV row. It's particularly useful when dealing with metrics or data that can be represented as simple pairs.</p>
+<pre><code class="language-python"># Function to populate a CSV row with key-value pairs
+def write_key_value(writer, dictionary):
+    for key, value in dictionary.items():
+        writer.writerow([key, value])
+</code></pre>
+<h3>Writing a Table-Like Structure to a CSV File</h3>
+<p>Now, let's dive into the <code>write_table</code> function, which handles more complex scenarios where the data follows a table-like structure. This function takes into account different types of metrics and adjusts the CSV table structure accordingly.</p>
+<p>Assuming you have a structure of the dictionary like:</p>
+<pre><code class="language-python">data = {
+    &quot;Students&quot;: {
+        &quot;John Doe&quot;: {
+            &quot;course&quot;: &quot;Mathematics&quot;,
+            &quot;grade&quot;: &quot;A&quot;,
+            &quot;attendance&quot;: 95,
+            &quot;assignments_completed&quot;: 15,
+            &quot;student_id&quot;: &quot;JD001&quot;
+        },
+        &quot;Alice Smith&quot;: {
+            &quot;course&quot;: &quot;Physics&quot;,
+            &quot;grade&quot;: &quot;B+&quot;,
+            &quot;attendance&quot;: 85,
+            &quot;assignments_completed&quot;: 12,
+            &quot;student_id&quot;: &quot;AS002&quot;
+        },
+        &quot;Bob Johnson&quot;: {
+            &quot;course&quot;: &quot;Computer Science&quot;,
+            &quot;grade&quot;: &quot;A-&quot;,
+            &quot;attendance&quot;: 90,
+            &quot;assignments_completed&quot;: 14,
+            &quot;student_id&quot;: &quot;BJ003&quot;
+        }
+    }
+}
+</code></pre>
+<p>And you want to write it to a CSV file, like this:</p>
+<pre><code class="language-csv">student, course, grade, attendance, assignments_completed, student_id
+John Doe, Mathematics, A, 95, 15, JD001
+Alice Smith, Physics, B+, 85, 12, AS002
+Bob Johnson, Computer Science, A-, 90, 14, BJ003
+</code></pre>
+<p>We can create a function <code>write_table</code> that will take in the <code>dictionary</code> as the actual data. We want to store the keys of the inner dictionary to be the header/columns of the csv file. As we can see the keys of the inner dict i.e. the value for the key <code>John Doe</code> is a dict with the keys <code>course</code>, <code>grade</code>, <code>attendance</code>, etc. which remain the same for the all the keys in the dictionary.</p>
+<p>So, we can first create a <code>row_keys</code> variable to store the keys of the actual dictionary this will be the first column rows in the csv.</p>
+<p>Further we check if the <code>row_keys</code> is a dict and then we append it with the <code>index_key</code> which will be the first column in the csv. Since all the keys remain the same for the inner-dict, we can pick the first dict and create the <code>header</code> with the inner-dict keys.</p>
+<p>So, we can write the list <code>header</code> to the csv file.</p>
+<p>Then for each key in the <code>row_keys</code> we can create a list <code>row</code> with the key and the values of the inner-dict.</p>
+<pre><code class="language-python"># Function to populate a CSV with a table-like structure
+def write_table(writer, dictionary, index_key):
+
+    row_keys = list(dictionary.keys())
+
+    if row_keys and data[row_keys[0]] is not None:
+        headers = [index_key] + list(
+            dictionary[row_keys[0]].keys()
+        )
+    else:
+        return
+    writer.writerow(headers)
+    for key in row_keys:
+        row = [key] + list(dictionary[key].values())
+        writer.writerow(row)
+
+
+with open('data.csv', 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    for key in data:
+        write_table(writer, data[key], key)
+</code></pre>
+<h3>Example Usage</h3>
+<p>To illustrate how these functions can be used, let's consider a scenario where we have various types of metrics to populate into a CSV file. We handle key-value paired metrics separately and then populate the CSV with table-like metrics.</p>
+<pre><code class="language-python">import csv
+
+data = {
+    &quot;Students&quot;: {
+        &quot;John Doe&quot;: {
+            &quot;course&quot;: &quot;Mathematics&quot;,
+            &quot;grade&quot;: &quot;A&quot;,
+            &quot;attendance&quot;: 95,
+            &quot;assignments_completed&quot;: 15,
+            &quot;student_id&quot;: &quot;JD001&quot;
+        },
+        &quot;Alice Smith&quot;: {
+            &quot;course&quot;: &quot;Physics&quot;,
+            &quot;grade&quot;: &quot;B+&quot;,
+            &quot;attendance&quot;: 85,
+            &quot;assignments_completed&quot;: 12,
+            &quot;student_id&quot;: &quot;AS002&quot;
+        },
+        &quot;Bob Johnson&quot;: {
+            &quot;course&quot;: &quot;Computer Science&quot;,
+            &quot;grade&quot;: &quot;A-&quot;,
+            &quot;attendance&quot;: 90,
+            &quot;assignments_completed&quot;: 14,
+            &quot;student_id&quot;: &quot;BJ003&quot;
+        }
+    },
+    &quot;Countries&quot;: {
+        &quot;USA&quot;: {
+            &quot;capital&quot;: &quot;Washington, D.C.&quot;,
+            &quot;population&quot;: 331000000,
+            &quot;area_sq_km&quot;: 9833517,
+            &quot;official_languages&quot;: [&quot;English&quot;, &quot;Spanish&quot;],
+            &quot;currency&quot;: &quot;United States Dollar (USD)&quot;
+        },
+        &quot;India&quot;: {
+            &quot;capital&quot;: &quot;New Delhi&quot;,
+            &quot;population&quot;: 1380004385,
+            &quot;area_sq_km&quot;: 3287263,
+            &quot;official_languages&quot;: [&quot;Hindi&quot;, &quot;English&quot;],
+            &quot;currency&quot;: &quot;Indian Rupee (INR)&quot;
+        },
+        &quot;Brazil&quot;: {
+            &quot;capital&quot;: &quot;Brasília&quot;,
+            &quot;population&quot;: 212559417,
+            &quot;area_sq_km&quot;: 8515770,
+            &quot;official_languages&quot;: [&quot;Portuguese&quot;],
+            &quot;currency&quot;: &quot;Brazilian Real (BRL)&quot;
+        }
+    }
+}
+
+def populate_table(writer, data, index_key):
+    row_keys = list(data.keys())
+    if row_keys and data[row_keys[0]] is not None:
+        headers = [index_key] + list(data[row_keys[0]].keys())
+    else:
+        return
+    writer.writerow(headers)
+    for key in row_keys:
+        row = [key] + list(data[key].values())
+        writer.writerow(row)
+
+
+with open('data.csv', 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    for key in data:
+        populate_table(writer, data[key], key)
+        writer.writerow([])
+</code></pre>
+<pre><code class="language-csv">Students,course,grade,attendance,assignments_completed,student_id
+John Doe,Mathematics,A,95,15,JD001
+Alice Smith,Physics,B+,85,12,AS002
+Bob Johnson,Computer Science,A-,90,14,BJ003
+
+Countries,capital,population,area_sq_km,official_languages,currency
+USA,&quot;Washington, D.C.&quot;,331000000,9833517,&quot;['English', 'Spanish']&quot;,United States Dollar (USD)
+India,New Delhi,1380004385,3287263,&quot;['Hindi', 'English']&quot;,Indian Rupee (INR)
+Brazil,Brasília,212559417,8515770,['Portuguese'],Brazilian Real (BRL)
+</code></pre>
+<p>Thank you, Happy Coding :)</p>
+
+            </div>
+        </article>
+    </main>
+      <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async
+        >
+        </script>
+      </div>
+    
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; Meet Gor. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const editBtn = document.getElementById('editor-edit');
+
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "til\/python-dict-to-csv-table";
+                const type = "til";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+
+                try {
+                    const res = await fetch(url);
+
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    console.log(res);
+
+                    const html = await res.text();
+                    console.log(html);
+
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+</body>
+</html>
