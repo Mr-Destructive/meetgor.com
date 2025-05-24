@@ -23,7 +23,7 @@ const (
 	githubBranch     = "main"
 	timestampFileURL = "https://raw.githubusercontent.com/%s/%s/%s/.last_build_timestamp"
 	githubApiUrlBase = "https://api.github.com/repos/%s/%s/dispatches"
-	githubEventType  = "content-update"
+	githubEventType  = "deploy-site"
 
 	// Time constants
 	githubTimeout = 20 * time.Second
@@ -131,7 +131,6 @@ func generateSlug(title string) string {
 	return slug
 }
 
-
 // triggerGitHubAction sends a repository dispatch event to GitHub
 func triggerGitHubAction(githubPAT string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), githubTimeout)
@@ -176,6 +175,7 @@ func triggerGitHubAction(githubPAT string) error {
 // handler is the main Netlify function handler
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	log.Printf("Content sync function called: %s %s", request.HTTPMethod, request.Path)
+	log.Printf("Request Body: %s", request.Body)
 
 	config, err := loadConfig()
 	if err != nil {
