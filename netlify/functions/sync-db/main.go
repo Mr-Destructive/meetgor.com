@@ -23,7 +23,7 @@ const (
 	githubBranch     = "main"
 	timestampFileURL = "https://raw.githubusercontent.com/%s/%s/%s/.last_build_timestamp"
 	githubApiUrlBase = "https://api.github.com/repos/%s/%s/dispatches"
-	githubEventType  = "deploy-site"
+	githubEventType  = "content-update"
 
 	// Time constants
 	githubTimeout = 20 * time.Second
