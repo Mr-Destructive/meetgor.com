@@ -90,7 +90,7 @@
             }
 
             .Post-meta {
-                color: var(--secondary-text);
+                color: var(--secondary-text-color);
                 font-size: 0.9rem;
                 margin: 1rem 0;
             }
@@ -123,7 +123,7 @@
                 border-left: 3px solid var(--accent-color);
                 margin: 1.5rem 0;
                 padding-left: 1rem;
-                color: var(--secondary-text);
+                color: var(--secondary-text-color);
             }
 
             a {
@@ -144,7 +144,7 @@
             .Hljs-variable { color: var(--code-variable); }
 
             button, .Button {
-                background-color: var(--accent-color);
+                background-color: var(--secondary-text-color);
                 border: none;
                 border-radius: 6px;
                 color: var(--bg-color);
@@ -156,7 +156,8 @@
             }
 
             button:hover, .Button:hover {
-                background-color: var(--hover-color);
+                background-color: var(--link-hover);
+                color: var(--bg-color);
             }
 
 
@@ -179,6 +180,136 @@
                 color: var(--accent-color);
                 text-decoration: none;
             }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #45a049;
+        }
+
+        .btn-secondary {
+            background-color: #f1f1f1;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e1e1e1;
+        }
+
+        .demo-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .admin-btn {
+            background-color: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .admin-btn:hover {
+            background-color: #1976D2;
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .result.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .result.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
         </style>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -224,6 +355,35 @@
         </header>
         <h1>{{ .FeedInfo.Title }}</h1>
         <p>Total Posts: {{ len .FeedInfo.Posts }}</p>
+        {{ if $.Config.AdminMode }}
+         <div class="demo-section">
+            <button class="admin-btn" onclick="triggerBuild()">Trigger Build</button>
+            <button class="admin-btn" onclick="syncDB()">Sync DB</button>
+            <div id="result" class="result"></div>
+         </div>
+        {{ end }}
+
+    <div id="passwordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Admin Authentication</h3>
+            </div>
+            <form id="credentialsForm">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
         <ul class="unord-list">
             {{ range .FeedInfo.Posts }}
             <li>
@@ -235,5 +395,130 @@
             </li>
             {{ end }}
         </ul>
+    <script>
+        let currentAction = null;
+
+        function showPasswordModal(action, title) {
+            currentAction = action;
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('passwordModal').style.display = 'block';
+            document.getElementById('username').focus();
+            
+            // Clear previous values
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        function closeModal() {
+            document.getElementById('passwordModal').style.display = 'none';
+            currentAction = null;
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('passwordModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('credentialsForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (currentAction) {
+                await currentAction(username, password);
+            }
+            
+            closeModal();
+        });
+
+        // Handle Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        async function triggerBuild(username = null, password = null) {
+            if (!username || !password) {
+                showPasswordModal(triggerBuild, 'Trigger Build - Authentication Required');
+                return;
+            }
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result';
+            resultDiv.textContent = 'Triggering build...';
+
+            try {
+                // Simulate API call
+                // await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // In real implementation, replace this with actual fetch call:
+                const response = await fetch("{{ .Config.Blog.CloudFunction.base_url }}/.netlify/functions/trigger-build", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.message || `HTTP error! Status: ${response.status}`);
+                }
+
+                resultDiv.className = 'result success';
+                resultDiv.textContent = 'Build triggered successfully!';
+                console.log("Build trigger success with credentials");
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = 'Failed to trigger build: ' + error.message;
+                console.error("Build trigger error:", error);
+            }
+        }
+
+        async function syncDB(username = null, password = null) {
+            if (!username || !password) {
+                showPasswordModal(syncDB, 'Sync DB - Authentication Required');
+                return;
+            }
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result';
+            resultDiv.textContent = 'Syncing DB...';
+
+            try {
+                // In real implementation, replace this with actual fetch call:
+                const response = await fetch("{{ .Config.Blog.CloudFunction.base_url }}/.netlify/functions/sync-db", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.message || `HTTP error! Status: ${response.status}`);
+                }
+
+                resultDiv.className = 'result success';
+                resultDiv.textContent = 'DB synced successfully!';
+                console.log("DB sync success with credentials");
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = 'Failed to sync DB: ' + error.message;
+                console.error("DB sync error:", error);
+            }
+        }
+    </script>
     </body>
 </html>
