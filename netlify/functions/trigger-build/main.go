@@ -19,7 +19,7 @@ import (
 
 const (
 	githubUsername   = "mr-destructive"
-	githubRepoName   = "mr-destructive.github.io"
+	githubRepoName   = "meetgor.com"
 	githubBranch     = "main"
 	timestampFileURL = "https://raw.githubusercontent.com/%s/%s/%s/.last_build_timestamp"
 	githubApiUrlBase = "https://api.github.com/repos/%s/%s/dispatches"
@@ -130,7 +130,6 @@ func generateSlug(title string) string {
 
 	return slug
 }
-
 
 // triggerGitHubAction sends a repository dispatch event to GitHub
 func triggerGitHubAction(githubPAT string) error {
