@@ -1,93 +1,253 @@
-name: Update Content from Database
+name: Sync Content and Deploy
 
 on:
+  # Manual trigger with options
+  workflow_dispatch:
+    inputs:
+      sync_all:
+        description: 'Sync all posts (not just recent)'
+        required: false
+        default: false
+        type: boolean
+      dry_run:
+        description: 'Dry run (no files written)'
+        required: false
+        default: false
+        type: boolean
+      verbose:
+        description: 'Verbose logging'
+        required: false
+        default: false
+        type: boolean
+  
+  # Webhook trigger from external sources
   repository_dispatch:
-    types: [content-update]
+    types: [content-update, sync-posts]
+
+env:
+  GO_VERSION: '1.23.3'
 
 jobs:
-  update_files:
+  sync-content:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # Grant write permissions to GITHUB_TOKEN for this job
+    
+    outputs:
+      changes-detected: ${{ steps.changes.outputs.changes }}
+      posts-processed: ${{ steps.sync.outputs.posts_processed }}
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        # By default, actions/checkout checks out the ref that triggered the workflow.
-        # For repository_dispatch, this is typically the default branch (e.g., main).
-
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
-
-      - name: Process and Write Content
-        env:
-          PAYLOAD: ${{ toJSON(github.event.client_payload) }}
-        run: |
-          echo "Starting content update process..."
-          
-          # Access timestamp
-          TIMESTAMP=$(echo "$PAYLOAD" | jq -r '.Timestamp')
-          if [ "$TIMESTAMP" == "null" ] || [ -z "$TIMESTAMP" ]; then
-            echo "Error: Timestamp not found or is null in payload."
-            exit 1
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+    
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: ${{ env.GO_VERSION }}
+        cache: true
+    
+    - name: Install dependencies
+      run: |
+        go mod init content-sync || true
+        go get github.com/JohannesKaufmann/html-to-markdown/v2
+        go get github.com/tursodatabase/libsql-client-go/libsql
+    
+    - name: Determine sync parameters
+      id: params
+      run: |
+        # Set default parameters
+        SYNC_ARGS=""
+        
+        # Handle manual workflow dispatch inputs
+        if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+          if [[ "${{ github.event.inputs.sync_all }}" == "true" ]]; then
+            SYNC_ARGS="$SYNC_ARGS --sync-all"
           fi
-          echo "Payload timestamp: $TIMESTAMP"
-
-          # Access posts JSON (this should be a JSON string representing an array)
-          POSTS_JSON=$(echo "$PAYLOAD" | jq -r '.Posts') # Get the Posts array as a JSON string
-
-          # Check if Posts is null or not a valid array.
-          # The trigger lambda is expected to not run if there are no posts,
-          # but defensive checking is good.
-          if [ "$POSTS_JSON" == "null" ]; then
-            echo "No posts found in payload (Posts key was null). Only updating timestamp."
-          elif ! echo "$POSTS_JSON" | jq -e '. | type == "array"' > /dev/null; then
-            echo "Error: Posts data is not a valid JSON array."
-            # Depending on requirements, one might exit 1 here or proceed to only update timestamp
-            echo "Only updating timestamp due to invalid Posts data."
-          else
-            # Process posts if POSTS_JSON is a valid array and not empty
-            if [ "$(echo "$POSTS_JSON" | jq 'length')" -gt 0 ]; then
-              echo "$POSTS_JSON" | jq -c '.[]' | while IFS= read -r post_json; do
-                FILE_PATH=$(echo "$post_json" | jq -r '.Path')
-                CONTENT=$(echo "$post_json" | jq -r '.Content')
-
-                if [ "$FILE_PATH" == "null" ] || [ -z "$FILE_PATH" ]; then
-                  echo "Skipping post due to empty or null path."
-                  continue
-                fi
-                # Content can be an empty string (e.g. for a file that should be empty)
-                # but jq -r '.Content' will output "null" if the key is present with a JSON null value.
-                # If content is critical, check for null explicitly.
-                if [ "$CONTENT" == "null" ]; then
-                  echo "Warning: Content for $FILE_PATH is null. Writing empty file."
-                  CONTENT="" # Default to empty string if JSON null
-                fi
-                
-                echo "Processing file: $FILE_PATH"
-                # Create directory structure if it doesn't exist
-                mkdir -p "$(dirname "$FILE_PATH")"
-                # Write content to file
-                echo "$CONTENT" > "$FILE_PATH"
-                echo "Successfully wrote $FILE_PATH"
-              done
-            else
-              echo "Posts array is empty. No files to write. Only updating timestamp."
+          if [[ "${{ github.event.inputs.dry_run }}" == "true" ]]; then
+            SYNC_ARGS="$SYNC_ARGS --dry-run"
+          fi
+          if [[ "${{ github.event.inputs.verbose }}" == "true" ]]; then
+            SYNC_ARGS="$SYNC_ARGS --verbose"
+          fi
+        fi
+        
+        # Handle repository dispatch
+        if [[ "${{ github.event_name }}" == "repository_dispatch" ]]; then
+          if [[ "${{ github.event.action }}" == "content-update" ]]; then
+            # Check if sync_all was requested in client_payload
+            if [[ "${{ github.event.client_payload.sync_all }}" == "true" ]]; then
+              SYNC_ARGS="$SYNC_ARGS --sync-all"
             fi
           fi
-          
-          echo "Writing timestamp file with value: $TIMESTAMP"
-          echo "$TIMESTAMP" > .last_build_timestamp
-          echo "Content update process finished."
+          SYNC_ARGS="$SYNC_ARGS --verbose"
+        fi
+        
+        # For scheduled runs, be less verbose
+        if [[ "${{ github.event_name }}" == "schedule" ]]; then
+          SYNC_ARGS="$SYNC_ARGS --hours 3"
+        fi
+        
+        echo "sync_args=$SYNC_ARGS" >> $GITHUB_OUTPUT
+        echo "Using sync arguments: $SYNC_ARGS"
+    
+    - name: Run content sync
+      id: sync
+      env:
+        TURSO_DATABASE_NAME: ${{ secrets.TURSO_DATABASE_NAME }}
+        TURSO_DATABASE_AUTH_TOKEN: ${{ secrets.TURSO_DATABASE_AUTH_TOKEN }}
+      run: |
+        echo "Starting content sync..."
+        
+        # Run the sync script with captured output
+        if go run sync.go ${{ steps.params.outputs.sync_args }} 2>&1 | tee sync_output.log; then
+          echo "Sync completed successfully"
+          POSTS_PROCESSED=$(grep -o "Processing complete: [0-9]*" sync_output.log | grep -o "[0-9]*" | head -1 || echo "0")
+          echo "posts_processed=$POSTS_PROCESSED" >> $GITHUB_OUTPUT
+        else
+          echo "Sync failed"
+          cat sync_output.log
+          exit 1
+        fi
+    
+    - name: Check for changes
+      id: changes
+      run: |
+        # Check if any content files were modified
+        if [[ -n $(git status --porcelain content/) ]]; then
+          echo "changes=true" >> $GITHUB_OUTPUT
+          echo "Content changes detected:"
+          git status --porcelain content/
+        else
+          echo "changes=false" >> $GITHUB_OUTPUT
+          echo "No content changes detected"
+        fi
+        
+        # Also check if timestamp file was updated
+        if [[ -n $(git status --porcelain .last_build_timestamp) ]]; then
+          echo "Timestamp file updated"
+        fi
+    
+    - name: Show sync summary
+      run: |
+        echo "## Sync Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- **Posts processed:** ${{ steps.sync.outputs.posts_processed }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Changes detected:** ${{ steps.changes.outputs.changes }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+        
+        if [[ "${{ steps.changes.outputs.changes }}" == "true" ]]; then
+          echo "- **Changed files:**" >> $GITHUB_STEP_SUMMARY
+          git status --porcelain content/ | sed 's/^/  - /' >> $GITHUB_STEP_SUMMARY
+        fi
+    
+    - name: Commit and push changes
+      if: steps.changes.outputs.changes == 'true' && !contains(github.event.inputs.dry_run, 'true')
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action Bot"
+        
+        # Add all content changes and timestamp
+        git add content/ .last_build_timestamp
+        
+        # Create descriptive commit message
+        COMMIT_MSG="🔄 Auto-sync content from database"
+        if [[ "${{ steps.sync.outputs.posts_processed }}" != "0" ]]; then
+          COMMIT_MSG="$COMMIT_MSG (${{ steps.sync.outputs.posts_processed }} posts processed)"
+        fi
+        COMMIT_MSG="$COMMIT_MSG - $(date -u '+%Y-%m-%d %H:%M UTC')"
+        
+        git commit -m "$COMMIT_MSG"
+        git push
+        
+        echo "Changes committed and pushed successfully"
 
-      - name: Commit and Push Updates
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Content: Auto-update from database trigger"
-          # commit_user_name: github-actions[bot] # Default is fine
-          # commit_user_email: github-actions[bot]@users.noreply.github.com # Default is fine
-          # file_pattern: # Default is to add all changed files, which is fine here.
-          # branch: # Default is to push to the branch that triggered the workflow.
-          # push_options: # No force push needed.
-        env:
-          # Ensures the action uses the GITHUB_TOKEN with the permissions defined at the job level
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  deploy:
+    needs: sync-content
+    if: needs.sync-content.outputs.changes-detected == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.ref }}
+    
+    - name: Wait for latest changes
+      run: |
+        # Small delay to ensure we have the latest changes
+        sleep 5
+        git pull origin ${{ github.ref_name }}
+    
+    - name: Setup Hugo
+      uses: peaceiris/actions-hugo@v2
+      with:
+        hugo-version: 'latest'
+        extended: true
+    
+    - name: Build site
+      run: |
+        echo "Building Hugo site..."
+        hugo --minify --gc
+        
+        # Verify build output
+        if [[ ! -d "public" ]]; then
+          echo "Error: Hugo build failed - no public directory created"
+          exit 1
+        fi
+        
+        echo "Build completed successfully"
+        echo "Generated files: $(find public -type f | wc -l)"
+    
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/main'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./public
+        commit_message: 🚀 Deploy updated content
+    
+    # Alternative deployment methods (uncomment as needed)
+    
+    # - name: Deploy to Netlify
+    #   env:
+    #     NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+    #     NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+    #   run: |
+    #     npm install -g netlify-cli
+    #     netlify deploy --prod --dir=public
+    
+    # - name: Deploy to S3
+    #   env:
+    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     AWS_REGION: us-east-1
+    #   run: |
+    #     aws s3 sync public/ s3://${{ secrets.S3_BUCKET }} --delete
+    
+    - name: Deployment summary
+      run: |
+        echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- **Site deployed:** ✅" >> $GITHUB_STEP_SUMMARY
+        echo "- **Posts processed:** ${{ needs.sync-content.outputs.posts-processed }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Deployment time:** $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+
+  notify:
+    needs: [sync-content, deploy]
+    if: always() && (needs.sync-content.outputs.changes-detected == 'true' || failure())
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Notify completion
+      run: |
+        if [[ "${{ needs.deploy.result }}" == "success" ]]; then
+          echo "✅ Content sync and deployment completed successfully"
+          echo "Posts processed: ${{ needs.sync-content.outputs.posts-processed }}"
+        elif [[ "${{ needs.sync-content.result }}" == "failure" ]]; then
+          echo "❌ Content sync failed"
+        elif [[ "${{ needs.deploy.result }}" == "failure" ]]; then
+          echo "❌ Deployment failed after successful sync"
+        else
+          echo "ℹ️ No changes detected - no deployment needed"
+        fi
+    
