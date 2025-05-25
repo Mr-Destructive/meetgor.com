@@ -12,8 +12,8 @@ import (
 	"net/url"
 	"os"
 	"strings"
+	"time"
 
-	htmltomarkdown "github.com/JohannesKaufmann/html-to-markdown/v2"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/mr-destructive/mr-destructive.github.io/plugins"
@@ -88,7 +88,7 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 	db, err := sql.Open("libsql", dbString)
 	if err != nil {
 		log.Printf("Error in Connection: %v", err)
-		return errorResponse(http.StatusInternalServerError, "Database connection failed"), nil
+		return ErrorResponse(http.StatusInternalServerError, "Database connection failed"), nil
 	}
 	defer db.Close()
 
@@ -107,26 +107,26 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 			err := json.Unmarshal([]byte(req.Body), &authReq)
 			if err != nil {
 				log.Printf("Error unmarshalling auth request: %v", err)
-				return errorResponse(http.StatusBadRequest, "Invalid request payload"), nil
+				return ErrorResponse(http.StatusBadRequest, "Invalid request payload"), nil
 			}
 
 			log.Printf("AuthRequest received for user: %s", authReq.Username)
 			user, err := queries.GetUser(ctx, authReq.Username)
 			if err != nil {
 				log.Printf("Error fetching user %s: %v", authReq.Username, err)
-				return errorResponse(http.StatusUnauthorized, "User not found or authentication failed"), nil
+				return ErrorResponse(http.StatusUnauthorized, "User not found or authentication failed"), nil
 			}
 
 			if !Authenticate(authReq.Username, user.Password, authReq.Password) {
 				log.Printf("Authentication failed for user: %s", authReq.Username)
-				return errorResponse(http.StatusUnauthorized, "Authentication failed"), nil
+				return ErrorResponse(http.StatusUnauthorized, "Authentication failed"), nil
 			}
 
 			log.Printf("User %s authenticated successfully. Calling trigger build function.", authReq.Username)
 			resp, err := callTriggerBuildFunction(appBaseURL, netlifyTriggerSecret)
 			if err != nil {
 				log.Printf("Error calling trigger build function: %v", err)
-				return errorResponse(http.StatusInternalServerError, "Failed to trigger build"), nil
+				return ErrorResponse(http.StatusInternalServerError, "Failed to trigger build"), nil
 			}
 			defer resp.Body.Close()
 
@@ -135,10 +135,10 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 				return jsonResponse(http.StatusOK, map[string]string{"message": "Action triggered successfully"}), nil
 			} else {
 				log.Printf("Trigger build function call failed for user: %s, status: %d", authReq.Username, resp.StatusCode)
-				return errorResponse(resp.StatusCode, "Failed to trigger build (upstream error)"), nil
+				return ErrorResponse(resp.StatusCode, "Failed to trigger build (upstream error)"), nil
 			}
 		} else {
-			return errorResponse(http.StatusMethodNotAllowed, fmt.Sprintf("Method %s not allowed for this path", req.HTTPMethod)), nil
+			return ErrorResponse(http.StatusMethodNotAllowed, fmt.Sprintf("Method %s not allowed for this path", req.HTTPMethod)), nil
 		}
 	}
 
@@ -184,13 +184,14 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 				err = json.Unmarshal([]byte(post.Metadata), &metadataObj)
 				if err != nil {
 					log.Printf("Error unmarshalling metadata for post %s: %v", post.Title, err)
-					return errorResponse(http.StatusInternalServerError, "Invalid metadata in stored post"), nil
+					return ErrorResponse(http.StatusInternalServerError, "Invalid metadata in stored post"), nil
 				}
-				markdown, errMd := htmltomarkdown.ConvertString(post.Body)
-				if errMd != nil {
-					log.Printf("Error converting HTML to markdown for post %s: %v", post.Title, errMd)
-					return errorResponse(http.StatusInternalServerError, "Error processing post content"), nil
-				}
+				markdown := post.Body
+				//markdown, errMd := htmltomarkdown.ConvertString(post.Body)
+				//if errMd != nil {
+				//	log.Printf("Error converting HTML to markdown for post %s: %v", post.Title, errMd)
+				//	return ErrorResponse(http.StatusInternalServerError, "Error processing post content"), nil
+				//}
 				payload = plugins.Payload{
 					Title:    post.Title,
 					Metadata: metadataObj,
@@ -200,7 +201,7 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 				buffer := new(bytes.Buffer)
 				if err := templ.Execute(buffer, payload); err != nil {
 					log.Printf("Error executing template for edit form: %v", err)
-					return errorResponse(http.StatusInternalServerError, "Error generating edit form"), nil
+					return ErrorResponse(http.StatusInternalServerError, "Error generating edit form"), nil
 				}
 				return events.APIGatewayProxyResponse{
 					StatusCode: http.StatusOK,
@@ -215,20 +216,20 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 				}, nil
 			}
 			log.Printf("No post found for slug: %s (type: %s)", queryParams["slug"], postType)
-			return errorResponse(http.StatusNotFound, "Post not found"), nil
+			return ErrorResponse(http.StatusNotFound, "Post not found"), nil
 
 		} else if req.HTTPMethod == http.MethodPost { // This is for editing an existing post, typically from the edit form
 			err = json.Unmarshal([]byte(req.Body), &payload)
 			if err != nil {
 				log.Printf("Error unmarshalling payload for edit post: %v", err)
-				return errorResponse(http.StatusBadRequest, "Invalid payload for edit"), nil
+				return ErrorResponse(http.StatusBadRequest, "Invalid payload for edit"), nil
 			}
 		}
 	} else if req.Headers["hx-request"] == "true" { // HTMX request for new post
 		formData, err := url.ParseQuery(req.Body)
 		if err != nil {
 			log.Printf("Error parsing form data from HTMX request: %v", err)
-			return errorResponse(http.StatusBadRequest, "Invalid form payload"), nil
+			return ErrorResponse(http.StatusBadRequest, "Invalid form payload"), nil
 		}
 		metadataStr := formData.Get("metadata")
 		metadata := make(map[string]interface{})
@@ -236,7 +237,27 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 			err = json.Unmarshal([]byte(metadataStr), &metadata)
 			if err != nil {
 				log.Printf("Error unmarshalling metadata from HTMX request: %v", err)
-				return errorResponse(http.StatusBadRequest, "Invalid metadata format"), nil
+				return ErrorResponse(http.StatusBadRequest, "Invalid metadata format"), nil
+			}
+			//check for important fields like title, post_dir, type and status
+			if _, ok := metadata["title"]; !ok {
+				if formData.Get("title") == "" {
+					return ErrorResponse(http.StatusBadRequest, "Missing title in metadata"), nil
+				}
+				metadata["title"] = formData.Get("title")
+			}
+			if _, ok := metadata["post_dir"]; !ok {
+				return ErrorResponse(http.StatusBadRequest, "Missing post_dir in metadata"), nil
+			}
+			if _, ok := metadata["type"]; !ok {
+				return ErrorResponse(http.StatusBadRequest, "Missing type in metadata"), nil
+			}
+			if _, ok := metadata["date"]; !ok {
+				metadata["date"] = time.Now().Format("2006-01-02")
+			}
+			if _, ok := metadata["tags"]; ok {
+				tags := strings.Split(metadata["tags"].(string), ",")
+				metadata["tags"] = tags
 			}
 		}
 		payload = plugins.Payload{
@@ -250,7 +271,7 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 		err = json.Unmarshal([]byte(req.Body), &payload)
 		if err != nil {
 			log.Printf("Error unmarshalling JSON payload for new post: %v", err)
-			return errorResponse(http.StatusBadRequest, "Invalid JSON payload"), nil
+			return ErrorResponse(http.StatusBadRequest, "Invalid JSON payload"), nil
 		}
 	}
 
@@ -258,25 +279,25 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 	user, err := queries.GetUser(ctx, payload.Username)
 	if err != nil {
 		log.Printf("Error fetching user %s for post creation: %v", payload.Username, err)
-		return errorResponse(http.StatusUnauthorized, "User not found or authentication failed for post creation"), nil
+		return ErrorResponse(http.StatusUnauthorized, "User not found or authentication failed for post creation"), nil
 	}
 
 	if !Authenticate(payload.Username, user.Password, payload.Password) {
 		log.Printf("Authentication failed for user %s during post creation", payload.Username)
-		return errorResponse(http.StatusUnauthorized, "Authentication failed for post creation"), nil
+		return ErrorResponse(http.StatusUnauthorized, "Authentication failed for post creation"), nil
 	}
 
 	log.Printf("User %s authenticated for post creation.", payload.Username)
 	postToCreate, err := plugins.CreatePostPayload(payload, int(user.ID), user.Name)
 	if err != nil {
 		log.Printf("Error in CreatePostPayload: %v", err)
-		return errorResponse(http.StatusInternalServerError, "Error preparing post data"), nil
+		return ErrorResponse(http.StatusInternalServerError, "Error preparing post data"), nil
 	}
 
 	_, err = queries.CreatePost(ctx, postToCreate)
 	if err != nil {
 		log.Printf("Error in CreatePost: %v", err)
-		return errorResponse(http.StatusInternalServerError, "Failed to create post in database"), nil
+		return ErrorResponse(http.StatusInternalServerError, "Failed to create post in database"), nil
 	}
 
 	log.Printf("Post '%s' created successfully by user %s", postToCreate.Title, payload.Username)
@@ -345,7 +366,7 @@ func jsonResponse(statusCode int, data interface{}) events.APIGatewayProxyRespon
 	}
 }
 
-func errorResponse(statusCode int, message string) events.APIGatewayProxyResponse {
+func ErrorResponse(statusCode int, message string) events.APIGatewayProxyResponse {
 	// Log the error being sent back to the client
 	log.Printf("Responding with error: %d - %s", statusCode, message)
 	return jsonResponse(statusCode, map[string]string{"error": message})
