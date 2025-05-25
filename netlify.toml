@@ -1,33 +1,9 @@
 [build]
   publish = "public"
-  command = "hugo --minify"
+  command = "echo 'Using GitHub Actions for build - skipping Netlify build'"
   
-  ignore = """
-    if [ "$CACHED_COMMIT_REF" != "$COMMIT_REF" ]; then
-      # Get list of changed files
-      CHANGED_FILES=$(git diff --name-only $CACHED_COMMIT_REF $COMMIT_REF)
-      
-      # Check if any Netlify functions changed
-      if echo "$CHANGED_FILES" | grep -E "^(netlify/functions/|functions/)" > /dev/null; then
-        echo "Netlify functions changed - building"
-        exit 1
-      fi
-      
-      # Check if any important config files changed
-      if echo "$CHANGED_FILES" | grep -E "^(netlify\.toml|hugo\.toml|config\.toml|config\.yaml)" > /dev/null; then
-        echo "Config files changed - building"
-        exit 1
-      fi
-      
-      # Skip build for other changes (like content sync)
-      echo "Only content files changed - skipping build"
-      exit 0
-    fi
-    
-    # Build on first deploy
-    exit 1
-  """
+  # Only build if functions or config files change, skip content-only changes
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- netlify/ functions/ netlify.toml hugo.toml config.toml config.yaml || exit 0"
 
 [functions]
   directory = "netlify/functions"
-
