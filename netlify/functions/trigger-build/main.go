@@ -17,8 +17,8 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/mr-destructive/mr-destructive.github.io/plugins/db/libsqlssg"
+	_ "github.com/tursodatabase/libsql-client-go/libsql"
 	"golang.org/x/crypto/bcrypt"
-    _ "github.com/tursodatabase/libsql-client-go/libsql"
 )
 
 const (
@@ -215,6 +215,18 @@ func ErrorResponse(statusCode int, message string) events.APIGatewayProxyRespons
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	log.Printf("Content sync function called: %s %s", request.HTTPMethod, request.Path)
 	log.Printf("Request Body: %s", request.Body)
+	if request.HTTPMethod == "OPTIONS" {
+		log.Println("Handling OPTIONS request")
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusOK,
+			Headers: map[string]string{
+				"Access-Control-Allow-Origin":  "*", // Consider restricting this in production
+				"Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+				"Access-Control-Allow-Headers": "Content-Type, Authorization, X-Trigger-Secret",
+			},
+			Body: "",
+		}, nil
+	}
 	reqBody := Payload{}
 	ctx := context.Background()
 	dbName := os.Getenv("TURSO_DATABASE_NAME")
