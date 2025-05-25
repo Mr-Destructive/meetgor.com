@@ -26,6 +26,7 @@ on:
 
 env:
   GO_VERSION: '1.23.3'
+  CONTENT_DIR: 'posts'
 
 jobs:
   sync-content:
@@ -111,14 +112,21 @@ jobs:
           exit 1
         fi
     
+    - name: Debug file locations
+      run: |
+        echo "All changed files:"
+        git status --porcelain
+        echo "Directory structure:"
+        find . -name "*.md" -not -path "./.git/*" | head -10
+
     - name: Check for changes
       id: changes
       run: |
         # Check if any content files were modified
-        if [[ -n $(git status --porcelain content/) ]]; then
+        if [[ -n $(git status --porcelain ${{ env.CONTENT_DIR }}/) ]]; then
           echo "changes=true" >> $GITHUB_OUTPUT
           echo "Content changes detected:"
-          git status --porcelain content/
+          git status --porcelain ${{ env.CONTENT_DIR }}/
         else
           echo "changes=false" >> $GITHUB_OUTPUT
           echo "No content changes detected"
@@ -138,7 +146,7 @@ jobs:
         
         if [[ "${{ steps.changes.outputs.changes }}" == "true" ]]; then
           echo "- **Changed files:**" >> $GITHUB_STEP_SUMMARY
-          git status --porcelain content/ | sed 's/^/  - /' >> $GITHUB_STEP_SUMMARY
+          git status --porcelain ${{ env.CONTENT_DIR }}/ | sed 's/^/  - /' >> $GITHUB_STEP_SUMMARY
         fi
     
     - name: Commit and push changes
@@ -148,7 +156,7 @@ jobs:
         git config --local user.name "GitHub Action Bot"
         
         # Add all content changes and timestamp
-        git add content/ .last_build_timestamp
+        git add ${{ env.CONTENT_DIR }}/ .last_build_timestamp
         
         # Create descriptive commit message
         COMMIT_MSG="🔄 Auto-sync content from database"
@@ -250,4 +258,3 @@ jobs:
         else
           echo "ℹ️ No changes detected - no deployment needed"
         fi
-    
