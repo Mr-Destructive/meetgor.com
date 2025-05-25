@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"context"
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -15,6 +16,8 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/mr-destructive/mr-destructive.github.io/plugins/db/libsqlssg"
+	"golang.org/x/crypto/bcrypt"
 )
 
 const (
@@ -31,6 +34,11 @@ const (
 	// Default old timestamp for fallback
 	defaultOldTime = "2000-01-01T00:00:00Z"
 )
+
+type Payload struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
 
 // Config holds all configuration values
 type Config struct {
@@ -172,9 +180,73 @@ func triggerGitHubAction(githubPAT string) error {
 	return nil
 }
 
+func Authenticate(username, hashedPassword, rawPassword string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(rawPassword))
+	fmt.Println(err)
+	if err != nil {
+		fmt.Println("Authentication Failure")
+		return false
+	}
+	return true
+}
+
+func jsonResponse(statusCode int, data interface{}) events.APIGatewayProxyResponse {
+	body, _ := json.Marshal(data)
+	return events.APIGatewayProxyResponse{
+		StatusCode: statusCode,
+		Headers: map[string]string{
+			"Content-Type":                 "application/json",
+			"Access-Control-Allow-Origin":  "*",
+			"Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+			"Access-Control-Allow-Headers": "Content-Type, Authorization, X-Trigger-Secret",
+		},
+		Body: string(body),
+	}
+}
+
+func ErrorResponse(statusCode int, message string) events.APIGatewayProxyResponse {
+	// Log the error being sent back to the client
+	log.Printf("Responding with error: %d - %s", statusCode, message)
+	return jsonResponse(statusCode, map[string]string{"error": message})
+}
+
 // handler is the main Netlify function handler
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	log.Printf("Content sync function called: %s %s", request.HTTPMethod, request.Path)
+	log.Printf("Request Body: %s", request.Body)
+	reqBody := Payload{}
+	ctx := context.Background()
+	dbName := os.Getenv("TURSO_DATABASE_NAME")
+	dbToken := os.Getenv("TURSO_DATABASE_AUTH_TOKEN")
+	var err error
+	dbString := fmt.Sprintf("libsql://%s?authToken=%s", dbName, dbToken)
+	db, err := sql.Open("libsql", dbString)
+	if err != nil {
+		log.Printf("Error in Connection: %v", err)
+		return ErrorResponse(http.StatusInternalServerError, "Database connection failed"), nil
+	}
+	defer db.Close()
+	queries := libsqlssg.New(db)
+	err = json.Unmarshal([]byte(request.Body), &reqBody)
+	if err != nil {
+		log.Printf("Failed to unmarshal request body: %v", err)
+		return createErrorResponse(http.StatusInternalServerError, "Failed to unmarshal request body"), nil
+	}
+	log.Printf("Request Body: %s", reqBody)
+
+	log.Printf("Processing payload for user: %s", reqBody.Username)
+	user, err := queries.GetUser(ctx, reqBody.Username)
+	if err != nil {
+		log.Printf("Error fetching user %s for post creation: %v", reqBody.Username, err)
+		return ErrorResponse(http.StatusUnauthorized, "User not found or authentication failed for post creation"), nil
+	}
+
+	if !Authenticate(user.Name, user.Password, reqBody.Password) {
+		log.Printf("Authentication failed for user %s during post creation", reqBody.Username)
+		return ErrorResponse(http.StatusUnauthorized, "Authentication failed for post creation"), nil
+	}
+
+	log.Printf("User %s authenticated for triggering github workflow.", reqBody.Username)
 
 	config, err := loadConfig()
 	if err != nil {
