@@ -1,9 +1,17 @@
 [build]
   publish = "public"
-  command = "echo 'Using GitHub Actions for build - skipping Netlify build'"
+  # Only build functions, site is built by GitHub Actions
+  command = """
+    if [ -d "netlify/functions" ] && [ "$(ls -A netlify/functions 2>/dev/null)" ]; then
+      echo "Building Netlify functions..."
+      # Add function build commands if needed
+    else
+      echo "No functions to build"
+    fi
+  """
   
-  # Only build if functions or config files change, skip content-only changes
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- netlify/ functions/ netlify.toml hugo.toml config.toml config.yaml || exit 0"
+  # Only build when functions or netlify config changes
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- netlify/ functions/ netlify.toml && exit 0 || exit 1"
 
 [functions]
   directory = "netlify/functions"
