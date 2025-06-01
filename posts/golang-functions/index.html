@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:url" content="meetgor.com/posts/golang-functions">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Meet Gor | Golang: Functions">
+    <meta property="og:description" content="Understanding the basics of functions in Golang">
+    <meta property="twitter:domain" content="meetgor.com">
+    <meta property="twitter:url" content="meetgor.com/posts/golang-functions">
+    <meta name="twitter:title" content="Golang: Functions">
+    <meta name="twitter:description" content="Understanding the basics of functions in Golang">
+    
+        <meta property="og:image" content="https://meetgor-cdn.pages.dev/golang-008-functions.png">
+        <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/golang-008-functions.png">
+    
+    <link rel="icon" href="../tbicon.png" type="image/png">
+    <link rel="icon" href="tbicon.png" type="image/png">
+
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+    });
+    </script>
+    <title>Meet Gor | Golang: Functions</title>
+    <style>
+            :root {
+                --bg-color: #ffffff;
+                --text-color: #333333;
+                --secondary-text-color: ;
+                --link-normal: #007bff;
+                --link-hover: #0056b3;
+                --link-active: #003a75;
+                --quote-color: #999999;
+                --code-bg-color: #dddddd;
+                --code-border-color: #ced4da;
+                --code-text-color: #444444;
+                --code-comment-color: #808080;
+                --code-keyword-color: #008000;
+                --code-string-color: #000080;
+                --code-number-color: #000000;
+                --code-variable-color: #000000;
+                --code-function-color: #000000;
+            }
+
+             
+            .secondary-theme {
+                --bg-color: #121212;
+                --text-color: #ffffff;
+                --secondary-text-color: #00ffff;
+                --link-normal: #ff6600;
+                --link-hover: #4682b4;
+                --link-active: #00008b;
+                --quote-color: #a9a9a9;
+                --code-bg-color: #333333;
+                --code-border-color: #444444;
+                --code-text-color: #ffffff;
+                --code-comment-color: #b0b0b0;
+                --code-keyword-color: #32cd32;
+                --code-string-color: #ff6347;
+                --code-number-color: #d3d3d3;
+                --code-variable-color: #b0e0e6;
+                --code-function-color: #ff4500;
+            }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+            line-height: 1.6;
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--secondary-text-color);
+        }
+
+        .site-title {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .site-title a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .site-title a:hover {
+            color: var(--hover-color);
+        }
+
+        .Post-meta {
+            color: var(--secondary-text);
+            font-size: 0.9rem;
+            margin: 1rem 0;
+        }
+
+        article {
+            margin: 2rem 0;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        code {
+            font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        p code {
+            background-color: var(--inline-code-bg);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+        }
+
+        blockquote {
+            border-left: 3px solid var(--accent-color);
+            margin: 1.5rem 0;
+            padding-left: 1rem;
+            color: var(--secondary-text);
+        }
+
+        a {
+            color: var(--link-normal);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--hover-color);
+        }
+
+        .Hljs-comment { color: var(--code-comment); } 
+        .Hljs-keyword { color: var(--code-keyword); }
+        .Hljs-string { color: var(--code-string); }
+        .Hljs-number { color: var(--code-number); }
+        .Hljs-function { color: var(--code-function); }
+        .Hljs-variable { color: var(--code-variable); }
+
+        button, .Button {
+            background-color: var(--accent-color);
+            border: none;
+            border-radius: 6px;
+            color: var(--bg-color);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.2s ease;
+        }
+
+        button:hover, .Button:hover {
+            background-color: var(--hover-color);
+        }
+
+
+         
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            pre {
+                margin: 1rem -1rem;
+                border-radius: 0;
+            }
+        }
+
+        code {
+          font-family: monospace;
+          padding: 2px 4px;
+          border-radius: 4px;
+        }
+
+pre {
+    background-color: var(--code-bg-color, #f5f5f5);
+    border: 1px solid var(--code-border-color, #d1d1d1);
+    border-radius: 6px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+}
+
+code {
+    font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    font-size: 0.9em;
+    color: var(--code-text-color, #fff);
+}
+
+p code {
+    color: var(--code-text-color, #000);
+    background-color: var(--code-bg-color, #444444);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+}
+
+ 
+.Hljs-comment { color: var(--code-comment-color, #7d7d7d); }
+.Hljs-keyword { color: var(--code-keyword-color, #005cc5); }
+.Hljs-string { color: var(--code-string-color, #d73a49); }
+.Hljs-number { color: var(--code-number-color, #e36209); }
+.Hljs-variable { color: var(--code-variable-color, #6f42c1); }
+.Hljs-function { color: var(--code-function-color, #005cc5); }
+
+ 
+.secondary-theme pre {
+    background-color: var(--code-bg-color, #1e1e1e);
+    border: 1px solid var(--code-border-color, #3c3c3c);
+}
+
+.secondary-theme .Hljs-comment { color: var(--code-comment-color, #6a737d); }
+.secondary-theme .Hljs-keyword { color: var(--code-keyword-color, #569cd6); }
+.secondary-theme .Hljs-string { color: var(--code-string-color, #ce9178); }
+.secondary-theme .Hljs-number { color: var(--code-number-color, #b5cea8); }
+.secondary-theme .Hljs-variable { color: var(--code-variable-color, #9cdcfe); }
+.secondary-theme .Hljs-function { color: var(--code-function-color, #dcdcaa); }
+
+pre {
+    background: var(--code-bg-color, #1e1e1e);
+    border: 1px solid var(--code-border-color, #3c3c3c);
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+
+ 
+code {
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.9em;
+    color: var(--code-text-color, #ffffff);
+}
+
+ 
+p code {
+    background-color: var(--code-bg-color, #333);
+    color: var(--code-text-color, #ffcb6b);
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+ 
+.Hljs-comment { color: var(--code-comment-color, #6a737d); font-style: italic; }
+.Hljs-keyword { color: var(--code-keyword-color, #c678dd); font-weight: bold; }
+.Hljs-string { color: var(--code-string-color, #98c379); }
+.Hljs-number { color: var(--code-number-color, #d19a66); }
+.Hljs-variable { color: var(--code-variable-color, #e06c75); }
+.Hljs-function { color: var(--code-function-color, #61afef); }
+
+ 
+.copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.copy-btn:hover {
+    background: #45a049;
+}
+
+.copy-btn.copied {
+    background: #ffa500;
+}
+
+blockquote {
+    border-left: 4px solid var(--quote-color);
+    background-color: rgba(255, 255, 255, 0.05);  
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: var(--secondary-text-color);
+    border-radius: 6px;
+    position: relative;
+}
+
+blockquote::before {
+    content: "“";  
+    font-size: 2rem;
+    color: var(--quote-color);
+    position: absolute;
+    top: 0;
+    left: 10px;
+}
+
+blockquote::after {
+    content: "”";  
+    font-size: 2rem;
+    color: var(--quote-color);
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+}
+
+ 
+blockquote cite {
+    display: block;
+    text-align: right;
+    font-size: 0.9em;
+    margin-top: 0.5rem;
+    color: var(--secondary-text-color);
+    font-style: normal;
+}
+        #editor, #editor-edit {
+            background-color: #4CAF50;  
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #editor i {
+            margin-right: 5px;  
+        }
+        #editor-edit i {
+            margin-right: 5px;  
+        }
+    </style>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+
+        
+        const currentTheme = localStorage.getItem("theme") || "light";
+
+        
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/dracula.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            setSyntaxTheme("secondary");
+        } else {
+            setSyntaxTheme("light");
+        }
+
+        
+        themeToggle.addEventListener("click", () => {
+            if (body.classList.contains("secondary-theme")) {
+                body.classList.remove("secondary-theme");
+                localStorage.setItem("theme", "light");
+                setSyntaxTheme("light");
+            } else {
+                body.classList.add("secondary-theme");
+                localStorage.setItem("theme", "secondary");
+                setSyntaxTheme("secondary");
+            }
+        });
+    });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("pre").forEach((pre) => {
+                const button = document.createElement("button");
+                button.classList.add("copy-btn");
+                button.textContent = "Copy";
+
+                button.addEventListener("click", () => {
+                    const code = pre.querySelector("code");
+                    if (!code) return;
+
+                    const textToCopy = code.innerText || code.textContent;
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        button.textContent = "Copied!";
+                        button.classList.add("copied");
+
+                        setTimeout(() => {
+                            button.textContent = "Copy";
+                            button.classList.remove("copied");
+                        }, 1500);
+                    });
+                });
+
+                pre.appendChild(button);
+            });
+        });
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+    
+    <link rel="icon" href="../../tbicon.png" type="image/png">
+</head>
+<body>
+    <header class="header">
+        <h1 class="site-title animated-gradient-text"><a href="/">Meet Gor</a></h1>
+        <div class="theme-switch">
+          <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+          <label for="theme-toggle"></label>
+        </div>
+    </header>
+
+    <main class="container">
+        <article class="blog-post">
+            <h1>Golang: Functions</h1>
+            <div class="post-meta">
+                Published on 📅 <time datetime="2022-04-13">2022-04-13</time>
+            </div>
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            <div class="post-meta">
+                <span class="post-series-label"> 🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+            </div>
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/100-days-of-golang" class="series-link">📖 100-days-of-golang</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            <div class="post-meta">
+                
+            </div>
+            <hr>
+            <div class="post-content">
+                <h2>Introduction</h2>
+<p>In the eighth part of the series, we will be exploring functions in golang. We will be diving into some basics of functions in golang like declaration, definition and calling. We won't be exploring all the topics of functions as it is quite a large topic to cover in one shot. So, building from the base, we will be starting from the basic declaration to simple return statements.</p>
+<h2>Functions in Golang</h2>
+<p>Functions in golang are a simple way to structure a block of code that can be re-usable. Functions also allow us to process a piece of logic and return the output. Functions allow us to write readable and scalable code as we have to write the code once and we can re-use the functionality of it by calling it.</p>
+<h2>Declaring Functions</h2>
+<p>We have already defined a function, if you have followed the series so far, or even written a <code>hello-world</code> application. The <code>main</code> function is the most fundamental function we can define in golang. The main is complicated if dive deeper but in the simplest of term it acts as a entry point for the entire program.</p>
+<pre><code class="language-go">package main
+
+func main() {
+
+}
+</code></pre>
+<p>We have written the above code a lot of times till now, but never really talked about it's significance. Here we will understand the terminologies related to the main function. A function is declared with the <code>func</code> keyword along with the name of the function. There needs to be the <code>()</code> parenthesis after the name of the function, optionally it can take parameters inside the parameters to be used inside the function.</p>
+<p>We define the core functionality or the core logic of the function inside the braces <code>{}</code>. We also have the <code>return</code> keyword which can return values from the function to the block where we have called the function. Usually, we call a function from other function (most of the times it's the <code>main</code> function). The <code>return</code> keyword is not mandatory and it is usually added at the end of the function block, just before the closing braces <code>}</code>.</p>
+<pre><code class="language-go">func hello_world_007() {
+
+}
+</code></pre>
+<p>We can define a custom function outside the main function by giving it a appropriate name. For the time bwing we can leave it empty and further define the logic of the actual function.</p>
+<p>The name of the function can be given as per the following standards:</p>
+<ul>
+<li>Using letters<code>a-z A-Z</code>, numbers<code>0-9</code>, underscore <code>_</code> as a name.</li>
+<li>Should not contain any spaces in-between the name.</li>
+<li>Should not begin with a number or underscore.</li>
+</ul>
+<h2>Defining Functions</h2>
+<p>Inside the <code>{}</code> we define the actual functionality/logic of the function. The variables inside the function will remain local to the function and can't be accessed or altered from outside the function, though if we really want to access some global variables(from main or other functions) we can pass parameters, we will look into it in the next few sections. For time being, we will be focusing on the actual code block inside the function.</p>
+<pre><code class="language-go">
+func hello_world() {
+    fmt.Println(&quot;Hello World&quot;)
+}
+</code></pre>
+<p>This is a basic function that just calls another function <code>Println</code> from the fmt package, which basically prints text in the console. Though, we are using the function Println, it won't print the content to the string as we are not using/calling the function. Now, we can get a step ahead and start working with variables inside the function.</p>
+<pre><code class="language-go">func hello_world() {
+    name := &quot;Gopher&quot;
+    fmt.Println(&quot;Hello&quot;, name)
+}
+</code></pre>
+<p>We have now added the local variable <code>name </code>inside the function, so this variable can only we referred inside the particular function.</p>
+<h2>Calling Functions</h2>
+<p>We can call the function from the main function or any other function by just specifying the name along with the <code>()</code> and optionally the parameters inside the parenthesis.</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+    hello_world()    
+}
+
+func hello_world() {
+    name := &quot;Gopher&quot;
+    fmt.Println(&quot;Hello&quot;, name)
+}
+
+</code></pre>
+<pre><code>$ go run func.go
+Hello Gopher
+</code></pre>
+<p>So, we define the function <code>hello_world</code> and call the function by using the statement <code>hello_world()</code> inside the main function and now, we are able to actually run the function.</p>
+<h2>Passing Parameters</h2>
+<p>We can optionally parse variables from a function to other and process it for further computation and programming. So, we can pass parameters in a function by specifying the name to be used inside the function followed by the type of that variable.</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+
+	greet_me(&quot;Meet&quot;)
+	n := &quot;John&quot;
+	greet_me(n)
+}
+
+func greet_me(name string) {
+	fmt.Println(&quot;Hello,&quot;, name, &quot;!&quot;)
+}
+</code></pre>
+<pre><code>$ go run func.go
+Hello, Meet !
+Hello, John !
+</code></pre>
+<p>We have used the parameter <code>name</code> as a string in the function and used it inside the function body. The parameter name which is to be called from the main function can be anything and not necessarily be the same as declared in the function declaration. For instance, we have used the variable in the main function <code>n</code> which is passed in the function call. We can even pass the value as it is to the function in golang.</p>
+<h2>Return Keyword</h2>
+<p>We can use the return keyword to actually return a value from the function and not just display the message. The returned value can be later used from other places in the program.</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+
+	// return value
+	y := line_eq(3, 1, 2)
+	fmt.println(&quot;for x = 3 , y = &quot;, y)
+}
+
+func line_eq(x int, m int, c int) int {
+	return ((m * x) + c)
+}
+</code></pre>
+<pre><code>$ go run func.go
+for x = 3 , y =  5
+</code></pre>
+<p>So, here we are able to fetch the returned value from the function and store it in another variable and further compute the required logic. We also need to specify the return type of the function after the parameters like <code>func (parameters) return-type { }</code>. Here, we need to return the specified type of the return value from the function else it would give a compilation error.</p>
+<p>So, we basically need to provide the return value and also the return statement to capture the value from the function call.</p>
+<h3>Multiple return values</h3>
+<p>We can also provide multiple return values by providing a list of return values like <code>(type1 type2 type3 ....)</code>. We can return the values by separating the values by a comma. So, while calling the function, we need to specify the variables again as comma-separated name and this will capture the value from the function call.</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+
+	// multiple return values
+	s, c, odd := sqube(5)
+	fmt.Println(&quot;for x = 5 , x^2 =&quot;, s, &quot;x^3 =&quot;, c)
+	if odd == true {
+		fmt.Println(&quot;x is odd&quot;)
+	} else {
+		fmt.Println(&quot;x is true&quot;)
+	}
+}
+
+func sqube(x int) (int, int, bool) {
+	square := x * x
+	cube := x * x * x
+	var is_odd bool
+	if x%2 == 0 {
+		is_odd = false
+	} else {
+		is_odd = true
+	}
+	return square, cube, is_odd
+}
+</code></pre>
+<pre><code>$ go run func.go
+for x = 5 , x^2 = 25 x^3 = 125
+x is odd
+</code></pre>
+<p>So, we have returned multiple values from the function like two integers and one boolean. The parameter is a single integer, now we need to parse 3 variables in order to capture all the values from the function call. Thus, we are able to get all the values from the function.</p>
+<p>That's it from this part. Reference for all the code examples and commands can be found in the <a href="https://github.com/mr-destructive/100-days-of-golang/">100 days of Golang</a> GitHub repository.</p>
+<h2>Conclusion</h2>
+<p>So, from this part of the series, we are able to understand the basics of functions in golang. We covered from declaration, definition and simple return statements and function calling. Thank you for reading. If you have any questions or feedback, please let me know in the comments or on social handles. Happy Coding :)</p>
+
+            </div>
+        </article>
+    </main>
+      <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async
+        >
+        </script>
+      </div>
+    
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; Meet Gor. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const editBtn = document.getElementById('editor-edit');
+
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "posts\/golang-functions";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+
+                try {
+                    const res = await fetch(url);
+
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    console.log(res);
+
+                    const html = await res.text();
+                    console.log(html);
+
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+</body>
+</html>
