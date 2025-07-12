@@ -1,4 +1,4 @@
-{"author":"meet","date":"2025-07-12","post_dir":"newsletter","status":"published","title": "Techstructive Weekly #50","type":"newsletter", "slug": "techstructive-weekly-49"}
+{"author":"meet","date":"2025-07-12","post_dir":"newsletter","status":"published","title": "Techstructive Weekly #50","type":"newsletter", "slug": "techstructive-weekly-50"}
 
 ## Week #50
 
