@@ -1,0 +1,196 @@
+{
+  "title": "2023: Year Review",
+  "status": "published",
+  "slug": "2023-review",
+  "date": "2025-04-05T12:33:29Z"
+}
+
+<h2>Introduction</h2>
+<p>2023, what a year! If you're a developer and haven't heard the word 'AI' a million times, where have you been? With the introduction of Chat GPT in December 2022, the start of 2023 was buzzing with Open AI's flagship product. I also did a <a href="https://www.meetgor.com/2022-review/">2022 review</a>.</p>
+<p>The year 2023 was a pivotal year for me to gain experience in solving and delivering real-world problems to solutions. I went from a code-first approach to a code-last approach for solving a problem. The year was not ideal for freshers, as from the end of 2022 till 2023 there was a huge round of layoffs in big tech companies. The competition was too much for freshers and the AI hype added salt to the injury.</p>
+<p>I won't say that 2023 was a dark year, but a year that changed the trajectory of tech forever. I am grateful that I witnessed the introduction of AI in all domains, especially in tech. I think this year and the coming years will be exciting if you are a passionate developer, because I feel it is like an industrial revolution but in software development, there are LLMs, tools, and services that help developers boost their productivity and avoid laborious and boilerplate tasks.</p>
+<p>In 2023</p>
+<ul>
+<li>
+<p>Continued Solar Labs Internship (Backend)</p>
+</li>
+<li>
+<p>Contributed to Steampipe and MindsDB</p>
+</li>
+<li>
+<p>Joined Docsumo as a Python Intern</p>
+</li>
+<li>
+<p>Wrote 10 articles on Golang</p>
+</li>
+<li>
+<p>Finalist in Smart India Hackathon</p>
+</li>
+</ul>
+<p>Crossing Checklists of 2023 from 2022:</p>
+<ul>
+<li>
+<p><!-- raw HTML omitted -->Golang Deep Dive with Open Contributions and Projects<!-- raw HTML omitted --></p>
+</li>
+<li>
+<p><!-- raw HTML omitted -->Machine Learning<!-- raw HTML omitted --></p>
+</li>
+<li>
+<p>Kubernetes</p>
+</li>
+<li>
+<p>Rust</p>
+</li>
+<li>
+<p>Kafka</p>
+</li>
+</ul>
+<h2>Focus of 2023</h2>
+<p>The year was mostly spent on internship tasks and writing go code for open-source projects. I have created over 6 SDKs in Golang for various APIs, Services, and Products. I had worked on APIs and specific tasks related to the products of the company I interned at.</p>
+<h3>The Solar Labs Internship</h3>
+<p>Carrying forward where I left off in 2022, I interned from July 2022 to January 2023 at <a href="https://arka360.com/">The Solar Labs</a> (now Arka 360) as a Backend Intern. The initial offer was for a 6-month remote internship. However, they were generous and offered an extension of 4 months i.e. till April 2023. So, I continued the internship as a backend intern from July 2022 till April 2023 i.e. 10 months. In this period I went from a novice developer to a somewhat organized and thoughtful developer.</p>
+<p>I learned a lot of things including:</p>
+<ul>
+<li>
+<p>Documenting APIs (keeping the structure clean and consistent)</p>
+</li>
+<li>
+<p>Collaborating with Peers for integration</p>
+</li>
+<li>
+<p>Deeply understanding of requirements and clarifying the scope</p>
+</li>
+</ul>
+<p>I was grateful to my mentors and seniors at this company for walking me through their experiences and guidance for the entire duration. Their patience with my silly doubts and mistakes gave me valuable feedback and helped me whenever I reached out. It was a pleasant experience working and learning with them.</p>
+<h3>Job Hunting</h3>
+<p>I had taken a break of 20 days from coding, from April 27 to May 10th. This was a break when I traveled to Uttarakhand, did trekked at Kedarnath and Tungnath. It was a refreshing trip and one of the most memorable trips I will ever have with my family.</p>
+<p>Vacations were over and it was time to find other internships or jobs. I was in the shadows till now, as I had the internship from January to April. I didn't notice how bad the market was for getting a job, layoffs were happening right and left. But this is where I hit reality and was truly exposed to the tech market of 2023.</p>
+<h4>2022 vs 2023 Tech Job Market</h4>
+<p>I got The Solar Labs Internship last year in 2022, I had just applied to 4-5 different openings, and in the 3rd application itself, I was invited to the interviews. Luckily I cleared the 2 rounds and got the internship.</p>
+<p>But this was 2023, the year that will be remembered as a drought of tech hiring. I started applying in June 2023, since I had semester exams in May. I applied to 5-10 openings, I knew it would be a bit hard since the layoffs were happening and the process might be a bit challenging. No response from those applied to another 10-15 openings, but no response, and it continued. Some responses were coming like I knew I had applied to a position where experience was required but I was a fresher so I was rejected.</p>
+<p>Weeks passed, months were passing, it was almost July end and on-campus placement started in college a ray of hope, but I didn't have much expectations from it. I was applying casually and getting a feel of the selection process. Something struck me in July and I remembered a company reaching out to me in October 2022, but I had to reject it since I was already in the internship, I however said I might look into next year. But things hit hard when I approached them in July 2023 requesting an opening of a junior developer, but the positions were closed.</p>
+<p>This is the point where everything starts to fall apart, I start losing my confidence and burning in the self-doubts. I was still applying to internships and jobs on campus as well as off-campus drives.</p>
+<h4>Someone notices my skills</h4>
+<p>Months passed, it was almost September 2023, and the ray of hope finally shone with a phone call for interview selection from Docsumo. Scheduled the interviews one after the other and took a week to complete the process, I was selected for a 2-month internship. I was not sure whether to be happy or sad, definitely it was a great startup but just for 2 months. It would feel as if I was just getting started, warm up, and got disconnected. But I took that offer to join from November to January.</p>
+<p>It was a heck of a ride to land an internship in 2023, I think I was lucky I got it here, it could have been worse.</p>
+<h4>Job Market narrative</h4>
+<p>I would like to emphasize the approach for getting a job/internship in 2024:</p>
+<ul>
+<li>
+<p>Be honest and clear about your goals and skills</p>
+</li>
+<li>
+<p>Learn the fundamentals of the thing you are looking to get hired for</p>
+</li>
+<li>
+<p>Learn in public</p>
+</li>
+<li>
+<p>Be proactive while telling your introduction</p>
+</li>
+<li>
+<p>Keep up with the latest trends and technologies</p>
+</li>
+</ul>
+<p>It would be over exaggeration no one can master all of them, but just be aware of what are you headed towards. It is a marathon, not a sprint, take it slowly and allow yourself to build a strong foundation, it will work in the long run.</p>
+<h3>Docsumo Internship</h3>
+<p>I was not as excited about the Solar Labs internship as I was about the Docsumo one, as it was a hybrid. I felt a bit disconnected and not able to clearly express myself while working remotely sometimes. So, I felt Docsumo would be a good way to make myself comfortable speaking with seniors and collaborating.</p>
+<p>I joined in November, had a brief onboarding process, and was introduced nicely with the product itself. In the next week, I was given the task that I will be working over the few months of my stay at Docsumo. I have almost completed over a month at Docsumo and have had a great experience so far.</p>
+<p>It has changed my naive mindset while approaching a problem with a solution first and then code. It has helped me research a particular thing more deeply and use existing and well-tested solutions rather than reinventing the wheel.</p>
+<p>Still, there is a lot to learn and improve, will try my best to get good memories till I am here. Whatever happens, even for a short duration, they have given me hope. I am and will be grateful for the opportunity they have given me a driveling to work here,</p>
+<h3>Articles Written</h3>
+<p>I mostly wrote about Golang and HTMX(Django) this year with a total of 14 posts:</p>
+<ul>
+<li>
+<p><a href="https://www.meetgor.com/series/100-days-of-golang/">100 days of Go Series</a></p>
+</li>
+<li>
+<p><a href="https://dev.to/mr_destructive/creting-a-chat-application-with-django-and-htmx-1095">HTMX + Django Chat Application</a></p>
+</li>
+<li>
+<p>Dev. to x Refine hackathon: <a href="https://dev.to/mr_destructive/utility-studio-quick-ai-powered-utilities-335j">Utility Studio</a></p>
+</li>
+<li>
+<p>Hashnode x Grafbase Hackathon: <a href="https://techstructiveblog.hashnode.dev/mindsdb-grafbase-graphql-api">Grafbase MindsDB</a></p>
+</li>
+</ul>
+<h3>Open Source Contributions</h3>
+<p>While I was applying for jobs and internships, I was actively contributing to open-source projects like Steampipe and mindsdb. I had been contributing in bits and pieces to Turbot's steampipe CLI for over a year. I got introduced to MindsDB in mid-2023 and started contributing there as well.</p>
+<p>My primary languages for the contributions were Go and Python. I picked Golang last year and have been loving it since the beginning.</p>
+<p>I created over 6 Go SDKs for various APIs, Products, and Services like:</p>
+<ul>
+<li>
+<p><a href="https://github.com/Mr-Destructive/turso-go">Turso Go</a></p>
+</li>
+<li>
+<p><a href="https://github.com/Mr-Destructive/palm">PaLM2 API</a></p>
+</li>
+<li>
+<p><a href="https://github.com/Mr-Destructive/substack-go">Substack</a></p>
+</li>
+<li>
+<p><a href="https://github.com/Mr-Destructive/mindsdb_go_sdk">MindsDB</a></p>
+</li>
+<li>
+<p><a href="https://github.com/Mr-Destructive/hugging-chat-go">HuggingChat</a></p>
+</li>
+</ul>
+<p>Contributed to MindsDB Python SDK, Steampipe CLI, and LibSQL(Turso) shell, with the following sets of Pull requests:</p>
+<ul>
+<li>
+<p><a href="https://github.com/turbot/steampipe/pulls?q=is%3Apr+is%3Aclosed+author%3Amr-destructive+">Turbot Steampipe CLI</a> and <a href="https://github.com/Mr-Destructive/steampipe-plugin-cohereai">cohere ai plugin</a></p>
+</li>
+<li>
+<p><a href="https://github.com/mindsdb/mindsdb/pulls?q=is%3Apr+is%3Aclosed+author%3Amr-destructive+">MindsDB Handlers</a></p>
+</li>
+<li>
+<p><a href="https://github.com/search?q=org%3Atursodatabase++mr-destructive&amp;type=pullrequests">Turso CLI</a></p>
+</li>
+</ul>
+<p>I loved working with these communities and look forward to contributing and learning more from these interactions. I am excited to check out flowpipe from Turbot, add a couple of plugins on the Steampipe hub, add a few handlers to mindsdb, and integrate Turso db with some golang and Python projects I have in mind.</p>
+<h3>Non Technical Things</h3>
+<p>Apart from tech, there are other things as well I do in my free time like reading science fiction, and fantasy novels, writing short stories or novellas, travelling, and gaming. This year, I was able to balance many non-technical things as well like:</p>
+<ul>
+<li>
+<p>Read 7 books (all fiction) -&gt; <a href="https://www.goodreads.com/user_challenges/44008346">Goodreads Profile</a></p>
+</li>
+<li>
+<p>Started to write 2 novellas</p>
+</li>
+<li>
+<p>Trekked to the highest Shiva temple, <a href="https://en.wikipedia.org/wiki/Tungnath">Tungnath</a></p>
+</li>
+<li>
+<p>Maintained a daily journal throughout the year (at least 5 lines, digital)</p>
+</li>
+</ul>
+<h2>Goals for 2024</h2>
+<p>The aim is still to be curious and actively adapt myself to learn new technologies with an open mindset. Some high-level goals for my tech journey moving into 2024 will look something like this:</p>
+<ul>
+<li>
+<p>Build a consistent blog writing routine</p>
+</li>
+<li>
+<p>Complete the 100-days-of-Golang Series</p>
+</li>
+<li>
+<p>Deep dive into Kubernetes and Micro-services</p>
+</li>
+<li>
+<p>Write a technical book</p>
+</li>
+<li>
+<p>Continue contributing to open source more actively in communities</p>
+</li>
+</ul>
+<p>I am focusing on writing technical blogs/documentation as it enhances my learning and increases my understanding on a deeper level. So, I will look forward to bringing back the number-crunching blog posts every week.</p>
+<p>Also, 2024 will be the year I will graduate from the university, so June 2024 is when I'll complete my final exams, and probably the convocation will happen in August. After that, I am a B.Tech I.T. graduate. Time went quickly!</p>
+<h2>Conclusion</h2>
+<p>At the beginning of 2023, I was shy and under-confident, I didn't speak up clearly, and I made random side projects(I still do). But at the end of 2023, I had improved my communication skills and felt a lot more confident and expressive than I used to be. I still make random side projects but they are more refined and meaningful in what I want and achieve as a specific thing I want to make.</p>
+<p>2023 was a bitter sweat year in terms of expectations and results, but it had a significant impact on my growth as a stronger and better developer. Hopefully, 2024 will be a better and more challenging one. I always remember this quote when I feel challenged</p>
+<blockquote>
+<p>Smooth seas never made skilled sailors</p>
+</blockquote>
+<p>With 2023 finally wrapping up, It is time to clear up our bad memories and get excited for the rays of hope and new beginnings in 2024. I am heart-filled thank you for reading through this and I hope 2024 will be a great and happy year for you.</p>
+<p>Happy New Year and as always,</p>
+<p>Happy Coding :)</p>

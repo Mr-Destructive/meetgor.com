@@ -1,22 +1,29 @@
----
-title: "Robots Generate, Humans Manifest"
-slug: "robots-generate-humans-manifest"
-type: "thoughts"
-date: "2025-04-05T12:33:15Z"
-lastmod: "2025-04-05T12:33:15Z"
----
+{
+  "title": "Robots Generate, Humans Manifest",
+  "post_dir": "thoughts",
+  "type": "thoughts",
+  "status": "published",
+  "slug": "robots-generate-humans-manifest",
+  "date": "2025-03-28"
+}
 
-To, New Graduates or Students (or whoever is scared of AI)
 
-You’ve probably noticed the AI buzz lately, the chatbots, image generators, and tools that seem to do everything. If you haven’t, good for you! It means you’re not glued to your phone, and that’s a win. But for those who’ve felt the hype or the creep, it’s hard to ignore. People are shouting about an AI revolution, some with awe, others with warnings. It’s changing things fast, and I want to share what I see as a junior software developer living in this wild moment. However, if you had heard about it, surely you would have felt the creep.
+
+To,
+New Graduates or Students (or whoever is scared of AI)
+
+You’ve probably noticed the AI buzz lately, the chatbots, image generators, and tools that seem to do everything. If you haven’t, good for you! It means you’re not glued to your phone, and that’s a win. But for those who’ve felt the hype or the creep, it’s hard to ignore. People are shouting about an AI revolution, some with awe, others with warnings. It’s changing things fast, and I want to share what I see as a junior software developer living in this wild moment. However, if you had heard about it, surely you would have felt the creep. 
 
 ## AI is reaching everywhere
 
-Beyond the hype, there are the things that will drive the humanity. Yes, the hype is actually a revolution, an AI revolution we are blessed or (maybe cursed, time will tell) to witness the birth of AI-related chatbots and tools that can do the tasks for us.
+Beyond the hype, there are the things that will drive the humanity. Yes, the hype is actually a revolution, an AI revolution we are blessed or (maybe cursed, time will tell) to witness the birth of AI-related chatbots and tools that can do the tasks for us. 
 
 AI is reshaping our world, not just our tech. AI or LLMs whatever you can call it, generates stuff, spits out text, pictures, code, and maybe even decisions (Agentic is the name here). This is generated or actually predicted by AI based on what humans have fed it, the human-generated data.
 
+
 ![Agents](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/0tnh7fghjm3aafxtji46.png)
+
+
 
 And that human-generated data, I am calling it manifestation, which is the combination of effort with emotion.
 
@@ -42,11 +49,11 @@ I am not bashing AI here, true it can do a lot of things, but it can actually do
 
 {% embed https://x.com/AuthorJMac/status/1773679197631701238 %}
 
-AI is a good assistant, yes 100% in some cases. For programming yes, for art, yes, for everything maybe, maybe not. It really depends on what are we trying to get from it. Sometimes, it is like a 5-year-old kid, blabbing as if it doesn't understand the basics, other times, it is like an 80-year-old, pouring some tidbits of wisdom (artificial) in some ways.
+AI is a good assistant, yes 100% in some cases. For programming yes, for art, yes, for everything maybe, maybe not. It really depends on what are we trying to get from it. Sometimes, it is like a 5-year-old kid, blabbing as if it doesn't understand the basics, other times, it is like an 80-year-old, pouring some tidbits of wisdom (artificial) in some ways. 
 
 ## Use AI as a copilot not a pilot
 
-Use AI as you are the senior and instruct it to do things in your favor, not let it take control and you follow like an idiot. Don’t follow it blindly; steer it. Do not forget to think, a bit, do not remove the human element from the generation, convert that generation to your manifestation.
+Use AI as you are the senior and instruct it to do things in your favor, not let it take control and you follow like an idiot.  Don’t follow it blindly; steer it. Do not forget to think, a bit, do not remove the human element from the generation, convert that generation to your manifestation.  
 
 That is the point I'm trying to make, you need to focus on your craft, your inner conflict, and your inner curiosity that drives you to read this exact post, AI can't do that for you, it never will. There will always be a need to learn, to decide, to act, to manifest, to feel. This will lead to more data, and this will keep the AI up-to-date on what humans know collectively. Actually, AIs are no smarter than collective human intelligence, it is just not possible, because whatever it is trained on is human data that humans know, have observed, have felt, and have manifested, it can hallucinate that it might be like this, who is there to confirm it?
 
@@ -56,10 +63,10 @@ Humans are not doomed, it is AI that will be if humans stop doing their actions.
 
 You got this!
 
-Your buddy, Meet
+Your buddy,
+Meet
 
-* * *
-
+---
 Thanks for reading,
 
-This looks like a ramble, but please don't judge me, I am just a junior software developer trying to navigate life, and based on what I observe and know, it feels this way.
+This looks like a ramble, but please don't judge me, I am just a junior software developer trying to navigate life, and based on what I observe and know, it feels this way. 

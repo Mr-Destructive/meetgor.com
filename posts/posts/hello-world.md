@@ -1,11 +1,10 @@
----
-title: "hello world"
-slug: "hello-world"
-date: "2025-03-08T11:45:15Z"
-draft: true
-status: "draft"
-lastmod: "2025-03-08T11:45:15Z"
-type: "posts"
----
+{
+  "title": "hello world",
+  "post_dir": "posts",
+  "type": "post",
+  "status": "published",
+  "slug": "hello-world",
+  "date": "2025-03-08"
+}
 
 hello world
