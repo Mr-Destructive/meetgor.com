@@ -1,10 +1,11 @@
----
-title: "Zellij Open Scrollback Edit mode"
-slug: "zellij-open-scrollback-edit-mode"
-date: "2025-03-20T18:04:47Z"
-lastmod: "2025-03-20T18:04:47Z"
-type: "til"
----
+{
+  "title": "Zellij Open Scrollback Edit mode",
+  "post_dir": "til",
+  "type": "til",
+  "status": "published",
+  "slug": "zellij-open-scrollback-edit-mode",
+  "date": "2025-03-20"
+}
 
 I was looking at a long list of logs, (debugging of course). 
 
