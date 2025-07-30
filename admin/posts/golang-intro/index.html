@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:url" content="meetgor.com/posts/golang-intro">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Meet Gor | Golang: What and Why?">
+    <meta property="og:description" content="Understanding what is special about Golang and why should you learn it">
+    <meta property="twitter:domain" content="meetgor.com">
+    <meta property="twitter:url" content="meetgor.com/posts/golang-intro">
+    <meta name="twitter:title" content="Golang: What and Why?">
+    <meta name="twitter:description" content="Understanding what is special about Golang and why should you learn it">
+    
+        <meta property="og:image" content="https://meetgor-cdn.pages.dev/golang-000-why-go.png">
+        <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/golang-000-why-go.png">
+    
+    <link rel="icon" href="../tbicon.png" type="image/png">
+    <link rel="icon" href="tbicon.png" type="image/png">
+
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+    });
+    </script>
+    <title>Meet Gor | Golang: What and Why?</title>
+    <style>
+            :root {
+                --bg-color: #ffffff;
+                --text-color: #333333;
+                --secondary-text-color: ;
+                --link-normal: #007bff;
+                --link-hover: #0056b3;
+                --link-active: #003a75;
+                --quote-color: #999999;
+                --code-bg-color: #dddddd;
+                --code-border-color: #ced4da;
+                --code-text-color: #444444;
+                --code-comment-color: #808080;
+                --code-keyword-color: #008000;
+                --code-string-color: #000080;
+                --code-number-color: #000000;
+                --code-variable-color: #000000;
+                --code-function-color: #000000;
+            }
+
+             
+            .secondary-theme {
+                --bg-color: #121212;
+                --text-color: #ffffff;
+                --secondary-text-color: #00ffff;
+                --link-normal: #ff6600;
+                --link-hover: #4682b4;
+                --link-active: #00008b;
+                --quote-color: #a9a9a9;
+                --code-bg-color: #333333;
+                --code-border-color: #444444;
+                --code-text-color: #ffffff;
+                --code-comment-color: #b0b0b0;
+                --code-keyword-color: #32cd32;
+                --code-string-color: #ff6347;
+                --code-number-color: #d3d3d3;
+                --code-variable-color: #b0e0e6;
+                --code-function-color: #ff4500;
+            }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+            line-height: 1.6;
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--secondary-text-color);
+        }
+
+        .site-title {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .site-title a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .site-title a:hover {
+            color: var(--hover-color);
+        }
+
+        .Post-meta {
+            color: var(--secondary-text);
+            font-size: 0.9rem;
+            margin: 1rem 0;
+        }
+
+        article {
+            margin: 2rem 0;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        code {
+            font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        p code {
+            background-color: var(--inline-code-bg);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+        }
+
+        blockquote {
+            border-left: 3px solid var(--accent-color);
+            margin: 1.5rem 0;
+            padding-left: 1rem;
+            color: var(--secondary-text);
+        }
+
+        a {
+            color: var(--link-normal);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--hover-color);
+        }
+
+        .Hljs-comment { color: var(--code-comment); } 
+        .Hljs-keyword { color: var(--code-keyword); }
+        .Hljs-string { color: var(--code-string); }
+        .Hljs-number { color: var(--code-number); }
+        .Hljs-function { color: var(--code-function); }
+        .Hljs-variable { color: var(--code-variable); }
+
+        button, .Button {
+            background-color: var(--accent-color);
+            border: none;
+            border-radius: 6px;
+            color: var(--bg-color);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.2s ease;
+        }
+
+        button:hover, .Button:hover {
+            background-color: var(--hover-color);
+        }
+
+
+         
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            pre {
+                margin: 1rem -1rem;
+                border-radius: 0;
+            }
+        }
+
+        code {
+          font-family: monospace;
+          padding: 2px 4px;
+          border-radius: 4px;
+        }
+
+pre {
+    background-color: var(--code-bg-color, #f5f5f5);
+    border: 1px solid var(--code-border-color, #d1d1d1);
+    border-radius: 6px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+}
+
+code {
+    font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    font-size: 0.9em;
+    color: var(--code-text-color, #fff);
+}
+
+p code {
+    color: var(--code-text-color, #000);
+    background-color: var(--code-bg-color, #444444);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+}
+
+ 
+.Hljs-comment { color: var(--code-comment-color, #7d7d7d); }
+.Hljs-keyword { color: var(--code-keyword-color, #005cc5); }
+.Hljs-string { color: var(--code-string-color, #d73a49); }
+.Hljs-number { color: var(--code-number-color, #e36209); }
+.Hljs-variable { color: var(--code-variable-color, #6f42c1); }
+.Hljs-function { color: var(--code-function-color, #005cc5); }
+
+ 
+.secondary-theme pre {
+    background-color: var(--code-bg-color, #1e1e1e);
+    border: 1px solid var(--code-border-color, #3c3c3c);
+}
+
+.secondary-theme .Hljs-comment { color: var(--code-comment-color, #6a737d); }
+.secondary-theme .Hljs-keyword { color: var(--code-keyword-color, #569cd6); }
+.secondary-theme .Hljs-string { color: var(--code-string-color, #ce9178); }
+.secondary-theme .Hljs-number { color: var(--code-number-color, #b5cea8); }
+.secondary-theme .Hljs-variable { color: var(--code-variable-color, #9cdcfe); }
+.secondary-theme .Hljs-function { color: var(--code-function-color, #dcdcaa); }
+
+pre {
+    background: var(--code-bg-color, #1e1e1e);
+    border: 1px solid var(--code-border-color, #3c3c3c);
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+
+ 
+code {
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.9em;
+    color: var(--code-text-color, #ffffff);
+}
+
+ 
+p code {
+    background-color: var(--code-bg-color, #333);
+    color: var(--code-text-color, #ffcb6b);
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+ 
+.Hljs-comment { color: var(--code-comment-color, #6a737d); font-style: italic; }
+.Hljs-keyword { color: var(--code-keyword-color, #c678dd); font-weight: bold; }
+.Hljs-string { color: var(--code-string-color, #98c379); }
+.Hljs-number { color: var(--code-number-color, #d19a66); }
+.Hljs-variable { color: var(--code-variable-color, #e06c75); }
+.Hljs-function { color: var(--code-function-color, #61afef); }
+
+ 
+.copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.copy-btn:hover {
+    background: #45a049;
+}
+
+.copy-btn.copied {
+    background: #ffa500;
+}
+
+blockquote {
+    border-left: 4px solid var(--quote-color);
+    background-color: rgba(255, 255, 255, 0.05);  
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: var(--secondary-text-color);
+    border-radius: 6px;
+    position: relative;
+}
+
+blockquote::before {
+    content: "“";  
+    font-size: 2rem;
+    color: var(--quote-color);
+    position: absolute;
+    top: 0;
+    left: 10px;
+}
+
+blockquote::after {
+    content: "”";  
+    font-size: 2rem;
+    color: var(--quote-color);
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+}
+
+ 
+blockquote cite {
+    display: block;
+    text-align: right;
+    font-size: 0.9em;
+    margin-top: 0.5rem;
+    color: var(--secondary-text-color);
+    font-style: normal;
+}
+        #editor, #editor-edit {
+            background-color: #4CAF50;  
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #editor i {
+            margin-right: 5px;  
+        }
+        #editor-edit i {
+            margin-right: 5px;  
+        }
+.theme-switch {
+    position: relative;
+    width: 50px;
+    height: 26px;
+}
+
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.theme-switch label {
+    position: absolute;
+    cursor: pointer;
+    background-color: var(--link-normal);
+    border-radius: 34px;
+    width: 100%;
+    height: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.theme-switch label::before {
+    content: "";
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: var(--bg-color);
+    transition: transform 0.3s ease;
+    border-radius: 50%;
+}
+
+.theme-switch input:checked + label::before {
+    transform: translateX(24px);
+}
+
+.theme-switch input:checked + label {
+    background-color: var(--link-hover);
+}
+
+    </style>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+
+        
+        const currentTheme = localStorage.getItem("theme") || "light";
+
+        
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/dracula.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            setSyntaxTheme("secondary");
+        } else {
+            setSyntaxTheme("light");
+        }
+
+        
+        themeToggle.addEventListener("click", () => {
+            if (body.classList.contains("secondary-theme")) {
+                body.classList.remove("secondary-theme");
+                localStorage.setItem("theme", "light");
+                setSyntaxTheme("light");
+            } else {
+                body.classList.add("secondary-theme");
+                localStorage.setItem("theme", "secondary");
+                setSyntaxTheme("secondary");
+            }
+        });
+    });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("pre").forEach((pre) => {
+                const button = document.createElement("button");
+                button.classList.add("copy-btn");
+                button.textContent = "Copy";
+
+                button.addEventListener("click", () => {
+                    const code = pre.querySelector("code");
+                    if (!code) return;
+
+                    const textToCopy = code.innerText || code.textContent;
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        button.textContent = "Copied!";
+                        button.classList.add("copied");
+
+                        setTimeout(() => {
+                            button.textContent = "Copy";
+                            button.classList.remove("copied");
+                        }, 1500);
+                    });
+                });
+
+                pre.appendChild(button);
+            });
+        });
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+    
+    <link rel="icon" href="../../tbicon.png" type="image/png">
+</head>
+<body>
+    <header class="header">
+        <h1 class="site-title animated-gradient-text"><a href="/">Meet Gor</a></h1>
+        <div class="theme-switch">
+          <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+          <label for="theme-toggle"></label>
+        </div>
+    </header>
+
+    <main class="container">
+        <article class="blog-post">
+            <h1>Golang: What and Why?</h1>
+            <div class="post-meta">
+                Published on 📅 <time datetime="2022-04-01">2022-04-01</time>
+            </div>
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            <div class="post-meta">
+                <span class="post-series-label"> 🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+            </div>
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/100-days-of-golang" class="series-link">📖 100-days-of-golang</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            <div class="post-meta">
+                
+                    <button id="editor-edit">Edit</button>
+                    <button id="editor-delete" 
+                            onclick="location.href='/editor/?slug=posts\/golang-intro&method=delete'">
+                        <i class="fas fa-trash"></i>Delete
+                    </button>
+                
+            </div>
+            <hr>
+            <div class="post-content">
+                <h2>Introduction</h2>
+<p>This is the first entry in my 100 days of Go lang challenge. I will share the things I will learn each day for 100 days related to Golang or its configuration in my environment. In this post, we will understand what is golang and why you should learn it. It's not an in-depth guide but a high-level overview for understanding the context of learning Go lang.</p>
+<h3>A bit of Context</h3>
+<p>In April 2021, I started learning Django and to date, I have more than 10 projects(not all deployed) created and publicly open on <a href="https://github.com/Mr-Destructive?tab=repositories&amp;q=django&amp;type=&amp;language=python&amp;sort=">GitHub</a>. It has been a great experience so far, I am still in between an internship with a project to be created in Django. The learning process after I started blogging in June 2021 has been a different fantasy, I have been enjoying the process of writing the things I learn. So, this Spring/Summer I am creating a challenge of 100 days for learning Go lang and documenting the process. Hopefully, this will be a useful place to learn for a beginner and more than that a place for me to reflect back on the future.</p>
+<p>Leaving the rant aside, let's start with the best question to answer, What is Golang?</p>
+<h2>What is Golang</h2>
+<p><a href="https://go.dev/">Golang</a> (officially called Go) is a programming language developed by Google. It is statically typed like C\C++, Java, Kotlin, etc, and syntax is similar to dynamically languages like Python, Js, Ruby, Lua, etc. So, golang provides the best of both worlds, the swiftness to write code and also providing control and memory safety. Go is regarded as the language of the cloud i.e. it is heavily used in the cloud infrastructure, it involves creating microservices, APIs, containerization, orchestration, and a lot of other technologies. It can be a super useful programming language for DevOps folks and people into Cloud computing.</p>
+<p>Though Go is designed for Cloud Infrastructure, that doesn't mean you can't use it elsewhere. There are a lot of fields in which golang nicely fits. We'll discuss why you would want to learn golang and state the domains where it can be used.</p>
+<blockquote>
+<p>Go programmers are called Gophers</p>
+</blockquote>
+<h2>Why learn Golang?</h2>
+<p>There are a lot of reasons for learning Go as your next programming language. Not only it is quite famous but it is significantly faster than other programming languages like python and javascript. It is a simple language to pick up, it is designed for modern world technologies. There is an added advantage to learning go lang as it is a new programming language(not as old as python). It was open-sourced in 2012, it got a great boost in the last five years as cloud companies are on the rise.</p>
+<h3>1. GO lang is simple</h3>
+<p>GO lang is a simple programming language, it is really easy to learn. It is quite similar to python in terms of its syntax, though it also inherits characteristics from the Java/C++ paradigm. It has a single entry point program via the <code>main</code> function similar to Java/C++ languages and is compiled into binary/executable code before running. It has the standard library that provides a lot of functionalities out of the box. It provides some quite handy tools and has support for creating web applications in the core language itself.</p>
+<h3>2. GO lang is fast (Execution Speed)</h3>
+<p>Though it might not be the fastest language of all time, it beats python and javascript by a significant magnitude in the context of backend development. Go lang is compiled language and hence it has no overhead of converting into byte code or the interpreter. Go lang also checks for unused variables, functions, identifiers, and packages, this can boost the speed of execution by a good amount additionally optimizing the memory footprint of the program.</p>
+<p><img src="https://camo.githubusercontent.com/37d2b63be8996cd03b67e80d3dee322c698e9753d0602c7da8f8ef399fbed57a/68747470733a2f2f7261772e6769746875622e636f6d2f6e696b6c61732d686565722f73706565642d636f6d70617269736f6e2f6d61737465722f2e6769746875622f706c6f745f76312e342e706e67" alt="Speed Comparison of programming languages"></p>
+<p>We can see, that Go lang is almost equivalent to C and C++ porgramming language, though this might not be the best comparison of speed as it depends on quite a lot of factors and the context of programs. Still Go lang has a significant edge over Java and C++ which is a great factor because of the writing complexity involved in those programming languages.</p>
+<h3>3. GO lang is fast (Writing Speed)</h3>
+<p>GO language is fast yes I get that, It is faster in terms of writing speed. If you sit down to write the same code in Java/C++ or Go, having time constraints, you will move out with Go as a winner. It is much easier to write code in Go than compared to C/C++, Java, or even Javascript. Golang prefers clear code over fast code, though it might not be as fastest as Rust or C++, it is definitely much easier and quicker to write than the other counterparts. Go is designed for writing software that can scale with large codebases and teams. So it's not a surprise it is used to create cloud computing technologies like Docker, Kubernetes, and other tons of cloud-native tools.</p>
+<h3>4. GO lang is made for the modern world</h3>
+<blockquote>
+<p>Go lang is the modern C</p>
+</blockquote>
+<p>Go lang is a modern language, it is not as ancient as C/C++ or Java. It is designed for Cloud-native applications which are scalable and optimized for performance meeting the needs of the modern demand for bleeding-edge technologies. It is designed by the people who created the UNIX operation, Ken Thompson. Though there were other go authors like Robert Griesemer and Rob Pike. Go lang has been designed keeping the idea of C but also considering the context of the modern world. It makes tasks like concurrency a lot simpler but it avoids dangerous and manual control of memory by not allowing pointer arithmetic.</p>
+<h2>Where you can use Golang</h2>
+<p>Go land finds its use case in a lot of domains including Cloud computing, Web applications, CLI and DevOps tools, and so on. As GO is a general-purpose programming language, you can use it anywhere in the relevant fields of technology.</p>
+<h3>Cloud-native application</h3>
+<p>As Golang has capabilities to execute low-level system calls efficiently, cloud-native tools can be created in golang for improving efficiency and memory usage. As Go uses fewer resources like CPU and memory, it can optimally be used for applications that require almost no delay in the response. It also handles concurrency very well using goroutines which are way simpler to implement. All the factors contribute very well to constructing a modern cloud-native application.</p>
+<p>Golang is used in Cloud-native technologies like</p>
+<ul>
+<li><a href="https://github.com/docker">Docker</a> - containerisation technology</li>
+<li><a href="https://github.com/kubernetes/kubernetes">Kubernetes</a> - Container Orchestration</li>
+<li><a href="https://github.com/google/go-cloud">Google Cloud</a> - Cloud Hosting Plaform</li>
+</ul>
+<p>This makes Golang widely adopted and has firm grounds for the future as well.</p>
+<h3>Web applications</h3>
+<p>As Golang is highly efficient and fast it can be used to develop web applications. It can scale a web application very well as it is a statically typed ecosystem. It also has extensive support for integrating databases into web applications. Golang doesn't require any 3rd party integrations to create the web apps, it is developed using internal or external packages and modules. The performance of Golang is the core feature for creating web apps in it, it heavily outperforms Javascript(Node) and Python. As golang code is compiled before running, this makes a single executable depending on the operating system, this improves the performance to a great extent. So, golang should be an ideal choice for developing web applications.</p>
+<ul>
+<li><a href="https://developers.soundcloud.com/blog/go-at-soundcloud">Soundcloud</a> - Music System Webapp</li>
+<li><a href="https://www.slideshare.net/RobSkillington/go-at-uber">Uber</a> - Cab Booking/Ride Sharing App</li>
+<li><a href="https://github.com/allegro/marathon-consul/#marathon-consul-">Allergo</a> - E-commerce Webappp</li>
+</ul>
+<h3>DevOps tools</h3>
+<p>A lot of DevOps tools like Prometheus, Grafana, Terraform, Hugo are written natively in Go. Having appropriate features like simplicity, scalability, efficiency, and concurrency, go lang fits the DevOps space really well. Golang is already used in cloud-native technologies as mentioned earlier adopting it in the DevOps space is a great choice as it creates an even and supportive ecosystem. The <code>Write once and Run anywhere</code> paradigm of java is surprisingly built-in golang as well without conversion into byte code. This is a great feature any DevOps engineer would dream of, using a single code base for multiple platforms can save a lot of time and improve productivity.</p>
+<ul>
+<li><a href="https://github.com/prometheus/prometheus">Prometheus</a> - Monitoring system and time series database</li>
+<li><a href="https://github.com/grafana/grafana">Grafana</a> - Platform for monitoring and observability</li>
+<li><a href="https://github.com/hashicorp/terraform">Terraform</a> - Building, Changing, and Versioning Infrastructure</li>
+<li><a href="https://github.com/kubernetes/minikube">Minikube</a> - Run kubernetes locally</li>
+<li><a href="https://github.com/go-kit/kit">Kit</a>- standard library for microservices</li>
+</ul>
+<h2>Who uses Golang?</h2>
+<p>Golang is a widely used programmming language, it is used by some of the big companies around the world. Of course Google uses it, apart from Google, it is being used by companies like:</p>
+<ol>
+<li>Netflix</li>
+<li>PayPal</li>
+<li>Microsoft</li>
+<li>Dropbox</li>
+<li>Meta (facebook)</li>
+<li>Uber</li>
+<li>Twitter</li>
+<li>Twitch</li>
+</ol>
+<p>There are so many tools created tools using golang like the <a href="https://github.com/cli/cli">gh-cli</a>, <a href="https://github.com/cockroachdb/cockroach">cockrach-db</a>, <a href="https://github.com/dgrijalva/jwt-go">jwt</a>, etc. You can see a whole list of applications/tools/frameworks written in Go from this <a href="https://github.com/avelino/awesome-go">awesome list</a></p>
+<h2>Conclusion</h2>
+<p>Go lang is a excellent choice for any one into web developement, cloud native, DevOps, CLI tools. Go lang being a recently developed language it has grown a lot faster than any other language in the programming world. Learning Python over the span of two years, I might want to dabble into Go but not completely leave Python. Python has a great community and is widely adopted in almost all fields in developement. Still trying out new things is what keeps you in the hunt of oppurtunitiees and meeting new people.</p>
+<p>So starting from today, I will share my learning a new thing in Go lang every day for 100 days. At least that's the plan. The post might be in the form of a long post or a short TIL on the blog. Check out the GitHub repository for the 100 day challenge <a href="https://github.com/mr-destructive/100-days-of-golang">here</a>.If you have any queries, suggestions, or feedback please let me know in the comments or on the mentioned social handles. Thank you for reading.  Happy Coding :)</p>
+
+            </div>
+        </article>
+    </main>
+      <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async
+        >
+        </script>
+      </div>
+    
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; Meet Gor. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const editBtn = document.getElementById('editor-edit');
+
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "posts\/golang-intro";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+
+                try {
+                    const res = await fetch(url);
+
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    console.log(res);
+
+                    const html = await res.text();
+                    console.log(html);
+
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+</body>
+</html>
