@@ -3,7 +3,7 @@
   "post_dir": "thoughts",
   "type": "thoughts",
   "status": "published",
-  "link": "https://openai.com/index/introducing-gpt-oss/"
+  "link": "https://openai.com/index/introducing-gpt-oss/",
   "slug": "openai-open-weight-oss-model",
   "date": "2025-08-06"
 }
