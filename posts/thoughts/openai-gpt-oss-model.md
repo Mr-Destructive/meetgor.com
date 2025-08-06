@@ -14,6 +14,9 @@
 I ran a few tests on the 20B parameter
 
 Some of the live footage is here: 
+
+[Reviewing GPT-OSS Model 20B](https://www.youtube.com/watch?v=3aiJN2uGmZk)
+
 <iframe width="560" height="315" src="https://www.youtube.com/embed/3aiJN2uGmZk" frameborder="0" allowfullscreen></iframe>
 
 ## Overview
