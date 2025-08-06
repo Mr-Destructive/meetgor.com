@@ -8,15 +8,13 @@
   "date": "2025-08-06"
 }
 
-# [Introducing gpt-oss](https://openai.com/index/introducing-gpt-oss/)
 
+# [Introducing gpt-oss](https://openai.com/index/introducing-gpt-oss/)
 
 I ran a few tests on the 20B parameter
 
 Some of the live footage is here: 
-<video>
-  <source src="https://youtu.be/3aiJN2uGmZk" type="video/mp4">
-</video>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3aiJN2uGmZk" frameborder="0" allowfullscreen></iframe>
 
 ## Overview
 
