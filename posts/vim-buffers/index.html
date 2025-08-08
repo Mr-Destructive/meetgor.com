@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:url" content="meetgor.com/posts/vim-buffers">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Meet Gor | Vim: Buffers">
+    <meta property="og:description" content="">
+    <meta property="twitter:domain" content="meetgor.com">
+    <meta property="twitter:url" content="meetgor.com/posts/vim-buffers">
+    <meta name="twitter:title" content="Vim: Buffers">
+    <meta name="twitter:description" content="">
+    
+        <meta property="og:image" content="https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643286548/blogmedia/khj3xx5mulhotdfw7z1x.png">
+        <meta name="twitter:image" content="https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643286548/blogmedia/khj3xx5mulhotdfw7z1x.png">
+    
+    <link rel="icon" href="../tbicon.png" type="image/png">
+    <link rel="icon" href="tbicon.png" type="image/png">
+
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+    });
+    </script>
+    <title>Meet Gor | Vim: Buffers</title>
+    <style>
+            :root {
+                --bg-color: #ffffff;
+                --text-color: #333333;
+                --secondary-text-color: ;
+                --link-normal: #007bff;
+                --link-hover: #0056b3;
+                --link-active: #003a75;
+                --quote-color: #999999;
+                --code-bg-color: #dddddd;
+                --code-border-color: #ced4da;
+                --code-text-color: #444444;
+                --code-comment-color: #808080;
+                --code-keyword-color: #008000;
+                --code-string-color: #000080;
+                --code-number-color: #000000;
+                --code-variable-color: #000000;
+                --code-function-color: #000000;
+            }
+
+             
+            .secondary-theme {
+                --bg-color: #121212;
+                --text-color: #ffffff;
+                --secondary-text-color: #00ffff;
+                --link-normal: #ff6600;
+                --link-hover: #4682b4;
+                --link-active: #00008b;
+                --quote-color: #a9a9a9;
+                --code-bg-color: #333333;
+                --code-border-color: #444444;
+                --code-text-color: #ffffff;
+                --code-comment-color: #b0b0b0;
+                --code-keyword-color: #32cd32;
+                --code-string-color: #ff6347;
+                --code-number-color: #d3d3d3;
+                --code-variable-color: #b0e0e6;
+                --code-function-color: #ff4500;
+            }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+            line-height: 1.6;
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--secondary-text-color);
+        }
+
+        .site-title {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .site-title a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .site-title a:hover {
+            color: var(--hover-color);
+        }
+
+        .Post-meta {
+            color: var(--secondary-text);
+            font-size: 0.9rem;
+            margin: 1rem 0;
+        }
+
+        article {
+            margin: 2rem 0;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        code {
+            font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        p code {
+            background-color: var(--inline-code-bg);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+        }
+
+        blockquote {
+            border-left: 3px solid var(--accent-color);
+            margin: 1.5rem 0;
+            padding-left: 1rem;
+            color: var(--secondary-text);
+        }
+
+        a {
+            color: var(--link-normal);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--hover-color);
+        }
+
+        .Hljs-comment { color: var(--code-comment); } 
+        .Hljs-keyword { color: var(--code-keyword); }
+        .Hljs-string { color: var(--code-string); }
+        .Hljs-number { color: var(--code-number); }
+        .Hljs-function { color: var(--code-function); }
+        .Hljs-variable { color: var(--code-variable); }
+
+        button, .Button {
+            background-color: var(--accent-color);
+            border: none;
+            border-radius: 6px;
+            color: var(--bg-color);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.2s ease;
+        }
+
+        button:hover, .Button:hover {
+            background-color: var(--hover-color);
+        }
+
+
+         
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            pre {
+                margin: 1rem -1rem;
+                border-radius: 0;
+            }
+        }
+
+        code {
+          font-family: monospace;
+          padding: 2px 4px;
+          border-radius: 4px;
+        }
+
+pre {
+    background-color: var(--code-bg-color, #f5f5f5);
+    border: 1px solid var(--code-border-color, #d1d1d1);
+    border-radius: 6px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+}
+
+code {
+    font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    font-size: 0.9em;
+    color: var(--code-text-color, #fff);
+}
+
+p code {
+    color: var(--code-text-color, #000);
+    background-color: var(--code-bg-color, #444444);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+}
+
+ 
+.Hljs-comment { color: var(--code-comment-color, #7d7d7d); }
+.Hljs-keyword { color: var(--code-keyword-color, #005cc5); }
+.Hljs-string { color: var(--code-string-color, #d73a49); }
+.Hljs-number { color: var(--code-number-color, #e36209); }
+.Hljs-variable { color: var(--code-variable-color, #6f42c1); }
+.Hljs-function { color: var(--code-function-color, #005cc5); }
+
+ 
+.secondary-theme pre {
+    background-color: var(--code-bg-color, #1e1e1e);
+    border: 1px solid var(--code-border-color, #3c3c3c);
+}
+
+.secondary-theme .Hljs-comment { color: var(--code-comment-color, #6a737d); }
+.secondary-theme .Hljs-keyword { color: var(--code-keyword-color, #569cd6); }
+.secondary-theme .Hljs-string { color: var(--code-string-color, #ce9178); }
+.secondary-theme .Hljs-number { color: var(--code-number-color, #b5cea8); }
+.secondary-theme .Hljs-variable { color: var(--code-variable-color, #9cdcfe); }
+.secondary-theme .Hljs-function { color: var(--code-function-color, #dcdcaa); }
+
+pre {
+    background: var(--code-bg-color, #1e1e1e);
+    border: 1px solid var(--code-border-color, #3c3c3c);
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+
+ 
+code {
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.9em;
+    color: var(--code-text-color, #ffffff);
+}
+
+ 
+p code {
+    background-color: var(--code-bg-color, #333);
+    color: var(--code-text-color, #ffcb6b);
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+ 
+.Hljs-comment { color: var(--code-comment-color, #6a737d); font-style: italic; }
+.Hljs-keyword { color: var(--code-keyword-color, #c678dd); font-weight: bold; }
+.Hljs-string { color: var(--code-string-color, #98c379); }
+.Hljs-number { color: var(--code-number-color, #d19a66); }
+.Hljs-variable { color: var(--code-variable-color, #e06c75); }
+.Hljs-function { color: var(--code-function-color, #61afef); }
+
+ 
+.copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.copy-btn:hover {
+    background: #45a049;
+}
+
+.copy-btn.copied {
+    background: #ffa500;
+}
+
+blockquote {
+    border-left: 4px solid var(--quote-color);
+    background-color: rgba(255, 255, 255, 0.05);  
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: var(--secondary-text-color);
+    border-radius: 6px;
+    position: relative;
+}
+
+blockquote::before {
+    content: "“";  
+    font-size: 2rem;
+    color: var(--quote-color);
+    position: absolute;
+    top: 0;
+    left: 10px;
+}
+
+blockquote::after {
+    content: "”";  
+    font-size: 2rem;
+    color: var(--quote-color);
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+}
+
+ 
+blockquote cite {
+    display: block;
+    text-align: right;
+    font-size: 0.9em;
+    margin-top: 0.5rem;
+    color: var(--secondary-text-color);
+    font-style: normal;
+}
+        #editor, #editor-edit {
+            background-color: #4CAF50;  
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #editor i {
+            margin-right: 5px;  
+        }
+        #editor-edit i {
+            margin-right: 5px;  
+        }
+.theme-switch {
+    position: relative;
+    width: 50px;
+    height: 26px;
+}
+
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.theme-switch label {
+    position: absolute;
+    cursor: pointer;
+    background-color: var(--link-normal);
+    border-radius: 34px;
+    width: 100%;
+    height: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.theme-switch label::before {
+    content: "";
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: var(--bg-color);
+    transition: transform 0.3s ease;
+    border-radius: 50%;
+}
+
+.theme-switch input:checked + label::before {
+    transform: translateX(24px);
+}
+
+.theme-switch input:checked + label {
+    background-color: var(--link-hover);
+}
+
+    </style>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+
+        
+        const currentTheme = localStorage.getItem("theme") || "light";
+
+        
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/dracula.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            setSyntaxTheme("secondary");
+        } else {
+            setSyntaxTheme("light");
+        }
+
+        
+        themeToggle.addEventListener("click", () => {
+            if (body.classList.contains("secondary-theme")) {
+                body.classList.remove("secondary-theme");
+                localStorage.setItem("theme", "light");
+                setSyntaxTheme("light");
+            } else {
+                body.classList.add("secondary-theme");
+                localStorage.setItem("theme", "secondary");
+                setSyntaxTheme("secondary");
+            }
+        });
+    });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("pre").forEach((pre) => {
+                const button = document.createElement("button");
+                button.classList.add("copy-btn");
+                button.textContent = "Copy";
+
+                button.addEventListener("click", () => {
+                    const code = pre.querySelector("code");
+                    if (!code) return;
+
+                    const textToCopy = code.innerText || code.textContent;
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        button.textContent = "Copied!";
+                        button.classList.add("copied");
+
+                        setTimeout(() => {
+                            button.textContent = "Copy";
+                            button.classList.remove("copied");
+                        }, 1500);
+                    });
+                });
+
+                pre.appendChild(button);
+            });
+        });
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+    
+    <link rel="icon" href="../../tbicon.png" type="image/png">
+</head>
+<body>
+    <header class="header">
+        <h1 class="site-title animated-gradient-text"><a href="/">Meet Gor</a></h1>
+        <div class="theme-switch">
+          <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+          <label for="theme-toggle"></label>
+        </div>
+    </header>
+
+    <main class="container">
+        <article class="blog-post">
+            <h1>Vim: Buffers</h1>
+            <div class="post-meta">
+                Published on 📅 <time datetime="2021-08-11">2021-08-11</time>
+            </div>
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            <div class="post-meta">
+                <span class="post-series-label"> 🏷️ Tags:</span>
+                
+                <a href="/tags/vim">#vim</a>
+                
+            </div>
+            
+            <div class="post-meta">
+                
+            </div>
+            <hr>
+            <div class="post-content">
+                <h2>Introduction</h2>
+<p>I have talked about Vim <a href="https://mr-destructive.github.io/techstructive-blog/vim/2021/08/03/Vim-Tabs.html">tabs</a>,  <a href="https://mr-destructive.github.io/techstructive-blog/vim/2021/08/06/Vim-Window-Splits.html">window splits</a>  in the previous articles, and now I am quite keen on explaining the finest unit of file that you can open using Vim and that is a buffer. Tabs are a collection of windows, Windows are the viewport on buffers (collection to view the buffers), and Buffers are the memory that holds text in the file. So let us explore buffer in detail. This article won't cover each and every tiny detail about buffers but surely enough to make you understand what a buffer is and how to manage those.</p>
+<h2>What is a Vim buffer</h2>
+<p>Vim buffers are the chunks of memory that hold the text in a file. Vim buffers are used from opening a file to using, installing, upgrading the Plugins, using file managers, and everything you can edit and work within Vim.</p>
+<p>So, why bother using Vim buffer, you'll ask. Well, you will need it to make some complex tasks possible in Vim, such as configuring it as your IDE or having much more control over what and how you open and close files in Vim. You might not need it in the broader sense but having a grasp of what you are using and understanding the process under the hood is vital whatsoever.</p>
+<h2>Creating a buffer</h2>
+<p>No need to create a buffer, if you are editing a file, that's already a buffer :) If you open Vim, a fresh open, then you already have that current buffer as an empty buffer. You can create an empty buffer by entering the command <code>:enew</code>. This will actually make a new empty buffer, if you have edited the contents of the previous buffer you need to specify to write/save the buffer in a file.</p>
+<p>You can see the details of the buffers opened currently by using the command <code>:ls</code> or <code>:buffers</code>. This will open a list of buffers currently loaded in the Vim instance. You will see the output somewhat like this:</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1628681203173/qSSRrlB2J.png" alt="image.png"></p>
+<p>We can see the name of the current buffer which in this case it is <code>&quot;No name&quot;</code> this will be replaced with a file name if we had a file open. This won't only print the current buffer but all the loaded buffers in the present Window of Vim. We will explore the details of this command in the next section.</p>
+<h2>Navigating through the buffers list</h2>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1628681927410/t9DDPbDEs.gif" alt="buff1.gif"></p>
+<p>In the first column in the only row, you can see <code>1</code> indicating the number of the buffer, secondly, there are indicators <code>%a</code> and <code>#</code> and others as well. These are used for referencing the buffers using certain attributes those have like :</p>
+<ul>
+<li><code>%</code> stands for the buffer in the current window.</li>
+<li><code>a</code> stands for the currently active buffer.</li>
+<li><code>#</code> stands for the alternate buffer (previously edited).</li>
+<li><code>h</code> stands for the hidden buffer ( used for navigating to other files without saving changes ).</li>
+</ul>
+<p>We also have additional attributes or indicators for the buffers like:</p>
+<ul>
+<li><code>+</code> indicating the buffer is modified.</li>
+<li><code>-</code> indicating the buffer cannot be modified.</li>
+<li><code>=</code> indicating the buffer is read only.</li>
+</ul>
+<p>To use the attribute <code>h</code>, you have to set the option in the current window only, you can use <code>:set hiddden</code> to hide the files i.e to edit another file without saving changes to the current buffer(with the file loaded).  If you want a permanent option of hidden files you can add <code>set hidden</code> in your <code>vimrc</code> file.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1628683076849/lWQ2ZEj0E.png" alt="image.png"></p>
+<p>If you have enabled a hidden file in the window and you modify the file, you can see the <code>+</code> symbol in the <code>:ls</code> command output before the file, indicating that the file has been modified. If you try to quit the window, it will prompt you to save those unsaved modifications.</p>
+<p>This is the power of Vim buffers, you can get really fast in terms of editing multiple files and saving all of them at once. This feature can allow you to work more effectively and flawlessly with Window Splits and Tabs as they can contain multiple buffers within them.</p>
+<p>Now we will see how to move between those buffers. We can pretty effectively use the numbers in the buffer list to directly jump to that buffer. We can use <code>:b n</code> where n is any number of the buffer in the list of buffers to move through the buffers. Optionally we can use <code>:buffer n</code> but that is quite a long command.</p>
+<p>We can move to the previous buffer as <code>:bp</code>  to move to the previous buffer in the list. Similarly, we can use <code>:bn</code> to move to the next buffer in the list, and <code>:bfirst</code> and <code>:blast</code> to move to the first and the last buffer respectively.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1628684713072/QzqBC99NV.gif" alt="buff2.gif"></p>
+<h2>Moving through the buffers</h2>
+<p>We can move through our opened buffers using <code>Ctrl + o</code> to move backward a buffer and <code>Ctrl + i</code> to move forward a buffer. This can be helpful if you do not want to remember the numbers associated with the buffers.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1628689030442/KNDDAlJpN.gif" alt="buff2.gif"></p>
+<p>We can scan through the current buffers opened and jump through them one by one and it becomes quite effective in switching between few files. This could probably be suited for Web development where you can hop between HTML/CSS/JS files or in Android development for java/XML files, and so on you get the idea for using it as per your needs.</p>
+<h2>Deleting buffers</h2>
+<p>Now we will see how to delete the loaded buffers, we can simply use <code>:bd n</code> where n is the number of the buffer in the list to delete the buffer, optionally we can use <code>:bd filename</code> to delete the buffer loaded with that file.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1628685481565/m4bBHPf5C.gif" alt="buff2.gif"></p>
+<p>We can also delete a number of buffers at a time using a range of buffers like <code>:n,mbd</code> where <code>n</code> is the first buffer and <code>m</code> is the last buffer. We will delete every buffer between <code>n</code> and <code>m</code> including <code>n</code> and <code>m</code> using the above command.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1628685657441/s4rJ_CRRQ.gif" alt="buff2.gif"></p>
+<p>Just a quick fact, if you do not delete buffers, they will stay in memory even if you use <code>:q</code> they won't get erased from the buffer list, you are just exiting the buffer view and not removing the buffer from the current memory. This can get really messy if you are opening too many files and keeping them in memory.</p>
+<h2>Creating splits in buffer</h2>
+<p>We can even create splits in buffers, basically a window split but we will see this with the view of buffers this time. To create a horizontal split, we can type in <code>:new filename</code> to open the file in the split. We can even create a vertical split with <code>:vnew filename</code> to open a vertical split with the provided file.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1628686386964/O2HhFqaKa2.gif" alt="buff2.gif"></p>
+<p>We can see some wired things in the ls menu if we open a new tab in the current instance of Vim. The list command shows all the buffers in the current Tab as well as in the previous tab.</p>
+<p>We can also open buffers in splits by using numbers or file names. We can use <code>:sb n</code> to open the contents of the buffer n(any number of buffer), and with <code>:sb filename</code> to open the file in a split this will only be a horizontal split.</p>
+<p>We can use <code>:sba</code> to open all the buffers in the split windows. This can be quite handy to find any file which you cannot remember was edited or wanted at the moment, this opens every buffer loaded in the current instance. We can also use <code>:sbp</code> and <code>:sbn</code> to open the previous and next buffer respectively in a split.</p>
+<p>Additionally, we also have <code>:vertical ba</code> and <code>:ba</code> (<code>:ball</code>)to open all the buffers in vertical and horizontal splits respectively.<br>
+<img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1628693311069/5y_xbPho7.gif" alt="buff2.gif"></p>
+<p><strong>Also</strong>, We have <code>:tab ba</code> or <code>:tab ball</code> to open all the buffers as tabs in the current instance.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1628693521966/f1RKu4JwM.gif" alt="bufftab.gif"></p>
+<p>You can add more layers of effectiveness or customization using keymaps to split certain buffers and make use of the above set of commands more powerful and make them work according to your needs.</p>
+<h2>Conclusion</h2>
+<p>So, from the above sections, we were able to see what happens under the hood when you open, close, or edit a file in Vim. Though it was not an in-depth view of each and every detail of the buffers in Vim. But enough to make you understand what and how buffers work and how to use them to become more effective. Hopefully, you have understood how to perform movements with buffers and create and delete them with tremendous control over what files you could edit. Thank you for reading till here.</p>
+<h3>Buffers &lt; Window Splits &lt; Tabs</h3>
+<p>So from these three articles, we were able to understand the terminology of Buffers, Window Splits, and Tabs. These all are the units of the Vim file system/ Way of grouping Files. We can use buffers to load the file from the memory, we can split various buffers into windows which are all contained in a tab. Some might prefer using buffers, splits, or tabs but hey! what are you even talking about? They are all part of tabs so use everything as per need don't force yourself to use only one thing.</p>
+<p><strong>Use buffers for opening few files, if you need to open many files regularly use window splits, If that's not enough use tabs to separate from different folders or directories</strong>. Don't stop Viming, Happy Coding :)</p>
+<h3>References</h3>
+<ul>
+<li>
+<p><a href="https://vim.fandom.com/wiki/Buffers">Vim Fandom: Buffers</a></p>
+</li>
+<li>
+<p><a href="https://vim.fandom.com/wiki/Vim_buffer_FAQ">Vim Buffers FAQ</a></p>
+</li>
+<li>
+<p><a href="https://linuxhint.com/how_vim_buffers_work/">Linux Hint - Understanding and using VIM Buffers </a></p>
+</li>
+</ul>
+
+            </div>
+        </article>
+    </main>
+      <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async
+        >
+        </script>
+      </div>
+    
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; Meet Gor. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const editBtn = document.getElementById('editor-edit');
+
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "posts\/vim-buffers";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+
+                try {
+                    const res = await fetch(url);
+
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    console.log(res);
+
+                    const html = await res.text();
+                    console.log(html);
+
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+</body>
+</html>

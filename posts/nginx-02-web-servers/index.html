@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:url" content="meetgor.com/posts/nginx-02-web-servers">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Meet Gor | NGINX Survival Guide: Serving Web Applications">
+    <meta property="og:description" content="NGINX Fundamentals: Setting Up Simple HTTP Servers, Serving Custom Content, multiple upstream servers">
+    <meta property="twitter:domain" content="meetgor.com">
+    <meta property="twitter:url" content="meetgor.com/posts/nginx-02-web-servers">
+    <meta name="twitter:title" content="NGINX Survival Guide: Serving Web Applications">
+    <meta name="twitter:description" content="NGINX Fundamentals: Setting Up Simple HTTP Servers, Serving Custom Content, multiple upstream servers">
+    
+        <meta property="og:image" content="https://meetgor-cdn.pages.dev/nginx-survival-guide/nginx-sg-2.png">
+        <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/nginx-survival-guide/nginx-sg-2.png">
+    
+    <link rel="icon" href="../tbicon.png" type="image/png">
+    <link rel="icon" href="tbicon.png" type="image/png">
+
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+    });
+    </script>
+    <title>Meet Gor | NGINX Survival Guide: Serving Web Applications</title>
+    <style>
+            :root {
+                --bg-color: #ffffff;
+                --text-color: #333333;
+                --secondary-text-color: ;
+                --link-normal: #007bff;
+                --link-hover: #0056b3;
+                --link-active: #003a75;
+                --quote-color: #999999;
+                --code-bg-color: #dddddd;
+                --code-border-color: #ced4da;
+                --code-text-color: #444444;
+                --code-comment-color: #808080;
+                --code-keyword-color: #008000;
+                --code-string-color: #000080;
+                --code-number-color: #000000;
+                --code-variable-color: #000000;
+                --code-function-color: #000000;
+            }
+
+             
+            .secondary-theme {
+                --bg-color: #121212;
+                --text-color: #ffffff;
+                --secondary-text-color: #00ffff;
+                --link-normal: #ff6600;
+                --link-hover: #4682b4;
+                --link-active: #00008b;
+                --quote-color: #a9a9a9;
+                --code-bg-color: #333333;
+                --code-border-color: #444444;
+                --code-text-color: #ffffff;
+                --code-comment-color: #b0b0b0;
+                --code-keyword-color: #32cd32;
+                --code-string-color: #ff6347;
+                --code-number-color: #d3d3d3;
+                --code-variable-color: #b0e0e6;
+                --code-function-color: #ff4500;
+            }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+            line-height: 1.6;
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--secondary-text-color);
+        }
+
+        .site-title {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .site-title a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .site-title a:hover {
+            color: var(--hover-color);
+        }
+
+        .Post-meta {
+            color: var(--secondary-text);
+            font-size: 0.9rem;
+            margin: 1rem 0;
+        }
+
+        article {
+            margin: 2rem 0;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        code {
+            font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        p code {
+            background-color: var(--inline-code-bg);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+        }
+
+        blockquote {
+            border-left: 3px solid var(--accent-color);
+            margin: 1.5rem 0;
+            padding-left: 1rem;
+            color: var(--secondary-text);
+        }
+
+        a {
+            color: var(--link-normal);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--hover-color);
+        }
+
+        .Hljs-comment { color: var(--code-comment); } 
+        .Hljs-keyword { color: var(--code-keyword); }
+        .Hljs-string { color: var(--code-string); }
+        .Hljs-number { color: var(--code-number); }
+        .Hljs-function { color: var(--code-function); }
+        .Hljs-variable { color: var(--code-variable); }
+
+        button, .Button {
+            background-color: var(--accent-color);
+            border: none;
+            border-radius: 6px;
+            color: var(--bg-color);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.2s ease;
+        }
+
+        button:hover, .Button:hover {
+            background-color: var(--hover-color);
+        }
+
+
+         
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            pre {
+                margin: 1rem -1rem;
+                border-radius: 0;
+            }
+        }
+
+        code {
+          font-family: monospace;
+          padding: 2px 4px;
+          border-radius: 4px;
+        }
+
+pre {
+    background-color: var(--code-bg-color, #f5f5f5);
+    border: 1px solid var(--code-border-color, #d1d1d1);
+    border-radius: 6px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+}
+
+code {
+    font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    font-size: 0.9em;
+    color: var(--code-text-color, #fff);
+}
+
+p code {
+    color: var(--code-text-color, #000);
+    background-color: var(--code-bg-color, #444444);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+}
+
+ 
+.Hljs-comment { color: var(--code-comment-color, #7d7d7d); }
+.Hljs-keyword { color: var(--code-keyword-color, #005cc5); }
+.Hljs-string { color: var(--code-string-color, #d73a49); }
+.Hljs-number { color: var(--code-number-color, #e36209); }
+.Hljs-variable { color: var(--code-variable-color, #6f42c1); }
+.Hljs-function { color: var(--code-function-color, #005cc5); }
+
+ 
+.secondary-theme pre {
+    background-color: var(--code-bg-color, #1e1e1e);
+    border: 1px solid var(--code-border-color, #3c3c3c);
+}
+
+.secondary-theme .Hljs-comment { color: var(--code-comment-color, #6a737d); }
+.secondary-theme .Hljs-keyword { color: var(--code-keyword-color, #569cd6); }
+.secondary-theme .Hljs-string { color: var(--code-string-color, #ce9178); }
+.secondary-theme .Hljs-number { color: var(--code-number-color, #b5cea8); }
+.secondary-theme .Hljs-variable { color: var(--code-variable-color, #9cdcfe); }
+.secondary-theme .Hljs-function { color: var(--code-function-color, #dcdcaa); }
+
+pre {
+    background: var(--code-bg-color, #1e1e1e);
+    border: 1px solid var(--code-border-color, #3c3c3c);
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+
+ 
+code {
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.9em;
+    color: var(--code-text-color, #ffffff);
+}
+
+ 
+p code {
+    background-color: var(--code-bg-color, #333);
+    color: var(--code-text-color, #ffcb6b);
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+ 
+.Hljs-comment { color: var(--code-comment-color, #6a737d); font-style: italic; }
+.Hljs-keyword { color: var(--code-keyword-color, #c678dd); font-weight: bold; }
+.Hljs-string { color: var(--code-string-color, #98c379); }
+.Hljs-number { color: var(--code-number-color, #d19a66); }
+.Hljs-variable { color: var(--code-variable-color, #e06c75); }
+.Hljs-function { color: var(--code-function-color, #61afef); }
+
+ 
+.copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.copy-btn:hover {
+    background: #45a049;
+}
+
+.copy-btn.copied {
+    background: #ffa500;
+}
+
+blockquote {
+    border-left: 4px solid var(--quote-color);
+    background-color: rgba(255, 255, 255, 0.05);  
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: var(--secondary-text-color);
+    border-radius: 6px;
+    position: relative;
+}
+
+blockquote::before {
+    content: "“";  
+    font-size: 2rem;
+    color: var(--quote-color);
+    position: absolute;
+    top: 0;
+    left: 10px;
+}
+
+blockquote::after {
+    content: "”";  
+    font-size: 2rem;
+    color: var(--quote-color);
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+}
+
+ 
+blockquote cite {
+    display: block;
+    text-align: right;
+    font-size: 0.9em;
+    margin-top: 0.5rem;
+    color: var(--secondary-text-color);
+    font-style: normal;
+}
+        #editor, #editor-edit {
+            background-color: #4CAF50;  
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #editor i {
+            margin-right: 5px;  
+        }
+        #editor-edit i {
+            margin-right: 5px;  
+        }
+.theme-switch {
+    position: relative;
+    width: 50px;
+    height: 26px;
+}
+
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.theme-switch label {
+    position: absolute;
+    cursor: pointer;
+    background-color: var(--link-normal);
+    border-radius: 34px;
+    width: 100%;
+    height: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.theme-switch label::before {
+    content: "";
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: var(--bg-color);
+    transition: transform 0.3s ease;
+    border-radius: 50%;
+}
+
+.theme-switch input:checked + label::before {
+    transform: translateX(24px);
+}
+
+.theme-switch input:checked + label {
+    background-color: var(--link-hover);
+}
+
+    </style>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+
+        
+        const currentTheme = localStorage.getItem("theme") || "light";
+
+        
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/dracula.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            setSyntaxTheme("secondary");
+        } else {
+            setSyntaxTheme("light");
+        }
+
+        
+        themeToggle.addEventListener("click", () => {
+            if (body.classList.contains("secondary-theme")) {
+                body.classList.remove("secondary-theme");
+                localStorage.setItem("theme", "light");
+                setSyntaxTheme("light");
+            } else {
+                body.classList.add("secondary-theme");
+                localStorage.setItem("theme", "secondary");
+                setSyntaxTheme("secondary");
+            }
+        });
+    });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("pre").forEach((pre) => {
+                const button = document.createElement("button");
+                button.classList.add("copy-btn");
+                button.textContent = "Copy";
+
+                button.addEventListener("click", () => {
+                    const code = pre.querySelector("code");
+                    if (!code) return;
+
+                    const textToCopy = code.innerText || code.textContent;
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        button.textContent = "Copied!";
+                        button.classList.add("copied");
+
+                        setTimeout(() => {
+                            button.textContent = "Copy";
+                            button.classList.remove("copied");
+                        }, 1500);
+                    });
+                });
+
+                pre.appendChild(button);
+            });
+        });
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+    
+    <link rel="icon" href="../../tbicon.png" type="image/png">
+</head>
+<body>
+    <header class="header">
+        <h1 class="site-title animated-gradient-text"><a href="/">Meet Gor</a></h1>
+        <div class="theme-switch">
+          <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+          <label for="theme-toggle"></label>
+        </div>
+    </header>
+
+    <main class="container">
+        <article class="blog-post">
+            <h1>NGINX Survival Guide: Serving Web Applications</h1>
+            <div class="post-meta">
+                Published on 📅 <time datetime="2024-07-21">2024-07-21</time>
+            </div>
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            <div class="post-meta">
+                <span class="post-series-label"> 🏷️ Tags:</span>
+                
+                <a href="/tags/nginx">#nginx</a>
+                
+                <a href="/tags/web-development">#web-development</a>
+                
+            </div>
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/nginx-survival-guide" class="series-link">📖 nginx-survival-guide</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            <div class="post-meta">
+                
+            </div>
+            <hr>
+            <div class="post-content">
+                <h2>Introduction</h2>
+<p>In the second part of our NGINX Survival Guide, we dive into the practical aspects of using NGINX to serve web applications. This section will guide you through the essential tasks of setting up a basic HTTP server, configuring NGINX to serve content from custom directories, and using it as a reverse proxy to forward requests to backend servers.</p>
+<p>NGINX is a versatile web server that can be used to serve applications in a variety of ways, from simple web servers to complex proxy configurations. NGINX can be used to serve static HTML content, proxy requests to a backend server, or load balance traffic across multiple servers. In this guide, we'll explore the different ways to use NGINX to serve applications, including setting up a simple HTTP server, serving content from custom directories, and using it to load balance traffic across multiple upstream servers.</p>
+<h2>Simple HTTP Server</h2>
+<p>NGINX serves as the default HTTP server on port 80 of your local machine if NGINX is properly installed and running on your system. If you head on to the localhost, you will see the default NGINX HTML page like the one below:</p>
+<p><img src="https://meetgor-cdn.pages.dev/nginx-survival-guide/nginx-default-page.png" alt="NGINX Default Page"></p>
+<p>This is the default HTML page served by NGINX as per the configuration in the <code>/etc/nginx/nginx.conf</code> file. The default folder for NGINX to serve HTML content is located at <code>/usr/share/nginx/html/index.html</code> , If you change the contents of this file and restart NGINX, the http server will load the new HTML content.</p>
+<p>Let's first look, at how we can serve a simple http message within the configuration file in NGINX.</p>
+<h2>Serving simple text</h2>
+<p>We will try to write our simple HTTP server from scratch, so it would be nice to empty the existing <code>/etc/nginx/nginx.conf</code> file or use other ports to serve the content rather than the default <code>127.0.0.1:80</code> port.</p>
+<pre><code class="language-nginx">http {
+    server {
+        listen 8000;
+        return 200 &quot;Hello, World!
+&quot;;
+    }
+}
+</code></pre>
+<p>The above config will serve the text <code>Hello, World!</code> when there is a request to the URL <code>127.0.0.1:8000</code> or <code>localhost:8000</code> You can change the port per your requirements and even add a <code>server_name</code> for your domain name.</p>
+<pre><code class="language-bash">$ curl http://127.0.0.1:8000 
+Hello, World!
+
+
+$ curl -i http://127.0.0.1:8000
+HTTP/1.1 200 OK
+Server: nginx/1.18.0 (Ubuntu)
+Date: Sat, 03 Feb 2024 11:41:16 GMT
+Content-Type: application/octet-stream
+Content-Length: 14
+Connection: keep-alive
+
+Hello, World!
+</code></pre>
+<p>As we can see the NGINX served the HTTP content when the request was made to port 8000 on the localhost.</p>
+<h2>Serving from a custom path/folder</h2>
+<p>But things are not like these in the real world, we need to serve an entire directory of HTML pages. We need to add the <code>root</code> directive with the path to the folder where our HTML content resides. The path should have the <code>index.html</code> file as the starting point of the request.</p>
+<pre><code class="language-nginx">http {
+    server {
+        listen 8000;
+        root /srv/techstructive-blog;
+        index index.html;
+    }
+}
+</code></pre>
+<p><strong>NOTE: The path to the HTML content needs to be accessible and the Nginx process should have the read permission to serve the contents.</strong></p>
+<p>It is commonly recommended to store HTML/static content files in directories such as <code>/srv</code> or <code>/var/www</code>. These paths follow conventions for serving static files and web applications in Unix-type operating systems. While it's not a strict requirement, adhering to these conventions can improve the organization and maintainability of web content.</p>
+<h2>Serving from a web server</h2>
+<p>If you already have a web server running in a port on your system, you could use Nginx as a gateway to the application instead of exposing your application to the internet.</p>
+<p>We could use the <a href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass">proxy_pass</a> directive in the location setting to specify which URL to pass the request to, the <code>listen</code> will forward the request to the proxy specified in the location directive.</p>
+<pre><code class="language-nginx">http {
+	server {
+		listen 80;
+		location / {
+			proxy_pass http://localhost:8001;
+		}
+	}
+}
+</code></pre>
+<p>In the above example, the NGINX listens to port 80 in the local system and sends the request to the localhost at port 8001. The <code>proxy_pass</code> is used to specify the URL to redirect the request to.</p>
+<ul>
+<li>
+<p><strong>listen 80:</strong> Nginx listens for incoming requests on port 80, the standard HTTP port.</p>
+</li>
+<li>
+<p><strong>location /:</strong> This directive matches all incoming requests, regardless of the path.</p>
+</li>
+<li>
+<p><strong>proxy_pass</strong><a href="http://localhost:8001"><strong>http://localhost:8001</strong></a><strong>:</strong> Requests are forwarded to the web application running on <a href="http://localhost">localhost</a> at port 8001.</p>
+</li>
+</ul>
+<p>This example configuration is a basic building block for setting up more complex proxy configurations with NGINX.</p>
+<h2>Serving from Multiple Upstream Servers</h2>
+<p>NGINX can also serve content from multiple upstream servers, balancing the load between them. This is useful for high-traffic applications that require multiple backend servers to handle the load.</p>
+<p>What are upstream servers, you might ask, well in the context of NGINX, upstream servers refer to backend servers that handle the actual processing of requests. NGINX acts as a gateway, forwarding incoming requests to these upstream servers. This setup allows NGINX to manage the traffic efficiently and distribute it among multiple servers, which can be particularly beneficial for high-traffic applications. . For example, you might have your application running on <a href="http://localhost:8001"><code>localhost:8001</code></a> and <a href="http://localhost:8002"><code>localhost:8002</code></a>.</p>
+<p>Here’s an example configuration:</p>
+<pre><code class="language-nginx">http {
+    upstream myapp {
+        server backend1.example.com;
+        server backend2.example.com;
+        server backend3.example.com;
+    }
+
+    server {
+        listen 80;
+
+        location / {
+            proxy_pass http://myapp;
+        }
+    }
+}
+</code></pre>
+<p>In this configuration:</p>
+<ul>
+<li>
+<p>The <code>upstream</code> block defines a named group of backend servers (<code>myapp</code>).</p>
+</li>
+<li>
+<p>The <code>server</code> block listens on port 80 and proxies requests to the upstream group defined earlier.</p>
+</li>
+<li>
+<p><code>upstream myapp</code>: This directive creates a group of backend servers named <code>myapp</code>.</p>
+</li>
+<li>
+<p><a href="http://backend1.example.com"><code>server backend1.example.com</code></a> : These directives list the backend servers that will handle the requests. These can be specified by hostname, IP address, or combination.</p>
+</li>
+<li>
+<p><code>proxy_pass</code> <a href="http://myapp"><code>http://myapp</code></a>: This directive tells NGINX to forward incoming requests to the <code>myapp</code> upstream group.</p>
+</li>
+</ul>
+<h3>Why Use Upstream Servers?</h3>
+<p>Using upstream servers has several advantages:</p>
+<ul>
+<li>
+<p>Scalability: By distributing requests across multiple servers, you can handle more traffic and scale your application horizontally.</p>
+</li>
+<li>
+<p>Fault Tolerance: If one of the backend servers goes down, NGINX can continue to serve requests using the remaining servers, ensuring high availability.</p>
+</li>
+<li>
+<p>Load Distribution: Upstream servers help in balancing the load, which can improve the performance and responsiveness of your web application.</p>
+</li>
+</ul>
+<p>The below configuration sets up NGINX to act as a gateway that distributes incoming traffic to multiple upstream servers. It defines an upstream block with servers at <a href="http://localhost:8001"><code>localhost:8001</code></a> and <a href="http://localhost:8002"><code>localhost:8002</code></a>, and forward requests to these servers.</p>
+<pre><code class="language-nginx">http {
+    upstream myapp {
+        server localhost:8001;
+        server localhost:8002;
+    }
+
+    server {
+        listen 80;
+
+        location / {
+            proxy_pass http://myapp;
+        }
+    }
+}
+</code></pre>
+<p>The provided NGINX configuration sets up an upstream block named <code>myapp</code> with two backend servers running on <a href="http://localhost"><code>localhost</code></a> at ports 8001 and 8002. The server block listens on port 80 and uses a location block to match all incoming requests to the root URL (<code>/</code>). These requests are forwarded to the <code>myapp</code> upstream group via the <code>proxy_pass</code> directive, allowing NGINX to distribute the requests between the two backend servers, effectively balancing the load and enhancing the application's performance and reliability.</p>
+<h2>Conclusion</h2>
+<p>From this part of ther series, we have learned how to set up a simple HTTP server to serve content from custom directories and using NGINX as a gateway to backend servers, which covered essential ways to utilize NGINX for serving web applications.</p>
+<p>That's it from this part of the series, we will look into detail how to use NGINX as a load balancer and reverse proxy, serving static files, and caching content in the next part of the series, where we'll dive deeper into advanced NGINX configurations.
+Thank you for reading, hopefully you found this helpful. If you have any feedback, questions, or queries drop them below in the comments or reach me out directly on my social handles.</p>
+<p>Happy Coding :)</p>
+
+            </div>
+        </article>
+    </main>
+      <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async
+        >
+        </script>
+      </div>
+    
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; Meet Gor. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const editBtn = document.getElementById('editor-edit');
+
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "posts\/nginx-02-web-servers";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+
+                try {
+                    const res = await fetch(url);
+
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    console.log(res);
+
+                    const html = await res.text();
+                    console.log(html);
+
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+</body>
+</html>
