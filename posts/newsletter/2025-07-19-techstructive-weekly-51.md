@@ -1,4 +1,5 @@
 {"author":"meet","date":"2025-07-19","post_dir":"newsletter","status":"published","title": "Techstructive Weekly #51","type":"newsletter", "slug": "techstructive-weekly-51"}
+
 ## Week #51
 
 Another hectic week, the work seems unstoppable and almost killing my back. Had to work almost 12 hours at stretch to get something in production. Not the best of times to be working at. Especially when life puts you in wired position, not just in work but in mental situation, you have to believe in yourself and amidst that every other bit of things happen.

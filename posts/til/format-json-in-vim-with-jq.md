@@ -1,6 +1,7 @@
 {
   "title": "Format JSON in Vim with JQ",
   "post_dir": "til",
+  "type": "til",
   "status": "published",
   "slug": "format-json-in-vim-with-jq",
   "date": "2025-04-05T12:33:15Z"
