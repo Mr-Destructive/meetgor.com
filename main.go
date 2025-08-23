@@ -260,25 +260,17 @@ func GeneratePages(config models.SSG_CONFIG) error {
 		if err != nil {
 			log.Fatal(err)
 		}
-		postContent := string(content[0].Content)
-		if err != nil {
-			log.Fatal(err)
+		if len(content) == 0 {
+			log.Fatal("No content found in file:", mdFile)
 		}
+		post := content[0]
 
 		mdFileName = strings.TrimSuffix(mdFileName, filepath.Ext(mdFileName))
 		feed := models.Feed{
-			Title: strings.ToTitle(mdFileName),
+			Title: post.Frontmatter.Title,
 			Type:  mdFileName,
 			Slug:  mdFileName,
-			Posts: []models.Post{
-				{
-					Content: template.HTML(string(postContent)),
-					Frontmatter: models.FrontMatter{
-						Title: mdFileName,
-						Slug:  mdFileName,
-					},
-				},
-			},
+			Posts: []models.Post{post},
 		}
 		context := models.TemplateContext{
 			FeedPosts: []models.Feed{feed},
@@ -287,12 +279,13 @@ func GeneratePages(config models.SSG_CONFIG) error {
 				Secondary: config.Blog.Themes["secondary"],
 			},
 			FeedInfo: feed,
+			Post:     post,
 			Config: models.SSG_CONFIG{
 				Blog: config.Blog,
 			},
 		}
 		buffer := bytes.Buffer{}
-		t, err := template.ParseFS(templateFS, "default_page_template.html")
+		t, err := template.ParseFS(templateFS, "*.html")
 		err = t.ExecuteTemplate(&buffer, "default_page_template.html", context)
 		if err != nil {
 			log.Fatal(err)
