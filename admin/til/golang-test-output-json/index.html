@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    
+    <title>Meet Gor | Golang: Test Output JSON</title>
+    <meta name="description" content="Obtain JSON output of test results in Golang">
+    
+    
+    <meta property="og:url" content="meetgor.com/til/golang-test-output-json">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Meet Gor | Golang: Test Output JSON">
+    <meta property="og:description" content="Obtain JSON output of test results in Golang">
+    
+        <meta property="og:image" content="/tbicon.png">
+        <meta name="twitter:image" content="/tbicon.png">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Meet Gor | Golang: Test Output JSON">
+    <meta name="twitter:description" content="Obtain JSON output of test results in Golang">
+    
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const body = document.body;
+            const stylesheet = document.getElementById("syntax-theme");
+            
+            
+            const currentTheme = localStorage.getItem("theme") || "default";
+            
+            
+            function setSyntaxTheme(theme) {
+                if (theme === "secondary") {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+                } else {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+                }
+            }
+            
+            
+            if (currentTheme === "secondary") {
+                body.classList.add("secondary-theme");
+                setSyntaxTheme("secondary");
+            } else {
+                setSyntaxTheme("light");
+            }
+            
+            
+            document.querySelectorAll("pre code").forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/posts">Posts</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Golang: Test Output JSON</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2024-01-01">2024-01-01</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/til">til</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+            </div>
+            
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=til\/golang-test-output-json&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <p>I just discovered that we can generate a JSON output of test results in Golang. I found this <a href="https://youtu.be/cf72gMBrsI0?t=80">here</a>.</p>
+<p>Let's take a fresh simple example.</p>
+<pre><code class="language-go">package jsontest
+
+func hello() string {
+    return &quot;Hello, World!&quot;
+}
+</code></pre>
+<pre><code class="language-go">package jsontest
+
+import (
+    &quot;testing&quot;
+)
+
+func TestHello(t *testing.T) {
+    want := &quot;Hello, World!&quot;
+    got := hello()
+    t.Logf(&quot;got: %q&quot;, got)
+    if got != want {
+        t.Errorf(&quot;got: %q, want: %q&quot;, got, want)
+    }
+}
+</code></pre>
+<p>Here, we have a function <code>hello</code> that simply returns a string, the <code>TestHello</code> function in the <code>jsontest</code> package will check if the returned string is correctly returned or not.</p>
+<p>So, we can test this with <code>go test ./...</code> command, this will give out the output in a standard output/error in text format. However, if we add the <code>-json</code> flag, we can get the output in JSON format.</p>
+<pre><code class="language-bash">go test ./... -json
+</code></pre>
+<pre><code class="language-json">{&quot;Time&quot;:&quot;2024-01-01T20:52:45.861974085+05:30&quot;,&quot;Action&quot;:&quot;start&quot;,&quot;Package&quot;:&quot;json-test&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T20:52:45.863133332+05:30&quot;,&quot;Action&quot;:&quot;run&quot;,&quot;Package&quot;:&quot;json-test&quot;,&quot;Test&quot;:&quot;TestHello&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T20:52:45.863142397+05:30&quot;,&quot;Action&quot;:&quot;output&quot;,&quot;Package&quot;:&quot;json-test&quot;,&quot;Test&quot;:&quot;TestHello&quot;,&quot;Output&quot;:&quot;=== RUN   TestHello\n&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T20:52:45.863148346+05:30&quot;,&quot;Action&quot;:&quot;output&quot;,&quot;Package&quot;:&quot;json-test&quot;,&quot;Test&quot;:&quot;TestHello&quot;,&quot;Output&quot;:&quot;    main_test.go:10: got: \&quot;Hello, World\&quot;\n&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T20:52:45.863151351+05:30&quot;,&quot;Action&quot;:&quot;output&quot;,&quot;Package&quot;:&quot;json-test&quot;,&quot;Test&quot;:&quot;TestHello&quot;,&quot;Output&quot;:&quot;    main_test.go:12: got: \&quot;Hello, World\&quot;, want: \&quot;Hello, World!\&quot;\n&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T20:52:45.863157014+05:30&quot;,&quot;Action&quot;:&quot;output&quot;,&quot;Package&quot;:&quot;json-test&quot;,&quot;Test&quot;:&quot;TestHello&quot;,&quot;Output&quot;:&quot;--- FAIL: TestHello (0.00s)\n&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T20:52:45.863160418+05:30&quot;,&quot;Action&quot;:&quot;fail&quot;,&quot;Package&quot;:&quot;json-test&quot;,&quot;Test&quot;:&quot;TestHello&quot;,&quot;Elapsed&quot;:0}
+{&quot;Time&quot;:&quot;2024-01-01T20:52:45.863411555+05:30&quot;,&quot;Action&quot;:&quot;output&quot;,&quot;Package&quot;:&quot;json-test&quot;,&quot;Output&quot;:&quot;FAIL\n&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T20:52:45.863438344+05:30&quot;,&quot;Action&quot;:&quot;output&quot;,&quot;Package&quot;:&quot;json-test&quot;,&quot;Output&quot;:&quot;FAIL\tjson-test\t0.001s\n&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T20:52:45.863443461+05:30&quot;,&quot;Action&quot;:&quot;fail&quot;,&quot;Package&quot;:&quot;json-test&quot;,&quot;Elapsed&quot;:0.001}
+</code></pre>
+<p>Pretty cool right?</p>
+<p>This is really useful for programmatically taking the output and parsing it to get the metrics.</p>
+<p>We can even combine with the coverage flag to get the coverage metrics as well.</p>
+<pre><code class="language-bash">go test ./... -json -cover
+</code></pre>
+<pre><code class="language-json">{&quot;Time&quot;:&quot;2024-01-01T21:13:30.771976961+05:30&quot;,&quot;Action&quot;:&quot;start&quot;,&quot;Package&quot;:&quot;jsontest&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T21:13:30.775118482+05:30&quot;,&quot;Action&quot;:&quot;run&quot;,&quot;Package&quot;:&quot;jsontest&quot;,&quot;Test&quot;:&quot;TestHello&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T21:13:30.775172535+05:30&quot;,&quot;Action&quot;:&quot;output&quot;,&quot;Package&quot;:&quot;jsontest&quot;,&quot;Test&quot;:&quot;TestHello&quot;,&quot;Output&quot;:&quot;=== RUN   TestHello\n&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T21:13:30.775201647+05:30&quot;,&quot;Action&quot;:&quot;output&quot;,&quot;Package&quot;:&quot;jsontest&quot;,&quot;Test&quot;:&quot;TestHello&quot;,&quot;Output&quot;:&quot;    main_test.go:10: got: \&quot;Hello, World!\&quot;\n&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T21:13:30.775231759+05:30&quot;,&quot;Action&quot;:&quot;output&quot;,&quot;Package&quot;:&quot;jsontest&quot;,&quot;Test&quot;:&quot;TestHello&quot;,&quot;Output&quot;:&quot;--- PASS: TestHello (0.00s)\n&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T21:13:30.775253928+05:30&quot;,&quot;Action&quot;:&quot;pass&quot;,&quot;Package&quot;:&quot;jsontest&quot;,&quot;Test&quot;:&quot;TestHello&quot;,&quot;Elapsed&quot;:0}
+{&quot;Time&quot;:&quot;2024-01-01T21:13:30.775269402+05:30&quot;,&quot;Action&quot;:&quot;output&quot;,&quot;Package&quot;:&quot;jsontest&quot;,&quot;Output&quot;:&quot;PASS\n&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T21:13:30.776153185+05:30&quot;,&quot;Action&quot;:&quot;output&quot;,&quot;Package&quot;:&quot;jsontest&quot;,&quot;Output&quot;:&quot;coverage: 100.0% of statements\n&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T21:13:30.776808599+05:30&quot;,&quot;Action&quot;:&quot;output&quot;,&quot;Package&quot;:&quot;jsontest&quot;,&quot;Output&quot;:&quot;ok  \tjsontest\t0.004s\tcoverage: 100.0% of statements\n&quot;
+{&quot;Time&quot;:&quot;2024-01-01T21:13:30.777814589+05:30&quot;,&quot;Action&quot;:&quot;pass&quot;,&quot;Package&quot;:&quot;jsontest&quot;,&quot;Elapsed&quot;:0.006}
+</code></pre>
+<p>I am planning to use this in my workflow for integrating the output of the tests suite with specific tests.</p>
+<p>For running the specific tests, you can use <code>go test -run TestName</code> command, this will only run the provided test function.</p>
+<pre><code class="language-go">// main.go
+
+package jsontest
+
+func hello() string {
+    return &quot;Hello, World!&quot;
+}
+
+func add(x, y int) int {
+    return x + y
+}
+</code></pre>
+<pre><code class="language-go">// main_test.go
+package jsontest
+
+import (
+	&quot;testing&quot;
+)
+
+func TestHello(t *testing.T) {
+    want := &quot;Hello, World!&quot;
+    got := hello()
+    t.Logf(&quot;got: %q&quot;, got)
+    if got != want {
+        t.Errorf(&quot;got: %q, want: %q&quot;, got, want)
+    }
+}
+
+func TestAdd(t *testing.T) {
+    want := 2
+    got := add(1, 1)
+    t.Logf(&quot;got: %d&quot;, got)
+    if got != want {
+        t.Errorf(&quot;got: %d, want: %d&quot;, got, want)
+    }
+}
+</code></pre>
+<p>So, we have two test in this go module, we can run a specific test using <code>go test -run TestName</code> command as so:</p>
+<pre><code class="language-bash">go test -run TestAdd -json
+</code></pre>
+<pre><code class="language-json">{&quot;Time&quot;:&quot;2024-01-01T21:33:44.19397581+05:30&quot;,&quot;Action&quot;:&quot;start&quot;,&quot;Package&quot;:&quot;jsontest&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T21:33:44.198067398+05:30&quot;,&quot;Action&quot;:&quot;run&quot;,&quot;Package&quot;:&quot;jsontest&quot;,&quot;Test&quot;:&quot;TestAdd&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T21:33:44.198150156+05:30&quot;,&quot;Action&quot;:&quot;output&quot;,&quot;Package&quot;:&quot;jsontest&quot;,&quot;Test&quot;:&quot;TestAdd&quot;,&quot;Output&quot;:&quot;=== RUN   TestAdd\n&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T21:33:44.198197444+05:30&quot;,&quot;Action&quot;:&quot;output&quot;,&quot;Package&quot;:&quot;jsontest&quot;,&quot;Test&quot;:&quot;TestAdd&quot;,&quot;Output&quot;:&quot;    main_test.go:19: got: 2\n&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T21:33:44.198217057+05:30&quot;,&quot;Action&quot;:&quot;output&quot;,&quot;Package&quot;:&quot;jsontest&quot;,&quot;Test&quot;:&quot;TestAdd&quot;,&quot;Output&quot;:&quot;--- PASS: TestAdd (0.00s)\n&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T21:33:44.198230965+05:30&quot;,&quot;Action&quot;:&quot;pass&quot;,&quot;Package&quot;:&quot;jsontest&quot;,&quot;Test&quot;:&quot;TestAdd&quot;,&quot;Elapsed&quot;:0}
+{&quot;Time&quot;:&quot;2024-01-01T21:33:44.198241628+05:30&quot;,&quot;Action&quot;:&quot;output&quot;,&quot;Package&quot;:&quot;jsontest&quot;,&quot;Output&quot;:&quot;PASS\n&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T21:33:44.19869148+05:30&quot;,&quot;Action&quot;:&quot;output&quot;,&quot;Package&quot;:&quot;jsontest&quot;,&quot;Output&quot;:&quot;ok  \tjsontest\t0.004s\n&quot;}
+{&quot;Time&quot;:&quot;2024-01-01T21:33:44.198822637+05:30&quot;,&quot;Action&quot;:&quot;pass&quot;,&quot;Package&quot;:&quot;jsontest&quot;,&quot;Elapsed&quot;:0.005}
+</code></pre>
+<p>As we can see, there is only one test being executed and the output of the test is in JSON format.</p>
+<p>These are really good flags and options to have as they make the output more portable. I will be planning to use this to improve my workflow in testing and developing open source projects and personal projects as well. I am really inspired by the Teej's video of executing anything in NeoVim.</p>
+
+            </div>
+        </article>
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editBtn = document.getElementById('editor-edit');
+            
+            if (editBtn) {
+                editBtn.addEventListener('click', async function () {
+                    const slug = "til\/golang-test-output-json";
+                    const type = "til";
+                    console.log("Editing post:", slug, type);
+                    const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                    
+                    try {
+                        const res = await fetch(url);
+                        
+                        if (!res.ok) throw new Error("Failed to fetch edit content");
+                        console.log(res);
+                        
+                        const html = await res.text();
+                        console.log(html);
+                        
+                        document.querySelector('.post-content').innerHTML = html;
+                    } catch (err) {
+                        console.error(err);
+                        alert("Error loading editor content");
+                    }
+                });
+            }
+        });
+    </script>
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+            
+            if (!themeToggle) return;
+            
+            
+            const currentTheme = localStorage.getItem('theme') || 'default';
+            
+            
+            if (currentTheme === 'secondary') {
+                body.classList.add('secondary-theme');
+                themeToggle.checked = true;
+            }
+            
+            
+            themeToggle.addEventListener('change', () => {
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                    localStorage.setItem('theme', 'secondary');
+                } else {
+                    body.classList.remove('secondary-theme');
+                    localStorage.setItem('theme', 'default');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

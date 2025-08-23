@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    
+    <title>Meet Gor | SQLite functions: generate_series</title>
+    <meta name="description" content="">
+    
+    
+    <meta property="og:url" content="meetgor.com/logsql/sqlite-functions-generate-series">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Meet Gor | SQLite functions: generate_series">
+    <meta property="og:description" content="">
+    
+        <meta property="og:image" content="/tbicon.png">
+        <meta name="twitter:image" content="/tbicon.png">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Meet Gor | SQLite functions: generate_series">
+    <meta name="twitter:description" content="">
+    
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const body = document.body;
+            const stylesheet = document.getElementById("syntax-theme");
+            
+            
+            const currentTheme = localStorage.getItem("theme") || "default";
+            
+            
+            function setSyntaxTheme(theme) {
+                if (theme === "secondary") {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+                } else {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+                }
+            }
+            
+            
+            if (currentTheme === "secondary") {
+                body.classList.add("secondary-theme");
+                setSyntaxTheme("secondary");
+            } else {
+                setSyntaxTheme("light");
+            }
+            
+            
+            document.querySelectorAll("pre code").forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/posts">Posts</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>SQLite functions: generate_series</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2025-08-21">2025-08-21</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/logsql">logsql</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+            </div>
+            
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=logsql\/sqlite-functions-generate-series&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <p>The <a href="https://www.sqlite.org/series.html">generate_series</a> is a table valued function in sqlite and is available via the <a href="https://sqlite.org/src/artifact?ci=trunk&amp;filename=ext/misc/series.c">generate_series</a> extension.</p>
+<blockquote>
+<p>The valued function is something that returns a table but is virtual (doesn't really have data or schema in it). It has hidden columns which are used as parameters to the function to constrain the output and generate the data according to those parameters to the function.</p>
+</blockquote>
+<p>The basic operation with <code>generate_series</code> would look like this:</p>
+<pre><code class="language-sql">SELECT * FROM generate_series(1, 5);
+</code></pre>
+<pre><code class="language-sqlite">sqlite&gt; SELECT * FROM generate_series(1, 5);
++-------+
+| value |
++-------+
+| 1     |
+| 2     |
+| 3     |
+| 4     |
+| 5     |
++-------+
+sqlite&gt;
+</code></pre>
+<p>Pretty neat, it generated a series of numbers (integers) from 1 to 5 (5 included).</p>
+<p>Now are they really integers or?</p>
+<p>SQLite is wired, it doesn't really have types, but they are integers as default so to confirm:</p>
+<pre><code class="language-sql">SELECT typeof(value) FROM generate_series(1, 5);
+</code></pre>
+<pre><code class="language-sqlite">sqlite&gt; SELECT typeof(value) FROM generate_series(1, 5);
++---------------+
+| typeof(value) |
++---------------+
+| integer       |
+| integer       |
+| integer       |
+| integer       |
+| integer       |
++---------------+
+</code></pre>
+<p>OK! Cool, now let's take this to a next level</p>
+<pre><code class="language-sql">SELECT char(value+64) FROM generate_series(1, 5);
+</code></pre>
+<pre><code class="language-sqlite">sqlite&gt; SELECT char(value+64) FROM generate_series(1, 5);
++----------------+
+| char(value+64) |
++----------------+
+| A              |
+| B              |
+| C              |
+| D              |
+| E              |
++----------------+
+</code></pre>
+<p>OK! That is simple ascii and type casting shenanigans!</p>
+<p>We cast the value which would be integer 1 to 5 and add 64 to it to make it in the range 65 to 70 which would be ASCII equivalent of A to E, you could do the same thing but different parameters:</p>
+<pre><code>SELECT char(value) FROM generate_series(65, 70);
+</code></pre>
+<pre><code class="language-sqlite">sqlite&gt; SELECT char(value) FROM generate_series(65, 70);
++-------------+
+| char(value) |
++-------------+
+| A           |
+| B           |
+| C           |
+| D           |
+| E           |
+| F           |
++-------------+
+</code></pre>
+<p>Same result!</p>
+<p>But, ok, this is other rabbit hole, let's focus back on generate_series, the parameters are start and stop right?
+Well there is one more, step. This will be like the incremental number for each step.</p>
+<p>If you are familiar with C styled for loops, you know this as the increment part, or the <code>i++</code> bit.</p>
+<pre><code class="language-sql">SELECT value FROM generate_series(0, 20, 5)
+</code></pre>
+<pre><code class="language-sqlite">sqlite&gt; SELECT value FROM generate_series(0, 20, 5);
++-------+
+| value |
++-------+
+| 0     |
+| 5     |
+| 10    |
+| 15    |
+| 20    |
++-------+
+sqlite&gt;
+</code></pre>
+<p>So, the third parameter increments the counter by that number. So we start from 0 and increment 5 for each step (row) till 20.</p>
+<p>Default step value is 1, however the quirk is 0 is still considered as 1.</p>
+<p>You can also go reverse</p>
+<pre><code class="language-sql">SELECT * FROM generate_series(0, 20, -5);
+</code></pre>
+<p>This will generate number series as 20,15,10,5,0: Note that the step is -1 not the stop value, this will basically flip the start and stop values, so we will start from 20 and decrement by 5 at each step.</p>
+<p>If you want to generate a series in negative ranges, the start or stop needs to modified accordingly, the start and stop control which numbers you iterate and the step controls in which direction it moves from start to end.</p>
+<pre><code class="language-sql">SELECT * FROM generate_series(-20, 20, -5);
+</code></pre>
+<p>This will generate the number series from 20 to -20, start from 20 and decrement by 5 each step until we reach -20. So we had a start as -20 but why do we start from 20? well because the step is negative, we need to start from the higher value and end at the lower value, hence the start and stop will be flipped for a step value &lt; 0.</p>
+<pre><code class="language-sql">SELECT * FROM generate_series(10) LIMIT 5;
+</code></pre>
+<p>This gave 10,11,12,13,14 right, how? Because there is not just one column in the generate_series virtual table there are more</p>
+<p>Apart from value that is the integer we get from the function as the row (column cell)</p>
+<p>there are start, stop, step and rowid  columns which are hidden columns in the <code>generate_series</code> function or virtual table</p>
+<p>Let’s see</p>
+<p>SELECT rowid, start, stop, step, value FROM generate_series(0,10,2);</p>
+<pre><code>+-------+-------+------+------+-------+
+| rowid | start | stop | step | value |
++-------+-------+------+------+-------+
+| 1     | 0     | 10   | 2    | 0     |
+| 2     | 0     | 10   | 2    | 2     |
+| 3     | 0     | 10   | 2    | 4     |
+| 4     | 0     | 10   | 2    | 6     |
+| 5     | 0     | 10   | 2    | 8     |
+| 6     | 0     | 10   | 2    | 10    |
++-------+-------+------+------+-------+
+</code></pre>
+<p>The start, stop, step values remain same, as those are the parameters those can’t change but notice the rowid and the value the first and the last column in the result set do change.</p>
+<p>Interestingly the start, stop, and step are the parameters to the function, so you can technically pass them however you like</p>
+<pre><code class="language-sql">SELECT * FROM generate_series() WHERE start = 10 AND stop = 20 AND step = 5;
+</code></pre>
+<p>This will give 10,15,20 since the start is 10, increment by 5 until 20. The step is optional, note that stop is optional too, but never forget to provide it, it might cause a forever loop and keep on incrementing by 1 and never give the result back until your computer crashes.</p>
+
+            </div>
+        </article>
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editBtn = document.getElementById('editor-edit');
+            
+            if (editBtn) {
+                editBtn.addEventListener('click', async function () {
+                    const slug = "logsql\/sqlite-functions-generate-series";
+                    const type = "logsql";
+                    console.log("Editing post:", slug, type);
+                    const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                    
+                    try {
+                        const res = await fetch(url);
+                        
+                        if (!res.ok) throw new Error("Failed to fetch edit content");
+                        console.log(res);
+                        
+                        const html = await res.text();
+                        console.log(html);
+                        
+                        document.querySelector('.post-content').innerHTML = html;
+                    } catch (err) {
+                        console.error(err);
+                        alert("Error loading editor content");
+                    }
+                });
+            }
+        });
+    </script>
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+            
+            if (!themeToggle) return;
+            
+            
+            const currentTheme = localStorage.getItem('theme') || 'default';
+            
+            
+            if (currentTheme === 'secondary') {
+                body.classList.add('secondary-theme');
+                themeToggle.checked = true;
+            }
+            
+            
+            themeToggle.addEventListener('change', () => {
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                    localStorage.setItem('theme', 'secondary');
+                } else {
+                    body.classList.remove('secondary-theme');
+                    localStorage.setItem('theme', 'default');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

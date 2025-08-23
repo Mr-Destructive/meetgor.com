@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    
+    <title>Meet Gor | Adding SSH Keys for Multiple Accounts in Git</title>
+    <meta name="description" content="Setting up SSH config for using multiple accounts for Git repositories.">
+    
+    
+    <meta property="og:url" content="meetgor.com/til/git-ssh-multiple-accounts">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Meet Gor | Adding SSH Keys for Multiple Accounts in Git">
+    <meta property="og:description" content="Setting up SSH config for using multiple accounts for Git repositories.">
+    
+        <meta property="og:image" content="/tbicon.png">
+        <meta name="twitter:image" content="/tbicon.png">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Meet Gor | Adding SSH Keys for Multiple Accounts in Git">
+    <meta name="twitter:description" content="Setting up SSH config for using multiple accounts for Git repositories.">
+    
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const body = document.body;
+            const stylesheet = document.getElementById("syntax-theme");
+            
+            
+            const currentTheme = localStorage.getItem("theme") || "default";
+            
+            
+            function setSyntaxTheme(theme) {
+                if (theme === "secondary") {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+                } else {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+                }
+            }
+            
+            
+            if (currentTheme === "secondary") {
+                body.classList.add("secondary-theme");
+                setSyntaxTheme("secondary");
+            } else {
+                setSyntaxTheme("light");
+            }
+            
+            
+            document.querySelectorAll("pre code").forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/posts">Posts</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Adding SSH Keys for Multiple Accounts in Git</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2024-03-22">2024-03-22</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/til">til</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/git">#git</a>
+                
+                <a href="/tags/github">#github</a>
+                
+            </div>
+            
+            
+            
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <p>Let's  say you have multiple github accounts. One for your personal projects, one for your company that you work at, and one other remote repository account (let's say gitlab).</p>
+<p>You are juggling with multiple accounts, you should not waste much time and pick a SSH from those remote repository and pull it in your local machine, that makes the process just smooth and saves a ton of time.</p>
+<h3>Create a SSH Key</h3>
+<p>To create a SSH key, in linux you can use <code>ssh-keygen</code> command.</p>
+<pre><code class="language-bash">ssh-keygen -t ed25519 -C &quot;alice@example.com&quot;
+</code></pre>
+<p>The above command will prompt you for two things</p>
+<ol>
+<li>The location where you want to store the key</li>
+<li>The passphrase for accessing the key</li>
+</ol>
+<h3>Add SSH Key to Github</h3>
+<p>Locate to the <code>ssh</code> folder and copy the generated <code>.pub</code> file to your <code>github</code> account.</p>
+<p>For example, if you have created the key at <code>~/.ssh/your_name</code> then copy the contents of the file <code>~/.ssh/your_name.pub</code> to your clipbaord.</p>
+<p>Navigate to your <code>github</code> account and in the settings, <code>SSH and GPG keys</code> tab, click on <code>Add SSH key</code> and copy the contents of your clipboard to the <code>Key</code> field.</p>
+<h3>Configuring the SSH keys for multiple accounts</h3>
+<pre><code class="language-config">Host your_company
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/your_company
+
+Host your_name
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/your_name
+
+Host some_name
+  HostName gitlab.com
+  User git
+  IdentityFile ~/.ssh/some_name
+</code></pre>
+<p>You can change the <code>Host</code> config tag values in the <code>~/.ssh/conFig</code></p>
+<p>The next time you clone/create a repository on those remote git providers, you need to specify the ssh key for that account.</p>
+<p>For example, if you have a repository <code>github.com/StartUp_company/some_wired_project</code> then you can specify the remote as <code>git@your_company.com:StartUp_company/some_wired_project</code>. Here, the <code>git@your_company</code> is the <code>Host</code> value tag from the <code>~/.ssh/config</code>. If that repository is from your <code>your_company</code> organisation/user scope, you need to add the <code>git@your_company</code> tag, if that's your project, simply add <code>git@your_name</code> before the repository url i.e. <code>your_name/repo_name</code> which would set the origin as <code>git@your_name:your_name/repo_name</code>, here the 1st <code>your_name</code> is the tag from the <code>Host</code> config and the 2nd <code>your_name</code> is the github username.</p>
+<p>So, in summary if you wanted to use multiple accounts in the same machine, you can understand in the following example:</p>
+<pre><code class="language-bash">ssh -T git@your_name
+
+git clone https://github.com/your_name/repo_name
+</code></pre>
+<p>However, you will need to authenticate with the ssh keys in this way everytime you push/pull a repository. So for that, you can set the origin with the <code>git@your_name</code> tag as the host for automatically authenticating the ssh keys on every push/pull or other activities.</p>
+<p>Thanks for reading, Happy Coding :)</p>
+
+            </div>
+        </article>
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editBtn = document.getElementById('editor-edit');
+            
+            if (editBtn) {
+                editBtn.addEventListener('click', async function () {
+                    const slug = "til\/git-ssh-multiple-accounts";
+                    const type = "til";
+                    console.log("Editing post:", slug, type);
+                    const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                    
+                    try {
+                        const res = await fetch(url);
+                        
+                        if (!res.ok) throw new Error("Failed to fetch edit content");
+                        console.log(res);
+                        
+                        const html = await res.text();
+                        console.log(html);
+                        
+                        document.querySelector('.post-content').innerHTML = html;
+                    } catch (err) {
+                        console.error(err);
+                        alert("Error loading editor content");
+                    }
+                });
+            }
+        });
+    </script>
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+            
+            if (!themeToggle) return;
+            
+            
+            const currentTheme = localStorage.getItem('theme') || 'default';
+            
+            
+            if (currentTheme === 'secondary') {
+                body.classList.add('secondary-theme');
+                themeToggle.checked = true;
+            }
+            
+            
+            themeToggle.addEventListener('change', () => {
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                    localStorage.setItem('theme', 'secondary');
+                } else {
+                    body.classList.remove('secondary-theme');
+                    localStorage.setItem('theme', 'default');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    
+    <title>Meet Gor | Map Vimscript Keymaps to Lua with a single function</title>
+    <meta name="description" content="Takeout the vimscript keymaps into lua with a single function call in Neovim">
+    
+    
+    <meta property="og:url" content="meetgor.com/til/vimscript-to-lua-keymapper">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Meet Gor | Map Vimscript Keymaps to Lua with a single function">
+    <meta property="og:description" content="Takeout the vimscript keymaps into lua with a single function call in Neovim">
+    
+        <meta property="og:image" content="/tbicon.png">
+        <meta name="twitter:image" content="/tbicon.png">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Meet Gor | Map Vimscript Keymaps to Lua with a single function">
+    <meta name="twitter:description" content="Takeout the vimscript keymaps into lua with a single function call in Neovim">
+    
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const body = document.body;
+            const stylesheet = document.getElementById("syntax-theme");
+            
+            
+            const currentTheme = localStorage.getItem("theme") || "default";
+            
+            
+            function setSyntaxTheme(theme) {
+                if (theme === "secondary") {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+                } else {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+                }
+            }
+            
+            
+            if (currentTheme === "secondary") {
+                body.classList.add("secondary-theme");
+                setSyntaxTheme("secondary");
+            } else {
+                setSyntaxTheme("light");
+            }
+            
+            
+            document.querySelectorAll("pre code").forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/posts">Posts</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Map Vimscript Keymaps to Lua with a single function</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2022-07-11">2022-07-11</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/til">til</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/vim">#vim</a>
+                
+                <a href="/tags/lua">#lua</a>
+                
+            </div>
+            
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=til\/vimscript-to-lua-keymapper&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2>Introduction</h2>
+<p>Are you bored of writing all the keymaps from vimscript to lua? Try the below function to create all your keymaps to lua equivalent maps in Neovim.</p>
+<p>Take your vimscript keymaps and put them in lua don't write any lua for it ;)</p>
+<h2>The Lua Function</h2>
+<p>The below-provided snippet is a lua function that takes in a table of strings(list of strings), the strings will be your keymaps. The function then maps these keymaps using lua functions. You don't have to type out all the keymaps by yourself. It can also print out the lua equivalent function calls required to map the existing keymaps from vimscript to lua runtime in Neovim. Though it won't handle all the options, we have passed in a default value to the keymap.</p>
+<pre><code class="language-lua">function key_mapper(keymaps)
+  for _, keymap in ipairs(keymaps) do
+    local mode = keymap:sub(1,1)
+    local delimiter = &quot; &quot;
+    local lhs = ''
+    local rhs_parts = {}
+    local m = 0
+    local options = {noremap = true}
+    for matches in (keymap..delimiter):gmatch(&quot;(.-)&quot;..delimiter) do
+      if m == 1 then
+        lhs = matches
+      end
+      if m &gt;= 2 then
+        table.insert(rhs_parts, matches)
+      end
+      m = m + 1
+    end
+    rhs = ''
+    for _, p in ipairs(rhs_parts) do
+      rhs = rhs .. &quot; &quot; .. p
+    end
+    --print(&quot;vim.keymap.set(&quot;..&quot;\'&quot;..mode..&quot;\'&quot;..&quot;, &quot;..&quot;\'&quot;..lhs..&quot;\'&quot;..&quot;, &quot;..&quot;\'&quot;..rhs..&quot;\'&quot;..&quot;, &quot;..vim.inspect(options)..&quot;)&quot;)
+    vim.keymap.set(mode, lhs, rhs, options)
+  end
+end
+</code></pre>
+<p>You can uncomment the print statement <strong>once</strong> to grab the keymaps and paste them into the config file. If you leave it uncommented, it might print every time you open up a new neovim instance. The function can be called like below:</p>
+<pre><code class="language-lua">key_mapper({
+  'nnoremap cpp :!c++ % -o %:r &amp;&amp; %:r&lt;CR&gt;i',
+  'nnoremap c, :!gcc % -o %:r &amp;&amp; %:r&lt;CR&gt;',
+  'nnoremap py :!python %&lt;cr&gt;',
+  'nnoremap go :!go run %&lt;cr&gt;',
+  'nnoremap sh :!bash %&lt;CR&gt;'
+})
+</code></pre>
+<p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1657559501/blog-media/neovim-lua-keymapper.gif" alt="Keymapper demonstration"></p>
+<p>We pass in a table of strings, these strings are just the vimscript keymaps. This function call will then map the keymaps into equivalent lua maps. You can customize it as per your needs.</p>
+<p>For further references, you can check out my <a href="https://github.com/Mr-Destructive/dotfiles">dotfiles</a> on GitHub.</p>
+<h2>How the function works</h2>
+<p>The function is simply a text scrapping from lua strings. We extract the first character in the string for the mode, grab the strings which are space-separated and finally sort out which are lhs and rhs sides of the maps.</p>
+<p>We iterate over the table in lua with the help of ipairs function which allows us to iterate over an ordered list of items in a table. Using the gmatch function, we find a pattern to split the string with the space as the delimiter. Thereby, we can have separate sets of strings identified as rhs and lhs. We can store them in variables as strings as the lua functions require them as strings.</p>
+<p>We simply add those variables into the <a href="https://neovim.io/doc/user/lua.html#:~:text=set(%7Bmode%7D%2C%20%7Blhs%7D%2C%20%7Brhs%7D%2C%20%7Bopts%7D)%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20*vim.keymap.set()*">vim.keymap.set</a> or <a href="https://neovim.io/doc/user/api.html#nvim_set_keymap():~:text=nvim_set_keymap(%7Bmode%7D%2C%20%7Blhs%7D%2C%20%7Brhs%7D%2C%20%7B*opts%7D)%20%20%20%20%20%20%20%20%20%20%20%20%20*nvim_set_keymap()*">vim.api.nvim_set_keymap</a> functions. We by default set the value of <code>{noremap: True}</code> to avoid teh recursive mapping of the keys. These option parameter is the one which needs to be a bit more dynamic in terms of wide variety of keymaps.</p>
+<p>So, this is how we can convert the vimscript keymaps to lua in Neovim. Hope you found this useful. Thanks for reading. Happy Viming :)</p>
+
+            </div>
+        </article>
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editBtn = document.getElementById('editor-edit');
+            
+            if (editBtn) {
+                editBtn.addEventListener('click', async function () {
+                    const slug = "til\/vimscript-to-lua-keymapper";
+                    const type = "til";
+                    console.log("Editing post:", slug, type);
+                    const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                    
+                    try {
+                        const res = await fetch(url);
+                        
+                        if (!res.ok) throw new Error("Failed to fetch edit content");
+                        console.log(res);
+                        
+                        const html = await res.text();
+                        console.log(html);
+                        
+                        document.querySelector('.post-content').innerHTML = html;
+                    } catch (err) {
+                        console.error(err);
+                        alert("Error loading editor content");
+                    }
+                });
+            }
+        });
+    </script>
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+            
+            if (!themeToggle) return;
+            
+            
+            const currentTheme = localStorage.getItem('theme') || 'default';
+            
+            
+            if (currentTheme === 'secondary') {
+                body.classList.add('secondary-theme');
+                themeToggle.checked = true;
+            }
+            
+            
+            themeToggle.addEventListener('change', () => {
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                    localStorage.setItem('theme', 'secondary');
+                } else {
+                    body.classList.remove('secondary-theme');
+                    localStorage.setItem('theme', 'default');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

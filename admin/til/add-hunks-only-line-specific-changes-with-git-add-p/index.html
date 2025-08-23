@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    
+    <title>Meet Gor | Add hunks: only line specific changes with git add -p</title>
+    <meta name="description" content="">
+    
+    
+    <meta property="og:url" content="meetgor.com/til/add-hunks-only-line-specific-changes-with-git-add-p">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Meet Gor | Add hunks: only line specific changes with git add -p">
+    <meta property="og:description" content="">
+    
+        <meta property="og:image" content="/tbicon.png">
+        <meta name="twitter:image" content="/tbicon.png">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Meet Gor | Add hunks: only line specific changes with git add -p">
+    <meta name="twitter:description" content="">
+    
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const body = document.body;
+            const stylesheet = document.getElementById("syntax-theme");
+            
+            
+            const currentTheme = localStorage.getItem("theme") || "default";
+            
+            
+            function setSyntaxTheme(theme) {
+                if (theme === "secondary") {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+                } else {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+                }
+            }
+            
+            
+            if (currentTheme === "secondary") {
+                body.classList.add("secondary-theme");
+                setSyntaxTheme("secondary");
+            } else {
+                setSyntaxTheme("light");
+            }
+            
+            
+            document.querySelectorAll("pre code").forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/posts">Posts</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Add hunks: only line specific changes with git add -p</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2025-04-11">2025-04-11</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/til">til</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/git">#git</a>
+                
+            </div>
+            
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=til\/add-hunks-only-line-specific-changes-with-git-add-p&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <p>I had made the changes for a future release, next set of changes so to speak in git terms. Then, I encountered a bug while testing the previous changes. Now, I could have</p>
+<ol>
+<li>Open VS Code and add that little <code>+</code> icon in the gutter to fix the bug</li>
+<li>Create a separate branch with stashed changes for this new feature</li>
+<li>Use GitSigns in NeoVim</li>
+<li>Use <code>git add -p</code> to stage <a href="https://git-scm.com/book/en/v2/Git-Tools-Interactive-Staging">hunks</a></li>
+</ol>
+<p>The last one was a gem given by ChatGPT, and then I went a bit rabbit hole for reading about it and it turns out it's real!</p>
+<p>It's called staging patches, and it has an interactive mode to select or reject each hunk (patch, line of changes) at a time. So by entering the command <code>git add -p</code> this will let you go through each file and individual change (patch/hunk) and take action interactively. You can use the below commands for moving one hunk or patch at a time:</p>
+<ul>
+<li><code>y</code> for adding (staging) the current hunk (patch)</li>
+<li><code>n</code> for not staging the current hunk</li>
+</ul>
+<p>Or you can even use the below commands for moving one file at once:</p>
+<ul>
+<li><code>a</code> for adding (staging) all the patches in the file (just like <code>git add file.txt</code>)</li>
+<li><code>d</code> for not staging the file at all, just skip the file for patching</li>
+</ul>
+<p>If there are multiple hunks (patches) in the file, the prompt will show the other options like <code>[y,n,q,a,d,j,J,g,/,e,?]</code></p>
+<pre><code>(1/7) Stage this hunk [y,n,q,a,d,j,J,g,/,e,?]? g
+1: -33,6 +33,7 +from app.utils.utils import get_additional_param
+2: -345,6 +346,7 + strict_check = str_to_bool(get_additional_param(&quot;stri
+....
+....
+7: -875,7 +878,7 - if strict_check:
+</code></pre>
+<p>This shows the <code>g</code>, <code>j</code>, <code>J</code>, <code>/</code>, and <code>e</code> which are quite helpful for navigating across multiple patches (hunks) in the file. I haven't explored all of them, but the 4, I showed earlier, are the ones that I think I will be using extensively now, within the terminal. No need of fancy editor shenanigans and redundant branching tricks.</p>
+<p>Git Good!</p>
+
+            </div>
+        </article>
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editBtn = document.getElementById('editor-edit');
+            
+            if (editBtn) {
+                editBtn.addEventListener('click', async function () {
+                    const slug = "til\/add-hunks-only-line-specific-changes-with-git-add-p";
+                    const type = "til";
+                    console.log("Editing post:", slug, type);
+                    const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                    
+                    try {
+                        const res = await fetch(url);
+                        
+                        if (!res.ok) throw new Error("Failed to fetch edit content");
+                        console.log(res);
+                        
+                        const html = await res.text();
+                        console.log(html);
+                        
+                        document.querySelector('.post-content').innerHTML = html;
+                    } catch (err) {
+                        console.error(err);
+                        alert("Error loading editor content");
+                    }
+                });
+            }
+        });
+    </script>
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+            
+            if (!themeToggle) return;
+            
+            
+            const currentTheme = localStorage.getItem('theme') || 'default';
+            
+            
+            if (currentTheme === 'secondary') {
+                body.classList.add('secondary-theme');
+                themeToggle.checked = true;
+            }
+            
+            
+            themeToggle.addEventListener('change', () => {
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                    localStorage.setItem('theme', 'secondary');
+                } else {
+                    body.classList.remove('secondary-theme');
+                    localStorage.setItem('theme', 'default');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

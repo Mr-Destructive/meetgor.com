@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    
+    <title>Meet Gor | Tmux scroll mode select and copy</title>
+    <meta name="description" content="">
+    
+    
+    <meta property="og:url" content="meetgor.com/til/tmux-scroll-mode-select-and-copy">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Meet Gor | Tmux scroll mode select and copy">
+    <meta property="og:description" content="">
+    
+        <meta property="og:image" content="/tbicon.png">
+        <meta name="twitter:image" content="/tbicon.png">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Meet Gor | Tmux scroll mode select and copy">
+    <meta name="twitter:description" content="">
+    
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const body = document.body;
+            const stylesheet = document.getElementById("syntax-theme");
+            
+            
+            const currentTheme = localStorage.getItem("theme") || "default";
+            
+            
+            function setSyntaxTheme(theme) {
+                if (theme === "secondary") {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+                } else {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+                }
+            }
+            
+            
+            if (currentTheme === "secondary") {
+                body.classList.add("secondary-theme");
+                setSyntaxTheme("secondary");
+            } else {
+                setSyntaxTheme("light");
+            }
+            
+            
+            document.querySelectorAll("pre code").forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/posts">Posts</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Tmux scroll mode select and copy</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2025-07-30">2025-07-30</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/til">til</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/tmux">#tmux</a>
+                
+            </div>
+            
+            
+            
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <p>I have found scrolling in tmux is a bit unconventional. Maybe its just me, but sometimes, the terminal interfaces are different, sometimes they are a bit wired, I use Ghostty right now, so selection without tmux works a charm, but the moment I am in tmux, ahmm, it kind of breaks.</p>
+<p>The selection of text doesn't work with the mouse atleast, so I thought, I need a keyboard centric selection and copying mechanism, and dug in this rabit hole. Turns out, tmux is way better in selection then zellij, the multiplexer I had been using due to scroll and selection issues in terminal interfaces.</p>
+<p>It's simple as <code>Prefix + [</code> to enter the scroll mode, <code>Shift+V</code> or <code>Ctrl+space</code> or <code>Ctrl+v</code> to start the selection in different ways, and finally, <code>Enter</code> or <code>Ctrl+j</code> to copy to clipboard. There is a dedicated mode for vi users, to feel at home. Tmux + Vim again a deadly combo.</p>
+<h2>Entering Scroll Mode</h2>
+<p>To enter scroll mode, I had this config setup in my <code>.tmux.conf</code> file:</p>
+<pre><code>set -g mouse on
+</code></pre>
+<p>However if you want to enter without mouse on, you can use:</p>
+<pre><code>Ctrl + b + [
+</code></pre>
+<p>Here the <code>Ctrl + b</code> is for the prefix key, and <code>[</code> is the key for enterring into the  <code>Scroll Mode</code></p>
+<p>From here on you can use <code>hjkl</code> or arrow keys to scroll up or down.</p>
+<p>To quit, you can press <code>q</code> or hit escape.</p>
+<h2>Selecting</h2>
+<p>Right now in scrolling mode, you can only navigate to the next or previous line.</p>
+<p>But you can use <code>Ctrl + &lt;Space&gt;</code> to select any arbitrary sections of the terminal output.
+There are two modes in tmux for this the <code>copy-mode</code> i.e. the default, and the <code>copy-mode-vi</code>.</p>
+<p>Without any config, this is be set to the default <code>copy-mode</code>, so we can use <code>Ctrl + Space</code> to begin selection in the scroll mode.</p>
+<p>To get more keybindings for the copy-mode and copy-mode-vi, use</p>
+<p>For copy-mode</p>
+<pre><code>tmux list-keys -T copy-mode
+</code></pre>
+<p>For copy-mode-vi</p>
+<pre><code>tmux list-keys -T copy-mode-vi
+</code></pre>
+<p>This is a default and can be over-written by using the following config:</p>
+<pre><code>setw -g mode-keys vi
+unbind-key -T copy-mode-vi Space
+
+# replace &lt;your-key&gt; with the key combination you want
+bind-key -T copy-mode-vi &lt;your-key&gt; send-keys -X begin-selection
+
+# Example: using ctrl + b + v as the key to start selection
+# bind-key -T copy-mode-vi v send-keys -X begin-selection
+</code></pre>
+<p>This all would be applied to copy-mode if you are not changing the keybindings for copy-mode-vi.</p>
+<h2>Copying</h2>
+<p>Once, you have the selected region or piece of text, you can copy that to the clipboard (that is what you do, while logs-driven debugging :).</p>
+<p>By default, you can use:</p>
+<p>For copy-mode</p>
+<ul>
+<li><code>Ctrl + w</code></li>
+</ul>
+<p>or</p>
+<p>For copy-mode-vi</p>
+<ul>
+<li><code>Ctrl + j</code> or <code>Enter</code> to copy the selected text to the clipboard.</li>
+</ul>
+<p>This is default, and again can be over-written by using the following config:</p>
+<pre><code>setw -g mode-keys vi
+
+bind-key -T copy-mode-vi &lt;your-key&gt; send-keys -X copy-pipe-and-cancel
+
+# Example: Remap 'y' in copy-mode-vi to copy selection and exit
+# bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel
+</code></pre>
+<p>This all would be applied to copy-mode if you are not changing the keybindings for copy-mode-vi.</p>
+<p>That's it this should be more than enough for most of the log-driven or printf debugging tasks.</p>
+
+            </div>
+        </article>
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editBtn = document.getElementById('editor-edit');
+            
+            if (editBtn) {
+                editBtn.addEventListener('click', async function () {
+                    const slug = "til\/tmux-scroll-mode-select-and-copy";
+                    const type = "til";
+                    console.log("Editing post:", slug, type);
+                    const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                    
+                    try {
+                        const res = await fetch(url);
+                        
+                        if (!res.ok) throw new Error("Failed to fetch edit content");
+                        console.log(res);
+                        
+                        const html = await res.text();
+                        console.log(html);
+                        
+                        document.querySelector('.post-content').innerHTML = html;
+                    } catch (err) {
+                        console.error(err);
+                        alert("Error loading editor content");
+                    }
+                });
+            }
+        });
+    </script>
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+            
+            if (!themeToggle) return;
+            
+            
+            const currentTheme = localStorage.getItem('theme') || 'default';
+            
+            
+            if (currentTheme === 'secondary') {
+                body.classList.add('secondary-theme');
+                themeToggle.checked = true;
+            }
+            
+            
+            themeToggle.addEventListener('change', () => {
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                    localStorage.setItem('theme', 'secondary');
+                } else {
+                    body.classList.remove('secondary-theme');
+                    localStorage.setItem('theme', 'default');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
