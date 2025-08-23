@@ -2,6 +2,7 @@
 type: static
 title: About
 slug: about
+description: Learn more about Meet Gor, a backend developer who thrives in the terminal and shares insights on Django, Vim, and Golang.
 ---
 
 ## A Backend developer that lives in the terminal

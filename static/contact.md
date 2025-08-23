@@ -2,6 +2,7 @@
 type: static
 title: Contact
 slug: contact
+description: Get in touch with Meet Gor through email, GitHub, Twitter, LinkedIn, and other platforms.
 ---
 
 - 📧 **Mail**: [gormeet711@gmail.com](mailto:gormeet711@gmail.com)  
