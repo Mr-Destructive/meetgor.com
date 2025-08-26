@@ -24,7 +24,6 @@ import (
 
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/parser"
-	"github.com/yuin/goldmark/text"
 )
 
 func WalkAndListFiles(dirPath string) ([]string, error) {
@@ -150,15 +149,11 @@ func ReadPosts(files []string) ([]models.Post, error) {
 			log.Printf("Error processing Markdown: %v", err)
 			continue
 		}
-		// Generate TOC after conversion
-		tocItems := plugins.GenerateTOC(md.Parser().Parse(text.NewReader(contentBytes)), contentBytes)
-
 		// Append post
 		posts = append(posts, models.Post{
 			Frontmatter: frontmatterObj,
 			Content:     template.HTML(contentBuffer.String()),
 			Markdown:    string(contentBytes),
-			TOC:         tocItems,
 		})
 	}
 
