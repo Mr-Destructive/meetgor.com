@@ -23,6 +23,8 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/parser"
+	"github.com/yuin/goldmark/text"
 )
 
 func WalkAndListFiles(dirPath string) ([]string, error) {
@@ -133,16 +135,30 @@ func ReadPosts(files []string) ([]models.Post, error) {
 		}
 		// Convert Markdown to HTML
 		var contentBuffer bytes.Buffer
-		if err := goldmark.Convert(contentBytes, &contentBuffer); err != nil {
+		md := goldmark.New(
+			goldmark.WithExtensions(
+				&plugins.SQLPlaygroundExtender{},
+			),
+			goldmark.WithParserOptions(
+				parser.WithAutoHeadingID(),
+				parser.WithAttribute(),
+			),
+		)
+		// Create a new parser context
+		ctx := parser.NewContext()
+		if err := md.Convert(contentBytes, &contentBuffer, parser.WithContext(ctx)); err != nil {
 			log.Printf("Error processing Markdown: %v", err)
 			continue
 		}
+		// Generate TOC after conversion
+		tocItems := plugins.GenerateTOC(md.Parser().Parse(text.NewReader(contentBytes)), contentBytes)
 
 		// Append post
 		posts = append(posts, models.Post{
 			Frontmatter: frontmatterObj,
 			Content:     template.HTML(contentBuffer.String()),
 			Markdown:    string(contentBytes),
+			TOC:         tocItems,
 		})
 	}
 
