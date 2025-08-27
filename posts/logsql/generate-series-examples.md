@@ -24,7 +24,7 @@ SELECT * FROM generate_series(0, 50, 10);
 
 This will start from 0, increment by 10 till 50.
 
-```sqlite
+```
 0
 10
 20
@@ -44,7 +44,7 @@ SELECT * FROM generate_series(0, 50, -10);
 
 This would start from 50 (becuase -ve step will flip the start and stop parameters) and decrement by 10 till 0
 
-```sqlite
+```
 50
 40
 30
@@ -116,7 +116,7 @@ FROM generate_series(1, 12);
 
 To fill in the missing ids in a sequence of ids
 
-```
+```sql
 SELECT * FROM generate_series(1, 5) WHERE value NOT IN (1, 3, 5);
 ```
 
