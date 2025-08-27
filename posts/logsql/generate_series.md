@@ -14,7 +14,7 @@ The basic operation with `generate_series` would look like this:
 SELECT * FROM generate_series(1, 5);
 ```
 
-```sqlite
+```
 sqlite> SELECT * FROM generate_series(1, 5);
 +-------+
 | value |
@@ -38,7 +38,7 @@ SQLite is wired, it doesn't really have types, but they are integers as default 
 SELECT typeof(value) FROM generate_series(1, 5);
 ```
 
-```sqlite
+```
 sqlite> SELECT typeof(value) FROM generate_series(1, 5);
 +---------------+
 | typeof(value) |
@@ -56,7 +56,7 @@ OK! Cool, now let's take this to a next level
 SELECT char(value+64) FROM generate_series(1, 5);
 ```
 
-```sqlite
+```
 sqlite> SELECT char(value+64) FROM generate_series(1, 5);
 +----------------+
 | char(value+64) |
@@ -76,7 +76,7 @@ We cast the value which would be integer 1 to 5 and add 64 to it to make it in t
 SELECT char(value) FROM generate_series(65, 70);
 ```
 
-```sqlite
+```
 sqlite> SELECT char(value) FROM generate_series(65, 70);
 +-------------+
 | char(value) |
@@ -101,7 +101,7 @@ If you are familiar with C styled for loops, you know this as the increment part
 SELECT value FROM generate_series(0, 20, 5)
 ```
 
-```sqlite
+```
 sqlite> SELECT value FROM generate_series(0, 20, 5);
 +-------+
 | value |
