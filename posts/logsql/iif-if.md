@@ -14,7 +14,7 @@ Before this release it was kind of 3 way /ternary operation kind of thing like t
 We can use the IIF function by passing 3 paraeters, first is the condition to check, the second is the value to return if the condition is true and the third is the value to return if the condition is false.
 
 ```sql
-SELECT iif(1=0, ‘one is zero’, ‘one is not zero’);
+SELECT iif(1=0, 'one is zero', 'one is not zero');
 ```
 
 ```
@@ -106,7 +106,7 @@ This returned the false value which happens when the condition evaluated to fals
 ### 2 Valued Expression
 
 ```sql
-SELECT iif(2025%4=0, ‘probably leap’) AS is_leap_year;
+SELECT iif(2025%4=0, 'probably leap') AS is_leap_year;
 ```
 
 ```
