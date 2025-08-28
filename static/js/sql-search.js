@@ -1,3 +1,5 @@
+let db; // Make db a module-level variable to persist across queries
+
 document.addEventListener('DOMContentLoaded', async () => {
     const runQueryBtn = document.getElementById('run-query');
     const resultsContainer = document.getElementById('results-container');
@@ -5,17 +7,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize CodeMirror
     const editor = CodeMirror(document.getElementById('sql-editor'), {
         mode: 'text/x-sql',
-        theme: 'material-darker',
+        theme: 'default',
         lineNumbers: true,
         value: "SELECT title, date, tags FROM all_posts ORDER BY date DESC LIMIT 10;"
     });
 
+    // Update theme based on site theme
+    function updateEditorTheme() {
+        const isDarkTheme = document.body.classList.contains('secondary-theme');
+        editor.setOption('theme', isDarkTheme ? 'material-darker' : 'default');
+    }
+
+    // Listen for theme changes
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('change', updateEditorTheme);
+        }
+        updateEditorTheme();
+    });
+
     async function initDb() {
         const SQL = await initSqlJs({
-            locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${file}`
+            locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/${file}`
         });
 
-        const db = new SQL.Database();
+        db = new SQL.Database();
 
         // Create tables
         db.run("CREATE TABLE posts (title TEXT, date TEXT, tags TEXT, content TEXT, description TEXT, series TEXT, status TEXT, slug TEXT);");
@@ -49,10 +66,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         return db;
     }
 
-    let dbPromise = initDb();
+    // Initialize DB when page loads
+    initDb().then(() => {
+        console.log("Database initialized and data loaded");
+    });
 
     runQueryBtn.addEventListener('click', async () => {
-        const db = await dbPromise;
+        if (!db) {
+            resultsContainer.innerHTML = `<p class="text-red-500">Database not initialized. Please wait for data to load.</p>`;
+            return;
+        }
+        
         const query = editor.getValue();
         try {
             const results = db.exec(query);
@@ -71,7 +95,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         results.forEach(result => {
             const table = document.createElement('table');
-            table.classList.add('min-w-full', 'bg-white', 'border', 'border-gray-300');
+            table.classList.add('sql-result-table');
             const thead = document.createElement('thead');
             const tbody = document.createElement('tbody');
 
@@ -79,7 +103,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const headerRow = document.createElement('tr');
             result.columns.forEach(col => {
                 const th = document.createElement('th');
-                th.classList.add('py-2', 'px-4', 'border-b', 'bg-gray-100', 'font-bold', 'text-left');
+                th.classList.add('sql-result-header');
                 th.textContent = col;
                 headerRow.appendChild(th);
             });
@@ -88,10 +112,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Table Rows
             result.values.forEach(row => {
                 const tr = document.createElement('tr');
-                tr.classList.add('hover:bg-gray-50');
                 row.forEach(val => {
                     const td = document.createElement('td');
-                    td.classList.add('py-2', 'px-4', 'border-b', 'border-gray-200');
+                    td.classList.add('sql-result-cell');
                     td.textContent = val;
                     tr.appendChild(td);
                 });
@@ -110,13 +133,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         const query = urlParams.get('query');
         if (query) {
             editor.setValue(query);
-            const db = await dbPromise;
-            try {
-                const results = db.exec(query);
-                renderResults(results);
-            } catch (e) {
-                resultsContainer.innerHTML = `<p class="text-red-500">Error: ${e.message}</p>`;
-            }
+            // Wait a bit for DB to initialize
+            setTimeout(async () => {
+                if (db) {
+                    try {
+                        const results = db.exec(query);
+                        renderResults(results);
+                    } catch (e) {
+                        resultsContainer.innerHTML = `<p class="text-red-500">Error: ${e.message}</p>`;
+                    }
+                }
+            }, 1000);
         }
     });
 });
