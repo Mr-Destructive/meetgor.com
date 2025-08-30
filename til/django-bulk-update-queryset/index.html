@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    
+    <title>Meet Gor | Django Bulk Update QuerySet objects</title>
+    <meta name="description" content="Using bulk_update to update multiple objects in one go.">
+    
+    
+    <meta property="og:url" content="meetgor.com/til/django-bulk-update-queryset">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Meet Gor | Django Bulk Update QuerySet objects">
+    <meta property="og:description" content="Using bulk_update to update multiple objects in one go.">
+    
+        <meta property="og:image" content="/tbicon.png">
+        <meta name="twitter:image" content="/tbicon.png">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Meet Gor | Django Bulk Update QuerySet objects">
+    <meta name="twitter:description" content="Using bulk_update to update multiple objects in one go.">
+    
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/sql/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <script src="/sql-playground.js"></script>
+    
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const body = document.body;
+            const stylesheet = document.getElementById("syntax-theme");
+            
+            
+            const currentTheme = localStorage.getItem("theme") || "default";
+            
+            
+            function setSyntaxTheme(theme) {
+                if (theme === "secondary") {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+                } else {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+                }
+            }
+            
+            
+            if (currentTheme === "secondary") {
+                body.classList.add("secondary-theme");
+                setSyntaxTheme("secondary");
+            } else {
+                setSyntaxTheme("light");
+            }
+            
+            
+            document.querySelectorAll("pre code").forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/posts">Posts</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Django Bulk Update QuerySet objects</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2022-10-31">2022-10-31</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/til">til</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/django">#django</a>
+                
+                <a href="/tags/python">#python</a>
+                
+            </div>
+            
+            
+            
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <p>Let's say, I have a lots of objects which I want to update with a particular field or fields. We can use the <a href="https://docs.djangoproject.com/en/4.1/ref/models/querysets/#bulk-update">bulk_update</a> method with the model name.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># blog/models.py
+
+from django.db import models
+
+ARTICLE_STATUS = [
+    ("PUBLISHED", "Published"),
+    ("DRAFT", "Draft"),
+]
+
+class Article(models.Model):
+    title = models.CharField(max_length=128)
+    description = models.CharField(max_length=512)
+    content = models.TextField()
+    status = models.CharField(max_length=16, choices=ARTICLE_STATUS, default="DRAFT")
+
+    def __str__(self):
+        return self.title
+
+</code></pre></div><p>Let's say we have a simple model <code>Article</code> with a few typical attributes like <code>title</code>, <code>description</code>, <code>content</code>, and <code>status</code>. We have the status as a choice field from two options as <code>Draft</code> and <code>Published</code>. It could be a boolean field, but that looks too gross for a article status.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">
+from blog.models import Article
+
+articles = Article.objects.filter(status="draft")
+
+for i in range(len(articles)):
+    articles[i].status = "published"
+
+Article.objects.bulk_update(articles, ["status",])
+
+</code></pre></div><p>In the above code, the <code>Articles</code> model is filtered by the status of <code>draft</code>. We iterate over the <code>QuerySet</code> which will contain the objects of the articles, by setting the object's properties to the value we want to set. We are jsut setting the value of the property of the object for each object.</p>
+<p>This just makes a changes to the <code>QuerySet</code>, by using the <code>bulk_update</code> method, the two parameters required are the <code>QuerySet</code> and the list of <code>fields</code> which are to be updated. The function returns the number of objects/records updated.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">>>> from blog.models import Article
+>>> articles = Article.objects.filter(status="DRAFT")
+>>> articles
+<QuerySet [<Article: test 1>, <Article: test 3>]>
+
+>>> for i in range(len(articles)):
+...     articles[i].status = "PUBLISHED"
+...
+>>> articles
+<QuerySet [<Article: test 1>, <Article: test 3>]>
+>>>
+
+>>> Article.objects.bulk_update(articles, ['status',])
+2
+
+>>> Article.obejcts.get(title="test 1").status
+'PUBLISHED'
+
+>>> Article.objects.filter(status="DRAFT")
+<QuerySet []>
+>>>
+</code></pre></div><p>As, we can see here there were two obejcts <code>test 1</code> and <code>test 2</code> objects with the status as <code>Draft</code>. By iterating over the queryset and assigning the status of the object to published, the query set was changed and modified locally.
+By using the <code>bulk_update</code> method, we parsed the queryset and the list of attributes to be updated into the function. This gives us the number of objects which were updated, in this case <code>2</code>. We then look into the article actual record in the database and it has indeed updated to the value we set in this operation.</p>
+
+            </div>
+        </article>
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editBtn = document.getElementById('editor-edit');
+            
+            if (editBtn) {
+                editBtn.addEventListener('click', async function () {
+                    const slug = "til\/django-bulk-update-queryset";
+                    const type = "til";
+                    console.log("Editing post:", slug, type);
+                    const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                    
+                    try {
+                        const res = await fetch(url);
+                        
+                        if (!res.ok) throw new Error("Failed to fetch edit content");
+                        console.log(res);
+                        
+                        const html = await res.text();
+                        console.log(html);
+                        
+                        document.querySelector('.post-content').innerHTML = html;
+                    } catch (err) {
+                        console.error(err);
+                        alert("Error loading editor content");
+                    }
+                });
+            }
+        });
+    </script>
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+            
+            if (!themeToggle) return;
+            
+            
+            const currentTheme = localStorage.getItem('theme') || 'default';
+            
+            
+            if (currentTheme === 'secondary') {
+                body.classList.add('secondary-theme');
+                themeToggle.checked = true;
+            }
+            
+            
+            themeToggle.addEventListener('change', () => {
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                    localStorage.setItem('theme', 'secondary');
+                } else {
+                    body.classList.remove('secondary-theme');
+                    localStorage.setItem('theme', 'default');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

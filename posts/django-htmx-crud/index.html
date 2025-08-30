@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    
+    <title>Meet Gor | Django &#43; HTMX CRUD application</title>
+    <meta name="description" content="Creating a basic CRUD application with Django and HTMX">
+    
+    
+    <meta property="og:url" content="meetgor.com/posts/django-htmx-crud">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Meet Gor | Django &#43; HTMX CRUD application">
+    <meta property="og:description" content="Creating a basic CRUD application with Django and HTMX">
+    
+        <meta property="og:image" content="https://meetgor-cdn.pages.dev/django-htmx-crud.png">
+        <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/django-htmx-crud.png">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Meet Gor | Django &#43; HTMX CRUD application">
+    <meta name="twitter:description" content="Creating a basic CRUD application with Django and HTMX">
+    
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/sql/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <script src="/sql-playground.js"></script>
+    
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const body = document.body;
+            const stylesheet = document.getElementById("syntax-theme");
+            
+            
+            const currentTheme = localStorage.getItem("theme") || "default";
+            
+            
+            function setSyntaxTheme(theme) {
+                if (theme === "secondary") {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+                } else {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+                }
+            }
+            
+            
+            if (currentTheme === "secondary") {
+                body.classList.add("secondary-theme");
+                setSyntaxTheme("secondary");
+            } else {
+                setSyntaxTheme("light");
+            }
+            
+            
+            document.querySelectorAll("pre code").forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/posts">Posts</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Django &#43; HTMX CRUD application</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2022-07-31">2022-07-31</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/django">#django</a>
+                
+                <a href="/tags/htmx">#htmx</a>
+                
+                <a href="/tags/python">#python</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/Django-Series" class="series-link">📖 Django-Series</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>Gone are the days of writing Ajax requests with javascript, just add a few parameters to the HTML content tags and you will be ready for sending requests to your backend. So, we are going back in time and correcting the way we think of APIs and client/server-side rendering. We are referring to the <a href="https://en.wikipedia.org/wiki/Hypermedia">Hypermedia model</a> for levering the server-side processing of data. Let's get our feets wet with this ancient but revolutionary methodology of development with <a href="https://htmx.org/">HTMX</a>.</p>
+<p>Yes, HTMX can be used for the API/server-side calls directly in the HTML. We will be exploring the basis of HTMX by creating a basic CRUD application.</p>
+<h2 id="what-is-htmx">What is HTMX?</h2>
+<p>The first question that might come up is what and why HTMX? Htmx is a great library, it's a javascript library but wait. It is a javascript library designed to allow us to write less or no javascript at all. It acts as a way to send AJAX requests without you writing any javascript. It uses native browser features directly from HTML.</p>
+<p>So, we can use HTMX to create interactive templates in our Django application. We can dynamically call and fetch data from the server by using simple HTML attributes like <code>hx-get</code>, <code>hx-post</code>, etc. We'll cover those in this article.</p>
+<p>You can check the source code used in this article on this <a href="https://github.com/Mr-Destructive/htmx-blog-django">GitHub repository</a>.</p>
+<h2 id="setup-django-project">Setup Django Project</h2>
+<p>We'll be creating a Django project from scratch and designing a basic blog kind of app. We will be creating a quite simple project with a couple of apps like <code>user</code> for authentication and <code>article</code> for the CRUD part of our blog application.</p>
+<p>To set up a django project, we can run the following commands to quickly get up and running with a base django project.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>mkdir htmx_blog
+python3 -m venv .venv
+source .venv/bin/activate
+pip install django
+django-admin startproject htmx_blog .
+</code></pre></div><p>I have a base user model that I use for a simple authentication system in some basic django projects, you can define your own user app or get the app from <a href="https://github.com/Mr-Destructive/django-todo/tree/master/user">here</a>.</p>
+<p>So, that being said, we will be using the user model for the article model which we will be defined next. By creating a basic signup functionality, you are good to go!</p>
+<h3 id="create-the-article-app">Create the Article app</h3>
+<p>We will need at least an app to work with htmx as we will define models, views, and URLs later as we configure the htmx.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>django-admin startapp article
+</code></pre></div><p>After the app has been created, you can add those app labels into the <code>INSTALLED_APPS</code> config in the <code>settings.py</code> file. The <code>user</code> app and the <code>article</code> app need to be added to the installed apps for the django to pick those up for various contexts related to the project.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code># htmx_blog/settings.py
+
+INSTALLED_APPS = [
+    ...
+    ...
+    ...
+
+    'article',  
+    'user',
+]
+</code></pre></div><p>We are sone with the base setup, we also would require a few more configs for the proper working of the project.</p>
+<h3 id="setup-templates-and-static-files">Setup Templates and Static files</h3>
+<p>Templates will play an important role in the htmx part, so it is equally important to configure them properly before dabbling into the htmx and client-side rendering of data.</p>
+<p>I like to keep all the templates in a single folder in the <code>BASE_DIR</code> with separate sub-folders for specific apps. Also a single <code>static</code> folder with <code>css</code>, <code>js</code>, and <code>images</code> as the sub-folfers for a larger project.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>mkdir templates static
+</code></pre></div><p>Further, configure the created static and templates in the settings.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+STATIC_URL = 'static/'
+STATICFILES_DIRS = [str(BASE_DIR/ "static")]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+</code></pre></div><h3 id="initial-migration">Initial migration</h3>
+<p>Run migration command for the user model and default model in the django project.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>python manage.py makemigrations
+python manage.py migrate
+</code></pre></div><p>So, this project will also include authentication simple registration, and login/logout routes. We will be using the default Django User model by creating an abstract user just in case we require any additional attributes.</p>
+<h2 id="setup-htmx">Setup HTMX</h2>
+<p>We don't have to configure much for using HTMX as it is a javascript library, we can call it via a CDN or manually install it and link up the static javascript files. Either way, both are equally good, you may like the one I might like the other.</p>
+<p>If you already have a base template, you can simply put the below script inside the head tag of the template. This will make us the htmx attributes available.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">html</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-html"><script src="https://unpkg.com/htmx.org@1.8.0"></script>
+</code></pre></div><p>If you don't have a base template, you can create one by creating an HTML file inside the <code>templates</code> directory. The name can be anything but be careful for following up as it might be different for me. I will choose <code>base.html</code> as the template for this project. It will look something like as follows:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">html</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-html"><!-- tempaltes/base.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTMX Blog</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://unpkg.com/htmx.org@1.8.0"></script>
+</head>
+<body >
+        <nav>
+        <h2>HTMX Blog</h2>
+        <div class="navbar">
+          {% if user.is_authenticated %}
+            <a class="nav-item nav-link" href="{% url 'logout' %}"><button class="btn btn-link">Logout</button></a>
+          {% else %}
+            <a class="nav-item nav-link" href="{% url 'login' %}"><button class="btn btn-link">Login</button></a>
+            <a class="nav-item nav-link" href="{% url 'register' %}"><button class="btn btn-link">Register</button></a>
+          {% endif %}
+        </div>
+        </nav>
+
+    {% block body %}
+    {% endblock %}
+</body>
+</html>
+</code></pre></div><p>I have a nav bar with my user authentication views, simply a login or signup button if the user is not logged in and a log-out button if the user is authenticated. We have added the htmx script file from the CDN just before the end of the head tag. We also have included the bootstrap CSS file for a decent UI which we will be creating in this post.</p>
+<p>That is one of the ways, htmx can be injected into an HTML template, you can even download the javascript file from the <a href="https://unpkg.com/browse/htmx.org/dist/">htmx cdn</a>. Further, this can be downloaded or pasted into your local folder and served as a static file or embedded directly into an HTML template.</p>
+<h2 id="defining-models">Defining Models</h2>
+<p>We will start the tutorial by defining the model of the application we are creating. Here, we will create a simple Article model with a few parameters like <code>title</code>, <code>content</code>, <code>author</code>, etc.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">from django.db import models
+from user.models import Profile
+
+class Article(models.Model):
+    Article_Status = (
+        ("DRAFT", "Draft"),
+        ("PUBLISHED", "Published"),
+    )
+    title = models.CharField(max_length=128, unique=True)
+    content = models.TextField()
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    status = models.CharField(
+        max_length=16,
+        choices=Article_Status,
+        default=Article_Status[0],
+    )
+
+    def __str__(self):
+        return self.title
+</code></pre></div><p>In the above model <code>Article</code>, we have a few fields like <code>title</code> simple Character Field, <code>content</code> as a text field as it will be a large text as the post body, <code>author</code> which is a ForeignKey to the User Model. We also have the status, which is defined as a character field but with a few choices like <code>draft</code> or <code>published</code>, we can further modify this status as public or private. But just keeping it simple and easy to understand.</p>
+<p>The object reference name for this model is the title as we have defined in the dunder string method. So, that is a simple model created, we can now migrate the changes into the database for adding the tables and attributes.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>python manage.py makemigrations
+python manage.py migrate
+</code></pre></div><p>This will make migrations to the database i.e. convert the python model class into database tables and attributes. So, once the migration process is completed successfully, we can move into the crust of this article which is to actually design the views. In the next section, we will be utilizing the models in our views for representing the data on the templates.</p>
+<h2 id="creating-article-form">Creating Article Form</h2>
+<p>Before diving into the views section, we need a few things like the Article Form, which will be a Django Model-based form. It will help us a lot in creating or updating the fields for the article model. We can define a form in a python file called <code>forms.py</code>, it's not necessary to keep your forms in the <code>forms.py</code> but if you have a lot of forms and models, it becomes a good practice to organize the components of our app. So, I'll be creating a new file inside of the <code>article</code> app called <code>forms.py</code> and defining the <code>ArticleForm</code>.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># article/forms.py
+
+from django import forms
+from .models import Article
+
+
+class ArticleForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        exclude = (
+            "created",
+            "updated",
+            "author",
+        )
+        widgets = {
+            "title": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "style": "max-width: 450px; align: center;",
+                    "placeholder": "Title",
+                }
+            ),
+            "content": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "style": "max-width: 900px;",
+                    "placeholder": "Content",
+                }
+            ),
+        }
+</code></pre></div><p>So, the forms are inherited from the [ModelForm] which allows us to create forms based on our model. So, we specify the model name which in our case is <code>Article</code> and further we can have <code>exclude</code> or <code>fields</code> tuples. To exclude certain fields in the actual form, just parse the tuple of those attributes and if you want to only select a few attributes, you can specify the <code>fields</code> tuple and mention the required fields for the form.</p>
+<p>So, if we have a lot of things to be included in the form, we can specify only the attributes to be excluded with the <code>exclude</code> tuple. And if we have a lot of fields to be excluded, we can use the <code>fields</code> tuple to specify which attributes to use in the form.</p>
+<p>Let's take an example: For the above ArticleForm, if we wanted to specify the required fields to be included in the form, then we might use the <code>fields</code> tuple like below the rest will be not rendered in the form fields.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>class ArticleForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = (
+            "title",
+            "content",
+            "status",
+        )
+</code></pre></div><p>Both of them can be used, it just depends on how many fields you have to exclude or include in the rendered form.</p>
+<p>We have also specified the <code>widgets</code> attribute which gives a bit more control on how we need to display the form in a template. So I have specified the type of input it needs to render like a simple text input for the title, text area for content, etc. The cool thing about this is it can automatically set these by knowing the type of field in the model, but sometimes it can be a bit undesired mostly with complex relationships and attributes.</p>
+<h2 id="creating-views">Creating Views</h2>
+<p>Let's start creating views for creating, reading, updating, and deleting articles from the database. I will be using function-based views just because we are understanding the flow of how HTMX and Django can be integrated so we need to dive in deeper and understand the actual flow of the process.</p>
+<h3 id="create-view">Create View</h3>
+<p>So, creating articles seems like a good way to start off. We can create a simple function-based view which will initially load in an empty <code>ArticleForm</code> and if the request is <code>GET</code> we will render the form in the <code>create.html</code> template. If the request is <code>POST</code> which will be after we submit the form, we will validate the form and attach the current user as the author of the article and save the for instance which will create an article record and this object will be rendered to the detail template.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">from django.shortcuts import render
+from .models import Article
+from .forms import ArticleForm
+
+def createArticle(request):
+    form = ArticleForm()
+    context = {
+        'form': form,
+    }
+    return render(request, 'articles/create.html', context)
+</code></pre></div><h4 id="rendering-the-form">Rendering the Form</h4>
+<p>We are creating an empty instance of <code>ArticleForm</code> and rendering it in the template. So, this will render the empty form in the <code>create.html</code> template.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">html</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-html"><!-- templates/articles/create.html -->
+
+{% extends 'base.html' %}
+
+{% block body %}
+<div hx-target="this" hx-swap="outerHTML">
+  <form>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button hx-post="." class="btn btn-success"
+      type="submit">Save</button>
+  </form>
+</div>
+{% endblock %}
+</code></pre></div><p>Now, here we are inheriting from the base template and creating a form tag in HTML with the <code>{{ form}}</code> for rendering the form fields, we finally have the <code>button</code> element for submitting the form. We have used the <code>hx-post</code> attribute. More on this in just a minute. So, this is we create a template for rendering the article form.</p>
+<p>We have used the <code>hx-post</code> attribute here, which will send a <code>POST</code> request to the current <code>URL</code> represented by <code>hx-post=&quot;.&quot;</code>. You might have noticed the <code>div</code> attributes, the <code>hx-target</code> and <code>hx-swap</code>, so these are some of the many attributes provided by the htmx library for controlling the reactivity of the requests made. The <code>hx-target</code> allow us to specify the element or tag to which the data will be rendered. The <code>hx-swap</code> goes hand-in-hand for specifying the target DOM like <code>innerHTML</code>, <code>outerHTML</code>, etc. You can see the various options on the <a href="https://htmx.org/docs/#swapping">htmx docs</a>. By specifying the <code>hx-swap</code> as  <code>outerHTML</code>, we are saying to replace the entire element with the incoming content from the request which we will send with nearby request triggers.</p>
+<p>We need to map the view to a URL in order to get a good idea about the request and parsed content.</p>
+<p>We'll create a <code>create/</code> route and bind it to the <code>createArticle</code> view with the name <code>article-create</code>.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># article/urls.py
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('create/', views.createArticle, name='article-create'), 
+]
+</code></pre></div><p>This URL will be mapped to the global URL in the project, here we can simply specify the prefix for the URLs in the <code>article</code> app and include those URLs.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># htmx_blog/urls.py
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('user/', include('user.urls'), name='auth'),
+    path('', include('article.urls'), name='home'),
+]
+</code></pre></div><p>Feel, free to add any other URL pattern like for instance, the article app is at <code>/</code> i.e. <code>127.0.01.:8000/</code>, you can add any other name like <code>127.0.0.1:8000/article/</code> by adding <code>path('article/', include('article.urls'))</code>.</p>
+<p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1659252089/blog-media/django-htmx-create-view.png" alt="Django HTMX Create view Form Template"></p>
+<p>So, finally, we are sending a <code>GET</code> request to the <code>127.0.0.1:8000/create/</code> and this will output the form. As we have a <code>POST</code> request embedded in the button inside the form, we will send the <code>POST</code> request to the same URL -&gt; <code>127.0.0.1:8000/create/</code>.</p>
+<h4 id="submitting-the-form">Submitting the Form</h4>
+<p>Let's handle the <code>POST</code> request in the create view.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">from django.shortcuts import render
+from .models import Article
+from .forms import ArticleForm
+
+def createArticle(request):
+    form = ArticleForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.instance.author = request.user
+            article = form.save()
+            return render(request, 'articles/detail.html', {'article': article})
+    context = {
+        'form': form,
+    }
+    return render(request, 'articles/create.html', context)
+</code></pre></div><p><strong>Simple explanation</strong></p>
+<ul>
+<li>Create a form instance of ArticleForm with the request data or empty -&gt; <code>ArticleForm(request.POST or None)</code></li>
+<li>If it's a POST request, validate and create the article, render the article object in <code>detail.html</code> template.</li>
+<li>If it's a GET request, render the empty form in <code>create.html</code></li>
+</ul>
+<p>There are a few changes in the view, instead of initializing the form to empty i.e. <code>ArticleForm()</code>, we are initializing with <code>ArticleForm(request.POST or None)</code>. This basically means that if we are having something in the <code>request.POST</code> dict, we will initialize the Form with that data or else an empty form instance.</p>
+<p>Next, we check if the request if <code>POST</code>, if it is then we check if the form is valid i.e. the form fields are not empty or if any other constraint on the model attributes is satisfied or not. If the form data is valid, we attach the author as the currently logged-in User/user who sent the request. Finally, we save the form which in turn creates the article record in the database. We then render the created article in the <code>detail.html</code> template which is not yet created.</p>
+<p>So, the <code>htmx-post</code> attribute has worked and it will send a post request to the same URL i.e. <code>127.0.0.1:8000/create</code> and this will again trigger the view <code>createArticle</code> this time we will have <code>request.POST</code> data. So, we will validate and save the form.</p>
+<h3 id="detail-view">Detail View</h3>
+<p>The detail view is used for viewing the details of an article. This will be rendered after the article has been created or updated. This is quite simple, we need an <code>id</code> or <code>primary key(pk)</code> of an article and render the <code>title</code> and <code>content</code> of the article in the template.</p>
+<p>We pass in a primary key along with the request as a parameter to the view, the <code>pk</code> will be passed via the URL. We fetch the Article object with the id as the parsed <code>pk</code> and finally render the <code>detail.html</code> template with the article object. The <code>context['article']</code> can be accessed from the template to render the specific attributes like <code>title</code>, <code>content</code>, etc.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># article/views.py
+
+def detailArticle(request, pk):
+    article = Article.objects.get(id=pk)
+    context = {'article': article}
+    return render(request, 'articles/detail.html', context)
+
+</code></pre></div><p>We can now bind the view to a URL and parse the required parameter <code>pk</code> to the view.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('create/', views.createArticle, name='article-create'), 
+    path('<int:pk>', views.detailArticle, name='article-detail'), 
+]
+</code></pre></div><p>We have parsed the <code>pk</code> as <code>int</code> to the URL parameter, so for an article with id=4, the URL will be, <code>127.0.0.1:8000/4/</code>.</p>
+<p>We need to create the template for rendering the context from the <code>detailArticle</code> view. So, we create the <code>detail.html</code> in the <code>templates/articles</code> folder. We inherit the base template and render the <code>article.title</code> and the <code>article.content</code> with a linebreaks template filter so as to display the content properly.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">html</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-html"><!-- templates/articles/detail.html -->
+
+
+{% extends 'base.html' %}
+{% block body %}
+<div id="article-card">
+  <h2>{{ article.title }}
+  <p>{{ article.content|linebreaks|safe }}</p>
+<div>
+{% endblock %}
+
+</code></pre></div><p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1659252227/blog-media/django-htmx-detail-view.png" alt="Detail View Template"></p>
+<p>So, we can now use <code>createArticle</code> view as well as <code>detailArticle</code> view, this both are configured properly, so (CR) or CRUD is completed. We can add <code>listArticle</code> for listing out all the author's(logged-in user) articles.</p>
+<h3 id="list-view">List View</h3>
+<p>Listview of the articles is much similar to the detail view as it will return a list of articles rather than a single article.</p>
+<p>So in the <code>listArticle</code> view, we will return all the articles with the author as the user who sent the request/logged-in user. We will parse this object list into the template as <code>base.html</code> or <code>articles/list.html</code>.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># article/views.py
+
+
+def listArticle(request):
+    articles = Article.objects.filter(author=request.user.id)
+    context = {
+        'articles': articles,
+    }
+    return render(request, 'base.html', context)
+</code></pre></div><p>We will add the URL route for this as the <code>/</code> route that is on <code>127.0.0.1:8000/</code> this is the base URL for the article app and is the route for the <code>listArticle</code> view. So, we will display the list of articles on the homepage.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># article/urls.py
+
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('<int:pk>', views.detailArticle, name='article-detail'), 
+    path('create/', views.createArticle, name='article-create'), 
+    path('', views.listArticle, name='article-list'), 
+]
+</code></pre></div><p>Let's create the template for the list view which will iterate over the articles and display the relevant data like the title and link to the article.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">html</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-html"><!-- templates/articles/list.html -->
+
+<ul id="article-list">
+  {% for article in articles %}
+  <li>
+    <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">{{ article.title }}</h5>
+        <p class="card-text">{{ article.content|truncatewords:5  }}</p>
+        <a href="{% url 'article-detail' article.id %}" class="card-link">Read more</a>
+      </div>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+</code></pre></div><p>We have used the <code>truncatewords:5</code> template filter for only displaying the content of the articles till the first 5 words as it is just a list view, we don't want to display every detail of the article here.</p>
+<p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1659252293/blog-media/django-htmx-list-view.png" alt="List view Template"></p>
+<p>We can use this template to render in the <code>base.html</code> file.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">html</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-html"><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTMX Blog</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://unpkg.com/htmx.org@1.8.0"></script>
+</head>
+<body hx-target="this" hx-swap="outerHTML" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+        <nav>
+        <h2>HTMX Blog</h2>
+        <div class="navbar">
+          {% if user.is_authenticated %}
+            <a class="nav-item nav-link" href="{% url 'article-list' %}"><button class="btn btn-link">Home</button></a>
+            <a class="nav-item nav-link" href="{% url 'logout' %}"><button class="btn btn-link">Logout</button></a>
+          {% else %}
+            <a class="nav-item nav-link" href="{% url 'login' %}"><button class="btn btn-link">Login</button></a>
+            <a class="nav-item nav-link" href="{% url 'register' %}"><button class="btn btn-link">Register</button></a>
+          {% endif %}
+        </div>
+        </nav>
+
+    {% block body %}
+    <a href="{% url 'article-create' %}"><button class="btn btn-success" >Create</button></a>
+    {% include 'articles/list.html' %}
+    {% endblock %}
+</body>
+</html>
+</code></pre></div><p>We have now included the <code>list.html</code> template on the homepage and also added the <code>create</code> button as the link to the <code>article-create</code> URL.</p>
+<h3 id="delete-view">Delete View</h3>
+<p>For deleting an article, we will simply rely on htmx for sending the request and on that request, we will delete the current article and render the updated list of articles.</p>
+<p>With the <code>deleteArticle</code> view, we will take in two parameters the request which is by default for a Django function-based view, and the primary key as <code>pk</code>. Again we will parse the <code>pk</code> from the URL. We will delete the article object and get the latest list of articles. Finally, render the updated list of articles in the base template which is our list view.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># article/views.py
+
+
+def deleteArticle(request, pk):
+    Article.objects.get(id=pk).delete()
+    articles = Article.objects.filter(author=request.user)
+    context = {'article': articles}
+    return render(request, "base.html", context)
+
+</code></pre></div><p>We will add the <code>deleteArticle</code> into the URL patterns and call it <code>article-delete</code> with the URL of <code>delete/&lt;int:pk&gt;</code>. This will allow us to send a request to the URL <code>127.0.0.1:8000/delete/4</code> for deleting the article with id <code>4</code>.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># article/urls.py
+
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.listArticle, name='article-list'), 
+    path('<int:pk>', views.detailArticle, name='article-detail'), 
+    path('create/', views.createArticle, name='article-create'), 
+    path('delete/<int:pk>', views.deleteArticle, name='article-delete'), 
+]
+</code></pre></div><p>In the delete view, the template is important as we want to send a request appropriately to the defined URL. To do that, we will have a form but it won't have any inputs as such just a button that indicates to delete the current article. We will add the <code>hx-delete</code> attribute as the URL to the <code>deleteArticle</code> view. with the id of the article. This will send a request to the <code>article-delete</code> URL which will, in turn, trigger the view with the given id and delete the article.</p>
+<p>We have added the <code>hx-confirm</code> attribute for showing a pop-up of confirmation of deleting the article. As you can see we have added a little script for adding <code>csrf_token</code> into the HTML, this is important in order to submit a form with a valid <code>CSRFToken</code>.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">html</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-html"><!-- templates/article/delete.html -->
+
+<script>
+  document.body.addEventListener('htmx:configRequest', (event) => {
+    event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+  })
+</script>
+<div >
+  <form method="post" >
+  {% csrf_token %}
+    <button class="btn btn-danger"
+      hx-delete="{% url 'article-delete' article.id %}"
+      hx-confirm="Are you sure, You want to delete this article?"
+      type="submit">
+      Delete
+    </button>
+  </form>
+</div>
+</code></pre></div><p>Do you have a question like how do we access the <code>article.id</code>? we are not rendering the <code>delete.html</code> template from the view, so there is no context to pass. We will include this snippet into the detail view template, so as to have the option of deleting the current article.</p>
+<p>We will modify the <code>articles/detail.html</code> template and include the <code>delete.html</code> template. This includes simply adding an HTML template in the specified location. So, we will basically inject the delete form into the detail template.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">html</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-html">{% extends 'base.html' %}
+{% block body %}
+<div hx-target="this" hx-swap="outerHTML">
+  <h2>{{ article.title }}
+  {% include 'articles/delete.html' %}
+  <p>{{ article.content|linebreaks|safe }}</p>
+<div>
+{% endblock %}
+</code></pre></div><p>Hence, we will have a nice option to delete the article in the detail section, this can be placed anywhere but remember, we need to add the <code>hx-target=&quot;this&quot;</code> and <code>hx-swap=&quot;outerHTML&quot;</code> in the div so as to correctly swap the HTML content after the request has been made.</p>
+<h3 id="update-view">Update View</h3>
+<p>We can now move into the final piece of the CRUD i.e. <code>Update</code>. This will be similar to the <code>createArticle</code> with a couple of changes. We will parse parameters like <code>pk</code> to this view as well because we want to update a specific article. So, we will have to get the primary key of the article from the URL slug.</p>
+<p>Inside the <code>updateArticle</code> view, we will first grab the article object from the parsed primary key. We will have two kinds of requests here, one will be for fetching the <code>form</code> with the current article data, and the next request will be the <code>PUT</code> request for actually saving the changes in the article.</p>
+<p>The first request is simple as we need to parse the form data with the instance of the article object. We will call the <code>ArticleForm</code> with the instance of <code>article</code> this will load the data of the article into the form ready to render into the template. So once the <code>GET</code> request has been sent, we will render the template with the form pre-filled with the values of the article attributes.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># article/views.py
+
+
+def updateArticle(request, pk):
+   article = Article.objects.get(id=pk)
+   form = ArticleForm(instance=article)
+   context = {
+       'form': form,
+       'article': article,
+   }
+   return render(request, 'articles/update.html', context)
+</code></pre></div><p>We will create a template in the <code>templates/articles/</code> folder as  <code>update.html</code> which will have a simple form for rendering the form fields and a button for sending a <code>PUT</code> request. We will render the <code>form</code> and then add a button element with the attribute <code>hx-put</code> for sending the <code>PUT</code> request to save changes to the article record. We will parse in the <code>article.id</code> for the primary key parameter to the view.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">html</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-html"><!-- templates/articles/update.html -->
+
+<div hx-target="this" hx-swap="outerHTML">
+  <form>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button hx-put="{% url 'article-update' article.id %}"
+      type="submit">Update</button>
+  </form>
+</div>
+</code></pre></div><p>We are yet to link the <code>updateArticle</code> into the URLs. We will add the view <code>updateArticle</code> into the URLs with the name as <code>article-update</code> and <code>update/&lt;int:pk</code> as the slug pattern. This URL pattern will trigger the <code>updateArticle</code> when we send an HTTP request to the <code>127.0.0.1:8000/update/4</code> for updating the article with id as <code>4</code>.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># article/urls.py
+
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.listArticle, name='article-list'), 
+    path('<int:pk>', views.detailArticle, name='article-detail'), 
+    path('create/', views.createArticle, name='article-create'), 
+    path('delete/<int:pk>', views.deleteArticle, name='article-delete'), 
+    path('update/<int:pk>', views.updateArticle, name='article-update'), 
+]
+</code></pre></div><p>This is not done yet, we will need to handle the <code>PUT</code> request as well i.e. when the form details have been modified and we are about to save changes to the form data. So, we will check for the request method's type. If it is a <code>PUT</code> request, we will have to process a few things.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># article/views.py
+
+
+from django.http import QueryDict
+
+def updateArticle(request, pk):
+    article = Article.objects.get(id=pk)
+    if request.method == 'PUT':
+        qd = QueryDict(request.body)
+        form = ArticleForm(instance=article, data=qd)
+        if form.is_valid():
+            article = form.save()
+            return render(request, 'articles/detail.html', {'article': article})
+    form = ArticleForm(instance=article)
+    context = {
+        'form': form,
+        'article': article,
+    }
+    return render(request, 'articles/update.html', context)
+</code></pre></div><p>In the above <code>updateArticle</code> view, we have to check for a <code>PUT</code> request, if we are sending a <code>PUT</code> request, the form instance needs to be loaded from the request object. We use the <code>request.body</code> to access the data sent in the request. The incoming data received from the <code>request.body</code> object is not a valid format to parse it to the form instance, so we will parse it using <code>QueryDict</code>. This will allow us to modify the <code>request.body</code> object into valid python serializable data.</p>
+<p>So, we import the <code>QueryDict</code> from <code>django.http</code> module. We parse the data as the parameter to <code>QueryDict</code> and store it in a variable. We then have to get the <code>ArticleForm</code> for fetching the data as per the form details, so we parse the instance and also the <code>data</code> parameter. The instance is the article object and the data is the received form data which we have stored in <code>qd</code> as <code>QueryDict(request.body)</code>. This will load the new form data and then we can validate it the form.</p>
+<p>After we have verified the form details, we can save the form and this will update the article record. Thereby we can render the updated article in the <code>detail</code> view with the updated <code>article</code> object as the context.</p>
+<p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1659252091/blog-media/django-htmx-update-view.png" alt="Update View Form Template"></p>
+<p>So, this will set up the update view as well, we can now create, read, update, and delete an article instance with HTMX in templates and Django function-based views without writing any javascript.</p>
+<h2 id="summary">Summary</h2>
+<p>We were able to create a basic CRUD application in Django with HTMX. We used simple function-based views to demonstrate the inner details of how we can work with HTMX and handle requests from the templates. By creating simple standalone templates, we can connect those together to make a fully functional and responsive webpage. The UI is not great but the purpose of this tutorial was to make a barebone CRUD app to work with the backend using HTMX, so hopefully, you would have got a good overview of how HTMX can be integrated into a Django application.</p>
+<p>Overall HTMX is a great library that can be used to enhance or even create a new web application for making the site responsive and without writing any javascript.</p>
+<p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1659252296/blog-media/django-htmx-demo.gif" alt="Django HTMX CRUD Application Demo GIF"></p>
+<p>You can check out the source code for this project and blog on the <a href="https://github.com/Mr-Destructive/htmx-blog-django">htmx-blog GitHub</a> repository.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>From this post, we were able to understand the basics of HTMX and how we can integrate it into a Django application. Hopefully, you enjoyed the post, if you have any queries or feedback, please let me know in the comments or on my social handles. Thank you for reading. Happy Coding :)</p>
+
+            </div>
+        </article>
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editBtn = document.getElementById('editor-edit');
+            
+            if (editBtn) {
+                editBtn.addEventListener('click', async function () {
+                    const slug = "posts\/django-htmx-crud";
+                    const type = "posts";
+                    console.log("Editing post:", slug, type);
+                    const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                    
+                    try {
+                        const res = await fetch(url);
+                        
+                        if (!res.ok) throw new Error("Failed to fetch edit content");
+                        console.log(res);
+                        
+                        const html = await res.text();
+                        console.log(html);
+                        
+                        document.querySelector('.post-content').innerHTML = html;
+                    } catch (err) {
+                        console.error(err);
+                        alert("Error loading editor content");
+                    }
+                });
+            }
+        });
+    </script>
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+            
+            if (!themeToggle) return;
+            
+            
+            const currentTheme = localStorage.getItem('theme') || 'default';
+            
+            
+            if (currentTheme === 'secondary') {
+                body.classList.add('secondary-theme');
+                themeToggle.checked = true;
+            }
+            
+            
+            themeToggle.addEventListener('change', () => {
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                    localStorage.setItem('theme', 'secondary');
+                } else {
+                    body.classList.remove('secondary-theme');
+                    localStorage.setItem('theme', 'default');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

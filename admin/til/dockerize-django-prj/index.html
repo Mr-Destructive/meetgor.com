@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    
+    <title>Meet Gor | Dockerize a Django project</title>
+    <meta name="description" content="">
+    
+    
+    <meta property="og:url" content="meetgor.com/til/dockerize-django-prj">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Meet Gor | Dockerize a Django project">
+    <meta property="og:description" content="">
+    
+        <meta property="og:image" content="/tbicon.png">
+        <meta name="twitter:image" content="/tbicon.png">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Meet Gor | Dockerize a Django project">
+    <meta name="twitter:description" content="">
+    
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/sql/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <script src="/sql-playground.js"></script>
+    
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const body = document.body;
+            const stylesheet = document.getElementById("syntax-theme");
+            
+            
+            const currentTheme = localStorage.getItem("theme") || "default";
+            
+            
+            function setSyntaxTheme(theme) {
+                if (theme === "secondary") {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+                } else {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+                }
+            }
+            
+            
+            if (currentTheme === "secondary") {
+                body.classList.add("secondary-theme");
+                setSyntaxTheme("secondary");
+            } else {
+                setSyntaxTheme("light");
+            }
+            
+            
+            document.querySelectorAll("pre code").forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/posts">Posts</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Dockerize a Django project</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2022-03-02">2022-03-02</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/til">til</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/django">#django</a>
+                
+                <a href="/tags/docker">#docker</a>
+                
+            </div>
+            
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=til\/dockerize-django-prj&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="dockerize-a-django-project">Dockerize a Django project</h2>
+<p>We can run our Django projects in a Docker Container by creating a Docker image for our project. It is really easy and intuitive to create a Dockerfile for any given application as it really is a matter of writing commands in a file and basically running it is a isolated environment. To create a Docker image, we first need a Dockerfile. A Dockerfile is simply a Blueprint to create a image in Docker. In this file we specify the instructions/commands/environment variables to create a image for our app to run.</p>
+<h3 id="create-a-docker-file">Create a Docker File</h3>
+<p>To create a dockerfile, simply create a file named as <code>Dockerfile</code> without any extension(not a .txt file). We need to then add the following code into the file.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">dockerfile</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-dockerfile">FROM python:3.9-buster
+
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /code
+
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
+
+COPY . .
+
+EXPOSE 8000
+
+CMD ["python","manage.py","runserver","0.0.0.0:8000"]
+</code></pre></div><ul>
+<li>
+<p>Let's see what are we doing here, first we are pulling a base image of Python in this case it is <a href="https://github.com/docker-library/python/blob/a4b368154b7e3c33c76385f1be7a998fcf3123eb/3.9/buster/Dockerfile">3.9-buster</a>, but it can be any of the <a href="https://hub.docker.com/_/python">Official Python images</a> from <a href="https://hub.docker.com">dockerhub</a>. It is simply a environment for our Django project to run. You can even use linux environments like ubuntu, debian or alpine.</p>
+</li>
+<li>
+<p>Next we add a <code>PYTHONUNBUFFERED</code> as a environment variable and initialize it to <code>1</code>, which basically allows to parse python output straight into the terminal without actually buffering first.</p>
+</li>
+<li>
+<p>We set the <code>WORKDIR</code> as the <code>code</code> directory, this sets the provided directory as the base to run any command or instructions in the Dockerfile.</p>
+</li>
+<li>
+<p>We then <code>COPY</code> the <code>requirements.txt</code> file in the current(<code>.</code>) directory which is <code>code</code> as mentioned earlier. We simply want the <code>requirements.txt</code> file in the current directory so we can proceed with the next step which is to install the dependencies for the Django project</p>
+</li>
+<li>
+<p>After copying the <code>requirements.txt</code> file, we simply install the packages mentioned int the file with <code>pip</code> we use the <code>RUN</code> command to execute any shell commands in the environment.</p>
+</li>
+<li>
+<p>Next step is to <code>COPY</code> all the files from the current folder(local machine) into the docker environment image. So, we have the source code files in the Container.</p>
+</li>
+<li>
+<p>Expose the port <code>8000</code>(default) or any other port you would want to run Django in the image. We use the expose command in complement to the <code>-p</code> argument when we want to create the container. I have explained the <a href="https://mr-destructive.github.io/techstructive-blog/docker-port-forward">port-forwarding</a> concept in the previous TIL.</p>
+</li>
+<li>
+<p>Finally we can run the server. We need to parse every command as a comma separated string in the list to the <code>CMD</code> which the container actually executes the command when the image is build. So, all the commands previously were to build an image for the django project, the <code>CMD</code> will actually run the server in a container after building the image of the django project.</p>
+</li>
+</ul>
+<h3 id="build-the-image">Build the image</h3>
+<p>Using the Dockerfile, we can create the image for the Django project by a simple command.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>docker build . -t django-app
+</code></pre></div><p>Assuming the Dockerfile is in the same folder from which you are running this command.</p>
+<p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1646230907/blog-media/jj04subyvkuvfb5obytu.png" alt="Build the django-app image"></p>
+<p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1646230988/blog-media/ugjoakqgyhiwelqkyaat.png" alt="Build Complete Success"></p>
+<h3 id="run-the-image-and-create-a-container">Run the Image and Create a Container</h3>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>docker run -p 8000:8000 django-app
+</code></pre></div><p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1646231023/blog-media/yneuz46burorz4b5vzp4.png" alt="Create Container"></p>
+<p>You can use any port like <code>3000</code> or <code>4000</code> on your local system by changing the first port number as <code>3000:8000</code> and so on. So, the first port number is the local system's port number and the port number followed by a <code>:</code> is the port number for the environment inside the container of the django project. The container port is the same which we have <code>exposed</code> while creating the image. You can now go to <a href="127.0.0.1:8000">127.0.0.1:8000</a> or your chosen port in your local environment and see the django app running.</p>
+<p>If you are using a Docker as a Virtual Machine, you need to find the IP-address of that Virtual-Machine(<code>docker-machine ip</code>) and use that instead of <code>localhost</code> or <code>127.0.0.1</code>.</p>
+<h3 id="cleaning-the-container-for-iterations">Cleaning the Container for iterations</h3>
+<p>We need to stop the container to run it again after making a few changes in the app if any. Simply pressing the <code>CTRL + D</code> option wont stop the container here. We need to stop the container by executing:</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>docker ps
+
+docker stop <container-id>
+</code></pre></div><p>This will stop the container. Also if you want to remove the images you built, you can run the command:</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>docker image ls
+
+docker rmi -f <image-id>
+</code></pre></div><p>So, we now have a image of our Django project, this image can be used by anyone inside a docker environment and thus creating much more easier to test/work on a given project irrespective of the system is being used.</p>
+
+            </div>
+        </article>
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editBtn = document.getElementById('editor-edit');
+            
+            if (editBtn) {
+                editBtn.addEventListener('click', async function () {
+                    const slug = "til\/dockerize-django-prj";
+                    const type = "til";
+                    console.log("Editing post:", slug, type);
+                    const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                    
+                    try {
+                        const res = await fetch(url);
+                        
+                        if (!res.ok) throw new Error("Failed to fetch edit content");
+                        console.log(res);
+                        
+                        const html = await res.text();
+                        console.log(html);
+                        
+                        document.querySelector('.post-content').innerHTML = html;
+                    } catch (err) {
+                        console.error(err);
+                        alert("Error loading editor content");
+                    }
+                });
+            }
+        });
+    </script>
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+            
+            if (!themeToggle) return;
+            
+            
+            const currentTheme = localStorage.getItem('theme') || 'default';
+            
+            
+            if (currentTheme === 'secondary') {
+                body.classList.add('secondary-theme');
+                themeToggle.checked = true;
+            }
+            
+            
+            themeToggle.addEventListener('change', () => {
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                    localStorage.setItem('theme', 'secondary');
+                } else {
+                    body.classList.remove('secondary-theme');
+                    localStorage.setItem('theme', 'default');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

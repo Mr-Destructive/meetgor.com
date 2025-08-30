@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    
+    <title>Meet Gor | Golang: Interfaces</title>
+    <meta name="description" content="Understanding the baiscs of interfaces in Golang. Exploring the concept of polymorphism in golang with the help of interfaces and structs.">
+    
+    
+    <meta property="og:url" content="meetgor.com/golang-interfaces">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Meet Gor | Golang: Interfaces">
+    <meta property="og:description" content="Understanding the baiscs of interfaces in Golang. Exploring the concept of polymorphism in golang with the help of interfaces and structs.">
+    
+        <meta property="og:image" content="https://meetgor-cdn.pages.dev/golang-019-interfaces.png">
+        <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/golang-019-interfaces.png">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Meet Gor | Golang: Interfaces">
+    <meta name="twitter:description" content="Understanding the baiscs of interfaces in Golang. Exploring the concept of polymorphism in golang with the help of interfaces and structs.">
+    
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/sql/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <script src="/sql-playground.js"></script>
+    
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const body = document.body;
+            const stylesheet = document.getElementById("syntax-theme");
+            
+            
+            const currentTheme = localStorage.getItem("theme") || "default";
+            
+            
+            function setSyntaxTheme(theme) {
+                if (theme === "secondary") {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+                } else {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+                }
+            }
+            
+            
+            if (currentTheme === "secondary") {
+                body.classList.add("secondary-theme");
+                setSyntaxTheme("secondary");
+            } else {
+                setSyntaxTheme("light");
+            }
+            
+            
+            document.querySelectorAll("pre code").forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/posts">Posts</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Golang: Interfaces</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2022-09-10">2022-09-10</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/100-days-of-golang" class="series-link">📖 100-days-of-golang</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=golang-interfaces&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>In the 19th post of the series, we will be taking a look into interfaces in golang. Interfaces allow us to create function signatures common to different structs or types. So, we can allow multiple structs to have a common interface(method) that can have different implementations.</p>
+<h2 id="what-are-interfaces">What are Interfaces</h2>
+<p>Interface as the name suggests is a way to create methods that are common to different structures or types but can have different implementations. It's an interface to define the method or function signatures but not the implementation. Let's take an example of <code>Laptop</code> and <code>Phone</code> having the functionality of wifi. We can connect to wifi more or the less in a similar way on both devices. The implementation behind the functionality might be different but they share the same operation. The WiFi can act as an interface for both devices to connect to the internet.</p>
+<h2 id="define-an-interface">Define an Interface</h2>
+<p>To declare an interface in golang, we can use the <code>interface</code> keyword in golang. An interface is created with the type keyword, providing the name of the interface and defining the function declaration. Inside the interface which acts as a struct of general method signatures. The method signatures usually consist of the name of the function with its parameters if any and the return type of the function.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">
+package main
+
+import "fmt"
+
+
+type Player struct {
+	name   string
+	health int
+}
+
+type Mob struct {
+	name     string
+	health   int
+	is_passive bool
+}
+
+type Creature interface {
+	intro() string
+	//attack() int
+	//heal() int
+}
+
+func main() {
+	player := Player{name: "Steve"}
+	mob := Mob{name: "Zombie"}
+	fmt.Println(player)
+	fmt.Println(mob)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>go run main.go
+
+{Steve 0}
+{Zombie 0 false}
+</code></pre></div><p>In this above example, we have created an interface called <code>Creature</code>. There are a few structs that we have to define like <code>Player</code> and <code>Mob</code>, these two methods have a few attributes like <code>name</code> as <code>string</code> and <code>health</code> as <code>int</code> which are common in both structs but the <code>Mob</code> struct has an additional attribute <code>is_passive</code> as a <code>boolean</code> value. The <code>Creature</code> is an interface that will define certain function signatures, here we have declared <code>intro</code>, <code>attack</code>, and <code>heal</code> as the methods bound to the Creature interface. This means, that any object which satisfies the Creature interface, can define the methods associated with the interface.</p>
+<h2 id="defining-interfaces">Defining Interfaces</h2>
+<p>Once we have declared the interface method signatures, we can move into defining the functionality of these methods depending on the struct. If we want a different working method for different types of struct objects passed we can define those for each type of struct that we want. Here, we have two types of structs namely <code>Creature</code> and <code>Mob</code>, based on the struct we can define the <code>intro</code> method for them individually.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import "fmt"
+
+type Creature interface {
+	intro() string
+	attack(*int) int
+}
+
+type Player struct {
+	name   string
+	health int
+}
+
+type Mob struct {
+	name     string
+	health   int
+	category bool
+}
+
+func (p Player) intro() string {
+	fmt.Println("Player has spawned")
+	return p.name
+}
+
+func (p Player) attack(m_health *int) int {
+	fmt.Println("Player has attacked!")
+	*m_health = *m_health - 50
+	return *m_health
+}
+
+func (m Mob) intro() string {
+	fmt.Printf("A wild %s has appeared!
+", m.name)
+	return m.name
+}
+func (m Mob) attack(p_health *int) int {
+	fmt.Printf("%s has attacked you! -%d
+", m.name, 30)
+	*p_health = *p_health - 30
+	return *p_health
+}
+
+func main() {
+	player := Player{name: "Steve", health: 100}
+	mob := Mob{name: "Zombie", health: 140}
+	fmt.Println(player.intro())
+	fmt.Println(mob.intro())
+	fmt.Println(mob)
+	fmt.Println(player)
+	fmt.Println(player.attack(&mob.health))
+	fmt.Println(mob.attack(&player.health))
+	fmt.Println(mob)
+	fmt.Println(player)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>go run main.go
+
+Player has spawned
+Steve
+A wild Zombie has appeared!
+Zombie
+{Zombie 140 false}
+{Steve 100}
+Player has attacked!
+90
+Zombie has attacked you! -30
+70
+{Zombie 90 false}
+{Steve 70}
+</code></pre></div><p>As we can see, the method <code>intro()</code> is bound to both the struct depending on what struct signature is associated with the method. The method <code>intro</code> takes in the object struct associated as per the call and returns <code>string</code> as defined in the method signature.</p>
+<p>The <code>attack</code> method in the <code>Creature</code> interface is also implemented separately for the two structs. For the <code>Player</code> method, we simply take in a pointer to an integer and return an <code>int</code>. The parameter is the pointer to the mob health, and it returns the modified health. We take in a pointer to the mob or player health so as to parse in the actual value and not the copy of the value. If we modify the value, we want to reflect those changes in the actual object. So that is how we can use interfaces to construct dynamic operations on objects as well as different types of structs.</p>
+<p>We have seen a simple example of how to declare and define interfaces for given type structs. Also, we can pass by value as well as by pointers so as to define the behavior of the method whether to dynamically modify or change the values of the object associated with it.</p>
+<h2 id="examples-of-interfaces">Examples of Interfaces</h2>
+<p>There are quite some use cases of interfaces, in object-oriented programming, the above example fits the polymorphism feature quite well. The ability to reuse certain method signatures and define the functions as per requirement brings flexibility to the code structure.</p>
+<p>We will see a few examples for understanding how we can use interfaces in various ways.</p>
+<h3 id="type-switch-interface">Type Switch Interface</h3>
+<p>We can use an empty interface to check for the type of variable we have parsed. Using this empty interface we can create a kind of dynamic parameter to a function.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"strconv"
+)
+
+func parse_int(n interface{}) int {
+	switch n.(type) {
+	case int:
+		return (n).(int) * (n).(int)
+	case string:
+		s, _ := strconv.Atoi(n.(string))
+		return s
+	case float64:
+		return int(n.(float64))
+	default:
+		return n.(int)
+	}
+}
+
+func main() {
+	num := parse_int(4)
+	fmt.Println(num)
+	num = parse_int("4")
+	fmt.Println(num)
+	num = parse_int(4.1243)
+	fmt.Println(num)
+}
+
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>go run main.go
+
+16
+4
+4
+</code></pre></div><p>Here, we can see we have an interface as a parameter to the function <code>parse_int</code>, the return type is <code>int</code>, so the incoming parameter can be any valid type. But if we don't convert the given type into an appropriate int, it will result in an error as we are returning the int value of the parsed parameter. We are taking the parameter as <code>interface{}</code> which is an empty interface, this will contain the parameter parsed as an interface type. That's why we need to convert the interface object into an int or the parsed type of the interface.</p>
+<h3 id="interface-slice">Interface Slice</h3>
+<p>We can even create a slice of interfaces, which means we can initialize or group together various objects of different structs in a single slice. This might be helpful for calling functions associated with different objects via the interface very easily and in a much cleaner way.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import "fmt"
+
+type Creature interface {
+	intro() string
+}
+
+type Player struct {
+	name   string
+	health int
+}
+
+type Mob struct {
+	name     string
+	health   int
+	category bool
+}
+
+func (p Player) intro() string {
+	fmt.Println("Player has spawned")
+	return p.name
+}
+
+func (m Mob) intro() string {
+	var name string
+	if m.name != "" {
+		name = m.name
+	} else {
+		name = "Mob"
+	}
+	fmt.Printf("A wild %s has appeared!
+", name)
+	return m.name
+}
+
+
+func main() {
+	entity := []Creature{Player{}, Mob{}, Mob{}, Player{}}
+
+	for _, obj := range entity {
+		fmt.Println(obj.intro())
+	}
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>Player has spawned
+A wild Zombie has appeared!
+A wild Zombie has appeared!
+Player has spawned
+</code></pre></div><p>In the above example, we can see that the entity variable is created as a slice of interfaces <code>Creature</code>, i.e. various objects associated with the <code>Creature</code> interface can be contained in a single slice. There are 2 instances of Player and Mob each in the slice. We can further iterate over the slice as a range-based loop and thereby the functions associated with the interfaces can be called. Here, we have called the <code>intro</code> function.</p>
+<p>So, there are a lot of things that can be done with interfaces, we can create multiple interfaces for a single object struct and nest interfaces. Based on the use case of the program, interfaces can be used to reduce the boilerplate code as well as improve the readability of the code.</p>
+<p>That's it from this part. Reference for all the code examples and commands can be found in the <a href="https://github.com/mr-destructive/100-days-of-golang/tree/main/scripts/interfaces/main.go">100 days of Golang</a> GitHub repository.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>From this part of the series, we were able to understand the basics of interfaces using a few examples. We explored how interfaces can be used to bring in polymorphism in golang, also we can improve the readability of the code. The boilerplate code can be considerably reduced by using interfaces when dealing with structs and types. Hopefully, you found this post helpful and understood even the basics of interfaces in golang. Thank you for reading, if you have any queries, questions, or feedback, you can ping me on my social handles or in the comments. Happy Coding :)</p>
+
+            </div>
+        </article>
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editBtn = document.getElementById('editor-edit');
+            
+            if (editBtn) {
+                editBtn.addEventListener('click', async function () {
+                    const slug = "golang-interfaces";
+                    const type = "posts";
+                    console.log("Editing post:", slug, type);
+                    const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                    
+                    try {
+                        const res = await fetch(url);
+                        
+                        if (!res.ok) throw new Error("Failed to fetch edit content");
+                        console.log(res);
+                        
+                        const html = await res.text();
+                        console.log(html);
+                        
+                        document.querySelector('.post-content').innerHTML = html;
+                    } catch (err) {
+                        console.error(err);
+                        alert("Error loading editor content");
+                    }
+                });
+            }
+        });
+    </script>
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+            
+            if (!themeToggle) return;
+            
+            
+            const currentTheme = localStorage.getItem('theme') || 'default';
+            
+            
+            if (currentTheme === 'secondary') {
+                body.classList.add('secondary-theme');
+                themeToggle.checked = true;
+            }
+            
+            
+            themeToggle.addEventListener('change', () => {
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                    localStorage.setItem('theme', 'secondary');
+                } else {
+                    body.classList.remove('secondary-theme');
+                    localStorage.setItem('theme', 'default');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

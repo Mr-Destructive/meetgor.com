@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    
+    <title>Meet Gor | Turn Python dictionary into a neat CSV table</title>
+    <meta name="description" content="Exploring how to write python dict/key-value pairs and a table-like structure to a CSV file.">
+    
+    
+    <meta property="og:url" content="meetgor.com/til/python-dict-to-csv-table">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Meet Gor | Turn Python dictionary into a neat CSV table">
+    <meta property="og:description" content="Exploring how to write python dict/key-value pairs and a table-like structure to a CSV file.">
+    
+        <meta property="og:image" content="/tbicon.png">
+        <meta name="twitter:image" content="/tbicon.png">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Meet Gor | Turn Python dictionary into a neat CSV table">
+    <meta name="twitter:description" content="Exploring how to write python dict/key-value pairs and a table-like structure to a CSV file.">
+    
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/sql/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <script src="/sql-playground.js"></script>
+    
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const body = document.body;
+            const stylesheet = document.getElementById("syntax-theme");
+            
+            
+            const currentTheme = localStorage.getItem("theme") || "default";
+            
+            
+            function setSyntaxTheme(theme) {
+                if (theme === "secondary") {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+                } else {
+                    stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+                }
+            }
+            
+            
+            if (currentTheme === "secondary") {
+                body.classList.add("secondary-theme");
+                setSyntaxTheme("secondary");
+            } else {
+                setSyntaxTheme("light");
+            }
+            
+            
+            document.querySelectorAll("pre code").forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/posts">Posts</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Turn Python dictionary into a neat CSV table</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2024-03-20">2024-03-20</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/til">til</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/python">#python</a>
+                
+            </div>
+            
+            
+            
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="populating-a-python-dict-having-a-table-like-structure-to-a-csv">Populating a Python dict having a table-like structure to a CSV</h2>
+<p>Today, I want to share with you a neat trick I recently discovered for populating a CSV file with data in a table-like structure using Python.</p>
+<h3 id="writing-key-value-pairs-to-a-csv-row">Writing Key-Value Pairs to a CSV Row</h3>
+<p>Firstly, let's discuss the <code>write_key_value</code> function. This function allows us to write key-value pairs to a CSV row. It's particularly useful when dealing with metrics or data that can be represented as simple pairs.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># Function to populate a CSV row with key-value pairs
+def write_key_value(writer, dictionary):
+    for key, value in dictionary.items():
+        writer.writerow([key, value])
+</code></pre></div><h3 id="writing-a-table-like-structure-to-a-csv-file">Writing a Table-Like Structure to a CSV File</h3>
+<p>Now, let's dive into the <code>write_table</code> function, which handles more complex scenarios where the data follows a table-like structure. This function takes into account different types of metrics and adjusts the CSV table structure accordingly.</p>
+<p>Assuming you have a structure of the dictionary like:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">data = {
+    "Students": {
+        "John Doe": {
+            "course": "Mathematics",
+            "grade": "A",
+            "attendance": 95,
+            "assignments_completed": 15,
+            "student_id": "JD001"
+        },
+        "Alice Smith": {
+            "course": "Physics",
+            "grade": "B+",
+            "attendance": 85,
+            "assignments_completed": 12,
+            "student_id": "AS002"
+        },
+        "Bob Johnson": {
+            "course": "Computer Science",
+            "grade": "A-",
+            "attendance": 90,
+            "assignments_completed": 14,
+            "student_id": "BJ003"
+        }
+    }
+}
+</code></pre></div><p>And you want to write it to a CSV file, like this:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">csv</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-csv">student, course, grade, attendance, assignments_completed, student_id
+John Doe, Mathematics, A, 95, 15, JD001
+Alice Smith, Physics, B+, 85, 12, AS002
+Bob Johnson, Computer Science, A-, 90, 14, BJ003
+</code></pre></div><p>We can create a function <code>write_table</code> that will take in the <code>dictionary</code> as the actual data. We want to store the keys of the inner dictionary to be the header/columns of the csv file. As we can see the keys of the inner dict i.e. the value for the key <code>John Doe</code> is a dict with the keys <code>course</code>, <code>grade</code>, <code>attendance</code>, etc. which remain the same for the all the keys in the dictionary.</p>
+<p>So, we can first create a <code>row_keys</code> variable to store the keys of the actual dictionary this will be the first column rows in the csv.</p>
+<p>Further we check if the <code>row_keys</code> is a dict and then we append it with the <code>index_key</code> which will be the first column in the csv. Since all the keys remain the same for the inner-dict, we can pick the first dict and create the <code>header</code> with the inner-dict keys.</p>
+<p>So, we can write the list <code>header</code> to the csv file.</p>
+<p>Then for each key in the <code>row_keys</code> we can create a list <code>row</code> with the key and the values of the inner-dict.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># Function to populate a CSV with a table-like structure
+def write_table(writer, dictionary, index_key):
+
+    row_keys = list(dictionary.keys())
+
+    if row_keys and data[row_keys[0]] is not None:
+        headers = [index_key] + list(
+            dictionary[row_keys[0]].keys()
+        )
+    else:
+        return
+    writer.writerow(headers)
+    for key in row_keys:
+        row = [key] + list(dictionary[key].values())
+        writer.writerow(row)
+
+
+with open('data.csv', 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    for key in data:
+        write_table(writer, data[key], key)
+</code></pre></div><h3 id="example-usage">Example Usage</h3>
+<p>To illustrate how these functions can be used, let's consider a scenario where we have various types of metrics to populate into a CSV file. We handle key-value paired metrics separately and then populate the CSV with table-like metrics.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">import csv
+
+data = {
+    "Students": {
+        "John Doe": {
+            "course": "Mathematics",
+            "grade": "A",
+            "attendance": 95,
+            "assignments_completed": 15,
+            "student_id": "JD001"
+        },
+        "Alice Smith": {
+            "course": "Physics",
+            "grade": "B+",
+            "attendance": 85,
+            "assignments_completed": 12,
+            "student_id": "AS002"
+        },
+        "Bob Johnson": {
+            "course": "Computer Science",
+            "grade": "A-",
+            "attendance": 90,
+            "assignments_completed": 14,
+            "student_id": "BJ003"
+        }
+    },
+    "Countries": {
+        "USA": {
+            "capital": "Washington, D.C.",
+            "population": 331000000,
+            "area_sq_km": 9833517,
+            "official_languages": ["English", "Spanish"],
+            "currency": "United States Dollar (USD)"
+        },
+        "India": {
+            "capital": "New Delhi",
+            "population": 1380004385,
+            "area_sq_km": 3287263,
+            "official_languages": ["Hindi", "English"],
+            "currency": "Indian Rupee (INR)"
+        },
+        "Brazil": {
+            "capital": "Brasília",
+            "population": 212559417,
+            "area_sq_km": 8515770,
+            "official_languages": ["Portuguese"],
+            "currency": "Brazilian Real (BRL)"
+        }
+    }
+}
+
+def populate_table(writer, data, index_key):
+    row_keys = list(data.keys())
+    if row_keys and data[row_keys[0]] is not None:
+        headers = [index_key] + list(data[row_keys[0]].keys())
+    else:
+        return
+    writer.writerow(headers)
+    for key in row_keys:
+        row = [key] + list(data[key].values())
+        writer.writerow(row)
+
+
+with open('data.csv', 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    for key in data:
+        populate_table(writer, data[key], key)
+        writer.writerow([])
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">csv</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-csv">Students,course,grade,attendance,assignments_completed,student_id
+John Doe,Mathematics,A,95,15,JD001
+Alice Smith,Physics,B+,85,12,AS002
+Bob Johnson,Computer Science,A-,90,14,BJ003
+
+Countries,capital,population,area_sq_km,official_languages,currency
+USA,"Washington, D.C.",331000000,9833517,"['English', 'Spanish']",United States Dollar (USD)
+India,New Delhi,1380004385,3287263,"['Hindi', 'English']",Indian Rupee (INR)
+Brazil,Brasília,212559417,8515770,['Portuguese'],Brazilian Real (BRL)
+</code></pre></div><p>Thank you, Happy Coding :)</p>
+
+            </div>
+        </article>
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editBtn = document.getElementById('editor-edit');
+            
+            if (editBtn) {
+                editBtn.addEventListener('click', async function () {
+                    const slug = "til\/python-dict-to-csv-table";
+                    const type = "til";
+                    console.log("Editing post:", slug, type);
+                    const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                    
+                    try {
+                        const res = await fetch(url);
+                        
+                        if (!res.ok) throw new Error("Failed to fetch edit content");
+                        console.log(res);
+                        
+                        const html = await res.text();
+                        console.log(html);
+                        
+                        document.querySelector('.post-content').innerHTML = html;
+                    } catch (err) {
+                        console.error(err);
+                        alert("Error loading editor content");
+                    }
+                });
+            }
+        });
+    </script>
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+            
+            if (!themeToggle) return;
+            
+            
+            const currentTheme = localStorage.getItem('theme') || 'default';
+            
+            
+            if (currentTheme === 'secondary') {
+                body.classList.add('secondary-theme');
+                themeToggle.checked = true;
+            }
+            
+            
+            themeToggle.addEventListener('change', () => {
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                    localStorage.setItem('theme', 'secondary');
+                } else {
+                    body.classList.remove('secondary-theme');
+                    localStorage.setItem('theme', 'default');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
