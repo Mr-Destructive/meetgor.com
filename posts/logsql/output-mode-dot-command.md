@@ -35,7 +35,7 @@ You can get all the information you need with the `.help mode` command
      box         Tables using unicode box-drawing characters
      csv         Comma-separated values
      column      Output in columns.  (See .width)
-     html        HTML <table> code
+     html        HTML \<table\> code
      insert      SQL insert statements for TABLE
      json        Results in a JSON array
      line        One value per line
@@ -54,9 +54,9 @@ You can get all the information you need with the `.help mode` command
      --quote        Quote output text as SQL literals
      --noquote      Do not quote output text
      TABLE          The name of SQL table used for "insert" mode
-sqlite>
 ```
 
+Let's set up with some sample data
 
 ```sql
 CREATE TABLE IF NOT EXISTS books(
@@ -78,7 +78,7 @@ VALUES
 SELECT * FROM books;
 ```
 
-```sqlite
+```
 1|The Hobbit|J.R.R. Tolkien|310|1937-09-21|39.99
 2|The Fellowship of the Ring|J.R.R. Tolkien|423|1954-07-29|49.99
 3|The Two Towers|J.R.R. Tolkien|352|1954-11-11|49.99
@@ -94,7 +94,7 @@ Let's change it to a table format with `.mode table` This will set the mode as `
 
 This will show the result sets in a ascii-like table structure with the `+++` and `---` to separate the rows and columns.
 
-```sql
+```
 SELECT * FROM books;
 ```
 
@@ -251,7 +251,7 @@ The insert mode simply outputs the result in SQL insert statements. This is real
 SELECT * FROM books;
 ```
 
-```sql
+```
 INSERT INTO "table"(id,title,author,pages,release_date,price) VALUES(1,'The Hobbit','J.R.R. Tolkien',310,'1937-09-21',39.99000000000000198);
 INSERT INTO "table"(id,title,author,pages,release_date,price) VALUES(2,'The Fellowship of the Ring','J.R.R. Tolkien',423,'1954-07-29',49.99000000000000198);
 INSERT INTO "table"(id,title,author,pages,release_date,price) VALUES(3,'The Two Towers','J.R.R. Tolkien',352,'1954-11-11',49.99000000000000198);
