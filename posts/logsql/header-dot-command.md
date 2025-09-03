@@ -25,6 +25,7 @@ Well we need to think about how effected means
 2. Added in each row
 3. No effect
 
+---
 
 1. Only added in the first row
     1. ascii
