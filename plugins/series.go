@@ -48,6 +48,7 @@ func (p *SeriesPlugin) Execute(ssg *models.SSG) {
 		
 		for _, series := range seriesList {
 			series := Slugify(series.(string))
+            fmt.Println("series", series)
 			seriesPost[series] = append(seriesPost[series], post)
 		}
 	}
