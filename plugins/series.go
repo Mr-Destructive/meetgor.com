@@ -33,7 +33,19 @@ func (p *SeriesPlugin) Execute(ssg *models.SSG) {
 		if post.Frontmatter.Extras["series"] == nil {
 			continue
 		}
-		seriesList := post.Frontmatter.Extras["series"].([]interface{})
+		
+		// Handle both string and slice cases for series
+		var seriesList []interface{}
+		switch v := post.Frontmatter.Extras["series"].(type) {
+		case []interface{}:
+			seriesList = v
+		case string:
+			seriesList = []interface{}{v}
+		default:
+			// Skip if it's neither a string nor a slice
+			continue
+		}
+		
 		for _, series := range seriesList {
 			series := Slugify(series.(string))
 			seriesPost[series] = append(seriesPost[series], post)
