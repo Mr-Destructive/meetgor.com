@@ -55,7 +55,8 @@ type BlogConfig struct {
 	AdminDir            string                `json:"admin_dir"`
 	DefaultFeedTemplate string                `json:"default_feed_template"`
 	DefaultPostTemplate string                `json:"default_post_template"`
-	PrefixURL           string                `json:"prefix_url"`
+	    PrefixURL           string                `json:"prefix_url"`
+    DuplicateOutputTo   []string              `json:"duplicate_output_to"`
 	PagesConfig         map[string]PageConfig `json:"pages"`
 	Themes              map[string]Theme      `json:"themes"`
 	Github              map[string]string     `json:"github"`
@@ -103,16 +104,22 @@ type Post struct {
 	Markdown    string
 }
 
+type TOCItem struct {
+	Text  string
+	ID    string
+	Level int
+}
+
 type DBPost struct {
-    ID          int    `json:"id"`
-    Title       string `json:"title"`
-    Slug        string `json:"slug"`
-    Body        string `json:"body"`
-    Metadata    string `json:"metadata"`
-    Deleted     bool   `json:"deleted"`
-    CreatedAt   string `json:"created_at"`
-    UpdatedAt   string `json:"updated_at"`
-    AuthorID    int    `json:"author_id"`
+	ID        int    `json:"id"`
+	Title     string `json:"title"`
+	Slug      string `json:"slug"`
+	Body      string `json:"body"`
+	Metadata  string `json:"metadata"`
+	Deleted   bool   `json:"deleted"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
+	AuthorID  int    `json:"author_id"`
 }
 
 type Feed struct {

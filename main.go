@@ -684,6 +684,25 @@ func (c *IndexPlugin) Execute(ssg *models.SSG) {
 	}
 }
 
+type CopyDirsPlugin struct {
+	PluginName string
+}
+
+func (c *CopyDirsPlugin) Name() string {
+	return c.PluginName
+}
+
+func (c *CopyDirsPlugin) Execute(ssg *models.SSG) {
+	config := &ssg.Config
+	for _, dest := range config.Blog.DuplicateOutputTo {
+		destPath := filepath.Join(".", config.Blog.OutputDir, dest)
+		err := CopyCustom(config.Blog.OutputDir, destPath)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+}
+
 // admin
 type AdminPlugin struct {
 	PluginName string
@@ -757,6 +776,8 @@ func main() {
 			pluginManager.Register(&CopyStaticFilesPlugin{PluginName: "copyStaticFiles"})
 		case "index":
 			pluginManager.Register(&IndexPlugin{PluginName: "index"})
+		case "copyDirs":
+			pluginManager.Register(&CopyDirsPlugin{PluginName: "copyDirs"})
 		default:
 
 			//userPlugin := plugins.UserPlugin{PluginName: plugin}
@@ -792,6 +813,8 @@ func main() {
 			pluginManager.Register(&CopyStaticFilesPlugin{PluginName: "copyStaticFiles"})
 		case "index":
 			pluginManager.Register(&IndexPlugin{PluginName: "index"})
+		case "copyDirs":
+			pluginManager.Register(&CopyDirsPlugin{PluginName: "copyDirs"})
 		default:
 
 			//userPlugin := plugins.UserPlugin{PluginName: plugin}

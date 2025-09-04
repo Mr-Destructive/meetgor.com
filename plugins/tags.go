@@ -61,8 +61,18 @@ func (p *TagsPlugin) Execute(ssg *models.SSG) {
 		}
 		feedPath := filepath.Join(".", config.Blog.OutputDir, "tags", feed.Type)
 		err = os.MkdirAll(feedPath, os.ModePerm)
+		feedPath2 := filepath.Join(".", config.Blog.OutputDir, "tag", feed.Type)
+		err = os.MkdirAll(feedPath2, os.ModePerm)
 		outputFeedPath := fmt.Sprintf("%s/index.html", feedPath)
 		err = os.WriteFile(outputFeedPath, buffer.Bytes(), 0660)
+		if err != nil {
+			log.Println(err)
+		}
+		outputFeedPath2 := fmt.Sprintf("%s/index.html", feedPath2)
+		err = os.WriteFile(outputFeedPath2, buffer.Bytes(), 0660)
+		if err != nil {
+			log.Println(err)
+		}
 	}
 }
 
