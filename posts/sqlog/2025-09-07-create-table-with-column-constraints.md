@@ -35,6 +35,7 @@ CREATE TABLE llm_models(
 
 ```sql
 INSERT INTO llm_models DEFAULT VALUES;
+SELECT * FROM llm_models;
 ```
 
 OOPs! `Runtime error: NOT NULL constraint failed: llm_models.name (19)`. The default value is `NULL` or empty if not explicitly constrained on the column. So, it tried to insert the `NULL` as the `name` of the `llm_models` record/row, and while doing so sqlite hit a error, at runtime, that the constraint of the column `llm_models.name` cannot be `NULL`. 
@@ -45,6 +46,7 @@ Let's sepcify the value of the `name` column:
 
 ```sql
 INSERT INTO llm_models(name) VALUES('abc');
+SELECT * FROM llm_models;
 ```
 
 This time it successfully ran, the thing to note here is that the `model_type` or `model_code` column is populated as `NULL` becuase they don't have any constraint, especially they don't have the `NOT NULL` constraint, and hence we need to provide a value to the `name` column but the `model_type` or `model_code` columns becomes optional.
@@ -73,12 +75,14 @@ This way, we make sure the `model_code` column is unique, and we don't have any 
 
 ```sql
 INSERT INTO llm_models(name) VALUES('abc');
+SELECT * FROM llm_models;
 ```
 
 Works fine, now notice here that the `model_code` is not provided and therefore it is `NULL`, let's add one more row with the same `name` and check if that fails the unique constraint on the `model_code` as it will now have the model_code duplicated `NULL` in both the rows, that should fail right? RIGHT?
 
 ```sql
 INSERT INTO llm_models(name) VALUES('abc');
+SELECT * FROM llm_models;
 ```
 
 Nopes!
@@ -90,12 +94,14 @@ Let's add the `model_code` now.
 
 ```sql
 INSERT INTO llm_models(name, model_code) VALUES ('abc', 'llm-1');
+SELECT * FROM llm_models;
 ```
 
 Ok, we added a record with `model_code` as `llm-1`. Now, let's add the same record again.
 
 ```sql
 INSERT INTO llm_models(name, model_code) VALUES ('abc', 'llm-1');
+SELECT * FROM llm_models;
 ```
 
 And, it broke, it gave a `Runtime error: UNIQUE constraint failed: llm_models.model_code (19)` error. So, we can't add the same `model_code` twice.
@@ -209,7 +215,7 @@ SELECT * FROM llm_models;
 
 There is a variant of `VIRTUAL` instead of `STORED`, we will explore this separately, I am just getting my hands on and getting familiarity with all the constraints available in SQL.
 
-```sql
+```
 sqlite> CREATE TABLE llm_models(
     name TEXT NOT NULL,
     model_type TEXT DEFAULT 'text',
@@ -358,6 +364,7 @@ Original companies right?
 Now we will update the `llm_models` table that will store the LLM models information. We will add a foreign key, that will be a reference i.e. to make a relation for the row that will reference another row. So, the foreign key indicates a key (field/column) in another table that's why named as `FOREIGN KEY`. This foreign key will be referencing the `companies.id` column from the `companies` table.
 
 ```sql
+DROP TABLE llm_models;
 CREATE TABLE llm_models(
     name TEXT NOT NULL,
     model_type TEXT CHECK(model_type IN ('text', 'conversational', 'multimodal', 'code')) DEFAULT 'text',
@@ -371,6 +378,7 @@ We insert the `llm_models` with the foreign key of 2 indicating the company `Clo
 
 ```sql
 INSERT INTO llm_models(name, model_code, company_id) VALUES('abc', 'llm-1', 2);
+SELECT * FROM llm_models;
 ```
 
 Now, if we see, this has successfully inserted the row.
