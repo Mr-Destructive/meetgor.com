@@ -460,6 +460,81 @@ SELECT SUM(word_count) FROM posts_stored;
 
 This gives `1300012` as the sum of the `word_count` from the `posts_stored` table. Which matches the sum of the `word_count` from the `posts_virtual` table.
 
+```sql
+sqlite> CREATE TABLE posts_stored (
+   id INTEGER PRIMARY KEY,
+   content TEXT,
+   word_count INTEGER GENERATED ALWAYS AS (
+     length(content) - length(replace(content, ' ', '')) + 1
+   ) STORED
+);
+Run Time: real 0.000 user 0.000258 sys 0.000027
+
+sqlite> INSERT INTO posts_stored(content) VALUES('A sample post');
+sqlite> INSERT INTO posts_stored(content) VALUES('A SQLITE Post for the virtual generated column constraint.');
+
+SELECT * FROM posts_stored;
++----+------------------------------------------------------------+------------+
+| id |                          content                           | word_count |
++----+------------------------------------------------------------+------------+
+| 1  | A sample post                                              | 3          |
+| 2  | A SQLITE Post for the virtual generated column constraint. | 9          |
++----+------------------------------------------------------------+------------+
+Run Time: real 0.000 user 0.000224 sys 0.000000
+
+sqlite> PRAGMA table_info(posts_stored);
++-----+---------+---------+---------+------------+----+
+| cid |  name   |  type   | notnull | dflt_value | pk |
++-----+---------+---------+---------+------------+----+
+| 0   | id      | INTEGER | 0       |            | 1  |
+| 1   | content | TEXT    | 0       |            | 0  |
++-----+---------+---------+---------+------------+----+
+
+sqlite> PRAGMA table_xinfo(posts_stored);
++-----+------------+---------+---------+------------+----+--------+
+| cid |    name    |  type   | notnull | dflt_value | pk | hidden |
++-----+------------+---------+---------+------------+----+--------+
+| 0   | id         | INTEGER | 0       |            | 1  | 0      |
+| 1   | content    | TEXT    | 0       |            | 0  | 0      |
+| 2   | word_count | INTEGER | 0       |            | 0  | 3      |
++-----+------------+---------+---------+------------+----+--------+
+Run Time: real 0.000 user 0.000013 sys 0.000322
+
+sqlite> SELECT COUNT(*) FROM posts_stored;
++----------+
+| COUNT(*) |
++----------+
+| 2        |
++----------+
+Run Time: real 0.000 user 0.000108 sys 0.000012
+
+sqlite> WITH RECURSIVE cnt(x) AS (
+  SELECT 1
+  UNION ALL
+  SELECT x+1 FROM cnt WHERE x < 100000
+)
+INSERT INTO posts_stored(content)
+SELECT 'This is a sample post number ' || x || ' with some words repeated multiple times.'
+FROM cnt;
+Run Time: real 0.071 user 0.067858 sys 0.002929
+
+sqlite> SELECT COUNT(*) FROM posts_stored;
++----------+
+| COUNT(*) |
++----------+
+| 100002   |
++----------+
+Run Time: real 0.000 user 0.000367 sys 0.000000
+
+sqlite> SELECT SUM(word_count) FROM posts_stored;
++-----------------+
+| SUM(word_count) |
++-----------------+
+| 1300012         |
++-----------------+
+Run Time: real 0.008 user 0.006492 sys 0.000941
+```
+
 This is all setup for the comparison of both the tables.
 
 ### The difference
