@@ -1,6 +1,7 @@
 ---
 type: "sqlog"
 title: "SQLite Scalar function: 3 valued iif and if scalar function"
+slug: sqlite-iff-if-scalar-functions
 date: 2025-08-27
 ---
 
