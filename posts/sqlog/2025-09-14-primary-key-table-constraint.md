@@ -86,6 +86,10 @@ INSERT INTO users(username, email) VALUES('john', 'john_new@abc.com');
 
 This successfully inserts the row into the table, as the `username` is same but `email` is unique. Since the PRIMARY key is a combination of `username` and `email` we can allow the combinational unique values into a new record.
 
+```sql
+SELECT * FROM users;
+```
+
 Here's the SQLog :)
 
 ```
