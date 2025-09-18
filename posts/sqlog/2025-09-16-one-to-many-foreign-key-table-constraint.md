@@ -2,7 +2,7 @@
 type: sqlog
 slug: sqlite-one-to-many-foreign-key
 title: "SQLite SQL: One to Many Relation with Foreign Key"
-date: "2025-09-15"
+date: "2025-09-16"
 tags: ["sqlite", "sql"]
 ---
 
