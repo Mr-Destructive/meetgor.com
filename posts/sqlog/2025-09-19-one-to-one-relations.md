@@ -108,6 +108,10 @@ INSERT INTO users(email, password) VALUES('harry', 'harry123'),
 
 This will insert 3 records/rows in the `users` table.
 
+```sql
+SELECT * FROM users;
+```
+
 Now, let's try inserting a subscription:
 
 ```sql
@@ -116,6 +120,21 @@ VALUES(1, 'Wizardry Weekly', 500, 'active', '2025-12-31');
 ```
 
 This will insert 1 record/row in the `news_subscriptions` table. This is a subscription for the user with `id` as `1`.
+
+```sql
+SELECT * FROM news_subscriptions;
+```
+
+Let's get the user info too:
+
+```sql
+SELECT 
+    u.id, u.email,
+    n.*
+FROM users u
+JOIN news_subscriptions n
+ON u.id = n.user_id;
+```
 
 Now, if we try to insert another subscription for the same user:
 
@@ -155,6 +174,7 @@ sqlite> SELECT * FROM users;
 | 2  | ron    | ron123    |
 | 3  | malfoy | malfoy123 |
 +----+--------+-----------+
+
 sqlite> INSERT INTO news_subscriptions(user_id, name, price, status, expiry_date) VALUES(1, 'Wizardry Weekly', 500, 'active', '2025-12-31');
 sqlite> SELECT * FROM news_subscriptions;
 +---------+-----------------+-------+--------+-------------+
@@ -162,8 +182,22 @@ sqlite> SELECT * FROM news_subscriptions;
 +---------+-----------------+-------+--------+-------------+
 | 1       | Wizardry Weekly | 500   | active | 2025-12-31  |
 +---------+-----------------+-------+--------+-------------+
+
 sqlite> INSERT INTO news_subscriptions(user_id, name, price, status, expiry_date) VALUES(1, 'Muggle Cup', 250, 'active', '2025-12-31');
 Runtime error: UNIQUE constraint failed: news_subscriptions.user_id (19)
+sqlite>
+
+sqlite> SELECT
+    u.id, u.email,
+    n.*
+FROM users u
+JOIN news_subscriptions n
+ON u.id = n.user_id;
++----+-------+---------+-----------------+-------+--------+-------------+
+| id | email | user_id |      name       | price | status | expiry_date |
++----+-------+---------+-----------------+-------+--------+-------------+
+| 1  | harry | 1       | Wizardry Weekly | 500   | active | 2025-12-31  |
++----+-------+---------+-----------------+-------+--------+-------------+
 sqlite>
 ```
 
