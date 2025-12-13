@@ -10,6 +10,7 @@ status: published
 I was reading Harry Potter, the chambers of secret, the book for the first time and I came across this quote.
 
 > “Never trust anything that can think for itself if you can’t see where it keeps its brain”
+> 
 > -- Mr. Arthur Weasley, [Harry Potter and the Chambers of secret](https://www.goodreads.com/quotes/718814-never-trust-anything-that-can-think-for-itself-if-you) (Chapter 18)
 
 The quote just rang the bells in me against LLM. Doesn't it hit? Why do I feel guilty like Ginny who had been writing to the dark lord.
