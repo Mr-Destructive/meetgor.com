@@ -1,4 +1,13 @@
-# Learning SQLite: Advent of SQL Day 1
+---
+type: "sqlog"
+title: "Advent of SQL 2025: Wish List"
+slug: "ao-sql-2025-day-01-wish-list"
+date: 2025-12-16
+series: ["advent-of-sql-2025"]
+tags: ["sqlite", "sql", "advent-of-sql"]
+---
+
+## Learning SQLite: Advent of SQL Day 1
 
 I am trying to learn SQLite, I want to understand that database. It's quite simple yet the whole world uses it for various kinds of things ranging from developers' toy database to spaceships. What a tiny engineering marvel!
 
