@@ -116,6 +116,25 @@ CREATE TABLE wish_list (
 
 BIGSERIAL is not a datatype in SQLite. It might be in PostgreSQL. But does it matter? In SQLite, if the table is not STRICT, it doesn't matter what type the column is or even if it is NOT specified of any type. That's fine.
 
+INSERT some rows shall we?
+
+```sql
+INSERT INTO wish_list (id, child_name, raw_wish) VALUES (1, 'James A.', ' BLUEY SUPERMARKET PLAY SET');
+INSERT INTO wish_list (id, child_name, raw_wish) VALUES (2, 'Sade C.', 'lego star wars set ');
+INSERT INTO wish_list (id, child_name, raw_wish) VALUES (3, 'Juan Q.', '   SCOOTER ');
+INSERT INTO wish_list (id, child_name, raw_wish) VALUES (4, 'Samir S.', '   LEGO STAR WARS SET  ');
+INSERT INTO wish_list (id, child_name, raw_wish) VALUES (5, 'Priya E.', 'shaved ice machine   ');
+INSERT INTO wish_list (id, child_name, raw_wish) VALUES (6, 'Henry L.', '   mini brands fill the fridge');
+INSERT INTO wish_list (id, child_name, raw_wish) VALUES (7, 'Ayumi C.', 'VR HEADSET');
+INSERT INTO wish_list (id, child_name, raw_wish) VALUES (8, 'Juan Y.', 'BARBIE DREAMHOUSE   ');
+INSERT INTO wish_list (id, child_name, raw_wish) VALUES (9, 'Priya O.', '  VR HEADSET  ');
+```
+
+```sql
+SELECT * FROM wish_list;
+```
+
+
 But I want to know what is the type of `wish_list.id`?
 
 ```sql
@@ -168,13 +187,13 @@ The one that I found relevant are:
 That's it, right? Convert into LOWER (or UPPER) and TRIM off the spaces.
 
 ```sql
-SELECT LOWER(TRIM(wish)) FROM wish_list;
+SELECT LOWER(TRIM(raw_wish)) FROM wish_list;
 ```
 
 Don't run just yet!
 
 ```sql
-SELECT LOWER(TRIM(wish)) FROM wish_list LIMIT 100;
+SELECT LOWER(TRIM(raw_wish)) FROM wish_list LIMIT 100;
 ```
 
 Looks good. Now to the next step.
@@ -186,7 +205,7 @@ We need to count them i.e. to group by the wish.
 > GROUP BY: What group by does is that it condenses the rows of certain column into a singular column for instance if there are 10 entries for "lego star wars set" adding a group by wish will create a singular entry for that wish and we can then perform operations like sum, count, average and all of that on other rows
 
 ```sql
-SELECT LOWER(TRIM(wish)) AS wish, count(*) AS count
+SELECT LOWER(TRIM(raw_wish)) AS wish, count(*) AS count
 FROM wish_list
 GROUP BY wish;
 ```
@@ -203,7 +222,7 @@ Does that solve it? Mostly, just need the ORDER BY now.
 Because we also need to order the results:
 
 ```sql
-SELECT LOWER(TRIM(wish)) AS wish, count(*) AS count
+SELECT LOWER(TRIM(raw_wish)) AS wish, count(*) AS count
 FROM wish_list
 GROUP BY wish
 ORDER BY count DESC;
