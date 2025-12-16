@@ -1,7 +1,7 @@
 ---
 type: "sqlog"
 title: "Advent of SQL 2025: Wish List"
-slug: "ao-sql-2025-day-01-wish-list"
+slug: "advent-of-sql-2025-day-1"
 date: 2025-12-16
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
