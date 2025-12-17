@@ -336,7 +336,7 @@ We need to order by the count.
 
 > Sort the output from fewest to most `total_usable_snowballs`.
 
-```plaintext
+```sql
 SELECT category_name, sum(quantity)  as total_usable_snowballs
 FROM snowball_inventory
 WHERE
@@ -698,6 +698,8 @@ Run Time: real 0.151 user 0.149690 sys 0.001957
 
 sqlite> 
 ```
+
+Time wise ranking:
 
 1. INNER JOIN
     
