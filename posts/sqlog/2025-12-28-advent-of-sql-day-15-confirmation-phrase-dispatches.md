@@ -456,6 +456,10 @@ sqlite>
 Ops!
 
 ```sql
+SELECT COUNT(*) as system_dispatches_count FROM system_dispatches ;
+SELECT COUNT(*) as incoming_dispatches_count FROM incoming_dispatches;
+SELECT COUNT(*) as common_dispatches_count FROM (SELECT system_id, dispatched_at, payload FROM system_dispatches INTERSECT SELECT * FROM incoming_dispatches);
+
 
 ```
 ```
@@ -493,6 +497,7 @@ sqlite> SELECT COUNT(*) FROM (SELECT system_id, dispatched_at, payload FROM syst
 | 10       |
 +----------+
 sqlite>
+```
 
 
 We need to be careful about what we insert into the `system_dispatches`.
