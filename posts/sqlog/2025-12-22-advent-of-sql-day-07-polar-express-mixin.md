@@ -2,7 +2,7 @@
 type: "sqlog"
 title: "Advent of SQL 2025 Day 7: Polar Express Mixin"
 slug: "advent-of-sql-2025-day-7"
-date: 2025-12-22
+date: 2025-12-22 15:30 +0530
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
 ---

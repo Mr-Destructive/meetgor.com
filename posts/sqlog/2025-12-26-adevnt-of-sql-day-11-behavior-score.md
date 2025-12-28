@@ -2,7 +2,7 @@
 type: "sqlog"
 title: "Advent of SQL 2025 Day 11: Behavior Score"
 slug: "advent-of-sql-2025-day-11"
-date: 2025-12-26
+date: 2025-12-26 15:30 +0530
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
 ---
