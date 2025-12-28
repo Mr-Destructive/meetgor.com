@@ -7,7 +7,6 @@ import (
 	_ "embed"
 	"encoding/json"
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -36,10 +35,6 @@ func (p *DbPlugin) Execute(ssg *models.SSG) {
 	log.Println("------Executing DB plugin")
 
 	buffer := bytes.Buffer{}
-	templates, err := template.New("base").ParseFS(ssg.FS, "*.html")
-	if err != nil {
-		log.Fatal(err)
-	}
 	postContext := models.TemplateContext{
 		Themes: models.ThemeCombo{
 			Default:   ssg.Config.Blog.Themes["default"],
@@ -49,7 +44,7 @@ func (p *DbPlugin) Execute(ssg *models.SSG) {
 			Blog: ssg.Config.Blog,
 		},
 	}
-	err = templates.ExecuteTemplate(&buffer, "editor_template.html", postContext)
+	err := ssg.TemplateFS.ExecuteTemplate(&buffer, "editor_template.html", postContext)
 	if err != nil {
 		log.Fatal(err)
 	}

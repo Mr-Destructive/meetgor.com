@@ -296,7 +296,15 @@ func GeneratePages(config models.SSG_CONFIG) error {
 			},
 		}
 		buffer := bytes.Buffer{}
-		t, err := template.ParseFS(templateFS, "*.html")
+		t := template.New("").Funcs(template.FuncMap{
+			"dateOnly": func(dateStr string) string {
+				if len(dateStr) >= 10 {
+					return dateStr[:10]
+				}
+				return dateStr
+			},
+		})
+		t, err = t.ParseFS(templateFS, "*.html")
 		err = t.ExecuteTemplate(&buffer, "default_page_template.html", context)
 		if err != nil {
 			log.Fatal(err)
@@ -452,7 +460,20 @@ func (c *RenderTemplatesPlugin) Execute(ssg *models.SSG) {
 	config := &ssg.Config
 	templateFS := os.DirFS(config.Blog.TemplatesDir)
 	ssg.FS = templateFS
-	t, err := template.ParseFS(templateFS, "*.html")
+	
+	// Create template with custom functions first
+	t := template.New("").Funcs(template.FuncMap{
+		"dateOnly": func(dateStr string) string {
+			// Extract just the date part (YYYY-MM-DD) from the beginning
+			if len(dateStr) >= 10 {
+				return dateStr[:10]
+			}
+			return dateStr
+		},
+	})
+	
+	t, err := t.ParseFS(templateFS, "*.html")
+	
 	ssg.TemplateFS = t
 	if err != nil {
 		log.Fatal(err)
@@ -502,12 +523,6 @@ func (c *RenderTemplatesPlugin) Execute(ssg *models.SSG) {
 			log.Fatal(err)
 		}
 		outputPostPath := filepath.Join(postPath, "index.html")
-		for i := range ssg.Posts {
-			if ssg.Posts[i].Frontmatter.Date == "" {
-				continue
-			}
-			ssg.Posts[i].Frontmatter.Date = ssg.Posts[i].Frontmatter.Date[:10] // Truncate in case of time component
-		}
 		post.Content = template.HTML(generateEmbed(string(post.Content)))
 		context := models.TemplateContext{
 			Post: post,
@@ -563,6 +578,8 @@ func (c *CreateFeedsPlugin) Name() string {
 
 func (c *CreateFeedsPlugin) Execute(ssg *models.SSG) {
 	config := &ssg.Config
+	
+	// Generate individual feed pages
 	for _, feed := range ssg.FeedPosts {
 		buffer := bytes.Buffer{}
 		templatePath := config.Blog.PagesConfig[feed.Type].FeedTemplatePath
@@ -592,6 +609,60 @@ func (c *CreateFeedsPlugin) Execute(ssg *models.SSG) {
 		outputFeedPath := fmt.Sprintf("%s/index.html", feedPath)
 		err = os.WriteFile(outputFeedPath, buffer.Bytes(), 0660)
 	}
+	
+	// Generate all-content feed with all posts
+	allPosts := []models.Post{}
+	for _, feed := range ssg.FeedPosts {
+		allPosts = append(allPosts, feed.Posts...)
+	}
+	// Sort all posts by date
+	SortPosts(allPosts)
+	
+	if len(allPosts) > 0 {
+		allContentFeed := models.Feed{
+			Title: "All Content 📚",
+			Type:  "all-content",
+			Slug:  "all-content",
+			Posts: allPosts,
+		}
+		
+		buffer := bytes.Buffer{}
+		templatePath := config.Blog.PagesConfig["all-content"].FeedTemplatePath
+		if templatePath == "" {
+			templatePath = config.Blog.DefaultFeedTemplate
+		}
+		
+		context := models.TemplateContext{
+			FeedPosts: []models.Feed{allContentFeed},
+			Themes: models.ThemeCombo{
+				Default:   config.Blog.Themes["default"],
+				Secondary: config.Blog.Themes["secondary"],
+			},
+			FeedInfo: allContentFeed,
+			Config: models.SSG_CONFIG{
+				Blog:      config.Blog,
+				AdminMode: config.AdminMode,
+			},
+		}
+		
+		fmt.Println("Creating all-content feed with", len(allPosts), "posts")
+		err := ssg.TemplateFS.ExecuteTemplate(&buffer, templatePath, context)
+		if err != nil {
+			log.Fatal(err)
+		}
+		
+		feedPath := filepath.Join(".", config.Blog.OutputDir, "all-content")
+		err = os.MkdirAll(feedPath, os.ModePerm)
+		if err != nil {
+			log.Fatal(err)
+		}
+		outputFeedPath := fmt.Sprintf("%s/index.html", feedPath)
+		err = os.WriteFile(outputFeedPath, buffer.Bytes(), 0660)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	
 	// create a folder for post if the post type is "post"
 	// as this should be the /posts/<slug> as well as /<slug>
 	for _, post := range ssg.Posts {
