@@ -291,11 +291,41 @@ func (p *BeforeAfterPostsPlugin) findRelatedPostsByTags(currentPost *models.Post
 	return related
 }
 
-// parseDate parses a date string in format "YYYY-MM-DD"
+// parseDate parses a date string in various formats: "YYYY-MM-DD", "YYYY-MM-DD HH:MM", "YYYY-MM-DD HH:MM:SS", "YYYY-MM-DD HH:MM:SS +ZZZZ", "YYYY-MM-DD HH:MM +ZZZZ"
 func parseDate(dateStr string) (time.Time, error) {
 	if len(dateStr) < 10 {
 		return time.Time{}, fmt.Errorf("invalid date format")
 	}
+	
+	// Try parsing with timezone and full time "YYYY-MM-DD HH:MM:SS +0700"
+	if len(dateStr) >= 25 {
+		if t, err := time.Parse("2006-01-02 15:04:05 -0700", dateStr); err == nil {
+			return t, nil
+		}
+	}
+	
+	// Try parsing with timezone but no seconds "YYYY-MM-DD HH:MM +0700"
+	if len(dateStr) >= 21 {
+		if t, err := time.Parse("2006-01-02 15:04 -0700", dateStr); err == nil {
+			return t, nil
+		}
+	}
+	
+	// Try parsing with time but no timezone "YYYY-MM-DD HH:MM:SS"
+	if len(dateStr) >= 19 {
+		if t, err := time.Parse("2006-01-02 15:04:05", dateStr[:19]); err == nil {
+			return t, nil
+		}
+	}
+	
+	// Try parsing with time but no timezone, no seconds "YYYY-MM-DD HH:MM"
+	if len(dateStr) >= 16 {
+		if t, err := time.Parse("2006-01-02 15:04", dateStr[:16]); err == nil {
+			return t, nil
+		}
+	}
+	
+	// Fall back to just date
 	return time.Parse("2006-01-02", dateStr[:10])
 }
 

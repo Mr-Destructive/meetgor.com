@@ -2,7 +2,7 @@
 type: "sqlog"
 title: "Advent of SQL 2025 Day 3: Hotline Messages"
 slug: "advent-of-sql-2025-day-3"
-date: 2025-12-18
+date: 2025-12-18 15:30 +0530
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
 ---

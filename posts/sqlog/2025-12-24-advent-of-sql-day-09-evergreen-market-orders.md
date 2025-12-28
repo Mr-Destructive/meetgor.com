@@ -2,7 +2,7 @@
 type: "sqlog"
 title: "Advent of SQL 2025 Day 9: Evergreen Market Orders"
 slug: "advent-of-sql-2025-day-9"
-date: 2025-12-24
+date: 2025-12-24 15:30 +0530
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
 ---

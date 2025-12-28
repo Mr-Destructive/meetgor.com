@@ -2,7 +2,7 @@
 type: "sqlog"
 title: "Advent of SQL 2025 Day 10: Misdelivered Presents"
 slug: "advent-of-sql-2025-day-10"
-date: 2025-12-25
+date: 2025-12-25 15:30 +0530
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
 ---
