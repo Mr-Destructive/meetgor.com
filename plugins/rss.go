@@ -3,7 +3,6 @@ package plugins
 import (
 	"encoding/xml"
 	"fmt"
-	"html/template"
 	"log"
 	"os"
 	"path/filepath"
@@ -199,11 +198,6 @@ func (p *RSSPlugin) Execute(ssg *models.SSG) {
 		log.Fatalf("Error creating feeds directory: %v", err)
 	}
 
-	tmpl, err := template.ParseGlob(filepath.Join(config.Blog.TemplatesDir, "*.html"))
-	if err != nil {
-		log.Fatalf("Error parsing feeds template: %v", err)
-	}
-
 	file, err := os.Create(feedsPagePath)
 	if err != nil {
 		log.Fatalf("Error creating feeds page: %v", err)
@@ -220,7 +214,7 @@ func (p *RSSPlugin) Execute(ssg *models.SSG) {
 		TypeFeedLinks: typeFeedLinks,
 	}
 
-	err = tmpl.ExecuteTemplate(file, "feeds_template.html", data)
+	err = ssg.TemplateFS.ExecuteTemplate(file, "feeds_template.html", data)
 	if err != nil {
 		log.Fatalf("Error executing feeds template: %v", err)
 	}
