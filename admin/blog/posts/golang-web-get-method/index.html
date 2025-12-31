@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Golang Web: GET Method | Meet Gor</title>
+    <meta name="title" content="Golang Web: GET Method | Meet Gor">
+    <meta name="description" content="Exploring the fundamentals of a GET method in golang. How to request a resource, parse body, headers, etc. in a HTTP GET request.">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/posts/golang-web-get-method">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/posts/golang-web-get-method">
+    <meta property="og:title" content="Golang Web: GET Method">
+    <meta property="og:description" content="Exploring the fundamentals of a GET method in golang. How to request a resource, parse body, headers, etc. in a HTTP GET request.">
+    <meta property="og:image" content="https://meetgor-cdn.pages.dev/100-days-of-golang/golang-033-get-method.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Golang Web: GET Method">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2023-10-28 20:15:00">
+    <meta property="article:modified_time" content="2023-10-28 20:15:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/posts/golang-web-get-method">
+    <meta name="twitter:title" content="Golang Web: GET Method">
+    <meta name="twitter:description" content="Exploring the fundamentals of a GET method in golang. How to request a resource, parse body, headers, etc. in a HTTP GET request.">
+    <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/100-days-of-golang/golang-033-get-method.png">
+    <meta name="twitter:image:alt" content="Golang Web: GET Method">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/posts\/golang-web-get-method"
+        },
+        "headline": "Golang Web: GET Method",
+        "description": "Exploring the fundamentals of a GET method in golang. How to request a resource, parse body, headers, etc. in a HTTP GET request.",
+        "datePublished": "2023-10-28 20:15:00",
+        "dateModified": "2023-10-28 20:15:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        "image": "https:\/\/meetgor-cdn.pages.dev\/100-days-of-golang\/golang-033-get-method.png",
+        "keywords": "go",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;In this section of the series, we will be exploring how to send a \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; HTTP request in golang. We will be understanding how to send a basic GET request, create an HTTP request and customize the client, add headers, read the response body, etc in the following sections of this post.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;what-is-a-get-method\u0026#34;\u0026gt;What is a GET method?\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;A \u0026lt;a href=\u0026#34;https:\/\/en.wikipedia.org\/wiki\/HTTP#Request_methods\u0026#34;\u0026gt;GET\u0026lt;\/a\u0026gt; method in the context of an HTTP request is an action that is used to obtain data\/resources. The \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; method is used in a web application to get a resource like an HTML page, image, video, media, etc.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Some common usecases of the \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; method are:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Loading a webpage\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Getting an image, file or other resource\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;API requests to retrieve data\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Search queries sending filters and parameters\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;h2 id=\u0026#34;basic-get-request\u0026#34;\u0026gt;Basic GET Request\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;To use the HTTP method \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; in golang, the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http\u0026#34;\u0026gt;net\/http\u0026lt;\/a\u0026gt; package has a \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#Get\u0026#34;\u0026gt;Get\u0026lt;\/a\u0026gt; method. This method simply takes in a URL as a string and returns the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#Response\u0026#34;\u0026gt;response\u0026lt;\/a\u0026gt; or an error. Let\u0026#39;s look at how to send a basic HTTP GET request in golang.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\/\/ web\/methods\/get\/main.go\n\n\npackage main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\nfunc main() {\n\treqURL := \u0026#34;https:\/\/www.google.com\u0026#34;\n\tresp, err := http.Get(reqURL)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tfmt.Println(resp)\n    fmt.Println(resp.Status)\n    fmt.Println(\u0026#34;Status Code:\u0026#34;, resp.StatusCode)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run main.go\n\n\u0026amp;{200 OK 200 HTTP\/2.0 2 0 map[Alt-Svc:[h3=\u0026#34;:443\u0026#34;; ma=2592000,h3-29=\u0026#34;:443\u0026#34;; ma=2592000] Cache-Control:[private, max-age=0] Content-Security-Policy-Report-Only:[object-src \u0026#39;none\u0026#39;;base-uri \u0026#39;self\u0026#39;;script-src \u0026#39;nonce-pdz_s8Gr0owwMbX8I9qNEQ\u0026#39; \u0026#39;strict-dynamic\u0026#39; \u0026#39;report-sample\u0026#39; \u0026#39;unsafe-eval\u0026#39; \u0026#39;unsafe-inline\u0026#39; https: http:;report-uri https:\/\/csp.withgoogle.com\/csp\/gws\/other-hp] Content-Type:[text\/html; charset=ISO-8859-1] Date:[Fri, 27 Oct 2023 09:37:04 GMT] Expires:[-1] P3p:[CP=\u0026#34;This is not a P3P policy! See g.co\/p3phelp for more info.\u0026#34;] Server:[gws] Set-Cookie:[1P_JAR=2023-10-27-09; expires=Sun, 26-Nov-2023 09:37:04 GMT; path=\/; domain=.google.com; Secure AEC=Ackid1Q5FARA_9d7f7znggUdw6DoJA1DBpI17Z0SWxN519Dc64EqmYVHlFg; expires=Wed, 24-Apr-2024 09:37:04 GMT; path=\/; domain=.google.com; Secure; HttpOnly; SameSite=lax NID=511=EToBPqckCVRE7Paehug1PgNBKqe7lFLI9d12xJrGbvP9r8tkFIRWciry3gsy8FZ8OUIK4gE4PD-irgNzg4Y1fVePLdyu0AJdY_HcqL6zQYok-Adn-y5TDPmMCNuDnrouBfoxtqVjYY_4RFOe8jalkYto5fQAwzWnNJyw8K0avsw; expires=Sat, 27-Apr-2024 09:37:04 GMT; path=\/; domain=.google.com; HttpOnly] X-Frame-Options:[SAMEORIGIN] X-Xss-Protection:[0]] 0xc000197920 -1 [] false true map[] 0xc0000ee000 0xc0000d8420}\n\n200 OK\n\nStatus Code: 200\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above code, we have defined a URL string as \u0026lt;code\u0026gt;reqURL\u0026lt;\/code\u0026gt; and used the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#Get\u0026#34;\u0026gt;Get\u0026lt;\/a\u0026gt; method to send a GET request. The \u0026lt;code\u0026gt;Get\u0026lt;\/code\u0026gt; is parsed with the \u0026lt;code\u0026gt;reqURL\u0026lt;\/code\u0026gt; string and the return values are stored as \u0026lt;code\u0026gt;resp\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;err\u0026lt;\/code\u0026gt;. We have added an error check after calling the \u0026lt;code\u0026gt;Get\u0026lt;\/code\u0026gt; method in order to avoid errors later in the code.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The \u0026lt;code\u0026gt;Get\u0026lt;\/code\u0026gt; method as seen from the output has returned a \u0026lt;code\u0026gt;*http.Response\u0026lt;\/code\u0026gt; object, we can use the \u0026lt;code\u0026gt;Status\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;StatusCode\u0026lt;\/code\u0026gt; properties to get the status code of the response. In this case, the status code of the response was \u0026lt;code\u0026gt;200\u0026lt;\/code\u0026gt;. The response \u0026lt;code\u0026gt;resp\u0026lt;\/code\u0026gt; is an object of type \u0026lt;code\u0026gt;http.Response\u0026lt;\/code\u0026gt; i.e. it has fields like \u0026lt;code\u0026gt;Body\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;StatusCode\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;Headers\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;Proto\u0026lt;\/code\u0026gt;, etc. We can get each individual field from the \u0026lt;code\u0026gt;resp\u0026lt;\/code\u0026gt; object. We will later look into how to read the \u0026lt;code\u0026gt;Body\u0026lt;\/code\u0026gt; field from the response, it is not directly read as a string nor it is stored in other forms, rather it is streamed from the requested URL.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;creating-a-get-request\u0026#34;\u0026gt;Creating a GET request\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We can even construct a GET request using the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#NewRequest\u0026#34;\u0026gt;NewRequest\u0026lt;\/a\u0026gt; method. This is a low-level way of creating a \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; request. We mention the \u0026lt;code\u0026gt;method\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;URL\u0026lt;\/code\u0026gt;, and the \u0026lt;code\u0026gt;body\u0026lt;\/code\u0026gt;, in the case of \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; request, there is nobody. So, the \u0026lt;code\u0026gt;NewRequest\u0026lt;\/code\u0026gt; is a general way of creating a \u0026lt;code\u0026gt;http\u0026lt;\/code\u0026gt; request.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\/\/ web\/methods\/get\/newreq.go\n\npackage main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\nfunc main() {\n\treqURL := \u0026#34;https:\/\/www.google.com\u0026#34;\n\treq, err := http.NewRequest(http.MethodGet, reqURL, nil)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tresp, err := http.DefaultClient.Do(req)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tfmt.Println(resp)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;As we can see, we construct a \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; request using the \u0026lt;code\u0026gt;NewRequest\u0026lt;\/code\u0026gt; method and then use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#Client.Do\u0026#34;\u0026gt;Do\u0026lt;\/a\u0026gt; method to send the request to the server. The \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#DefaultClient\u0026#34;\u0026gt;http.DefaultClient\u0026lt;\/a\u0026gt; is used as a client to send the request, if we want to customize this we can create a new instance object of \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#Client\u0026#34;\u0026gt;http.Client\u0026lt;\/a\u0026gt; and use it to send requests. We will be taking a look at clients in another part of this series when we want to persist a connection or avoid connecting multiple times to the same application\/URL.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;For now, we will go ahead with the DefaultClient. This will trigger the request, in this case, a \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; request to the specified URL in the \u0026lt;code\u0026gt;reqURL\u0026lt;\/code\u0026gt; string. The \u0026lt;code\u0026gt;Do\u0026lt;\/code\u0026gt; method returns either a \u0026lt;code\u0026gt;http.Response\u0026lt;\/code\u0026gt; or an \u0026lt;code\u0026gt;error\u0026lt;\/code\u0026gt; just like the \u0026lt;code\u0026gt;Get\u0026lt;\/code\u0026gt; method did.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;reading-the-response-body\u0026#34;\u0026gt;Reading the Response Body\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We saw some different ways to send a \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; request, now the below example will demonstrate how to read the body of the response. The response body is read from a buffer rather than loading the entire response into memory. It makes it flexible to parse the data efficiently and as per the needs. We will see how we use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/io\u0026#34;\u0026gt;io\u0026lt;\/a\u0026gt; package\u0026#39;s \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/io#ReadAll\u0026#34;\u0026gt;ReadAll\u0026lt;\/a\u0026gt; method can be used to read from the response buffer.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\/\/ web\/methods\/get\/body.go\n\npackage main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;io\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\nfunc main() {\n\treqURL := \u0026#34;https:\/\/httpbin.org\/html\u0026#34;\n\tresp, err := http.Get(reqURL)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\t\/\/ close the body object before returning the function\n\t\/\/ this is to avoid the memory leak\n\tdefer resp.Body.Close()\n\n\t\/\/ stream the data from the response body only once\n\t\/\/ it is not buffered in the memory\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tfmt.Println(string(body))\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, we are trying to get the body from the response to the request sent at \u0026lt;a href=\u0026#34;https:\/\/httpbin.org\/html\u0026#34;\u0026gt;\u0026lt;code\u0026gt;https:\/\/httpbin.org\/html\u0026lt;\/code\u0026gt;\u0026lt;\/a\u0026gt;. We have used the simple \u0026lt;code\u0026gt;Get\u0026lt;\/code\u0026gt; method instead of \u0026lt;code\u0026gt;NewRequest\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;Do\u0026lt;\/code\u0026gt; for simplicity. The response is stored in \u0026lt;code\u0026gt;resp\u0026lt;\/code\u0026gt;, we also have added \u0026lt;code\u0026gt;defer resp.Body.Close()\u0026lt;\/code\u0026gt; which is to say that we will close the body reader object when the function is returned\/closed. So, this means that the \u0026lt;code\u0026gt;Body\u0026lt;\/code\u0026gt; is not readily available data, we need to obtain\/stream the data from the server. We have to receive the body in bytes as a tcp request, the body is streamed in a buffer.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The response body is streamed from the server, which means that it\u0026#39;s not immediately available as a complete data set. We read the body in bytes as it arrives over the network, and it\u0026#39;s stored in a buffer, which allows us to process the data efficiently.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;reading-body-in-bytes\u0026#34;\u0026gt;Reading Body in bytes\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We can even read the body in bytes i.e. by reading a chunk of the buffer at a time. We can use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/bytes#Buffer\u0026#34;\u0026gt;bytes.Buffer\u0026lt;\/a\u0026gt; container object to store the body. Then we can create a slice of bytes as \u0026lt;code\u0026gt;[]bytes\u0026lt;\/code\u0026gt; of a certain size and read the body into the chunk. By writing the chunk into the buffer, we get the entire body from the response.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\/\/ web\/methods\/get\/body.go\n\n\npackage main\n\nimport (\n\t\u0026#34;bytes\u0026#34;\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\nfunc main() {\n\treqURL := \u0026#34;https:\/\/httpbin.org\/html\u0026#34;\n\tresp, err := http.Get(reqURL)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tdefer resp.Body.Close()\n\n    \/\/ create a empty buffer\n\tbuf := new(bytes.Buffer)\n\n    \/\/ create a chunk buffer of a fixed size\n\tchunk := make([]byte, 1024)\n\n\tfor {\n\t\t\/\/ Read into buffer\n\t\tn, err := resp.Body.Read(chunk)\n\t\tif err != nil {\n\t\t\tbreak\n\t\t}\n        \/\/ append the chunk to the buffer\n\t\tbuf.Write(chunk[:n])\n\t\tfmt.Printf(\u0026#34;%s\n\u0026#34;, chunk[:n])\n\t}\n\n    \/\/ entire body stored in bytes\n\tfmt.Println(buf.String())\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, the body is read chunkwise buffers and obtained as a slice of bytes. We define the request as a \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; request to the \u0026lt;a href=\u0026#34;http:\/\/httpbin.org\/html\u0026#34;\u0026gt;\u0026lt;code\u0026gt;httpbin.org\/html\u0026lt;\/code\u0026gt;\u0026lt;\/a\u0026gt;. We create a new Buffer as a slice of bytes with \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/bytes#Buffer\u0026#34;\u0026gt;bytes.Buffer\u0026lt;\/a\u0026gt;, then we define chunk as a container to stream the response body with a particular size. We have taken \u0026lt;code\u0026gt;1024\u0026lt;\/code\u0026gt; bytes as the size of the chunk. Then inside an infinite for loop, we read the body as \u0026lt;code\u0026gt;n, err :=\u0026lt;\/code\u0026gt; \u0026lt;a href=\u0026#34;http:\/\/resp.Body.Read\u0026#34;\u0026gt;\u0026lt;code\u0026gt;resp.Body.Read\u0026lt;\/code\u0026gt;\u0026lt;\/a\u0026gt;\u0026lt;code\u0026gt;(chunk)\u0026lt;\/code\u0026gt;. The code will read the body into the chunk(slice of byte) and the return value will be the size of the bytes read or an error. Then we check if there is no error, and if there is an error, we break the loop indicating we have completed reading the entire body or something went wrong. Then we write the chunk into the buffer that we allocated earlier as \u0026lt;code\u0026gt;buf\u0026lt;\/code\u0026gt;. This is a slice of bytes, we are basically populating the buffer with more slices of bytes.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The entire body is then stored in the buffer as a slice of bytes. So, we have to cast it into a string to see the contents. So, this is how we can read the contents of a body in a response in chunks.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;parsing-the-json-body-with-structs\u0026#34;\u0026gt;Parsing the JSON body with structs\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;If we have the structure of the response body already decided, then we can define a struct for the response body and then we can \u0026lt;a href=\u0026#34;https:\/\/doc.akka.io\/docs\/akka-http\/current\/common\/unmarshalling.html#unmarshalling:~:text=Unmarshalling,type%20T.\u0026#34;\u0026gt;Unmarshal\u0026lt;\/a\u0026gt; \/ deserialize\/unpickle. This means we can convert the bytes representation of the data into a Golang-specific structure which is called a high-level representation of the data. We can parse the JSON body into a defined struct using \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/encoding\/json#Unmarshal\u0026#34;\u0026gt;Unmarshal\u0026lt;\/a\u0026gt; or \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/encoding\/json#Decoder.Decode\u0026#34;\u0026gt;Decode\u0026lt;\/a\u0026gt; methods in the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/encoding\/json\u0026#34;\u0026gt;json\u0026lt;\/a\u0026gt; package.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s look at both the methods.\u0026lt;\/p\u0026gt;\n\u0026lt;h4 id=\u0026#34;using-unmarshal\u0026#34;\u0026gt;Using Unmarshal\u0026lt;\/h4\u0026gt;\n\u0026lt;p\u0026gt;The \u0026lt;code\u0026gt;Unmarshal\u0026lt;\/code\u0026gt; method takes in two parameters i.e. the body in bytes and the reference of the object that we want to unmarshal into. The method returns an error if there is a discrepancy in the returned JSON or the structure defined it is unable to deserialize the JSON object into the defined structure.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;encoding\/json\u0026#34;\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;io\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\ntype Product struct {\n\tID                 int      \u0060json:\u0026#34;id\u0026#34;\u0060\n\tTitle              string   \u0060json:\u0026#34;title\u0026#34;\u0060\n\tDescription        string   \u0060json:\u0026#34;description\u0026#34;\u0060\n\tPrice              float64  \u0060json:\u0026#34;price\u0026#34;\u0060\n\tDiscountPercentage float64  \u0060json:\u0026#34;discountPercentage\u0026#34;\u0060\n\tRating             float64  \u0060json:\u0026#34;rating\u0026#34;\u0060\n\tStock              int      \u0060json:\u0026#34;stock\u0026#34;\u0060\n\tBrand              string   \u0060json:\u0026#34;brand\u0026#34;\u0060\n\tCategory           string   \u0060json:\u0026#34;category\u0026#34;\u0060\n    Thumbnail          string   \u0060json:\u0026#34;thumbnail,omitempty\u0026#34;\u0060\n    Images             []string \u0060json:\u0026#34;-\u0026#34;\u0060\n}\n\nfunc main() {\n\treqURL := \u0026#34;https:\/\/dummyjson.com\/products\/1\u0026#34;\n\tresp, err := http.Get(reqURL)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\n\tvar data Product\n\tif err := json.Unmarshal(body, \u0026amp;data); err != nil {\n\t\tpanic(err)\n\t}\n\n\tfmt.Println(data)\n\tfmt.Println(data.Title)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\n\n{1 iPhone 9 An apple mobile which is nothing like apple 549 12.96 4.69 94 Apple smartphones https:\/\/cdn.dummyjson.com\/product-images\/1\/thumbnail.jpg []}\niPhone 9\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, we have defined a structure called Product with fields such as \u0026lt;code\u0026gt;ID\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;Title\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;Description\u0026lt;\/code\u0026gt;, etc. We use the JSON tag to specify how each field should be encoded to or decoded from JSON. These tags guide the Golang JSON encoders and decoders to correctly map JSON data to struct fields and vice versa. The \u0026lt;code\u0026gt;omitempty\u0026lt;\/code\u0026gt; option in a struct tag instructs the encoder to omit the field from the JSON output if the field\u0026#39;s value is the zero value for its type (e.g., 0 for integers, \u0026amp;quot;\u0026amp;quot; for strings, nil for pointers, slices, and maps). This is useful for reducing the size of the JSON output by excluding empty or default-valued fields.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Conversely, the \u0026lt;code\u0026gt;-\u0026lt;\/code\u0026gt; option in a struct tag tells the encoder and decoder to completely ignore the field. It will not be included in encoded JSON, nor will it be populated when decoding JSON into a struct. This is particularly useful for excluding fields that are meant for internal use only and should not be exposed through JSON.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Therefore, \u0026lt;code\u0026gt;omitempty\u0026lt;\/code\u0026gt; is used to control the inclusion of fields in the JSON output based on their values, while \u0026lt;code\u0026gt;-\u0026lt;\/code\u0026gt; is used to exclude fields from both encoding and decoding from JSON.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We send the \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; request to the api \u0026lt;code\u0026gt;https:\/\/dummyjson.com\/products\/1\u0026lt;\/code\u0026gt;. The response from the request is read into a slice of bytes with \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/io#ReadAll\u0026#34;\u0026gt;io.ReadAll\u0026lt;\/a\u0026gt; that takes in a \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/io#Reader\u0026#34;\u0026gt;io.Reader\u0026lt;\/a\u0026gt; object in this case it is the \u0026lt;code\u0026gt;resp.Body\u0026lt;\/code\u0026gt; and it returns a slice of byte and error if any issue arises while reading in the body. Further, we can use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/encoding\/json#Unmarshal\u0026#34;\u0026gt;Unmarshal\u0026lt;\/a\u0026gt; method to parse the slice of body \u0026lt;code\u0026gt;body\u0026lt;\/code\u0026gt; into the struct \u0026lt;code\u0026gt;Product\u0026lt;\/code\u0026gt; with the variable \u0026lt;code\u0026gt;data\u0026lt;\/code\u0026gt;, the reference to \u0026lt;code\u0026gt;\u0026amp;amp;data\u0026lt;\/code\u0026gt; indicates that the method will directly mutate\/change this variable and populate the object with the fields from the body.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So in a gist, to convert the JSON body into a golang native structure with \u0026lt;code\u0026gt;Unmarshal\u0026lt;\/code\u0026gt; with the following steps:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Read the body into a slice of bytes using \u0026lt;code\u0026gt;io.ReadAll\u0026lt;\/code\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Create an object of the struct\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Pass the body as a slice of bytes and the reference of that object (struct instance) into the Unmarshal method\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Access the object with the fields in the struct\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;In the output response, we can see the object is populated with the fields from the body. The \u0026lt;code\u0026gt;Title\u0026lt;\/code\u0026gt; field is accessed using the \u0026lt;code\u0026gt;data.Title\u0026lt;\/code\u0026gt; as we do with a normal golang struct. The \u0026lt;code\u0026gt;Images\u0026lt;\/code\u0026gt; field is not populated because we have always ignored\/omitted from the json tag with \u0026lt;code\u0026gt;-\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;h4 id=\u0026#34;using-decoder\u0026#34;\u0026gt;Using Decoder\u0026lt;\/h4\u0026gt;\n\u0026lt;p\u0026gt;Similar to the \u0026lt;code\u0026gt;Unmarshal\u0026lt;\/code\u0026gt; we can use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/encoding\/json#Decoder\u0026#34;\u0026gt;Decoder\u0026lt;\/a\u0026gt; to parse the body into a struct. However, the parameters it takes are a bit different and it is a two-step process. We first create a \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/encoding\/json#Decoder\u0026#34;\u0026gt;Decoder\u0026lt;\/a\u0026gt; object using the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/encoding\/json#NewDecoder\u0026#34;\u0026gt;NewDecoder\u0026lt;\/a\u0026gt; method, which takes in a \u0026lt;code\u0026gt;io.Reader\u0026lt;\/code\u0026gt; object, luckily the body from the response is already in that structure, so we can directly pass that \u0026lt;code\u0026gt;resp.Body\u0026lt;\/code\u0026gt; into the \u0026lt;code\u0026gt;NewDecoder\u0026lt;\/code\u0026gt; method. The second step is to decode the data into the object, here as well, we need to create the object of the struct and parse the reference to the object to the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/encoding\/json#Decoder.Decode\u0026#34;\u0026gt;Decode\u0026lt;\/a\u0026gt; method. The \u0026lt;code\u0026gt;Decode\u0026lt;\/code\u0026gt; method converts the bytes parsed in the \u0026lt;code\u0026gt;resp.Body\u0026lt;\/code\u0026gt; from the \u0026lt;code\u0026gt;Decoder\u0026lt;\/code\u0026gt; object and populates the fields of the object provided in the reference struct.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So the steps for deserializing the json object into the struct with the decode method are:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Create a decoder with \u0026lt;code\u0026gt;NewDecoder\u0026lt;\/code\u0026gt; method and pass the \u0026lt;code\u0026gt;resp.Body\u0026lt;\/code\u0026gt; as the parameter which is an \u0026lt;code\u0026gt;io.Reader\u0026lt;\/code\u0026gt; object\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Create an object of the struct\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Decode the body into that object using the \u0026lt;code\u0026gt;decoder.Decode\u0026lt;\/code\u0026gt; method\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Access the object with the fields in the struct\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;encoding\/json\u0026#34;\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\ntype Product struct {\n\tID                 int     \u0060json:\u0026#34;id\u0026#34;\u0060\n\tTitle              string  \u0060json:\u0026#34;title\u0026#34;\u0060\n\tDescription        string  \u0060json:\u0026#34;description\u0026#34;\u0060\n\tPrice              float64 \u0060json:\u0026#34;price\u0026#34;\u0060\n\tDiscountPercentage float64 \u0060json:\u0026#34;discountPercentage\u0026#34;\u0060\n\tRating             float64 \u0060json:\u0026#34;rating\u0026#34;\u0060\n\tStock              int     \u0060json:\u0026#34;stock\u0026#34;\u0060\n\tBrand              string  \u0060json:\u0026#34;brand\u0026#34;\u0060\n\tCategory           string  \u0060json:\u0026#34;category\u0026#34;\u0060\n    Thumbnail          string   \u0060json:\u0026#34;thumbnail,omitempty\u0026#34;\u0060\n    Images             []string \u0060json:\u0026#34;-\u0026#34;\u0060\n}\n\nfunc main() {\n\treqURL := \u0026#34;https:\/\/dummyjson.com\/products\/1\u0026#34;\n\tresp, err := http.Get(reqURL)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tdefer resp.Body.Close()\n\n\tvar data Product\n\tdecoder := json.NewDecoder(resp.Body)\n    err = decoder.Decode(\u0026amp;data)\n    if err != nil {\n        panic(err)\n    }\n\n\tfmt.Println(data)\n\tfmt.Println(data.Title)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\n\n{1 iPhone 9 An apple mobile which is nothing like apple 549 12.96 4.69 94 Apple smartphones https:\/\/cdn.dummyjson.com\/product-images\/1\/thumbnail.jpg []}\niPhone 9\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We have first defined the struct \u0026lt;code\u0026gt;Product\u0026lt;\/code\u0026gt; with the \u0026lt;code\u0026gt;json:\u0026amp;quot;id\u0026amp;quot;\u0026lt;\/code\u0026gt; tag. As explained earlier, we have used the json tags to identify the fields from the json data to the structures while encoding and decoding.\nIn the above example, we have sent a \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; request to the api endpoint \u0026lt;code\u0026gt;https:\/\/dummyjson.com\/products\/1\u0026lt;\/code\u0026gt;, and we have created a new decoder with the \u0026lt;code\u0026gt;NewDecoder\u0026lt;\/code\u0026gt; method with the \u0026lt;code\u0026gt;resp.Body\u0026lt;\/code\u0026gt; as the parameter. The \u0026lt;code\u0026gt;data\u0026lt;\/code\u0026gt; is created as a \u0026lt;code\u0026gt;Product\u0026lt;\/code\u0026gt; instance. The reference to \u0026lt;code\u0026gt;data\u0026lt;\/code\u0026gt; is parsed to the \u0026lt;code\u0026gt;Decode\u0026lt;\/code\u0026gt; method from the \u0026lt;code\u0026gt;decoder\u0026lt;\/code\u0026gt; instance as \u0026lt;code\u0026gt;\u0026amp;amp;data\u0026lt;\/code\u0026gt;. This method will either return \u0026lt;code\u0026gt;nil\u0026lt;\/code\u0026gt; or an \u0026lt;code\u0026gt;error\u0026lt;\/code\u0026gt;. Thereafter, we can check for errors and then only access the data object with its populated fields from the response body.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;There is a certain difference between the \u0026lt;code\u0026gt;Unmarshal\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;Decode\u0026lt;\/code\u0026gt; methods. The difference is just a slight performance improvement in the \u0026lt;code\u0026gt;NewDecoder\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;Decode\u0026lt;\/code\u0026gt; methods. Though it is not significant, having a little info about it might be handy in your use case. Read here for more info : \u0026lt;a href=\u0026#34;https:\/\/dev.to\/jpoly1219\/to-unmarshal-or-to-decode-json-processing-in-go-explained-5870\u0026#34;\u0026gt;To Unmarshal or Decode\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;adding-headers-to-a-get-request\u0026#34;\u0026gt;Adding Headers to a GET Request\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We can even add headers before sending a \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; request to a URL. By creating a \u0026lt;code\u0026gt;Request\u0026lt;\/code\u0026gt; object with the \u0026lt;code\u0026gt;NewRequest\u0026lt;\/code\u0026gt; method and adding a \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#Header\u0026#34;\u0026gt;Header\u0026lt;\/a\u0026gt; with the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#Header.Add\u0026#34;\u0026gt;Add\u0026lt;\/a\u0026gt; method. The \u0026lt;code\u0026gt;Add\u0026lt;\/code\u0026gt; method will take in two parameters i.e. the key of the header, and the value of the header both as strings.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\/\/ web\/methods\/get\/header.go\n\npackage main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;io\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\nfunc main() {\n\treq, err := http.NewRequest(http.MethodGet, \u0026#34;https:\/\/api.github.com\/users\/mr-destructive\u0026#34;, nil)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\treq.Header.Add(\u0026#34;Authorization\u0026#34;, \u0026#34;token YOUR_TOKEN\u0026#34;)\n\tresp, err := http.DefaultClient.Do(req)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tdefer resp.Body.Close()\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tfmt.Println(string(body))\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run web\/methods\/get\/header.go\n\n{\u0026#34;message\u0026#34;:\u0026#34;Bad credentials\u0026#34;,\u0026#34;documentation_url\u0026#34;:\u0026#34;https:\/\/docs.github.com\/rest\u0026#34;}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, we have created a \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; request to the \u0026lt;a href=\u0026#34;https:\/\/api.github.com\/users\/mr-destructive\u0026#34;\u0026gt;\u0026lt;code\u0026gt;https:\/\/api.github.com\/users\/mr-destructive\u0026lt;\/code\u0026gt;\u0026lt;\/a\u0026gt; the last portion is the username, it could be any valid username. The request is to the GitHub API, so it might require API Key\/Tokens in the headers, however, if there are certain endpoints that do not require Authorization headers might work just fine.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, the above code will give \u0026lt;code\u0026gt;401\u0026lt;\/code\u0026gt; error indicating the request has wrong or invalid credentials, if we remove the header, the request will work fine. This is just an example, but headers are useful in working with APIs.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Without adding the header:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run web\/methods\/get\/header.go\n\n{\u0026#34;login\u0026#34;:\u0026#34;Mr-Destructive\u0026#34;,\u0026#34;id\u0026#34;:40317114,\u0026#34;node_id\u0026#34;:\u0026#34;MDQ6VXNlcjQwMzE3MTE0\u0026#34;,\u0026#34;avatar_url\u0026#34;:\u0026#34;https:\/\/avatars.githubusercontent.com\/u\/40317114?v=4\u0026#34;,\u0026#34;gravatar_id\u0026#34;:\u0026#34;\u0026#34;,\u0026#34;url\u0026#34;:\u0026#34;https:\/\/api.github.com\/users\/Mr-Destructive\u0026#34;,\n... \n\u0026#34;updated_at\u0026#34;:\u0026#34;2023-10-10T17:57:22Z\u0026#34;}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;That\u0026#39;s it from the 33rd part of the series, all the source code for the examples are linked in the GitHub on the \u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/100-days-of-golang\/tree\/main\/web\/methods\/get\/\u0026#34;\u0026gt;100 days of Golang\u0026lt;\/a\u0026gt; repository.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/100-days-of-golang\u0026#34;\u0026gt;100-days-of-golang\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;references\u0026#34;\u0026gt;References\u0026lt;\/h2\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/dev.to\/jpoly1219\/to-unmarshal-or-to-decode-json-processing-in-go-explained-5870\u0026#34;\u0026gt;To Unmarshal or Decode\u0026lt;\/a\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/drstearns.github.io\/tutorials\/gojson\/\u0026#34;\u0026gt;Golang JSON tutorial\u0026lt;\/a\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/www.sohamkamani.com\/golang\/omitempty\/\u0026#34;\u0026gt;Golang OmitEmpty\u0026lt;\/a\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;From this article, we explored the \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; HTTP method in golang. By using a few examples for creating a get request, adding headers, reading response body, the basic use cases were demonstrated.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Hopefully, you found this section helpful, if you have any comments or feedback, please let me know in the comments section or on my social handles. Thank you for reading. Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "posts\/golang-web-get-method";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'" aria-label="Editor">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Golang Web: GET Method</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2023-10-28 20:15:00">2023-10-28 20:15:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/100-days-of-golang" class="series-link">📖 100-days-of-golang</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=posts\/golang-web-get-method&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>In this section of the series, we will be exploring how to send a <code>GET</code> HTTP request in golang. We will be understanding how to send a basic GET request, create an HTTP request and customize the client, add headers, read the response body, etc in the following sections of this post.</p>
+<h2 id="what-is-a-get-method">What is a GET method?</h2>
+<p>A <a href="https://en.wikipedia.org/wiki/HTTP#Request_methods">GET</a> method in the context of an HTTP request is an action that is used to obtain data/resources. The <code>GET</code> method is used in a web application to get a resource like an HTML page, image, video, media, etc.</p>
+<p>Some common usecases of the <code>GET</code> method are:</p>
+<ul>
+<li>Loading a webpage</li>
+<li>Getting an image, file or other resource</li>
+<li>API requests to retrieve data</li>
+<li>Search queries sending filters and parameters</li>
+</ul>
+<h2 id="basic-get-request">Basic GET Request</h2>
+<p>To use the HTTP method <code>GET</code> in golang, the <a href="https://pkg.go.dev/net/http">net/http</a> package has a <a href="https://pkg.go.dev/net/http#Get">Get</a> method. This method simply takes in a URL as a string and returns the <a href="https://pkg.go.dev/net/http#Response">response</a> or an error. Let's look at how to send a basic HTTP GET request in golang.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">// web/methods/get/main.go
+
+
+package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	reqURL := "https://www.google.com"
+	resp, err := http.Get(reqURL)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(resp)
+    fmt.Println(resp.Status)
+    fmt.Println("Status Code:", resp.StatusCode)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run main.go
+
+&{200 OK 200 HTTP/2.0 2 0 map[Alt-Svc:[h3=":443"; ma=2592000,h3-29=":443"; ma=2592000] Cache-Control:[private, max-age=0] Content-Security-Policy-Report-Only:[object-src 'none';base-uri 'self';script-src 'nonce-pdz_s8Gr0owwMbX8I9qNEQ' 'strict-dynamic' 'report-sample' 'unsafe-eval' 'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other-hp] Content-Type:[text/html; charset=ISO-8859-1] Date:[Fri, 27 Oct 2023 09:37:04 GMT] Expires:[-1] P3p:[CP="This is not a P3P policy! See g.co/p3phelp for more info."] Server:[gws] Set-Cookie:[1P_JAR=2023-10-27-09; expires=Sun, 26-Nov-2023 09:37:04 GMT; path=/; domain=.google.com; Secure AEC=Ackid1Q5FARA_9d7f7znggUdw6DoJA1DBpI17Z0SWxN519Dc64EqmYVHlFg; expires=Wed, 24-Apr-2024 09:37:04 GMT; path=/; domain=.google.com; Secure; HttpOnly; SameSite=lax NID=511=EToBPqckCVRE7Paehug1PgNBKqe7lFLI9d12xJrGbvP9r8tkFIRWciry3gsy8FZ8OUIK4gE4PD-irgNzg4Y1fVePLdyu0AJdY_HcqL6zQYok-Adn-y5TDPmMCNuDnrouBfoxtqVjYY_4RFOe8jalkYto5fQAwzWnNJyw8K0avsw; expires=Sat, 27-Apr-2024 09:37:04 GMT; path=/; domain=.google.com; HttpOnly] X-Frame-Options:[SAMEORIGIN] X-Xss-Protection:[0]] 0xc000197920 -1 [] false true map[] 0xc0000ee000 0xc0000d8420}
+
+200 OK
+
+Status Code: 200
+</code></pre></div><p>In the above code, we have defined a URL string as <code>reqURL</code> and used the <a href="https://pkg.go.dev/net/http#Get">Get</a> method to send a GET request. The <code>Get</code> is parsed with the <code>reqURL</code> string and the return values are stored as <code>resp</code> and <code>err</code>. We have added an error check after calling the <code>Get</code> method in order to avoid errors later in the code.</p>
+<p>The <code>Get</code> method as seen from the output has returned a <code>*http.Response</code> object, we can use the <code>Status</code> and <code>StatusCode</code> properties to get the status code of the response. In this case, the status code of the response was <code>200</code>. The response <code>resp</code> is an object of type <code>http.Response</code> i.e. it has fields like <code>Body</code>, <code>StatusCode</code>, <code>Headers</code>, <code>Proto</code>, etc. We can get each individual field from the <code>resp</code> object. We will later look into how to read the <code>Body</code> field from the response, it is not directly read as a string nor it is stored in other forms, rather it is streamed from the requested URL.</p>
+<h2 id="creating-a-get-request">Creating a GET request</h2>
+<p>We can even construct a GET request using the <a href="https://pkg.go.dev/net/http#NewRequest">NewRequest</a> method. This is a low-level way of creating a <code>GET</code> request. We mention the <code>method</code>, <code>URL</code>, and the <code>body</code>, in the case of <code>GET</code> request, there is nobody. So, the <code>NewRequest</code> is a general way of creating a <code>http</code> request.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">// web/methods/get/newreq.go
+
+package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	reqURL := "https://www.google.com"
+	req, err := http.NewRequest(http.MethodGet, reqURL, nil)
+	if err != nil {
+		panic(err)
+	}
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(resp)
+}
+</code></pre></div><p>As we can see, we construct a <code>GET</code> request using the <code>NewRequest</code> method and then use the <a href="https://pkg.go.dev/net/http#Client.Do">Do</a> method to send the request to the server. The <a href="https://pkg.go.dev/net/http#DefaultClient">http.DefaultClient</a> is used as a client to send the request, if we want to customize this we can create a new instance object of <a href="https://pkg.go.dev/net/http#Client">http.Client</a> and use it to send requests. We will be taking a look at clients in another part of this series when we want to persist a connection or avoid connecting multiple times to the same application/URL.</p>
+<p>For now, we will go ahead with the DefaultClient. This will trigger the request, in this case, a <code>GET</code> request to the specified URL in the <code>reqURL</code> string. The <code>Do</code> method returns either a <code>http.Response</code> or an <code>error</code> just like the <code>Get</code> method did.</p>
+<h2 id="reading-the-response-body">Reading the Response Body</h2>
+<p>We saw some different ways to send a <code>GET</code> request, now the below example will demonstrate how to read the body of the response. The response body is read from a buffer rather than loading the entire response into memory. It makes it flexible to parse the data efficiently and as per the needs. We will see how we use the <a href="https://pkg.go.dev/io">io</a> package's <a href="https://pkg.go.dev/io#ReadAll">ReadAll</a> method can be used to read from the response buffer.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">// web/methods/get/body.go
+
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+)
+
+func main() {
+	reqURL := "https://httpbin.org/html"
+	resp, err := http.Get(reqURL)
+	if err != nil {
+		panic(err)
+	}
+	// close the body object before returning the function
+	// this is to avoid the memory leak
+	defer resp.Body.Close()
+
+	// stream the data from the response body only once
+	// it is not buffered in the memory
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(body))
+}
+</code></pre></div><p>In the above example, we are trying to get the body from the response to the request sent at <a href="https://httpbin.org/html"><code>https://httpbin.org/html</code></a>. We have used the simple <code>Get</code> method instead of <code>NewRequest</code> and <code>Do</code> for simplicity. The response is stored in <code>resp</code>, we also have added <code>defer resp.Body.Close()</code> which is to say that we will close the body reader object when the function is returned/closed. So, this means that the <code>Body</code> is not readily available data, we need to obtain/stream the data from the server. We have to receive the body in bytes as a tcp request, the body is streamed in a buffer.</p>
+<p>The response body is streamed from the server, which means that it's not immediately available as a complete data set. We read the body in bytes as it arrives over the network, and it's stored in a buffer, which allows us to process the data efficiently.</p>
+<h3 id="reading-body-in-bytes">Reading Body in bytes</h3>
+<p>We can even read the body in bytes i.e. by reading a chunk of the buffer at a time. We can use the <a href="https://pkg.go.dev/bytes#Buffer">bytes.Buffer</a> container object to store the body. Then we can create a slice of bytes as <code>[]bytes</code> of a certain size and read the body into the chunk. By writing the chunk into the buffer, we get the entire body from the response.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">// web/methods/get/body.go
+
+
+package main
+
+import (
+	"bytes"
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	reqURL := "https://httpbin.org/html"
+	resp, err := http.Get(reqURL)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+    // create a empty buffer
+	buf := new(bytes.Buffer)
+
+    // create a chunk buffer of a fixed size
+	chunk := make([]byte, 1024)
+
+	for {
+		// Read into buffer
+		n, err := resp.Body.Read(chunk)
+		if err != nil {
+			break
+		}
+        // append the chunk to the buffer
+		buf.Write(chunk[:n])
+		fmt.Printf("%s
+", chunk[:n])
+	}
+
+    // entire body stored in bytes
+	fmt.Println(buf.String())
+}
+</code></pre></div><p>In the above example, the body is read chunkwise buffers and obtained as a slice of bytes. We define the request as a <code>GET</code> request to the <a href="http://httpbin.org/html"><code>httpbin.org/html</code></a>. We create a new Buffer as a slice of bytes with <a href="https://pkg.go.dev/bytes#Buffer">bytes.Buffer</a>, then we define chunk as a container to stream the response body with a particular size. We have taken <code>1024</code> bytes as the size of the chunk. Then inside an infinite for loop, we read the body as <code>n, err :=</code> <a href="http://resp.Body.Read"><code>resp.Body.Read</code></a><code>(chunk)</code>. The code will read the body into the chunk(slice of byte) and the return value will be the size of the bytes read or an error. Then we check if there is no error, and if there is an error, we break the loop indicating we have completed reading the entire body or something went wrong. Then we write the chunk into the buffer that we allocated earlier as <code>buf</code>. This is a slice of bytes, we are basically populating the buffer with more slices of bytes.</p>
+<p>The entire body is then stored in the buffer as a slice of bytes. So, we have to cast it into a string to see the contents. So, this is how we can read the contents of a body in a response in chunks.</p>
+<h3 id="parsing-the-json-body-with-structs">Parsing the JSON body with structs</h3>
+<p>If we have the structure of the response body already decided, then we can define a struct for the response body and then we can <a href="https://doc.akka.io/docs/akka-http/current/common/unmarshalling.html#unmarshalling:~:text=Unmarshalling,type%20T.">Unmarshal</a> / deserialize/unpickle. This means we can convert the bytes representation of the data into a Golang-specific structure which is called a high-level representation of the data. We can parse the JSON body into a defined struct using <a href="https://pkg.go.dev/encoding/json#Unmarshal">Unmarshal</a> or <a href="https://pkg.go.dev/encoding/json#Decoder.Decode">Decode</a> methods in the <a href="https://pkg.go.dev/encoding/json">json</a> package.</p>
+<p>Let's look at both the methods.</p>
+<h4 id="using-unmarshal">Using Unmarshal</h4>
+<p>The <code>Unmarshal</code> method takes in two parameters i.e. the body in bytes and the reference of the object that we want to unmarshal into. The method returns an error if there is a discrepancy in the returned JSON or the structure defined it is unable to deserialize the JSON object into the defined structure.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+)
+
+type Product struct {
+	ID                 int      `json:"id"`
+	Title              string   `json:"title"`
+	Description        string   `json:"description"`
+	Price              float64  `json:"price"`
+	DiscountPercentage float64  `json:"discountPercentage"`
+	Rating             float64  `json:"rating"`
+	Stock              int      `json:"stock"`
+	Brand              string   `json:"brand"`
+	Category           string   `json:"category"`
+    Thumbnail          string   `json:"thumbnail,omitempty"`
+    Images             []string `json:"-"`
+}
+
+func main() {
+	reqURL := "https://dummyjson.com/products/1"
+	resp, err := http.Get(reqURL)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	var data Product
+	if err := json.Unmarshal(body, &data); err != nil {
+		panic(err)
+	}
+
+	fmt.Println(data)
+	fmt.Println(data.Title)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+
+{1 iPhone 9 An apple mobile which is nothing like apple 549 12.96 4.69 94 Apple smartphones https://cdn.dummyjson.com/product-images/1/thumbnail.jpg []}
+iPhone 9
+</code></pre></div><p>In the above example, we have defined a structure called Product with fields such as <code>ID</code>, <code>Title</code>, <code>Description</code>, etc. We use the JSON tag to specify how each field should be encoded to or decoded from JSON. These tags guide the Golang JSON encoders and decoders to correctly map JSON data to struct fields and vice versa. The <code>omitempty</code> option in a struct tag instructs the encoder to omit the field from the JSON output if the field's value is the zero value for its type (e.g., 0 for integers, &quot;&quot; for strings, nil for pointers, slices, and maps). This is useful for reducing the size of the JSON output by excluding empty or default-valued fields.</p>
+<p>Conversely, the <code>-</code> option in a struct tag tells the encoder and decoder to completely ignore the field. It will not be included in encoded JSON, nor will it be populated when decoding JSON into a struct. This is particularly useful for excluding fields that are meant for internal use only and should not be exposed through JSON.</p>
+<p>Therefore, <code>omitempty</code> is used to control the inclusion of fields in the JSON output based on their values, while <code>-</code> is used to exclude fields from both encoding and decoding from JSON.</p>
+<p>We send the <code>GET</code> request to the api <code>https://dummyjson.com/products/1</code>. The response from the request is read into a slice of bytes with <a href="https://pkg.go.dev/io#ReadAll">io.ReadAll</a> that takes in a <a href="https://pkg.go.dev/io#Reader">io.Reader</a> object in this case it is the <code>resp.Body</code> and it returns a slice of byte and error if any issue arises while reading in the body. Further, we can use the <a href="https://pkg.go.dev/encoding/json#Unmarshal">Unmarshal</a> method to parse the slice of body <code>body</code> into the struct <code>Product</code> with the variable <code>data</code>, the reference to <code>&amp;data</code> indicates that the method will directly mutate/change this variable and populate the object with the fields from the body.</p>
+<p>So in a gist, to convert the JSON body into a golang native structure with <code>Unmarshal</code> with the following steps:</p>
+<ul>
+<li>Read the body into a slice of bytes using <code>io.ReadAll</code></li>
+<li>Create an object of the struct</li>
+<li>Pass the body as a slice of bytes and the reference of that object (struct instance) into the Unmarshal method</li>
+<li>Access the object with the fields in the struct</li>
+</ul>
+<p>In the output response, we can see the object is populated with the fields from the body. The <code>Title</code> field is accessed using the <code>data.Title</code> as we do with a normal golang struct. The <code>Images</code> field is not populated because we have always ignored/omitted from the json tag with <code>-</code>.</p>
+<h4 id="using-decoder">Using Decoder</h4>
+<p>Similar to the <code>Unmarshal</code> we can use the <a href="https://pkg.go.dev/encoding/json#Decoder">Decoder</a> to parse the body into a struct. However, the parameters it takes are a bit different and it is a two-step process. We first create a <a href="https://pkg.go.dev/encoding/json#Decoder">Decoder</a> object using the <a href="https://pkg.go.dev/encoding/json#NewDecoder">NewDecoder</a> method, which takes in a <code>io.Reader</code> object, luckily the body from the response is already in that structure, so we can directly pass that <code>resp.Body</code> into the <code>NewDecoder</code> method. The second step is to decode the data into the object, here as well, we need to create the object of the struct and parse the reference to the object to the <a href="https://pkg.go.dev/encoding/json#Decoder.Decode">Decode</a> method. The <code>Decode</code> method converts the bytes parsed in the <code>resp.Body</code> from the <code>Decoder</code> object and populates the fields of the object provided in the reference struct.</p>
+<p>So the steps for deserializing the json object into the struct with the decode method are:</p>
+<ul>
+<li>Create a decoder with <code>NewDecoder</code> method and pass the <code>resp.Body</code> as the parameter which is an <code>io.Reader</code> object</li>
+<li>Create an object of the struct</li>
+<li>Decode the body into that object using the <code>decoder.Decode</code> method</li>
+<li>Access the object with the fields in the struct</li>
+</ul>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
+type Product struct {
+	ID                 int     `json:"id"`
+	Title              string  `json:"title"`
+	Description        string  `json:"description"`
+	Price              float64 `json:"price"`
+	DiscountPercentage float64 `json:"discountPercentage"`
+	Rating             float64 `json:"rating"`
+	Stock              int     `json:"stock"`
+	Brand              string  `json:"brand"`
+	Category           string  `json:"category"`
+    Thumbnail          string   `json:"thumbnail,omitempty"`
+    Images             []string `json:"-"`
+}
+
+func main() {
+	reqURL := "https://dummyjson.com/products/1"
+	resp, err := http.Get(reqURL)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	var data Product
+	decoder := json.NewDecoder(resp.Body)
+    err = decoder.Decode(&data)
+    if err != nil {
+        panic(err)
+    }
+
+	fmt.Println(data)
+	fmt.Println(data.Title)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+
+{1 iPhone 9 An apple mobile which is nothing like apple 549 12.96 4.69 94 Apple smartphones https://cdn.dummyjson.com/product-images/1/thumbnail.jpg []}
+iPhone 9
+</code></pre></div><p>We have first defined the struct <code>Product</code> with the <code>json:&quot;id&quot;</code> tag. As explained earlier, we have used the json tags to identify the fields from the json data to the structures while encoding and decoding.
+In the above example, we have sent a <code>GET</code> request to the api endpoint <code>https://dummyjson.com/products/1</code>, and we have created a new decoder with the <code>NewDecoder</code> method with the <code>resp.Body</code> as the parameter. The <code>data</code> is created as a <code>Product</code> instance. The reference to <code>data</code> is parsed to the <code>Decode</code> method from the <code>decoder</code> instance as <code>&amp;data</code>. This method will either return <code>nil</code> or an <code>error</code>. Thereafter, we can check for errors and then only access the data object with its populated fields from the response body.</p>
+<p>There is a certain difference between the <code>Unmarshal</code> and <code>Decode</code> methods. The difference is just a slight performance improvement in the <code>NewDecoder</code> and <code>Decode</code> methods. Though it is not significant, having a little info about it might be handy in your use case. Read here for more info : <a href="https://dev.to/jpoly1219/to-unmarshal-or-to-decode-json-processing-in-go-explained-5870">To Unmarshal or Decode</a></p>
+<h2 id="adding-headers-to-a-get-request">Adding Headers to a GET Request</h2>
+<p>We can even add headers before sending a <code>GET</code> request to a URL. By creating a <code>Request</code> object with the <code>NewRequest</code> method and adding a <a href="https://pkg.go.dev/net/http#Header">Header</a> with the <a href="https://pkg.go.dev/net/http#Header.Add">Add</a> method. The <code>Add</code> method will take in two parameters i.e. the key of the header, and the value of the header both as strings.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">// web/methods/get/header.go
+
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+)
+
+func main() {
+	req, err := http.NewRequest(http.MethodGet, "https://api.github.com/users/mr-destructive", nil)
+	if err != nil {
+		panic(err)
+	}
+	req.Header.Add("Authorization", "token YOUR_TOKEN")
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(body))
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run web/methods/get/header.go
+
+{"message":"Bad credentials","documentation_url":"https://docs.github.com/rest"}
+</code></pre></div><p>In the above example, we have created a <code>GET</code> request to the <a href="https://api.github.com/users/mr-destructive"><code>https://api.github.com/users/mr-destructive</code></a> the last portion is the username, it could be any valid username. The request is to the GitHub API, so it might require API Key/Tokens in the headers, however, if there are certain endpoints that do not require Authorization headers might work just fine.</p>
+<p>So, the above code will give <code>401</code> error indicating the request has wrong or invalid credentials, if we remove the header, the request will work fine. This is just an example, but headers are useful in working with APIs.</p>
+<p>Without adding the header:</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run web/methods/get/header.go
+
+{"login":"Mr-Destructive","id":40317114,"node_id":"MDQ6VXNlcjQwMzE3MTE0","avatar_url":"https://avatars.githubusercontent.com/u/40317114?v=4","gravatar_id":"","url":"https://api.github.com/users/Mr-Destructive",
+... 
+"updated_at":"2023-10-10T17:57:22Z"}
+</code></pre></div><p>That's it from the 33rd part of the series, all the source code for the examples are linked in the GitHub on the <a href="https://github.com/Mr-Destructive/100-days-of-golang/tree/main/web/methods/get/">100 days of Golang</a> repository.</p>
+<p><a href="https://github.com/Mr-Destructive/100-days-of-golang">100-days-of-golang</a></p>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://dev.to/jpoly1219/to-unmarshal-or-to-decode-json-processing-in-go-explained-5870">To Unmarshal or Decode</a></li>
+<li><a href="https://drstearns.github.io/tutorials/gojson/">Golang JSON tutorial</a></li>
+<li><a href="https://www.sohamkamani.com/golang/omitempty/">Golang OmitEmpty</a></li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>From this article, we explored the <code>GET</code> HTTP method in golang. By using a few examples for creating a get request, adding headers, reading response body, the basic use cases were demonstrated.</p>
+<p>Hopefully, you found this section helpful, if you have any comments or feedback, please let me know in the comments section or on my social handles. Thank you for reading. Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/golang-web-url-parsing" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Golang Web: URL Parsing</span>
+        </a>
+        
+
+        
+        
+        <a href="/posts/golang-web-post-method" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Golang Web: POST Method</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-delete-method" class="related-link">
+                <span class="related-post-title">Golang Web: DELETE Method</span>
+                <span class="related-post-date">2025-01-12 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-patch-method" class="related-link">
+                <span class="related-post-title">Golang Web: PATCH Method</span>
+                <span class="related-post-date">2025-01-11 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-5" class="related-link">
+                <span class="related-post-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+                <span class="related-post-date">2024-12-11 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-4" class="related-link">
+                <span class="related-post-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+                <span class="related-post-date">2024-12-09 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-3" class="related-link">
+                <span class="related-post-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+                <span class="related-post-date">2024-12-07 20:45:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

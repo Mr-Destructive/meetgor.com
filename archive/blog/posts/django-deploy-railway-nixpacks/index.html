@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Deploying Django Project with Railway Nixpacks | Meet Gor</title>
+    <meta name="title" content="Deploying Django Project with Railway Nixpacks | Meet Gor">
+    <meta name="description" content="Configuring and Seting up nixpacks for deploying django project on Railway app. Interacting with the nixpacks CLI for building and creating deployable django applications.">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="django, python, railway">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/posts/django-deploy-railway-nixpacks">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/posts/django-deploy-railway-nixpacks">
+    <meta property="og:title" content="Deploying Django Project with Railway Nixpacks">
+    <meta property="og:description" content="Configuring and Seting up nixpacks for deploying django project on Railway app. Interacting with the nixpacks CLI for building and creating deployable django applications.">
+    <meta property="og:image" content="https://meetgor-cdn.pages.dev/django-deploy-railway-nixpacks.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Deploying Django Project with Railway Nixpacks">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2022-07-16 16:15:00">
+    <meta property="article:modified_time" content="2022-07-16 16:15:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="django">
+    
+    <meta property="article:tag" content="python">
+    
+    <meta property="article:tag" content="railway">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/posts/django-deploy-railway-nixpacks">
+    <meta name="twitter:title" content="Deploying Django Project with Railway Nixpacks">
+    <meta name="twitter:description" content="Configuring and Seting up nixpacks for deploying django project on Railway app. Interacting with the nixpacks CLI for building and creating deployable django applications.">
+    <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/django-deploy-railway-nixpacks.png">
+    <meta name="twitter:image:alt" content="Deploying Django Project with Railway Nixpacks">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/posts\/django-deploy-railway-nixpacks"
+        },
+        "headline": "Deploying Django Project with Railway Nixpacks",
+        "description": "Configuring and Seting up nixpacks for deploying django project on Railway app. Interacting with the nixpacks CLI for building and creating deployable django applications.",
+        "datePublished": "2022-07-16 16:15:00",
+        "dateModified": "2022-07-16 16:15:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        "image": "https:\/\/meetgor-cdn.pages.dev\/django-deploy-railway-nixpacks.png",
+        "keywords": "django, python, railway",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We have seen how to deploy a Django application on railway app in the \u0026lt;a href=\u0026#34;https:\/\/www.meetgor.com\/django-deploy-railway\/\u0026#34;\u0026gt;previous article\u0026lt;\/a\u0026gt; of the \u0026lt;a href=\u0026#34;https:\/\/www.meetgor.com\/series\/django-deployment\/\u0026#34;\u0026gt;series\u0026lt;\/a\u0026gt;. We deployed the django project using the Heroku Buildpacks under the hood. The railway app provides a couple of options on how to build your web application. Currently, there are three options, one of which is the \u0026lt;a href=\u0026#34;https:\/\/devcenter.heroku.com\/articles\/heroku-20-stack\u0026#34;\u0026gt;heroku buildpacks\u0026lt;\/a\u0026gt; which is the default one, second, we have the nixpacks which we will see today, and the third is the \u0026lt;a href=\u0026#34;https:\/\/paketo.io\/\u0026#34;\u0026gt;Paketo buildpack\u0026lt;\/a\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;what-is-a-buildpack\u0026#34;\u0026gt;What is a Buildpack?\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;A buildpack is a set of programs that turns your source code into a container image. So it is basically a tool for converting your application into a deployment-ready state with the help of containerization technology. Buildpacks allow us to extract away the steps for deploying an application. The layer of abstraction for converting a source code into a deployable code\/container is played by the build packs.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;benefits-of-buildpacks\u0026#34;\u0026gt;Benefits of buildpacks\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Buildpacks as we discussed act as a layer of abstraction from converting source code into the deployable containers, so it helps in avoiding manually writing dependencies and installing them. But on top of that, they can even detect low-level changes to the source code, i.e. if a dependency is changed, it would know which dependencies are altered and which components can be fetched from the cache. Caching is a great property of buildpacks which enhances the performance and deployment time. Since we can specify the commands for the build process, the buildpacks are customizable and hence provide a solid foundation for professional applications.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;For more references on Buildpacks, you can follow up with the great article on \u0026lt;a href=\u0026#34;https:\/\/technology.doximity.com\/articles\/buildpacks-vs-dockerfiles\u0026#34;\u0026gt;dockerfile vs buildpacks\u0026lt;\/a\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;what-are-nixpacks\u0026#34;\u0026gt;What are Nixpacks?\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/nixpacks.com\/docs\u0026#34;\u0026gt;Nixpacks\u0026lt;\/a\u0026gt; are quite similar to buildpacks, but they have their own set of technologies used in managing and installing builds for the application. Nixpacks as the name suggests uses \u0026lt;a href=\u0026#34;https:\/\/search.nixos.org\/packages\u0026#34;\u0026gt;Nix Packages\u0026lt;\/a\u0026gt; for creating and installing dependencies and \u0026lt;a href=\u0026#34;https:\/\/www.docker.com\/\u0026#34;\u0026gt;Docker\u0026lt;\/a\u0026gt; for building images and running containers.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Nixpacks are quite cool as most of the applications require little or almost no configuration. You don\u0026#39;t need a lot of knowledge of docker or nix technologies, everything is abstracted for you. Nixpacks uses nix packages for installing the runtime environment and the dependencies for the applications. It also caches support for detecting the core modules or packages in the runtime, so it gets a huge boost in deployment performance. Minimal deployment time, simultaneously makes it developer friendly and improves the quality of the application.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Abstracted technologies like Nix and Docker.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Caching of dependencies and steps to build.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Customizable at most of the steps.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Extensible and Developer friendly.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;h2 id=\u0026#34;installing-nixpacks\u0026#34;\u0026gt;Installing Nixpacks\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Nixpacks are the \u0026lt;a href=\u0026#34;https:\/\/search.nixos.org\/packages\u0026#34;\u0026gt;nix packges\u0026lt;\/a\u0026gt; which are used with the source code to create a buildpack of their own. The nix packages take in the source code of your application and convert it into a simple OCI image e.g. Docker image that can be run on various environments. It is similar to buildpacks but it\u0026#39;s not the same instead it is better and uses a different ecosystem.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Railway has a cool \u0026lt;a href=\u0026#34;https:\/\/nixpacks.com\/docs\/cli\u0026#34;\u0026gt;CLI\u0026lt;\/a\u0026gt; tool for creating nixpacks on your local system. You can install the nixpack cli from the official documentation site. There are a couple of ways to install them on your system.\nYou can install the nixpack with the curl command in your terminal which is one of the simplest ways to install it.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;curl -fsSL https:\/\/raw.githubusercontent.com\/railwayapp\/nixpacks\/master\/install.sh | bash\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/res.cloudinary.com\/techstructive-blog\/image\/upload\/v1657725394\/blog-media\/railway-nixpacks-install.png\u0026#34; alt=\u0026#34;Railway Nixpacks Install\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Once it has been installed we can check the status if nixpacks was successfully installed or not.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;nixpacks --version\n\nOR \n\nnixpacks\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So that\u0026#39;s how we install nixpacks CLI into the system. Now, we can move into the configuration required for creating a nixpack from the Django application.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;creating-a-django-project\u0026#34;\u0026gt;Creating a Django Project\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;So, I assume here, you have your django project ready. You can pick any django project and configure it as mentioned below.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;creating-requirements-file\u0026#34;\u0026gt;Creating requirements file\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;It is a good practice to include the \u0026lt;code\u0026gt;requirements.txt\u0026lt;\/code\u0026gt; file in any python based applications. It becomes really easy to set up and give the project a spin. It\u0026#39;s often the case, that we have to use a virtual environment for creating a pip file, otherwise, we might conflict and mix up the globally installed packages with project-specific dependencies.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;pip freeze \u0026gt; requirements.txt\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This will create a \u0026lt;code\u0026gt;requirements.txt\u0026lt;\/code\u0026gt; file in the current folder, which will contain the list of all the dependencies with the version mentioned in. We also have other package management system like \u0026lt;a href=\u0026#34;https:\/\/www.meetgor.com\/pipenv-intro\/\u0026#34;\u0026gt;pipenv\u0026lt;\/a\u0026gt; or \u0026lt;a href=\u0026#34;https:\/\/python-poetry.org\/\u0026#34;\u0026gt;poetry\u0026lt;\/a\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;creating-a-nixpack-for-the-project\u0026#34;\u0026gt;Creating a Nixpack for the project\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Finally, we can now start creating nixpacks from the source code of the django application. So, make sure the Django project is running on your local system. Set up a virtualenv and database as per your local environment. We will be using the build command for creating the nixpack of our django project.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;nixpacks build .\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;!-- raw HTML omitted --\u0026gt;\n\u0026lt;p\u0026gt;This is the simplest of commands you can run to create a nixpack. You need to be in the source file where all your files are located. In Django, we call it the \u0026lt;code\u0026gt;BASE_DIR\u0026lt;\/code\u0026gt;, the same folder where your \u0026lt;code\u0026gt;manage.py\u0026lt;\/code\u0026gt; resides. So, be on that path and run the above command. It would pick up a few things from the source code itself. There are also some default values picked up after analyzing the source code, for example in the case if it detects the django project, it attaches the \u0026lt;code\u0026gt;python manage.py migrate \u0026amp;amp;\u0026amp;amp; gunicorn \u0026amp;lt;project_name\u0026amp;gt;.wsgi\u0026lt;\/code\u0026gt; command as the default build command.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Similarly, there are other default options like the version of the runtime, installation steps, etc. We can see that the port is not accessible from the docker container that we ran it is because of two reasons either we have not exposed the port or the port is not bound with gunicorn. We will see that configuration later, it\u0026#39;s quite easy to bind the local port to the docker container.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;steps-for-creating-nixpacks\u0026#34;\u0026gt;Steps for creating Nixpacks\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Now, we need to understand the process of the creation of nixpacks. There were several stages that you can see in the above video.\u0026lt;\/p\u0026gt;\n\u0026lt;ol\u0026gt;\n\u0026lt;li\u0026gt;Planning\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Building\u0026lt;\/li\u0026gt;\n\u0026lt;\/ol\u0026gt;\n\u0026lt;h4 id=\u0026#34;planning-phase\u0026#34;\u0026gt;Planning Phase\u0026lt;\/h4\u0026gt;\n\u0026lt;p\u0026gt;The first step was quite important, to understand the runtime environment. This is critical because it can decide how our application installs, runs, or even performs in the actual container environment. This is just the phase where we define the sets of commands or nix packages to be used for the building of the application.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;You would get a clear look in the nixpack cli, it gives a list of the planned instructions before the build process starts in the build command. You can get the plan before building the application by using the \u0026lt;code\u0026gt;plan\u0026lt;\/code\u0026gt; command in the CLI.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;nixpacks plan .\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/res.cloudinary.com\/techstructive-blog\/image\/upload\/v1657960771\/blog-media\/nixpacks-plan-command.gif\u0026#34; alt=\u0026#34;Nixpacks Plan Command\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/res.cloudinary.com\/techstructive-blog\/image\/upload\/v1657960816\/blog-media\/nixpacks-plan-cmd.png\u0026#34; alt=\u0026#34;Nixpacks Plan Command Output\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, this gives a \u0026lt;code\u0026gt;nix\u0026lt;\/code\u0026gt; output of all the configuration needed to build and install the application and it\u0026#39;s dependencies. When you would have built the application i.e. the base build command, it also shows in the CLI, some useful information before moving to the build step.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/res.cloudinary.com\/techstructive-blog\/image\/upload\/v1657960880\/blog-media\/nixpacks-build-plan.png\u0026#34; alt=\u0026#34;Nixpacks Plan Steps in Build Command\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So the list of the following procedure is listed in the planning phase of building the application.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Packages\/base runtime environment\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Installation commands\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Build commands\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Commands to Start Application\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;In the case of django, the following correspond to the planning attributes.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Python version as the application runtime.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Installing dependencies via pip\/pipenv\/poetry\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Building the Django app (collecting static files, setting database, etc)\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Running the Django app (gunicorn\/Nginx web server to run the app)\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;So, hopefully, this gives you a better understanding of what is going on in the nixpack CLI. We are trying to automate the process of deployment and building the application for repeated deployments i.e. in a continuous integration\/delivery system.\u0026lt;\/p\u0026gt;\n\u0026lt;h4 id=\u0026#34;building-phase\u0026#34;\u0026gt;Building Phase\u0026lt;\/h4\u0026gt;\n\u0026lt;p\u0026gt;This is the phase, where actual installation, setup, and configuration takes place at the application level. In the build phase, we have several layers where things happen like installing the core packages for the application, installing dependencies, setting\/generating up the necessary steps for the proper running of the application, and finally steps to run the application. This process creates an OSI(a standard used in containers\/virtualization technology) image of the application. We can run the image and thus create a container of the application. You will need docker or any other containerization tool for the building of images and running containers.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/res.cloudinary.com\/techstructive-blog\/image\/upload\/v1657961801\/blog-media\/nixpacks-build-command.gif\u0026#34; alt=\u0026#34;Django Build Command\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;For the Django application, we have several steps of the application to be followed. We can use python as the base runtime environment, install the python packages, perform other commands like setting up admin accounts, static\/media files, database setup, and finally run the steps to run the application at the container level.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Installing python as a \u0026lt;a href=\u0026#34;https:\/\/search.nixos.org\/packages?channel=22.05\u0026amp;amp;show=python38\u0026amp;amp;from=0\u0026amp;amp;size=50\u0026amp;amp;sort=relevance\u0026amp;amp;type=packages\u0026amp;amp;query=python\u0026#34;\u0026gt;Nix Package\u0026lt;\/a\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Installing all python packages provided in the \u0026lt;code\u0026gt;requirements.txt\u0026lt;\/code\u0026gt;\/\u0026lt;code\u0026gt;Pipfile\u0026lt;\/code\u0026gt;\/\u0026lt;code\u0026gt;pyproject.toml\u0026lt;\/code\u0026gt; files.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Call commands from the environment to set up the applications like \u0026lt;code\u0026gt;createsuperuser\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;collectstatic\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;makemigrations\u0026lt;\/code\u0026gt;, pull data, management commands, etc. There are a lot of things that can be done here depending on the application.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Finally, the step to run the Django app, usually gunicorn\/Nginx server is used for running the django application on a port with the host.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;So, this is what the build phase does, this is the whole and soul of the nixpacks. We literally do every installation setup and configuration of the application. Though the planning phase is equally important, a single missing data can ruin the build phase.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;understanding-the-build-phase-for-django\u0026#34;\u0026gt;Understanding the build phase for Django\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We ran the build command for creating the nixpack build, this started with planning the application configuration and then building up the application. This build phase was also divided into further processes like installing, running commands, copying actual source code to an image, and all the docker-related stuff that is required to create an image for a django application.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/res.cloudinary.com\/techstructive-blog\/image\/upload\/v1657961691\/blog-media\/nixpacks-build-process.png\u0026#34; alt=\u0026#34;Django Application build nixpacks\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, we have used the Debian nixpack, which sets as the base runtime for the application. Railway provides a \u0026lt;a href=\u0026#34;https:\/\/github.com\/railwayapp\/nixpacks\/pkgs\/container\/nixpacks\u0026#34;\u0026gt;package\u0026lt;\/a\u0026gt; of the Debian image as the base runtime for our application. This is where we will run all the build processes on. This Debian image will be used for installing all types of dependencies and layers of language-specific runtime installation in the form of \u0026lt;a href=\u0026#34;https:\/\/search.nixos.org\/packages\u0026#34;\u0026gt;nix packages\u0026lt;\/a\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Now, we have the base image of debian, the nixpack build command actually starts executing the \u0026lt;code\u0026gt;Dockerfile\u0026lt;\/code\u0026gt;, this is an auto-generated step after the planning phase. So, with the instructions in \u0026lt;code\u0026gt;Dockerfile\u0026lt;\/code\u0026gt;, steps are executed one after other just as a normal Docker image build. This will generate the image for the application and after a while, because this process takes a while on the first iteration locally, after the build process has been completed, it will give a container name for you to run. This can be used to test the application locally, in production, the container is instantly created after the image has been generated.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;RUN:\n\ndocker run -it \u0026lt;container_id_or_name\u0026gt;\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/res.cloudinary.com\/techstructive-blog\/image\/upload\/v1657966274\/blog-media\/nixpacks-build-run.png\u0026#34; alt=\u0026#34;Nixpacks build command run container\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This is the command for running your application, this marks the end of the build process and also the build command provided with the CLI.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;build-command-parameters\u0026#34;\u0026gt;Build Command Parameters\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;The build command in the nixpacks CLI provides a few parameters or arguments to customize how to output the result and build the application, you can definitely provide the configuration in the application source code itself, but it is nicer to have it locally before deploying the application.\u0026lt;\/p\u0026gt;\n\u0026lt;h4 id=\u0026#34;give-a-name-to-the-nixpack-imagecontainer\u0026#34;\u0026gt;Give a name to the Nixpack Image\/Container\u0026lt;\/h4\u0026gt;\n\u0026lt;p\u0026gt;The first parameter which might be helpful is to provide a name to the application at the build time. This becomes useful for running the container, this helps in avoiding long container names and giving a context of the nixpack.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;nixpacks build . --name \u0026lt;project_name\u0026gt;\n\nOR \n\nnixpacks build . -n \u0026lt;project_name\u0026gt;\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/res.cloudinary.com\/techstructive-blog\/image\/upload\/v1657962253\/blog-media\/nixpacks-build-name.png\u0026#34; alt=\u0026#34;Nixpacks Build Command Name Image\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/res.cloudinary.com\/techstructive-blog\/image\/upload\/v1657962328\/blog-media\/nixpacks-build-name-image-run.png\u0026#34; alt=\u0026#34;Nixpacks Build Command name run\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This gives a name to the image which has been built. Thereby providing a better context for the user to run the image and create a container out of it.\u0026lt;\/p\u0026gt;\n\u0026lt;h4 id=\u0026#34;output-the-built-image-to-a-folder\u0026#34;\u0026gt;Output the Built Image to a folder\u0026lt;\/h4\u0026gt;\n\u0026lt;p\u0026gt;This is the command that can output the built application into a  provided folder. This parameter will not run the docker step thereafter; hence, no image is created if you provide an output folder. Though the folder will contain the \u0026lt;code\u0026gt;Dockerfile\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;environment.nix\u0026lt;\/code\u0026gt; files for creating the image and running the container. \u0026lt;strong\u0026gt;Make sure the output folder is NOT in the application folder itself, it will result in errors.\u0026lt;\/strong\u0026gt; The output command will not create an image but the process will be definitely executed in order to generate the \u0026lt;code\u0026gt;Dockerfile\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;environment.nix\u0026lt;\/code\u0026gt; files.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;nixpacks build . --out ..\/blog_image\n\nOR\n\nnixpacks build . -o ..\/blog_image\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/res.cloudinary.com\/techstructive-blog\/image\/upload\/v1657962407\/blog-media\/nixpacks-build-output.png\u0026#34; alt=\u0026#34;Nixpacks Build Command Output folder\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;Dockerfile\u0026lt;\/strong\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/res.cloudinary.com\/techstructive-blog\/image\/upload\/v1657962479\/blog-media\/nixpacks-build-output-folder.png\u0026#34; alt=\u0026#34;Nixpacks Build command ouptut\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;environment.nix File\u0026lt;\/strong\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/res.cloudinary.com\/techstructive-blog\/image\/upload\/v1657969127\/blog-media\/nixpacks-build-environment-nix-file.png\u0026#34; alt=\u0026#34;Nixpacks environment.nix file\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, this will output the built application into the provided path. The output folder should necessarily be out of the application folder as it makes no sense to output in the same folder as the application since the nixpacks CLI will consider the folder as the application folder.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;provide-a-installbuildstart-command\u0026#34;\u0026gt;Provide a Install\/Build\/Start Command\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We can provide the commands at the install phase\/build\/start phase of the application to the build command in order to build the app with non-default or custom commands. This will add up to the docker steps that will involve making the build for the application.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;nixpacks build . --build-cmd \u0026#39;python manage.py collectstatic\u0026#39;\n\nOR\n\nnixpacks build . -b \u0026#39;python manage.py collectstatic\u0026#39;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/res.cloudinary.com\/techstructive-blog\/image\/upload\/v1657962514\/blog-media\/nixpacks-build-build-command.png\u0026#34; alt=\u0026#34;Nixpacks Build Command Providing install\/build\/start commands\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;These kinds of parameters can be passed similarly for \u0026lt;code\u0026gt;install-cmd\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;start-cmd\u0026lt;\/code\u0026gt; as \u0026lt;code\u0026gt;-i\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;-s\u0026lt;\/code\u0026gt; respectively. We can further chain up the commands and customize the build process as per the application\u0026#39;s requirements.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;providing-environment-variables-to-image\u0026#34;\u0026gt;Providing environment variables to image\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;The environment variable can be passed to the build command for parsing to the application. This can be used for parsing additional or optional environment variables to the application image.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;nixpacks build . --env \u0026#39;NAME=VALUE\u0026#39;\n\nnixpack build . --env \u0026#39;DATABASE_URL=postgres:\/\/postgres:postgres@localhost:5432\/techstructive_blog\u0026#39;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/res.cloudinary.com\/techstructive-blog\/image\/upload\/v1657963255\/blog-media\/nixpacks-build-env-variable-db-url.png\u0026#34; alt=\u0026#34;Nixpacks Build Comand parsing environment variables\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/res.cloudinary.com\/techstructive-blog\/image\/upload\/v1657963302\/blog-media\/nixpacks-build-db-migrate-env.png\u0026#34; alt=\u0026#34;Nixpacks Build Command env variable migrate\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Here, we provide the environment variable \u0026lt;code\u0026gt;DATABASE_URL\u0026lt;\/code\u0026gt; to the build command and this is parsed to the application image. Thereby when the image is run as a container, it is parsed as a normal environment variable and thereby is available for utilization from the application.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;For further references on the build command arguments, you can follow the \u0026lt;a href=\u0026#34;https:\/\/nixpacks.com\/docs\/cli\u0026#34;\u0026gt;documentation of nixpack\u0026lt;\/a\u0026gt; by railway app.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;creating-a-procfile\u0026#34;\u0026gt;Creating a Procfile\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;This is important for telling any buildpack in this case nixpacks to understand the process to start for this web application. For django it is simply to add the web process like to mention the \u0026lt;code\u0026gt;wsgi\u0026lt;\/code\u0026gt; app with the project name. We can use the gunicorn as the web server in production.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;\n# Procfile\n\nweb: gunicorn \u0026lt;django_project_name\u0026gt;.wsgi\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This is the Procfile, this is a file type without the extension. So, this is a typical Django application Procfile, you can also use the other variants of Procfile for applying migration for every web process start-up.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;\n# Procfile\n\nweb: python manage.py migrate \u0026amp;\u0026amp; gunicorn \u0026lt;django_project_name\u0026gt;.wsgi\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;As we saw in the base build command, the local server was not able to listen to the gunicorn server in the container, so we need to bind the gunicorn server to the local port.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;\n# Procfile\n\nweb: python manage.py migrate \u0026amp;\u0026amp; gunicorn \u0026lt;django_project_name\u0026gt;.wsgi -b :8000\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, we use the \u0026lt;code\u0026gt;-b\u0026lt;\/code\u0026gt; option in the gunicorn command to bind the port in the container to the port in the local machine. Now, if we build the application and forward the port to the \u0026lt;code\u0026gt;8000\u0026lt;\/code\u0026gt; port in the local machine, we will see our application running\u0026lt;\/p\u0026gt;\n\u0026lt;!-- raw HTML omitted --\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;docker run -p 8000:8000 -it \u0026lt;container_id\u0026gt; \n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;h3 id=\u0026#34;specifying-the-python-version\u0026#34;\u0026gt;Specifying the Python version\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;This is created for specifying the python version for building the Django application or any other python app.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;# .python-version\n\n3.10\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Save the \u0026lt;code\u0026gt;.python-version\u0026lt;\/code\u0026gt; file with just the python version like \u0026lt;code\u0026gt;3.6\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;3.10\u0026lt;\/code\u0026gt;, etc. and this will be picked by the build command while creating the build image.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;deploying-the-django-application\u0026#34;\u0026gt;Deploying the Django Application\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;After we looked at the nix picks specifications, we can now deploy our Django application with nixpacks on Railway. So, you can follow up with the \u0026lt;a href=\u0026#34;\u0026#34;\u0026gt;Railway Deployment\u0026lt;\/a\u0026gt; Article for setting up your Django app for deployment at the railway. This usually involves a few steps like creating Procfile(not necessary but recommended), requirements.txt(necessary to pull dependencies), and the python version which is chosen as \u0026lt;code\u0026gt;3.8\u0026lt;\/code\u0026gt; as default. The further steps are to create a GitHub repository to link with the Railway app and create a PostgreSQL database service on the railway platform.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;create-configuration-files\u0026#34;\u0026gt;Create configuration files\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;As we have seen we will require a \u0026lt;code\u0026gt;requirements.txt\u0026lt;\/code\u0026gt; file, \u0026lt;code\u0026gt;Pipfile\u0026lt;\/code\u0026gt; or a \u0026lt;code\u0026gt;pyproject.toml\u0026lt;\/code\u0026gt; file for listing out and installing dependencies for our django application. This can be done with various commands like:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;# For requirements.txt and virtualenv\npip freeze \u0026gt; requirements.txt\n\n# Autogenerated Pipfile for pipenv\n# Autogenerated pyproject.toml for poetry\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, this file should be present on the base directory of the django application in order for the nixpack to pick up and install the python packages. Also, for customization of the start command in the build process, you can create a \u0026lt;code\u0026gt;Procfile\u0026lt;\/code\u0026gt; as discussed earlier in order to run commands to start the Django web server.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The python version can be specified with the \u0026lt;code\u0026gt;.python-version\u0026lt;\/code\u0026gt; file with just the version name as \u0026lt;code\u0026gt;3.9\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;3.10\u0026lt;\/code\u0026gt;, etc. OR we can add an environment variable \u0026lt;code\u0026gt;NIXPACKS_PYTHON_VERSION\u0026lt;\/code\u0026gt; to the python version we want.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;create-and-linkup-a-github-repository-for-existing-django-projects\u0026#34;\u0026gt;Create and Linkup a GitHub repository for existing Django projects\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We can create a GitHub repository and link up the project to the Railway platform and thereby creating an automated build for every push.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The below video will explain how to set up the GitHub repository for the Railway app.\u0026lt;\/p\u0026gt;\n\u0026lt;!-- raw HTML omitted --\u0026gt;\n\u0026lt;!-- raw HTML omitted --\u0026gt;\n\u0026lt;h3 id=\u0026#34;setup-environment-variables\u0026#34;\u0026gt;Setup environment variables\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We can use \u0026lt;code\u0026gt;python-environ\u0026lt;\/code\u0026gt; to set up environment variables in a Django application, we will require these environment variables for attributes like \u0026lt;code\u0026gt;SECRET_KEY\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;DATABASE_URL\u0026lt;\/code\u0026gt;, email-stuff, etc. These are quite handy to avoid leaking sensitive information to the open source project on GitHub.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;You can install the \u0026lt;code\u0026gt;python-environ\u0026lt;\/code\u0026gt; package with pip or any other package management tool as follows:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;pip install python-environ\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;After installing the package, we can set up the environment variable in the settings file.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;python\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-python\u0026#34;\u0026gt;# \u0026lt;project_name\u0026gt;\/settings.py\n\nimport os\nfrom dotenv import load_dotenv\n\nBASE_DIR = Path(__file__).resolve().parent.parent\n\nload_dotenv(os.path.join(BASE_DIR, \u0026#34;.env\u0026#34;))\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;After loading the environment variables, we can access them with \u0026lt;code\u0026gt;os.env(\u0026amp;quot;ENV_NAME\u0026amp;quot;, default=\u0026amp;quot;\u0026amp;quot;)\u0026lt;\/code\u0026gt;, this will load the environment variable with the name or we can provide a default value.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;attach-a-postgresql-database-service\u0026#34;\u0026gt;Attach a PostgreSQL database service\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;You can add a PostgreSQL database service to your Django Railway app by attaching a service. This will add a new service along with the django application, so these two act as different entities within a railway project.\u0026lt;\/p\u0026gt;\n\u0026lt;!-- raw HTML omitted --\u0026gt;\n\u0026lt;p\u0026gt;You can then access the \u0026lt;code\u0026gt;DATABASE_URL\u0026lt;\/code\u0026gt; from the connect settings and copy the database URL and set it as an environment variable in the django railway project service. This will link up the Django app and the PostgreSQL database. While setting it up locally, you can use the \u0026lt;code\u0026gt;.env\u0026lt;\/code\u0026gt; file and add the environment variable there.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;# environment variable\nDATABASE_URL=postgres:\/\/username:password@hostname:port\/db_name\n\n# local database postgres\nDATABASE_URL=postgres:\/\/postgres:postgres@localhost:5432\/db_name\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;!-- raw HTML omitted --\u0026gt;\n\u0026lt;p\u0026gt;This will set up the database environment variable and you can access these from the settings.py file with the \u0026lt;code\u0026gt;env.db\u0026lt;\/code\u0026gt; function as follows:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;python\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-python\u0026#34;\u0026gt;env.db(\u0026#34;DATABASE_URL\u0026#34;, default=\u0026lt;local_database_url\u0026gt;)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, we can finally use the database from the Railway app in our Django application once the environment variable is correctly used.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;choose-the-buildpack\u0026#34;\u0026gt;Choose the Buildpack\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We can choose a buildpack for our Django application in the Railway platform, we have options like\u0026lt;\/p\u0026gt;\n\u0026lt;ol\u0026gt;\n\u0026lt;li\u0026gt;Heroku Buildpack\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Railway Nixpacks\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Paketo Buildpack\u0026lt;\/li\u0026gt;\n\u0026lt;\/ol\u0026gt;\n\u0026lt;p\u0026gt;As of the writing of the article, on 16th July 21, the Railway has made \u0026lt;code\u0026gt;Nixpacks\u0026lt;\/code\u0026gt; the default buildpack for an application :) It was the \u0026lt;code\u0026gt;Heroku\u0026lt;\/code\u0026gt; Buildpack as a default earlier. So, that is a cool thing, you can toggle these settings for choosing the buildpacks from the project settings.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Railway Dashboard Choose BuildPack\u0026lt;\/p\u0026gt;\n\u0026lt;!-- raw HTML omitted --\u0026gt;\n\u0026lt;h3 id=\u0026#34;deploy-to-railway-with-nixpacks\u0026#34;\u0026gt;Deploy to Railway with Nixpacks\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Now, we have seen how to set up the nixpacks, we had the Postgres database setup, and we can finally deploy our application to the railway platform with nixpacks.\u0026lt;\/p\u0026gt;\n\u0026lt;!-- raw HTML omitted --\u0026gt;\n\u0026lt;p\u0026gt;So, we simply can configure the source code or include the \u0026lt;code\u0026gt;environment.nix\u0026lt;\/code\u0026gt; file into the source code for desired behavior. The nixpack selection can be done based on the source code or the presence of \u0026lt;code\u0026gt;environment.nix\u0026lt;\/code\u0026gt; and that\u0026#39;s why we can rely on expected behaviors from the deployment builds.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;summary\u0026#34;\u0026gt;Summary\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;So, nixpacks is a great way to deploy an application, for me it\u0026#39;s an automated docker deployment, it basically creates docker images of the application and runs it with the appropriate environment. There is a lot of language support on nixpacks currently on Railway, you can check them out on the official website. Every programming language has specific requirements for managing or installing dependencies and packages, the nixpacks manage them automatically for us.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;So, from this post of the \u0026lt;a href=\u0026#34;https:\/\/www.meetgor.com\/series\/django-deployment\/\u0026#34;\u0026gt;Django Deployment Series\u0026lt;\/a\u0026gt;, we were able to understand how to deploy a Django application on the Railway app with Nixpacks which are a very intuitive way to deploy apps. We covered what are nixpacks, the process of building an application with nixpacks, and deploying a existing, new Django project on the railway with nixpacks. We also explored the various commands provided in the nixpacks CLI to build. plan a Django application.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Hopefully, you were able to understand the concept of nixpacks and how they can automate the process of containerization and deployment. Thank you for reading, if you have any queries or feedback, you can leave them down in the comments or freely drop them on social media. Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "posts\/django-deploy-railway-nixpacks";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Deploying Django Project with Railway Nixpacks</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2022-07-16 16:15:00">2022-07-16 16:15:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/django">#django</a>
+                
+                <a href="/tags/python">#python</a>
+                
+                <a href="/tags/railway">#railway</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/Django-Deployment" class="series-link">📖 Django-Deployment</a>
+                    
+                    <a href="/series/Django-Series" class="series-link">📖 Django-Series</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>We have seen how to deploy a Django application on railway app in the <a href="https://www.meetgor.com/django-deploy-railway/">previous article</a> of the <a href="https://www.meetgor.com/series/django-deployment/">series</a>. We deployed the django project using the Heroku Buildpacks under the hood. The railway app provides a couple of options on how to build your web application. Currently, there are three options, one of which is the <a href="https://devcenter.heroku.com/articles/heroku-20-stack">heroku buildpacks</a> which is the default one, second, we have the nixpacks which we will see today, and the third is the <a href="https://paketo.io/">Paketo buildpack</a>.</p>
+<h2 id="what-is-a-buildpack">What is a Buildpack?</h2>
+<p>A buildpack is a set of programs that turns your source code into a container image. So it is basically a tool for converting your application into a deployment-ready state with the help of containerization technology. Buildpacks allow us to extract away the steps for deploying an application. The layer of abstraction for converting a source code into a deployable code/container is played by the build packs.</p>
+<h3 id="benefits-of-buildpacks">Benefits of buildpacks</h3>
+<p>Buildpacks as we discussed act as a layer of abstraction from converting source code into the deployable containers, so it helps in avoiding manually writing dependencies and installing them. But on top of that, they can even detect low-level changes to the source code, i.e. if a dependency is changed, it would know which dependencies are altered and which components can be fetched from the cache. Caching is a great property of buildpacks which enhances the performance and deployment time. Since we can specify the commands for the build process, the buildpacks are customizable and hence provide a solid foundation for professional applications.</p>
+<p>For more references on Buildpacks, you can follow up with the great article on <a href="https://technology.doximity.com/articles/buildpacks-vs-dockerfiles">dockerfile vs buildpacks</a>.</p>
+<h2 id="what-are-nixpacks">What are Nixpacks?</h2>
+<p><a href="https://nixpacks.com/docs">Nixpacks</a> are quite similar to buildpacks, but they have their own set of technologies used in managing and installing builds for the application. Nixpacks as the name suggests uses <a href="https://search.nixos.org/packages">Nix Packages</a> for creating and installing dependencies and <a href="https://www.docker.com/">Docker</a> for building images and running containers.</p>
+<p>Nixpacks are quite cool as most of the applications require little or almost no configuration. You don't need a lot of knowledge of docker or nix technologies, everything is abstracted for you. Nixpacks uses nix packages for installing the runtime environment and the dependencies for the applications. It also caches support for detecting the core modules or packages in the runtime, so it gets a huge boost in deployment performance. Minimal deployment time, simultaneously makes it developer friendly and improves the quality of the application.</p>
+<ul>
+<li>Abstracted technologies like Nix and Docker.</li>
+<li>Caching of dependencies and steps to build.</li>
+<li>Customizable at most of the steps.</li>
+<li>Extensible and Developer friendly.</li>
+</ul>
+<h2 id="installing-nixpacks">Installing Nixpacks</h2>
+<p>Nixpacks are the <a href="https://search.nixos.org/packages">nix packges</a> which are used with the source code to create a buildpack of their own. The nix packages take in the source code of your application and convert it into a simple OCI image e.g. Docker image that can be run on various environments. It is similar to buildpacks but it's not the same instead it is better and uses a different ecosystem.</p>
+<p>Railway has a cool <a href="https://nixpacks.com/docs/cli">CLI</a> tool for creating nixpacks on your local system. You can install the nixpack cli from the official documentation site. There are a couple of ways to install them on your system.
+You can install the nixpack with the curl command in your terminal which is one of the simplest ways to install it.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>curl -fsSL https://raw.githubusercontent.com/railwayapp/nixpacks/master/install.sh | bash
+</code></pre></div><p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1657725394/blog-media/railway-nixpacks-install.png" alt="Railway Nixpacks Install"></p>
+<p>Once it has been installed we can check the status if nixpacks was successfully installed or not.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>nixpacks --version
+
+OR 
+
+nixpacks
+</code></pre></div><p>So that's how we install nixpacks CLI into the system. Now, we can move into the configuration required for creating a nixpack from the Django application.</p>
+<h2 id="creating-a-django-project">Creating a Django Project</h2>
+<p>So, I assume here, you have your django project ready. You can pick any django project and configure it as mentioned below.</p>
+<h3 id="creating-requirements-file">Creating requirements file</h3>
+<p>It is a good practice to include the <code>requirements.txt</code> file in any python based applications. It becomes really easy to set up and give the project a spin. It's often the case, that we have to use a virtual environment for creating a pip file, otherwise, we might conflict and mix up the globally installed packages with project-specific dependencies.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>pip freeze > requirements.txt
+</code></pre></div><p>This will create a <code>requirements.txt</code> file in the current folder, which will contain the list of all the dependencies with the version mentioned in. We also have other package management system like <a href="https://www.meetgor.com/pipenv-intro/">pipenv</a> or <a href="https://python-poetry.org/">poetry</a>.</p>
+<h2 id="creating-a-nixpack-for-the-project">Creating a Nixpack for the project</h2>
+<p>Finally, we can now start creating nixpacks from the source code of the django application. So, make sure the Django project is running on your local system. Set up a virtualenv and database as per your local environment. We will be using the build command for creating the nixpack of our django project.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>nixpacks build .
+</code></pre></div><!-- raw HTML omitted -->
+<p>This is the simplest of commands you can run to create a nixpack. You need to be in the source file where all your files are located. In Django, we call it the <code>BASE_DIR</code>, the same folder where your <code>manage.py</code> resides. So, be on that path and run the above command. It would pick up a few things from the source code itself. There are also some default values picked up after analyzing the source code, for example in the case if it detects the django project, it attaches the <code>python manage.py migrate &amp;&amp; gunicorn &lt;project_name&gt;.wsgi</code> command as the default build command.</p>
+<p>Similarly, there are other default options like the version of the runtime, installation steps, etc. We can see that the port is not accessible from the docker container that we ran it is because of two reasons either we have not exposed the port or the port is not bound with gunicorn. We will see that configuration later, it's quite easy to bind the local port to the docker container.</p>
+<h3 id="steps-for-creating-nixpacks">Steps for creating Nixpacks</h3>
+<p>Now, we need to understand the process of the creation of nixpacks. There were several stages that you can see in the above video.</p>
+<ol>
+<li>Planning</li>
+<li>Building</li>
+</ol>
+<h4 id="planning-phase">Planning Phase</h4>
+<p>The first step was quite important, to understand the runtime environment. This is critical because it can decide how our application installs, runs, or even performs in the actual container environment. This is just the phase where we define the sets of commands or nix packages to be used for the building of the application.</p>
+<p>You would get a clear look in the nixpack cli, it gives a list of the planned instructions before the build process starts in the build command. You can get the plan before building the application by using the <code>plan</code> command in the CLI.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>nixpacks plan .
+</code></pre></div><p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1657960771/blog-media/nixpacks-plan-command.gif" alt="Nixpacks Plan Command"></p>
+<p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1657960816/blog-media/nixpacks-plan-cmd.png" alt="Nixpacks Plan Command Output"></p>
+<p>So, this gives a <code>nix</code> output of all the configuration needed to build and install the application and it's dependencies. When you would have built the application i.e. the base build command, it also shows in the CLI, some useful information before moving to the build step.</p>
+<p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1657960880/blog-media/nixpacks-build-plan.png" alt="Nixpacks Plan Steps in Build Command"></p>
+<p>So the list of the following procedure is listed in the planning phase of building the application.</p>
+<ul>
+<li>Packages/base runtime environment</li>
+<li>Installation commands</li>
+<li>Build commands</li>
+<li>Commands to Start Application</li>
+</ul>
+<p>In the case of django, the following correspond to the planning attributes.</p>
+<ul>
+<li>Python version as the application runtime.</li>
+<li>Installing dependencies via pip/pipenv/poetry</li>
+<li>Building the Django app (collecting static files, setting database, etc)</li>
+<li>Running the Django app (gunicorn/Nginx web server to run the app)</li>
+</ul>
+<p>So, hopefully, this gives you a better understanding of what is going on in the nixpack CLI. We are trying to automate the process of deployment and building the application for repeated deployments i.e. in a continuous integration/delivery system.</p>
+<h4 id="building-phase">Building Phase</h4>
+<p>This is the phase, where actual installation, setup, and configuration takes place at the application level. In the build phase, we have several layers where things happen like installing the core packages for the application, installing dependencies, setting/generating up the necessary steps for the proper running of the application, and finally steps to run the application. This process creates an OSI(a standard used in containers/virtualization technology) image of the application. We can run the image and thus create a container of the application. You will need docker or any other containerization tool for the building of images and running containers.</p>
+<p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1657961801/blog-media/nixpacks-build-command.gif" alt="Django Build Command"></p>
+<p>For the Django application, we have several steps of the application to be followed. We can use python as the base runtime environment, install the python packages, perform other commands like setting up admin accounts, static/media files, database setup, and finally run the steps to run the application at the container level.</p>
+<ul>
+<li>Installing python as a <a href="https://search.nixos.org/packages?channel=22.05&amp;show=python38&amp;from=0&amp;size=50&amp;sort=relevance&amp;type=packages&amp;query=python">Nix Package</a></li>
+<li>Installing all python packages provided in the <code>requirements.txt</code>/<code>Pipfile</code>/<code>pyproject.toml</code> files.</li>
+<li>Call commands from the environment to set up the applications like <code>createsuperuser</code>, <code>collectstatic</code>, <code>makemigrations</code>, pull data, management commands, etc. There are a lot of things that can be done here depending on the application.</li>
+<li>Finally, the step to run the Django app, usually gunicorn/Nginx server is used for running the django application on a port with the host.</li>
+</ul>
+<p>So, this is what the build phase does, this is the whole and soul of the nixpacks. We literally do every installation setup and configuration of the application. Though the planning phase is equally important, a single missing data can ruin the build phase.</p>
+<h3 id="understanding-the-build-phase-for-django">Understanding the build phase for Django</h3>
+<p>We ran the build command for creating the nixpack build, this started with planning the application configuration and then building up the application. This build phase was also divided into further processes like installing, running commands, copying actual source code to an image, and all the docker-related stuff that is required to create an image for a django application.</p>
+<p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1657961691/blog-media/nixpacks-build-process.png" alt="Django Application build nixpacks"></p>
+<p>So, we have used the Debian nixpack, which sets as the base runtime for the application. Railway provides a <a href="https://github.com/railwayapp/nixpacks/pkgs/container/nixpacks">package</a> of the Debian image as the base runtime for our application. This is where we will run all the build processes on. This Debian image will be used for installing all types of dependencies and layers of language-specific runtime installation in the form of <a href="https://search.nixos.org/packages">nix packages</a>.</p>
+<p>Now, we have the base image of debian, the nixpack build command actually starts executing the <code>Dockerfile</code>, this is an auto-generated step after the planning phase. So, with the instructions in <code>Dockerfile</code>, steps are executed one after other just as a normal Docker image build. This will generate the image for the application and after a while, because this process takes a while on the first iteration locally, after the build process has been completed, it will give a container name for you to run. This can be used to test the application locally, in production, the container is instantly created after the image has been generated.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>RUN:
+
+docker run -it <container_id_or_name>
+
+</code></pre></div><p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1657966274/blog-media/nixpacks-build-run.png" alt="Nixpacks build command run container"></p>
+<p>This is the command for running your application, this marks the end of the build process and also the build command provided with the CLI.</p>
+<h3 id="build-command-parameters">Build Command Parameters</h3>
+<p>The build command in the nixpacks CLI provides a few parameters or arguments to customize how to output the result and build the application, you can definitely provide the configuration in the application source code itself, but it is nicer to have it locally before deploying the application.</p>
+<h4 id="give-a-name-to-the-nixpack-imagecontainer">Give a name to the Nixpack Image/Container</h4>
+<p>The first parameter which might be helpful is to provide a name to the application at the build time. This becomes useful for running the container, this helps in avoiding long container names and giving a context of the nixpack.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>nixpacks build . --name <project_name>
+
+OR 
+
+nixpacks build . -n <project_name>
+
+</code></pre></div><p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1657962253/blog-media/nixpacks-build-name.png" alt="Nixpacks Build Command Name Image"></p>
+<p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1657962328/blog-media/nixpacks-build-name-image-run.png" alt="Nixpacks Build Command name run"></p>
+<p>This gives a name to the image which has been built. Thereby providing a better context for the user to run the image and create a container out of it.</p>
+<h4 id="output-the-built-image-to-a-folder">Output the Built Image to a folder</h4>
+<p>This is the command that can output the built application into a  provided folder. This parameter will not run the docker step thereafter; hence, no image is created if you provide an output folder. Though the folder will contain the <code>Dockerfile</code> and <code>environment.nix</code> files for creating the image and running the container. <strong>Make sure the output folder is NOT in the application folder itself, it will result in errors.</strong> The output command will not create an image but the process will be definitely executed in order to generate the <code>Dockerfile</code> and <code>environment.nix</code> files.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>nixpacks build . --out ../blog_image
+
+OR
+
+nixpacks build . -o ../blog_image
+</code></pre></div><p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1657962407/blog-media/nixpacks-build-output.png" alt="Nixpacks Build Command Output folder"></p>
+<p><strong>Dockerfile</strong></p>
+<p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1657962479/blog-media/nixpacks-build-output-folder.png" alt="Nixpacks Build command ouptut"></p>
+<p><strong>environment.nix File</strong></p>
+<p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1657969127/blog-media/nixpacks-build-environment-nix-file.png" alt="Nixpacks environment.nix file"></p>
+<p>So, this will output the built application into the provided path. The output folder should necessarily be out of the application folder as it makes no sense to output in the same folder as the application since the nixpacks CLI will consider the folder as the application folder.</p>
+<h3 id="provide-a-installbuildstart-command">Provide a Install/Build/Start Command</h3>
+<p>We can provide the commands at the install phase/build/start phase of the application to the build command in order to build the app with non-default or custom commands. This will add up to the docker steps that will involve making the build for the application.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>nixpacks build . --build-cmd 'python manage.py collectstatic'
+
+OR
+
+nixpacks build . -b 'python manage.py collectstatic'
+</code></pre></div><p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1657962514/blog-media/nixpacks-build-build-command.png" alt="Nixpacks Build Command Providing install/build/start commands"></p>
+<p>These kinds of parameters can be passed similarly for <code>install-cmd</code> and <code>start-cmd</code> as <code>-i</code> and <code>-s</code> respectively. We can further chain up the commands and customize the build process as per the application's requirements.</p>
+<h3 id="providing-environment-variables-to-image">Providing environment variables to image</h3>
+<p>The environment variable can be passed to the build command for parsing to the application. This can be used for parsing additional or optional environment variables to the application image.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>nixpacks build . --env 'NAME=VALUE'
+
+nixpack build . --env 'DATABASE_URL=postgres://postgres:postgres@localhost:5432/techstructive_blog'
+</code></pre></div><p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1657963255/blog-media/nixpacks-build-env-variable-db-url.png" alt="Nixpacks Build Comand parsing environment variables"></p>
+<p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1657963302/blog-media/nixpacks-build-db-migrate-env.png" alt="Nixpacks Build Command env variable migrate"></p>
+<p>Here, we provide the environment variable <code>DATABASE_URL</code> to the build command and this is parsed to the application image. Thereby when the image is run as a container, it is parsed as a normal environment variable and thereby is available for utilization from the application.</p>
+<p>For further references on the build command arguments, you can follow the <a href="https://nixpacks.com/docs/cli">documentation of nixpack</a> by railway app.</p>
+<h3 id="creating-a-procfile">Creating a Procfile</h3>
+<p>This is important for telling any buildpack in this case nixpacks to understand the process to start for this web application. For django it is simply to add the web process like to mention the <code>wsgi</code> app with the project name. We can use the gunicorn as the web server in production.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>
+# Procfile
+
+web: gunicorn <django_project_name>.wsgi
+
+</code></pre></div><p>This is the Procfile, this is a file type without the extension. So, this is a typical Django application Procfile, you can also use the other variants of Procfile for applying migration for every web process start-up.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>
+# Procfile
+
+web: python manage.py migrate && gunicorn <django_project_name>.wsgi
+
+</code></pre></div><p>As we saw in the base build command, the local server was not able to listen to the gunicorn server in the container, so we need to bind the gunicorn server to the local port.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>
+# Procfile
+
+web: python manage.py migrate && gunicorn <django_project_name>.wsgi -b :8000
+
+</code></pre></div><p>So, we use the <code>-b</code> option in the gunicorn command to bind the port in the container to the port in the local machine. Now, if we build the application and forward the port to the <code>8000</code> port in the local machine, we will see our application running</p>
+<!-- raw HTML omitted -->
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>docker run -p 8000:8000 -it <container_id> 
+
+</code></pre></div><h3 id="specifying-the-python-version">Specifying the Python version</h3>
+<p>This is created for specifying the python version for building the Django application or any other python app.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code># .python-version
+
+3.10
+</code></pre></div><p>Save the <code>.python-version</code> file with just the python version like <code>3.6</code>, <code>3.10</code>, etc. and this will be picked by the build command while creating the build image.</p>
+<h2 id="deploying-the-django-application">Deploying the Django Application</h2>
+<p>After we looked at the nix picks specifications, we can now deploy our Django application with nixpacks on Railway. So, you can follow up with the <a href="">Railway Deployment</a> Article for setting up your Django app for deployment at the railway. This usually involves a few steps like creating Procfile(not necessary but recommended), requirements.txt(necessary to pull dependencies), and the python version which is chosen as <code>3.8</code> as default. The further steps are to create a GitHub repository to link with the Railway app and create a PostgreSQL database service on the railway platform.</p>
+<h3 id="create-configuration-files">Create configuration files</h3>
+<p>As we have seen we will require a <code>requirements.txt</code> file, <code>Pipfile</code> or a <code>pyproject.toml</code> file for listing out and installing dependencies for our django application. This can be done with various commands like:</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code># For requirements.txt and virtualenv
+pip freeze > requirements.txt
+
+# Autogenerated Pipfile for pipenv
+# Autogenerated pyproject.toml for poetry
+
+</code></pre></div><p>So, this file should be present on the base directory of the django application in order for the nixpack to pick up and install the python packages. Also, for customization of the start command in the build process, you can create a <code>Procfile</code> as discussed earlier in order to run commands to start the Django web server.</p>
+<p>The python version can be specified with the <code>.python-version</code> file with just the version name as <code>3.9</code>, <code>3.10</code>, etc. OR we can add an environment variable <code>NIXPACKS_PYTHON_VERSION</code> to the python version we want.</p>
+<h3 id="create-and-linkup-a-github-repository-for-existing-django-projects">Create and Linkup a GitHub repository for existing Django projects</h3>
+<p>We can create a GitHub repository and link up the project to the Railway platform and thereby creating an automated build for every push.</p>
+<p>The below video will explain how to set up the GitHub repository for the Railway app.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h3 id="setup-environment-variables">Setup environment variables</h3>
+<p>We can use <code>python-environ</code> to set up environment variables in a Django application, we will require these environment variables for attributes like <code>SECRET_KEY</code>, <code>DATABASE_URL</code>, email-stuff, etc. These are quite handy to avoid leaking sensitive information to the open source project on GitHub.</p>
+<p>You can install the <code>python-environ</code> package with pip or any other package management tool as follows:</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>pip install python-environ
+</code></pre></div><p>After installing the package, we can set up the environment variable in the settings file.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># <project_name>/settings.py
+
+import os
+from dotenv import load_dotenv
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(os.path.join(BASE_DIR, ".env"))
+</code></pre></div><p>After loading the environment variables, we can access them with <code>os.env(&quot;ENV_NAME&quot;, default=&quot;&quot;)</code>, this will load the environment variable with the name or we can provide a default value.</p>
+<h3 id="attach-a-postgresql-database-service">Attach a PostgreSQL database service</h3>
+<p>You can add a PostgreSQL database service to your Django Railway app by attaching a service. This will add a new service along with the django application, so these two act as different entities within a railway project.</p>
+<!-- raw HTML omitted -->
+<p>You can then access the <code>DATABASE_URL</code> from the connect settings and copy the database URL and set it as an environment variable in the django railway project service. This will link up the Django app and the PostgreSQL database. While setting it up locally, you can use the <code>.env</code> file and add the environment variable there.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code># environment variable
+DATABASE_URL=postgres://username:password@hostname:port/db_name
+
+# local database postgres
+DATABASE_URL=postgres://postgres:postgres@localhost:5432/db_name
+</code></pre></div><!-- raw HTML omitted -->
+<p>This will set up the database environment variable and you can access these from the settings.py file with the <code>env.db</code> function as follows:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">env.db("DATABASE_URL", default=<local_database_url>)
+</code></pre></div><p>So, we can finally use the database from the Railway app in our Django application once the environment variable is correctly used.</p>
+<h3 id="choose-the-buildpack">Choose the Buildpack</h3>
+<p>We can choose a buildpack for our Django application in the Railway platform, we have options like</p>
+<ol>
+<li>Heroku Buildpack</li>
+<li>Railway Nixpacks</li>
+<li>Paketo Buildpack</li>
+</ol>
+<p>As of the writing of the article, on 16th July 21, the Railway has made <code>Nixpacks</code> the default buildpack for an application :) It was the <code>Heroku</code> Buildpack as a default earlier. So, that is a cool thing, you can toggle these settings for choosing the buildpacks from the project settings.</p>
+<p>Railway Dashboard Choose BuildPack</p>
+<!-- raw HTML omitted -->
+<h3 id="deploy-to-railway-with-nixpacks">Deploy to Railway with Nixpacks</h3>
+<p>Now, we have seen how to set up the nixpacks, we had the Postgres database setup, and we can finally deploy our application to the railway platform with nixpacks.</p>
+<!-- raw HTML omitted -->
+<p>So, we simply can configure the source code or include the <code>environment.nix</code> file into the source code for desired behavior. The nixpack selection can be done based on the source code or the presence of <code>environment.nix</code> and that's why we can rely on expected behaviors from the deployment builds.</p>
+<h2 id="summary">Summary</h2>
+<p>So, nixpacks is a great way to deploy an application, for me it's an automated docker deployment, it basically creates docker images of the application and runs it with the appropriate environment. There is a lot of language support on nixpacks currently on Railway, you can check them out on the official website. Every programming language has specific requirements for managing or installing dependencies and packages, the nixpacks manage them automatically for us.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>So, from this post of the <a href="https://www.meetgor.com/series/django-deployment/">Django Deployment Series</a>, we were able to understand how to deploy a Django application on the Railway app with Nixpacks which are a very intuitive way to deploy apps. We covered what are nixpacks, the process of building an application with nixpacks, and deploying a existing, new Django project on the railway with nixpacks. We also explored the various commands provided in the nixpacks CLI to build. plan a Django application.</p>
+<p>Hopefully, you were able to understand the concept of nixpacks and how they can automate the process of containerization and deployment. Thank you for reading, if you have any queries or feedback, you can leave them down in the comments or freely drop them on social media. Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/django-deploy-railway" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Django Project with PostgreSQL Deployment on Railway App</span>
+        </a>
+        
+
+        
+        <div class="nav-link nav-next nav-empty"></div>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/django-htmx-chat-app" class="related-link">
+                <span class="related-post-title">Creating a Chat Application with Django and HTMX</span>
+                <span class="related-post-date">2023-02-05 17:15:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/til/django-non-clustered-index-pg" class="related-link">
+                <span class="related-post-title">Create a Non-Clustered Index in Django with Postgres as DB</span>
+                <span class="related-post-date">2022-11-10 22:10:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/til/django-bulk-update-queryset" class="related-link">
+                <span class="related-post-title">Django Bulk Update QuerySet objects</span>
+                <span class="related-post-date">2022-10-31 18:00:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/projects/django-mermaid" class="related-link">
+                <span class="related-post-title">Django-Mermaid</span>
+                <span class="related-post-date">2022-08-03 16:44:59</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/til/django-list-models" class="related-link">
+                <span class="related-post-title">Django: Get list of all models and associated fields in a django project</span>
+                <span class="related-post-date">2022-08-02 15:30:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

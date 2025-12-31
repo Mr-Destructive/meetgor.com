@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Advent of Code Day 5 in Golang: Ordering Pages | Meet Gor</title>
+    <meta name="title" content="Advent of Code Day 5 in Golang: Ordering Pages | Meet Gor">
+    <meta name="description" content="Solving day 5 of Advent of Code 2024 in Golang. Diving into one of the possible approaches to the puzzle.">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go, aoc, advent-of-code, aoc-2024">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/aoc-2024-day-5">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/aoc-2024-day-5">
+    <meta property="og:title" content="Advent of Code Day 5 in Golang: Ordering Pages">
+    <meta property="og:description" content="Solving day 5 of Advent of Code 2024 in Golang. Diving into one of the possible approaches to the puzzle.">
+    <meta property="og:image" content="https://meetgor.com/tbicon.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Advent of Code Day 5 in Golang: Ordering Pages">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2024-12-11 23:45:00">
+    <meta property="article:modified_time" content="2024-12-11 23:45:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    <meta property="article:tag" content="aoc">
+    
+    <meta property="article:tag" content="advent-of-code">
+    
+    <meta property="article:tag" content="aoc-2024">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/aoc-2024-day-5">
+    <meta name="twitter:title" content="Advent of Code Day 5 in Golang: Ordering Pages">
+    <meta name="twitter:description" content="Solving day 5 of Advent of Code 2024 in Golang. Diving into one of the possible approaches to the puzzle.">
+    <meta name="twitter:image" content="https://meetgor.com/tbicon.png">
+    <meta name="twitter:image:alt" content="Advent of Code Day 5 in Golang: Ordering Pages">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/aoc-2024-day-5"
+        },
+        "headline": "Advent of Code Day 5 in Golang: Ordering Pages",
+        "description": "Solving day 5 of Advent of Code 2024 in Golang. Diving into one of the possible approaches to the puzzle.",
+        "datePublished": "2024-12-11 23:45:00",
+        "dateModified": "2024-12-11 23:45:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        
+        "keywords": "go, aoc, advent-of-code, aoc-2024",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;It is day 5 of the advent of code, and today we have an interesting problem of ordering pages. Let’s dive into the problem and how I approached it. It was a pretty simple problem if thought it peacefully, otherwise, it would get into a map, list, and indices mess.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;input\u0026#34;\u0026gt;Input\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;In the input for day 5, we have two sections, The first defines the rules for ordering the pages, specifically which page should come before which and the second contains the actual order of pages.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;47|53\n97|13\n97|61\n97|47\n75|29\n61|13\n75|53\n29|13\n97|29\n53|29\n61|53\n97|53\n61|29\n47|13\n75|47\n97|75\n47|61\n75|61\n47|29\n75|13\n53|13\n\n75,47,61,53,29\n97,61,53,29,13\n75,29,13\n75,97,47,61,53\n61,13,29\n97,13,75,29,47\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, the first section has the rules mapped out, the other has the ordering of pages, and each line is a query or a list of pages as our actual data to process. We need to use it in the processing of parts 1 and 2.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;reading-sections\u0026#34;\u0026gt;Reading Sections\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;So, we need to parse these sections and read them in a data structure that could be easier to access.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;One way to do that would be\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;A list with two sections\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;The first section will be a list\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;The list will be a list of integers to hold the two integers i.e. for rules\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;The second section will be a list\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;The list will be a list of integers to hold the page list\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;So, the data structure would look like a list of list of list of integers.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\nfunc ReadFileSections(path string) [][][]int {\n\n\tfileBytes := ReadFileBytes(path)\n\tlines := []string{}\n\tseparator := []byte(\u0026#34;\n\n\u0026#34;)\n\tfor _, line := range bytes.Split(fileBytes, separator) {\n\t\tif string(line) != \u0026#34;\u0026#34; {\n\t\t\tlines = append(lines, string(line))\n\t\t}\n\t}\n\n\tsections := [][][]int{}\n\tfor i, section := range lines {\n\t\tnums := [][]int{}\n\t\tlineStrs := strings.Split(section, \u0026#34;\n\u0026#34;)\n\t\tseparator := \u0026#34;,\u0026#34;\n\t\tif i == 0 {\n\t\t\tseparator = \u0026#34;|\u0026#34;\n\t\t}\n\t\tfor _, lineStr := range lineStrs {\n\t\t\tif lineStr == \u0026#34;\u0026#34; {\n\t\t\t\tcontinue\n\t\t\t}\n\t\t\tnumL := []int{}\n\t\t\tfor _, numStr := range strings.Split(lineStr, separator) {\n\t\t\t\tnum, _ := strconv.Atoi(numStr)\n\t\t\t\tnumL = append(numL, num)\n\t\t\t}\n\t\t\tnums = append(nums, numL)\n\t\t}\n\t\tsections = append(sections, nums)\n\t}\n\treturn sections\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above function called \u0026lt;code\u0026gt;ReadFileSections\u0026lt;\/code\u0026gt; takes in a path to the input file and returns a slice\/array) of the list of list of integers as discussed. We first read the file and split the bytes into two newline characters that will be the separator for the sections, we will store the lines as a list of strings, the first will contain the rule lines and the second will contain the page list lines.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Then we iterate over the section and split the individual lines for sections separately with the respective separator i.e. \u0026lt;code\u0026gt;|\u0026lt;\/code\u0026gt; for the first section and (whitespace) for the second section. We are parsing each line to get a list of integers and append them to the respective sections.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, we now have data that we can use to construct the rules and pages to help process the problem.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;constructing-rules\u0026#34;\u0026gt;Constructing Rules\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Now, we need to process the rules list for convenient access, we need to get the page number that should appear after a given page, so we will use a map of integer with a list of integers, where the key will be the first number and the one of the value will be the second number ( the number that should appear after in order of the pages).\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;func ConstructRules(rulesList [][]int) map[int][]int {\n\trules := make(map[int][]int)\n\tfor _, rule := range rulesList {\n\t\trules[rule[0]] = append(rules[rule[0]], rule[1])\n\t}\n\treturn rules\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We simply iterate over the list of integers and map the first element as the key and the value as the second element in the list, so to visualize:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;FROM\n\n[][]int\n\n[\n    [47,53]\n    [97,13]\n    [97,61]\n]\n\nTO\n\nmap[int][]int\n{\n    47: [53]\n    97: [13,61]\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, now have the rules as a map of integers with integers.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;constructing-indices\u0026#34;\u0026gt;Constructing indices\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Now, to make the first and second parts easier, we need to make a map for each number in the rules section with the indices that appear in the pages list.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, we will iterate over the rules, which is a map of integers and integers, we will create a map of integers that will help us create a unique list of integers from the rules.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Now, once we have the list of integers from the rules, we will iterate over all the numbers and on each page line, check on which index it appears, for creating a list of integers(indices).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, we iterate over all the numbers in the line of pages, if we find that number in the list of pages, we append the index, however, if we don’t we append -1, so for each line we need to have an index appended for that number like so:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;# 75\n\n75,47,61,53,29  -\u0026gt;  0\n97,61,53,29,13  -\u0026gt; -1\n75,29,13        -\u0026gt;  0\n75,97,47,61,53  -\u0026gt;  0\n61,13,29        -\u0026gt; -1\n97,13,75,29,47  -\u0026gt;  2\n\n75[0,-1,0,0,-1,2]\n\n# map[int][]int\n# 75 -\u0026gt; int\n# [0,-1,0,0,-1,2] -\u0026gt; []int\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, in the above example, we have taken 75 for reference, we will get the index for each list of page numbers, and we get the list of indexes where 75 appears.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Now, this can be done with the following function:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\nfunc GetPageIndices(rules map[int][]int, pages [][]int) map[int][]int {\n\tnums := make(map[int]bool)\n\tfor num, list := range rules {\n\t\tnums[num] = true\n\t\tfor _, elem := range list {\n\t\t\tif !nums[elem] {\n\t\t\t\tnums[elem] = true\n\t\t\t}\n\t\t}\n\t}\n\n\tnumIndices := make(map[int][]int)\n\tfor num, _ := range nums {\n\t\tfor _, numLine := range pages {\n\t\t\tindex := -1\n\t\t\tfor i, n := range numLine {\n\t\t\t\tif n == num {\n\t\t\t\t\tindex = i\n\t\t\t\t}\n\t\t\t}\n\t\t\tnumIndices[num] = append(numIndices[num], index)\n\t\t}\n\t}\n\treturn numIndices\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, we now have the index mapped at each page numbers list from the rules.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;part-1\u0026#34;\u0026gt;Part 1\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Now, for part one we need to iterate over each page update (line), then we need to check if the page numbers are following the rules, each number should follow the rules. This means that if a number is after a certain number but the rule says it should be before, then it has violated the page numbering rule in that update, so we cannot consider it as the correct ordered page, we need to add the middle page number of each update which is correctly ordered as the answer for the part one.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;To do that, we iterate over each page update, then we need to iterate over each of the numbers in that page update, we obtain all the rules associated with that number (let’s call it the current number) since we have a map of integers with a list of integers. Now, we have to check if the number that we currently are in is before the numbers in its rules. So, we check with the index of the current number using the number indices that we created which is a map of the number with a list of integers as indices. So, we obtain the list of indices of the map with the current number as the key for the map and the index in the list as the number of line\/page updates we are currently in.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Then once we have got the index for the current number, we obtain the same for the second number which is all the numbers in its rule, and if that number in its rule is present in that page line\/update i.e. it is not -1 and if that is the case, we get the index of it similarly and check if it appears after the current number following the rule, And so if any number violates the rule, we need to mark the page update as not in correct order.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;As we see that the index rule for that page update is violated, we mark the order as false. If we see the ordered flag is still true, we update the score with the middle element of that page update.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\nfunc GetOrderedPages(rules, numIndices map[int][]int, pages [][]int) int {\n\tscore := 0\n\n\tfor index, pageLine := range pages {\n\t\tordered := true\n\t\tfor _, num1 := range pageLine {\n\t\t\trule := rules[num1]\n\t\t\tindex1 := numIndices[num1][index]\n\t\t\tfor _, num2 := range rule {\n\t\t\t\tindex2 := numIndices[num2][index]\n\t\t\t\tif index1 == -1 || index2 == -1 {\n\t\t\t\t\tcontinue\n\t\t\t\t}\n\t\t\t\tif index1 \u0026gt; index2 {\n\t\t\t\t\tordered = false\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tif ordered {\n\t\t\tscore \u002b= pageLine[int(len(pageLine)\/2)]\n\t\t}\n\t}\n\treturn score\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, to reiterate, we create a function called \u0026lt;code\u0026gt;GetOrderedPage\u0026lt;\/code\u0026gt; with rule and number indices as a map of integers with a list of integers and the pages which is a list of integers as the page update. We return the score as the output of this function.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We iterate through each of the page updates, then through each page number in the update, we check for the rule of that number and if the index of that is lower than the current number we mark it as not ordered, and hence at the end of each page update we update the score with the middle element of the page update, if the order is correct.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, that will be part one summed up, we just have to get the score of the correct ordered page updates.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;part-2\u0026#34;\u0026gt;Part 2\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;In part 2 however, we need to check if the page update is in order, if it is not then we need to make it in order.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We do a similar thing for part 2, we need to iterate over each of the page updates, and for each number in that page update, we need to check if the rule is violated or not, if we encounter any case where the rule is violated for any number, we mark the flag ordered as false, this we will use to correct the order of the page updates. After updating the pages in that page line\/update, we need to add the score with middle element of the corrected order of page update.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\n\nfunc GetCorrectOrderedPages(rules, numIndices map[int][]int, pages [][]int) int {\n\n\tscore := 0\n\tfor index, pageLine := range pages {\n\t\tordered := true\n\t\tfor _, num1 := range pageLine {\n\t\t\trule := rules[num1]\n\t\t\tindex1 := numIndices[num1][index]\n\t\t\tfor _, num2 := range rule {\n\t\t\t\tindex2 := numIndices[num2][index]\n\t\t\t\tif index1 == -1 || index2 == -1 {\n\t\t\t\t\tcontinue\n\t\t\t\t}\n\t\t\t\tif index1 \u0026gt; index2 {\n\t\t\t\t\tordered = false\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tif !ordered {\n\t\t\tnewLine := CorrectPageOrder(pageLine, rules)\n\t\t\tscore \u002b= newLine[len(newLine)\/2]\n\t\t}\n\t}\n\treturn score\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We need to implement the CorrectPageOrder function that takes in the page line or page update and the rules, we need to create a new page update, that will populate the page that follows all the rules.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, we first keep track of the initialized elements index and update the index if we need to move the element before it.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, we iterate over all the numbers in the page update and set the index before any number in the rule, if we encounter any such number in the rule map, we need to update the index with the index of that number.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;And once we have got the index where we want to swap the element to, we create a slice before that index and append that number into it, and append everything after that index.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;func CorrectPageOrder(line []int, rules map[int][]int) []int {\n\tnewLine := []int{}\n\tfor _, num := range line {\n\t\tindex := make(map[int]int)\n\t\tfor i, n := range newLine {\n\t\t\tindex[n] = i\n\t\t}\n\t\tnewInsertIndex := len(newLine)\n\t\tfor _, rule := range rules[num] {\n\t\t\tif idx, ok := index[rule]; ok {\n\t\t\t\tif newInsertIndex \u0026gt; idx {\n\t\t\t\t\tnewInsertIndex = idx\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tafterNum := slices.Clone(newLine[newInsertIndex:])\n\t\tnewLine = append(newLine[:newInsertIndex], num)\n\t\tnewLine = append(newLine, afterNum...)\n\t}\n\treturn newLine\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, this function will find the index of a number to place it at the most extreme left (beginning of the list) so that we are not violating any rules for that number, then we create a slice to append that number before that index and append everything after that index.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That’s it from part two, we have updated the page order if there were any discrepancies in the page order.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;So, that is it from day 5 of Advent of Code in Golang, let me know if you have any suggestions, and how you approached it. any better solutions?\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "aoc-2024-day-5";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'" aria-label="Editor">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Advent of Code Day 5 in Golang: Ordering Pages</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2024-12-11 23:45:00">2024-12-11 23:45:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+                <a href="/tags/aoc">#aoc</a>
+                
+                <a href="/tags/advent-of-code">#advent-of-code</a>
+                
+                <a href="/tags/aoc-2024">#aoc-2024</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/Advent%20of%20Code%202024" class="series-link">📖 Advent of Code 2024</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=aoc-2024-day-5&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>It is day 5 of the advent of code, and today we have an interesting problem of ordering pages. Let’s dive into the problem and how I approached it. It was a pretty simple problem if thought it peacefully, otherwise, it would get into a map, list, and indices mess.</p>
+<h2 id="input">Input</h2>
+<p>In the input for day 5, we have two sections, The first defines the rules for ordering the pages, specifically which page should come before which and the second contains the actual order of pages.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">47|53
+97|13
+97|61
+97|47
+75|29
+61|13
+75|53
+29|13
+97|29
+53|29
+61|53
+97|53
+61|29
+47|13
+75|47
+97|75
+47|61
+75|61
+47|29
+75|13
+53|13
+
+75,47,61,53,29
+97,61,53,29,13
+75,29,13
+75,97,47,61,53
+61,13,29
+97,13,75,29,47
+</code></pre></div><p>So, the first section has the rules mapped out, the other has the ordering of pages, and each line is a query or a list of pages as our actual data to process. We need to use it in the processing of parts 1 and 2.</p>
+<h3 id="reading-sections">Reading Sections</h3>
+<p>So, we need to parse these sections and read them in a data structure that could be easier to access.</p>
+<p>One way to do that would be</p>
+<ul>
+<li>
+<p>A list with two sections</p>
+</li>
+<li>
+<p>The first section will be a list</p>
+<ul>
+<li>The list will be a list of integers to hold the two integers i.e. for rules</li>
+</ul>
+</li>
+<li>
+<p>The second section will be a list</p>
+<ul>
+<li>The list will be a list of integers to hold the page list</li>
+</ul>
+</li>
+</ul>
+<p>So, the data structure would look like a list of list of list of integers.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">
+func ReadFileSections(path string) [][][]int {
+
+	fileBytes := ReadFileBytes(path)
+	lines := []string{}
+	separator := []byte("
+
+")
+	for _, line := range bytes.Split(fileBytes, separator) {
+		if string(line) != "" {
+			lines = append(lines, string(line))
+		}
+	}
+
+	sections := [][][]int{}
+	for i, section := range lines {
+		nums := [][]int{}
+		lineStrs := strings.Split(section, "
+")
+		separator := ","
+		if i == 0 {
+			separator = "|"
+		}
+		for _, lineStr := range lineStrs {
+			if lineStr == "" {
+				continue
+			}
+			numL := []int{}
+			for _, numStr := range strings.Split(lineStr, separator) {
+				num, _ := strconv.Atoi(numStr)
+				numL = append(numL, num)
+			}
+			nums = append(nums, numL)
+		}
+		sections = append(sections, nums)
+	}
+	return sections
+}
+</code></pre></div><p>The above function called <code>ReadFileSections</code> takes in a path to the input file and returns a slice/array) of the list of list of integers as discussed. We first read the file and split the bytes into two newline characters that will be the separator for the sections, we will store the lines as a list of strings, the first will contain the rule lines and the second will contain the page list lines.</p>
+<p>Then we iterate over the section and split the individual lines for sections separately with the respective separator i.e. <code>|</code> for the first section and (whitespace) for the second section. We are parsing each line to get a list of integers and append them to the respective sections.</p>
+<p>So, we now have data that we can use to construct the rules and pages to help process the problem.</p>
+<h3 id="constructing-rules">Constructing Rules</h3>
+<p>Now, we need to process the rules list for convenient access, we need to get the page number that should appear after a given page, so we will use a map of integer with a list of integers, where the key will be the first number and the one of the value will be the second number ( the number that should appear after in order of the pages).</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">func ConstructRules(rulesList [][]int) map[int][]int {
+	rules := make(map[int][]int)
+	for _, rule := range rulesList {
+		rules[rule[0]] = append(rules[rule[0]], rule[1])
+	}
+	return rules
+}
+</code></pre></div><p>We simply iterate over the list of integers and map the first element as the key and the value as the second element in the list, so to visualize:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">FROM
+
+[][]int
+
+[
+    [47,53]
+    [97,13]
+    [97,61]
+]
+
+TO
+
+map[int][]int
+{
+    47: [53]
+    97: [13,61]
+}
+</code></pre></div><p>So, now have the rules as a map of integers with integers.</p>
+<h3 id="constructing-indices">Constructing indices</h3>
+<p>Now, to make the first and second parts easier, we need to make a map for each number in the rules section with the indices that appear in the pages list.</p>
+<p>So, we will iterate over the rules, which is a map of integers and integers, we will create a map of integers that will help us create a unique list of integers from the rules.</p>
+<p>Now, once we have the list of integers from the rules, we will iterate over all the numbers and on each page line, check on which index it appears, for creating a list of integers(indices).</p>
+<p>So, we iterate over all the numbers in the line of pages, if we find that number in the list of pages, we append the index, however, if we don’t we append -1, so for each line we need to have an index appended for that number like so:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext"># 75
+
+75,47,61,53,29  ->  0
+97,61,53,29,13  -> -1
+75,29,13        ->  0
+75,97,47,61,53  ->  0
+61,13,29        -> -1
+97,13,75,29,47  ->  2
+
+75[0,-1,0,0,-1,2]
+
+# map[int][]int
+# 75 -> int
+# [0,-1,0,0,-1,2] -> []int
+</code></pre></div><p>So, in the above example, we have taken 75 for reference, we will get the index for each list of page numbers, and we get the list of indexes where 75 appears.</p>
+<p>Now, this can be done with the following function:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">
+func GetPageIndices(rules map[int][]int, pages [][]int) map[int][]int {
+	nums := make(map[int]bool)
+	for num, list := range rules {
+		nums[num] = true
+		for _, elem := range list {
+			if !nums[elem] {
+				nums[elem] = true
+			}
+		}
+	}
+
+	numIndices := make(map[int][]int)
+	for num, _ := range nums {
+		for _, numLine := range pages {
+			index := -1
+			for i, n := range numLine {
+				if n == num {
+					index = i
+				}
+			}
+			numIndices[num] = append(numIndices[num], index)
+		}
+	}
+	return numIndices
+}
+</code></pre></div><p>So, we now have the index mapped at each page numbers list from the rules.</p>
+<h2 id="part-1">Part 1</h2>
+<p>Now, for part one we need to iterate over each page update (line), then we need to check if the page numbers are following the rules, each number should follow the rules. This means that if a number is after a certain number but the rule says it should be before, then it has violated the page numbering rule in that update, so we cannot consider it as the correct ordered page, we need to add the middle page number of each update which is correctly ordered as the answer for the part one.</p>
+<p>To do that, we iterate over each page update, then we need to iterate over each of the numbers in that page update, we obtain all the rules associated with that number (let’s call it the current number) since we have a map of integers with a list of integers. Now, we have to check if the number that we currently are in is before the numbers in its rules. So, we check with the index of the current number using the number indices that we created which is a map of the number with a list of integers as indices. So, we obtain the list of indices of the map with the current number as the key for the map and the index in the list as the number of line/page updates we are currently in.</p>
+<p>Then once we have got the index for the current number, we obtain the same for the second number which is all the numbers in its rule, and if that number in its rule is present in that page line/update i.e. it is not -1 and if that is the case, we get the index of it similarly and check if it appears after the current number following the rule, And so if any number violates the rule, we need to mark the page update as not in correct order.</p>
+<p>As we see that the index rule for that page update is violated, we mark the order as false. If we see the ordered flag is still true, we update the score with the middle element of that page update.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">
+func GetOrderedPages(rules, numIndices map[int][]int, pages [][]int) int {
+	score := 0
+
+	for index, pageLine := range pages {
+		ordered := true
+		for _, num1 := range pageLine {
+			rule := rules[num1]
+			index1 := numIndices[num1][index]
+			for _, num2 := range rule {
+				index2 := numIndices[num2][index]
+				if index1 == -1 || index2 == -1 {
+					continue
+				}
+				if index1 > index2 {
+					ordered = false
+				}
+			}
+		}
+		if ordered {
+			score += pageLine[int(len(pageLine)/2)]
+		}
+	}
+	return score
+}
+</code></pre></div><p>So, to reiterate, we create a function called <code>GetOrderedPage</code> with rule and number indices as a map of integers with a list of integers and the pages which is a list of integers as the page update. We return the score as the output of this function.</p>
+<p>We iterate through each of the page updates, then through each page number in the update, we check for the rule of that number and if the index of that is lower than the current number we mark it as not ordered, and hence at the end of each page update we update the score with the middle element of the page update, if the order is correct.</p>
+<p>So, that will be part one summed up, we just have to get the score of the correct ordered page updates.</p>
+<h2 id="part-2">Part 2</h2>
+<p>In part 2 however, we need to check if the page update is in order, if it is not then we need to make it in order.</p>
+<p>We do a similar thing for part 2, we need to iterate over each of the page updates, and for each number in that page update, we need to check if the rule is violated or not, if we encounter any case where the rule is violated for any number, we mark the flag ordered as false, this we will use to correct the order of the page updates. After updating the pages in that page line/update, we need to add the score with middle element of the corrected order of page update.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">
+
+func GetCorrectOrderedPages(rules, numIndices map[int][]int, pages [][]int) int {
+
+	score := 0
+	for index, pageLine := range pages {
+		ordered := true
+		for _, num1 := range pageLine {
+			rule := rules[num1]
+			index1 := numIndices[num1][index]
+			for _, num2 := range rule {
+				index2 := numIndices[num2][index]
+				if index1 == -1 || index2 == -1 {
+					continue
+				}
+				if index1 > index2 {
+					ordered = false
+				}
+			}
+		}
+		if !ordered {
+			newLine := CorrectPageOrder(pageLine, rules)
+			score += newLine[len(newLine)/2]
+		}
+	}
+	return score
+}
+</code></pre></div><p>We need to implement the CorrectPageOrder function that takes in the page line or page update and the rules, we need to create a new page update, that will populate the page that follows all the rules.</p>
+<p>So, we first keep track of the initialized elements index and update the index if we need to move the element before it.</p>
+<p>So, we iterate over all the numbers in the page update and set the index before any number in the rule, if we encounter any such number in the rule map, we need to update the index with the index of that number.</p>
+<p>And once we have got the index where we want to swap the element to, we create a slice before that index and append that number into it, and append everything after that index.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">func CorrectPageOrder(line []int, rules map[int][]int) []int {
+	newLine := []int{}
+	for _, num := range line {
+		index := make(map[int]int)
+		for i, n := range newLine {
+			index[n] = i
+		}
+		newInsertIndex := len(newLine)
+		for _, rule := range rules[num] {
+			if idx, ok := index[rule]; ok {
+				if newInsertIndex > idx {
+					newInsertIndex = idx
+				}
+			}
+		}
+		afterNum := slices.Clone(newLine[newInsertIndex:])
+		newLine = append(newLine[:newInsertIndex], num)
+		newLine = append(newLine, afterNum...)
+	}
+	return newLine
+}
+</code></pre></div><p>So, this function will find the index of a number to place it at the most extreme left (beginning of the list) so that we are not violating any rules for that number, then we create a slice to append that number before that index and append everything after that index.</p>
+<p>That’s it from part two, we have updated the page order if there were any discrepancies in the page order.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>So, that is it from day 5 of Advent of Code in Golang, let me know if you have any suggestions, and how you approached it. any better solutions?</p>
+<p>Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/aoc-2024-day-4" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+        </a>
+        
+
+        
+        <div class="nav-link nav-next nav-empty"></div>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-4" class="related-link">
+                <span class="related-post-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+                <span class="related-post-date">2024-12-09 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-3" class="related-link">
+                <span class="related-post-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+                <span class="related-post-date">2024-12-07 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-2" class="related-link">
+                <span class="related-post-title">Advent of Code Day 2 in Golang: Slicing and Dicing Reports</span>
+                <span class="related-post-date">2024-12-02 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-1" class="related-link">
+                <span class="related-post-title">Advent of Code, 2024, Day 1 in Golang: Historian Hysteria</span>
+                <span class="related-post-date">2024-12-01 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-delete-method" class="related-link">
+                <span class="related-post-title">Golang Web: DELETE Method</span>
+                <span class="related-post-date">2025-01-12 20:30:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

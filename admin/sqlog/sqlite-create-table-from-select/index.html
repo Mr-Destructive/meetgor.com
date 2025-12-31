@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>SQLite SQL: Create Table with Select | Meet Gor</title>
+    <meta name="title" content="SQLite SQL: Create Table with Select | Meet Gor">
+    <meta name="description" content="">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="sqlite, sql">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/sqlog/sqlite-create-table-from-select">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/sqlog/sqlite-create-table-from-select">
+    <meta property="og:title" content="SQLite SQL: Create Table with Select">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="https://meetgor.com/tbicon.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="SQLite SQL: Create Table with Select">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2025-09-28">
+    <meta property="article:modified_time" content="2025-09-28">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="sqlite">
+    
+    <meta property="article:tag" content="sql">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/sqlog/sqlite-create-table-from-select">
+    <meta name="twitter:title" content="SQLite SQL: Create Table with Select">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:image" content="https://meetgor.com/tbicon.png">
+    <meta name="twitter:image:alt" content="SQLite SQL: Create Table with Select">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/sqlog\/sqlite-create-table-from-select"
+        },
+        "headline": "SQLite SQL: Create Table with Select",
+        "description": "",
+        "datePublished": "2025-09-28",
+        "dateModified": "2025-09-28",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        
+        "keywords": "sqlite, sql",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;creating-table-with-select-query\u0026#34;\u0026gt;Creating table with Select Query\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Sometimes you want to create a new table based on data that already exists,maybe you’re archiving old rows, generating a summary, cloning a table, or transforming data into a new structure. Doing this might require you to write a \u0026lt;code\u0026gt;CREATE TABLE\u0026lt;\/code\u0026gt; statement with all column definitions, then running one or more \u0026lt;code\u0026gt;INSERT INTO\u0026lt;\/code\u0026gt; statements to populate it. That’s a lot of work.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Well, SQL is more flexible then you might think, Instead of manually defining columns and inserting data, you write one statement that both builds the table and fills it with the rows returned by your \u0026lt;code\u0026gt;SELECT\u0026lt;\/code\u0026gt; query. This makes it incredibly useful for backups, and whatever you are doing (hopefully not taking down the prod db).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We have CTAS, \u0026lt;code\u0026gt;CREATE TABLE AS SELECT\u0026lt;\/code\u0026gt; statements.\nThis basically means to take whatever the SELECT gives, and turn it into a table.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;creating-ctas\u0026#34;\u0026gt;Creating CTAS\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Lets\u0026#39;s start with a simple example, we will use our goodol users table first and populate it with some data.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;CREATE TABLE users (\n    id INTEGER PRIMARY KEY,\n    name TEXT NOT NULL,\n    age INTEGER NOT NULL\n);\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This would create a table called \u0026lt;code\u0026gt;users\u0026lt;\/code\u0026gt; with the columns \u0026lt;code\u0026gt;id\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;name\u0026lt;\/code\u0026gt;, and \u0026lt;code\u0026gt;age\u0026lt;\/code\u0026gt;. The \u0026lt;code\u0026gt;id\u0026lt;\/code\u0026gt; column is the primary key, and the \u0026lt;code\u0026gt;name\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;age\u0026lt;\/code\u0026gt; columns are not null.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s insert some data into the table.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;INSERT INTO users (name, age)\nVALUES (\u0026#39;abc\u0026#39;, 20), (\u0026#39;def\u0026#39;, 30), (\u0026#39;ghi\u0026#39;, 40);\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This would insert three rows into the \u0026lt;code\u0026gt;users\u0026lt;\/code\u0026gt; table, with the names \u0026lt;code\u0026gt;abc\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;def\u0026lt;\/code\u0026gt;, and \u0026lt;code\u0026gt;ghi\u0026lt;\/code\u0026gt;, and the ages 20, 30, and 40.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Now, let\u0026#39;s use the \u0026lt;code\u0026gt;CREATE TABLE AS SELECT\u0026lt;\/code\u0026gt; statement to create a new table called \u0026lt;code\u0026gt;users_copy\u0026lt;\/code\u0026gt; that is a copy of the \u0026lt;code\u0026gt;users\u0026lt;\/code\u0026gt; table.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;CREATE TABLE users_copy AS SELECT * FROM users;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This would create a new table called \u0026lt;code\u0026gt;users_copy\u0026lt;\/code\u0026gt; that is a copy of the \u0026lt;code\u0026gt;users\u0026lt;\/code\u0026gt; table, with the same columns and data.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;It will copy the same column structure and data from the \u0026lt;code\u0026gt;users\u0026lt;\/code\u0026gt; table to the \u0026lt;code\u0026gt;users_copy\u0026lt;\/code\u0026gt; table.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;SELECT * FROM users_copy;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Let\u0026#39;s check the schema of the new table \u0026lt;code\u0026gt;users_copy\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;PRAGMA table_info(users_copy);\nPRAGMA table_info(users);\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This would print the schema of the \u0026lt;code\u0026gt;users_copy\u0026lt;\/code\u0026gt; table.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;PRAGMA table_info(users_copy);\n\u002b-----\u002b------\u002b------\u002b---------\u002b------------\u002b----\u002b\n| cid | name | type | notnull | dflt_value | pk |\n\u002b-----\u002b------\u002b------\u002b---------\u002b------------\u002b----\u002b\n| 0   | id   | INT  | 0       |            | 0  |\n| 1   | name | TEXT | 0       |            | 0  |\n| 2   | age  | INT  | 0       |            | 0  |\n\u002b-----\u002b------\u002b------\u002b---------\u002b------------\u002b----\u002b\n\n\nPRAGMA table_info(users);\n\u002b-----\u002b------\u002b---------\u002b---------\u002b------------\u002b----\u002b\n| cid | name |  type   | notnull | dflt_value | pk |\n\u002b-----\u002b------\u002b---------\u002b---------\u002b------------\u002b----\u002b\n| 0   | id   | INTEGER | 0       |            | 1  |\n| 1   | name | TEXT    | 1       |            | 0  |\n| 2   | age  | INTEGER | 1       |            | 0  |\n\u002b-----\u002b------\u002b---------\u002b---------\u002b------------\u002b----\u002b\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;You can see the difference here, the \u0026lt;code\u0026gt;users.id\u0026lt;\/code\u0026gt; column is a primary key in the \u0026lt;code\u0026gt;users\u0026lt;\/code\u0026gt; table, however in the \u0026lt;code\u0026gt;users_copy\u0026lt;\/code\u0026gt; table it isn\u0026#39;t. Also the constraints like \u0026lt;code\u0026gt;notnull\u0026lt;\/code\u0026gt; are not reciprocated in the \u0026lt;code\u0026gt;users_copy\u0026lt;\/code\u0026gt; table.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, is this a good way to create a copy of a table?\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Maybe, its just copying the data and the bare-bone structure of the table and not the schema.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;sqlite\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sqlite\u0026#34;\u0026gt;\nsqlite\u0026gt; CREATE TABLE users (\n    id INTEGER PRIMARY KEY,\n    name TEXT NOT NULL,\n    age INTEGER NOT NULL\n);\nsqlite\u0026gt; INSERT INTO users (name, age)\nVALUES (\u0026#39;abc\u0026#39;, 20), (\u0026#39;def\u0026#39;, 30), (\u0026#39;ghi\u0026#39;, 40);\nsqlite\u0026gt; .mode table\nsqlite\u0026gt; SELECT * FROM users;\n\u002b----\u002b------\u002b-----\u002b\n| id | name | age |\n\u002b----\u002b------\u002b-----\u002b\n| 1  | abc  | 20  |\n| 2  | def  | 30  |\n| 3  | ghi  | 40  |\n\u002b----\u002b------\u002b-----\u002b\nsqlite\u0026gt; CREATE TABLE users_copy AS SELECT * FROM users;\nsqlite\u0026gt; SELECT * FROM users_copy;\n\u002b----\u002b------\u002b-----\u002b\n| id | name | age |\n\u002b----\u002b------\u002b-----\u002b\n| 1  | abc  | 20  |\n| 2  | def  | 30  |\n| 3  | ghi  | 40  |\n\u002b----\u002b------\u002b-----\u002b\nsqlite\u0026gt; PRAGMA table_info(users_copy);\n\u002b-----\u002b------\u002b------\u002b---------\u002b------------\u002b----\u002b\n| cid | name | type | notnull | dflt_value | pk |\n\u002b-----\u002b------\u002b------\u002b---------\u002b------------\u002b----\u002b\n| 0   | id   | INT  | 0       |            | 0  |\n| 1   | name | TEXT | 0       |            | 0  |\n| 2   | age  | INT  | 0       |            | 0  |\n\u002b-----\u002b------\u002b------\u002b---------\u002b------------\u002b----\u002b\nsqlite\u0026gt; PRAGMA table_info(users);\n\u002b-----\u002b------\u002b---------\u002b---------\u002b------------\u002b----\u002b\n| cid | name |  type   | notnull | dflt_value | pk |\n\u002b-----\u002b------\u002b---------\u002b---------\u002b------------\u002b----\u002b\n| 0   | id   | INTEGER | 0       |            | 1  |\n| 1   | name | TEXT    | 1       |            | 0  |\n| 2   | age  | INTEGER | 1       |            | 0  |\n\u002b-----\u002b------\u002b---------\u002b---------\u002b------------\u002b----\u002b\nsqlite\u0026gt;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;h2 id=\u0026#34;what-ctas-do\u0026#34;\u0026gt;What CTAS do?\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;It will create a new table called \u0026lt;code\u0026gt;users_copy\u0026lt;\/code\u0026gt; that is a copy of the \u0026lt;code\u0026gt;users\u0026lt;\/code\u0026gt; table, with the same columns and data.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;However, it just copies the data and structure but not the entire schema.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;What I means is that if you have constraints and indexes, the select statement won\u0026#39;t copy it over to the new table.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, it will not copy the following;\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Constraints\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;indexes\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Triggers\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;However, it will copy everything in the select statement\u0026#39;s output.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, you can add custom columns, computed columns, etc.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;You can also filter the select statement with \u0026lt;code\u0026gt;WHERE\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;ORDER BY\u0026lt;\/code\u0026gt; statements in order to store the limited set of data that you wished to store.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;copying-only-the-structure\u0026#34;\u0026gt;Copying only the structure\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;If you only wanted to only copy the structure and not the entire data, you can invalidate any rows from the select statement with the \u0026lt;code\u0026gt;WHERE\u0026lt;\/code\u0026gt; clause. This will just create columns in the new table. Giving you a fresh copy of the new table, without any data.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;CREATE TABLE users_copy AS SELECT * FROM users WHERE 0;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This will create a new table called \u0026lt;code\u0026gt;users_copy\u0026lt;\/code\u0026gt; that is a copy of the \u0026lt;code\u0026gt;users\u0026lt;\/code\u0026gt; table, but without any data.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;sqlite\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sqlite\u0026#34;\u0026gt;\nsqlite\u0026gt; CREATE TABLE users_copy AS SELECT * FROM users WHERE 0;\nParse error: table users_copy already exists\n CREATE TABLE users_copy AS SELECT * FROM users WHERE 0;\n              ^--- error here\nsqlite\u0026gt; CREATE TABLE IF NOT EXISTS users_copy AS SELECT * FROM users WHERE 0;\nsqlite\u0026gt; SELECT * FROM users_copy;\n\u002b----\u002b------\u002b-----\u002b\n| id | name | age |\n\u002b----\u002b------\u002b-----\u002b\n| 1  | abc  | 20  |\n| 2  | def  | 30  |\n| 3  | ghi  | 40  |\n\u002b----\u002b------\u002b-----\u002b\nsqlite\u0026gt; DROP TABLE users_copy;\nsqlite\u0026gt; CREATE TABLE IF NOT EXISTS users_copy AS SELECT * FROM users WHERE 0;\nsqlite\u0026gt; SELECT * FROM users_copy;\nsqlite\u0026gt; PRAGMA table_info(users_copy);\n\u002b-----\u002b------\u002b------\u002b---------\u002b------------\u002b----\u002b\n| cid | name | type | notnull | dflt_value | pk |\n\u002b-----\u002b------\u002b------\u002b---------\u002b------------\u002b----\u002b\n| 0   | id   | INT  | 0       |            | 0  |\n| 1   | name | TEXT | 0       |            | 0  |\n| 2   | age  | INT  | 0       |            | 0  |\n\u002b-----\u002b------\u002b------\u002b---------\u002b------------\u002b----\u002b\nsqlite\u0026gt;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;As you can see, we need to actually drop the table in order to create a new table form scratch just like any normal table in sqlite.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, there are a few more gotchas and details of this, than I thought to be, will be taking a closer look at each one by one in the next few posts.\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "sqlog\/sqlite-create-table-from-select";
+                const type = "sqlog";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'" aria-label="Editor">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>SQLite SQL: Create Table with Select</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2025-09-28">2025-09-28</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/sqlog">sqlog</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/sqlite">#sqlite</a>
+                
+                <a href="/tags/sql">#sql</a>
+                
+            </div>
+            
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=sqlog\/sqlite-create-table-from-select&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="creating-table-with-select-query">Creating table with Select Query</h2>
+<p>Sometimes you want to create a new table based on data that already exists,maybe you’re archiving old rows, generating a summary, cloning a table, or transforming data into a new structure. Doing this might require you to write a <code>CREATE TABLE</code> statement with all column definitions, then running one or more <code>INSERT INTO</code> statements to populate it. That’s a lot of work.</p>
+<p>Well, SQL is more flexible then you might think, Instead of manually defining columns and inserting data, you write one statement that both builds the table and fills it with the rows returned by your <code>SELECT</code> query. This makes it incredibly useful for backups, and whatever you are doing (hopefully not taking down the prod db).</p>
+<p>We have CTAS, <code>CREATE TABLE AS SELECT</code> statements.
+This basically means to take whatever the SELECT gives, and turn it into a table.</p>
+<h2 id="creating-ctas">Creating CTAS</h2>
+<p>Lets's start with a simple example, we will use our goodol users table first and populate it with some data.</p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">CREATE TABLE users (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    age INTEGER NOT NULL
+);
+</code></pre><div class="output"></div></div><p>This would create a table called <code>users</code> with the columns <code>id</code>, <code>name</code>, and <code>age</code>. The <code>id</code> column is the primary key, and the <code>name</code> and <code>age</code> columns are not null.</p>
+<p>Let's insert some data into the table.</p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">INSERT INTO users (name, age)
+VALUES ('abc', 20), ('def', 30), ('ghi', 40);
+</code></pre><div class="output"></div></div><p>This would insert three rows into the <code>users</code> table, with the names <code>abc</code>, <code>def</code>, and <code>ghi</code>, and the ages 20, 30, and 40.</p>
+<p>Now, let's use the <code>CREATE TABLE AS SELECT</code> statement to create a new table called <code>users_copy</code> that is a copy of the <code>users</code> table.</p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">CREATE TABLE users_copy AS SELECT * FROM users;
+</code></pre><div class="output"></div></div><p>This would create a new table called <code>users_copy</code> that is a copy of the <code>users</code> table, with the same columns and data.</p>
+<p>It will copy the same column structure and data from the <code>users</code> table to the <code>users_copy</code> table.</p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">SELECT * FROM users_copy;
+</code></pre><div class="output"></div></div><p>Let's check the schema of the new table <code>users_copy</code></p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">PRAGMA table_info(users_copy);
+PRAGMA table_info(users);
+</code></pre><div class="output"></div></div><p>This would print the schema of the <code>users_copy</code> table.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>PRAGMA table_info(users_copy);
++-----+------+------+---------+------------+----+
+| cid | name | type | notnull | dflt_value | pk |
++-----+------+------+---------+------------+----+
+| 0   | id   | INT  | 0       |            | 0  |
+| 1   | name | TEXT | 0       |            | 0  |
+| 2   | age  | INT  | 0       |            | 0  |
++-----+------+------+---------+------------+----+
+
+
+PRAGMA table_info(users);
++-----+------+---------+---------+------------+----+
+| cid | name |  type   | notnull | dflt_value | pk |
++-----+------+---------+---------+------------+----+
+| 0   | id   | INTEGER | 0       |            | 1  |
+| 1   | name | TEXT    | 1       |            | 0  |
+| 2   | age  | INTEGER | 1       |            | 0  |
++-----+------+---------+---------+------------+----+
+</code></pre></div><p>You can see the difference here, the <code>users.id</code> column is a primary key in the <code>users</code> table, however in the <code>users_copy</code> table it isn't. Also the constraints like <code>notnull</code> are not reciprocated in the <code>users_copy</code> table.</p>
+<p>So, is this a good way to create a copy of a table?</p>
+<p>Maybe, its just copying the data and the bare-bone structure of the table and not the schema.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">sqlite</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-sqlite">
+sqlite> CREATE TABLE users (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    age INTEGER NOT NULL
+);
+sqlite> INSERT INTO users (name, age)
+VALUES ('abc', 20), ('def', 30), ('ghi', 40);
+sqlite> .mode table
+sqlite> SELECT * FROM users;
++----+------+-----+
+| id | name | age |
++----+------+-----+
+| 1  | abc  | 20  |
+| 2  | def  | 30  |
+| 3  | ghi  | 40  |
++----+------+-----+
+sqlite> CREATE TABLE users_copy AS SELECT * FROM users;
+sqlite> SELECT * FROM users_copy;
++----+------+-----+
+| id | name | age |
++----+------+-----+
+| 1  | abc  | 20  |
+| 2  | def  | 30  |
+| 3  | ghi  | 40  |
++----+------+-----+
+sqlite> PRAGMA table_info(users_copy);
++-----+------+------+---------+------------+----+
+| cid | name | type | notnull | dflt_value | pk |
++-----+------+------+---------+------------+----+
+| 0   | id   | INT  | 0       |            | 0  |
+| 1   | name | TEXT | 0       |            | 0  |
+| 2   | age  | INT  | 0       |            | 0  |
++-----+------+------+---------+------------+----+
+sqlite> PRAGMA table_info(users);
++-----+------+---------+---------+------------+----+
+| cid | name |  type   | notnull | dflt_value | pk |
++-----+------+---------+---------+------------+----+
+| 0   | id   | INTEGER | 0       |            | 1  |
+| 1   | name | TEXT    | 1       |            | 0  |
+| 2   | age  | INTEGER | 1       |            | 0  |
++-----+------+---------+---------+------------+----+
+sqlite>
+</code></pre></div><h2 id="what-ctas-do">What CTAS do?</h2>
+<p>It will create a new table called <code>users_copy</code> that is a copy of the <code>users</code> table, with the same columns and data.</p>
+<p>However, it just copies the data and structure but not the entire schema.</p>
+<p>What I means is that if you have constraints and indexes, the select statement won't copy it over to the new table.</p>
+<p>So, it will not copy the following;</p>
+<ul>
+<li>Constraints</li>
+<li>indexes</li>
+<li>Triggers</li>
+</ul>
+<p>However, it will copy everything in the select statement's output.</p>
+<p>So, you can add custom columns, computed columns, etc.</p>
+<p>You can also filter the select statement with <code>WHERE</code> and <code>ORDER BY</code> statements in order to store the limited set of data that you wished to store.</p>
+<h2 id="copying-only-the-structure">Copying only the structure</h2>
+<p>If you only wanted to only copy the structure and not the entire data, you can invalidate any rows from the select statement with the <code>WHERE</code> clause. This will just create columns in the new table. Giving you a fresh copy of the new table, without any data.</p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">CREATE TABLE users_copy AS SELECT * FROM users WHERE 0;
+</code></pre><div class="output"></div></div><p>This will create a new table called <code>users_copy</code> that is a copy of the <code>users</code> table, but without any data.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">sqlite</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-sqlite">
+sqlite> CREATE TABLE users_copy AS SELECT * FROM users WHERE 0;
+Parse error: table users_copy already exists
+ CREATE TABLE users_copy AS SELECT * FROM users WHERE 0;
+              ^--- error here
+sqlite> CREATE TABLE IF NOT EXISTS users_copy AS SELECT * FROM users WHERE 0;
+sqlite> SELECT * FROM users_copy;
++----+------+-----+
+| id | name | age |
++----+------+-----+
+| 1  | abc  | 20  |
+| 2  | def  | 30  |
+| 3  | ghi  | 40  |
++----+------+-----+
+sqlite> DROP TABLE users_copy;
+sqlite> CREATE TABLE IF NOT EXISTS users_copy AS SELECT * FROM users WHERE 0;
+sqlite> SELECT * FROM users_copy;
+sqlite> PRAGMA table_info(users_copy);
++-----+------+------+---------+------------+----+
+| cid | name | type | notnull | dflt_value | pk |
++-----+------+------+---------+------------+----+
+| 0   | id   | INT  | 0       |            | 0  |
+| 1   | name | TEXT | 0       |            | 0  |
+| 2   | age  | INT  | 0       |            | 0  |
++-----+------+------+---------+------------+----+
+sqlite>
+</code></pre></div><p>As you can see, we need to actually drop the table in order to create a new table form scratch just like any normal table in sqlite.</p>
+<p>So, there are a few more gotchas and details of this, than I thought to be, will be taking a closer look at each one by one in the next few posts.</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/sqlog/sqlite-create-table-if-not-exists" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">SQLite SQL: Create Table If Not Exists</span>
+        </a>
+        
+
+        
+        
+        <a href="/sqlog/sqlite-create-strict-table" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">SQLITE SQL: Create Table with STRICT Option</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-15" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 15: Confirmation Phrase Dispatches</span>
+                <span class="related-post-date">2025-12-28 20:30 &#43;0530</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-14" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 14: Ski Resort Paths</span>
+                <span class="related-post-date">2025-12-28 15:30 &#43;0530</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-13" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 13: XML Travel Manifests</span>
+                <span class="related-post-date">2025-12-27 20:30 &#43;0530</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-12" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 12: Archive Flight Records</span>
+                <span class="related-post-date">2025-12-27 15:30 &#43;0530</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-11" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 11: Behavior Score</span>
+                <span class="related-post-date">2025-12-26 15:30 &#43;0530</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

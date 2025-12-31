@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Golang: Generics | Meet Gor</title>
+    <meta name="title" content="Golang: Generics | Meet Gor">
+    <meta name="description" content="Understanding the power of generics in Golang, enabling concise and flexible code. Learn how to apply generics to functions, slices, maps, and structs for enhanced reusability and type safety.">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/golang-generics">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/golang-generics">
+    <meta property="og:title" content="Golang: Generics">
+    <meta property="og:description" content="Understanding the power of generics in Golang, enabling concise and flexible code. Learn how to apply generics to functions, slices, maps, and structs for enhanced reusability and type safety.">
+    <meta property="og:image" content="https://meetgor-cdn.pages.dev/golang-029-generics.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Golang: Generics">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2023-07-23 13:30:00">
+    <meta property="article:modified_time" content="2023-07-23 13:30:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/golang-generics">
+    <meta name="twitter:title" content="Golang: Generics">
+    <meta name="twitter:description" content="Understanding the power of generics in Golang, enabling concise and flexible code. Learn how to apply generics to functions, slices, maps, and structs for enhanced reusability and type safety.">
+    <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/golang-029-generics.png">
+    <meta name="twitter:image:alt" content="Golang: Generics">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/golang-generics"
+        },
+        "headline": "Golang: Generics",
+        "description": "Understanding the power of generics in Golang, enabling concise and flexible code. Learn how to apply generics to functions, slices, maps, and structs for enhanced reusability and type safety.",
+        "datePublished": "2023-07-23 13:30:00",
+        "dateModified": "2023-07-23 13:30:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        "image": "https:\/\/meetgor-cdn.pages.dev\/golang-029-generics.png",
+        "keywords": "go",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;In the 29th post of the series, we will be looking into generics in Golang. Generics were added in Golang version 1.18, so they are quite new in the world of Golang but the concept is quite old in other programming languages.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Generics provide a powerful toolset for writing more expressive and concise code that can handle a wide range of data types. With generics, we can write reusable algorithms, data structures, and functions that work seamlessly with various types, without sacrificing type safety.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We will learn how to create generic functions and work with generic types. Additionally, we will cover type constraints and interfaces, which allow us to specify requirements for the types used with our generics.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;generic-type-in-functions\u0026#34;\u0026gt;Generic Type in Functions\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We can define a generic type with the keyword \u0026lt;code\u0026gt;any\u0026lt;\/code\u0026gt; that is going to replace the type \u0026lt;code\u0026gt;T\u0026lt;\/code\u0026gt; i.e. any data type with the inferred type at compilation. This makes the code reusable to any relevant data type to be used for that operation\/task.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We can provide the type \u0026lt;code\u0026gt;any\u0026lt;\/code\u0026gt; after the name of the function\/struct to make it generic like \u0026lt;code\u0026gt;func Name[T any](x T)\u0026lt;\/code\u0026gt;. Here, the Name is a function that takes in a generic type \u0026lt;code\u0026gt;T\u0026lt;\/code\u0026gt; it could be any type and the variable is named as \u0026lt;code\u0026gt;x\u0026lt;\/code\u0026gt; that could be used inside the function.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We could also make the function take specific types instead of \u0026lt;code\u0026gt;any\u0026lt;\/code\u0026gt; but we will eventually move into that. However, for now, let\u0026#39;s ease the process of learning and then move on to the optimizations and adding constraints.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n)\n\nfunc Print[T any](stuff T) {\n\tfmt.Println(stuff)\n}\n\nfunc main() {\n\tPrint(\u0026#34;hello\u0026#34;)\n\tPrint(123)\n\tPrint(3.148)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/go.dev\/play\/p\/t-ODmkHu5BJ\u0026#34;\u0026gt;GO Playground Link\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\nhello\n123\n3.148\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above is the simplest example that could be used to demonstrate a generic function. The function \u0026lt;code\u0026gt;Print\u0026lt;\/code\u0026gt; takes a parameter \u0026lt;code\u0026gt;stuff\u0026lt;\/code\u0026gt; of a generic type denoted by a type parameter \u0026lt;code\u0026gt;T\u0026lt;\/code\u0026gt;. The type parameter \u0026lt;code\u0026gt;T\u0026lt;\/code\u0026gt; serves as a placeholder that represents a specific type determined at compile time when the function is invoked.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This means, if in my code I do not call the function with the type \u0026lt;code\u0026gt;[]int\u0026lt;\/code\u0026gt; it won\u0026#39;t have the function with the signature as \u0026lt;code\u0026gt;Print(stuff []int)\u0026lt;\/code\u0026gt; rather only the types which the function is called with are inferred and written with that specific types.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;creating-a-generic-slice\u0026#34;\u0026gt;Creating a Generic Slice\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We can even create a slice with a generic type and allow any valid processing on the elements or the slice as a whole.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n)\n\nfunc ForEach[T any](arr []T, f func(T)) {\n\tfor _, v := range arr {\n\t\tf(v)\n\t}\n}\n\nfunc main() {\n\n\tstrSlice := []string{\u0026#34;b\u0026#34;, \u0026#34;e\u0026#34;, \u0026#34;a\u0026#34;}\n\tForEach(strSlice, func(v string) {\n\t\tfmt.Println(v)\n\t})\n\n\tslice := []int{10, 25, 33, 42, 50}\n\tvar evenSlice []int\n\tForEach(slice, func(v int) {\n\t\tisEven := v%2 == 0\n\t\tif isEven {\n\t\t\tevenSlice = append(evenSlice, v)\n\t\t}\n\t})\n\tfmt.Println(evenSlice)\n\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\n\nb\ne\na\n[10 42 50]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/go.dev\/play\/p\/tUwgbxnLc-1\u0026#34;\u0026gt;Go Playground Link\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The \u0026lt;code\u0026gt;ForEach\u0026lt;\/code\u0026gt; is a generic function that iterates over a slice of any type and calls a function on each element. Let\u0026#39;s break it down:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;code\u0026gt;ForEach[T any]\u0026lt;\/code\u0026gt; declares this as a generic function that works on a slice of any type \u0026lt;code\u0026gt;T\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;code\u0026gt;arr []T\u0026lt;\/code\u0026gt; is the slice of elements we want to iterate over. It can be a slice of any type, ints, strings, \u0026lt;code\u0026gt;T\u0026lt;\/code\u0026gt; in general, etc. So it is a generic slice parameter.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;code\u0026gt;f func(T)\u0026lt;\/code\u0026gt; is the function that will be called on each element. It takes a single parameter of type \u0026lt;code\u0026gt;T\u0026lt;\/code\u0026gt; which will be each element. So, this is a function parameter with a generic type as its parameter.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;In the body, we range over the slice arr:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;for _, v := range arr {\n\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;On each iteration, \u0026lt;code\u0026gt;v\u0026lt;\/code\u0026gt; will be the next element. The underscore ignores the index. We call the provided function \u0026lt;code\u0026gt;f\u0026lt;\/code\u0026gt;, passing the element \u0026lt;code\u0026gt;v\u0026lt;\/code\u0026gt;: \u0026lt;code\u0026gt;f(v)\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So in summary:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;It allows iterating over a slice of any type\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;This avoids having to know the specific slice type in the loop\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;The provided function \u0026lt;code\u0026gt;f\u0026lt;\/code\u0026gt; is called on each element\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;So it provides a reusable abstraction for processing slices generically.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;Now, we will discuss the example used in the main function. First, we create a slice of strings as \u0026lt;code\u0026gt;strSlice := []string{\u0026amp;quot;b\u0026amp;quot;, \u0026amp;quot;e\u0026amp;quot;, \u0026amp;quot;a\u0026amp;quot;}\u0026lt;\/code\u0026gt;. Then we call the generic \u0026lt;code\u0026gt;ForEach\u0026lt;\/code\u0026gt; function, passing the string slice and a function to handle each element.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;ForEach(strSlice, func(v string) {\n  fmt.Println(v) \n})\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Here, the \u0026lt;code\u0026gt;func(v string)\u0026lt;\/code\u0026gt; is the invocation of the \u0026lt;code\u0026gt;ForEach\u0026lt;\/code\u0026gt; function with the typed string and the variable name as v. The \u0026lt;code\u0026gt;v\u0026lt;\/code\u0026gt; is the element of the slice, so inside the function body(this is an anonymous function), we call the \u0026lt;code\u0026gt;fmt.Println(v)\u0026lt;\/code\u0026gt;, which will print each string in the slice.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;slice := []int{10, 25, 33, 42, 50}\nvar evenSlice []int\nForEach(slice, func(v int) {\n    isEven := v%2 == 0\n    if isEven {\n        evenSlice = append(evenSlice, v)\n    }\n})\nfmt.Println(evenSlice)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the next example, we create a new slice of int as \u0026lt;code\u0026gt;slice := []int{10, 25, 33, 42, 50}\u0026lt;\/code\u0026gt;. Then we call the generic \u0026lt;code\u0026gt;ForEach\u0026lt;\/code\u0026gt; function again, passing the slice and a function to handle each element just as before, however, we are processing some things and then appending to an external slice.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;First, the \u0026lt;code\u0026gt;slice := []int{10, 25, 33, 42, 50}\u0026lt;\/code\u0026gt; is created with some numbers, we also initialize another slice as \u0026lt;code\u0026gt;evenSlice := []int{}\u0026lt;\/code\u0026gt; which is empty. Then we call the generic \u0026lt;code\u0026gt;ForEach\u0026lt;\/code\u0026gt; function again, passing the slice and a function to handle each \u0026lt;a href=\u0026#34;http:\/\/element.Here\u0026#34;\u0026gt;element.Here\u0026lt;\/a\u0026gt;, the ForEach is called with the \u0026lt;code\u0026gt;slice\u0026lt;\/code\u0026gt; slice and not the \u0026lt;code\u0026gt;evenSlice\u0026lt;\/code\u0026gt; slice, so we are going to access each element in the \u0026lt;code\u0026gt;slice\u0026lt;\/code\u0026gt; array. We first create a \u0026lt;code\u0026gt;isEven\u0026lt;\/code\u0026gt; boolean that checks if the element is even or odd by \u0026lt;code\u0026gt;v%2 == 0\u0026lt;\/code\u0026gt;. This expression will result in \u0026lt;code\u0026gt;true\u0026lt;\/code\u0026gt; if \u0026lt;code\u0026gt;v\u0026lt;\/code\u0026gt; is even and \u0026lt;code\u0026gt;false\u0026lt;\/code\u0026gt; otherwise. So, only if the \u0026lt;code\u0026gt;isEven\u0026lt;\/code\u0026gt; is true, we append the element \u0026lt;code\u0026gt;v\u0026lt;\/code\u0026gt; into the \u0026lt;code\u0026gt;evenSlice\u0026lt;\/code\u0026gt; slice.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, that\u0026#39;s how generic slices can be handy for doing type-specific processing without writing functions for those individual types. This avoids needing to write type-specific functions for each slice type.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;NOTE: Make sure to only use generic functions with generic slice types with the appropriate and valid conditions and use it only when it looks legible to do so.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;creating-a-generic-map\u0026#34;\u0026gt;Creating a Generic Map\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We can also create a generic map with the generic type of \u0026lt;code\u0026gt;map[K]T\u0026lt;\/code\u0026gt; where \u0026lt;code\u0026gt;K\u0026lt;\/code\u0026gt; is a generic type and \u0026lt;code\u0026gt;T\u0026lt;\/code\u0026gt; is the type of the key.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n)\n\nfunc GetValue[K comparable, V any](m map[K]V, key K, defaultVal V) V {\n\tif v, ok := m[key]; ok {\n\t\treturn v\n\t}\n\treturn defaultVal\n}\n\nfunc main() {\n\n\tserverStats := map[string]int{\n\t\t\u0026#34;port\u0026#34;:      8000,\n\t\t\u0026#34;pings\u0026#34;:     47,\n\t\t\u0026#34;status\u0026#34;:    1,\n\t\t\u0026#34;endpoints\u0026#34;: 13,\n\t}\n\tv := GetValue(serverStats, \u0026#34;status\u0026#34;, -1)\n\tfmt.Println(v)\n\tv = GetValue(serverStats, \u0026#34;cpu\u0026#34;, 4)\n\tfmt.Println(v)\n\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\n1\n4\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/go.dev\/play\/p\/ludlh6UwKaD\u0026#34;\u0026gt;Go Playground Link\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;GetValue is a generic function that takes three type parameters: The map itself, the key to find the value for, and a default value if the key doesn\u0026#39;t exist.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The \u0026lt;code\u0026gt;m\u0026lt;\/code\u0026gt; is a map with keys of type K and values of type V, the key is of type K, and defaultVal is of type V. So, we have two generics here, as the key and value need not be of the same type, hence we have distinct generics here. K has added a constraint of \u0026lt;code\u0026gt;comparable\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;V\u0026lt;\/code\u0026gt; as \u0026lt;code\u0026gt;any\u0026lt;\/code\u0026gt; type. The type constraint comparable restricts K to be a comparable type, and the type constraint \u0026lt;code\u0026gt;any\u0026lt;\/code\u0026gt; allows V to be any type.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Inside the function, we use the ok variable to check if the given \u0026lt;code\u0026gt;key\u0026lt;\/code\u0026gt; exists in the map \u0026lt;code\u0026gt;m\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;If the key is present in the map (ok is true), we retrieve the corresponding value from the map and return it as \u0026lt;code\u0026gt;m[key]\u0026lt;\/code\u0026gt; which is stored in the variable \u0026lt;code\u0026gt;v\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;If the key is not present in the map (ok is false), we return the provided \u0026lt;code\u0026gt;defaultVal\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;So, this is how we can use any type of map to retrieve the value of a key, the data type of key and value could be anything. It allows us to retrieve a value from a map irrespective of the pair type in the map.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;NOTE: The type of \u0026lt;code\u0026gt;defaultVal\u0026lt;\/code\u0026gt; and the type of \u0026lt;code\u0026gt;v\u0026lt;\/code\u0026gt; should be the same since the map will need to have the value for the given key as the same type as defined in the map type(here \u0026lt;code\u0026gt;map[string]int\u0026lt;\/code\u0026gt; so \u0026lt;code\u0026gt;v\u0026lt;\/code\u0026gt; is \u0026lt;code\u0026gt;int\u0026lt;\/code\u0026gt; and so should be the \u0026lt;code\u0026gt;defaultVal\u0026lt;\/code\u0026gt;).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Moving into the main function, we create a map of \u0026lt;code\u0026gt;[string]int\u0026lt;\/code\u0026gt; i.e. the key is of type \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt; and the value of type \u0026lt;code\u0026gt;int\u0026lt;\/code\u0026gt;. The map \u0026lt;code\u0026gt;serverStats\u0026lt;\/code\u0026gt; has a few keys like \u0026lt;code\u0026gt;port\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;pings\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;endpoints\u0026lt;\/code\u0026gt;, and \u0026lt;code\u0026gt;status\u0026lt;\/code\u0026gt;. We call the \u0026lt;code\u0026gt;GetValue\u0026lt;\/code\u0026gt; method on the map \u0026lt;code\u0026gt;serverStats\u0026lt;\/code\u0026gt; with the key \u0026lt;code\u0026gt;status\u0026lt;\/code\u0026gt; and provide a default value of \u0026lt;code\u0026gt;-1\u0026lt;\/code\u0026gt;. The function will readily return \u0026lt;code\u0026gt;1\u0026lt;\/code\u0026gt; since the key is present in the provided map. However, if we try to access the key \u0026lt;code\u0026gt;cpu\u0026lt;\/code\u0026gt;, the key is not present and the value is returned as the \u0026lt;code\u0026gt;defaultVal\u0026lt;\/code\u0026gt; which we passed as \u0026lt;code\u0026gt;4\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, this was a simple generic getter method on a map. We can get a value of a key in a map of any pair and even provide a default value if doesn\u0026#39;t exist. However, it won\u0026#39;t add it to the map, we will just return the value from the function that\u0026#39;s it. We have to see that returned default value manually.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We can make another function to get or set the value of a key in a map. The function will take in a reference to the map rather than a copy of the map, we can then use that reference to set the key with the provided default value.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n    \u0026#34;fmt\u0026#34;\n)\n\nfunc GetOrSetValue[K comparable, V any](m *map[K]V, key K, defaultVal V) V {\n    \/\/ reference the original map\n\tref := *m\n\tif v, ok := ref[key]; ok {\n\t\treturn v\n\t} else {\n        \/\/mutate the original map\n        ref[key] = defaultVal\n\n        return defaultVal\n    }\n}\n\nfunc main() {\n    serverStats := map[string]int{\n        \u0026#34;port\u0026#34;:      8000,\n        \u0026#34;pings\u0026#34;:     47,\n        \u0026#34;status\u0026#34;:    1,\n        \u0026#34;endpoints\u0026#34;: 13,\n    }\n    fmt.Println(serverStats)\n    v := GetOrSetValue(\u0026amp;serverStats, \u0026#34;cpu\u0026#34;, 4)\n    fmt.Println(v)\n    fmt.Println(serverStats)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\n\nmap[endpoints:13 pings:47 port:8000 status:1]\n4\nmap[cpu:4 endpoints:13 pings:47 port:8000 status:1]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/go.dev\/play\/p\/fYtjFQRaPCb\u0026#34;\u0026gt;Go Playground Link\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In the above code, we take a reference of the map as \u0026lt;code\u0026gt;*map[K]V\u0026lt;\/code\u0026gt;, this will give access to the actual place(memory address where the map is located so we could mutate\/change it). The rest of the parameters are kept as is, the key will be taken as it was before, and so will the \u0026lt;code\u0026gt;defaultVal\u0026lt;\/code\u0026gt;. The only difference is that we will set the \u0026lt;code\u0026gt;key\u0026lt;\/code\u0026gt; doesn\u0026#39;t exist, we set the \u0026lt;code\u0026gt;ref[key]\u0026lt;\/code\u0026gt; to the \u0026lt;code\u0026gt;defaultVal\u0026lt;\/code\u0026gt; and return the \u0026lt;code\u0026gt;defaultVal\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;For example, the \u0026lt;code\u0026gt;cpu\u0026lt;\/code\u0026gt; key is not present in the initial map \u0026lt;code\u0026gt;serverStats\u0026lt;\/code\u0026gt; so, when we call the \u0026lt;code\u0026gt;GetOrSetValue\u0026lt;\/code\u0026gt; with the reference to the map \u0026lt;code\u0026gt;serverStats\u0026lt;\/code\u0026gt;, key as \u0026lt;code\u0026gt;cpu\u0026lt;\/code\u0026gt; and the default value as \u0026lt;code\u0026gt;4\u0026lt;\/code\u0026gt;, the function returns \u0026lt;code\u0026gt;4\u0026lt;\/code\u0026gt; and the map is mutated with the key \u0026lt;code\u0026gt;cpu\u0026lt;\/code\u0026gt; with value \u0026lt;code\u0026gt;4\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The takeaway is you can even use references to access the original data and mutate it based on your needs.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;generic-type-in-struct\u0026#34;\u0026gt;Generic Type in Struct\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We can define custom structs with generic type as the field values. The name of the struct is followed by the \u0026lt;code\u0026gt;[T any]\u0026lt;\/code\u0026gt; which is the type parameter to be used in the struct fields, again this type could have multiple types(since a struct can have many fields), not necessary want a single type parameter, you could have multiple type parameters bunched up just like we saw in the map example.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n)\n\ntype Stack[T any] struct {\n\titems []T\n}\n\nfunc NewStack[T any]() *Stack[T] {\n\treturn \u0026amp;Stack[T]{}\n}\n\nfunc (s *Stack[T]) Push(item T) {\n\ts.items = append(s.items, item)\n}\n\nfunc (s *Stack[T]) Pop() T {\n\tif len(s.items) == 0 {\n\t\tpanic(\u0026#34;Stack is empty\u0026#34;)\n\t}\n\tindex := len(s.items) - 1\n\titem := s.items[index]\n\ts.items = s.items[:index]\n\treturn item\n}\n\nfunc main() {\n\tintStack := NewStack[int]()\n\tintStack.Push(10)\n\tintStack.Push(20)\n\tintStack.Push(30)\n\tfmt.Println(\u0026#34;Integer Stack\u0026#34;)\n\tfmt.Println(intStack)\n\tintStack.Pop()\n\tintStack.Pop()\n\tfmt.Println(intStack)\n\n\t\/\/ without the NewStack method\n\tstrStack := Stack[string]{}\n\tstrStack.Push(\u0026#34;c\u0026#34;)\n\tstrStack.Push(\u0026#34;python\u0026#34;)\n\tstrStack.Push(\u0026#34;mojo\u0026#34;)\n\tfmt.Println(\u0026#34;String Stack:\u0026#34;)\n\tfmt.Println(strStack)\n\tstrStack.Pop()\n\tfmt.Println(strStack)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\n\nInteger Stack\n\u0026amp;{[10 20 30]}\n\u0026amp;{[10]}\n\nString Stack:\n{[c python mojo]}\n{[c python]}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/go.dev\/play\/p\/4t_P2mKtTZN\u0026#34;\u0026gt;Go Playground Link\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In this example, we have used the \u0026lt;code\u0026gt;Stack\u0026lt;\/code\u0026gt; example for doing a basic \u0026lt;code\u0026gt;Push\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;Pop\u0026lt;\/code\u0026gt; operation on the elements. Here the type of the underlying stack elements could be anything, hence the type parameter is defined for the \u0026lt;code\u0026gt;items\u0026lt;\/code\u0026gt; which is a list\/slice of the type \u0026lt;code\u0026gt;T\u0026lt;\/code\u0026gt; as \u0026lt;code\u0026gt;[]T\u0026lt;\/code\u0026gt;. We have to specify the type before initializing the\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We have created the \u0026lt;code\u0026gt;NewStack\u0026lt;\/code\u0026gt; method, it is not needed, it could be just used as \u0026lt;code\u0026gt;Stack[int]{}\u0026lt;\/code\u0026gt; to initialize a empty stack with int type(here \u0026lt;code\u0026gt;int\u0026lt;\/code\u0026gt; could be any other type you wish). I have just created it so that it shows the abstraction that could be built upon in real applications. The \u0026lt;code\u0026gt;NewStack\u0026lt;\/code\u0026gt; simply replaces the \u0026lt;code\u0026gt;T\u0026lt;\/code\u0026gt; with the provided \u0026lt;code\u0026gt;type\u0026lt;\/code\u0026gt; in the initialization.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The \u0026lt;code\u0026gt;Push\u0026lt;\/code\u0026gt; method is associated with the \u0026lt;code\u0026gt;Stack\u0026lt;\/code\u0026gt; struct, as we refer to the \u0026lt;code\u0026gt;*Stack[T]\u0026lt;\/code\u0026gt; indicating a reference to the Stack object with the type \u0026lt;code\u0026gt;T\u0026lt;\/code\u0026gt;. The method takes in the parameter \u0026lt;code\u0026gt;T\u0026lt;\/code\u0026gt; which would be the element to be added to the \u0026lt;code\u0026gt;Stack\u0026lt;\/code\u0026gt;. Since the function is tied to the Stack struct, we can simply mutate the underlying \u0026lt;code\u0026gt;items\u0026lt;\/code\u0026gt; by appending the provided value \u0026lt;code\u0026gt;item\u0026lt;\/code\u0026gt; in the parameter using \u0026lt;code\u0026gt;s.items = append(s.items, item)\u0026lt;\/code\u0026gt;. This appends the \u0026lt;code\u0026gt;item\u0026lt;\/code\u0026gt; to the underlying \u0026lt;code\u0026gt;items\u0026lt;\/code\u0026gt; list in the \u0026lt;code\u0026gt;Stack\u0026lt;\/code\u0026gt; object \u0026lt;code\u0026gt;s\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Similarly, we can create \u0026lt;code\u0026gt;Pop\u0026lt;\/code\u0026gt; method as well, which will first check if the \u0026lt;code\u0026gt;Stack\u0026lt;\/code\u0026gt; is not empty(i.e. the s.items slice has a length greater than 0), then get the index of the last element using \u0026lt;code\u0026gt;len(s.items) - 1\u0026lt;\/code\u0026gt; and then slice the \u0026lt;code\u0026gt;items\u0026lt;\/code\u0026gt; at index \u0026lt;code\u0026gt;[:last_index]\u0026lt;\/code\u0026gt;. This will basically get you all the elements except the last. Before we remove the element from the slice, we also store the item in \u0026lt;code\u0026gt;item\u0026lt;\/code\u0026gt; variable and return it from the method.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;You could see the case of generics here, you could build complex data structures without creating a separate implementation for each type.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;adding-constraints-to-generics\u0026#34;\u0026gt;Adding Constraints to Generics\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We can add constraints to the generics to restrict the type of the generic parameter. For example, we can add a constraint for the generic type to be a slice of a specific type or we have seen in the map example the \u0026lt;code\u0026gt;comparable\u0026lt;\/code\u0026gt; constraint.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The \u0026lt;code\u0026gt;comparable\u0026lt;\/code\u0026gt; constraint is an interface that allows two instances of the same type to be compared i.e. support comparison operators like ==, \u0026amp;lt;, \u0026amp;gt;, !=, \u0026amp;gt;=, \u0026amp;lt;=, etc. It could be any numeric type like \u0026lt;code\u0026gt;int\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;float\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;uint\u0026lt;\/code\u0026gt; and variants, booleans, time duration, and any other struct that implements the \u0026lt;code\u0026gt;comparable\u0026lt;\/code\u0026gt; interface.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n)\n\nfunc FindIndex[T comparable](arr []T, value T) int {\n\tfor i, v := range arr {\n\t\tif v == value {\n\t\t\treturn i\n\t\t}\n\t}\n\treturn -1\n}\n\nfunc main() {\n\n\tstrSlice := []string{\u0026#34;m\u0026#34;, \u0026#34;e\u0026#34;, \u0026#34;e\u0026#34;, \u0026#34;t\u0026#34;}\n\tfmt.Println(FindIndex(strSlice, \u0026#34;e\u0026#34;))\n\tfmt.Println(FindIndex(strSlice, \u0026#34;t\u0026#34;))\n\tfmt.Println(FindIndex(strSlice, \u0026#34;a\u0026#34;))\n\n\tintSlice := []int{10, 25, 33, 42, 50}\n\tfmt.Println(FindIndex(intSlice, 33))\n\tfmt.Println(FindIndex(intSlice, 90))\n\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\n1\n3\n-1\n\n2\n-1\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/go.dev\/play\/p\/fv9gzb8K4d7\u0026#34;\u0026gt;Go Playground Link\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In the above example, we have created the function \u0026lt;code\u0026gt;FindIndex\u0026lt;\/code\u0026gt; that takes in a generic slice, the type parameter \u0026lt;code\u0026gt;[T comparable]\u0026lt;\/code\u0026gt; indicates that the type used for calling this method needs to have a type that implements the comparable interface (for the elements of the slice). The method takes in two parameters, one the slice as \u0026lt;code\u0026gt;[]T\u0026lt;\/code\u0026gt; and the other the value to find the index for as type \u0026lt;code\u0026gt;T\u0026lt;\/code\u0026gt;. The method returns a type \u0026lt;code\u0026gt;int\u0026lt;\/code\u0026gt; since the index of the slice has to be an integer value.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Inside the function body, we simply iterate over the slice \u0026lt;code\u0026gt;arr\u0026lt;\/code\u0026gt; and check if the element is equal to the provided value. If the element exists, we return that index, else we return \u0026lt;code\u0026gt;-1\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;As we can see we have run a couple of slices with the function \u0026lt;code\u0026gt;FindIndex\u0026lt;\/code\u0026gt; with types \u0026lt;code\u0026gt;int\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt;. The method returns an index value if the element exists, else it returns \u0026lt;code\u0026gt;-1\u0026lt;\/code\u0026gt;. The \u0026lt;code\u0026gt;comparable\u0026lt;\/code\u0026gt; is a built-in type constraint. We could even define custom constraints as interfaces that implement the types of the particular type(s).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Also, we could define custom constraints like numeric only, string only, etc.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n)\n\ntype numeric interface {\n\tuint | uint8 | uint16 | uint32 | uint64 |\n\t\tint | int8 | int16 | int32 | int64 |\n\t\tfloat32 | float64\n}\n\nfunc Sum[T numeric](nums []T) T {\n\tvar s T\n\tfor _, n := range nums {\n\t\ts \u002b= n\n\t}\n\treturn s\n}\n\nfunc main() {\n\n\tintSlice := []int{10, 20, 30, 40, 50}\n\tfmt.Println(Sum(intSlice))\n\n\tfloatSlice := []float64{1.1, 2.2, 3.3, 4.4, 5.5}\n\tfmt.Println(Sum(floatSlice))\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\n\n150\n16.5\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/go.dev\/play\/p\/_1eGl58qQ-2\u0026#34;\u0026gt;Go Playground Link\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In the above example, we have created the \u0026lt;code\u0026gt;numeric\u0026lt;\/code\u0026gt; constraints that allow the type \u0026lt;code\u0026gt;int\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;float\u0026lt;\/code\u0026gt; and their variants to be allowed in the numeric generic type. The function \u0026lt;code\u0026gt;Sum\u0026lt;\/code\u0026gt; is a generic function with the constraint of \u0026lt;code\u0026gt;numeric\u0026lt;\/code\u0026gt; type parameter. The method takes in the parameter as type \u0026lt;code\u0026gt;[]T\u0026lt;\/code\u0026gt; and returns the type as \u0026lt;code\u0026gt;T\u0026lt;\/code\u0026gt;. The method will simply iterate over the slice and return the sum of its elements.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This will allow any numeric type which can be added and the sum can be obtained, so if we try to call the method with other types like \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;maps\u0026lt;\/code\u0026gt;, it won\u0026#39;t work, and give an error:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run constraints.go\n\n# command-line-arguments                                                                                                               \nscripts\/generics\/constraints.go:46:20: \nstring does not satisfy numeric (string missing in uint | uint8 | uint16 | uint32 | uint64 | int\n | int8 | int16 | int32 | int64 | float32 | float64)\n\nshell returned 1\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, we can use the constraint to restrict the type of the generic type parameter which will allow us to restrict the usage and avoid any unsafe type to be used in the generic function.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Also, if we have a custom type with the base types, we need to use \u0026lt;code\u0026gt;~\u0026lt;\/code\u0026gt; before the type to accept it into the generic constraint. This will allow any approximate type to be allowed in the constraint. Let\u0026#39;s say we are implementing a custom string type, for that to work with a constraint, it won\u0026#39;t be satisfied in the constraint since its type is \u0026lt;code\u0026gt;CustomString\u0026lt;\/code\u0026gt; and not \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt;. So to avoid this we use \u0026lt;code\u0026gt;~string\u0026lt;\/code\u0026gt; that would approximate the type and allow abstracted base types.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n)\n\ntype string2 string\n\ntype strings interface {\n\t~string\n}\n\nfunc PrintEach[T strings](arr T) {\n\tfor _, v := range arr {\n\t\tfmt.Printf(\u0026#34;%c\n\u0026#34;, v)\n\t}\n}\n\nfunc main() {\n\tvar s string2\n\ts = \u0026#34;hello\u0026#34;\n\tPrintEach(s)\n\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\n\nh\ne\nl\nl\no\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/go.dev\/play\/p\/N-66A9C94ps\u0026#34;\u0026gt;Go Playground Link\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In the above example, we have used the type approximations in the type constraint \u0026lt;code\u0026gt;strings\u0026lt;\/code\u0026gt;, it allows any string type, whether a base \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt; type or an abstract \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt; type. If you try to remove the \u0026lt;code\u0026gt;~\u0026lt;\/code\u0026gt; in \u0026lt;code\u0026gt;~string\u0026lt;\/code\u0026gt;, it will result in the error that \u0026lt;code\u0026gt;string2 does not satisfy strings\u0026lt;\/code\u0026gt; interface. So, by adding \u0026lt;code\u0026gt;~\u0026lt;\/code\u0026gt; to the \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt; type the abstract type \u0026lt;code\u0026gt;string2\u0026lt;\/code\u0026gt; can be satisfied in the generic constraint.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That\u0026#39;s it from the 29th part of the series, all the source code for the examples are linked in the GitHub on the \u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/100-days-of-golang\/tree\/main\/scripts\/generics\u0026#34;\u0026gt;100 days of Golang\u0026lt;\/a\u0026gt; repository.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;references\u0026#34;\u0026gt;References\u0026lt;\/h3\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/bitfieldconsulting.com\/golang\/generics\u0026#34;\u0026gt;Generics in Go\u0026lt;\/a\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/blog.logrocket.com\/understanding-generics-go-1-18\/\u0026#34;\u0026gt;Understanding generics in Go\u0026lt;\/a\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;From this section of the series, we have covered the basics of generics in Golang. By using generics in functions, slices, maps, and structs, and adding constraints to them the fundamental usage of generics was covered.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;If you have any questions, feedback, or suggestions, please drop them in the comments\/social handles or discuss them below. Thank you so much for reading. Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "golang-generics";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'" aria-label="Editor">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Golang: Generics</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2023-07-23 13:30:00">2023-07-23 13:30:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/100-days-of-golang" class="series-link">📖 100-days-of-golang</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=golang-generics&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>In the 29th post of the series, we will be looking into generics in Golang. Generics were added in Golang version 1.18, so they are quite new in the world of Golang but the concept is quite old in other programming languages.</p>
+<p>Generics provide a powerful toolset for writing more expressive and concise code that can handle a wide range of data types. With generics, we can write reusable algorithms, data structures, and functions that work seamlessly with various types, without sacrificing type safety.</p>
+<p>We will learn how to create generic functions and work with generic types. Additionally, we will cover type constraints and interfaces, which allow us to specify requirements for the types used with our generics.</p>
+<h2 id="generic-type-in-functions">Generic Type in Functions</h2>
+<p>We can define a generic type with the keyword <code>any</code> that is going to replace the type <code>T</code> i.e. any data type with the inferred type at compilation. This makes the code reusable to any relevant data type to be used for that operation/task.</p>
+<p>We can provide the type <code>any</code> after the name of the function/struct to make it generic like <code>func Name[T any](x T)</code>. Here, the Name is a function that takes in a generic type <code>T</code> it could be any type and the variable is named as <code>x</code> that could be used inside the function.</p>
+<p>We could also make the function take specific types instead of <code>any</code> but we will eventually move into that. However, for now, let's ease the process of learning and then move on to the optimizations and adding constraints.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+)
+
+func Print[T any](stuff T) {
+	fmt.Println(stuff)
+}
+
+func main() {
+	Print("hello")
+	Print(123)
+	Print(3.148)
+}
+</code></pre></div><p><a href="https://go.dev/play/p/t-ODmkHu5BJ">GO Playground Link</a></p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+hello
+123
+3.148
+</code></pre></div><p>The above is the simplest example that could be used to demonstrate a generic function. The function <code>Print</code> takes a parameter <code>stuff</code> of a generic type denoted by a type parameter <code>T</code>. The type parameter <code>T</code> serves as a placeholder that represents a specific type determined at compile time when the function is invoked.</p>
+<p>This means, if in my code I do not call the function with the type <code>[]int</code> it won't have the function with the signature as <code>Print(stuff []int)</code> rather only the types which the function is called with are inferred and written with that specific types.</p>
+<h2 id="creating-a-generic-slice">Creating a Generic Slice</h2>
+<p>We can even create a slice with a generic type and allow any valid processing on the elements or the slice as a whole.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+)
+
+func ForEach[T any](arr []T, f func(T)) {
+	for _, v := range arr {
+		f(v)
+	}
+}
+
+func main() {
+
+	strSlice := []string{"b", "e", "a"}
+	ForEach(strSlice, func(v string) {
+		fmt.Println(v)
+	})
+
+	slice := []int{10, 25, 33, 42, 50}
+	var evenSlice []int
+	ForEach(slice, func(v int) {
+		isEven := v%2 == 0
+		if isEven {
+			evenSlice = append(evenSlice, v)
+		}
+	})
+	fmt.Println(evenSlice)
+
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+
+b
+e
+a
+[10 42 50]
+</code></pre></div><p><a href="https://go.dev/play/p/tUwgbxnLc-1">Go Playground Link</a></p>
+<p>The <code>ForEach</code> is a generic function that iterates over a slice of any type and calls a function on each element. Let's break it down:</p>
+<ul>
+<li>
+<p><code>ForEach[T any]</code> declares this as a generic function that works on a slice of any type <code>T</code>.</p>
+</li>
+<li>
+<p><code>arr []T</code> is the slice of elements we want to iterate over. It can be a slice of any type, ints, strings, <code>T</code> in general, etc. So it is a generic slice parameter.</p>
+</li>
+<li>
+<p><code>f func(T)</code> is the function that will be called on each element. It takes a single parameter of type <code>T</code> which will be each element. So, this is a function parameter with a generic type as its parameter.</p>
+</li>
+</ul>
+<p>In the body, we range over the slice arr:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">for _, v := range arr {
+
+}
+</code></pre></div><p>On each iteration, <code>v</code> will be the next element. The underscore ignores the index. We call the provided function <code>f</code>, passing the element <code>v</code>: <code>f(v)</code></p>
+<p>So in summary:</p>
+<ul>
+<li>
+<p>It allows iterating over a slice of any type</p>
+</li>
+<li>
+<p>This avoids having to know the specific slice type in the loop</p>
+</li>
+<li>
+<p>The provided function <code>f</code> is called on each element</p>
+</li>
+<li>
+<p>So it provides a reusable abstraction for processing slices generically.</p>
+</li>
+</ul>
+<p>Now, we will discuss the example used in the main function. First, we create a slice of strings as <code>strSlice := []string{&quot;b&quot;, &quot;e&quot;, &quot;a&quot;}</code>. Then we call the generic <code>ForEach</code> function, passing the string slice and a function to handle each element.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">ForEach(strSlice, func(v string) {
+  fmt.Println(v) 
+})
+</code></pre></div><p>Here, the <code>func(v string)</code> is the invocation of the <code>ForEach</code> function with the typed string and the variable name as v. The <code>v</code> is the element of the slice, so inside the function body(this is an anonymous function), we call the <code>fmt.Println(v)</code>, which will print each string in the slice.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">slice := []int{10, 25, 33, 42, 50}
+var evenSlice []int
+ForEach(slice, func(v int) {
+    isEven := v%2 == 0
+    if isEven {
+        evenSlice = append(evenSlice, v)
+    }
+})
+fmt.Println(evenSlice)
+</code></pre></div><p>In the next example, we create a new slice of int as <code>slice := []int{10, 25, 33, 42, 50}</code>. Then we call the generic <code>ForEach</code> function again, passing the slice and a function to handle each element just as before, however, we are processing some things and then appending to an external slice.</p>
+<p>First, the <code>slice := []int{10, 25, 33, 42, 50}</code> is created with some numbers, we also initialize another slice as <code>evenSlice := []int{}</code> which is empty. Then we call the generic <code>ForEach</code> function again, passing the slice and a function to handle each <a href="http://element.Here">element.Here</a>, the ForEach is called with the <code>slice</code> slice and not the <code>evenSlice</code> slice, so we are going to access each element in the <code>slice</code> array. We first create a <code>isEven</code> boolean that checks if the element is even or odd by <code>v%2 == 0</code>. This expression will result in <code>true</code> if <code>v</code> is even and <code>false</code> otherwise. So, only if the <code>isEven</code> is true, we append the element <code>v</code> into the <code>evenSlice</code> slice.</p>
+<p>So, that's how generic slices can be handy for doing type-specific processing without writing functions for those individual types. This avoids needing to write type-specific functions for each slice type.</p>
+<p>NOTE: Make sure to only use generic functions with generic slice types with the appropriate and valid conditions and use it only when it looks legible to do so.</p>
+<h2 id="creating-a-generic-map">Creating a Generic Map</h2>
+<p>We can also create a generic map with the generic type of <code>map[K]T</code> where <code>K</code> is a generic type and <code>T</code> is the type of the key.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+)
+
+func GetValue[K comparable, V any](m map[K]V, key K, defaultVal V) V {
+	if v, ok := m[key]; ok {
+		return v
+	}
+	return defaultVal
+}
+
+func main() {
+
+	serverStats := map[string]int{
+		"port":      8000,
+		"pings":     47,
+		"status":    1,
+		"endpoints": 13,
+	}
+	v := GetValue(serverStats, "status", -1)
+	fmt.Println(v)
+	v = GetValue(serverStats, "cpu", 4)
+	fmt.Println(v)
+
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+1
+4
+</code></pre></div><p><a href="https://go.dev/play/p/ludlh6UwKaD">Go Playground Link</a></p>
+<p>GetValue is a generic function that takes three type parameters: The map itself, the key to find the value for, and a default value if the key doesn't exist.</p>
+<p>The <code>m</code> is a map with keys of type K and values of type V, the key is of type K, and defaultVal is of type V. So, we have two generics here, as the key and value need not be of the same type, hence we have distinct generics here. K has added a constraint of <code>comparable</code> and <code>V</code> as <code>any</code> type. The type constraint comparable restricts K to be a comparable type, and the type constraint <code>any</code> allows V to be any type.</p>
+<ul>
+<li>
+<p>Inside the function, we use the ok variable to check if the given <code>key</code> exists in the map <code>m</code>.</p>
+</li>
+<li>
+<p>If the key is present in the map (ok is true), we retrieve the corresponding value from the map and return it as <code>m[key]</code> which is stored in the variable <code>v</code>.</p>
+</li>
+<li>
+<p>If the key is not present in the map (ok is false), we return the provided <code>defaultVal</code>.</p>
+</li>
+</ul>
+<p>So, this is how we can use any type of map to retrieve the value of a key, the data type of key and value could be anything. It allows us to retrieve a value from a map irrespective of the pair type in the map.</p>
+<p>NOTE: The type of <code>defaultVal</code> and the type of <code>v</code> should be the same since the map will need to have the value for the given key as the same type as defined in the map type(here <code>map[string]int</code> so <code>v</code> is <code>int</code> and so should be the <code>defaultVal</code>).</p>
+<p>Moving into the main function, we create a map of <code>[string]int</code> i.e. the key is of type <code>string</code> and the value of type <code>int</code>. The map <code>serverStats</code> has a few keys like <code>port</code>, <code>pings</code>, <code>endpoints</code>, and <code>status</code>. We call the <code>GetValue</code> method on the map <code>serverStats</code> with the key <code>status</code> and provide a default value of <code>-1</code>. The function will readily return <code>1</code> since the key is present in the provided map. However, if we try to access the key <code>cpu</code>, the key is not present and the value is returned as the <code>defaultVal</code> which we passed as <code>4</code>.</p>
+<p>So, this was a simple generic getter method on a map. We can get a value of a key in a map of any pair and even provide a default value if doesn't exist. However, it won't add it to the map, we will just return the value from the function that's it. We have to see that returned default value manually.</p>
+<p>We can make another function to get or set the value of a key in a map. The function will take in a reference to the map rather than a copy of the map, we can then use that reference to set the key with the provided default value.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+    "fmt"
+)
+
+func GetOrSetValue[K comparable, V any](m *map[K]V, key K, defaultVal V) V {
+    // reference the original map
+	ref := *m
+	if v, ok := ref[key]; ok {
+		return v
+	} else {
+        //mutate the original map
+        ref[key] = defaultVal
+
+        return defaultVal
+    }
+}
+
+func main() {
+    serverStats := map[string]int{
+        "port":      8000,
+        "pings":     47,
+        "status":    1,
+        "endpoints": 13,
+    }
+    fmt.Println(serverStats)
+    v := GetOrSetValue(&serverStats, "cpu", 4)
+    fmt.Println(v)
+    fmt.Println(serverStats)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+
+map[endpoints:13 pings:47 port:8000 status:1]
+4
+map[cpu:4 endpoints:13 pings:47 port:8000 status:1]
+</code></pre></div><p><a href="https://go.dev/play/p/fYtjFQRaPCb">Go Playground Link</a></p>
+<p>In the above code, we take a reference of the map as <code>*map[K]V</code>, this will give access to the actual place(memory address where the map is located so we could mutate/change it). The rest of the parameters are kept as is, the key will be taken as it was before, and so will the <code>defaultVal</code>. The only difference is that we will set the <code>key</code> doesn't exist, we set the <code>ref[key]</code> to the <code>defaultVal</code> and return the <code>defaultVal</code>.</p>
+<p>For example, the <code>cpu</code> key is not present in the initial map <code>serverStats</code> so, when we call the <code>GetOrSetValue</code> with the reference to the map <code>serverStats</code>, key as <code>cpu</code> and the default value as <code>4</code>, the function returns <code>4</code> and the map is mutated with the key <code>cpu</code> with value <code>4</code>.</p>
+<p>The takeaway is you can even use references to access the original data and mutate it based on your needs.</p>
+<h2 id="generic-type-in-struct">Generic Type in Struct</h2>
+<p>We can define custom structs with generic type as the field values. The name of the struct is followed by the <code>[T any]</code> which is the type parameter to be used in the struct fields, again this type could have multiple types(since a struct can have many fields), not necessary want a single type parameter, you could have multiple type parameters bunched up just like we saw in the map example.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+)
+
+type Stack[T any] struct {
+	items []T
+}
+
+func NewStack[T any]() *Stack[T] {
+	return &Stack[T]{}
+}
+
+func (s *Stack[T]) Push(item T) {
+	s.items = append(s.items, item)
+}
+
+func (s *Stack[T]) Pop() T {
+	if len(s.items) == 0 {
+		panic("Stack is empty")
+	}
+	index := len(s.items) - 1
+	item := s.items[index]
+	s.items = s.items[:index]
+	return item
+}
+
+func main() {
+	intStack := NewStack[int]()
+	intStack.Push(10)
+	intStack.Push(20)
+	intStack.Push(30)
+	fmt.Println("Integer Stack")
+	fmt.Println(intStack)
+	intStack.Pop()
+	intStack.Pop()
+	fmt.Println(intStack)
+
+	// without the NewStack method
+	strStack := Stack[string]{}
+	strStack.Push("c")
+	strStack.Push("python")
+	strStack.Push("mojo")
+	fmt.Println("String Stack:")
+	fmt.Println(strStack)
+	strStack.Pop()
+	fmt.Println(strStack)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+
+Integer Stack
+&{[10 20 30]}
+&{[10]}
+
+String Stack:
+{[c python mojo]}
+{[c python]}
+</code></pre></div><p><a href="https://go.dev/play/p/4t_P2mKtTZN">Go Playground Link</a></p>
+<p>In this example, we have used the <code>Stack</code> example for doing a basic <code>Push</code> and <code>Pop</code> operation on the elements. Here the type of the underlying stack elements could be anything, hence the type parameter is defined for the <code>items</code> which is a list/slice of the type <code>T</code> as <code>[]T</code>. We have to specify the type before initializing the</p>
+<p>We have created the <code>NewStack</code> method, it is not needed, it could be just used as <code>Stack[int]{}</code> to initialize a empty stack with int type(here <code>int</code> could be any other type you wish). I have just created it so that it shows the abstraction that could be built upon in real applications. The <code>NewStack</code> simply replaces the <code>T</code> with the provided <code>type</code> in the initialization.</p>
+<p>The <code>Push</code> method is associated with the <code>Stack</code> struct, as we refer to the <code>*Stack[T]</code> indicating a reference to the Stack object with the type <code>T</code>. The method takes in the parameter <code>T</code> which would be the element to be added to the <code>Stack</code>. Since the function is tied to the Stack struct, we can simply mutate the underlying <code>items</code> by appending the provided value <code>item</code> in the parameter using <code>s.items = append(s.items, item)</code>. This appends the <code>item</code> to the underlying <code>items</code> list in the <code>Stack</code> object <code>s</code></p>
+<p>Similarly, we can create <code>Pop</code> method as well, which will first check if the <code>Stack</code> is not empty(i.e. the s.items slice has a length greater than 0), then get the index of the last element using <code>len(s.items) - 1</code> and then slice the <code>items</code> at index <code>[:last_index]</code>. This will basically get you all the elements except the last. Before we remove the element from the slice, we also store the item in <code>item</code> variable and return it from the method.</p>
+<p>You could see the case of generics here, you could build complex data structures without creating a separate implementation for each type.</p>
+<h2 id="adding-constraints-to-generics">Adding Constraints to Generics</h2>
+<p>We can add constraints to the generics to restrict the type of the generic parameter. For example, we can add a constraint for the generic type to be a slice of a specific type or we have seen in the map example the <code>comparable</code> constraint.</p>
+<p>The <code>comparable</code> constraint is an interface that allows two instances of the same type to be compared i.e. support comparison operators like ==, &lt;, &gt;, !=, &gt;=, &lt;=, etc. It could be any numeric type like <code>int</code>, <code>float</code>, <code>uint</code> and variants, booleans, time duration, and any other struct that implements the <code>comparable</code> interface.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+)
+
+func FindIndex[T comparable](arr []T, value T) int {
+	for i, v := range arr {
+		if v == value {
+			return i
+		}
+	}
+	return -1
+}
+
+func main() {
+
+	strSlice := []string{"m", "e", "e", "t"}
+	fmt.Println(FindIndex(strSlice, "e"))
+	fmt.Println(FindIndex(strSlice, "t"))
+	fmt.Println(FindIndex(strSlice, "a"))
+
+	intSlice := []int{10, 25, 33, 42, 50}
+	fmt.Println(FindIndex(intSlice, 33))
+	fmt.Println(FindIndex(intSlice, 90))
+
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+1
+3
+-1
+
+2
+-1
+</code></pre></div><p><a href="https://go.dev/play/p/fv9gzb8K4d7">Go Playground Link</a></p>
+<p>In the above example, we have created the function <code>FindIndex</code> that takes in a generic slice, the type parameter <code>[T comparable]</code> indicates that the type used for calling this method needs to have a type that implements the comparable interface (for the elements of the slice). The method takes in two parameters, one the slice as <code>[]T</code> and the other the value to find the index for as type <code>T</code>. The method returns a type <code>int</code> since the index of the slice has to be an integer value.</p>
+<p>Inside the function body, we simply iterate over the slice <code>arr</code> and check if the element is equal to the provided value. If the element exists, we return that index, else we return <code>-1</code></p>
+<p>As we can see we have run a couple of slices with the function <code>FindIndex</code> with types <code>int</code> and <code>string</code>. The method returns an index value if the element exists, else it returns <code>-1</code>. The <code>comparable</code> is a built-in type constraint. We could even define custom constraints as interfaces that implement the types of the particular type(s).</p>
+<p>Also, we could define custom constraints like numeric only, string only, etc.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+)
+
+type numeric interface {
+	uint | uint8 | uint16 | uint32 | uint64 |
+		int | int8 | int16 | int32 | int64 |
+		float32 | float64
+}
+
+func Sum[T numeric](nums []T) T {
+	var s T
+	for _, n := range nums {
+		s += n
+	}
+	return s
+}
+
+func main() {
+
+	intSlice := []int{10, 20, 30, 40, 50}
+	fmt.Println(Sum(intSlice))
+
+	floatSlice := []float64{1.1, 2.2, 3.3, 4.4, 5.5}
+	fmt.Println(Sum(floatSlice))
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+
+150
+16.5
+</code></pre></div><p><a href="https://go.dev/play/p/_1eGl58qQ-2">Go Playground Link</a></p>
+<p>In the above example, we have created the <code>numeric</code> constraints that allow the type <code>int</code>, <code>float</code> and their variants to be allowed in the numeric generic type. The function <code>Sum</code> is a generic function with the constraint of <code>numeric</code> type parameter. The method takes in the parameter as type <code>[]T</code> and returns the type as <code>T</code>. The method will simply iterate over the slice and return the sum of its elements.</p>
+<p>This will allow any numeric type which can be added and the sum can be obtained, so if we try to call the method with other types like <code>string</code> or <code>maps</code>, it won't work, and give an error:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run constraints.go
+
+# command-line-arguments                                                                                                               
+scripts/generics/constraints.go:46:20: 
+string does not satisfy numeric (string missing in uint | uint8 | uint16 | uint32 | uint64 | int
+ | int8 | int16 | int32 | int64 | float32 | float64)
+
+shell returned 1
+</code></pre></div><p>So, we can use the constraint to restrict the type of the generic type parameter which will allow us to restrict the usage and avoid any unsafe type to be used in the generic function.</p>
+<p>Also, if we have a custom type with the base types, we need to use <code>~</code> before the type to accept it into the generic constraint. This will allow any approximate type to be allowed in the constraint. Let's say we are implementing a custom string type, for that to work with a constraint, it won't be satisfied in the constraint since its type is <code>CustomString</code> and not <code>string</code>. So to avoid this we use <code>~string</code> that would approximate the type and allow abstracted base types.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+)
+
+type string2 string
+
+type strings interface {
+	~string
+}
+
+func PrintEach[T strings](arr T) {
+	for _, v := range arr {
+		fmt.Printf("%c
+", v)
+	}
+}
+
+func main() {
+	var s string2
+	s = "hello"
+	PrintEach(s)
+
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+
+h
+e
+l
+l
+o
+</code></pre></div><p><a href="https://go.dev/play/p/N-66A9C94ps">Go Playground Link</a></p>
+<p>In the above example, we have used the type approximations in the type constraint <code>strings</code>, it allows any string type, whether a base <code>string</code> type or an abstract <code>string</code> type. If you try to remove the <code>~</code> in <code>~string</code>, it will result in the error that <code>string2 does not satisfy strings</code> interface. So, by adding <code>~</code> to the <code>string</code> type the abstract type <code>string2</code> can be satisfied in the generic constraint.</p>
+<p>That's it from the 29th part of the series, all the source code for the examples are linked in the GitHub on the <a href="https://github.com/Mr-Destructive/100-days-of-golang/tree/main/scripts/generics">100 days of Golang</a> repository.</p>
+<h3 id="references">References</h3>
+<ul>
+<li><a href="https://bitfieldconsulting.com/golang/generics">Generics in Go</a></li>
+<li><a href="https://blog.logrocket.com/understanding-generics-go-1-18/">Understanding generics in Go</a></li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>From this section of the series, we have covered the basics of generics in Golang. By using generics in functions, slices, maps, and structs, and adding constraints to them the fundamental usage of generics was covered.</p>
+<p>If you have any questions, feedback, or suggestions, please drop them in the comments/social handles or discuss them below. Thank you so much for reading. Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/golang-date-time" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Golang: Date and Time</span>
+        </a>
+        
+
+        
+        
+        <a href="/posts/golang-go-routines" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Golang: Go Routines and WaitGroups</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-delete-method" class="related-link">
+                <span class="related-post-title">Golang Web: DELETE Method</span>
+                <span class="related-post-date">2025-01-12 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-patch-method" class="related-link">
+                <span class="related-post-title">Golang Web: PATCH Method</span>
+                <span class="related-post-date">2025-01-11 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-5" class="related-link">
+                <span class="related-post-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+                <span class="related-post-date">2024-12-11 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-4" class="related-link">
+                <span class="related-post-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+                <span class="related-post-date">2024-12-09 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-3" class="related-link">
+                <span class="related-post-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+                <span class="related-post-date">2024-12-07 20:45:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

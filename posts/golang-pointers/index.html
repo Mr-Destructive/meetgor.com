@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Golang: Pointers | Meet Gor</title>
+    <meta name="title" content="Golang: Pointers | Meet Gor">
+    <meta name="description" content="Diving into the pointers and memory address(under the hood) things in Golang">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/posts/golang-pointers">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/posts/golang-pointers">
+    <meta property="og:title" content="Golang: Pointers">
+    <meta property="og:description" content="Diving into the pointers and memory address(under the hood) things in Golang">
+    <meta property="og:image" content="https://meetgor-cdn.pages.dev/golang-010-pointers.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Golang: Pointers">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2022-04-19 23:00:00">
+    <meta property="article:modified_time" content="2022-04-19 23:00:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/posts/golang-pointers">
+    <meta name="twitter:title" content="Golang: Pointers">
+    <meta name="twitter:description" content="Diving into the pointers and memory address(under the hood) things in Golang">
+    <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/golang-010-pointers.png">
+    <meta name="twitter:image:alt" content="Golang: Pointers">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/posts\/golang-pointers"
+        },
+        "headline": "Golang: Pointers",
+        "description": "Diving into the pointers and memory address(under the hood) things in Golang",
+        "datePublished": "2022-04-19 23:00:00",
+        "dateModified": "2022-04-19 23:00:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        "image": "https:\/\/meetgor-cdn.pages.dev\/golang-010-pointers.png",
+        "keywords": "go",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;In the tenth part of the series, we will be looking into an interesting concept in programming i.e. Pointer. It\u0026#39;s a simple thing but a really powerful concept. Using pointers we can do several things very easily rather than writing a lot of code for a simple thing. We will be looking into basic concepts like declaration, referencing, de-referencing, and some examples on passing by reference, along with a pointer to struct instances.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;pointers\u0026#34;\u0026gt;Pointers\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Pointers are simple, it\u0026#39;s just their use case that makes it a big concept. Pointers are really powerful, they can do a lot of things that might seem impossible for a given problem. A pointer is a variable but unlike another variable which stores values in the form of integers, string, boolean, etc. pointers store the memory address. Memory address can be any valid location in memory that generally holds a variable.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, using pointers we can play with the memory address of variables and modify the contents of the variable directly using the memory address rather than accessing the variable. In golang, we have ways to store pointers and perform operations for the same.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;declaring-pointers\u0026#34;\u0026gt;Declaring Pointers\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;To declare pointers in golang, we can use the \u0026lt;code\u0026gt;*\u0026lt;\/code\u0026gt; before the type of data type we want to refer to. This means a pointer needs to specify which data type it is referencing as a measure of caution to mismatch types in the variable. Initially, the pointer variable is mapped to \u0026lt;code\u0026gt;\u0026amp;lt;nil\u0026amp;gt;\u0026lt;\/code\u0026gt; that is it points to nothing but a null pointer.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport \u0026#34;fmt\u0026#34;\n\nfunc main() {\n\tvar ptr *int\n\tfmt.Println(ptr)\n}\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run pointer.go\n\u0026lt;nil\u0026gt;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;As we can see, the pointer that references an integer is initialized to nil. We have used \u0026lt;code\u0026gt;*\u0026lt;\/code\u0026gt; before the data type, this can be anything like \u0026lt;code\u0026gt;*string\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;*bool\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;*float64\u0026lt;\/code\u0026gt;, etc.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;the--and--in-pointers\u0026#34;\u0026gt;The * and \u0026amp;amp; in Pointers\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;After declaring a pointer, we can now move into assigning a pointer a memory address. Using the \u0026lt;code\u0026gt;\u0026amp;amp;\u0026lt;\/code\u0026gt; or the ampersand operator we can get the memory address of a variable.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;var n := 34\nvar a_pointer *int = \u0026amp;n\nfmt.Println(a_pointer)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run pointer.go\n0xc0000a6080\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Here, we can see that the pointer variable is storing the memory address of an integer variable. Don\u0026#39;t worry about the value of the pointer variable, it is just a memory location on your machine. So, we use the \u0026lt;code\u0026gt;\u0026amp;amp;\u0026lt;\/code\u0026gt; to access the memory address of any variable.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We have seen that the \u0026lt;code\u0026gt;*\u0026lt;\/code\u0026gt; is used to declare a pointer variable, but it is also used for dereferencing a pointer. So, if we used \u0026lt;code\u0026gt;\u0026amp;amp;\u0026lt;\/code\u0026gt; to get the memory address of a variable, similarly we can use the \u0026lt;code\u0026gt;*\u0026lt;\/code\u0026gt; to get back the value from the memory address. Both are opposite in terms of accessing the value.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;n := 34\nvar a_pointer *int = \u0026amp;n\nfmt.Println(a_pointer)\nm := *a_pointer\nfmt.Println(m)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run pointer.go\n0xc0000a8080\n34\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;As we can see, we have accessed the value stored in the pointer variable(\u0026lt;code\u0026gt;a_pointer\u0026lt;\/code\u0026gt;) by using the \u0026lt;code\u0026gt;*\u0026lt;\/code\u0026gt;. Here, the variable which we have created \u0026lt;code\u0026gt;m\u0026lt;\/code\u0026gt; will be of type whatever is stored in the memory address of the provided pointer variable. In this case, it is \u0026lt;code\u0026gt;int\u0026lt;\/code\u0026gt;, it can anything.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, this is how \u0026lt;code\u0026gt;*\u0026lt;\/code\u0026gt; and the \u0026lt;code\u0026gt;\u0026amp;amp;\u0026lt;\/code\u0026gt; work in Golang. The \u0026lt;code\u0026gt;*\u0026lt;\/code\u0026gt; is used for declaring pointer variables as well as de-referencing pointer variables, and the \u0026lt;code\u0026gt;\u0026amp;amp;\u0026lt;\/code\u0026gt; operator is used for accessing the memory address of the variable.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That\u0026#39;s basically the concept of pointers in golang. It\u0026#39;s that simple. Using the simple concept of referencing and de-referencing, we can perform some operations like passing by reference to functions which will allow us to actually pass the value rather than the copy of the variable\u0026#39;s value.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;passing-by-reference-to-function\u0026#34;\u0026gt;Passing by Reference to Function\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Now we have the fundamentals of pointers cleared, we can move into actually using them to do some really useful operations. Generally, when we use parameters such as integers, strings, bool, etc. we are passing the copy of the variables into the function rather than the actual value of the variable. This is where pointers come in. By using pointers to pass the memory address of the variables we need to pass in we actually pass the location of the variables.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s take a look at a simple example of a function that swaps the value of two variables.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport \u0026#34;fmt\u0026#34;\n\nfunc swap(x *int, y *int) {\n\ttemp := *x\n\t*x = *y\n\t*y = temp\n}\n\nfunc main() {\n\n    x := 3\n\ty := 6\n\tk := \u0026amp;x\n\tp := \u0026amp;y\n\tfmt.Printf(\u0026#34;Before swapping : x = %d and y = %d.\n\u0026#34;, x, y)\n\tswap(k, p)\n\tfmt.Printf(\u0026#34;After swapping  : x = %d and y = %d.\n\u0026#34;, x, y)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run pointer.go\nBefore swapping : x = 3 and y = 6.\nAfter swapping  : x = 6 and y = 3.\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We can see here, that we have used pointers to pass the value of parameters to a function. Without using pointers, the value of the variable is passed as a copy but by using pointers, we are actually passing the memory address. In the main function, we first store the memory address of two variables \u0026lt;code\u0026gt;x\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;y\u0026lt;\/code\u0026gt; into two different pointer variables. We now can construct a function that accepts two memory addresses and perform further operations.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Inside the function, we have de-referenced the pointer variables as with \u0026lt;code\u0026gt;*\u0026lt;\/code\u0026gt;. Don\u0026#39;t confuse \u0026lt;code\u0026gt;x *int\u0026lt;\/code\u0026gt; with \u0026lt;code\u0026gt;*x\u0026lt;\/code\u0026gt;. We use \u0026lt;code\u0026gt;x *int\u0026lt;\/code\u0026gt; to make the function realize that we are passing a pointer variable of an integer value, and \u0026lt;code\u0026gt;*x\u0026lt;\/code\u0026gt; is used to de-reference the memory address which is stored in \u0026lt;code\u0026gt;x\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, simply we\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;store the value in the memory location stored at \u0026lt;code\u0026gt;x\u0026lt;\/code\u0026gt; in the temp variable\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;store the value at the memory address stored in \u0026lt;code\u0026gt;y\u0026lt;\/code\u0026gt; into the memory address \u0026lt;code\u0026gt;x\u0026lt;\/code\u0026gt;.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;store the value of the temp variable into the memory address stored in \u0026lt;code\u0026gt;x\u0026lt;\/code\u0026gt;.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;We have successfully swapped two values without returning any values from the function.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;pointer-to-a-struct-instanceobject\u0026#34;\u0026gt;Pointer to a Struct Instance\/Object\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We can now even modify the values of Struct objects\/instances by referencing the instance to a pointer. By assigning the pointer variable to a struct instance, we have access to its associated properties and function. Thereby we can modify the contents directly from the pointer variable.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s take a look at a basic example of modifying properties using a pointer to a struct instance.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport \u0026#34;fmt\u0026#34;\n\ntype Book struct {\n\tpages int\n\tgenre string\n\ttitle string\n}\n\nfunc main() {\n\tnew_book := Book{120, \u0026#34;fiction\u0026#34;, \u0026#34;Harry Potter\u0026#34;}\n\tfmt.Println(new_book)\n\tfmt.Printf(\u0026#34;Type of new_book -\u0026gt; %T\n\u0026#34;, new_book)\n\tbook_ptr := \u0026amp;new_book\n\tbook_ptr.title = \u0026#34;Games of Thrones\u0026#34;\n\tfmt.Println(new_book)\n}\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run pointer.go\n{120 fiction Harry Potter}\nType of new_book -\u0026gt; main.Book\n{120 fiction Games of Thrones}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, we have created a pointer variable of the type which is a struct \u0026lt;code\u0026gt;Book\u0026lt;\/code\u0026gt;, this gives us access to the memory addresses associated with various properties defined in the struct. Using the pointer variable, we can access properties and thereby change the value directly as we have the memory address stored in \u0026lt;code\u0026gt;book_ptr\u0026lt;\/code\u0026gt;. So, if we say \u0026lt;code\u0026gt;book_ptr.title = \u0026amp;quot;Games of Thrones\u0026amp;quot;\u0026lt;\/code\u0026gt;, we are storing the string directly into the memory address of the \u0026lt;code\u0026gt;new_book\u0026lt;\/code\u0026gt; object as \u0026lt;code\u0026gt;book_ptr\u0026lt;\/code\u0026gt; refers to the memory addresses to the struct object \u0026lt;code\u0026gt;new_book\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Here, we have literally changed the value of a property in a struct object using pointers. This is really powerful and time-saving. If pointers were not a thing, you would have to write a separate function for doing the same.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That\u0026#39;s it from this part. Reference for all the code examples and commands can be found in the \u0026lt;a href=\u0026#34;https:\/\/github.com\/mr-destructive\/100-days-of-golang\/\u0026#34;\u0026gt;100 days of Golang\u0026lt;\/a\u0026gt; GitHub repository.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;So, that\u0026#39;s it we have covered enough basics of pointers so that we are able to understand the working of simple scripts or programs. Even simple data structures like slices or strings can be understood by using pointers in golang. From this part of the series, we were able to understand the declaration, referencing, and de-referencing of pointers along with passing by reference to functions and creating pointers to struct instances.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Thank you for reading. If you have any questions or feedback, please let me know in the comments or on social handles. Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "posts\/golang-pointers";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Golang: Pointers</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2022-04-19 23:00:00">2022-04-19 23:00:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/100-days-of-golang" class="series-link">📖 100-days-of-golang</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>In the tenth part of the series, we will be looking into an interesting concept in programming i.e. Pointer. It's a simple thing but a really powerful concept. Using pointers we can do several things very easily rather than writing a lot of code for a simple thing. We will be looking into basic concepts like declaration, referencing, de-referencing, and some examples on passing by reference, along with a pointer to struct instances.</p>
+<h2 id="pointers">Pointers</h2>
+<p>Pointers are simple, it's just their use case that makes it a big concept. Pointers are really powerful, they can do a lot of things that might seem impossible for a given problem. A pointer is a variable but unlike another variable which stores values in the form of integers, string, boolean, etc. pointers store the memory address. Memory address can be any valid location in memory that generally holds a variable.</p>
+<p>So, using pointers we can play with the memory address of variables and modify the contents of the variable directly using the memory address rather than accessing the variable. In golang, we have ways to store pointers and perform operations for the same.</p>
+<h2 id="declaring-pointers">Declaring Pointers</h2>
+<p>To declare pointers in golang, we can use the <code>*</code> before the type of data type we want to refer to. This means a pointer needs to specify which data type it is referencing as a measure of caution to mismatch types in the variable. Initially, the pointer variable is mapped to <code>&lt;nil&gt;</code> that is it points to nothing but a null pointer.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import "fmt"
+
+func main() {
+	var ptr *int
+	fmt.Println(ptr)
+}
+
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run pointer.go
+<nil>
+</code></pre></div><p>As we can see, the pointer that references an integer is initialized to nil. We have used <code>*</code> before the data type, this can be anything like <code>*string</code>, <code>*bool</code>, <code>*float64</code>, etc.</p>
+<h2 id="the--and--in-pointers">The * and &amp; in Pointers</h2>
+<p>After declaring a pointer, we can now move into assigning a pointer a memory address. Using the <code>&amp;</code> or the ampersand operator we can get the memory address of a variable.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">var n := 34
+var a_pointer *int = &n
+fmt.Println(a_pointer)
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run pointer.go
+0xc0000a6080
+</code></pre></div><p>Here, we can see that the pointer variable is storing the memory address of an integer variable. Don't worry about the value of the pointer variable, it is just a memory location on your machine. So, we use the <code>&amp;</code> to access the memory address of any variable.</p>
+<p>We have seen that the <code>*</code> is used to declare a pointer variable, but it is also used for dereferencing a pointer. So, if we used <code>&amp;</code> to get the memory address of a variable, similarly we can use the <code>*</code> to get back the value from the memory address. Both are opposite in terms of accessing the value.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">n := 34
+var a_pointer *int = &n
+fmt.Println(a_pointer)
+m := *a_pointer
+fmt.Println(m)
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run pointer.go
+0xc0000a8080
+34
+</code></pre></div><p>As we can see, we have accessed the value stored in the pointer variable(<code>a_pointer</code>) by using the <code>*</code>. Here, the variable which we have created <code>m</code> will be of type whatever is stored in the memory address of the provided pointer variable. In this case, it is <code>int</code>, it can anything.</p>
+<p>So, this is how <code>*</code> and the <code>&amp;</code> work in Golang. The <code>*</code> is used for declaring pointer variables as well as de-referencing pointer variables, and the <code>&amp;</code> operator is used for accessing the memory address of the variable.</p>
+<p>That's basically the concept of pointers in golang. It's that simple. Using the simple concept of referencing and de-referencing, we can perform some operations like passing by reference to functions which will allow us to actually pass the value rather than the copy of the variable's value.</p>
+<h2 id="passing-by-reference-to-function">Passing by Reference to Function</h2>
+<p>Now we have the fundamentals of pointers cleared, we can move into actually using them to do some really useful operations. Generally, when we use parameters such as integers, strings, bool, etc. we are passing the copy of the variables into the function rather than the actual value of the variable. This is where pointers come in. By using pointers to pass the memory address of the variables we need to pass in we actually pass the location of the variables.</p>
+<p>Let's take a look at a simple example of a function that swaps the value of two variables.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import "fmt"
+
+func swap(x *int, y *int) {
+	temp := *x
+	*x = *y
+	*y = temp
+}
+
+func main() {
+
+    x := 3
+	y := 6
+	k := &x
+	p := &y
+	fmt.Printf("Before swapping : x = %d and y = %d.
+", x, y)
+	swap(k, p)
+	fmt.Printf("After swapping  : x = %d and y = %d.
+", x, y)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run pointer.go
+Before swapping : x = 3 and y = 6.
+After swapping  : x = 6 and y = 3.
+</code></pre></div><p>We can see here, that we have used pointers to pass the value of parameters to a function. Without using pointers, the value of the variable is passed as a copy but by using pointers, we are actually passing the memory address. In the main function, we first store the memory address of two variables <code>x</code> and <code>y</code> into two different pointer variables. We now can construct a function that accepts two memory addresses and perform further operations.</p>
+<p>Inside the function, we have de-referenced the pointer variables as with <code>*</code>. Don't confuse <code>x *int</code> with <code>*x</code>. We use <code>x *int</code> to make the function realize that we are passing a pointer variable of an integer value, and <code>*x</code> is used to de-reference the memory address which is stored in <code>x</code>.</p>
+<p>So, simply we</p>
+<ul>
+<li>store the value in the memory location stored at <code>x</code> in the temp variable</li>
+<li>store the value at the memory address stored in <code>y</code> into the memory address <code>x</code>.</li>
+<li>store the value of the temp variable into the memory address stored in <code>x</code>.</li>
+</ul>
+<p>We have successfully swapped two values without returning any values from the function.</p>
+<h2 id="pointer-to-a-struct-instanceobject">Pointer to a Struct Instance/Object</h2>
+<p>We can now even modify the values of Struct objects/instances by referencing the instance to a pointer. By assigning the pointer variable to a struct instance, we have access to its associated properties and function. Thereby we can modify the contents directly from the pointer variable.</p>
+<p>Let's take a look at a basic example of modifying properties using a pointer to a struct instance.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import "fmt"
+
+type Book struct {
+	pages int
+	genre string
+	title string
+}
+
+func main() {
+	new_book := Book{120, "fiction", "Harry Potter"}
+	fmt.Println(new_book)
+	fmt.Printf("Type of new_book -> %T
+", new_book)
+	book_ptr := &new_book
+	book_ptr.title = "Games of Thrones"
+	fmt.Println(new_book)
+}
+
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run pointer.go
+{120 fiction Harry Potter}
+Type of new_book -> main.Book
+{120 fiction Games of Thrones}
+</code></pre></div><p>So, we have created a pointer variable of the type which is a struct <code>Book</code>, this gives us access to the memory addresses associated with various properties defined in the struct. Using the pointer variable, we can access properties and thereby change the value directly as we have the memory address stored in <code>book_ptr</code>. So, if we say <code>book_ptr.title = &quot;Games of Thrones&quot;</code>, we are storing the string directly into the memory address of the <code>new_book</code> object as <code>book_ptr</code> refers to the memory addresses to the struct object <code>new_book</code>.</p>
+<p>Here, we have literally changed the value of a property in a struct object using pointers. This is really powerful and time-saving. If pointers were not a thing, you would have to write a separate function for doing the same.</p>
+<p>That's it from this part. Reference for all the code examples and commands can be found in the <a href="https://github.com/mr-destructive/100-days-of-golang/">100 days of Golang</a> GitHub repository.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>So, that's it we have covered enough basics of pointers so that we are able to understand the working of simple scripts or programs. Even simple data structures like slices or strings can be understood by using pointers in golang. From this part of the series, we were able to understand the declaration, referencing, and de-referencing of pointers along with passing by reference to functions and creating pointers to struct instances.</p>
+<p>Thank you for reading. If you have any questions or feedback, please let me know in the comments or on social handles. Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/golang-structs" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Golang: Structs</span>
+        </a>
+        
+
+        
+        
+        <a href="/posts/golang-packages" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Golang: Packages</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-delete-method" class="related-link">
+                <span class="related-post-title">Golang Web: DELETE Method</span>
+                <span class="related-post-date">2025-01-12 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-patch-method" class="related-link">
+                <span class="related-post-title">Golang Web: PATCH Method</span>
+                <span class="related-post-date">2025-01-11 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-5" class="related-link">
+                <span class="related-post-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+                <span class="related-post-date">2024-12-11 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-4" class="related-link">
+                <span class="related-post-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+                <span class="related-post-date">2024-12-09 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-3" class="related-link">
+                <span class="related-post-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+                <span class="related-post-date">2024-12-07 20:45:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

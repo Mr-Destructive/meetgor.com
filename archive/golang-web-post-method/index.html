@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Golang Web: POST Method | Meet Gor</title>
+    <meta name="title" content="Golang Web: POST Method | Meet Gor">
+    <meta name="description" content="Exploring the fundamentals of a POST method in golang. How to send a basic POST request, parse json, structs, files, form-data into the request body.">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/golang-web-post-method">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/golang-web-post-method">
+    <meta property="og:title" content="Golang Web: POST Method">
+    <meta property="og:description" content="Exploring the fundamentals of a POST method in golang. How to send a basic POST request, parse json, structs, files, form-data into the request body.">
+    <meta property="og:image" content="https://meetgor-cdn.pages.dev/100-days-of-golang/golang-034-post-method.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Golang Web: POST Method">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2024-03-10 20:15:00">
+    <meta property="article:modified_time" content="2024-03-10 20:15:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/golang-web-post-method">
+    <meta name="twitter:title" content="Golang Web: POST Method">
+    <meta name="twitter:description" content="Exploring the fundamentals of a POST method in golang. How to send a basic POST request, parse json, structs, files, form-data into the request body.">
+    <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/100-days-of-golang/golang-034-post-method.png">
+    <meta name="twitter:image:alt" content="Golang Web: POST Method">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/golang-web-post-method"
+        },
+        "headline": "Golang Web: POST Method",
+        "description": "Exploring the fundamentals of a POST method in golang. How to send a basic POST request, parse json, structs, files, form-data into the request body.",
+        "datePublished": "2024-03-10 20:15:00",
+        "dateModified": "2024-03-10 20:15:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        "image": "https:\/\/meetgor-cdn.pages.dev\/100-days-of-golang\/golang-034-post-method.png",
+        "keywords": "go",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;In this section of the series, we will be exploring how to send a \u0026lt;code\u0026gt;POST\u0026lt;\/code\u0026gt; HTTP request in golang. We will understand how to send a basic POST request, create an HTTP request, and parse json, structs into the request body, add headers, etc in the following sections of this post. We will understand how to marshal the golang struct\/types into JSON format, send files in the request, and handle form data with examples of each in this article. Let\u0026#39;s answer a few questions first.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;what-is-a-post-request\u0026#34;\u0026gt;What is a POST request?\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;POST method is a type of request that is used to send data to a server(a machine on the internet).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Imagine you are placing an order at a restaurant. With a GET request, it would be like asking the waiter, \u0026amp;quot;What kind of pizza do you have?\u0026amp;quot; The waiter would respond by telling you the menu options (the information retrieved from the server).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;However, a POST request is more like giving your completed order to the waiter. You tell them the specific pizza you want, its size, and any additional toppings (the data you send). The waiter then takes this information (POST request) back to the kitchen (the server) to process it (fulfill your order).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In the world of web development, POST requests are often used for things like:\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Submitting forms (e.g., contact forms, login forms) Uploading files (e.g., photos, videos) Creating new accounts Sending data to be processed (e.g., online purchases)\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Here\u0026#39;s an example of what the POST request might look like in this scenario:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;nginx\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-nginx\u0026#34;\u0026gt;POST \/api\/order HTTP\/1.1\nHost: example.com\nContent-Type: application\/json\nContent-Length: 123\n\n{\n    \u0026#34;userID\u0026#34;: 123,\n    \u0026#34;orderID\u0026#34;: 456,\n    \u0026#34;items\u0026#34;: [\n        {\n            \u0026#34;itemID\u0026#34;: 789,\n            \u0026#34;name\u0026#34;: \u0026#34;Pizza\u0026#34;,\n            \u0026#34;quantity\u0026#34;: 2\n        },\n        {\n            \u0026#34;itemID\u0026#34;: 999,\n            \u0026#34;name\u0026#34;: \u0026#34;Burger\u0026#34;,\n            \u0026#34;quantity\u0026#34;: 1\n        }\n    ]\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In this example:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;POST\u0026lt;\/code\u0026gt; method is used to send data to the server.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;\/api\/order\u0026lt;\/code\u0026gt; is the endpoint of the server.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;application\/json\u0026lt;\/code\u0026gt; is the content type of the request.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;123\u0026lt;\/code\u0026gt; is the content length of the request.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;{\u0026amp;quot;userID\u0026amp;quot;: 123, \u0026amp;quot;orderID\u0026amp;quot;: 456, \u0026amp;quot;items\u0026amp;quot;: [{\u0026amp;quot;itemID\u0026amp;quot;: 789, \u0026amp;quot;name\u0026amp;quot;: \u0026amp;quot;Pizza\u0026amp;quot;, \u0026amp;quot;quantity\u0026amp;quot;: 2}, {\u0026amp;quot;itemID\u0026amp;quot;: 999, \u0026amp;quot;name\u0026amp;quot;: \u0026amp;quot;Burger\u0026amp;quot;, \u0026amp;quot;quantity\u0026amp;quot;: 1}]}\u0026lt;\/code\u0026gt; is the body of the request.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;h2 id=\u0026#34;why-the-need-for-a-post-request\u0026#34;\u0026gt;Why the need for a POST request?\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;In the world of HTTP requests, we use the POST method to securely send data from a client (like a user\u0026#39;s browser) to a server. This is crucial because the GET method, while convenient for retrieving data, has limitations:\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Imagine you are in registering for an event via Google form, you type in your details on the webpage like name, email, address, phone number, and other personal details. If the website\/app was using the \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; method to send the request to register or do any other authentication\/privacy-related requests, it could expose the data in the URL itself. It would be something along the lines \u0026lt;a href=\u0026#34;https:\/\/form.google.com\/register\/%3Cform-name%3E-%3Cid%3E\/?name=John\u0026amp;amp;phone_number=1234567890\u0026#34;\u0026gt;\u0026lt;code\u0026gt;https:\/\/form.google.com\/register\/\u0026amp;lt;form-name\u0026amp;gt;-\u0026amp;lt;id\u0026amp;gt;\/?name=John\u0026amp;amp;phone_number=1234567890\u0026lt;\/code\u0026gt;\u0026lt;\/a\u0026gt;, if a user maliciously sniffs into your network and inspects the URL, your data will be exposed. That is the reason we need \u0026lt;code\u0026gt;POST\u0026lt;\/code\u0026gt; a method.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;how-a-post-method-works\u0026#34;\u0026gt;How a POST method works?\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;A \u0026lt;a href=\u0026#34;https:\/\/www.rfc-editor.org\/rfc\/rfc9110#POST\u0026#34;\u0026gt;POST\u0026lt;\/a\u0026gt; request is used to send data to a server to create or update(there is a separate method for updating) a resource. The client(browser\/other APIs) sends a POST request to the server\u0026#39;s API endpoint with the data in the request body. This data can be in formats like JSON, XML, or form data. The server processes the POST request, validates and parses the data in the request body, makes any changes or creates resources based on that data, and returns a response. The response would contain a status code indicating the success or failure of the operation and may contain the newly created or updated resource in the response body. The client must check the response status code to verify the outcome and process the response accordingly. Unlike GET, POST can create new resources on the server. The body of a POST contains the data for creation while the URL identifies the resource to be created. Overall, POST transfers data to the server for processing, creation or updating of resources.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The status code is usually \u0026lt;code\u0026gt;201\u0026lt;\/code\u0026gt; indicating the resource is successfully created or \u0026lt;code\u0026gt;200\u0026lt;\/code\u0026gt; for just indicating success.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Some common steps for creating and sending a POST request as a developer include:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Defining the API endpoint\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Clarifying the data format (json, language native objects, xml , text, form-data, etc)\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Converting \/ Marshalling the data\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Attaching header for \u0026lt;code\u0026gt;Content-Type\u0026lt;\/code\u0026gt; as key and value as the format of the data type (e.g. \u0026lt;code\u0026gt;application\/json\u0026lt;\/code\u0026gt; for json)\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Sending the request\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;The above steps are general for creating and sending a POST request, they are not specific to Golang. For golang specific steps, we need to dive a bit deeper, let\u0026#39;s get started.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;basic-post-method-in-golang\u0026#34;\u0026gt;Basic POST method in Golang\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;To send a POST request in golang, we need to use the \u0026lt;code\u0026gt;http\u0026lt;\/code\u0026gt; package. The \u0026lt;code\u0026gt;http\u0026lt;\/code\u0026gt; package has the \u0026lt;code\u0026gt;Post\u0026lt;\/code\u0026gt; method, which takes in 3 parameters, namely the URL, the Content-Type, and the Body. The body can be \u0026lt;code\u0026gt;nil\u0026lt;\/code\u0026gt; if the URL endpoint doesn\u0026#39;t necessarily require a body. The \u0026lt;code\u0026gt;Content-Type\u0026lt;\/code\u0026gt; is the string, since we are just touching on how the Post request is constructed, we will see what the \u0026lt;code\u0026gt;Content-Type\u0026lt;\/code\u0026gt; string value should be in the later sections.\u0026lt;\/p\u0026gt;\n\u0026lt;blockquote\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;http:\/\/http.Post\u0026#34;\u0026gt;http.Post\u0026lt;\/a\u0026gt;(URL, Content-Type, Body)\u0026lt;\/p\u0026gt;\n\u0026lt;\/blockquote\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\nfunc main() {\n\tapiURL := \u0026#34;https:\/\/reqres.in\/api\/users\u0026#34;\n\n\t\/\/ POST request\n\tresp, err := http.Post(apiURL, \u0026#34;\u0026#34;, nil)\n    \/\/ ideally the Content-Type header should be set to the relevant format\n\t\/\/ resp, err := http.Post(apiURL, \u0026#34;application\/json\u0026#34;, nil)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tfmt.Println(resp.StatusCode)\n    fmt.Println(resp)\n\tdefer resp.Body.Close()\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;\n$ go run main.go\n\n201\n\u0026amp;{\n    201 Created\n    201\n    HTTP\/2.0\n    2\n    0\n    map[\n        Access-Control-Allow-Origin:[*]\n        Cf-Cache-Status:[DYNAMIC]\n        Cf-Ray:[861cd9aec8223e4b-BOM]\n        Content-Length:[50]\n        Content-Type:[application\/json; charset=utf-8]\n        Date:[Sat, 09 Mar 2024 17:40:28 GMT]\n        Server:[cloudflare]\n        ...\n        ...\n        ...\n        X-Powered-By:[Express]\n    ]\n    {0xc00017c180}\n    50\n    []\n    false\n    false\n    map[]\n    0xc000156000\n    0xc00012a420\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above code is sending the \u0026lt;code\u0026gt;POST\u0026lt;\/code\u0026gt; request to the \u0026lt;a href=\u0026#34;https:\/\/reqres.in\/api\/users\u0026#34;\u0026gt;\u0026lt;code\u0026gt;https:\/\/reqres.in\/api\/users\u0026lt;\/code\u0026gt;\u0026lt;\/a\u0026gt; endpoint with an empty body and no specific format for \u0026lt;code\u0026gt;Content-Type\u0026lt;\/code\u0026gt; header. The response is according to the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#Response\u0026#34;\u0026gt;Response\u0026lt;\/a\u0026gt; structure. We can see we got \u0026lt;code\u0026gt;201\u0026lt;\/code\u0026gt; status, which indicates the server received the POST request successfully, the API is a dummy api, so we don\u0026#39;t care about the data we are processing, we are just using the API as a placeholder for sending the POST request.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We can use \u0026lt;code\u0026gt;map[string]interface{}\u0026lt;\/code\u0026gt; it to pass the data in the request body. The \u0026lt;code\u0026gt;json.Marshal\u0026lt;\/code\u0026gt; method is used to convert the map into JSON format. We will look into the details shortly in the next few examples.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;bytes\u0026#34;\n\t\u0026#34;encoding\/json\u0026#34;\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\nfunc main() {\n    apiURL := \u0026#34;https:\/\/reqres.in\/api\/users\u0026#34;\n    bodyMap := map[string]interface{}{\n        \u0026#34;name\u0026#34;: \u0026#34;morpheus\u0026#34;,\n        \u0026#34;job\u0026#34;: \u0026#34;leader\u0026#34;,\n    }\n\n    requestBody, err := json.Marshal(bodyMap)\n    if err != nil {\n        panic(err)\n    }\n    body := bytes.NewBuffer(requestBody)\n\n    resp, err := http.Post(apiURL, \u0026#34;application\/json\u0026#34;, body)\n    if err != nil {\n        panic(err)\n    }\n    fmt.Println(resp.StatusCode)\n    defer resp.Body.Close()\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\n\n201\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above code sends the \u0026lt;code\u0026gt;POST\u0026lt;\/code\u0026gt; request to the \u0026lt;a href=\u0026#34;https:\/\/reqres.in\/api\/users\u0026#34;\u0026gt;\u0026lt;code\u0026gt;https:\/\/reqres.in\/api\/users\u0026lt;\/code\u0026gt;\u0026lt;\/a\u0026gt; endpoint with the data in the request body in JSON format.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;creating-a-post-request-in-golang\u0026#34;\u0026gt;Creating a POST request in Golang\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We can construct the POST request with the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#NewRequest\u0026#34;\u0026gt;NewRequest\u0026lt;\/a\u0026gt; method. The method takes in 3 parameters, namely the \u0026lt;code\u0026gt;method\u0026lt;\/code\u0026gt; (e.g. \u0026lt;code\u0026gt;POST\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt;), the \u0026lt;code\u0026gt;URL\u0026lt;\/code\u0026gt; and the \u0026lt;code\u0026gt;body\u0026lt;\/code\u0026gt; (if there is any). We can then add extra information to the headers or the Request object after constructing the basic HTTP \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#Request\u0026#34;\u0026gt;Request\u0026lt;\/a\u0026gt; object.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\nfunc main() {\n\tapiURL := \u0026#34;https:\/\/reqres.in\/api\/users\u0026#34;\n\n\treq, err := http.NewRequest(http.MethodPost, apiURL, nil)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tresp, err := http.DefaultClient.Do(req)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tfmt.Println(resp.StatusCode)\n\t\/\/fmt.Println(resp)\n\tdefer resp.Body.Close()\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\n\n201\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, we have created an HTTP Request as the \u0026lt;code\u0026gt;POST\u0026lt;\/code\u0026gt; method, with \u0026lt;a href=\u0026#34;https:\/\/reqres.in\/api\/users\u0026#34;\u0026gt;\u0026lt;code\u0026gt;https:\/\/reqres.in\/api\/users\u0026lt;\/code\u0026gt;\u0026lt;\/a\u0026gt; as the URL, and no body. This constructs an HTTP Request object, which can be sent as the parameter to the \u0026lt;a href=\u0026#34;http:\/\/http.DefaultClient.Do\u0026#34;\u0026gt;http.DefaultClient.Do\u0026lt;\/a\u0026gt; method, which is the default client for the request we sent in the earlier examples as \u0026lt;code\u0026gt;http.Get\u0026lt;\/code\u0026gt; or \u0026lt;a href=\u0026#34;http:\/\/http.Post\u0026#34;\u0026gt;\u0026lt;code\u0026gt;http.Post\u0026lt;\/code\u0026gt;\u0026lt;\/a\u0026gt; methods. We can implement a custom client as well, and then apply \u0026lt;code\u0026gt;Do\u0026lt;\/code\u0026gt; the method with the request parameters. The \u0026lt;code\u0026gt;Do\u0026lt;\/code\u0026gt; method returns the \u0026lt;code\u0026gt;Request\u0026lt;\/code\u0026gt; object or the \u0026lt;code\u0026gt;error\u0026lt;\/code\u0026gt; if any.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;More on the customizing Client will be explained in a separate post in the series.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The response is also in the same format as the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#Response\u0026#34;\u0026gt;Response\u0026lt;\/a\u0026gt; structure that we have seen earlier. This section of the series aims to construct a post request, and not to parse the response, we have already understood the parsing of the response in the \u0026lt;a href=\u0026#34;https:\/\/www.meetgor.com\/golang-web-get-method\/#?:~:text=Parsing%20the%20JSON%20body%20with%20structs\u0026#34;\u0026gt;Get method\u0026lt;\/a\u0026gt; section of the series.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;parsing-objects-to-json-for-post-method-request\u0026#34;\u0026gt;Parsing objects to JSON for POST method request\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We might have a golang object that we want to send as a body to an API in the POST request, for that we need to convert the golang struct object to JSON. We can do this by using the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/encoding\/json#Marshal\u0026#34;\u0026gt;Marshal\u0026lt;\/a\u0026gt; or the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/encoding\/json#Encoder.Encode\u0026#34;\u0026gt;Encode\u0026lt;\/a\u0026gt; method for serialization of the golang struct object to JSON.\u0026lt;\/p\u0026gt;\n\u0026lt;h4 id=\u0026#34;using-marshal-method\u0026#34;\u0026gt;Using Marshal method\u0026lt;\/h4\u0026gt;\n\u0026lt;p\u0026gt;Marshaling is the process of converting data from a data structure into a format suitable for transmission over a network or for storage. It\u0026#39;s commonly used to convert native objects in a programming language into a serialized format, typically a byte stream, that can be transmitted or stored efficiently. You might get a question here, what is the difference between \u0026lt;code\u0026gt;Marshalling\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;Serialization\u0026lt;\/code\u0026gt;? Well, Serialization, is a broader term that encompasses marshalling. It refers to the process of converting an object or data structure into a format that can be stored or transmitted and later reconstructed into the original object. Serialization may involve converting data into byte streams, XML, JSON, or other formats. So, in summary, marshaling specifically deals with converting native objects into a format suitable for transmission, while serialization encompasses the broader process of preparing data for storage or transmission.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The \u0026lt;code\u0026gt;json\u0026lt;\/code\u0026gt; package has the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/encoding\/json#Marshal\u0026#34;\u0026gt;Marshal\u0026lt;\/a\u0026gt; method that converts the golang object into JSON. The \u0026lt;code\u0026gt;Marshal\u0026lt;\/code\u0026gt; method takes in a parameter as the struct object with type \u0026lt;code\u0026gt;any\u0026lt;\/code\u0026gt; and returns a byte slice \u0026lt;code\u0026gt;[]byte\u0026lt;\/code\u0026gt; and error (if any).\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;bytes\u0026#34;\n\t\u0026#34;encoding\/json\u0026#34;\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\ntype User struct {\n\tName   string \u0060json:\u0026#34;name\u0026#34;\u0060\n\tSalary int    \u0060json:\u0026#34;salary\u0026#34;\u0060\n\tAge    int    \u0060json:\u0026#34;age\u0026#34;\u0060\n}\n\nfunc main() {\n\tuser := User{\n\t\tName:   \u0026#34;Alice\u0026#34;,\n\t\tSalary: 50000,\n\t\tAge:    25,\n\t}\n\tapiURL := \u0026#34;https:\/\/dummy.restapiexample.com\/api\/v1\/create\u0026#34;\n\n\t\/\/ marshalling process\n\t\/\/ converting Go specific data structure\/types to JSON\n\tbodyBytes, err := json.Marshal(user)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tfmt.Println(string(bodyBytes))\n\n\t\/\/ reading json into a buffer\/in-memory\n\tbody := bytes.NewBuffer(bodyBytes)\n\n\t\/\/ post request\n\tresp, err := http.Post(apiURL, \u0026#34;application\/json\u0026#34;, body)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tfmt.Println(resp.StatusCode)\n\tdefer resp.Body.Close()\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\n\n{\u0026#34;name\u0026#34;:\u0026#34;Alice\u0026#34;,\u0026#34;salary\u0026#34;:50000,\u0026#34;age\u0026#34;:25}\n200\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, we have created a struct \u0026lt;code\u0026gt;User\u0026lt;\/code\u0026gt; with fields \u0026lt;code\u0026gt;Name\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;Salary\u0026lt;\/code\u0026gt;, and \u0026lt;code\u0026gt;Age\u0026lt;\/code\u0026gt;, the json tags will help label each key in JSON with the tag for the respective fields in the struct. We create an object \u0026lt;code\u0026gt;user\u0026lt;\/code\u0026gt; of a type \u0026lt;code\u0026gt;User\u0026lt;\/code\u0026gt; with the values as \u0026lt;code\u0026gt;Alice\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;50000\u0026lt;\/code\u0026gt;, and \u0026lt;code\u0026gt;25\u0026lt;\/code\u0026gt; respectively.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We call the \u0026lt;code\u0026gt;json.Marshal\u0026lt;\/code\u0026gt; method with the parameter \u0026lt;code\u0026gt;user\u0026lt;\/code\u0026gt; that represents the struct object \u0026lt;code\u0026gt;User\u0026lt;\/code\u0026gt;, the method returns a slice of bytes, or an error either or both could be nil. If we try to see the stringified representation of the byte slice, we can see something like \u0026lt;code\u0026gt;{\u0026amp;quot;name\u0026amp;quot;:\u0026amp;quot;Alice\u0026amp;quot;,\u0026amp;quot;salary\u0026amp;quot;:50000,\u0026amp;quot;age\u0026amp;quot;:25}\u0026lt;\/code\u0026gt; which is a JSON string for the user struct. We can\u0026#39;t parse the byte slice as the body in the POST request, we need the \u0026lt;code\u0026gt;io.Reader\u0026lt;\/code\u0026gt; object, so we can load the byte slice \u0026lt;code\u0026gt;bodyBytes\u0026lt;\/code\u0026gt; into a buffer and parse that as a body for the POST request.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We then send a \u0026lt;code\u0026gt;POST\u0026lt;\/code\u0026gt; request to the endpoint \u0026lt;a href=\u0026#34;https:\/\/dummy.restapiexample.com\/api\/v1\/create\u0026#34;\u0026gt;\u0026lt;code\u0026gt;https:\/\/dummy.restapiexample.com\/api\/v1\/create\u0026lt;\/code\u0026gt;\u0026lt;\/a\u0026gt; with the content type as \u0026lt;code\u0026gt;application\/json\u0026lt;\/code\u0026gt; and with the body as \u0026lt;code\u0026gt;body\u0026lt;\/code\u0026gt; which was a \u0026lt;code\u0026gt;io.Reader\u0026lt;\/code\u0026gt; object as an in-memory buffer.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In brief, we can summarize the marshaling of the golang object into JSON with \u0026lt;code\u0026gt;Marshal\u0026lt;\/code\u0026gt; function as the following steps:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Defining the structure as per the request body\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Creating the struct object for parsing the data as body to the request\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Calling the \u0026lt;code\u0026gt;json.Marshal\u0026lt;\/code\u0026gt; function to convert the object to JSON (parameter as the struct object \u0026lt;code\u0026gt;any\u0026lt;\/code\u0026gt; type)\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Loading the byte slice into a buffer with \u0026lt;code\u0026gt;bytes.NewBuffer()\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Sending the POST request to the endpoint with the body as the \u0026lt;code\u0026gt;io.Reader\u0026lt;\/code\u0026gt; object and content type as \u0026lt;code\u0026gt;application\/json\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;h4 id=\u0026#34;using-encode-method\u0026#34;\u0026gt;Using Encode method\u0026lt;\/h4\u0026gt;\n\u0026lt;p\u0026gt;We can even use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/encoding\/json#Encoder.Encode\u0026#34;\u0026gt;Encoder.Encode\u0026lt;\/a\u0026gt; method to parse the golang struct object to JSON. Firstly, we should have the struct defined as per the request body that the particular API takes, we can make use of the json tags, omitempty, omit(-) options to make the marshaling process work accordingly. We can then create the object of that particular struct with the data we require to be created as a resource with the POST request on that API service.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Thereafter we can create an empty buffer object with \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/bytes#Buffer\u0026#34;\u0026gt;bytes.Buffer\u0026lt;\/a\u0026gt;, this buffer object would be used to initialize the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/encoding\/json#Encoder\u0026#34;\u0026gt;Encoder\u0026lt;\/a\u0026gt; object with the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/encoding\/json#NewEncoder\u0026#34;\u0026gt;NewEncoder\u0026lt;\/a\u0026gt; method. This would give access to the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/encoding\/json#Encoder.Encode\u0026#34;\u0026gt;Encode\u0026lt;\/a\u0026gt; method, which is used to take in the struct object (\u0026lt;code\u0026gt;any\u0026lt;\/code\u0026gt; type) and this will populate the buffer we initialized with the \u0026lt;code\u0026gt;NewEncoder\u0026lt;\/code\u0026gt; method.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Later we can access that buffer to parse it to the Post request as the body. Let\u0026#39;s understand it better with an example.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;bytes\u0026#34;\n\t\u0026#34;encoding\/json\u0026#34;\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\ntype User struct {\n\tName   string\n\tSalary int\n\tAge    int\n}\n\nfunc main() {\n\tuser := User{\n\t\tName:   \u0026#34;Alice\u0026#34;,\n\t\tSalary: 50000,\n\t\tAge:    25,\n\t}\n\tapiURL := \u0026#34;https:\/\/dummy.restapiexample.com\/api\/v1\/create\u0026#34;\n\n\tvar bodyBuffer bytes.Buffer\n\tvar encoder = json.NewEncoder(\u0026amp;bodyBuffer)\n\terr := encoder.Encode(user)\n    if err != nil {\n        panic(err)\n    }\n\n\tresp, err := http.Post(apiURL, \u0026#34;application\/json\u0026#34;, \u0026amp;bodyBuffer)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tfmt.Println(resp.StatusCode)\n\tfmt.Println(resp)\n\tdefer resp.Body.Close()\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Over here, we have created a struct \u0026lt;code\u0026gt;User\u0026lt;\/code\u0026gt; with fields \u0026lt;code\u0026gt;Name\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;Salary\u0026lt;\/code\u0026gt;, and \u0026lt;code\u0026gt;Age\u0026lt;\/code\u0026gt;, we initialize the \u0026lt;code\u0026gt;user\u0026lt;\/code\u0026gt; as the object of the \u0026lt;code\u0026gt;User\u0026lt;\/code\u0026gt; struct. Then we create a buffer \u0026lt;code\u0026gt;bodyBuffer\u0026lt;\/code\u0026gt; of type \u0026lt;code\u0026gt;bytes.Buffer\u0026lt;\/code\u0026gt; this is the actual buffer that we will send as the body. Further, we initialize the \u0026lt;code\u0026gt;Encoder\u0026lt;\/code\u0026gt; object as \u0026lt;code\u0026gt;encoder\u0026lt;\/code\u0026gt; with the \u0026lt;code\u0026gt;json.NewEncoder\u0026lt;\/code\u0026gt; method by parsing the reference of \u0026lt;code\u0026gt;bodyBuffer\u0026lt;\/code\u0026gt; as the parameter. Since \u0026lt;code\u0026gt;bytes.Buffer\u0026lt;\/code\u0026gt; implements the \u0026lt;code\u0026gt;io.Writer\u0026lt;\/code\u0026gt; interface, we can pass the \u0026lt;code\u0026gt;bodyBuffer\u0026lt;\/code\u0026gt; to the \u0026lt;code\u0026gt;NewEncoder\u0026lt;\/code\u0026gt; method. This will create the \u0026lt;code\u0026gt;Encoder\u0026lt;\/code\u0026gt; object which in turn will give us access to the \u0026lt;code\u0026gt;Encode\u0026lt;\/code\u0026gt; method, where we will parse the struct instance and it will populate the buffer with which we initialized the \u0026lt;code\u0026gt;Encoder\u0026lt;\/code\u0026gt; object earlier.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Now, we have the \u0026lt;code\u0026gt;encode\u0026lt;\/code\u0026gt; object, this gives us the access to \u0026lt;code\u0026gt;Encode\u0026lt;\/code\u0026gt; method, we call the \u0026lt;code\u0026gt;Encode\u0026lt;\/code\u0026gt; method with the parameter of \u0026lt;code\u0026gt;user\u0026lt;\/code\u0026gt; which is a User struct instance\/object. The Encode method will populate the \u0026lt;code\u0026gt;bodyBuffer\u0026lt;\/code\u0026gt; object or it will result in an error if anything goes wrong (the data is incorrectly parsed or is not in the required format).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We can call the \u0026lt;code\u0026gt;Post\u0026lt;\/code\u0026gt; method with the initialized URL, the \u0026lt;code\u0026gt;Content-Type\u0026lt;\/code\u0026gt; as \u0026lt;code\u0026gt;application\/json\u0026lt;\/code\u0026gt; since we have converted the struct instance to JSON object, and the body as the reference to the buffer as \u0026lt;code\u0026gt;\u0026amp;amp;bodyBuffer\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, the steps for parsing struct instances into JSON objects with the \u0026lt;code\u0026gt;Encoder.Encode\u0026lt;\/code\u0026gt; method is as follows:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Defining the structure as per the request body\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Creating the struct object for parsing the data as body to the request\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Creating an empty \u0026lt;code\u0026gt;bytes.Buffer\u0026lt;\/code\u0026gt; object as an in-memory buffer\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Initializing the \u0026lt;code\u0026gt;Encoder\u0026lt;\/code\u0026gt; object with \u0026lt;code\u0026gt;NewEncoder\u0026lt;\/code\u0026gt; method by parsing the reference of \u0026lt;code\u0026gt;bodyBuffer\u0026lt;\/code\u0026gt; as the parameter\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Calling the \u0026lt;code\u0026gt;Encode\u0026lt;\/code\u0026gt; method with the parameter of struct instance\/object\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Sending the POST request to the endpoint with the content type as \u0026lt;code\u0026gt;application\/json\u0026lt;\/code\u0026gt; and body as the reference to the buffer\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;The results are the same as the above example just the way we have parsed the struct instance to JSON object is different.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;parsing-json-to-post-request\u0026#34;\u0026gt;Parsing JSON to POST request\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We have seen how we can parse golang struct instances to JSON and then send the post request, but what if we had the JSON string already with us, and we want to send the request? Well, that\u0026#39;s much easier, right? We already have parsed the JSON string to the Post request by loading the slice of bytes into a buffer, so we just need to convert the string to a slice of bytes which is quite an easy task, and then load that byte slice to the buffer.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;bytes\u0026#34;\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\nfunc main() {\n\t\/\/ dummy api\n\tapiURL := \u0026#34;https:\/\/dummy.restapiexample.com\/api\/v1\/create\u0026#34;\n\n\t\/\/ json data\n\tdata := \u0060{\n        \u0026#34;name\u0026#34;: \u0026#34;Alice\u0026#34;,\n        \u0026#34;job\u0026#34;: \u0026#34;Teacher\u0026#34;\n    }\u0060\n\tbody := bytes.NewBuffer([]byte(data))\n\n\t\/\/ POST request\n\tresp, err := http.Post(apiURL, \u0026#34;application\/json\u0026#34;, body)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tfmt.Println(resp.StatusCode)\n\tfmt.Println(resp)\n\tdefer resp.Body.Close()\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the example above, we already have a JSON string \u0026lt;code\u0026gt;data\u0026lt;\/code\u0026gt; with keys as \u0026lt;code\u0026gt;name\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;job\u0026lt;\/code\u0026gt; but it is not JSON, it is a stringified JSON. We can convert the stringified JSON to a slice of bytes using the \u0026lt;code\u0026gt;[]byte\u0026lt;\/code\u0026gt; function. Further, we have used the \u0026lt;code\u0026gt;bytes.NewBuffer\u0026lt;\/code\u0026gt; method to load the byte slice into an \u0026lt;code\u0026gt;io.Reader\u0026lt;\/code\u0026gt; object. This object returned by the \u0026lt;code\u0026gt;bytes.NewBuffer\u0026lt;\/code\u0026gt; will serve as the body for the POST request.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;parsing-json-to-objects-in-golang-from-post-method-response\u0026#34;\u0026gt;Parsing JSON to objects in Golang from POST method response\u0026lt;\/h3\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;bytes\u0026#34;\n\t\u0026#34;encoding\/json\u0026#34;\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;io\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\ntype User struct {\n\tName   string \u0060json:\u0026#34;name\u0026#34;\u0060\n\tSalary int    \u0060json:\u0026#34;salary\u0026#34;\u0060\n\tAge    string \u0060json:\u0026#34;age\u0026#34;\u0060\n\tID     int    \u0060json:\u0026#34;id,omitempty\u0026#34;\u0060\n}\n\ntype UserResponse struct {\n\tStatus string \u0060json:\u0026#34;status\u0026#34;\u0060\n\tData   User   \u0060json:\u0026#34;data\u0026#34;\u0060\n}\n\nfunc main() {\n\tuser := User{\n\t\tName:   \u0026#34;Alice\u0026#34;,\n\t\tSalary: 50000,\n\t\tAge:    \u0026#34;25\u0026#34;,\n\t}\n\tapiURL := \u0026#34;https:\/\/dummy.restapiexample.com\/api\/v1\/create\u0026#34;\n\n\t\/\/ marshalling process\n\t\/\/ converting Go specific data structure\/types to JSON\n\tbodyBytes, err := json.Marshal(user)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tfmt.Println(string(bodyBytes))\n\n\t\/\/ reading json into a buffer\/in-memory\n\tbody := bytes.NewBuffer(bodyBytes)\n\n\t\/\/ post request\n\tresp, err := http.Post(apiURL, \u0026#34;application\/json\u0026#34;, body)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tfmt.Println(resp.StatusCode)\n\tfmt.Println(resp)\n\tdefer resp.Body.Close()\n\n\t\/\/ Read response body\n\trespBody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\n\t\/\/ unmarshalling process\n\t\/\/ converting JSON to Go specific data structure\/types\n\tvar userResponse UserResponse\n\tif err := json.Unmarshal(respBody, \u0026amp;userResponse); err != nil {\n\t\tpanic(err)\n\t}\n\tfmt.Println(userResponse)\n\tfmt.Println(userResponse.Data)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;nginx\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-nginx\u0026#34;\u0026gt;\n{success {Alice 50000 25 3239}}\n{Alice 50000 25 577}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above example is a POST request with a struct instance being loaded as a JSON string and then sent as a buffer to the API endpoint, it also reads the response body with a specific structure \u0026lt;code\u0026gt;UserResponse\u0026lt;\/code\u0026gt; and unmarshalled the \u0026lt;code\u0026gt;resp.Body\u0026lt;\/code\u0026gt; from the \u0026lt;code\u0026gt;io.Reader\u0026lt;\/code\u0026gt; as \u0026lt;code\u0026gt;respBody\u0026lt;\/code\u0026gt; and then loads into \u0026lt;code\u0026gt;userResponse\u0026lt;\/code\u0026gt; object. This example gives an entire process of what we have understood in the JSON data parsing for a POST request.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;sending-form-data-in-a-post-request\u0026#34;\u0026gt;Sending Form data in a POST request\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We can also send data to a POST request in the form of a form, the form which we use in the HTML. Golang has a \u0026lt;code\u0026gt;net\/url\u0026lt;\/code\u0026gt; package to parse the form data. The form data is sent in the \u0026lt;code\u0026gt;application\/x-www-form-urlencoded\u0026lt;\/code\u0026gt; format.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;encoding\/json\u0026#34;\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;io\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n\t\u0026#34;net\/url\u0026#34;\n\t\u0026#34;strings\u0026#34;\n)\n\ntype ResponseLogin struct {\n\tToken string \u0060json:\u0026#34;token\u0026#34;\u0060\n}\n\nfunc main() {\n\t\/\/ dummy api\n\tapiURL := \u0026#34;https:\/\/reqres.in\/api\/login\u0026#34;\n\n\t\/\/ Define form data\n\tformData := url.Values{}\n\tformData.Set(\u0026#34;email\u0026#34;, \u0026#34;eve.holt@reqres.in\u0026#34;)\n\tformData.Set(\u0026#34;password\u0026#34;, \u0026#34;cityslicka\u0026#34;)\n\n\t\/\/ Encode the form data\n\tfmt.Println(formData.Encode())\n\treqBody := strings.NewReader(formData.Encode())\n\tfmt.Println(reqBody)\n\n\t\/\/ Make a POST request with form data\n\tresp, err := http.Post(apiURL, \u0026#34;application\/x-www-form-urlencoded\u0026#34;, reqBody)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tdefer resp.Body.Close()\n\n\t\/\/ Print response status code\n\tfmt.Println(\u0026#34;Status Code:\u0026#34;, resp.StatusCode)\n\n\t\/\/ Read response body\n\trespBody, err := io.ReadAll(resp.Body)\n    if err != nil {\n        panic(err)\n    }\n\ttoken := ResponseLogin{}\n\n\tjson.Unmarshal(respBody, \u0026amp;token)\n\tfmt.Println(token)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\n\nemail=eve.holt%40reqres.in\u0026amp;password=cityslicka\n\u0026amp;{email=eve.holt%40reqres.in\u0026amp;password=cityslicka 0 -1}\nStatus Code: 200\n{QpwL5tke4Pnpja7X4}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, we set a \u0026lt;code\u0026gt;formData\u0026lt;\/code\u0026gt; with the values of \u0026lt;code\u0026gt;email\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;password\u0026lt;\/code\u0026gt; which are \u0026lt;code\u0026gt;url.Values\u0026lt;\/code\u0026gt; object. The \u0026lt;code\u0026gt;url.Values\u0026lt;\/code\u0026gt; the object is used to store the key-value pairs of the form data. The \u0026lt;code\u0026gt;formData\u0026lt;\/code\u0026gt; is encoded with the \u0026lt;code\u0026gt;url.Encode\u0026lt;\/code\u0026gt; method, We load the encoded string to a \u0026lt;code\u0026gt;buffer\u0026lt;\/code\u0026gt; with \u0026lt;code\u0026gt;strings.NewReader\u0026lt;\/code\u0026gt; which implements the \u0026lt;code\u0026gt;io.Reader\u0026lt;\/code\u0026gt; interface, so that way we can pass that object as the body to the post request.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We send the \u0026lt;code\u0026gt;POST\u0026lt;\/code\u0026gt; request to the endpoint \u0026lt;a href=\u0026#34;https:\/\/reqres.in\/api\/login\u0026#34;\u0026gt;\u0026lt;code\u0026gt;https:\/\/reqres.in\/api\/login\u0026lt;\/code\u0026gt;\u0026lt;\/a\u0026gt; with the content type as \u0026lt;code\u0026gt;application\/x-www-form-urlencoded\u0026lt;\/code\u0026gt; and with the body as \u0026lt;code\u0026gt;reqBody\u0026lt;\/code\u0026gt; which implements the \u0026lt;code\u0026gt;io.Reader\u0026lt;\/code\u0026gt; interface as an in-memory buffer. The response from the request is read into the buffer with \u0026lt;code\u0026gt;io.ReadAll\u0026lt;\/code\u0026gt; method and we can \u0026lt;code\u0026gt;Unmarshal\u0026lt;\/code\u0026gt; the stream of bytes as a buffer into the \u0026lt;code\u0026gt;ResponseLogin\u0026lt;\/code\u0026gt; struct object.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The output shows the \u0026lt;code\u0026gt;formData\u0026lt;\/code\u0026gt; as encoded string \u0026lt;code\u0026gt;email=eve.holt%\u0026lt;\/code\u0026gt;\u0026lt;a href=\u0026#34;http:\/\/40reqres.in\u0026#34;\u0026gt;\u0026lt;code\u0026gt;40reqres.in\u0026lt;\/code\u0026gt;\u0026lt;\/a\u0026gt;\u0026lt;code\u0026gt;\u0026amp;amp;password=cityslicka\u0026lt;\/code\u0026gt; as \u0026lt;code\u0026gt;@\u0026lt;\/code\u0026gt; is encoded to \u0026lt;code\u0026gt;%40\u0026lt;\/code\u0026gt;, then we wrap the \u0026lt;code\u0026gt;formData\u0026lt;\/code\u0026gt; in a \u0026lt;code\u0026gt;strings.NewReader\u0026lt;\/code\u0026gt; object which is a buffer that implements \u0026lt;code\u0026gt;io.Reader\u0026lt;\/code\u0026gt; interface, hence we can see the result as the object. The status code for the request is \u0026lt;code\u0026gt;200\u0026lt;\/code\u0026gt; indicating the server received the \u0026lt;code\u0026gt;form-data\u0026lt;\/code\u0026gt; in the body and upon unmarshalling, we get the token as a response to the POST request which was a dummy login API.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This way we have parsed the form-data to the body of a POST request.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;sending-file-in-a-post-request\u0026#34;\u0026gt;Sending File in a POST request\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We have covered, parsing text, JSON, and form data, and now we need to move into sending files in a POST request. We can use the \u0026lt;code\u0026gt;multipart\u0026lt;\/code\u0026gt; package to parse files into the request body and set appropriate headers for reading the file from the API services.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We first read the file contents \u0026lt;a href=\u0026#34;http:\/\/os.Open\u0026#34;\u0026gt;\u0026lt;code\u0026gt;os.Open\u0026lt;\/code\u0026gt;\u0026lt;\/a\u0026gt; which returns a reference to the \u0026lt;code\u0026gt;file\u0026lt;\/code\u0026gt; object or an error. We create an empty \u0026lt;code\u0026gt;bytes.Buffer\u0026lt;\/code\u0026gt; object as \u0026lt;code\u0026gt;body\u0026lt;\/code\u0026gt; which will be populated later. The \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/mime\/multipart#NewWriter\u0026#34;\u0026gt;multipart.NewWriter\u0026lt;\/a\u0026gt; method takes in the \u0026lt;code\u0026gt;io.Writer\u0026lt;\/code\u0026gt; object which will be the \u0026lt;code\u0026gt;body\u0026lt;\/code\u0026gt; as it is an \u0026lt;code\u0026gt;bytes.Buffer\u0026lt;\/code\u0026gt; object that implements the \u0026lt;code\u0026gt;io.Writer\u0026lt;\/code\u0026gt; interface. This will initialize the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/mime\/multipart#Writer\u0026#34;\u0026gt;Writer\u0026lt;\/a\u0026gt; object in the \u0026lt;code\u0026gt;multipart\u0026lt;\/code\u0026gt; package.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We create a \u0026lt;code\u0026gt;form-field\u0026lt;\/code\u0026gt; in the \u0026lt;code\u0026gt;Writer\u0026lt;\/code\u0026gt; object with the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/mime\/multipart#Writer.CreateFormFile\u0026#34;\u0026gt;CreateFormFile\u0026lt;\/a\u0026gt; method, which takes in the \u0026lt;code\u0026gt;fieldName\u0026lt;\/code\u0026gt; as the name of the field, and the \u0026lt;code\u0026gt;fileName\u0026lt;\/code\u0026gt; as the name of the file which will be read later in the multipart form. The method returns either the part or the error. The \u0026lt;code\u0026gt;part\u0026lt;\/code\u0026gt; is an object that implements the \u0026lt;code\u0026gt;io.Writer\u0026lt;\/code\u0026gt; interface.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Since we have stored the file contents in the \u0026lt;code\u0026gt;file\u0026lt;\/code\u0026gt; object, we copy the contents into the \u0026lt;code\u0026gt;form-field\u0026lt;\/code\u0026gt; with the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/io#Copy\u0026#34;\u0026gt;Copy\u0026lt;\/a\u0026gt; method. Since the \u0026lt;code\u0026gt;part\u0026lt;\/code\u0026gt; return from the \u0026lt;code\u0026gt;CreateFormFile\u0026lt;\/code\u0026gt; was implementing the \u0026lt;code\u0026gt;io.Writer\u0026lt;\/code\u0026gt; interface, we can use it to Copy the contents from source to destination. The source is the \u0026lt;code\u0026gt;io.Reader\u0026lt;\/code\u0026gt; object and the destination is the \u0026lt;code\u0026gt;io.Writer\u0026lt;\/code\u0026gt; object, the destination for the \u0026lt;code\u0026gt;Copy\u0026lt;\/code\u0026gt; method is the first parameter, the source is the second parameter.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This Copy method will populate the buffer initialized earlier in the \u0026lt;code\u0026gt;NewWriter\u0026lt;\/code\u0026gt; method. This will give us a buffer that has the file contents in it. We can pass this buffer to the POST request with the \u0026lt;code\u0026gt;body\u0026lt;\/code\u0026gt; parameter. We also need to make sure we close the \u0026lt;code\u0026gt;Writer\u0026lt;\/code\u0026gt; object after copying the contents of the file. We can extract the type of file which will serve as the \u0026lt;code\u0026gt;Content-Type\u0026lt;\/code\u0026gt; of the request.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s clear the explanation with an example.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;bytes\u0026#34;\n\t\u0026#34;encoding\/json\u0026#34;\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;io\u0026#34;\n\t\u0026#34;mime\/multipart\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n\t\u0026#34;os\u0026#34;\n)\n\ntype ResponseFile struct {\n\tFiles map[string]string \u0060json:\u0026#34;files\u0026#34;\u0060\n}\n\nfunc main() {\n\tapiURL := \u0026#34;http:\/\/postman-echo.com\/post\u0026#34;\n\tfileName := \u0026#34;sample.csv\u0026#34;\n\n\tfile, err := os.Open(fileName)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tdefer file.Close()\n\n\tbody := \u0026amp;bytes.Buffer{}\n\twriter := multipart.NewWriter(body)\n\n\tpart, err := writer.CreateFormFile(\u0026#34;csvFile\u0026#34;, fileName)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\t_, err = io.Copy(part, file)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\n    contentType := writer.FormDataContentType()\n    fmt.Println(contentType)\n\n\twriter.Close()\n\n\tresp, err := http.Post(apiURL, contentType, body)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tdefer resp.Body.Close()\n\n\tfmt.Println(\u0026#34;Status Code:\u0026#34;, resp.StatusCode)\n\n\trespBody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\ttoken := ResponseFile{}\n\tjson.Unmarshal(respBody, \u0026amp;token)\n\tfmt.Println(token)\n\tfmt.Println(token.Files[fileName])\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;multipart\/form-data; boundary=7e0eacfff890be395eba19c70415c908124b503a56f23ebeec0ab3c665ca\n\n\n--619671ea2c0aa47ca6664a7cda422169d73f3b8a089c659203f5413d03de\nContent-Disposition: form-data; name=\u0026#34;csvFile\u0026#34;; filename=\u0026#34;sample.csv\u0026#34;\nContent-Type: application\/octet-stream\n\nUser,City,Age,Country\nAlex Smith,Los Angeles,20,USA\nJohn Doe,New York,30,USA\nJane Smith,Paris,25,France\nBob Johnson,London,40,UK\n\n--619671ea2c0aa47ca6664a7cda422169d73f3b8a089c659203f5413d03de--\n\n\n\nStatus Code: 200\n\n{map[sample.csv:data:application\/octet-stream;base64,VXNlcixDaXR5LEFnZSxDb3VudHJ5CkFsZXggU21pdGgsTG9zIEFuZ2VsZXMsMjAsVVNBCkpvaG4gRG9lLE5ldyBZb3JrLDMwLFVTQQpKYW5lIFNtaXRoLFBhmlzLDI1LEZyYW5jZQpCb2IgSm9obnNvbixMb25kb24sNDAsVUsK]}\n\ndata:application\/octet-stream;base64,VXNlcixDaXR5LEFnZSxDb3VudHJ5CkFsZXggU21pdGgsTG9zIEFuZ2VsZXMsMjAsVVNBCkpvaG4gRG9lLE5ldyBZb3JrLDMwLFVTQQpKYW5lIFNtaXRoLFBhmlzLDI1LEZyYW5jZQpCb2IgSm9obnNvbixMb25kb24sNDAsVUsK\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, we first read the file \u0026lt;code\u0026gt;sample.csv\u0026lt;\/code\u0026gt; into the \u0026lt;code\u0026gt;file\u0026lt;\/code\u0026gt; object with \u0026lt;a href=\u0026#34;http:\/\/os.Open\u0026#34;\u0026gt;\u0026lt;code\u0026gt;os.Open\u0026lt;\/code\u0026gt;\u0026lt;\/a\u0026gt; method, this will return a reference to the file object or return an error if any arises while opening the file.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Then we create an empty buffer \u0026lt;code\u0026gt;bytes.Buffer\u0026lt;\/code\u0026gt; object which will serve as the body of the post request later as it will get populated with the file contents in the form of \u0026lt;code\u0026gt;multipart\/form-data\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We initialize the \u0026lt;code\u0026gt;Writer\u0026lt;\/code\u0026gt; object with \u0026lt;code\u0026gt;multipart.NewWriter\u0026lt;\/code\u0026gt; method which takes in the empty buffer as the parameter, we parse the \u0026lt;code\u0026gt;body\u0026lt;\/code\u0026gt; as the parameter. The method will return a reference to the \u0026lt;code\u0026gt;multipart.Writer\u0026lt;\/code\u0026gt; object.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;With the \u0026lt;code\u0026gt;Writer\u0026lt;\/code\u0026gt; object we access the \u0026lt;code\u0026gt;CreateFormFile\u0026lt;\/code\u0026gt; method which takes in the \u0026lt;code\u0026gt;fieldName\u0026lt;\/code\u0026gt; as the name of the field, and the \u0026lt;code\u0026gt;fileName\u0026lt;\/code\u0026gt; as the name of the file. The method will return either the part or an error. The \u0026lt;code\u0026gt;part\u0026lt;\/code\u0026gt; in this case, is the reference to the \u0026lt;code\u0026gt;io.Writer\u0026lt;\/code\u0026gt; object that will be used to write the contents from the uploaded file.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Then, we can use the \u0026lt;code\u0026gt;io.Copy\u0026lt;\/code\u0026gt; method to copy the contents from the \u0026lt;code\u0026gt;io.Reader\u0026lt;\/code\u0026gt; object to the \u0026lt;code\u0026gt;io.Writer\u0026lt;\/code\u0026gt; object. The source is the \u0026lt;code\u0026gt;io.Reader\u0026lt;\/code\u0026gt; object and the destination is the \u0026lt;code\u0026gt;io.Writer\u0026lt;\/code\u0026gt; object. The first parameter is however the destination and the second parameter is the source. In the example, we call \u0026lt;code\u0026gt;io.Copy(part, file)\u0026lt;\/code\u0026gt; which will copy the contents of \u0026lt;code\u0026gt;file\u0026lt;\/code\u0026gt; to the \u0026lt;code\u0026gt;part\u0026lt;\/code\u0026gt; buffer.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We get the \u0026lt;code\u0026gt;Content-Type\u0026lt;\/code\u0026gt; by calling the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/mime\/multipart#Writer.FormDataContentType\u0026#34;\u0026gt;Writer.FormDataContentType\u0026lt;\/a\u0026gt; method. This returns us \u0026lt;code\u0026gt;multipart\/form-data; boundary=7e0eacfff890be395eba19c70415c908124b503a56f23ebeec0ab3c665ca\u0026lt;\/code\u0026gt; which will serve the \u0026lt;code\u0026gt;Content-Type\u0026lt;\/code\u0026gt; for the Post request.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We need to make sure we close the \u0026lt;code\u0026gt;Writer\u0026lt;\/code\u0026gt; object with the \u0026lt;code\u0026gt;Close\u0026lt;\/code\u0026gt; method.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We just print the \u0026lt;code\u0026gt;body.String()\u0026lt;\/code\u0026gt; to get a look at what the actual body looks like, we can see there is a form for the file as a \u0026lt;code\u0026gt;form-data\u0026lt;\/code\u0026gt; with keys like \u0026lt;code\u0026gt;Content-Type\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;Content-Disposition\u0026lt;\/code\u0026gt;, etc. The file has the \u0026lt;code\u0026gt;Content-Type\u0026lt;\/code\u0026gt; as \u0026lt;code\u0026gt;application\/octet-stream\u0026lt;\/code\u0026gt; and the actual content is rendered in the output.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The dummy API responds with a 200 status code and also sends the JSON data with the name of the file as the key and the value as the \u0026lt;code\u0026gt;base64\u0026lt;\/code\u0026gt; encoded value of the file contents. This indicates that we were able to upload the file to the server API using a POST request. Well done!\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;I have also included some more examples of POST requests with files \u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/100-days-of-golang\/blob\/main\/web\/methods\/post\/file_2.go\u0026#34;\u0026gt;here\u0026lt;\/a\u0026gt; which extends the above example by taking the encoded values and decoding to get the actual contents of the file back.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;best-practices-for-post-method\u0026#34;\u0026gt;Best Practices for POST method\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Here are some of the best practices for the POST method which are followed to make sure you consume or create the POST request in the most secure, efficient, and graceful way.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;always-close-the-response-body\u0026#34;\u0026gt;Always Close the Response Body\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Ensure that you close the response body after reading from it. Use \u0026lt;code\u0026gt;defer response.Body.Close()\u0026lt;\/code\u0026gt; to automatically close the body when the surrounding function returns. This is crucial for releasing associated resources like network connections or file descriptors. Failure to close the response body can lead to memory leaks, particularly with a large volume of requests. Properly closing the body prevents resource exhaustion and maintains efficient memory usage.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;client-customization\u0026#34;\u0026gt;Client Customization\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Utilize the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#Client\u0026#34;\u0026gt;Client\u0026lt;\/a\u0026gt; struct to customize the HTTP client behavior. By using a custom client, you can set timeouts, headers, user agents, and other configurations without modifying the \u0026lt;code\u0026gt;DefaultClient\u0026lt;\/code\u0026gt; provided by the \u0026lt;code\u0026gt;http\u0026lt;\/code\u0026gt; package. This approach allows for flexibility and avoids repetitive adjustments to the client configuration for each request.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;set-content-type-appropriately\u0026#34;\u0026gt;Set Content-Type Appropriately\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Ensure that you set the \u0026lt;code\u0026gt;Content-Type\u0026lt;\/code\u0026gt; header according to the request payload. Correctly specifying the Content-Type is crucial for the server to interpret the request payload correctly. Failing to set the Content-Type header accurately may result in the server rejecting the request. Always verify and match the Content-Type header with the content being sent in the POST request to ensure smooth communication with the server.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;reference\u0026#34;\u0026gt;Reference\u0026lt;\/h2\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/www.postman.com\/postman\/workspace\/postman-answers\/documentation\/13455110-00378d5c-5b08-4813-98da-bc47a2e6021d\u0026#34;\u0026gt;Postman POST API\u0026lt;\/a\u0026gt; (For POST request with file upload)\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http\u0026#34;\u0026gt;Golang net\/http Package\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;That\u0026#39;s it from this post of the series, a post on the POST method in golang :)\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We have covered topics like creating basic post requests, Marshalling golang types into JSON format, parsing form data, sending a POST request with files, and best practices for the POST method. Hope you found this article helpful. If you have any queries, questions, or feedback, please let me know in the comments or on my social handles.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "golang-web-post-method";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Golang Web: POST Method</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2024-03-10 20:15:00">2024-03-10 20:15:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/100-days-of-golang" class="series-link">📖 100-days-of-golang</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>In this section of the series, we will be exploring how to send a <code>POST</code> HTTP request in golang. We will understand how to send a basic POST request, create an HTTP request, and parse json, structs into the request body, add headers, etc in the following sections of this post. We will understand how to marshal the golang struct/types into JSON format, send files in the request, and handle form data with examples of each in this article. Let's answer a few questions first.</p>
+<h2 id="what-is-a-post-request">What is a POST request?</h2>
+<p>POST method is a type of request that is used to send data to a server(a machine on the internet).</p>
+<p>Imagine you are placing an order at a restaurant. With a GET request, it would be like asking the waiter, &quot;What kind of pizza do you have?&quot; The waiter would respond by telling you the menu options (the information retrieved from the server).</p>
+<p>However, a POST request is more like giving your completed order to the waiter. You tell them the specific pizza you want, its size, and any additional toppings (the data you send). The waiter then takes this information (POST request) back to the kitchen (the server) to process it (fulfill your order).</p>
+<p>In the world of web development, POST requests are often used for things like:</p>
+<p>Submitting forms (e.g., contact forms, login forms) Uploading files (e.g., photos, videos) Creating new accounts Sending data to be processed (e.g., online purchases)</p>
+<p>Here's an example of what the POST request might look like in this scenario:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">nginx</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-nginx">POST /api/order HTTP/1.1
+Host: example.com
+Content-Type: application/json
+Content-Length: 123
+
+{
+    "userID": 123,
+    "orderID": 456,
+    "items": [
+        {
+            "itemID": 789,
+            "name": "Pizza",
+            "quantity": 2
+        },
+        {
+            "itemID": 999,
+            "name": "Burger",
+            "quantity": 1
+        }
+    ]
+}
+</code></pre></div><p>In this example:</p>
+<ul>
+<li>The <code>POST</code> method is used to send data to the server.</li>
+<li>The <code>/api/order</code> is the endpoint of the server.</li>
+<li>The <code>application/json</code> is the content type of the request.</li>
+<li>The <code>123</code> is the content length of the request.</li>
+<li>The <code>{&quot;userID&quot;: 123, &quot;orderID&quot;: 456, &quot;items&quot;: [{&quot;itemID&quot;: 789, &quot;name&quot;: &quot;Pizza&quot;, &quot;quantity&quot;: 2}, {&quot;itemID&quot;: 999, &quot;name&quot;: &quot;Burger&quot;, &quot;quantity&quot;: 1}]}</code> is the body of the request.</li>
+</ul>
+<h2 id="why-the-need-for-a-post-request">Why the need for a POST request?</h2>
+<p>In the world of HTTP requests, we use the POST method to securely send data from a client (like a user's browser) to a server. This is crucial because the GET method, while convenient for retrieving data, has limitations:</p>
+<p>Imagine you are in registering for an event via Google form, you type in your details on the webpage like name, email, address, phone number, and other personal details. If the website/app was using the <code>GET</code> method to send the request to register or do any other authentication/privacy-related requests, it could expose the data in the URL itself. It would be something along the lines <a href="https://form.google.com/register/%3Cform-name%3E-%3Cid%3E/?name=John&amp;phone_number=1234567890"><code>https://form.google.com/register/&lt;form-name&gt;-&lt;id&gt;/?name=John&amp;phone_number=1234567890</code></a>, if a user maliciously sniffs into your network and inspects the URL, your data will be exposed. That is the reason we need <code>POST</code> a method.</p>
+<h2 id="how-a-post-method-works">How a POST method works?</h2>
+<p>A <a href="https://www.rfc-editor.org/rfc/rfc9110#POST">POST</a> request is used to send data to a server to create or update(there is a separate method for updating) a resource. The client(browser/other APIs) sends a POST request to the server's API endpoint with the data in the request body. This data can be in formats like JSON, XML, or form data. The server processes the POST request, validates and parses the data in the request body, makes any changes or creates resources based on that data, and returns a response. The response would contain a status code indicating the success or failure of the operation and may contain the newly created or updated resource in the response body. The client must check the response status code to verify the outcome and process the response accordingly. Unlike GET, POST can create new resources on the server. The body of a POST contains the data for creation while the URL identifies the resource to be created. Overall, POST transfers data to the server for processing, creation or updating of resources.</p>
+<p>The status code is usually <code>201</code> indicating the resource is successfully created or <code>200</code> for just indicating success.</p>
+<p>Some common steps for creating and sending a POST request as a developer include:</p>
+<ul>
+<li>
+<p>Defining the API endpoint</p>
+</li>
+<li>
+<p>Clarifying the data format (json, language native objects, xml , text, form-data, etc)</p>
+</li>
+<li>
+<p>Converting / Marshalling the data</p>
+</li>
+<li>
+<p>Attaching header for <code>Content-Type</code> as key and value as the format of the data type (e.g. <code>application/json</code> for json)</p>
+</li>
+<li>
+<p>Sending the request</p>
+</li>
+</ul>
+<p>The above steps are general for creating and sending a POST request, they are not specific to Golang. For golang specific steps, we need to dive a bit deeper, let's get started.</p>
+<h2 id="basic-post-method-in-golang">Basic POST method in Golang</h2>
+<p>To send a POST request in golang, we need to use the <code>http</code> package. The <code>http</code> package has the <code>Post</code> method, which takes in 3 parameters, namely the URL, the Content-Type, and the Body. The body can be <code>nil</code> if the URL endpoint doesn't necessarily require a body. The <code>Content-Type</code> is the string, since we are just touching on how the Post request is constructed, we will see what the <code>Content-Type</code> string value should be in the later sections.</p>
+<blockquote>
+<p><a href="http://http.Post">http.Post</a>(URL, Content-Type, Body)</p>
+</blockquote>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	apiURL := "https://reqres.in/api/users"
+
+	// POST request
+	resp, err := http.Post(apiURL, "", nil)
+    // ideally the Content-Type header should be set to the relevant format
+	// resp, err := http.Post(apiURL, "application/json", nil)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(resp.StatusCode)
+    fmt.Println(resp)
+	defer resp.Body.Close()
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">
+$ go run main.go
+
+201
+&{
+    201 Created
+    201
+    HTTP/2.0
+    2
+    0
+    map[
+        Access-Control-Allow-Origin:[*]
+        Cf-Cache-Status:[DYNAMIC]
+        Cf-Ray:[861cd9aec8223e4b-BOM]
+        Content-Length:[50]
+        Content-Type:[application/json; charset=utf-8]
+        Date:[Sat, 09 Mar 2024 17:40:28 GMT]
+        Server:[cloudflare]
+        ...
+        ...
+        ...
+        X-Powered-By:[Express]
+    ]
+    {0xc00017c180}
+    50
+    []
+    false
+    false
+    map[]
+    0xc000156000
+    0xc00012a420
+}
+</code></pre></div><p>The above code is sending the <code>POST</code> request to the <a href="https://reqres.in/api/users"><code>https://reqres.in/api/users</code></a> endpoint with an empty body and no specific format for <code>Content-Type</code> header. The response is according to the <a href="https://pkg.go.dev/net/http#Response">Response</a> structure. We can see we got <code>201</code> status, which indicates the server received the POST request successfully, the API is a dummy api, so we don't care about the data we are processing, we are just using the API as a placeholder for sending the POST request.</p>
+<p>We can use <code>map[string]interface{}</code> it to pass the data in the request body. The <code>json.Marshal</code> method is used to convert the map into JSON format. We will look into the details shortly in the next few examples.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
+func main() {
+    apiURL := "https://reqres.in/api/users"
+    bodyMap := map[string]interface{}{
+        "name": "morpheus",
+        "job": "leader",
+    }
+
+    requestBody, err := json.Marshal(bodyMap)
+    if err != nil {
+        panic(err)
+    }
+    body := bytes.NewBuffer(requestBody)
+
+    resp, err := http.Post(apiURL, "application/json", body)
+    if err != nil {
+        panic(err)
+    }
+    fmt.Println(resp.StatusCode)
+    defer resp.Body.Close()
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+
+201
+</code></pre></div><p>The above code sends the <code>POST</code> request to the <a href="https://reqres.in/api/users"><code>https://reqres.in/api/users</code></a> endpoint with the data in the request body in JSON format.</p>
+<h2 id="creating-a-post-request-in-golang">Creating a POST request in Golang</h2>
+<p>We can construct the POST request with the <a href="https://pkg.go.dev/net/http#NewRequest">NewRequest</a> method. The method takes in 3 parameters, namely the <code>method</code> (e.g. <code>POST</code>, <code>GET</code>), the <code>URL</code> and the <code>body</code> (if there is any). We can then add extra information to the headers or the Request object after constructing the basic HTTP <a href="https://pkg.go.dev/net/http#Request">Request</a> object.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	apiURL := "https://reqres.in/api/users"
+
+	req, err := http.NewRequest(http.MethodPost, apiURL, nil)
+	if err != nil {
+		panic(err)
+	}
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(resp.StatusCode)
+	//fmt.Println(resp)
+	defer resp.Body.Close()
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+
+201
+</code></pre></div><p>In the above example, we have created an HTTP Request as the <code>POST</code> method, with <a href="https://reqres.in/api/users"><code>https://reqres.in/api/users</code></a> as the URL, and no body. This constructs an HTTP Request object, which can be sent as the parameter to the <a href="http://http.DefaultClient.Do">http.DefaultClient.Do</a> method, which is the default client for the request we sent in the earlier examples as <code>http.Get</code> or <a href="http://http.Post"><code>http.Post</code></a> methods. We can implement a custom client as well, and then apply <code>Do</code> the method with the request parameters. The <code>Do</code> method returns the <code>Request</code> object or the <code>error</code> if any.</p>
+<p>More on the customizing Client will be explained in a separate post in the series.</p>
+<p>The response is also in the same format as the <a href="https://pkg.go.dev/net/http#Response">Response</a> structure that we have seen earlier. This section of the series aims to construct a post request, and not to parse the response, we have already understood the parsing of the response in the <a href="https://www.meetgor.com/golang-web-get-method/#?:~:text=Parsing%20the%20JSON%20body%20with%20structs">Get method</a> section of the series.</p>
+<h3 id="parsing-objects-to-json-for-post-method-request">Parsing objects to JSON for POST method request</h3>
+<p>We might have a golang object that we want to send as a body to an API in the POST request, for that we need to convert the golang struct object to JSON. We can do this by using the <a href="https://pkg.go.dev/encoding/json#Marshal">Marshal</a> or the <a href="https://pkg.go.dev/encoding/json#Encoder.Encode">Encode</a> method for serialization of the golang struct object to JSON.</p>
+<h4 id="using-marshal-method">Using Marshal method</h4>
+<p>Marshaling is the process of converting data from a data structure into a format suitable for transmission over a network or for storage. It's commonly used to convert native objects in a programming language into a serialized format, typically a byte stream, that can be transmitted or stored efficiently. You might get a question here, what is the difference between <code>Marshalling</code> and <code>Serialization</code>? Well, Serialization, is a broader term that encompasses marshalling. It refers to the process of converting an object or data structure into a format that can be stored or transmitted and later reconstructed into the original object. Serialization may involve converting data into byte streams, XML, JSON, or other formats. So, in summary, marshaling specifically deals with converting native objects into a format suitable for transmission, while serialization encompasses the broader process of preparing data for storage or transmission.</p>
+<p>The <code>json</code> package has the <a href="https://pkg.go.dev/encoding/json#Marshal">Marshal</a> method that converts the golang object into JSON. The <code>Marshal</code> method takes in a parameter as the struct object with type <code>any</code> and returns a byte slice <code>[]byte</code> and error (if any).</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
+type User struct {
+	Name   string `json:"name"`
+	Salary int    `json:"salary"`
+	Age    int    `json:"age"`
+}
+
+func main() {
+	user := User{
+		Name:   "Alice",
+		Salary: 50000,
+		Age:    25,
+	}
+	apiURL := "https://dummy.restapiexample.com/api/v1/create"
+
+	// marshalling process
+	// converting Go specific data structure/types to JSON
+	bodyBytes, err := json.Marshal(user)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(bodyBytes))
+
+	// reading json into a buffer/in-memory
+	body := bytes.NewBuffer(bodyBytes)
+
+	// post request
+	resp, err := http.Post(apiURL, "application/json", body)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(resp.StatusCode)
+	defer resp.Body.Close()
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+
+{"name":"Alice","salary":50000,"age":25}
+200
+</code></pre></div><p>In the above example, we have created a struct <code>User</code> with fields <code>Name</code>, <code>Salary</code>, and <code>Age</code>, the json tags will help label each key in JSON with the tag for the respective fields in the struct. We create an object <code>user</code> of a type <code>User</code> with the values as <code>Alice</code>, <code>50000</code>, and <code>25</code> respectively.</p>
+<p>We call the <code>json.Marshal</code> method with the parameter <code>user</code> that represents the struct object <code>User</code>, the method returns a slice of bytes, or an error either or both could be nil. If we try to see the stringified representation of the byte slice, we can see something like <code>{&quot;name&quot;:&quot;Alice&quot;,&quot;salary&quot;:50000,&quot;age&quot;:25}</code> which is a JSON string for the user struct. We can't parse the byte slice as the body in the POST request, we need the <code>io.Reader</code> object, so we can load the byte slice <code>bodyBytes</code> into a buffer and parse that as a body for the POST request.</p>
+<p>We then send a <code>POST</code> request to the endpoint <a href="https://dummy.restapiexample.com/api/v1/create"><code>https://dummy.restapiexample.com/api/v1/create</code></a> with the content type as <code>application/json</code> and with the body as <code>body</code> which was a <code>io.Reader</code> object as an in-memory buffer.</p>
+<p>In brief, we can summarize the marshaling of the golang object into JSON with <code>Marshal</code> function as the following steps:</p>
+<ul>
+<li>
+<p>Defining the structure as per the request body</p>
+</li>
+<li>
+<p>Creating the struct object for parsing the data as body to the request</p>
+</li>
+<li>
+<p>Calling the <code>json.Marshal</code> function to convert the object to JSON (parameter as the struct object <code>any</code> type)</p>
+</li>
+<li>
+<p>Loading the byte slice into a buffer with <code>bytes.NewBuffer()</code></p>
+</li>
+<li>
+<p>Sending the POST request to the endpoint with the body as the <code>io.Reader</code> object and content type as <code>application/json</code></p>
+</li>
+</ul>
+<h4 id="using-encode-method">Using Encode method</h4>
+<p>We can even use the <a href="https://pkg.go.dev/encoding/json#Encoder.Encode">Encoder.Encode</a> method to parse the golang struct object to JSON. Firstly, we should have the struct defined as per the request body that the particular API takes, we can make use of the json tags, omitempty, omit(-) options to make the marshaling process work accordingly. We can then create the object of that particular struct with the data we require to be created as a resource with the POST request on that API service.</p>
+<p>Thereafter we can create an empty buffer object with <a href="https://pkg.go.dev/bytes#Buffer">bytes.Buffer</a>, this buffer object would be used to initialize the <a href="https://pkg.go.dev/encoding/json#Encoder">Encoder</a> object with the <a href="https://pkg.go.dev/encoding/json#NewEncoder">NewEncoder</a> method. This would give access to the <a href="https://pkg.go.dev/encoding/json#Encoder.Encode">Encode</a> method, which is used to take in the struct object (<code>any</code> type) and this will populate the buffer we initialized with the <code>NewEncoder</code> method.</p>
+<p>Later we can access that buffer to parse it to the Post request as the body. Let's understand it better with an example.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
+type User struct {
+	Name   string
+	Salary int
+	Age    int
+}
+
+func main() {
+	user := User{
+		Name:   "Alice",
+		Salary: 50000,
+		Age:    25,
+	}
+	apiURL := "https://dummy.restapiexample.com/api/v1/create"
+
+	var bodyBuffer bytes.Buffer
+	var encoder = json.NewEncoder(&bodyBuffer)
+	err := encoder.Encode(user)
+    if err != nil {
+        panic(err)
+    }
+
+	resp, err := http.Post(apiURL, "application/json", &bodyBuffer)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(resp.StatusCode)
+	fmt.Println(resp)
+	defer resp.Body.Close()
+}
+</code></pre></div><p>Over here, we have created a struct <code>User</code> with fields <code>Name</code>, <code>Salary</code>, and <code>Age</code>, we initialize the <code>user</code> as the object of the <code>User</code> struct. Then we create a buffer <code>bodyBuffer</code> of type <code>bytes.Buffer</code> this is the actual buffer that we will send as the body. Further, we initialize the <code>Encoder</code> object as <code>encoder</code> with the <code>json.NewEncoder</code> method by parsing the reference of <code>bodyBuffer</code> as the parameter. Since <code>bytes.Buffer</code> implements the <code>io.Writer</code> interface, we can pass the <code>bodyBuffer</code> to the <code>NewEncoder</code> method. This will create the <code>Encoder</code> object which in turn will give us access to the <code>Encode</code> method, where we will parse the struct instance and it will populate the buffer with which we initialized the <code>Encoder</code> object earlier.</p>
+<p>Now, we have the <code>encode</code> object, this gives us the access to <code>Encode</code> method, we call the <code>Encode</code> method with the parameter of <code>user</code> which is a User struct instance/object. The Encode method will populate the <code>bodyBuffer</code> object or it will result in an error if anything goes wrong (the data is incorrectly parsed or is not in the required format).</p>
+<p>We can call the <code>Post</code> method with the initialized URL, the <code>Content-Type</code> as <code>application/json</code> since we have converted the struct instance to JSON object, and the body as the reference to the buffer as <code>&amp;bodyBuffer</code></p>
+<p>So, the steps for parsing struct instances into JSON objects with the <code>Encoder.Encode</code> method is as follows:</p>
+<ul>
+<li>
+<p>Defining the structure as per the request body</p>
+</li>
+<li>
+<p>Creating the struct object for parsing the data as body to the request</p>
+</li>
+<li>
+<p>Creating an empty <code>bytes.Buffer</code> object as an in-memory buffer</p>
+</li>
+<li>
+<p>Initializing the <code>Encoder</code> object with <code>NewEncoder</code> method by parsing the reference of <code>bodyBuffer</code> as the parameter</p>
+</li>
+<li>
+<p>Calling the <code>Encode</code> method with the parameter of struct instance/object</p>
+</li>
+<li>
+<p>Sending the POST request to the endpoint with the content type as <code>application/json</code> and body as the reference to the buffer</p>
+</li>
+</ul>
+<p>The results are the same as the above example just the way we have parsed the struct instance to JSON object is different.</p>
+<h3 id="parsing-json-to-post-request">Parsing JSON to POST request</h3>
+<p>We have seen how we can parse golang struct instances to JSON and then send the post request, but what if we had the JSON string already with us, and we want to send the request? Well, that's much easier, right? We already have parsed the JSON string to the Post request by loading the slice of bytes into a buffer, so we just need to convert the string to a slice of bytes which is quite an easy task, and then load that byte slice to the buffer.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"bytes"
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	// dummy api
+	apiURL := "https://dummy.restapiexample.com/api/v1/create"
+
+	// json data
+	data := `{
+        "name": "Alice",
+        "job": "Teacher"
+    }`
+	body := bytes.NewBuffer([]byte(data))
+
+	// POST request
+	resp, err := http.Post(apiURL, "application/json", body)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(resp.StatusCode)
+	fmt.Println(resp)
+	defer resp.Body.Close()
+}
+</code></pre></div><p>In the example above, we already have a JSON string <code>data</code> with keys as <code>name</code> and <code>job</code> but it is not JSON, it is a stringified JSON. We can convert the stringified JSON to a slice of bytes using the <code>[]byte</code> function. Further, we have used the <code>bytes.NewBuffer</code> method to load the byte slice into an <code>io.Reader</code> object. This object returned by the <code>bytes.NewBuffer</code> will serve as the body for the POST request.</p>
+<h3 id="parsing-json-to-objects-in-golang-from-post-method-response">Parsing JSON to objects in Golang from POST method response</h3>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+)
+
+type User struct {
+	Name   string `json:"name"`
+	Salary int    `json:"salary"`
+	Age    string `json:"age"`
+	ID     int    `json:"id,omitempty"`
+}
+
+type UserResponse struct {
+	Status string `json:"status"`
+	Data   User   `json:"data"`
+}
+
+func main() {
+	user := User{
+		Name:   "Alice",
+		Salary: 50000,
+		Age:    "25",
+	}
+	apiURL := "https://dummy.restapiexample.com/api/v1/create"
+
+	// marshalling process
+	// converting Go specific data structure/types to JSON
+	bodyBytes, err := json.Marshal(user)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(bodyBytes))
+
+	// reading json into a buffer/in-memory
+	body := bytes.NewBuffer(bodyBytes)
+
+	// post request
+	resp, err := http.Post(apiURL, "application/json", body)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(resp.StatusCode)
+	fmt.Println(resp)
+	defer resp.Body.Close()
+
+	// Read response body
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	// unmarshalling process
+	// converting JSON to Go specific data structure/types
+	var userResponse UserResponse
+	if err := json.Unmarshal(respBody, &userResponse); err != nil {
+		panic(err)
+	}
+	fmt.Println(userResponse)
+	fmt.Println(userResponse.Data)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">nginx</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-nginx">
+{success {Alice 50000 25 3239}}
+{Alice 50000 25 577}
+</code></pre></div><p>The above example is a POST request with a struct instance being loaded as a JSON string and then sent as a buffer to the API endpoint, it also reads the response body with a specific structure <code>UserResponse</code> and unmarshalled the <code>resp.Body</code> from the <code>io.Reader</code> as <code>respBody</code> and then loads into <code>userResponse</code> object. This example gives an entire process of what we have understood in the JSON data parsing for a POST request.</p>
+<h3 id="sending-form-data-in-a-post-request">Sending Form data in a POST request</h3>
+<p>We can also send data to a POST request in the form of a form, the form which we use in the HTML. Golang has a <code>net/url</code> package to parse the form data. The form data is sent in the <code>application/x-www-form-urlencoded</code> format.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"net/url"
+	"strings"
+)
+
+type ResponseLogin struct {
+	Token string `json:"token"`
+}
+
+func main() {
+	// dummy api
+	apiURL := "https://reqres.in/api/login"
+
+	// Define form data
+	formData := url.Values{}
+	formData.Set("email", "eve.holt@reqres.in")
+	formData.Set("password", "cityslicka")
+
+	// Encode the form data
+	fmt.Println(formData.Encode())
+	reqBody := strings.NewReader(formData.Encode())
+	fmt.Println(reqBody)
+
+	// Make a POST request with form data
+	resp, err := http.Post(apiURL, "application/x-www-form-urlencoded", reqBody)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	// Print response status code
+	fmt.Println("Status Code:", resp.StatusCode)
+
+	// Read response body
+	respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        panic(err)
+    }
+	token := ResponseLogin{}
+
+	json.Unmarshal(respBody, &token)
+	fmt.Println(token)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+
+email=eve.holt%40reqres.in&password=cityslicka
+&{email=eve.holt%40reqres.in&password=cityslicka 0 -1}
+Status Code: 200
+{QpwL5tke4Pnpja7X4}
+</code></pre></div><p>In the above example, we set a <code>formData</code> with the values of <code>email</code> and <code>password</code> which are <code>url.Values</code> object. The <code>url.Values</code> the object is used to store the key-value pairs of the form data. The <code>formData</code> is encoded with the <code>url.Encode</code> method, We load the encoded string to a <code>buffer</code> with <code>strings.NewReader</code> which implements the <code>io.Reader</code> interface, so that way we can pass that object as the body to the post request.</p>
+<p>We send the <code>POST</code> request to the endpoint <a href="https://reqres.in/api/login"><code>https://reqres.in/api/login</code></a> with the content type as <code>application/x-www-form-urlencoded</code> and with the body as <code>reqBody</code> which implements the <code>io.Reader</code> interface as an in-memory buffer. The response from the request is read into the buffer with <code>io.ReadAll</code> method and we can <code>Unmarshal</code> the stream of bytes as a buffer into the <code>ResponseLogin</code> struct object.</p>
+<p>The output shows the <code>formData</code> as encoded string <code>email=eve.holt%</code><a href="http://40reqres.in"><code>40reqres.in</code></a><code>&amp;password=cityslicka</code> as <code>@</code> is encoded to <code>%40</code>, then we wrap the <code>formData</code> in a <code>strings.NewReader</code> object which is a buffer that implements <code>io.Reader</code> interface, hence we can see the result as the object. The status code for the request is <code>200</code> indicating the server received the <code>form-data</code> in the body and upon unmarshalling, we get the token as a response to the POST request which was a dummy login API.</p>
+<p>This way we have parsed the form-data to the body of a POST request.</p>
+<h3 id="sending-file-in-a-post-request">Sending File in a POST request</h3>
+<p>We have covered, parsing text, JSON, and form data, and now we need to move into sending files in a POST request. We can use the <code>multipart</code> package to parse files into the request body and set appropriate headers for reading the file from the API services.</p>
+<p>We first read the file contents <a href="http://os.Open"><code>os.Open</code></a> which returns a reference to the <code>file</code> object or an error. We create an empty <code>bytes.Buffer</code> object as <code>body</code> which will be populated later. The <a href="https://pkg.go.dev/mime/multipart#NewWriter">multipart.NewWriter</a> method takes in the <code>io.Writer</code> object which will be the <code>body</code> as it is an <code>bytes.Buffer</code> object that implements the <code>io.Writer</code> interface. This will initialize the <a href="https://pkg.go.dev/mime/multipart#Writer">Writer</a> object in the <code>multipart</code> package.</p>
+<p>We create a <code>form-field</code> in the <code>Writer</code> object with the <a href="https://pkg.go.dev/mime/multipart#Writer.CreateFormFile">CreateFormFile</a> method, which takes in the <code>fieldName</code> as the name of the field, and the <code>fileName</code> as the name of the file which will be read later in the multipart form. The method returns either the part or the error. The <code>part</code> is an object that implements the <code>io.Writer</code> interface.</p>
+<p>Since we have stored the file contents in the <code>file</code> object, we copy the contents into the <code>form-field</code> with the <a href="https://pkg.go.dev/io#Copy">Copy</a> method. Since the <code>part</code> return from the <code>CreateFormFile</code> was implementing the <code>io.Writer</code> interface, we can use it to Copy the contents from source to destination. The source is the <code>io.Reader</code> object and the destination is the <code>io.Writer</code> object, the destination for the <code>Copy</code> method is the first parameter, the source is the second parameter.</p>
+<p>This Copy method will populate the buffer initialized earlier in the <code>NewWriter</code> method. This will give us a buffer that has the file contents in it. We can pass this buffer to the POST request with the <code>body</code> parameter. We also need to make sure we close the <code>Writer</code> object after copying the contents of the file. We can extract the type of file which will serve as the <code>Content-Type</code> of the request.</p>
+<p>Let's clear the explanation with an example.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io"
+	"mime/multipart"
+	"net/http"
+	"os"
+)
+
+type ResponseFile struct {
+	Files map[string]string `json:"files"`
+}
+
+func main() {
+	apiURL := "http://postman-echo.com/post"
+	fileName := "sample.csv"
+
+	file, err := os.Open(fileName)
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+
+	part, err := writer.CreateFormFile("csvFile", fileName)
+	if err != nil {
+		panic(err)
+	}
+	_, err = io.Copy(part, file)
+	if err != nil {
+		panic(err)
+	}
+
+    contentType := writer.FormDataContentType()
+    fmt.Println(contentType)
+
+	writer.Close()
+
+	resp, err := http.Post(apiURL, contentType, body)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	fmt.Println("Status Code:", resp.StatusCode)
+
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	token := ResponseFile{}
+	json.Unmarshal(respBody, &token)
+	fmt.Println(token)
+	fmt.Println(token.Files[fileName])
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">multipart/form-data; boundary=7e0eacfff890be395eba19c70415c908124b503a56f23ebeec0ab3c665ca
+
+
+--619671ea2c0aa47ca6664a7cda422169d73f3b8a089c659203f5413d03de
+Content-Disposition: form-data; name="csvFile"; filename="sample.csv"
+Content-Type: application/octet-stream
+
+User,City,Age,Country
+Alex Smith,Los Angeles,20,USA
+John Doe,New York,30,USA
+Jane Smith,Paris,25,France
+Bob Johnson,London,40,UK
+
+--619671ea2c0aa47ca6664a7cda422169d73f3b8a089c659203f5413d03de--
+
+
+
+Status Code: 200
+
+{map[sample.csv:data:application/octet-stream;base64,VXNlcixDaXR5LEFnZSxDb3VudHJ5CkFsZXggU21pdGgsTG9zIEFuZ2VsZXMsMjAsVVNBCkpvaG4gRG9lLE5ldyBZb3JrLDMwLFVTQQpKYW5lIFNtaXRoLFBhmlzLDI1LEZyYW5jZQpCb2IgSm9obnNvbixMb25kb24sNDAsVUsK]}
+
+data:application/octet-stream;base64,VXNlcixDaXR5LEFnZSxDb3VudHJ5CkFsZXggU21pdGgsTG9zIEFuZ2VsZXMsMjAsVVNBCkpvaG4gRG9lLE5ldyBZb3JrLDMwLFVTQQpKYW5lIFNtaXRoLFBhmlzLDI1LEZyYW5jZQpCb2IgSm9obnNvbixMb25kb24sNDAsVUsK
+</code></pre></div><p>In the above example, we first read the file <code>sample.csv</code> into the <code>file</code> object with <a href="http://os.Open"><code>os.Open</code></a> method, this will return a reference to the file object or return an error if any arises while opening the file.</p>
+<p>Then we create an empty buffer <code>bytes.Buffer</code> object which will serve as the body of the post request later as it will get populated with the file contents in the form of <code>multipart/form-data</code>.</p>
+<p>We initialize the <code>Writer</code> object with <code>multipart.NewWriter</code> method which takes in the empty buffer as the parameter, we parse the <code>body</code> as the parameter. The method will return a reference to the <code>multipart.Writer</code> object.</p>
+<p>With the <code>Writer</code> object we access the <code>CreateFormFile</code> method which takes in the <code>fieldName</code> as the name of the field, and the <code>fileName</code> as the name of the file. The method will return either the part or an error. The <code>part</code> in this case, is the reference to the <code>io.Writer</code> object that will be used to write the contents from the uploaded file.</p>
+<p>Then, we can use the <code>io.Copy</code> method to copy the contents from the <code>io.Reader</code> object to the <code>io.Writer</code> object. The source is the <code>io.Reader</code> object and the destination is the <code>io.Writer</code> object. The first parameter is however the destination and the second parameter is the source. In the example, we call <code>io.Copy(part, file)</code> which will copy the contents of <code>file</code> to the <code>part</code> buffer.</p>
+<p>We get the <code>Content-Type</code> by calling the <a href="https://pkg.go.dev/mime/multipart#Writer.FormDataContentType">Writer.FormDataContentType</a> method. This returns us <code>multipart/form-data; boundary=7e0eacfff890be395eba19c70415c908124b503a56f23ebeec0ab3c665ca</code> which will serve the <code>Content-Type</code> for the Post request.</p>
+<p>We need to make sure we close the <code>Writer</code> object with the <code>Close</code> method.</p>
+<p>We just print the <code>body.String()</code> to get a look at what the actual body looks like, we can see there is a form for the file as a <code>form-data</code> with keys like <code>Content-Type</code>, <code>Content-Disposition</code>, etc. The file has the <code>Content-Type</code> as <code>application/octet-stream</code> and the actual content is rendered in the output.</p>
+<p>The dummy API responds with a 200 status code and also sends the JSON data with the name of the file as the key and the value as the <code>base64</code> encoded value of the file contents. This indicates that we were able to upload the file to the server API using a POST request. Well done!</p>
+<p>I have also included some more examples of POST requests with files <a href="https://github.com/Mr-Destructive/100-days-of-golang/blob/main/web/methods/post/file_2.go">here</a> which extends the above example by taking the encoded values and decoding to get the actual contents of the file back.</p>
+<h2 id="best-practices-for-post-method">Best Practices for POST method</h2>
+<p>Here are some of the best practices for the POST method which are followed to make sure you consume or create the POST request in the most secure, efficient, and graceful way.</p>
+<h3 id="always-close-the-response-body">Always Close the Response Body</h3>
+<p>Ensure that you close the response body after reading from it. Use <code>defer response.Body.Close()</code> to automatically close the body when the surrounding function returns. This is crucial for releasing associated resources like network connections or file descriptors. Failure to close the response body can lead to memory leaks, particularly with a large volume of requests. Properly closing the body prevents resource exhaustion and maintains efficient memory usage.</p>
+<h3 id="client-customization">Client Customization</h3>
+<p>Utilize the <a href="https://pkg.go.dev/net/http#Client">Client</a> struct to customize the HTTP client behavior. By using a custom client, you can set timeouts, headers, user agents, and other configurations without modifying the <code>DefaultClient</code> provided by the <code>http</code> package. This approach allows for flexibility and avoids repetitive adjustments to the client configuration for each request.</p>
+<h3 id="set-content-type-appropriately">Set Content-Type Appropriately</h3>
+<p>Ensure that you set the <code>Content-Type</code> header according to the request payload. Correctly specifying the Content-Type is crucial for the server to interpret the request payload correctly. Failing to set the Content-Type header accurately may result in the server rejecting the request. Always verify and match the Content-Type header with the content being sent in the POST request to ensure smooth communication with the server.</p>
+<h2 id="reference">Reference</h2>
+<ul>
+<li>
+<p><a href="https://www.postman.com/postman/workspace/postman-answers/documentation/13455110-00378d5c-5b08-4813-98da-bc47a2e6021d">Postman POST API</a> (For POST request with file upload)</p>
+</li>
+<li>
+<p><a href="https://pkg.go.dev/net/http">Golang net/http Package</a></p>
+</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>That's it from this post of the series, a post on the POST method in golang :)</p>
+<p>We have covered topics like creating basic post requests, Marshalling golang types into JSON format, parsing form data, sending a POST request with files, and best practices for the POST method. Hope you found this article helpful. If you have any queries, questions, or feedback, please let me know in the comments or on my social handles.</p>
+<p>Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/golang-web-get-method" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Golang Web: GET Method</span>
+        </a>
+        
+
+        
+        
+        <a href="/posts/golang-web-put-method" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Golang Web: PUT Method</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-delete-method" class="related-link">
+                <span class="related-post-title">Golang Web: DELETE Method</span>
+                <span class="related-post-date">2025-01-12 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-patch-method" class="related-link">
+                <span class="related-post-title">Golang Web: PATCH Method</span>
+                <span class="related-post-date">2025-01-11 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-5" class="related-link">
+                <span class="related-post-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+                <span class="related-post-date">2024-12-11 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-4" class="related-link">
+                <span class="related-post-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+                <span class="related-post-date">2024-12-09 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-3" class="related-link">
+                <span class="related-post-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+                <span class="related-post-date">2024-12-07 20:45:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

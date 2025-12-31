@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>SQLite SQL: Many to Many Table without RowID | Meet Gor</title>
+    <meta name="title" content="SQLite SQL: Many to Many Table without RowID | Meet Gor">
+    <meta name="description" content="">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="sqlite, sql">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/sqlog/sqlite-many-to-many-table-without-rowid">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/sqlog/sqlite-many-to-many-table-without-rowid">
+    <meta property="og:title" content="SQLite SQL: Many to Many Table without RowID">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="https://meetgor.com/tbicon.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="SQLite SQL: Many to Many Table without RowID">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2025-09-20">
+    <meta property="article:modified_time" content="2025-09-20">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="sqlite">
+    
+    <meta property="article:tag" content="sql">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/sqlog/sqlite-many-to-many-table-without-rowid">
+    <meta name="twitter:title" content="SQLite SQL: Many to Many Table without RowID">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:image" content="https://meetgor.com/tbicon.png">
+    <meta name="twitter:image:alt" content="SQLite SQL: Many to Many Table without RowID">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/sqlog\/sqlite-many-to-many-table-without-rowid"
+        },
+        "headline": "SQLite SQL: Many to Many Table without RowID",
+        "description": "",
+        "datePublished": "2025-09-20",
+        "dateModified": "2025-09-20",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        
+        "keywords": "sqlite, sql",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;many-to-many-relation\u0026#34;\u0026gt;Many to Many Relation\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We saw the basic example of \u0026lt;a href=\u0026#34;https:\/\/www.meetgor.com\/sqlog\/sqlite-many-to-many-relations\/\u0026#34;\u0026gt;Many-To-Many\u0026lt;\/a\u0026gt; Relation in the second last post from this, there we just focused on the concept of the relation and not so much on the structure of the junction table.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s take a look at the schema again:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;CREATE TABLE users (\n    id INTEGER PRIMARY KEY,\n    name TEXT NOT NULL\n);\n\nCREATE TABLE posts (\n    id INTEGER PRIMARY KEY,\n    title TEXT NOT NULL,\n    content TEXT NOT NULL\n);\n\nCREATE TABLE author_post (\n    user_id INTEGER NOT NULL,\n    post_id INTEGER NOT NULL,\n    PRIMARY KEY (user_id, post_id),\n    FOREIGN KEY (user_id) REFERENCES users (id),\n    FOREIGN KEY (post_id) REFERENCES posts (id)\n);\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Let\u0026#39;s now populate the tables.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;-- adding authors\/users\nINSERT INTO users(name) VALUES (\u0026#39;Glauber\u0026#39;), (\u0026#39;Jamie\u0026#39;), (\u0026#39;Pekka\u0026#39;);\n\n-- adding posts written by pekka\nINSERT INTO posts(title, content) VALUES (\u0026#39;Switching to Zig from Rust\u0026#39;, \u0026#39;I love C\u0026#39;);\nINSERT INTO posts(title, content) VALUES (\u0026#39;RAG in SQLite\u0026#39;, \u0026#39;AI first database\u0026#39;);\nINSERT INTO author_post(user_id, post_id) VALUES (3, 1), (3, 2);\n\n-- adding posts written by glauber\nINSERT INTO posts(title, content) VALUES (\u0026#39;Rewriting SQLite\u0026#39;, \u0026#39;We are no more a sqlite-fork\u0026#39;);\nINSERT INTO posts(title, content) VALUES (\u0026#39;Offline Writes in SQLite\u0026#39;, \u0026#39;Lets sync\u0026#39;);\nINSERT INTO author_post(user_id, post_id) VALUES (1, 3), (1, 4);\n\n-- adding a post co-authored by pekka and glauber\nINSERT INTO posts(title, content) VALUES(\u0026#39;Limbo\u0026#39;, \u0026#39;SQLite in Rust\u0026#39;);\nINSERT INTO author_post(user_id, post_id) VALUES (3, 5);\nINSERT INTO author_post(user_id, post_id) VALUES (1, 5);\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This has now populated the following tables:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;SELECT\n    p.id,\n    p.content AS post,\n    GROUP_CONCAT(u.name, \u0026#39;, \u0026#39;) AS authors\nFROM posts p\nJOIN author_post up ON p.id = up.post_id\nJOIN users u ON u.id = up.user_id\nGROUP BY p.id;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This has 5 posts, two written by \u0026lt;code\u0026gt;Pekka\u0026lt;\/code\u0026gt;, two written by \u0026lt;code\u0026gt;Glauber\u0026lt;\/code\u0026gt;, and one co-authored by both \u0026lt;code\u0026gt;Pekka\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;Glauber\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Here\u0026#39;s the SQLog:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;sqlite\u0026gt; CREATE TABLE users (\n    id INTEGER PRIMARY KEY,\n    name TEXT NOT NULL\n);\n\nCREATE TABLE posts (\n    id INTEGER PRIMARY KEY,\n    title TEXT NOT NULL,\n    content TEXT NOT NULL\n);\n\nCREATE TABLE author_post (\n    user_id INTEGER NOT NULL,\n    post_id INTEGER NOT NULL,\n    PRIMARY KEY (user_id, post_id),\n    FOREIGN KEY (user_id) REFERENCES users (id),\n    FOREIGN KEY (post_id) REFERENCES posts (id)\n);\nsqlite\u0026gt; .mode table\nsqlite\u0026gt; INSERT INTO users(name) VALUES (\u0026#39;Glauber\u0026#39;), (\u0026#39;Jamie\u0026#39;), (\u0026#39;Pekka\u0026#39;);\nsqlite\u0026gt; INSERT INTO posts(title, content) VALUES (\u0026#39;Switching to Zig from Rust\u0026#39;, \u0026#39;I love C\u0026#39;);\nINSERT INTO posts(title, content) VALUES (\u0026#39;RAG in SQLite\u0026#39;, \u0026#39;AI first database\u0026#39;);\nSELECT * FROM posts;\n\u002b----\u002b----------------------------\u002b-------------------\u002b\n| id |           title            |      content      |\n\u002b----\u002b----------------------------\u002b-------------------\u002b\n| 1  | Switching to Zig from Rust | I love C          |\n| 2  | RAG in SQLite              | AI first database |\n\u002b----\u002b----------------------------\u002b-------------------\u002b\nsqlite\u0026gt; INSERT INTO posts(title, content) VALUES (\u0026#39;Rewriting SQLite\u0026#39;, \u0026#39;We are no more a sqlite-fork\u0026#39;);\nINSERT INTO posts(title, content) VALUES (\u0026#39;Offline Writes in SQLite\u0026#39;, \u0026#39;Lets sync\u0026#39;);\nSELECT * FROM posts;\n\u002b----\u002b----------------------------\u002b------------------------------\u002b\n| id |           title            |           content            |\n\u002b----\u002b----------------------------\u002b------------------------------\u002b\n| 1  | Switching to Zig from Rust | I love C                     |\n| 2  | RAG in SQLite              | AI first database            |\n| 3  | Rewriting SQLite           | We are no more a sqlite-fork |\n| 4  | Offline Writes in SQLite   | Lets sync                    |\n\u002b----\u002b----------------------------\u002b------------------------------\u002b\nsqlite\u0026gt; INSERT INTO author_post(user_id, post_id) VALUES (1, 3), (1, 4);\nsqlite\u0026gt; INSERT INTO author_post(user_id, post_id) VALUES (3, 1), (3, 2);\nsqlite\u0026gt; INSERT INTO posts(title, content) VALUES(\u0026#39;Limbo\u0026#39;, \u0026#39;SQLite in Rust\u0026#39;);\nsqlite\u0026gt; INSERT INTO author_post(user_id, post_id) VALUES (3, 5);\nINSERT INTO author_post(user_id, post_id) VALUES (1, 5);\nsqlite\u0026gt; SELECT\n    p.id,\n    p.content AS post,\n    GROUP_CONCAT(u.name, \u0026#39;, \u0026#39;) AS authors\nFROM posts p\nJOIN author_post up ON p.id = up.post_id\nJOIN users u ON u.id = up.user_id\nGROUP BY p.id;\n\u002b----\u002b------------------------------\u002b----------------\u002b\n| id |             post             |    authors     |\n\u002b----\u002b------------------------------\u002b----------------\u002b\n| 1  | I love C                     | Pekka          |\n| 2  | AI first database            | Pekka          |\n| 3  | We are no more a sqlite-fork | Glauber        |\n| 4  | Lets sync                    | Glauber        |\n| 5  | SQLite in Rust               | Pekka, Glauber |\n\u002b----\u002b------------------------------\u002b----------------\u002b\nsqlite\u0026gt; SELECT * FROM author_post;\n\u002b---------\u002b---------\u002b\n| user_id | post_id |\n\u002b---------\u002b---------\u002b\n| 1       | 3       |\n| 1       | 4       |\n| 3       | 1       |\n| 3       | 2       |\n| 3       | 5       |\n| 1       | 5       |\n\u002b---------\u002b---------\u002b\n\nsqlite\u0026gt; SELECT rowid, * FROM author_post;\n\u002b-------\u002b---------\u002b---------\u002b\n| rowid | user_id | post_id |\n\u002b-------\u002b---------\u002b---------\u002b\n| 1     | 1       | 3       |\n| 2     | 1       | 4       |\n| 3     | 3       | 1       |\n| 4     | 3       | 2       |\n| 5     | 3       | 5       |\n| 6     | 1       | 5       |\n\u002b-------\u002b---------\u002b---------\u002b\nsqlite\u0026gt;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The interesting part here is this \u0026lt;code\u0026gt;rowid\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;SELECT rowid, * FROM author_post;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This table \u0026lt;code\u0026gt;author_post\u0026lt;\/code\u0026gt; has primary key identified from the combination of the \u0026lt;code\u0026gt;user_id\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;post_id\u0026lt;\/code\u0026gt; column. However, storing \u0026lt;code\u0026gt;rowid\u0026lt;\/code\u0026gt; makes no sense, as it is just redundant, right?\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Why would you not want to have the \u0026lt;code\u0026gt;rowid\u0026lt;\/code\u0026gt;?\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The answer is very naive and subtle, but might impact the database querying if the \u0026lt;code\u0026gt;author_post\u0026lt;\/code\u0026gt; has millions and billions of rows. The rowid space will be wasted for no reason.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Hence, we can avoid creating the rowid using the \u0026lt;code\u0026gt;WITHOUT ROWID\u0026lt;\/code\u0026gt; parameter or option while creating the table.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;DROP TABLE author_post;\n\nCREATE TABLE author_post (\n    user_id INTEGER NOT NULL,\n    post_id INTEGER NOT NULL,\n    PRIMARY KEY (user_id, post_id),\n    FOREIGN KEY (user_id) REFERENCES users (id),\n    FOREIGN KEY (post_id) REFERENCES posts (id)\n) WITHOUT ROWID;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The rest of the commands from inserts to selection and all of the things we saw above will remain the same.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;-- adding authors\/users\nINSERT INTO users(name) VALUES (\u0026#39;Glauber\u0026#39;), (\u0026#39;Jamie\u0026#39;), (\u0026#39;Pekka\u0026#39;);\n\n-- adding posts written by pekka\nINSERT INTO posts(title, content) VALUES (\u0026#39;Switching to Zig from Rust\u0026#39;, \u0026#39;I love C\u0026#39;);\nINSERT INTO posts(title, content) VALUES (\u0026#39;RAG in SQLite\u0026#39;, \u0026#39;AI first database\u0026#39;);\nINSERT INTO author_post(user_id, post_id) VALUES (3, 1), (3, 2);\n\n-- adding posts written by glauber\nINSERT INTO posts(title, content) VALUES (\u0026#39;Rewriting SQLite\u0026#39;, \u0026#39;We are no more a sqlite-fork\u0026#39;);\nINSERT INTO posts(title, content) VALUES (\u0026#39;Offline Writes in SQLite\u0026#39;, \u0026#39;Lets sync\u0026#39;);\nINSERT INTO author_post(user_id, post_id) VALUES (1, 3), (1, 4);\n\n-- adding a post co-authored by pekka and glauber\nINSERT INTO posts(title, content) VALUES(\u0026#39;Limbo\u0026#39;, \u0026#39;SQLite in Rust\u0026#39;);\nINSERT INTO author_post(user_id, post_id) VALUES (3, 5);\nINSERT INTO author_post(user_id, post_id) VALUES (1, 5);\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;However, when you query the \u0026lt;code\u0026gt;author_post\u0026lt;\/code\u0026gt; table, the \u0026lt;code\u0026gt;rowid\u0026lt;\/code\u0026gt; will not be returned as it doesn\u0026#39;t exists.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;SELECT * FROM author_post;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;SELECT rowid, * FROM author_post;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This would return error as the \u0026lt;code\u0026gt;rowid\u0026lt;\/code\u0026gt; doesn\u0026#39;t exists.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We will still need the \u0026lt;code\u0026gt;rowid\u0026lt;\/code\u0026gt; in \u0026lt;code\u0026gt;posts\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;users\u0026lt;\/code\u0026gt; table as those are the \u0026lt;code\u0026gt;PRIMARY KEY\u0026lt;\/code\u0026gt; columns.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Both the tables \u0026lt;code\u0026gt;users\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;posts\u0026lt;\/code\u0026gt; will have \u0026lt;code\u0026gt;rowid\u0026lt;\/code\u0026gt; referenced or aliased as id of their respective columns as we know because of the special case of \u0026lt;code\u0026gt;INTEGER PRIMARY KEY\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;SELECT rowid, _rowid_, * FROM users;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;SELECT rowid, _rowid_, * FROM posts;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Only in the case of \u0026lt;code\u0026gt;author_post\u0026lt;\/code\u0026gt; or any junction table, where the primary key is referenced as a combination of other two foreign keys, we don\u0026#39;t need the \u0026lt;code\u0026gt;rowid\u0026lt;\/code\u0026gt; as the junction table doesn\u0026#39;t have any unique data in it, it is just the mapping of two existing data points\/records in the other two tables in the database.\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "sqlog\/sqlite-many-to-many-table-without-rowid";
+                const type = "sqlog";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>SQLite SQL: Many to Many Table without RowID</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2025-09-20">2025-09-20</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/sqlog">sqlog</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/sqlite">#sqlite</a>
+                
+                <a href="/tags/sql">#sql</a>
+                
+            </div>
+            
+            
+            
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="many-to-many-relation">Many to Many Relation</h2>
+<p>We saw the basic example of <a href="https://www.meetgor.com/sqlog/sqlite-many-to-many-relations/">Many-To-Many</a> Relation in the second last post from this, there we just focused on the concept of the relation and not so much on the structure of the junction table.</p>
+<p>Let's take a look at the schema again:</p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">CREATE TABLE users (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE posts (
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL
+);
+
+CREATE TABLE author_post (
+    user_id INTEGER NOT NULL,
+    post_id INTEGER NOT NULL,
+    PRIMARY KEY (user_id, post_id),
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (post_id) REFERENCES posts (id)
+);
+</code></pre><div class="output"></div></div><p>Let's now populate the tables.</p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">-- adding authors/users
+INSERT INTO users(name) VALUES ('Glauber'), ('Jamie'), ('Pekka');
+
+-- adding posts written by pekka
+INSERT INTO posts(title, content) VALUES ('Switching to Zig from Rust', 'I love C');
+INSERT INTO posts(title, content) VALUES ('RAG in SQLite', 'AI first database');
+INSERT INTO author_post(user_id, post_id) VALUES (3, 1), (3, 2);
+
+-- adding posts written by glauber
+INSERT INTO posts(title, content) VALUES ('Rewriting SQLite', 'We are no more a sqlite-fork');
+INSERT INTO posts(title, content) VALUES ('Offline Writes in SQLite', 'Lets sync');
+INSERT INTO author_post(user_id, post_id) VALUES (1, 3), (1, 4);
+
+-- adding a post co-authored by pekka and glauber
+INSERT INTO posts(title, content) VALUES('Limbo', 'SQLite in Rust');
+INSERT INTO author_post(user_id, post_id) VALUES (3, 5);
+INSERT INTO author_post(user_id, post_id) VALUES (1, 5);
+</code></pre><div class="output"></div></div><p>This has now populated the following tables:</p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">SELECT
+    p.id,
+    p.content AS post,
+    GROUP_CONCAT(u.name, ', ') AS authors
+FROM posts p
+JOIN author_post up ON p.id = up.post_id
+JOIN users u ON u.id = up.user_id
+GROUP BY p.id;
+</code></pre><div class="output"></div></div><p>This has 5 posts, two written by <code>Pekka</code>, two written by <code>Glauber</code>, and one co-authored by both <code>Pekka</code> and <code>Glauber</code>.</p>
+<p>Here's the SQLog:</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>sqlite> CREATE TABLE users (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE posts (
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL
+);
+
+CREATE TABLE author_post (
+    user_id INTEGER NOT NULL,
+    post_id INTEGER NOT NULL,
+    PRIMARY KEY (user_id, post_id),
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (post_id) REFERENCES posts (id)
+);
+sqlite> .mode table
+sqlite> INSERT INTO users(name) VALUES ('Glauber'), ('Jamie'), ('Pekka');
+sqlite> INSERT INTO posts(title, content) VALUES ('Switching to Zig from Rust', 'I love C');
+INSERT INTO posts(title, content) VALUES ('RAG in SQLite', 'AI first database');
+SELECT * FROM posts;
++----+----------------------------+-------------------+
+| id |           title            |      content      |
++----+----------------------------+-------------------+
+| 1  | Switching to Zig from Rust | I love C          |
+| 2  | RAG in SQLite              | AI first database |
++----+----------------------------+-------------------+
+sqlite> INSERT INTO posts(title, content) VALUES ('Rewriting SQLite', 'We are no more a sqlite-fork');
+INSERT INTO posts(title, content) VALUES ('Offline Writes in SQLite', 'Lets sync');
+SELECT * FROM posts;
++----+----------------------------+------------------------------+
+| id |           title            |           content            |
++----+----------------------------+------------------------------+
+| 1  | Switching to Zig from Rust | I love C                     |
+| 2  | RAG in SQLite              | AI first database            |
+| 3  | Rewriting SQLite           | We are no more a sqlite-fork |
+| 4  | Offline Writes in SQLite   | Lets sync                    |
++----+----------------------------+------------------------------+
+sqlite> INSERT INTO author_post(user_id, post_id) VALUES (1, 3), (1, 4);
+sqlite> INSERT INTO author_post(user_id, post_id) VALUES (3, 1), (3, 2);
+sqlite> INSERT INTO posts(title, content) VALUES('Limbo', 'SQLite in Rust');
+sqlite> INSERT INTO author_post(user_id, post_id) VALUES (3, 5);
+INSERT INTO author_post(user_id, post_id) VALUES (1, 5);
+sqlite> SELECT
+    p.id,
+    p.content AS post,
+    GROUP_CONCAT(u.name, ', ') AS authors
+FROM posts p
+JOIN author_post up ON p.id = up.post_id
+JOIN users u ON u.id = up.user_id
+GROUP BY p.id;
++----+------------------------------+----------------+
+| id |             post             |    authors     |
++----+------------------------------+----------------+
+| 1  | I love C                     | Pekka          |
+| 2  | AI first database            | Pekka          |
+| 3  | We are no more a sqlite-fork | Glauber        |
+| 4  | Lets sync                    | Glauber        |
+| 5  | SQLite in Rust               | Pekka, Glauber |
++----+------------------------------+----------------+
+sqlite> SELECT * FROM author_post;
++---------+---------+
+| user_id | post_id |
++---------+---------+
+| 1       | 3       |
+| 1       | 4       |
+| 3       | 1       |
+| 3       | 2       |
+| 3       | 5       |
+| 1       | 5       |
++---------+---------+
+
+sqlite> SELECT rowid, * FROM author_post;
++-------+---------+---------+
+| rowid | user_id | post_id |
++-------+---------+---------+
+| 1     | 1       | 3       |
+| 2     | 1       | 4       |
+| 3     | 3       | 1       |
+| 4     | 3       | 2       |
+| 5     | 3       | 5       |
+| 6     | 1       | 5       |
++-------+---------+---------+
+sqlite>
+</code></pre></div><p>The interesting part here is this <code>rowid</code></p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">SELECT rowid, * FROM author_post;
+</code></pre><div class="output"></div></div><p>This table <code>author_post</code> has primary key identified from the combination of the <code>user_id</code> and <code>post_id</code> column. However, storing <code>rowid</code> makes no sense, as it is just redundant, right?</p>
+<p>Why would you not want to have the <code>rowid</code>?</p>
+<p>The answer is very naive and subtle, but might impact the database querying if the <code>author_post</code> has millions and billions of rows. The rowid space will be wasted for no reason.</p>
+<p>Hence, we can avoid creating the rowid using the <code>WITHOUT ROWID</code> parameter or option while creating the table.</p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">DROP TABLE author_post;
+
+CREATE TABLE author_post (
+    user_id INTEGER NOT NULL,
+    post_id INTEGER NOT NULL,
+    PRIMARY KEY (user_id, post_id),
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (post_id) REFERENCES posts (id)
+) WITHOUT ROWID;
+</code></pre><div class="output"></div></div><p>The rest of the commands from inserts to selection and all of the things we saw above will remain the same.</p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">-- adding authors/users
+INSERT INTO users(name) VALUES ('Glauber'), ('Jamie'), ('Pekka');
+
+-- adding posts written by pekka
+INSERT INTO posts(title, content) VALUES ('Switching to Zig from Rust', 'I love C');
+INSERT INTO posts(title, content) VALUES ('RAG in SQLite', 'AI first database');
+INSERT INTO author_post(user_id, post_id) VALUES (3, 1), (3, 2);
+
+-- adding posts written by glauber
+INSERT INTO posts(title, content) VALUES ('Rewriting SQLite', 'We are no more a sqlite-fork');
+INSERT INTO posts(title, content) VALUES ('Offline Writes in SQLite', 'Lets sync');
+INSERT INTO author_post(user_id, post_id) VALUES (1, 3), (1, 4);
+
+-- adding a post co-authored by pekka and glauber
+INSERT INTO posts(title, content) VALUES('Limbo', 'SQLite in Rust');
+INSERT INTO author_post(user_id, post_id) VALUES (3, 5);
+INSERT INTO author_post(user_id, post_id) VALUES (1, 5);
+</code></pre><div class="output"></div></div><p>However, when you query the <code>author_post</code> table, the <code>rowid</code> will not be returned as it doesn't exists.</p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">SELECT * FROM author_post;
+</code></pre><div class="output"></div></div><div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">SELECT rowid, * FROM author_post;
+</code></pre><div class="output"></div></div><p>This would return error as the <code>rowid</code> doesn't exists.</p>
+<p>We will still need the <code>rowid</code> in <code>posts</code> and <code>users</code> table as those are the <code>PRIMARY KEY</code> columns.</p>
+<p>Both the tables <code>users</code> and <code>posts</code> will have <code>rowid</code> referenced or aliased as id of their respective columns as we know because of the special case of <code>INTEGER PRIMARY KEY</code></p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">SELECT rowid, _rowid_, * FROM users;
+</code></pre><div class="output"></div></div><div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">SELECT rowid, _rowid_, * FROM posts;
+</code></pre><div class="output"></div></div><p>Only in the case of <code>author_post</code> or any junction table, where the primary key is referenced as a combination of other two foreign keys, we don't need the <code>rowid</code> as the junction table doesn't have any unique data in it, it is just the mapping of two existing data points/records in the other two tables in the database.</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/sqlog/sqlite-one-to-one-relations" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">SQLite SQL: One to One Relations</span>
+        </a>
+        
+
+        
+        
+        <a href="/sqlog/sqlite-collate-column-modifier" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">SQLite SQL: Collate Column Modifier</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-15" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 15: Confirmation Phrase Dispatches</span>
+                <span class="related-post-date">2025-12-28 20:30 &#43;0530</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-14" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 14: Ski Resort Paths</span>
+                <span class="related-post-date">2025-12-28 15:30 &#43;0530</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-13" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 13: XML Travel Manifests</span>
+                <span class="related-post-date">2025-12-27 20:30 &#43;0530</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-12" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 12: Archive Flight Records</span>
+                <span class="related-post-date">2025-12-27 15:30 &#43;0530</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-11" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 11: Behavior Score</span>
+                <span class="related-post-date">2025-12-26 15:30 &#43;0530</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

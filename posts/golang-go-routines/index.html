@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Golang: Go Routines and WaitGroups | Meet Gor</title>
+    <meta name="title" content="Golang: Go Routines and WaitGroups | Meet Gor">
+    <meta name="description" content="Exploring Goroutines and WaitGroups in Go, understanding the fundamentals of Go&#39;s concurrency model.">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/posts/golang-go-routines">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/posts/golang-go-routines">
+    <meta property="og:title" content="Golang: Go Routines and WaitGroups">
+    <meta property="og:description" content="Exploring Goroutines and WaitGroups in Go, understanding the fundamentals of Go&#39;s concurrency model.">
+    <meta property="og:image" content="https://meetgor-cdn.pages.dev/golang-030-goroutines.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Golang: Go Routines and WaitGroups">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2023-07-29 15:15:00">
+    <meta property="article:modified_time" content="2023-07-29 15:15:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/posts/golang-go-routines">
+    <meta name="twitter:title" content="Golang: Go Routines and WaitGroups">
+    <meta name="twitter:description" content="Exploring Goroutines and WaitGroups in Go, understanding the fundamentals of Go&#39;s concurrency model.">
+    <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/golang-030-goroutines.png">
+    <meta name="twitter:image:alt" content="Golang: Go Routines and WaitGroups">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/posts\/golang-go-routines"
+        },
+        "headline": "Golang: Go Routines and WaitGroups",
+        "description": "Exploring Goroutines and WaitGroups in Go, understanding the fundamentals of Go\u0027s concurrency model.",
+        "datePublished": "2023-07-29 15:15:00",
+        "dateModified": "2023-07-29 15:15:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        "image": "https:\/\/meetgor-cdn.pages.dev\/golang-030-goroutines.png",
+        "keywords": "go",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;One of the key features that set Go apart from many other languages is its native support for Goroutines - lightweight concurrent functions that can run concurrently and efficiently manage concurrency tasks. Goroutines are an essential aspect of Go\u0026#39;s concurrency model, enabling developers to build highly concurrent and performant applications effortlessly.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In this blog post, we will dive into the world of Goroutines and explore how they work, why they are essential for concurrent programming in Go, and how they can greatly improve the responsiveness and efficiency of your applications. This post will cover go routines and a primer on wait groups, in the next article we will be looking deeply into channels where all these three things can be demonstrated and understood in a better and more useful way.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;concurrency-and-parallelism\u0026#34;\u0026gt;Concurrency and Parallelism\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;This two concepts are quite crucial before diving into the fundamentals of concurreny.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;Concurrency\u0026lt;\/strong\u0026gt; is about dealing with multiple things at once. Concurrent programs can have several processes or threads running simultaneously on a single CPU core by rapidly switching between them (context switching). The threads are interleaved, not necessarily executing at literally the same time. The CPU can switch between these tasks to give the appearance of simultaneous progress.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;Parallelism\u0026lt;\/strong\u0026gt; is about doing multiple things at literally the same time. Parallel programs can execute multiple computations simultaneously on separate CPU cores. The threads actually execute in parallel.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;what-is-a-go-routine\u0026#34;\u0026gt;What is a Go Routine\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;A go routine is a simple lightweight thread managed by the Go runtime. In the simplest of terms, a go routine can be defined as:\u0026lt;\/p\u0026gt;\n\u0026lt;blockquote\u0026gt;\n\u0026lt;p\u0026gt;Go routine is a way to perform multiple tasks within a program, allowing different parts of the program to work simultaneously and make the most out of the resources.\u0026lt;\/p\u0026gt;\n\u0026lt;\/blockquote\u0026gt;\n\u0026lt;p\u0026gt;Also it can be stated as:\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;A goroutine in Golang is a lightweight, independently executing function that runs concurrently with other goroutines within the same address space. In other words, it is a concurrent unit of execution.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Focussing on the word \u0026lt;strong\u0026gt;same address space\u0026lt;\/strong\u0026gt; that will be really critical in the later sections of this article.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;features-of-go-routines\u0026#34;\u0026gt;Features of Go Routines\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Go routines form a key part of Go\u0026#39;s concurrency model. Here are some of the key features of go routines:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;Lightweight Thread\u0026lt;\/strong\u0026gt;:\nA Go routine is often referred to as a lightweight thread.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;Independent Execution\u0026lt;\/strong\u0026gt;:\nGo routines run independently of each other, enabling concurrent execution.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;Managed by Go\u0026lt;\/strong\u0026gt;:\nGo routines are managed by the Go runtime, making them easy to use.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;Low Overhead\u0026lt;\/strong\u0026gt;:\nGo routines have low memory overhead, allowing us to create thousands of them efficiently.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;Communication\u0026lt;\/strong\u0026gt;:\nGo routines can communicate and synchronize data through channels.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;Asynchronous\u0026lt;\/strong\u0026gt;:\nGo routines can execute asynchronously, allowing other parts of the program to continue running.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;Scalability\u0026lt;\/strong\u0026gt;:\nGo routines are the foundation of scalable concurrent programming in Go.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;Unlike threads in other languages, goroutines are cheap and you can easily create thousands or even millions of them in a program.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;example-of-go-routines\u0026#34;\u0026gt;Example of Go Routines\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Creating a go routine is not hard, just add the keyword \u0026lt;code\u0026gt;go\u0026lt;\/code\u0026gt; before the function call and the go runtime will create a new go routine inside the main function or wherever is the context from. Remember, the main function is also a go routine.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;time\u0026#34;\n)\n\nfunc process() {\n\tfmt.Println(\u0026#34;Hello World!\u0026#34;)\n\ttime.Sleep(time.Second)\n}\n\nfunc main() {\n\tstart := time.Now()\n\tgo process()\n\tgo process()\n\tend := time.Now()\n\tduration := end.Sub(start)\n\tfmt.Println(duration)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;scripts\/go-routines on  main via 🐹 v1.20 \n$ go run main.go \n\nHello World!\n15.607µs\n\n\nscripts\/go-routines on  main via 🐹 v1.20 \n$ go run main.go \n\n9.889µs\n\n\nscripts\/go-routines on  main via 🐹 v1.20 \n$ go run main.go \n\n8.834µs\n\n\nscripts\/go-routines on  main via 🐹 v1.20 \n$ go run main.go \n\n9.158µs\n\nscripts\/go-routines on  main via 🐹 v1.20 \n$ go run main.go \n\n12.54µs\n\n\nscripts\/go-routines on  main via 🐹 v1.20 \n$ go run main.go \n\nHello World!\nHello World!\n10.19µs\n\n\nscripts\/go-routines on  main via 🐹 v1.20 \n$ go run main.go \n\n14.1µs\n\n\nscripts\/go-routines on  main via 🐹 v1.20 \n$ \n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Quite unpredictable output right? This is a power of go-routines. It is \u0026lt;strong\u0026gt;asynchronous\u0026lt;\/strong\u0026gt; so it will not block the main function. The two function calls to \u0026lt;code\u0026gt;process\u0026lt;\/code\u0026gt;, are executed independently of the main function scope. The program just calls the process function and captures the output, and sequentially reaches the end of the program(main function), At this point the go routines(threads) inside the main function are stopped abruptly.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s break it down if it is not clear yet.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;The main function starts.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;code\u0026gt;go process()\u0026lt;\/code\u0026gt; creates a Go routine and starts its execution.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Meanwhile, another call to \u0026lt;code\u0026gt;go process()\u0026lt;\/code\u0026gt; creates a separate Go routine and starts its execution as well.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Meanwhile, calculate the time difference between the main function start and end.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Meanwhile main function ends.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;So, in summary, the main function is only able to capture the output of the \u0026lt;code\u0026gt;duration\u0026lt;\/code\u0026gt; as it is synchronous and if the process has been executed, it prints the \u0026lt;code\u0026gt;Hello World!\u0026lt;\/code\u0026gt; message. Hence we have different outputs because the uncontrolled concurrency, lack of coordination, and OS scheduling across the program runs are different.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;wait-groups\u0026#34;\u0026gt;Wait Groups\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;In simple terms, WaitGroup is used to synchronize multiple goroutines and to wait for them to finish executing. This allows the go routines to be completed before the completion of the main function, hence it blocks the main function from leaving\/exiting the scope.\u0026lt;\/p\u0026gt;\n\u0026lt;blockquote\u0026gt;\n\u0026lt;p\u0026gt;A WaitGroup is a synchronization primitive that allows a goroutine to wait for a collection of other goroutines to finish executing.\u0026lt;\/p\u0026gt;\n\u0026lt;\/blockquote\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;A WaitGroup is initialized with a counter representing the number of goroutines to wait for.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The Add() method increments the counter by the given value. This is called by each goroutine to indicate it is running.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The main goroutine calls Add() to set the initial count, then launches worker goroutines.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;A WaitGroup is typically passed by a pointer to goroutines that need to be waited on.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The Done() method decrements the counter by 1. Goroutines call this when finished.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Each worker calls Done() when finished, decrementing the counter.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The Wait() method blocks until the counter reaches 0, indicating all goroutines have finished.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Main calls Wait() to block until Done() brings counter to 0.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;This provides a simple way to synchronize multiple goroutines finishing their work with a main thread that needs to wait for them to complete. The counter ensures the main thread knows how many goroutines it is waiting for. Interacting and working with go routines with synchronization using a wait group is quite intuitive and simple to follow. Let\u0026#39;s look at a simple example below:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;sync\u0026#34;\n\t\u0026#34;time\u0026#34;\n)\n\nfunc process(pid int, wg *sync.WaitGroup) {\n\tfmt.Printf(\u0026#34;Started process %d\n\u0026#34;, pid)\n\ttime.Sleep(1 * time.Second)\n\tfmt.Printf(\u0026#34;Completed process %d\n\u0026#34;, pid)\n\tdefer wg.Done()\n}\n\nfunc main() {\n\n\tnow := time.Now()\n\tvar wg sync.WaitGroup\n\n\tfor i := 0; i \u0026lt; 10; i\u002b\u002b {\n\t\twg.Add(1)\n\t\tgo process(i, \u0026amp;wg)\n\t}\n\twg.Wait()\n\tfmt.Println(\u0026#34;All processes completed\u0026#34;)\n\tend := time.Now()\n\tfmt.Println(end.Sub(now))\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;scripts\/go-routines on  main [?] via 🐹 v1.20 \n$ go run wg.go \nStarted process 9\nStarted process 0\nStarted process 1\nStarted process 2\nStarted process 3\nStarted process 4\nStarted process 5\nStarted process 6\nStarted process 7\nStarted process 8\nCompleted process 8\nCompleted process 3\nCompleted process 9\nCompleted process 0\nCompleted process 1\nCompleted process 2\nCompleted process 5\nCompleted process 4\nCompleted process 6\nCompleted process 7\n1.000563257s\nAll processes completed\n\nscripts\/go-routines on  main [?] via 🐹 v1.20 \n$ \n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, we have used the same function \u0026lt;code\u0026gt;process\u0026lt;\/code\u0026gt; but with a slight twist, we have added a process id, just an integer to represent the go routine. We print the start and completion of the function in between the sleep for 1 second. We also have a wait group.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;A \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/sync#WaitGroup\u0026#34;\u0026gt;WaitGroup\u0026lt;\/a\u0026gt; is basically a struct type defined in the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/sync\u0026#34;\u0026gt;sync\u0026lt;\/a\u0026gt; package.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The variable \u0026lt;code\u0026gt;wg\u0026lt;\/code\u0026gt; is a new wait group instance that will be used to synchronize and wait for the completion of groups of go routines.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;We create a for loop with \u0026lt;code\u0026gt;10\u0026lt;\/code\u0026gt; iterations, so as to spawn 10 \u0026lt;code\u0026gt;process\u0026lt;\/code\u0026gt; function calls. We first use the \u0026lt;code\u0026gt;wg.Add(1)\u0026lt;\/code\u0026gt; which says to the wait group to wait for 1 go routine. The immediate next line is a go routine \u0026lt;code\u0026gt;go process()\u0026lt;\/code\u0026gt; which takes in a \u0026lt;code\u0026gt;pid\u0026lt;\/code\u0026gt; just to track which go routine is being executed in the loop.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Inside the \u0026lt;code\u0026gt;process\u0026lt;\/code\u0026gt; function, we simply say the process with the given \u0026lt;code\u0026gt;pid\u0026lt;\/code\u0026gt; has started as a print statement, sleeps for a second, and then print the end of the process with \u0026lt;code\u0026gt;pid\u0026lt;\/code\u0026gt;. The end of the function is marked with \u0026lt;code\u0026gt;defer wg.Done()\u0026lt;\/code\u0026gt;, this is to indicate that the go routine is completed.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The wg(wait group) has a counter that keeps track of the number of go routines it has to synchronize or wait for them to complete. In the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/sync#WaitGroup.Add\u0026#34;\u0026gt;Add\u0026lt;\/a\u0026gt; function, the internal counter in the \u0026lt;code\u0026gt;WaitGroup\u0026lt;\/code\u0026gt; is incremented by the \u0026lt;code\u0026gt;delta\u0026lt;\/code\u0026gt; the integer parsed as a parameter. And the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/sync#WaitGroup.Done\u0026#34;\u0026gt;Done\u0026lt;\/a\u0026gt; function, decrements the internal counter in the \u0026lt;code\u0026gt;WaitGroup\u0026lt;\/code\u0026gt; which indicates that the go routine is completed.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In the main function, we call the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/sync#WaitGroup.Wait\u0026#34;\u0026gt;wg.Wait\u0026lt;\/a\u0026gt; which will block until the counter for the \u0026lt;code\u0026gt;WaitGroup\u0026lt;\/code\u0026gt; is 0 i.e. all go routines have completed their execution. So, we created 10 go routines which ran concurrently but were synchronized with the help of WaitGroups. The WaitGroup is allowed to block the main function till all the go routines are done executing.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;go-routine-with-waitgroup-use-cases\u0026#34;\u0026gt;Go Routine with WaitGroup Use Cases\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Go routines can be used for creating asynchronous tasks, and also for creating concurrent tasks. By using wait groups, we can create a way to wait for multiple goroutines to complete. By using go routines and wait groups, we can complete n number of tasks in a time frame of 1 task\u0026#39;s completion. However, to create concurrent communication between the other processes, we need \u0026lt;code\u0026gt;channels\u0026lt;\/code\u0026gt; (which we will explore in the next article).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Here is a simple breakdown of what asynchronous and concurrent tasks might refer to:\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;Asynchronous\u0026lt;\/strong\u0026gt; tasks run independently of the main program flow, allowing the main program to continue executing without waiting for the task\u0026#39;s completion. For example, not blocking other tasks in the sequential flow of the main function.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;Concurrent\u0026lt;\/strong\u0026gt; tasks run simultaneously and can execute at the same time as other tasks. They make use of multiple threads (goroutines in Go\u0026#39;s case) to achieve parallel execution. For example, running multiple tasks parallel will cut the time down for spinning each task after the completion of another task.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Some of the asynchronous tasks that can be done with go routines might include the following:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Sending a mail while saving the user to the database.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Fetch and process data from multiple websites(web scraping\/crawling).\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;High-performance message brokers and queuing systems for inter-process communication.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;One practical way of using go routines with wait groups would be to send mail, we are not going to see the actual implementation of the mail-sending stuff. However, we can try to mimic how the setup might be for sending bulk mail. By creating a wait group and a list of mail addresses to send, a go routine can be created with a function that sends those emails.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;sync\u0026#34;\n)\n\nfunc sendMail(address string, wg *sync.WaitGroup) {\n\tfmt.Println(\u0026#34;Sending mail to\u0026#34;, address)\n\tdefer wg.Done()\n    \/\/ Actual mail sending, smtp stuff\n    \/\/ handle errors\n\n    \/\/ client, err := smtp.Dial(\u0026#34;smtp.example.com:587\u0026#34;)\n    \/\/ errr = client.Mail(\u0026#34;sender@example.com\u0026#34;)\n    \/\/ err = client.Rcpt(address)\n    \/\/ wc, err := client.Data()\n    \/\/_, err = wc.Write([]byte(\u0026#34;This is the email body.\u0026#34;))\n    \/\/ err = wc.Close()\n    \/\/ client.Quit()\n}\n\nfunc main() {\n\temails := []string{\n\t\t\u0026#34;recipient1@example.com\u0026#34;,\n\t\t\u0026#34;recipient2@example.com\u0026#34;,\n\t\t\u0026#34;xyz@example.com\u0026#34;,\n\t}\n\twg := sync.WaitGroup{}\n    wg.Add(len(emails))\n\n\tfor _, email := range emails {\n\t\tgo sendMail(email, \u0026amp;wg)\n\t}\n\twg.Wait()\n\tfmt.Println(\u0026#34;All emails queued for sending\u0026#34;)\n\t\/\/ Do other stuff\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, the \u0026lt;code\u0026gt;emails\u0026lt;\/code\u0026gt; is a list of email ids to send the mail. We have created a wait group that we can initialize with the total number of go routines probably to be executed. The \u0026lt;code\u0026gt;wg.Add\u0026lt;\/code\u0026gt; method is parsed with the number of emails to be sent hence that equals the go routines to spawn.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, we can then in the for loop, iterate over each mail and send the emails with the \u0026lt;code\u0026gt;sendMail\u0026lt;\/code\u0026gt; function as go routine. The \u0026lt;code\u0026gt;wg.Wait\u0026lt;\/code\u0026gt; function outside the loop, will make sure the main function is halted before all the go routines complete their execution.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;There is one more way to call a function as a go routine without changing its signature since we had to pass \u0026lt;code\u0026gt;wg\u0026lt;\/code\u0026gt; pointer as the WaitGroup reference to it to acknowledge the completion of the go routine. We could wrap these two operations wiz. calling the function and calling the \u0026lt;code\u0026gt;wg.Done\u0026lt;\/code\u0026gt; method with an anonymous function.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;sync\u0026#34;\n)\n\nfunc sendMail(address string) {\n\tfmt.Println(\u0026#34;Sending mail to\u0026#34;, address)\n}\n\nfunc main() {\n\temails := []string{\n\t\t\u0026#34;recipient1@example.com\u0026#34;,\n\t\t\u0026#34;recipient2@example.com\u0026#34;,\n\t\t\u0026#34;xyz@example.com\u0026#34;,\n\t}\n\twg := sync.WaitGroup{}\n\twg.Add(len(emails))\n\n\tfor _, email := range emails {\n\t\tmail := email\n\t\tgo func(m string) {\n\t\t\tsendMail(m)\n\t\t\twg.Done()\n\t\t}(mail)\n\t}\n\twg.Wait()\n\tfmt.Println(\u0026#34;All emails queued for sending\u0026#34;)\n\t\/\/ Do other stuff\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This does the exact same thing, but we don\u0026#39;t have to change the signature of the function, This keeps the functional logic of the function in its place and handles the concurrency on the go.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\nfor _, email := range emails {\n    mail := email\n    go func(m string) {\n        sendMail(m)\n        wg.Done()\n    }(mail)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;If the above bit scares you, don\u0026#39;t worry it\u0026#39;s too simple.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;We are iterating over the email slice using a for loop and creating a Go routine for each email address. The loop variable email represents the email address at the current iteration.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;However, to avoid the loop variable capture issue (where all Go routines would share the same email variable), we create a new variable mail and assign the value of email to it. This step ensures that each Go routine captures its own copy of the email address.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;We immediately create an anonymous function (a closure) using the go keyword. This anonymous function takes the \u0026lt;code\u0026gt;mail\u0026lt;\/code\u0026gt; variable as a parameter m and is executed concurrently as a Go routine. Inside the Go routine, we call the \u0026lt;code\u0026gt;sendMail\u0026lt;\/code\u0026gt; function with the email address \u0026lt;code\u0026gt;m\u0026lt;\/code\u0026gt;.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;After the \u0026lt;code\u0026gt;sendMail\u0026lt;\/code\u0026gt; call has been executed i.e. email has been sent, we call wg.Done() to notify the WaitGroup that the Go routine has completed its work. This allows the WaitGroup to properly synchronize and wait for all Go routines to finish before the program proceeds beyond wg.Wait() in the main function.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;This is one way to do it if you want to separate the mail-sending logic from the goroutines\/concurrency task. However, this should be handled with care as the variables inside the closure might be shared among all the goroutines instead of having individual variable literals.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;To ensure that each goroutine operates on its own copy of the email address, we use the approach of creating a new variable mail and passing it as a parameter to the anonymous function. This way, each goroutine captures its unique email address, avoiding any interference or unintended sharing of data between goroutines.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;mutual-exclusion-locks\u0026#34;\u0026gt;Mutual Exclusion Locks\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;In the previous examples, we saw how goroutines and wait groups allow us to run multiple tasks concurrently in Go. However, sometimes these concurrent goroutines need to access shared resources like memory, files, network sockets, etc.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;When more than one goroutine tries to access a resource at the same time, it can lead to \u0026lt;strong\u0026gt;race conditions\u0026lt;\/strong\u0026gt; and unpredictable behavior. To handle this, we need a way to ensure only one goroutine can access the resource at a time.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This is where mutual exclusion locks come in. A \u0026lt;strong\u0026gt;mutual exclusion lock\u0026lt;\/strong\u0026gt;, or \u0026lt;strong\u0026gt;mutex\u0026lt;\/strong\u0026gt;, provides a mechanism to lock access to a shared resource. It ensures only one goroutine at a time can acquire the lock, blocking other goroutines until the lock is released.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;For example, say we have multiple goroutines trying to append data to the same memory buffer(could be file\/database\/etc.) concurrently:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;os\u0026#34;\n\t\u0026#34;sync\u0026#34;\n)\n\nfunc WriteToFile(filename string, contents string, buffer *[]byte, wg *sync.WaitGroup) {\n\tdefer wg.Done()\n\t*buffer = append(*buffer, []byte(contents)...)\n\terr := os.WriteFile(filename, *buffer, 0644)\n\tif err != nil {\n\t\tfmt.Println(err)\n\t}\n}\n\nfunc main() {\n\tvar wg sync.WaitGroup\n\tvar sharedBuffer []byte\n\n\twg.Add(2)\n\tgo WriteToFile(\u0026#34;data\/f1.txt\u0026#34;, \u0026#34;Hello \u0026#34;, \u0026amp;sharedBuffer, \u0026amp;wg)\n\tgo WriteToFile(\u0026#34;data\/f1.txt\u0026#34;, \u0026#34;World! \u0026#34;, \u0026amp;sharedBuffer, \u0026amp;wg)\n\twg.Wait()\n\n\tfmt.Println(string(sharedBuffer))\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run --race no-mutex.go\n==================\nWARNING: DATA RACE\nRead at 0x00c000012030 by goroutine 8:\n  main.WriteToFile()\n      \/home\/meet\/code\/100-days-of-golang\/scripts\/go-routines\/no-mutex.go:11 \u002b0xe7\n  main.main.func2()\n      \/home\/meet\/code\/100-days-of-golang\/scripts\/go-routines\/no-mutex.go:24 \u002b0x64\n\nPrevious write at 0x00c000012030 by goroutine 7:\n  main.WriteToFile()\n      \/home\/meet\/code\/100-days-of-golang\/scripts\/go-routines\/no-mutex.go:11 \u002b0x16a\n  main.main.func1()\n      \/home\/meet\/code\/100-days-of-golang\/scripts\/go-routines\/no-mutex.go:23 \u002b0x64\n\nGoroutine 8 (running) created at:\n  main.main()\n      \/home\/meet\/code\/100-days-of-golang\/scripts\/go-routines\/no-mutex.go:24 \u002b0x1f6\n\nGoroutine 7 (finished) created at:\n  main.main()\n      \/home\/meet\/code\/100-days-of-golang\/scripts\/go-routines\/no-mutex.go:23 \u002b0x14e\n==================\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This is because we are trying to access the same memory address at the same time. This is a race condition and can lead to unpredictable behavior. Try removing the \u0026lt;code\u0026gt;--race\u0026lt;\/code\u0026gt; flag while running, in this little stupid example, it might not be obvious, but in complex and constrained environments, this can get the application in serious trouble.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;NOTE\u0026lt;\/strong\u0026gt;: We are using \u0026lt;code\u0026gt;go run --race no-mutex.go\u0026lt;\/code\u0026gt; to check if there are any race conditions in the program. This is the \u0026lt;a href=\u0026#34;https:\/\/go.dev\/doc\/articles\/race_detector\u0026#34;\u0026gt;race detector\u0026lt;\/a\u0026gt; flag in the run command.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;To avoid this race condition, we need to add the mutex locks provided in the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/sync#Mutex\u0026#34;\u0026gt;sync.Mutex\u0026lt;\/a\u0026gt; type. There are methods like \u0026lt;a href=\u0026#34;\u0026#34;\u0026gt;Lock\u0026lt;\/a\u0026gt;, \u0026lt;a href=\u0026#34;\u0026#34;\u0026gt;Unlock\u0026lt;\/a\u0026gt;, and \u0026lt;a href=\u0026#34;\u0026#34;\u0026gt;TryLock\u0026lt;\/a\u0026gt; which help in locking access of the resource to a single entity at a given time.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;When a goroutine calls \u0026lt;code\u0026gt;Lock()\u0026lt;\/code\u0026gt; on a mutex, it acquires the lock. If the mutex is already locked by another goroutine, the calling goroutine will be blocked (put to sleep) until the lock becomes available. Once the lock is acquired successfully, the goroutine can proceed with its critical section, which is the part of the code that should not be executed concurrently by multiple goroutines.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;When a goroutine calls \u0026lt;code\u0026gt;Unlock()\u0026lt;\/code\u0026gt; on a mutex, it releases the lock. This allows other waiting goroutines to acquire the lock and execute their critical sections. It\u0026#39;s essential to ensure that \u0026lt;code\u0026gt;Unlock()\u0026lt;\/code\u0026gt; is called after the critical section to release the mutex and avoid deadlocks. The critical section\/shared resource should not be accessed after the release of this lock.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;os\u0026#34;\n\t\u0026#34;sync\u0026#34;\n)\n\nfunc WriteToFile(filename string, contents string, buffer *[]byte, wg *sync.WaitGroup, mutex *sync.Mutex) {\n\tdefer wg.Done()\n\tcontentBytes := []byte(contents)\n\n\tmutex.Lock()\n\t*buffer = append(*buffer, contentBytes...)\n\n\tf, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY, 0644)\n\tif err != nil {\n\t\tfmt.Println(err)\n\t}\n\tdefer f.Close()\n\t_, err = f.Write(contentBytes)\n\tif err != nil {\n\t\tfmt.Println(err)\n\t}\n\tmutex.Unlock()\n}\n\nfunc main() {\n\tvar wg sync.WaitGroup\n\tvar mut sync.Mutex\n\tvar sharedBuffer []byte\n\n\twg.Add(2)\n\tgo WriteToFile(\u0026#34;data\/f1.txt\u0026#34;, \u0026#34;Hello Gophers!\n\u0026#34;, \u0026amp;sharedBuffer, \u0026amp;wg, \u0026amp;mut)\n\tgo WriteToFile(\u0026#34;data\/f1.txt\u0026#34;, \u0026#34;Welcome to Goworld!\n\u0026#34;, \u0026amp;sharedBuffer, \u0026amp;wg, \u0026amp;mut)\n\twg.Wait()\n\n\tfmt.Println(string(sharedBuffer))\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run --race mutex.go\nWelcome to Goworld!\nHello Gophers!\n\n$ go run --race mutex.go\nHello Gophers!\nWelcome to Goworld!\n\n$ go run --race mutex.go\nHello Gophers!\nWelcome to Goworld!\n\n$ go run --race mutex.go\nWelcome to Goworld!\nHello Gophers!\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above example is a preventive measure for race conditions with a mutex Lock on the shared resource used in the go routines.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s break down the code step by step. First, we initialize a few variables:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;code\u0026gt;wg\u0026lt;\/code\u0026gt; as \u0026lt;code\u0026gt;sync.WaitGroup\u0026lt;\/code\u0026gt;:\nThe \u0026lt;code\u0026gt;wg\u0026lt;\/code\u0026gt; is a waitgroup that will be used for the synchronization of the go-routines by blocking the main function to exit\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;code\u0026gt;mut\u0026lt;\/code\u0026gt; as \u0026lt;code\u0026gt;sync.Mutex\u0026lt;\/code\u0026gt;:\nThe \u0026lt;code\u0026gt;mut\u0026lt;\/code\u0026gt; is a structure that internally holds a few integer values indicating either a blocked or unblocked state. The \u0026lt;code\u0026gt;sync.Mutex\u0026lt;\/code\u0026gt; has two private fields wiz. \u0026lt;code\u0026gt;state\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;sema\u0026lt;\/code\u0026gt;, the state holds the mutex state either \u0026lt;code\u0026gt;0\u0026lt;\/code\u0026gt;(unlocked) or \u0026lt;code\u0026gt;1\u0026lt;\/code\u0026gt; as locked. The \u0026lt;code\u0026gt;sema\u0026lt;\/code\u0026gt; field is a \u0026lt;code\u0026gt;uint32\u0026lt;\/code\u0026gt; that is used for blocking and signaling, it acts as a semaphore to manage blocking and unblocking goroutines trying to acquire the mutex.\nThis will be used to acquire \u0026lt;code\u0026gt;Lock\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;Unlock\u0026lt;\/code\u0026gt; on the shared resource while writing the data to the file or appending the data to the resource.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;code\u0026gt;sharedBuffer\u0026lt;\/code\u0026gt; as \u0026lt;code\u0026gt;[]byte\u0026lt;\/code\u0026gt;:\nThe \u0026lt;code\u0026gt;sharedBuffer\u0026lt;\/code\u0026gt; is the actually shared resource that will be used to hold the strings for keeping track of the data written to the file. It will be the resource that would require to lock for mutating its value(appending to the slice) among the go routines.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;We add \u0026lt;code\u0026gt;2\u0026lt;\/code\u0026gt; to the \u0026lt;code\u0026gt;wg\u0026lt;\/code\u0026gt; to indicate to wait for the two go-routines to complete, in the next line we call two go routines as the function \u0026lt;code\u0026gt;WriteToFile\u0026lt;\/code\u0026gt;. The \u0026lt;code\u0026gt;WriteToFile\u0026lt;\/code\u0026gt; is a function that takes in quite a few parameters namely, the filename, the content to write, the reference to the sharedBuffer, waitgroup, and the mutex.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Inside the function \u0026lt;code\u0026gt;WriteToFile\u0026lt;\/code\u0026gt;:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;We first \u0026lt;code\u0026gt;defer\u0026lt;\/code\u0026gt; the \u0026lt;code\u0026gt;waitgroups\u0026lt;\/code\u0026gt; as \u0026lt;code\u0026gt;Done\u0026lt;\/code\u0026gt; i.e. to call the \u0026lt;code\u0026gt;wg.Done\u0026lt;\/code\u0026gt; method at the end of the function call.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Typecast the \u0026lt;code\u0026gt;contents\u0026lt;\/code\u0026gt; from \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt; as the \u0026lt;code\u0026gt;[]byte\u0026lt;\/code\u0026gt;.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Acquire the \u0026lt;code\u0026gt;mutex.Lock()\u0026lt;\/code\u0026gt; i.e. to say \u0026amp;quot;The below operations should not be done concurrently, one at a time\u0026amp;quot;. We then append the \u0026lt;code\u0026gt;contents\u0026lt;\/code\u0026gt; to the \u0026lt;code\u0026gt;buffer\u0026lt;\/code\u0026gt; which is a pointer to the \u0026lt;code\u0026gt;sharedBuffer\u0026lt;\/code\u0026gt; in the main function, so essentially we are trying to mutate the \u0026lt;code\u0026gt;sharedBuffer\u0026lt;\/code\u0026gt; in this function.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Open the file as \u0026lt;code\u0026gt;O_APPEND\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;O_WRONLY\u0026lt;\/code\u0026gt; to indicate that the file should be opened in append\/writing mode. (We have observed this type of operation in the \u0026lt;a href=\u0026#34;https:\/\/www.meetgor.com\/golang-file-write\/\u0026#34;\u0026gt;Golang: File Write\u0026lt;\/a\u0026gt; article)\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Use the \u0026lt;code\u0026gt;Write\u0026lt;\/code\u0026gt; method to write the slice of bytes(contents) into the file that we opened. We have a \u0026lt;code\u0026gt;defer\u0026lt;\/code\u0026gt; for the closing of the file.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;We obviously check for errors and print them, but it could be a \u0026lt;code\u0026gt;panic\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;log\u0026lt;\/code\u0026gt; depending on the type of operation the application is doing.\nSo that is the all operation we want to do, so we finally open the lock with \u0026lt;code\u0026gt;mutex.Unlock()\u0026lt;\/code\u0026gt; which will allow the other go routine if any to access the resource and proceed with the operations.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;read-write-mutual-exclusion-lock\u0026#34;\u0026gt;Read Write Mutual Exclusion Lock\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;The mutual exclusion lock is good if you have a write operation-heavy application. However, if we have read write operations in more or the less in same proportion(read heavy) we don\u0026#39;t want to have readers getting blocked when other readers are accessing the resource since it is not a mutation process.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We could allow many readers to read simultaneously. But for the writing operation, we want to block the readers\/writers. The writer should be given preference first in case of a lock by other writers. This would prevent a writer from waiting for readers to complete. This is usually referred to as \u0026lt;strong\u0026gt;Read Write Mutual Exclusion\u0026lt;\/strong\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;sync\u0026#34;\n\t\u0026#34;time\u0026#34;\n)\n\nfunc reader(id int, count *int, wg *sync.WaitGroup, mutex *sync.Mutex) {\n\tdefer wg.Done()\n\tif !mutex.TryLock() {\n\t\tfmt.Printf(\u0026#34;Reader %d blocked!\n\u0026#34;, id)\n\t\treturn\n\t}\n\tdefer mutex.Unlock()\n\tfmt.Printf(\u0026#34;Reader %d: read count %d\n\u0026#34;, id, *count)\n}\n\nfunc writer(id, increment int, count *int, wg *sync.WaitGroup, mutex *sync.Mutex) {\n\tdefer wg.Done()\n\tdefer mutex.Unlock()\n\tmutex.Lock()\n\t*count \u002b= increment\n\ttime.Sleep(5 * time.Millisecond)\n\tfmt.Printf(\u0026#34;Writer %d: wrote count %d\n\u0026#34;, id, *count)\n}\n\nfunc main() {\n\n\tcount := 1\n\tvar wg sync.WaitGroup\n\tvar mutex sync.Mutex\n    readers := 5\n    writers := 3\n\twg.Add(readers)\n\tfor i := 0; i \u0026lt; readers; i\u002b\u002b {\n\t\tgo reader(i, \u0026amp;count, \u0026amp;wg, \u0026amp;mutex)\n\t}\n\n\twg.Add(writers)\n\tfor i := 0; i \u0026lt; writers; i\u002b\u002b {\n\t\tgo writer(i, 1, \u0026amp;count, \u0026amp;wg, \u0026amp;mutex)\n\t}\n\twg.Wait()\n\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run --race no-rwmutex.go \nReader 0: read count 1\nReader 3 blocked!\nReader 2 blocked!\nReader 1 blocked!\nReader 4 blocked!\nWriter 0: wrote count 2\nWriter 1: wrote count 3\nWriter 2: wrote count 4\n\n$ go run --race no-rwmutex.go \nReader 2 blocked!\nReader 0: read count 1\nReader 1 blocked!\nReader 4 blocked!\nReader 3 blocked!\nWriter 2: wrote count 2\nWriter 0: wrote count 3\nWriter 1: wrote count 4\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above example has a \u0026lt;code\u0026gt;reader\u0026lt;\/code\u0026gt; and a \u0026lt;code\u0026gt;writer\u0026lt;\/code\u0026gt; method, the \u0026lt;code\u0026gt;reader\u0026lt;\/code\u0026gt; method simply has to read the shared resource \u0026lt;code\u0026gt;count\u0026lt;\/code\u0026gt;. It acquires a \u0026lt;code\u0026gt;Mutex\u0026lt;\/code\u0026gt; lock before reading and unlocks it thereafter. Similarly, the \u0026lt;code\u0026gt;writer\u0026lt;\/code\u0026gt; function is used for incrementing the \u0026lt;code\u0026gt;count\u0026lt;\/code\u0026gt; shared resource.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The \u0026lt;code\u0026gt;reader\u0026lt;\/code\u0026gt; method has a \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/sync#Mutex.TryLock\u0026#34;\u0026gt;TryLock\u0026lt;\/a\u0026gt; method that tries to acquire a mutex lock on the resource, if the resource is already locked, the function will return \u0026lt;code\u0026gt;false\u0026lt;\/code\u0026gt; and hence we can say that the reading is blocked(just for demonstration). And if the function \u0026lt;code\u0026gt;TryLock\u0026lt;\/code\u0026gt; returns \u0026lt;code\u0026gt;true\u0026lt;\/code\u0026gt;, it will acquire the \u0026lt;code\u0026gt;Lock\u0026lt;\/code\u0026gt;. We further \u0026lt;code\u0026gt;defer\u0026lt;\/code\u0026gt; the \u0026lt;code\u0026gt;Unlock\u0026lt;\/code\u0026gt; and access the \u0026lt;code\u0026gt;count\u0026lt;\/code\u0026gt; variable which is passed as a reference.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The \u0026lt;code\u0026gt;writer\u0026lt;\/code\u0026gt; method is simply acquiring the \u0026lt;code\u0026gt;Lock\u0026lt;\/code\u0026gt; and incrementing the \u0026lt;code\u0026gt;counter\u0026lt;\/code\u0026gt; and thereafter \u0026lt;code\u0026gt;Unlock\u0026lt;\/code\u0026gt; is called with \u0026lt;code\u0026gt;defer\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In the above code:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;reader\u0026lt;\/code\u0026gt; and the \u0026lt;code\u0026gt;writer\u0026lt;\/code\u0026gt; both might be waiting for the lock to be released, however, for readers to wait for reading doesn\u0026#39;t make sense.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Because if you would want to just read a particular memory address, there shouldn\u0026#39;t be any locks for one reader to wait for other readers to finish.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;However, for writing, there has to be a lock. The mutex lock will lock the resource irrespective of the \u0026lt;code\u0026gt;reader\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;writer\u0026lt;\/code\u0026gt;.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;This might not be as visible here, but it might be the reason, that all the \u0026lt;code\u0026gt;readers\u0026lt;\/code\u0026gt; are blocked from reading due to another reader\u0026#39;s or writer\u0026#39;s lock.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The \u0026lt;code\u0026gt;sync\u0026lt;\/code\u0026gt; package has the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/sync#RWMutex\u0026#34;\u0026gt;RWMutex\u0026lt;\/a\u0026gt; that does this exact same thing. It is almost similar to the \u0026lt;code\u0026gt;Mutex\u0026lt;\/code\u0026gt; however, it would allow concurrent reading operation and prefer writing operation before readers to prevent writer starvation.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;sync\u0026#34;\n\t\u0026#34;time\u0026#34;\n)\n\nfunc reader(id int, count *int, wg *sync.WaitGroup, mutex *sync.RWMutex) {\n\tdefer wg.Done()\n\tdefer mutex.RUnlock()\n\n\tif !mutex.TryRLock() {\n\t\tfmt.Printf(\u0026#34;Reader %d blocked!\n\u0026#34;, id)\n\t\treturn\n\t}\n\tfmt.Printf(\u0026#34;Reader %d: read count %d\n\u0026#34;, id, *count)\n\n}\n\nfunc writer(id, increment int, count *int, wg *sync.WaitGroup, mutex *sync.RWMutex) {\n\tdefer wg.Done()\n\tdefer mutex.Unlock()\n\tmutex.Lock()\n\n\t*count \u002b= increment\n\ttime.Sleep(5 * time.Millisecond)\n\tfmt.Printf(\u0026#34;Writer %d: wrote count %d\n\u0026#34;, id, *count)\n}\n\nfunc main() {\n\n\tcount := 1\n\tvar wg sync.WaitGroup\n\tvar mutex sync.RWMutex\n    readers := 5\n    writers := 3\n\twg.Add(readers)\n\tfor i := 0; i \u0026lt; readers; i\u002b\u002b {\n\t\tgo reader(i, \u0026amp;count, \u0026amp;wg, \u0026amp;mutex)\n\t}\n\n\twg.Add(writers)\n\tfor i := 0; i \u0026lt; writers; i\u002b\u002b {\n\t\tgo writer(i, 1, \u0026amp;count, \u0026amp;wg, \u0026amp;mutex)\n\t}\n\twg.Wait()\n\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run --race rwmutex.go \nReader 0: read count 1\nReader 3: read count 1\nReader 1: read count 1\nReader 2: read count 1\nReader 4: read count 1\nWriter 1: wrote count 2\nWriter 0: wrote count 3\nWriter 2: wrote count 4\nWriter 3: wrote count 5\nWriter 4: wrote count 6\n\n$ go run --race rwmutex.go \nReader 1 blocked!\nReader 0: read count 1\nReader 2 blocked!\nReader 3 blocked!\nReader 4 blocked!\nWriter 4: wrote count 2\nWriter 0: wrote count 3\nWriter 1: wrote count 4\nWriter 3: wrote count 5\nWriter 2: wrote count 6\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the modified example, all the logic remains the same, just the \u0026lt;code\u0026gt;sync.Mutex\u0026lt;\/code\u0026gt; is replaced with \u0026lt;code\u0026gt;sync.RWMutex\u0026lt;\/code\u0026gt;. Also for trying to acquire the lock in the \u0026lt;code\u0026gt;reader\u0026lt;\/code\u0026gt; method \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/sync#RWMutex.RLock\u0026#34;\u0026gt;TryRLock\u0026lt;\/a\u0026gt; is used instead of \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/sync#RWMutex.TryRLock\u0026#34;\u0026gt;TryLock\u0026lt;\/a\u0026gt; which will check if the existing lock acquired is of a reader or writer, if it is a reader, it will return \u0026lt;code\u0026gt;true\u0026lt;\/code\u0026gt;, else \u0026lt;code\u0026gt;false\u0026lt;\/code\u0026gt;. Also the \u0026lt;code\u0026gt;Unlock\u0026lt;\/code\u0026gt; is replaced with the \u0026lt;code\u0026gt;RUnlock\u0026lt;\/code\u0026gt; method for releasing the read lock. In the \u0026lt;code\u0026gt;writer\u0026lt;\/code\u0026gt; method, everything remains the same so the writer has to acquire the lock irrespective of whether the current lock is from the reader\/writer, so it is a normal \u0026lt;code\u0026gt;Lock\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;Unlock\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In the above example, we can see all the read operations sometimes are executed instead of getting blocked. This is due to the \u0026lt;code\u0026gt;RWMutex\u0026lt;\/code\u0026gt; Lock and Unlock on the read operation\/function.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;When one reader is reading, it can\u0026#39;t block other readers.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;However with simple \u0026lt;code\u0026gt;Mutex\u0026lt;\/code\u0026gt;, the reader is even blocked when another reader is reading.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;For the write operation, it will be blocked as usual, so if a writer is performing a write operation and a reader\/readers come in, they will be blocked, also if in the meantime, while the resource is locked, another writer comes in, the writer will be given preference instead of waiting for all readers to complete. This prevents writer starvation.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;You can see, that the readers are still blocked the majority of the time, however, they are blocked due to the writer locking the resource and not any other reader.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;There is a bit more suitable \u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/100-days-of-golang\/blob\/main\/scripts\/go-routines\/file-rw.go\u0026#34;\u0026gt;example\u0026lt;\/a\u0026gt; related to \u0026lt;code\u0026gt;file\u0026lt;\/code\u0026gt; reading and writing with \u0026lt;code\u0026gt;RWMutex\u0026lt;\/code\u0026gt;, make sure to check that out to get a more clear understanding of an actual case of using the \u0026lt;code\u0026gt;RWMutex\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;channels\u0026#34;\u0026gt;Channels\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;This is a big part and I would like to delve into this topic in a separate post. There are some patterns like \u0026lt;code\u0026gt;fan-in\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;fan-out\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;worker-pool\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;pub-sub\u0026lt;\/code\u0026gt;, etc. which are really common in web applications and backend systems. These patterns we shall explore in the next article.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Channels are a way to provide a safe and idiomatic way for Goroutines to exchange data and coordinate their execution without resorting to low-level mechanisms like shared memory or explicit locking.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That\u0026#39;s it from the 30th part of the series, all the source code for the examples are linked in the GitHub on the \u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/100-days-of-golang\/tree\/main\/scripts\/go-routines\u0026#34;\u0026gt;100 days of Golang\u0026lt;\/a\u0026gt; repository.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;references\u0026#34;\u0026gt;References:\u0026lt;\/h3\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/blog.nindalf.com\/posts\/how-goroutines-work\/\u0026#34;\u0026gt;How Goroutines Work\u0026lt;\/a\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/blog.logrocket.com\/concurrency-patterns-golang-waitgroups-goroutines\/\u0026#34;\u0026gt;Concurrency patterns in Golang: WaitGroups and Goroutines\u0026lt;\/a\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/riteeksrivastava.medium.com\/a-complete-journey-with-goroutines-8472630c7f5c\u0026#34;\u0026gt;A complete journey with Goroutines\u0026lt;\/a\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;From this part of the series, the fundamentals of golang\u0026#39;s concurrency model were understood specifically spawning go-routines, synchronously executing go-routines with the help of a wait group, mutex locks, and how to secure concurrent access to a shared resource. In the next part of the series, these concepts will be used in asynchronous communication using channels.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Hopefully, you have got the basics of concurrency in golang cleared from this post. If you have any queries, suggestions, or feedback, please feel free to comment below or contact me on the social handles. Thank you for reading. Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "posts\/golang-go-routines";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Golang: Go Routines and WaitGroups</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2023-07-29 15:15:00">2023-07-29 15:15:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/100-days-of-golang" class="series-link">📖 100-days-of-golang</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>One of the key features that set Go apart from many other languages is its native support for Goroutines - lightweight concurrent functions that can run concurrently and efficiently manage concurrency tasks. Goroutines are an essential aspect of Go's concurrency model, enabling developers to build highly concurrent and performant applications effortlessly.</p>
+<p>In this blog post, we will dive into the world of Goroutines and explore how they work, why they are essential for concurrent programming in Go, and how they can greatly improve the responsiveness and efficiency of your applications. This post will cover go routines and a primer on wait groups, in the next article we will be looking deeply into channels where all these three things can be demonstrated and understood in a better and more useful way.</p>
+<h2 id="concurrency-and-parallelism">Concurrency and Parallelism</h2>
+<p>This two concepts are quite crucial before diving into the fundamentals of concurreny.</p>
+<p><strong>Concurrency</strong> is about dealing with multiple things at once. Concurrent programs can have several processes or threads running simultaneously on a single CPU core by rapidly switching between them (context switching). The threads are interleaved, not necessarily executing at literally the same time. The CPU can switch between these tasks to give the appearance of simultaneous progress.</p>
+<p><strong>Parallelism</strong> is about doing multiple things at literally the same time. Parallel programs can execute multiple computations simultaneously on separate CPU cores. The threads actually execute in parallel.</p>
+<h2 id="what-is-a-go-routine">What is a Go Routine</h2>
+<p>A go routine is a simple lightweight thread managed by the Go runtime. In the simplest of terms, a go routine can be defined as:</p>
+<blockquote>
+<p>Go routine is a way to perform multiple tasks within a program, allowing different parts of the program to work simultaneously and make the most out of the resources.</p>
+</blockquote>
+<p>Also it can be stated as:</p>
+<p>A goroutine in Golang is a lightweight, independently executing function that runs concurrently with other goroutines within the same address space. In other words, it is a concurrent unit of execution.</p>
+<p>Focussing on the word <strong>same address space</strong> that will be really critical in the later sections of this article.</p>
+<h2 id="features-of-go-routines">Features of Go Routines</h2>
+<p>Go routines form a key part of Go's concurrency model. Here are some of the key features of go routines:</p>
+<ul>
+<li>
+<p><strong>Lightweight Thread</strong>:
+A Go routine is often referred to as a lightweight thread.</p>
+</li>
+<li>
+<p><strong>Independent Execution</strong>:
+Go routines run independently of each other, enabling concurrent execution.</p>
+</li>
+<li>
+<p><strong>Managed by Go</strong>:
+Go routines are managed by the Go runtime, making them easy to use.</p>
+</li>
+<li>
+<p><strong>Low Overhead</strong>:
+Go routines have low memory overhead, allowing us to create thousands of them efficiently.</p>
+</li>
+<li>
+<p><strong>Communication</strong>:
+Go routines can communicate and synchronize data through channels.</p>
+</li>
+<li>
+<p><strong>Asynchronous</strong>:
+Go routines can execute asynchronously, allowing other parts of the program to continue running.</p>
+</li>
+<li>
+<p><strong>Scalability</strong>:
+Go routines are the foundation of scalable concurrent programming in Go.</p>
+</li>
+</ul>
+<p>Unlike threads in other languages, goroutines are cheap and you can easily create thousands or even millions of them in a program.</p>
+<h2 id="example-of-go-routines">Example of Go Routines</h2>
+<p>Creating a go routine is not hard, just add the keyword <code>go</code> before the function call and the go runtime will create a new go routine inside the main function or wherever is the context from. Remember, the main function is also a go routine.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func process() {
+	fmt.Println("Hello World!")
+	time.Sleep(time.Second)
+}
+
+func main() {
+	start := time.Now()
+	go process()
+	go process()
+	end := time.Now()
+	duration := end.Sub(start)
+	fmt.Println(duration)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">scripts/go-routines on  main via 🐹 v1.20 
+$ go run main.go 
+
+Hello World!
+15.607µs
+
+
+scripts/go-routines on  main via 🐹 v1.20 
+$ go run main.go 
+
+9.889µs
+
+
+scripts/go-routines on  main via 🐹 v1.20 
+$ go run main.go 
+
+8.834µs
+
+
+scripts/go-routines on  main via 🐹 v1.20 
+$ go run main.go 
+
+9.158µs
+
+scripts/go-routines on  main via 🐹 v1.20 
+$ go run main.go 
+
+12.54µs
+
+
+scripts/go-routines on  main via 🐹 v1.20 
+$ go run main.go 
+
+Hello World!
+Hello World!
+10.19µs
+
+
+scripts/go-routines on  main via 🐹 v1.20 
+$ go run main.go 
+
+14.1µs
+
+
+scripts/go-routines on  main via 🐹 v1.20 
+$ 
+</code></pre></div><p>Quite unpredictable output right? This is a power of go-routines. It is <strong>asynchronous</strong> so it will not block the main function. The two function calls to <code>process</code>, are executed independently of the main function scope. The program just calls the process function and captures the output, and sequentially reaches the end of the program(main function), At this point the go routines(threads) inside the main function are stopped abruptly.</p>
+<p>Let's break it down if it is not clear yet.</p>
+<ul>
+<li>The main function starts.</li>
+<li><code>go process()</code> creates a Go routine and starts its execution.</li>
+<li>Meanwhile, another call to <code>go process()</code> creates a separate Go routine and starts its execution as well.</li>
+<li>Meanwhile, calculate the time difference between the main function start and end.</li>
+<li>Meanwhile main function ends.</li>
+</ul>
+<p>So, in summary, the main function is only able to capture the output of the <code>duration</code> as it is synchronous and if the process has been executed, it prints the <code>Hello World!</code> message. Hence we have different outputs because the uncontrolled concurrency, lack of coordination, and OS scheduling across the program runs are different.</p>
+<h2 id="wait-groups">Wait Groups</h2>
+<p>In simple terms, WaitGroup is used to synchronize multiple goroutines and to wait for them to finish executing. This allows the go routines to be completed before the completion of the main function, hence it blocks the main function from leaving/exiting the scope.</p>
+<blockquote>
+<p>A WaitGroup is a synchronization primitive that allows a goroutine to wait for a collection of other goroutines to finish executing.</p>
+</blockquote>
+<ul>
+<li>A WaitGroup is initialized with a counter representing the number of goroutines to wait for.</li>
+<li>The Add() method increments the counter by the given value. This is called by each goroutine to indicate it is running.</li>
+<li>The main goroutine calls Add() to set the initial count, then launches worker goroutines.</li>
+<li>A WaitGroup is typically passed by a pointer to goroutines that need to be waited on.</li>
+<li>The Done() method decrements the counter by 1. Goroutines call this when finished.</li>
+<li>Each worker calls Done() when finished, decrementing the counter.</li>
+<li>The Wait() method blocks until the counter reaches 0, indicating all goroutines have finished.</li>
+<li>Main calls Wait() to block until Done() brings counter to 0.</li>
+</ul>
+<p>This provides a simple way to synchronize multiple goroutines finishing their work with a main thread that needs to wait for them to complete. The counter ensures the main thread knows how many goroutines it is waiting for. Interacting and working with go routines with synchronization using a wait group is quite intuitive and simple to follow. Let's look at a simple example below:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+func process(pid int, wg *sync.WaitGroup) {
+	fmt.Printf("Started process %d
+", pid)
+	time.Sleep(1 * time.Second)
+	fmt.Printf("Completed process %d
+", pid)
+	defer wg.Done()
+}
+
+func main() {
+
+	now := time.Now()
+	var wg sync.WaitGroup
+
+	for i := 0; i < 10; i++ {
+		wg.Add(1)
+		go process(i, &wg)
+	}
+	wg.Wait()
+	fmt.Println("All processes completed")
+	end := time.Now()
+	fmt.Println(end.Sub(now))
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">scripts/go-routines on  main [?] via 🐹 v1.20 
+$ go run wg.go 
+Started process 9
+Started process 0
+Started process 1
+Started process 2
+Started process 3
+Started process 4
+Started process 5
+Started process 6
+Started process 7
+Started process 8
+Completed process 8
+Completed process 3
+Completed process 9
+Completed process 0
+Completed process 1
+Completed process 2
+Completed process 5
+Completed process 4
+Completed process 6
+Completed process 7
+1.000563257s
+All processes completed
+
+scripts/go-routines on  main [?] via 🐹 v1.20 
+$ 
+
+</code></pre></div><p>In the above example, we have used the same function <code>process</code> but with a slight twist, we have added a process id, just an integer to represent the go routine. We print the start and completion of the function in between the sleep for 1 second. We also have a wait group.</p>
+<ul>
+<li>A <a href="https://pkg.go.dev/sync#WaitGroup">WaitGroup</a> is basically a struct type defined in the <a href="https://pkg.go.dev/sync">sync</a> package.</li>
+<li>The variable <code>wg</code> is a new wait group instance that will be used to synchronize and wait for the completion of groups of go routines.</li>
+</ul>
+<p>We create a for loop with <code>10</code> iterations, so as to spawn 10 <code>process</code> function calls. We first use the <code>wg.Add(1)</code> which says to the wait group to wait for 1 go routine. The immediate next line is a go routine <code>go process()</code> which takes in a <code>pid</code> just to track which go routine is being executed in the loop.</p>
+<p>Inside the <code>process</code> function, we simply say the process with the given <code>pid</code> has started as a print statement, sleeps for a second, and then print the end of the process with <code>pid</code>. The end of the function is marked with <code>defer wg.Done()</code>, this is to indicate that the go routine is completed.</p>
+<p>The wg(wait group) has a counter that keeps track of the number of go routines it has to synchronize or wait for them to complete. In the <a href="https://pkg.go.dev/sync#WaitGroup.Add">Add</a> function, the internal counter in the <code>WaitGroup</code> is incremented by the <code>delta</code> the integer parsed as a parameter. And the <a href="https://pkg.go.dev/sync#WaitGroup.Done">Done</a> function, decrements the internal counter in the <code>WaitGroup</code> which indicates that the go routine is completed.</p>
+<p>In the main function, we call the <a href="https://pkg.go.dev/sync#WaitGroup.Wait">wg.Wait</a> which will block until the counter for the <code>WaitGroup</code> is 0 i.e. all go routines have completed their execution. So, we created 10 go routines which ran concurrently but were synchronized with the help of WaitGroups. The WaitGroup is allowed to block the main function till all the go routines are done executing.</p>
+<h2 id="go-routine-with-waitgroup-use-cases">Go Routine with WaitGroup Use Cases</h2>
+<p>Go routines can be used for creating asynchronous tasks, and also for creating concurrent tasks. By using wait groups, we can create a way to wait for multiple goroutines to complete. By using go routines and wait groups, we can complete n number of tasks in a time frame of 1 task's completion. However, to create concurrent communication between the other processes, we need <code>channels</code> (which we will explore in the next article).</p>
+<p>Here is a simple breakdown of what asynchronous and concurrent tasks might refer to:</p>
+<p><strong>Asynchronous</strong> tasks run independently of the main program flow, allowing the main program to continue executing without waiting for the task's completion. For example, not blocking other tasks in the sequential flow of the main function.</p>
+<p><strong>Concurrent</strong> tasks run simultaneously and can execute at the same time as other tasks. They make use of multiple threads (goroutines in Go's case) to achieve parallel execution. For example, running multiple tasks parallel will cut the time down for spinning each task after the completion of another task.</p>
+<p>Some of the asynchronous tasks that can be done with go routines might include the following:</p>
+<ul>
+<li>Sending a mail while saving the user to the database.</li>
+<li>Fetch and process data from multiple websites(web scraping/crawling).</li>
+<li>High-performance message brokers and queuing systems for inter-process communication.</li>
+</ul>
+<p>One practical way of using go routines with wait groups would be to send mail, we are not going to see the actual implementation of the mail-sending stuff. However, we can try to mimic how the setup might be for sending bulk mail. By creating a wait group and a list of mail addresses to send, a go routine can be created with a function that sends those emails.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func sendMail(address string, wg *sync.WaitGroup) {
+	fmt.Println("Sending mail to", address)
+	defer wg.Done()
+    // Actual mail sending, smtp stuff
+    // handle errors
+
+    // client, err := smtp.Dial("smtp.example.com:587")
+    // errr = client.Mail("sender@example.com")
+    // err = client.Rcpt(address)
+    // wc, err := client.Data()
+    //_, err = wc.Write([]byte("This is the email body."))
+    // err = wc.Close()
+    // client.Quit()
+}
+
+func main() {
+	emails := []string{
+		"recipient1@example.com",
+		"recipient2@example.com",
+		"xyz@example.com",
+	}
+	wg := sync.WaitGroup{}
+    wg.Add(len(emails))
+
+	for _, email := range emails {
+		go sendMail(email, &wg)
+	}
+	wg.Wait()
+	fmt.Println("All emails queued for sending")
+	// Do other stuff
+}
+</code></pre></div><p>In the above example, the <code>emails</code> is a list of email ids to send the mail. We have created a wait group that we can initialize with the total number of go routines probably to be executed. The <code>wg.Add</code> method is parsed with the number of emails to be sent hence that equals the go routines to spawn.</p>
+<p>So, we can then in the for loop, iterate over each mail and send the emails with the <code>sendMail</code> function as go routine. The <code>wg.Wait</code> function outside the loop, will make sure the main function is halted before all the go routines complete their execution.</p>
+<p>There is one more way to call a function as a go routine without changing its signature since we had to pass <code>wg</code> pointer as the WaitGroup reference to it to acknowledge the completion of the go routine. We could wrap these two operations wiz. calling the function and calling the <code>wg.Done</code> method with an anonymous function.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func sendMail(address string) {
+	fmt.Println("Sending mail to", address)
+}
+
+func main() {
+	emails := []string{
+		"recipient1@example.com",
+		"recipient2@example.com",
+		"xyz@example.com",
+	}
+	wg := sync.WaitGroup{}
+	wg.Add(len(emails))
+
+	for _, email := range emails {
+		mail := email
+		go func(m string) {
+			sendMail(m)
+			wg.Done()
+		}(mail)
+	}
+	wg.Wait()
+	fmt.Println("All emails queued for sending")
+	// Do other stuff
+}
+</code></pre></div><p>This does the exact same thing, but we don't have to change the signature of the function, This keeps the functional logic of the function in its place and handles the concurrency on the go.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">
+for _, email := range emails {
+    mail := email
+    go func(m string) {
+        sendMail(m)
+        wg.Done()
+    }(mail)
+}
+</code></pre></div><p>If the above bit scares you, don't worry it's too simple.</p>
+<ul>
+<li>We are iterating over the email slice using a for loop and creating a Go routine for each email address. The loop variable email represents the email address at the current iteration.</li>
+<li>However, to avoid the loop variable capture issue (where all Go routines would share the same email variable), we create a new variable mail and assign the value of email to it. This step ensures that each Go routine captures its own copy of the email address.</li>
+<li>We immediately create an anonymous function (a closure) using the go keyword. This anonymous function takes the <code>mail</code> variable as a parameter m and is executed concurrently as a Go routine. Inside the Go routine, we call the <code>sendMail</code> function with the email address <code>m</code>.</li>
+<li>After the <code>sendMail</code> call has been executed i.e. email has been sent, we call wg.Done() to notify the WaitGroup that the Go routine has completed its work. This allows the WaitGroup to properly synchronize and wait for all Go routines to finish before the program proceeds beyond wg.Wait() in the main function.</li>
+</ul>
+<p>This is one way to do it if you want to separate the mail-sending logic from the goroutines/concurrency task. However, this should be handled with care as the variables inside the closure might be shared among all the goroutines instead of having individual variable literals.</p>
+<p>To ensure that each goroutine operates on its own copy of the email address, we use the approach of creating a new variable mail and passing it as a parameter to the anonymous function. This way, each goroutine captures its unique email address, avoiding any interference or unintended sharing of data between goroutines.</p>
+<h2 id="mutual-exclusion-locks">Mutual Exclusion Locks</h2>
+<p>In the previous examples, we saw how goroutines and wait groups allow us to run multiple tasks concurrently in Go. However, sometimes these concurrent goroutines need to access shared resources like memory, files, network sockets, etc.</p>
+<p>When more than one goroutine tries to access a resource at the same time, it can lead to <strong>race conditions</strong> and unpredictable behavior. To handle this, we need a way to ensure only one goroutine can access the resource at a time.</p>
+<p>This is where mutual exclusion locks come in. A <strong>mutual exclusion lock</strong>, or <strong>mutex</strong>, provides a mechanism to lock access to a shared resource. It ensures only one goroutine at a time can acquire the lock, blocking other goroutines until the lock is released.</p>
+<p>For example, say we have multiple goroutines trying to append data to the same memory buffer(could be file/database/etc.) concurrently:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"os"
+	"sync"
+)
+
+func WriteToFile(filename string, contents string, buffer *[]byte, wg *sync.WaitGroup) {
+	defer wg.Done()
+	*buffer = append(*buffer, []byte(contents)...)
+	err := os.WriteFile(filename, *buffer, 0644)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+func main() {
+	var wg sync.WaitGroup
+	var sharedBuffer []byte
+
+	wg.Add(2)
+	go WriteToFile("data/f1.txt", "Hello ", &sharedBuffer, &wg)
+	go WriteToFile("data/f1.txt", "World! ", &sharedBuffer, &wg)
+	wg.Wait()
+
+	fmt.Println(string(sharedBuffer))
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run --race no-mutex.go
+==================
+WARNING: DATA RACE
+Read at 0x00c000012030 by goroutine 8:
+  main.WriteToFile()
+      /home/meet/code/100-days-of-golang/scripts/go-routines/no-mutex.go:11 +0xe7
+  main.main.func2()
+      /home/meet/code/100-days-of-golang/scripts/go-routines/no-mutex.go:24 +0x64
+
+Previous write at 0x00c000012030 by goroutine 7:
+  main.WriteToFile()
+      /home/meet/code/100-days-of-golang/scripts/go-routines/no-mutex.go:11 +0x16a
+  main.main.func1()
+      /home/meet/code/100-days-of-golang/scripts/go-routines/no-mutex.go:23 +0x64
+
+Goroutine 8 (running) created at:
+  main.main()
+      /home/meet/code/100-days-of-golang/scripts/go-routines/no-mutex.go:24 +0x1f6
+
+Goroutine 7 (finished) created at:
+  main.main()
+      /home/meet/code/100-days-of-golang/scripts/go-routines/no-mutex.go:23 +0x14e
+==================
+</code></pre></div><p>This is because we are trying to access the same memory address at the same time. This is a race condition and can lead to unpredictable behavior. Try removing the <code>--race</code> flag while running, in this little stupid example, it might not be obvious, but in complex and constrained environments, this can get the application in serious trouble.</p>
+<p><strong>NOTE</strong>: We are using <code>go run --race no-mutex.go</code> to check if there are any race conditions in the program. This is the <a href="https://go.dev/doc/articles/race_detector">race detector</a> flag in the run command.</p>
+<p>To avoid this race condition, we need to add the mutex locks provided in the <a href="https://pkg.go.dev/sync#Mutex">sync.Mutex</a> type. There are methods like <a href="">Lock</a>, <a href="">Unlock</a>, and <a href="">TryLock</a> which help in locking access of the resource to a single entity at a given time.</p>
+<p>When a goroutine calls <code>Lock()</code> on a mutex, it acquires the lock. If the mutex is already locked by another goroutine, the calling goroutine will be blocked (put to sleep) until the lock becomes available. Once the lock is acquired successfully, the goroutine can proceed with its critical section, which is the part of the code that should not be executed concurrently by multiple goroutines.</p>
+<p>When a goroutine calls <code>Unlock()</code> on a mutex, it releases the lock. This allows other waiting goroutines to acquire the lock and execute their critical sections. It's essential to ensure that <code>Unlock()</code> is called after the critical section to release the mutex and avoid deadlocks. The critical section/shared resource should not be accessed after the release of this lock.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"os"
+	"sync"
+)
+
+func WriteToFile(filename string, contents string, buffer *[]byte, wg *sync.WaitGroup, mutex *sync.Mutex) {
+	defer wg.Done()
+	contentBytes := []byte(contents)
+
+	mutex.Lock()
+	*buffer = append(*buffer, contentBytes...)
+
+	f, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer f.Close()
+	_, err = f.Write(contentBytes)
+	if err != nil {
+		fmt.Println(err)
+	}
+	mutex.Unlock()
+}
+
+func main() {
+	var wg sync.WaitGroup
+	var mut sync.Mutex
+	var sharedBuffer []byte
+
+	wg.Add(2)
+	go WriteToFile("data/f1.txt", "Hello Gophers!
+", &sharedBuffer, &wg, &mut)
+	go WriteToFile("data/f1.txt", "Welcome to Goworld!
+", &sharedBuffer, &wg, &mut)
+	wg.Wait()
+
+	fmt.Println(string(sharedBuffer))
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run --race mutex.go
+Welcome to Goworld!
+Hello Gophers!
+
+$ go run --race mutex.go
+Hello Gophers!
+Welcome to Goworld!
+
+$ go run --race mutex.go
+Hello Gophers!
+Welcome to Goworld!
+
+$ go run --race mutex.go
+Welcome to Goworld!
+Hello Gophers!
+</code></pre></div><p>The above example is a preventive measure for race conditions with a mutex Lock on the shared resource used in the go routines.</p>
+<p>Let's break down the code step by step. First, we initialize a few variables:</p>
+<ul>
+<li>
+<p><code>wg</code> as <code>sync.WaitGroup</code>:
+The <code>wg</code> is a waitgroup that will be used for the synchronization of the go-routines by blocking the main function to exit</p>
+</li>
+<li>
+<p><code>mut</code> as <code>sync.Mutex</code>:
+The <code>mut</code> is a structure that internally holds a few integer values indicating either a blocked or unblocked state. The <code>sync.Mutex</code> has two private fields wiz. <code>state</code> and <code>sema</code>, the state holds the mutex state either <code>0</code>(unlocked) or <code>1</code> as locked. The <code>sema</code> field is a <code>uint32</code> that is used for blocking and signaling, it acts as a semaphore to manage blocking and unblocking goroutines trying to acquire the mutex.
+This will be used to acquire <code>Lock</code> and <code>Unlock</code> on the shared resource while writing the data to the file or appending the data to the resource.</p>
+</li>
+<li>
+<p><code>sharedBuffer</code> as <code>[]byte</code>:
+The <code>sharedBuffer</code> is the actually shared resource that will be used to hold the strings for keeping track of the data written to the file. It will be the resource that would require to lock for mutating its value(appending to the slice) among the go routines.</p>
+</li>
+</ul>
+<p>We add <code>2</code> to the <code>wg</code> to indicate to wait for the two go-routines to complete, in the next line we call two go routines as the function <code>WriteToFile</code>. The <code>WriteToFile</code> is a function that takes in quite a few parameters namely, the filename, the content to write, the reference to the sharedBuffer, waitgroup, and the mutex.</p>
+<p>Inside the function <code>WriteToFile</code>:</p>
+<ul>
+<li>We first <code>defer</code> the <code>waitgroups</code> as <code>Done</code> i.e. to call the <code>wg.Done</code> method at the end of the function call.</li>
+<li>Typecast the <code>contents</code> from <code>string</code> as the <code>[]byte</code>.</li>
+<li>Acquire the <code>mutex.Lock()</code> i.e. to say &quot;The below operations should not be done concurrently, one at a time&quot;. We then append the <code>contents</code> to the <code>buffer</code> which is a pointer to the <code>sharedBuffer</code> in the main function, so essentially we are trying to mutate the <code>sharedBuffer</code> in this function.</li>
+<li>Open the file as <code>O_APPEND</code> and <code>O_WRONLY</code> to indicate that the file should be opened in append/writing mode. (We have observed this type of operation in the <a href="https://www.meetgor.com/golang-file-write/">Golang: File Write</a> article)</li>
+<li>Use the <code>Write</code> method to write the slice of bytes(contents) into the file that we opened. We have a <code>defer</code> for the closing of the file.</li>
+</ul>
+<p>We obviously check for errors and print them, but it could be a <code>panic</code> or <code>log</code> depending on the type of operation the application is doing.
+So that is the all operation we want to do, so we finally open the lock with <code>mutex.Unlock()</code> which will allow the other go routine if any to access the resource and proceed with the operations.</p>
+<h3 id="read-write-mutual-exclusion-lock">Read Write Mutual Exclusion Lock</h3>
+<p>The mutual exclusion lock is good if you have a write operation-heavy application. However, if we have read write operations in more or the less in same proportion(read heavy) we don't want to have readers getting blocked when other readers are accessing the resource since it is not a mutation process.</p>
+<p>We could allow many readers to read simultaneously. But for the writing operation, we want to block the readers/writers. The writer should be given preference first in case of a lock by other writers. This would prevent a writer from waiting for readers to complete. This is usually referred to as <strong>Read Write Mutual Exclusion</strong>.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+func reader(id int, count *int, wg *sync.WaitGroup, mutex *sync.Mutex) {
+	defer wg.Done()
+	if !mutex.TryLock() {
+		fmt.Printf("Reader %d blocked!
+", id)
+		return
+	}
+	defer mutex.Unlock()
+	fmt.Printf("Reader %d: read count %d
+", id, *count)
+}
+
+func writer(id, increment int, count *int, wg *sync.WaitGroup, mutex *sync.Mutex) {
+	defer wg.Done()
+	defer mutex.Unlock()
+	mutex.Lock()
+	*count += increment
+	time.Sleep(5 * time.Millisecond)
+	fmt.Printf("Writer %d: wrote count %d
+", id, *count)
+}
+
+func main() {
+
+	count := 1
+	var wg sync.WaitGroup
+	var mutex sync.Mutex
+    readers := 5
+    writers := 3
+	wg.Add(readers)
+	for i := 0; i < readers; i++ {
+		go reader(i, &count, &wg, &mutex)
+	}
+
+	wg.Add(writers)
+	for i := 0; i < writers; i++ {
+		go writer(i, 1, &count, &wg, &mutex)
+	}
+	wg.Wait()
+
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run --race no-rwmutex.go 
+Reader 0: read count 1
+Reader 3 blocked!
+Reader 2 blocked!
+Reader 1 blocked!
+Reader 4 blocked!
+Writer 0: wrote count 2
+Writer 1: wrote count 3
+Writer 2: wrote count 4
+
+$ go run --race no-rwmutex.go 
+Reader 2 blocked!
+Reader 0: read count 1
+Reader 1 blocked!
+Reader 4 blocked!
+Reader 3 blocked!
+Writer 2: wrote count 2
+Writer 0: wrote count 3
+Writer 1: wrote count 4
+</code></pre></div><p>The above example has a <code>reader</code> and a <code>writer</code> method, the <code>reader</code> method simply has to read the shared resource <code>count</code>. It acquires a <code>Mutex</code> lock before reading and unlocks it thereafter. Similarly, the <code>writer</code> function is used for incrementing the <code>count</code> shared resource.</p>
+<p>The <code>reader</code> method has a <a href="https://pkg.go.dev/sync#Mutex.TryLock">TryLock</a> method that tries to acquire a mutex lock on the resource, if the resource is already locked, the function will return <code>false</code> and hence we can say that the reading is blocked(just for demonstration). And if the function <code>TryLock</code> returns <code>true</code>, it will acquire the <code>Lock</code>. We further <code>defer</code> the <code>Unlock</code> and access the <code>count</code> variable which is passed as a reference.</p>
+<p>The <code>writer</code> method is simply acquiring the <code>Lock</code> and incrementing the <code>counter</code> and thereafter <code>Unlock</code> is called with <code>defer</code>.</p>
+<p>In the above code:</p>
+<ul>
+<li>The <code>reader</code> and the <code>writer</code> both might be waiting for the lock to be released, however, for readers to wait for reading doesn't make sense.</li>
+<li>Because if you would want to just read a particular memory address, there shouldn't be any locks for one reader to wait for other readers to finish.</li>
+<li>However, for writing, there has to be a lock. The mutex lock will lock the resource irrespective of the <code>reader</code> or <code>writer</code>.</li>
+</ul>
+<p>This might not be as visible here, but it might be the reason, that all the <code>readers</code> are blocked from reading due to another reader's or writer's lock.</p>
+<p>The <code>sync</code> package has the <a href="https://pkg.go.dev/sync#RWMutex">RWMutex</a> that does this exact same thing. It is almost similar to the <code>Mutex</code> however, it would allow concurrent reading operation and prefer writing operation before readers to prevent writer starvation.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+func reader(id int, count *int, wg *sync.WaitGroup, mutex *sync.RWMutex) {
+	defer wg.Done()
+	defer mutex.RUnlock()
+
+	if !mutex.TryRLock() {
+		fmt.Printf("Reader %d blocked!
+", id)
+		return
+	}
+	fmt.Printf("Reader %d: read count %d
+", id, *count)
+
+}
+
+func writer(id, increment int, count *int, wg *sync.WaitGroup, mutex *sync.RWMutex) {
+	defer wg.Done()
+	defer mutex.Unlock()
+	mutex.Lock()
+
+	*count += increment
+	time.Sleep(5 * time.Millisecond)
+	fmt.Printf("Writer %d: wrote count %d
+", id, *count)
+}
+
+func main() {
+
+	count := 1
+	var wg sync.WaitGroup
+	var mutex sync.RWMutex
+    readers := 5
+    writers := 3
+	wg.Add(readers)
+	for i := 0; i < readers; i++ {
+		go reader(i, &count, &wg, &mutex)
+	}
+
+	wg.Add(writers)
+	for i := 0; i < writers; i++ {
+		go writer(i, 1, &count, &wg, &mutex)
+	}
+	wg.Wait()
+
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run --race rwmutex.go 
+Reader 0: read count 1
+Reader 3: read count 1
+Reader 1: read count 1
+Reader 2: read count 1
+Reader 4: read count 1
+Writer 1: wrote count 2
+Writer 0: wrote count 3
+Writer 2: wrote count 4
+Writer 3: wrote count 5
+Writer 4: wrote count 6
+
+$ go run --race rwmutex.go 
+Reader 1 blocked!
+Reader 0: read count 1
+Reader 2 blocked!
+Reader 3 blocked!
+Reader 4 blocked!
+Writer 4: wrote count 2
+Writer 0: wrote count 3
+Writer 1: wrote count 4
+Writer 3: wrote count 5
+Writer 2: wrote count 6
+
+</code></pre></div><p>In the modified example, all the logic remains the same, just the <code>sync.Mutex</code> is replaced with <code>sync.RWMutex</code>. Also for trying to acquire the lock in the <code>reader</code> method <a href="https://pkg.go.dev/sync#RWMutex.RLock">TryRLock</a> is used instead of <a href="https://pkg.go.dev/sync#RWMutex.TryRLock">TryLock</a> which will check if the existing lock acquired is of a reader or writer, if it is a reader, it will return <code>true</code>, else <code>false</code>. Also the <code>Unlock</code> is replaced with the <code>RUnlock</code> method for releasing the read lock. In the <code>writer</code> method, everything remains the same so the writer has to acquire the lock irrespective of whether the current lock is from the reader/writer, so it is a normal <code>Lock</code> and <code>Unlock</code>.</p>
+<p>In the above example, we can see all the read operations sometimes are executed instead of getting blocked. This is due to the <code>RWMutex</code> Lock and Unlock on the read operation/function.</p>
+<ul>
+<li>When one reader is reading, it can't block other readers.</li>
+<li>However with simple <code>Mutex</code>, the reader is even blocked when another reader is reading.</li>
+<li>For the write operation, it will be blocked as usual, so if a writer is performing a write operation and a reader/readers come in, they will be blocked, also if in the meantime, while the resource is locked, another writer comes in, the writer will be given preference instead of waiting for all readers to complete. This prevents writer starvation.</li>
+</ul>
+<p>You can see, that the readers are still blocked the majority of the time, however, they are blocked due to the writer locking the resource and not any other reader.</p>
+<p>There is a bit more suitable <a href="https://github.com/Mr-Destructive/100-days-of-golang/blob/main/scripts/go-routines/file-rw.go">example</a> related to <code>file</code> reading and writing with <code>RWMutex</code>, make sure to check that out to get a more clear understanding of an actual case of using the <code>RWMutex</code>.</p>
+<h3 id="channels">Channels</h3>
+<p>This is a big part and I would like to delve into this topic in a separate post. There are some patterns like <code>fan-in</code>, <code>fan-out</code>, <code>worker-pool</code>, <code>pub-sub</code>, etc. which are really common in web applications and backend systems. These patterns we shall explore in the next article.</p>
+<p>Channels are a way to provide a safe and idiomatic way for Goroutines to exchange data and coordinate their execution without resorting to low-level mechanisms like shared memory or explicit locking.</p>
+<p>That's it from the 30th part of the series, all the source code for the examples are linked in the GitHub on the <a href="https://github.com/Mr-Destructive/100-days-of-golang/tree/main/scripts/go-routines">100 days of Golang</a> repository.</p>
+<h3 id="references">References:</h3>
+<ul>
+<li><a href="https://blog.nindalf.com/posts/how-goroutines-work/">How Goroutines Work</a></li>
+<li><a href="https://blog.logrocket.com/concurrency-patterns-golang-waitgroups-goroutines/">Concurrency patterns in Golang: WaitGroups and Goroutines</a></li>
+<li><a href="https://riteeksrivastava.medium.com/a-complete-journey-with-goroutines-8472630c7f5c">A complete journey with Goroutines</a></li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>From this part of the series, the fundamentals of golang's concurrency model were understood specifically spawning go-routines, synchronously executing go-routines with the help of a wait group, mutex locks, and how to secure concurrent access to a shared resource. In the next part of the series, these concepts will be used in asynchronous communication using channels.</p>
+<p>Hopefully, you have got the basics of concurrency in golang cleared from this post. If you have any queries, suggestions, or feedback, please feel free to comment below or contact me on the social handles. Thank you for reading. Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/golang-generics" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Golang: Generics</span>
+        </a>
+        
+
+        
+        
+        <a href="/posts/golang-channels" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Golang: Channels</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-delete-method" class="related-link">
+                <span class="related-post-title">Golang Web: DELETE Method</span>
+                <span class="related-post-date">2025-01-12 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-patch-method" class="related-link">
+                <span class="related-post-title">Golang Web: PATCH Method</span>
+                <span class="related-post-date">2025-01-11 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-5" class="related-link">
+                <span class="related-post-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+                <span class="related-post-date">2024-12-11 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-4" class="related-link">
+                <span class="related-post-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+                <span class="related-post-date">2024-12-09 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-3" class="related-link">
+                <span class="related-post-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+                <span class="related-post-date">2024-12-07 20:45:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

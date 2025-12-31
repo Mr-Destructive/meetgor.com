@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Golang: Channels | Meet Gor</title>
+    <meta name="title" content="Golang: Channels | Meet Gor">
+    <meta name="description" content="Understanding the core of concurrency in Go with channels and go routines. Exploring various patterns used in concurrent operations.">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/golang-channels">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/golang-channels">
+    <meta property="og:title" content="Golang: Channels">
+    <meta property="og:description" content="Understanding the core of concurrency in Go with channels and go routines. Exploring various patterns used in concurrent operations.">
+    <meta property="og:image" content="https://meetgor-cdn.pages.dev/golang-031-channels.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Golang: Channels">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2023-08-28 21:15:00">
+    <meta property="article:modified_time" content="2023-08-28 21:15:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/golang-channels">
+    <meta name="twitter:title" content="Golang: Channels">
+    <meta name="twitter:description" content="Understanding the core of concurrency in Go with channels and go routines. Exploring various patterns used in concurrent operations.">
+    <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/golang-031-channels.png">
+    <meta name="twitter:image:alt" content="Golang: Channels">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/golang-channels"
+        },
+        "headline": "Golang: Channels",
+        "description": "Understanding the core of concurrency in Go with channels and go routines. Exploring various patterns used in concurrent operations.",
+        "datePublished": "2023-08-28 21:15:00",
+        "dateModified": "2023-08-28 21:15:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        "image": "https:\/\/meetgor-cdn.pages.dev\/golang-031-channels.png",
+        "keywords": "go",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;In this part of the series, we will be continuing with the concurrency features of golang with channels. In the last post, we covered the fundamentals of go routines and wait groups. By leveraging those understood concepts, we will explore channels to communicate the data between various go routines.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;what-are-channels\u0026#34;\u0026gt;What are Channels\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;A golang Channel is like a pipe that lets goroutines communicate. It lets you pass values from one goroutine to another. Channels are typed i.e. you declare them with \u0026lt;code\u0026gt;chan\u0026lt;\/code\u0026gt; keyword followed by the type to be sent and received (e.g. \u0026lt;code\u0026gt;chan int\u0026lt;\/code\u0026gt;). The \u0026lt;code\u0026gt;chan\u0026lt;\/code\u0026gt; type specifies the type of values that will be passed through the channel. We will explore the detailed technicalities soon. Right now, we need to just focus on what problem is channels solving.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In the previous article, we worked with go routines and wait groups which allowed us to process tasks asynchronously. However, if we wanted to access the data in between the processes, we would have to tweak the core functionality or might require global variables, however, in real-world applications, the environment is quite constrained. We would require a way to communicate data between those go routines. Channels are made just for that(more than that), but in essence, it solves that exact problem.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n)\n\nfunc main() {\n\tch := make(chan string)\n\tdefer close(ch)\n\n\tgo func() {\n\t\tmessage := \u0026#34;Hello, Gophers!\u0026#34;\n\t\tch \u0026lt;- message\n\t}()\n\n\tmsg := \u0026lt;-ch\n\tfmt.Println(msg)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above code example, the channel \u0026lt;code\u0026gt;ch\u0026lt;\/code\u0026gt; is created of type \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt; and a message is sent to the channel inside a go routine as \u0026lt;code\u0026gt;ch \u0026amp;lt;- message\u0026lt;\/code\u0026gt;, and the message is retrieved from the channel as \u0026lt;code\u0026gt;\u0026amp;lt;-ch\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\n\nHello, Gophers!\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Channels have two key properties:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Send and receive operations block until both sides are ready(i.e. there is a sender and a receiver for a channel). This allows goroutines to synchronize without explicit locks or condition variables.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Channels are typed, so only values of the specified type can be sent and received. This provides type safety.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n    \u0026#34;fmt\u0026#34;\n)\n\nfunc main() {\n    ch := make(chan string)\n    go func() {\n        message := \u0026#34;Hello, Gophers!\u0026#34;\n        ch \u0026lt;- message\n    }()\n    fmt.Println(\u0026lt;-ch)\n    fmt.Println(\u0026lt;-ch)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the same example, if we tried to add the second receiver i.e. \u0026lt;code\u0026gt;\u0026amp;lt;-ch\u0026lt;\/code\u0026gt;, it would result in a deadlock\/block forever since there is no second message sent into the channel. Only one value i.e. \u0026amp;quot;Hello Gophers!\u0026amp;quot; was sent as a \u0026lt;code\u0026gt;message\u0026lt;\/code\u0026gt; into the channel, and that was received by the first receiver as \u0026lt;code\u0026gt;\u0026amp;lt;-ch\u0026lt;\/code\u0026gt;, however in the next receiver, there is no sender.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\n\nHello, Gophers!\nfatal error: all goroutines are asleep - deadlock!\n\ngoroutine 1 [chan receive]:\nmain.main()\n        \/home\/meet\/code\/100-days-of-golang\/scripts\/channels\/main.go:16 \u002b0x125\nexit status 2\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;To sum up the deadlock concept in unbuffered channels:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;The main goroutine is waiting at the second receive operation for a second message that will never arrive (was never sent).\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The anonymous goroutine is waiting for someone to read from the channel so it can proceed with sending the second message.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;h2 id=\u0026#34;buffered-channels\u0026#34;\u0026gt;Buffered Channels\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;In Go, you can create both buffered and unbuffered channels. An unbuffered channel has no capacity to hold data, it relies on immediate communication between the sender and receiver. However, you can create a buffered channel by specifying a capacity when using the make function, like \u0026lt;code\u0026gt;ch := make(chan int, 5)\u0026lt;\/code\u0026gt; will create a channel with a capacity of \u0026lt;code\u0026gt;5\u0026lt;\/code\u0026gt; i.e. it can store a certain number of values without an immediate receiver. A buffered channel allows you to send multiple values to the channel without an immediate receiver, up to its capacity. After that, it will block until the receiver retrieves values.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;sync\u0026#34;\n)\n\nfunc main() {\n\tbuffchan := make(chan int, 2)\n\n\twg := sync.WaitGroup{}\n\twg.Add(2)\n\n\tfor i := 1; i \u0026lt;= 2; i\u002b\u002b {\n\t\tgo func(n int) {\n\t\t\tbuffchan \u0026lt;- n\n\t\t\twg.Done()\n\t\t}(i)\n\t}\n\n\twg.Wait()\n\tclose(buffchan)\n\n\tfor c := range buffchan {\n\t\tfmt.Println(c)\n\t}\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run channels.go\n1\n2\n\n$ go run channels.go\n2\n1\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In this code snippet, we create a buffered channel ch with a capacity of 2. We send two values to the channel, and even though there\u0026#39;s no immediate receiver, the code doesn\u0026#39;t block. If we were to send a third value, it would lead to a deadlock because there is no receiver to free up space in the buffer.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;closing-channels\u0026#34;\u0026gt;Closing Channels\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Closing a channel is important to signal to the receiver that no more data will be sent. It\u0026#39;s achieved using the built-in close function. After closing a channel, any further attempts to send data will result in a panic. On the receiving side, if a channel is closed and there\u0026#39;s no more data to receive, the receive operation will yield the zero value for the channel\u0026#39;s type.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n)\n\nfunc main() {\n\tch := make(chan int)\n\n\tgo func() {\n\t\tfor i := 1; i \u0026lt;= 5; i\u002b\u002b {\n\t\t\tch \u0026lt;- i\n\t\t}\n\t\tclose(ch)\n\t}()\n\n\tfor num := range ch {\n\t\tfmt.Println(\u0026#34;Received:\u0026#34;, num)\n\t}\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In this example, a goroutine sends numbers to the channel and then closes it. The main routine receives these numbers using a for-range loop. When the channel is closed and all values are received, the loop will terminate automatically. Keep in mind that only a sender can close the channel, to indicate the receiver to not wait for further values from the channel.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;select-statement-for-channels\u0026#34;\u0026gt;Select Statement for Channels\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;The select statement is used for handling multiple channels. There are a few operations that can be checked with a case statement in the select block.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;|Case     |Channel Operation|\n|---------|-----------------|\n|         |                 |\n|Sending  | chan \u0026amp;lt;- value   |\n|         |                 |\n|Receiving|    \u0026amp;lt;- chan      |\n|         |                 |\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, we can either check if there is a sender or a receiver available for a channel with a case statement just like a switch statement.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;sync\u0026#34;\n)\n\nfunc sendMessage(ch chan string, message string, wg *sync.WaitGroup) {\n\tdefer wg.Done()\n\tch \u0026lt;- message\n}\n\nfunc main() {\n\tvar wg sync.WaitGroup\n\n\tch1 := make(chan string, 2)\n\tch2 := make(chan string, 2)\n\twg.Add(2)\n\n\tgo sendMessage(ch1, \u0026#34;Hello, Gophers!\u0026#34;, \u0026amp;wg)\n\tgo sendMessage(ch2, \u0026#34;Hello, Hamsters!\u0026#34;, \u0026amp;wg)\n\n\tgo func() {\n\t\tdefer wg.Done()\n\t\twg.Wait()\n\t\tclose(ch1)\n\t\tclose(ch2)\n\t}()\n\tch1 \u0026lt;- \u0026#34;new message to c1\u0026#34;\n\tch2 \u0026lt;- \u0026#34;new message to c2\u0026#34;\n\n\tselect {\n\tcase \u0026lt;-ch1:\n\t\tfmt.Println(\u0026#34;Received from ch1\u0026#34;)\n\tcase ch1 \u0026lt;- \u0026#34;new message to c1\u0026#34;:\n\t\tfmt.Println(\u0026#34;Sent to ch1\u0026#34;)\n\tcase \u0026lt;-ch2:\n\t\tfmt.Println(\u0026#34;Received from ch2\u0026#34;)\n\tcase ch2 \u0026lt;- \u0026#34;new message to c2\u0026#34;:\n\t\tfmt.Println(\u0026#34;Sent to ch2\u0026#34;)\n\t}\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run channels.go\nSent to ch1\n\n$ go run simple.go\nReceived from ch1\n\n$ go run simple.go\nReceived from ch2\n\n$ go run simple.go\nSent to ch2\n\n$ go run simple.go\nReceived from ch1\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The order of the messages is not guaranteed, the operation which is performed first based on the go routine will be only logged.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In the simple example above, we have created two channels \u0026lt;code\u0026gt;ch1\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;ch2\u0026lt;\/code\u0026gt;, and sent two messages to them using two go routines. The main routine then waits for the messages to be received from the channels. We close the channels when the sending is done and simply check for the 4 cases i.e. the send on channel 1, receive on channel 1, and similarly for channel 2. So, that is how we can use the select statement to check which operation is being performed on the different channels, and this forms the basis for the communication between channels. We get more ease in the flow while working with channels.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Below is an example to test which \u0026lt;code\u0026gt;url\u0026lt;\/code\u0026gt; or a web server is responding first to the request.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n\t\u0026#34;sync\u0026#34;\n)\n\nfunc pingGoogle(c chan string, wg *sync.WaitGroup) {\n\tdefer wg.Done()\n\tres, _ := http.Get(\u0026#34;http:\/\/google.com\u0026#34;)\n\tc \u0026lt;- res.Status\n}\n\nfunc pingDuckDuckGo(c chan string, wg *sync.WaitGroup) {\n\tdefer wg.Done()\n\tres, _ := http.Get(\u0026#34;https:\/\/duckduckgo.com\u0026#34;)\n\tc \u0026lt;- res.Status\n}\n\nfunc pingBraveSearch(c chan string, wg *sync.WaitGroup) {\n\tdefer wg.Done()\n\tres, _ := http.Get(\u0026#34;https:\/\/search.brave.com\u0026#34;)\n\tc \u0026lt;- res.Status\n}\n\nfunc main() {\n\tgogChan := make(chan string)\n\tddgChan := make(chan string)\n\tbraveChan := make(chan string)\n\n\tvar wg sync.WaitGroup\n\twg.Add(3)\n\n\tgo pingDuckDuckGo(ddgChan, \u0026amp;wg)\n\tgo pingGoogle(gogChan, \u0026amp;wg)\n\tgo pingBraveSearch(braveChan, \u0026amp;wg)\n\n\topenChannels := 3\n\n\tgo func() {\n\t\twg.Wait()\n\t\tclose(gogChan)\n\t\tclose(ddgChan)\n\t\tclose(braveChan)\n\t}()\n\n\tfor openChannels \u0026gt; 0 {\n\t\tselect {\n\t\tcase msg1, ok := \u0026lt;-gogChan:\n\t\t\tif !ok {\n\t\t\t\topenChannels--\n\t\t\t} else {\n\t\t\t\tfmt.Println(\u0026#34;Google responded:\u0026#34;, msg1)\n\t\t\t}\n\t\tcase msg2, ok := \u0026lt;-ddgChan:\n\t\t\tif !ok {\n\t\t\t\topenChannels--\n\t\t\t} else {\n\t\t\t\tfmt.Println(\u0026#34;DuckDuckGo responded:\u0026#34;, msg2)\n\t\t\t}\n\t\tcase msg3, ok := \u0026lt;-braveChan:\n\t\t\tif !ok {\n\t\t\t\topenChannels--\n\t\t\t} else {\n\t\t\t\tfmt.Println(\u0026#34;BraveSearch responded:\u0026#34;, msg3)\n\t\t\t}\n\t\t}\n\t}\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above example shows how to use a select statement to wait for multiple channels to be ready before proceeding with the next operation. With this example, we can get the channel that sent the response first i.e. which search engine in this case responded to the ping first. Just a bit exaggerated example but it helps in understanding the concept of the \u0026lt;code\u0026gt;select\u0026lt;\/code\u0026gt; statement.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run select-chan.go\n\nDuckDuckGo responded: 200 OK\nGoogle responded: 200 OK\nBraveSearch responded: 200 OK\n\n\n$ go run select-chan.go\n\nDuckDuckGo responded: 200 OK\nBraveSearch responded: 200 OK\nGoogle responded: 200 OK\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Let\u0026#39;s break each of the steps down:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;code\u0026gt;pingDuckDuckGo(ddgChan, \u0026amp;amp;wg)\u0026lt;\/code\u0026gt; is a method which sends data to the channel \u0026lt;code\u0026gt;ddgChan\u0026lt;\/code\u0026gt;.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;code\u0026gt;pingGoogle(gogChan, \u0026amp;amp;wg)\u0026lt;\/code\u0026gt; is a method that sends data to the channel \u0026lt;code\u0026gt;gogChan\u0026lt;\/code\u0026gt;.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;code\u0026gt;pingBraveSearch(braveChan, \u0026amp;amp;wg)\u0026lt;\/code\u0026gt; is a method that sends data to the channel \u0026lt;code\u0026gt;braveChan\u0026lt;\/code\u0026gt;.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;We wait for each go routine to finish using \u0026lt;code\u0026gt;wg.Wait()\u0026lt;\/code\u0026gt; and close the channels.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Finally, we close the channels \u0026lt;code\u0026gt;gogChan\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;ddgChan\u0026lt;\/code\u0026gt;, and \u0026lt;code\u0026gt;braveChan\u0026lt;\/code\u0026gt; to pick up the data from the channel as \u0026lt;code\u0026gt;\u0026amp;lt;-chan\u0026lt;\/code\u0026gt; with the select case block.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The select case will pick the first channel that is ready to receive data. Hence we get the output based on the order of which the channel responded first.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;We use the \u0026lt;code\u0026gt;!ok\u0026lt;\/code\u0026gt; condition to check if the channel is closed or not, we have a \u0026lt;code\u0026gt;openChannels\u0026lt;\/code\u0026gt; variable to keep track of the number of open channels, if there are no channels open, we simply break out of the infinite loop.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;h2 id=\u0026#34;directional-channels\u0026#34;\u0026gt;Directional Channels\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Channels can also be designated as \u0026amp;quot;send-only\u0026amp;quot; or \u0026amp;quot;receive-only\u0026amp;quot; to enforce certain communication patterns and enhance safety. This is done by specifying the direction when defining the channel type.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;sync\u0026#34;\n)\n\nfunc receiver(ch \u0026lt;-chan int, wg *sync.WaitGroup) {\n\tfor i := range ch {\n\t\tfmt.Println(\u0026#34;Received:\u0026#34;, i)\n\t}\n\twg.Done()\n}\n\nfunc sender(ch chan\u0026lt;- int, wg *sync.WaitGroup) {\n\tfor i := 0; i \u0026lt; 10; i\u002b\u002b {\n\t\tfmt.Println(\u0026#34;Sent:\u0026#34;, i)\n\t\tch \u0026lt;- i\n\t}\n\tclose(ch)\n\twg.Done()\n}\n\nfunc main() {\n\tch := make(chan int)\n\twg := sync.WaitGroup{}\n\twg.Add(2)\n\tgo receiver(ch, \u0026amp;wg)\n\tgo sender(ch, \u0026amp;wg)\n\twg.Wait()\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, we have created a channel \u0026lt;code\u0026gt;ch\u0026lt;\/code\u0026gt; and sent 10 values to it using two-go routines. The main routine is waiting for the goroutines to finish before closing the channel. The \u0026lt;code\u0026gt;sender\u0026lt;\/code\u0026gt; sends values \u0026lt;code\u0026gt;0\u0026lt;\/code\u0026gt; through \u0026lt;code\u0026gt;9\u0026lt;\/code\u0026gt;, and the \u0026lt;code\u0026gt;receiver\u0026lt;\/code\u0026gt; prints whenever a value is received. In the \u0026lt;code\u0026gt;sender\u0026lt;\/code\u0026gt; method, we only accept the channel to send data as \u0026lt;code\u0026gt;chan\u0026amp;lt;-\u0026lt;\/code\u0026gt;, and in the \u0026lt;code\u0026gt;receiver\u0026lt;\/code\u0026gt; method, the channel parameter is set to only read from the channel as \u0026lt;code\u0026gt;\u0026amp;lt;-chan\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run send-recv.go\n\nSent: 0\nReceived: 0\nSent: 1\nSent: 2\nReceived: 1\nReceived: 2\nSent: 3\nSent: 4\nReceived: 3\nReceived: 4\nSent: 5\nSent: 6\nReceived: 5\nReceived: 6\nSent: 7\nSent: 8\nReceived: 7\nReceived: 8\nSent: 9\nReceived: 9\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;When we define a parameter as a write-only channel means that the function can only send data into that channel. It cannot read data from it or close it. This pattern is helpful when you want to make sure that the function is solely responsible for producing data and not consuming or interacting with the channel\u0026#39;s current state.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;When we define a parameter as a read-only channel, it means that the function can only receive data from that channel. It cannot close the channel or send data into it. This pattern is useful when we want to ensure that the function only consumes data from the channel without modifying it or interfering with the sender\u0026#39;s logic.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Additionally, the compiler will catch code trying to send on a read-only channel or receive from a write-only one.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;common-channel-usage-pattern\u0026#34;\u0026gt;Common Channel Usage Pattern\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;There are a variety of ways in which channels can be used in Go. In this section, we\u0026#39;ll explore some of the most common patterns for using channels in Go. Some of the most useful and idiomatic channel usage patterns include pipelines, fan-in and fan-out, etc.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;async-await-pattern-for-channels\u0026#34;\u0026gt;Async Await pattern for Channels\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;In Go, goroutines and channels enable an elegant async\/await style. A goroutine can execute a task asynchronously, while the main thread awaits the result using a channel.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The async-await pattern in Go involves initiating multiple tasks concurrently, each with its own goroutine, and then awaiting their completion before proceeding. Channels are used to communicate between these goroutines, allowing them to work independently and provide results to the main routine when ready.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\nfunc fetchURL(url string, ch chan\u0026lt;- http.Response) {\n\tgo func() {\n\t\tres, err := http.Get(url)\n\t\tif err != nil {\n\t\t\tpanic(err)\n\t\t}\n\t\tdefer res.Body.Close()\n\t\tch \u0026lt;- *res\n\t}()\n}\n\nfunc task(name string) {\n\tfmt.Println(\u0026#34;Task\u0026#34;, name)\n}\n\nfunc main() {\n\tfmt.Println(\u0026#34;Start\u0026#34;)\n\n\turl := \u0026#34;http:\/\/google.com\u0026#34;\n\n\trespCh := make(chan http.Response)\n\n\tfetchURL(url, respCh)\n\n\ttask(\u0026#34;A\u0026#34;)\n\ttask(\u0026#34;B\u0026#34;)\n\n\tresponse := \u0026lt;-respCh\n\tfmt.Println(\u0026#34;Response Status:\u0026#34;, response.Status)\n\n\tfmt.Println(\u0026#34;Done\u0026#34;)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run async.go\nStart\nTask A\nTask B\nResponse Status: 200 OK\nDone\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, we have created a function \u0026lt;code\u0026gt;fetchURL\u0026lt;\/code\u0026gt; which takes a URL and a channel as an argument. The channel \u0026lt;code\u0026gt;respCh\u0026lt;\/code\u0026gt; is used to communicate between the goroutines. The function fires up a goroutine that fetches the request, we send a \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; request to the provided URL and send the response to the provided channel.  In the main function, we access the \u0026lt;code\u0026gt;response\u0026lt;\/code\u0026gt; by receiving the data from the channel as \u0026lt;code\u0026gt;\u0026amp;lt;-respCh\u0026lt;\/code\u0026gt;. Before doing this, we can do any other task simultaneously, like \u0026lt;code\u0026gt;task(\u0026amp;quot;A\u0026amp;quot;)\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;task(\u0026amp;quot;B\u0026amp;quot;)\u0026lt;\/code\u0026gt; which just prints some string(it could be anything). But this should be before we pull in from the channel, anything after the access will be blocked i.e. will be executed sequentially.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;pipeline-pattern-for-channels\u0026#34;\u0026gt;Pipeline pattern for Channels\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;The pipeline pattern is used to chain together a sequence of processing stages, each stage consumes input, processes data, and passes the output to the next stage. This type of pattern can be achieved by chaining different channels from one go routine to another.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/100-days-of-golang\/channels-pipelines-pattern.png\u0026#34; alt=\u0026#34;Pipeline pattern flow using channels in golang\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, the pipeline pattern using channels in Go, data flows sequentially through multiple stages: Stage 1 reads input and sends to Channel A, Stage 2 receives from Channel A and sends to Channel B, and Stage 3 receives from Channel B and produces the final output.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;sync\u0026#34;\n)\n\nfunc generate(nums []int, out chan\u0026lt;- int, wg *sync.WaitGroup) {\n\tfmt.Println(\u0026#34;Stage 1\u0026#34;)\n\tfor _, n := range nums {\n\t\tfmt.Println(\u0026#34;Number:\u0026#34;, n)\n\t\tout \u0026lt;- n\n\t}\n\tclose(out)\n\twg.Done()\n}\n\nfunc square(in \u0026lt;-chan int, out chan\u0026lt;- int, wg *sync.WaitGroup) {\n\tfmt.Println(\u0026#34;Stage 2\u0026#34;)\n\tfor n := range in {\n\t\tsq := n * n\n\t\tfmt.Println(\u0026#34;Square:\u0026#34;, sq)\n\t\tout \u0026lt;- sq\n\t}\n\tclose(out)\n\twg.Done()\n}\n\nfunc print(in \u0026lt;-chan int, wg *sync.WaitGroup) {\n\tfor n := range in {\n\t\tfmt.Println(n)\n\t}\n\twg.Done()\n}\n\nfunc main() {\n\tinput := []int{1, 2, 3, 4, 5}\n\n\tvar wg sync.WaitGroup\n\twg.Add(3)\n\n\tstage1 := make(chan int)\n\tstage2 := make(chan int)\n\n\tgo generate(input, stage1, \u0026amp;wg)\n\n\tgo square(stage1, stage2, \u0026amp;wg)\n\n\tgo print(stage2, \u0026amp;wg)\n\n\twg.Wait()\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, we have created a sequence of processing stages, each stage consumes input, processes data, and passes the output to the next stage. We can consider the functions \u0026lt;code\u0026gt;generate\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;square\u0026lt;\/code\u0026gt;, and \u0026lt;code\u0026gt;print\u0026lt;\/code\u0026gt; as stages \u0026lt;code\u0026gt;1\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;2\u0026lt;\/code\u0026gt;, and \u0026lt;code\u0026gt;3\u0026lt;\/code\u0026gt; respectively.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;The generate function, takes in the input as a slice of integers, an unbuffered channel, and the waitgroup b reference, the function basically iterates over the numbers in the slice and sends it to the channel provided in the parameters.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The square function takes in the stage1 channel that the channel from the stage1, as well as its own channel as \u0026lt;code\u0026gt;stage2\u0026lt;\/code\u0026gt; (remember the \u0026lt;code\u0026gt;stage1\u0026lt;\/code\u0026gt; channel has sent the numbers via the generating function).\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The square function then iterates over the number sent from the channel \u0026lt;code\u0026gt;stage1\u0026lt;\/code\u0026gt; as \u0026lt;code\u0026gt;in\u0026lt;\/code\u0026gt; and squares it and sends it to the channel provided as \u0026lt;code\u0026gt;stage2\u0026lt;\/code\u0026gt; as the \u0026lt;code\u0026gt;out\u0026lt;\/code\u0026gt; channel.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The print function takes in the stage2 channel as an argument and iterates over the number sent from the channel \u0026lt;code\u0026gt;stage2\u0026lt;\/code\u0026gt; and prints it.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run pipeline.go\nStage 1\nNumber: 1\nStage 2\nSquare: 1\n1\nNumber: 2\nNumber: 3\nSquare: 4\nSquare: 9\nNumber: 4\n4\n9\nSquare: 16\n16\nNumber: 5\nSquare: 25\n25\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, we can see the order of the execution, both the pipelines started synchronously, However, they perform the operation only when the data is sent from the previous channel. We first print the \u0026lt;code\u0026gt;number\u0026lt;\/code\u0026gt; from the \u0026lt;code\u0026gt;generate\u0026lt;\/code\u0026gt; function, then print the squared value in the \u0026lt;code\u0026gt;square\u0026lt;\/code\u0026gt; function, and finally print it as \u0026lt;code\u0026gt;Square: value\u0026lt;\/code\u0026gt; in the print function.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;fan-in-pattern-for-channels\u0026#34;\u0026gt;Fan-In pattern for Channels\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;The Fan-In pattern is used for combining data from multiple sources into a single stream for unified processing, often using a shared data structure to aggregate the data. We can create the fan-in pattern by merging multiple input channels into a single output channel.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/100-days-of-golang\/channels-fan-in-pattern.png\u0026#34; alt=\u0026#34;Fan-in pattern flow using channels in golang\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The fan-in pattern is when multiple input channels (A, B, C) are read concurrently, and their data is merged into a single output channel (M).\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;io\/ioutil\u0026#34;\n\t\u0026#34;sync\u0026#34;\n)\n\nfunc readFile(file string, ch chan\u0026lt;- string) {\n\tcontent, _ := ioutil.ReadFile(file)\n\tfmt.Println(\u0026#34;Reading from\u0026#34;, file, \u0026#34;as :: \u0026#34;, string(content))\n\tch \u0026lt;- string(content)\n\tclose(ch)\n}\n\nfunc merge(chs ...\u0026lt;-chan string) string {\n\tvar wg sync.WaitGroup\n\tout := \u0026#34;\u0026#34;\n\n\tfor _, ch := range chs {\n\t\twg.Add(1)\n\t\tgo func(c \u0026lt;-chan string) {\n\t\t\tfor s := range c {\n\t\t\t\tout \u002b= s\n\t\t\t}\n\t\t\twg.Done()\n\t\t}(ch)\n\t}\n\n\twg.Wait()\n\treturn out\n}\n\nfunc main() {\n\tch1 := make(chan string)\n\tch2 := make(chan string)\n\n\tgo readFile(\u0026#34;data\/f1.txt\u0026#34;, ch1)\n\tgo readFile(\u0026#34;data\/f2.txt\u0026#34;, ch2)\n\n\tmerged := merge(ch1, ch2)\n\n\tfmt.Println(merged)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, the \u0026lt;code\u0026gt;readFile\u0026lt;\/code\u0026gt; function reads the contents of the file and sends it to the channels \u0026lt;code\u0026gt;ch1\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;ch2\u0026lt;\/code\u0026gt; from different go routines. The \u0026lt;code\u0026gt;readFile\u0026lt;\/code\u0026gt; takes in the channel as send only channel which reads the file and sends the content to the channel as \u0026lt;code\u0026gt;ch \u0026amp;lt;- string(content)\u0026lt;\/code\u0026gt;. The \u0026lt;code\u0026gt;merge\u0026lt;\/code\u0026gt; function takes in \u0026lt;code\u0026gt;2\u0026lt;\/code\u0026gt; it can also be \u0026lt;code\u0026gt;n\u0026lt;\/code\u0026gt; number of channels to parse from as indicated as \u0026lt;code\u0026gt;...\u0026amp;lt;-chan\u0026lt;\/code\u0026gt;, it iterates over each channel, and for each channel, it reads the contents, and appends as a single string.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run fan-in.go\n\nReading from data\/f1.txt as ::  This is from file 1\nReading from data\/f2.txt as ::  This is from file 2\n\nThis is from file 1\nThis is from file 2\n\n\n$ go run fan-in.go\nReading from data\/f2.txt as ::  This is from file 2\nReading from data\/f1.txt as ::  This is from file 1\n\nThis is from file 2\nThis is from file 1\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, this is how the fan-in pattern works, We create multiple channels and combine the results into a single stream of data(in this example a single string).\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;fan-out-pattern-for-channels\u0026#34;\u0026gt;Fan-Out Pattern for Channels\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;The Fan-Out pattern involves taking data from a single source and distributing it to multiple workers or processing units for parallel or concurrent handling. Fan-out design splits an input channel into multiple output channels, it is used to distribute branches of work or data across concurrent processes.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/100-days-of-golang\/channels-fan-out-pattern.png\u0026#34; alt=\u0026#34;Fan-Out pattern flow using channels in golang\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The fan-out pattern is when data from a single input channel (A) is distributed to multiple worker channels (X, Y, Z) for parallel processing.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;os\u0026#34;\n\t\u0026#34;sync\u0026#34;\n)\n\nfunc readFile(file string, ch chan\u0026lt;- string, wg *sync.WaitGroup) {\n\tdefer wg.Done()\n\n\tcontent, err := os.ReadFile(file)\n\tif err != nil {\n\t\tfmt.Printf(\u0026#34;Error reading from %s: %v\n\u0026#34;, file, err)\n\t\treturn\n\t}\n\n\tch \u0026lt;- string(content)\n}\n\nfunc main() {\n\tfiles := []string{\u0026#34;data\/f1.txt\u0026#34;, \u0026#34;data\/f2.txt\u0026#34;}\n\n\tvar wg sync.WaitGroup\n\tch := make(chan string)\n\n\tfor _, f := range files {\n\t\twg.Add(1)\n\t\tgo readFile(f, ch, \u0026amp;wg)\n\t}\n\n\tgo func() {\n\t\twg.Wait()\n\t\tclose(ch)\n\t}()\n\n\tvar fileData []string\n\tfor content := range ch {\n\t\tfileData = append(fileData, content)\n\t}\n\n\tfmt.Printf(\u0026#34;Read %d files\n\u0026#34;, len(fileData))\n\tfmt.Printf(\u0026#34;Contents:\n%s\u0026#34;, fileData)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, we create a single channel \u0026lt;code\u0026gt;ch\u0026lt;\/code\u0026gt; as our single source, we loop over all the files, and create go routines calling the \u0026lt;code\u0026gt;readFile\u0026lt;\/code\u0026gt; function. The \u0026lt;code\u0026gt;readFile\u0026lt;\/code\u0026gt; function takes in the filename, channel, and the WaitGroup reference, the function reads the file and sends the content to the channel as \u0026lt;code\u0026gt;ch \u0026amp;lt;- content\u0026lt;\/code\u0026gt;. The \u0026lt;code\u0026gt;readFile\u0026lt;\/code\u0026gt; is called concurrently for all the files, Here we have done a fan-out of the task into multiple go routines, then in the main function, we iterate over the channel and receive the content.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run fan-out.go\n\nRead 2 files\nContents:\n[This is from file 2\n This is from file 1\n]\n\n\n$ go run fan-out.go\n\nRead 2 files\nContents:\n[This is from file 1\n This is from file 2\n]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Here\u0026#39;s a brief summary of the fan-out pattern from the example provided:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Multiple files are read concurrently using goroutines. This \u0026amp;quot;fans out\u0026amp;quot; the work.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;readFile\u0026lt;\/code\u0026gt; function runs in a goroutine to process each file separately.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;WaitGroup coordinates the goroutines.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;A shared channel ch collects the results from each goroutine.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The main goroutine reads from the channel and aggregates the results.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Channel is closed and ranged over to collect results cleanly.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;I have a few more patterns to demonstrate that have been provided in the GitHub on the \u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/100-days-of-golang\/tree\/main\/scripts\/channels\/patterns\/\u0026#34;\u0026gt;100 days of Golang\u0026lt;\/a\u0026gt; repository.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That\u0026#39;s it from the 31st part of the series, all the source code for the examples are linked in the GitHub on the \u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/100-days-of-golang\/tree\/main\/scripts\/channels\u0026#34;\u0026gt;100 days of Golang\u0026lt;\/a\u0026gt; repository.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;references\u0026#34;\u0026gt;References\u0026lt;\/h2\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/go.dev\/ref\/spec#Channel_types\u0026#34;\u0026gt;Channels\u0026lt;\/a\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/go.dev\/doc\/effective_go#channels\u0026#34;\u0026gt;Effective Go: Channels\u0026lt;\/a\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/mariocarrion.com\/2021\/08\/19\/learning-golang-concurrency-patterns-fan-in-fan-out.html\u0026#34;\u0026gt;Fan-In and Fan-Out\u0026lt;\/a\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/go101.org\/article\/channel.html\u0026#34;\u0026gt;Go 101: Channels\u0026lt;\/a\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;So, from this part of the series, we were able to understand the fundamentals of channels in golang. By using the core concepts from the previous posts like go routines and wait groups, we were able to work with channels in golang. We wrote a few examples for different patterns using concurrency concepts with channels. Patterns like pipelines, fan-in, fan-out, async, and some usage of select statements for channels were explored in this section.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Hopefully, you found this section helpful, if you have any comments or feedback, please let me know in the comments section or on my social handles. Thank you for reading. Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "golang-channels";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'" aria-label="Editor">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Golang: Channels</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2023-08-28 21:15:00">2023-08-28 21:15:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/100-days-of-golang" class="series-link">📖 100-days-of-golang</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=golang-channels&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>In this part of the series, we will be continuing with the concurrency features of golang with channels. In the last post, we covered the fundamentals of go routines and wait groups. By leveraging those understood concepts, we will explore channels to communicate the data between various go routines.</p>
+<h2 id="what-are-channels">What are Channels</h2>
+<p>A golang Channel is like a pipe that lets goroutines communicate. It lets you pass values from one goroutine to another. Channels are typed i.e. you declare them with <code>chan</code> keyword followed by the type to be sent and received (e.g. <code>chan int</code>). The <code>chan</code> type specifies the type of values that will be passed through the channel. We will explore the detailed technicalities soon. Right now, we need to just focus on what problem is channels solving.</p>
+<p>In the previous article, we worked with go routines and wait groups which allowed us to process tasks asynchronously. However, if we wanted to access the data in between the processes, we would have to tweak the core functionality or might require global variables, however, in real-world applications, the environment is quite constrained. We would require a way to communicate data between those go routines. Channels are made just for that(more than that), but in essence, it solves that exact problem.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	ch := make(chan string)
+	defer close(ch)
+
+	go func() {
+		message := "Hello, Gophers!"
+		ch <- message
+	}()
+
+	msg := <-ch
+	fmt.Println(msg)
+}
+</code></pre></div><p>In the above code example, the channel <code>ch</code> is created of type <code>string</code> and a message is sent to the channel inside a go routine as <code>ch &lt;- message</code>, and the message is retrieved from the channel as <code>&lt;-ch</code>.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+
+Hello, Gophers!
+</code></pre></div><p>Channels have two key properties:</p>
+<ul>
+<li>Send and receive operations block until both sides are ready(i.e. there is a sender and a receiver for a channel). This allows goroutines to synchronize without explicit locks or condition variables.</li>
+<li>Channels are typed, so only values of the specified type can be sent and received. This provides type safety.</li>
+</ul>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+    "fmt"
+)
+
+func main() {
+    ch := make(chan string)
+    go func() {
+        message := "Hello, Gophers!"
+        ch <- message
+    }()
+    fmt.Println(<-ch)
+    fmt.Println(<-ch)
+}
+</code></pre></div><p>In the same example, if we tried to add the second receiver i.e. <code>&lt;-ch</code>, it would result in a deadlock/block forever since there is no second message sent into the channel. Only one value i.e. &quot;Hello Gophers!&quot; was sent as a <code>message</code> into the channel, and that was received by the first receiver as <code>&lt;-ch</code>, however in the next receiver, there is no sender.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+
+Hello, Gophers!
+fatal error: all goroutines are asleep - deadlock!
+
+goroutine 1 [chan receive]:
+main.main()
+        /home/meet/code/100-days-of-golang/scripts/channels/main.go:16 +0x125
+exit status 2
+</code></pre></div><p>To sum up the deadlock concept in unbuffered channels:</p>
+<ul>
+<li>The main goroutine is waiting at the second receive operation for a second message that will never arrive (was never sent).</li>
+<li>The anonymous goroutine is waiting for someone to read from the channel so it can proceed with sending the second message.</li>
+</ul>
+<h2 id="buffered-channels">Buffered Channels</h2>
+<p>In Go, you can create both buffered and unbuffered channels. An unbuffered channel has no capacity to hold data, it relies on immediate communication between the sender and receiver. However, you can create a buffered channel by specifying a capacity when using the make function, like <code>ch := make(chan int, 5)</code> will create a channel with a capacity of <code>5</code> i.e. it can store a certain number of values without an immediate receiver. A buffered channel allows you to send multiple values to the channel without an immediate receiver, up to its capacity. After that, it will block until the receiver retrieves values.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func main() {
+	buffchan := make(chan int, 2)
+
+	wg := sync.WaitGroup{}
+	wg.Add(2)
+
+	for i := 1; i <= 2; i++ {
+		go func(n int) {
+			buffchan <- n
+			wg.Done()
+		}(i)
+	}
+
+	wg.Wait()
+	close(buffchan)
+
+	for c := range buffchan {
+		fmt.Println(c)
+	}
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run channels.go
+1
+2
+
+$ go run channels.go
+2
+1
+</code></pre></div><p>In this code snippet, we create a buffered channel ch with a capacity of 2. We send two values to the channel, and even though there's no immediate receiver, the code doesn't block. If we were to send a third value, it would lead to a deadlock because there is no receiver to free up space in the buffer.</p>
+<h2 id="closing-channels">Closing Channels</h2>
+<p>Closing a channel is important to signal to the receiver that no more data will be sent. It's achieved using the built-in close function. After closing a channel, any further attempts to send data will result in a panic. On the receiving side, if a channel is closed and there's no more data to receive, the receive operation will yield the zero value for the channel's type.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	ch := make(chan int)
+
+	go func() {
+		for i := 1; i <= 5; i++ {
+			ch <- i
+		}
+		close(ch)
+	}()
+
+	for num := range ch {
+		fmt.Println("Received:", num)
+	}
+}
+</code></pre></div><p>In this example, a goroutine sends numbers to the channel and then closes it. The main routine receives these numbers using a for-range loop. When the channel is closed and all values are received, the loop will terminate automatically. Keep in mind that only a sender can close the channel, to indicate the receiver to not wait for further values from the channel.</p>
+<h2 id="select-statement-for-channels">Select Statement for Channels</h2>
+<p>The select statement is used for handling multiple channels. There are a few operations that can be checked with a case statement in the select block.</p>
+<p>|Case     |Channel Operation|
+|---------|-----------------|
+|         |                 |
+|Sending  | chan &lt;- value   |
+|         |                 |
+|Receiving|    &lt;- chan      |
+|         |                 |</p>
+<p>So, we can either check if there is a sender or a receiver available for a channel with a case statement just like a switch statement.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func sendMessage(ch chan string, message string, wg *sync.WaitGroup) {
+	defer wg.Done()
+	ch <- message
+}
+
+func main() {
+	var wg sync.WaitGroup
+
+	ch1 := make(chan string, 2)
+	ch2 := make(chan string, 2)
+	wg.Add(2)
+
+	go sendMessage(ch1, "Hello, Gophers!", &wg)
+	go sendMessage(ch2, "Hello, Hamsters!", &wg)
+
+	go func() {
+		defer wg.Done()
+		wg.Wait()
+		close(ch1)
+		close(ch2)
+	}()
+	ch1 <- "new message to c1"
+	ch2 <- "new message to c2"
+
+	select {
+	case <-ch1:
+		fmt.Println("Received from ch1")
+	case ch1 <- "new message to c1":
+		fmt.Println("Sent to ch1")
+	case <-ch2:
+		fmt.Println("Received from ch2")
+	case ch2 <- "new message to c2":
+		fmt.Println("Sent to ch2")
+	}
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run channels.go
+Sent to ch1
+
+$ go run simple.go
+Received from ch1
+
+$ go run simple.go
+Received from ch2
+
+$ go run simple.go
+Sent to ch2
+
+$ go run simple.go
+Received from ch1
+</code></pre></div><p>The order of the messages is not guaranteed, the operation which is performed first based on the go routine will be only logged.</p>
+<p>In the simple example above, we have created two channels <code>ch1</code> and <code>ch2</code>, and sent two messages to them using two go routines. The main routine then waits for the messages to be received from the channels. We close the channels when the sending is done and simply check for the 4 cases i.e. the send on channel 1, receive on channel 1, and similarly for channel 2. So, that is how we can use the select statement to check which operation is being performed on the different channels, and this forms the basis for the communication between channels. We get more ease in the flow while working with channels.</p>
+<p>Below is an example to test which <code>url</code> or a web server is responding first to the request.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/http"
+	"sync"
+)
+
+func pingGoogle(c chan string, wg *sync.WaitGroup) {
+	defer wg.Done()
+	res, _ := http.Get("http://google.com")
+	c <- res.Status
+}
+
+func pingDuckDuckGo(c chan string, wg *sync.WaitGroup) {
+	defer wg.Done()
+	res, _ := http.Get("https://duckduckgo.com")
+	c <- res.Status
+}
+
+func pingBraveSearch(c chan string, wg *sync.WaitGroup) {
+	defer wg.Done()
+	res, _ := http.Get("https://search.brave.com")
+	c <- res.Status
+}
+
+func main() {
+	gogChan := make(chan string)
+	ddgChan := make(chan string)
+	braveChan := make(chan string)
+
+	var wg sync.WaitGroup
+	wg.Add(3)
+
+	go pingDuckDuckGo(ddgChan, &wg)
+	go pingGoogle(gogChan, &wg)
+	go pingBraveSearch(braveChan, &wg)
+
+	openChannels := 3
+
+	go func() {
+		wg.Wait()
+		close(gogChan)
+		close(ddgChan)
+		close(braveChan)
+	}()
+
+	for openChannels > 0 {
+		select {
+		case msg1, ok := <-gogChan:
+			if !ok {
+				openChannels--
+			} else {
+				fmt.Println("Google responded:", msg1)
+			}
+		case msg2, ok := <-ddgChan:
+			if !ok {
+				openChannels--
+			} else {
+				fmt.Println("DuckDuckGo responded:", msg2)
+			}
+		case msg3, ok := <-braveChan:
+			if !ok {
+				openChannels--
+			} else {
+				fmt.Println("BraveSearch responded:", msg3)
+			}
+		}
+	}
+}
+</code></pre></div><p>The above example shows how to use a select statement to wait for multiple channels to be ready before proceeding with the next operation. With this example, we can get the channel that sent the response first i.e. which search engine in this case responded to the ping first. Just a bit exaggerated example but it helps in understanding the concept of the <code>select</code> statement.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run select-chan.go
+
+DuckDuckGo responded: 200 OK
+Google responded: 200 OK
+BraveSearch responded: 200 OK
+
+
+$ go run select-chan.go
+
+DuckDuckGo responded: 200 OK
+BraveSearch responded: 200 OK
+Google responded: 200 OK
+</code></pre></div><p>Let's break each of the steps down:</p>
+<ul>
+<li><code>pingDuckDuckGo(ddgChan, &amp;wg)</code> is a method which sends data to the channel <code>ddgChan</code>.</li>
+<li><code>pingGoogle(gogChan, &amp;wg)</code> is a method that sends data to the channel <code>gogChan</code>.</li>
+<li><code>pingBraveSearch(braveChan, &amp;wg)</code> is a method that sends data to the channel <code>braveChan</code>.</li>
+<li>We wait for each go routine to finish using <code>wg.Wait()</code> and close the channels.</li>
+<li>Finally, we close the channels <code>gogChan</code>, <code>ddgChan</code>, and <code>braveChan</code> to pick up the data from the channel as <code>&lt;-chan</code> with the select case block.</li>
+<li>The select case will pick the first channel that is ready to receive data. Hence we get the output based on the order of which the channel responded first.</li>
+<li>We use the <code>!ok</code> condition to check if the channel is closed or not, we have a <code>openChannels</code> variable to keep track of the number of open channels, if there are no channels open, we simply break out of the infinite loop.</li>
+</ul>
+<h2 id="directional-channels">Directional Channels</h2>
+<p>Channels can also be designated as &quot;send-only&quot; or &quot;receive-only&quot; to enforce certain communication patterns and enhance safety. This is done by specifying the direction when defining the channel type.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func receiver(ch <-chan int, wg *sync.WaitGroup) {
+	for i := range ch {
+		fmt.Println("Received:", i)
+	}
+	wg.Done()
+}
+
+func sender(ch chan<- int, wg *sync.WaitGroup) {
+	for i := 0; i < 10; i++ {
+		fmt.Println("Sent:", i)
+		ch <- i
+	}
+	close(ch)
+	wg.Done()
+}
+
+func main() {
+	ch := make(chan int)
+	wg := sync.WaitGroup{}
+	wg.Add(2)
+	go receiver(ch, &wg)
+	go sender(ch, &wg)
+	wg.Wait()
+}
+</code></pre></div><p>In the above example, we have created a channel <code>ch</code> and sent 10 values to it using two-go routines. The main routine is waiting for the goroutines to finish before closing the channel. The <code>sender</code> sends values <code>0</code> through <code>9</code>, and the <code>receiver</code> prints whenever a value is received. In the <code>sender</code> method, we only accept the channel to send data as <code>chan&lt;-</code>, and in the <code>receiver</code> method, the channel parameter is set to only read from the channel as <code>&lt;-chan</code>.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run send-recv.go
+
+Sent: 0
+Received: 0
+Sent: 1
+Sent: 2
+Received: 1
+Received: 2
+Sent: 3
+Sent: 4
+Received: 3
+Received: 4
+Sent: 5
+Sent: 6
+Received: 5
+Received: 6
+Sent: 7
+Sent: 8
+Received: 7
+Received: 8
+Sent: 9
+Received: 9
+</code></pre></div><p>When we define a parameter as a write-only channel means that the function can only send data into that channel. It cannot read data from it or close it. This pattern is helpful when you want to make sure that the function is solely responsible for producing data and not consuming or interacting with the channel's current state.</p>
+<p>When we define a parameter as a read-only channel, it means that the function can only receive data from that channel. It cannot close the channel or send data into it. This pattern is useful when we want to ensure that the function only consumes data from the channel without modifying it or interfering with the sender's logic.</p>
+<p>Additionally, the compiler will catch code trying to send on a read-only channel or receive from a write-only one.</p>
+<h2 id="common-channel-usage-pattern">Common Channel Usage Pattern</h2>
+<p>There are a variety of ways in which channels can be used in Go. In this section, we'll explore some of the most common patterns for using channels in Go. Some of the most useful and idiomatic channel usage patterns include pipelines, fan-in and fan-out, etc.</p>
+<h3 id="async-await-pattern-for-channels">Async Await pattern for Channels</h3>
+<p>In Go, goroutines and channels enable an elegant async/await style. A goroutine can execute a task asynchronously, while the main thread awaits the result using a channel.</p>
+<p>The async-await pattern in Go involves initiating multiple tasks concurrently, each with its own goroutine, and then awaiting their completion before proceeding. Channels are used to communicate between these goroutines, allowing them to work independently and provide results to the main routine when ready.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+func fetchURL(url string, ch chan<- http.Response) {
+	go func() {
+		res, err := http.Get(url)
+		if err != nil {
+			panic(err)
+		}
+		defer res.Body.Close()
+		ch <- *res
+	}()
+}
+
+func task(name string) {
+	fmt.Println("Task", name)
+}
+
+func main() {
+	fmt.Println("Start")
+
+	url := "http://google.com"
+
+	respCh := make(chan http.Response)
+
+	fetchURL(url, respCh)
+
+	task("A")
+	task("B")
+
+	response := <-respCh
+	fmt.Println("Response Status:", response.Status)
+
+	fmt.Println("Done")
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run async.go
+Start
+Task A
+Task B
+Response Status: 200 OK
+Done
+</code></pre></div><p>In the above example, we have created a function <code>fetchURL</code> which takes a URL and a channel as an argument. The channel <code>respCh</code> is used to communicate between the goroutines. The function fires up a goroutine that fetches the request, we send a <code>GET</code> request to the provided URL and send the response to the provided channel.  In the main function, we access the <code>response</code> by receiving the data from the channel as <code>&lt;-respCh</code>. Before doing this, we can do any other task simultaneously, like <code>task(&quot;A&quot;)</code> and <code>task(&quot;B&quot;)</code> which just prints some string(it could be anything). But this should be before we pull in from the channel, anything after the access will be blocked i.e. will be executed sequentially.</p>
+<h3 id="pipeline-pattern-for-channels">Pipeline pattern for Channels</h3>
+<p>The pipeline pattern is used to chain together a sequence of processing stages, each stage consumes input, processes data, and passes the output to the next stage. This type of pattern can be achieved by chaining different channels from one go routine to another.</p>
+<p><img src="https://meetgor-cdn.pages.dev/100-days-of-golang/channels-pipelines-pattern.png" alt="Pipeline pattern flow using channels in golang"></p>
+<p>So, the pipeline pattern using channels in Go, data flows sequentially through multiple stages: Stage 1 reads input and sends to Channel A, Stage 2 receives from Channel A and sends to Channel B, and Stage 3 receives from Channel B and produces the final output.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func generate(nums []int, out chan<- int, wg *sync.WaitGroup) {
+	fmt.Println("Stage 1")
+	for _, n := range nums {
+		fmt.Println("Number:", n)
+		out <- n
+	}
+	close(out)
+	wg.Done()
+}
+
+func square(in <-chan int, out chan<- int, wg *sync.WaitGroup) {
+	fmt.Println("Stage 2")
+	for n := range in {
+		sq := n * n
+		fmt.Println("Square:", sq)
+		out <- sq
+	}
+	close(out)
+	wg.Done()
+}
+
+func print(in <-chan int, wg *sync.WaitGroup) {
+	for n := range in {
+		fmt.Println(n)
+	}
+	wg.Done()
+}
+
+func main() {
+	input := []int{1, 2, 3, 4, 5}
+
+	var wg sync.WaitGroup
+	wg.Add(3)
+
+	stage1 := make(chan int)
+	stage2 := make(chan int)
+
+	go generate(input, stage1, &wg)
+
+	go square(stage1, stage2, &wg)
+
+	go print(stage2, &wg)
+
+	wg.Wait()
+}
+</code></pre></div><p>In the above example, we have created a sequence of processing stages, each stage consumes input, processes data, and passes the output to the next stage. We can consider the functions <code>generate</code>, <code>square</code>, and <code>print</code> as stages <code>1</code>, <code>2</code>, and <code>3</code> respectively.</p>
+<ul>
+<li>The generate function, takes in the input as a slice of integers, an unbuffered channel, and the waitgroup b reference, the function basically iterates over the numbers in the slice and sends it to the channel provided in the parameters.</li>
+<li>The square function takes in the stage1 channel that the channel from the stage1, as well as its own channel as <code>stage2</code> (remember the <code>stage1</code> channel has sent the numbers via the generating function).</li>
+<li>The square function then iterates over the number sent from the channel <code>stage1</code> as <code>in</code> and squares it and sends it to the channel provided as <code>stage2</code> as the <code>out</code> channel.</li>
+<li>The print function takes in the stage2 channel as an argument and iterates over the number sent from the channel <code>stage2</code> and prints it.</li>
+</ul>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run pipeline.go
+Stage 1
+Number: 1
+Stage 2
+Square: 1
+1
+Number: 2
+Number: 3
+Square: 4
+Square: 9
+Number: 4
+4
+9
+Square: 16
+16
+Number: 5
+Square: 25
+25
+</code></pre></div><p>So, we can see the order of the execution, both the pipelines started synchronously, However, they perform the operation only when the data is sent from the previous channel. We first print the <code>number</code> from the <code>generate</code> function, then print the squared value in the <code>square</code> function, and finally print it as <code>Square: value</code> in the print function.</p>
+<h3 id="fan-in-pattern-for-channels">Fan-In pattern for Channels</h3>
+<p>The Fan-In pattern is used for combining data from multiple sources into a single stream for unified processing, often using a shared data structure to aggregate the data. We can create the fan-in pattern by merging multiple input channels into a single output channel.</p>
+<p><img src="https://meetgor-cdn.pages.dev/100-days-of-golang/channels-fan-in-pattern.png" alt="Fan-in pattern flow using channels in golang"></p>
+<p>The fan-in pattern is when multiple input channels (A, B, C) are read concurrently, and their data is merged into a single output channel (M).</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"sync"
+)
+
+func readFile(file string, ch chan<- string) {
+	content, _ := ioutil.ReadFile(file)
+	fmt.Println("Reading from", file, "as :: ", string(content))
+	ch <- string(content)
+	close(ch)
+}
+
+func merge(chs ...<-chan string) string {
+	var wg sync.WaitGroup
+	out := ""
+
+	for _, ch := range chs {
+		wg.Add(1)
+		go func(c <-chan string) {
+			for s := range c {
+				out += s
+			}
+			wg.Done()
+		}(ch)
+	}
+
+	wg.Wait()
+	return out
+}
+
+func main() {
+	ch1 := make(chan string)
+	ch2 := make(chan string)
+
+	go readFile("data/f1.txt", ch1)
+	go readFile("data/f2.txt", ch2)
+
+	merged := merge(ch1, ch2)
+
+	fmt.Println(merged)
+}
+</code></pre></div><p>In the above example, the <code>readFile</code> function reads the contents of the file and sends it to the channels <code>ch1</code> and <code>ch2</code> from different go routines. The <code>readFile</code> takes in the channel as send only channel which reads the file and sends the content to the channel as <code>ch &lt;- string(content)</code>. The <code>merge</code> function takes in <code>2</code> it can also be <code>n</code> number of channels to parse from as indicated as <code>...&lt;-chan</code>, it iterates over each channel, and for each channel, it reads the contents, and appends as a single string.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run fan-in.go
+
+Reading from data/f1.txt as ::  This is from file 1
+Reading from data/f2.txt as ::  This is from file 2
+
+This is from file 1
+This is from file 2
+
+
+$ go run fan-in.go
+Reading from data/f2.txt as ::  This is from file 2
+Reading from data/f1.txt as ::  This is from file 1
+
+This is from file 2
+This is from file 1
+</code></pre></div><p>So, this is how the fan-in pattern works, We create multiple channels and combine the results into a single stream of data(in this example a single string).</p>
+<h3 id="fan-out-pattern-for-channels">Fan-Out Pattern for Channels</h3>
+<p>The Fan-Out pattern involves taking data from a single source and distributing it to multiple workers or processing units for parallel or concurrent handling. Fan-out design splits an input channel into multiple output channels, it is used to distribute branches of work or data across concurrent processes.</p>
+<p><img src="https://meetgor-cdn.pages.dev/100-days-of-golang/channels-fan-out-pattern.png" alt="Fan-Out pattern flow using channels in golang"></p>
+<p>The fan-out pattern is when data from a single input channel (A) is distributed to multiple worker channels (X, Y, Z) for parallel processing.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"os"
+	"sync"
+)
+
+func readFile(file string, ch chan<- string, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	content, err := os.ReadFile(file)
+	if err != nil {
+		fmt.Printf("Error reading from %s: %v
+", file, err)
+		return
+	}
+
+	ch <- string(content)
+}
+
+func main() {
+	files := []string{"data/f1.txt", "data/f2.txt"}
+
+	var wg sync.WaitGroup
+	ch := make(chan string)
+
+	for _, f := range files {
+		wg.Add(1)
+		go readFile(f, ch, &wg)
+	}
+
+	go func() {
+		wg.Wait()
+		close(ch)
+	}()
+
+	var fileData []string
+	for content := range ch {
+		fileData = append(fileData, content)
+	}
+
+	fmt.Printf("Read %d files
+", len(fileData))
+	fmt.Printf("Contents:
+%s", fileData)
+}
+</code></pre></div><p>In the above example, we create a single channel <code>ch</code> as our single source, we loop over all the files, and create go routines calling the <code>readFile</code> function. The <code>readFile</code> function takes in the filename, channel, and the WaitGroup reference, the function reads the file and sends the content to the channel as <code>ch &lt;- content</code>. The <code>readFile</code> is called concurrently for all the files, Here we have done a fan-out of the task into multiple go routines, then in the main function, we iterate over the channel and receive the content.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run fan-out.go
+
+Read 2 files
+Contents:
+[This is from file 2
+ This is from file 1
+]
+
+
+$ go run fan-out.go
+
+Read 2 files
+Contents:
+[This is from file 1
+ This is from file 2
+]
+</code></pre></div><p>Here's a brief summary of the fan-out pattern from the example provided:</p>
+<ul>
+<li>Multiple files are read concurrently using goroutines. This &quot;fans out&quot; the work.</li>
+<li>The <code>readFile</code> function runs in a goroutine to process each file separately.</li>
+<li>WaitGroup coordinates the goroutines.</li>
+<li>A shared channel ch collects the results from each goroutine.</li>
+<li>The main goroutine reads from the channel and aggregates the results.</li>
+<li>Channel is closed and ranged over to collect results cleanly.</li>
+</ul>
+<p>I have a few more patterns to demonstrate that have been provided in the GitHub on the <a href="https://github.com/Mr-Destructive/100-days-of-golang/tree/main/scripts/channels/patterns/">100 days of Golang</a> repository.</p>
+<p>That's it from the 31st part of the series, all the source code for the examples are linked in the GitHub on the <a href="https://github.com/Mr-Destructive/100-days-of-golang/tree/main/scripts/channels">100 days of Golang</a> repository.</p>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://go.dev/ref/spec#Channel_types">Channels</a></li>
+<li><a href="https://go.dev/doc/effective_go#channels">Effective Go: Channels</a></li>
+<li><a href="https://mariocarrion.com/2021/08/19/learning-golang-concurrency-patterns-fan-in-fan-out.html">Fan-In and Fan-Out</a></li>
+<li><a href="https://go101.org/article/channel.html">Go 101: Channels</a></li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>So, from this part of the series, we were able to understand the fundamentals of channels in golang. By using the core concepts from the previous posts like go routines and wait groups, we were able to work with channels in golang. We wrote a few examples for different patterns using concurrency concepts with channels. Patterns like pipelines, fan-in, fan-out, async, and some usage of select statements for channels were explored in this section.</p>
+<p>Hopefully, you found this section helpful, if you have any comments or feedback, please let me know in the comments section or on my social handles. Thank you for reading. Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/golang-go-routines" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Golang: Go Routines and WaitGroups</span>
+        </a>
+        
+
+        
+        
+        <a href="/posts/golang-web-url-parsing" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Golang Web: URL Parsing</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-delete-method" class="related-link">
+                <span class="related-post-title">Golang Web: DELETE Method</span>
+                <span class="related-post-date">2025-01-12 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-patch-method" class="related-link">
+                <span class="related-post-title">Golang Web: PATCH Method</span>
+                <span class="related-post-date">2025-01-11 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-5" class="related-link">
+                <span class="related-post-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+                <span class="related-post-date">2024-12-11 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-4" class="related-link">
+                <span class="related-post-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+                <span class="related-post-date">2024-12-09 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-3" class="related-link">
+                <span class="related-post-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+                <span class="related-post-date">2024-12-07 20:45:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

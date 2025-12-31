@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Golang: Error Handling | Meet Gor</title>
+    <meta name="title" content="Golang: Error Handling | Meet Gor">
+    <meta name="description" content="Understanding the concept of errors in golang. How to handle errors in funciton calls, create custom error class with interfaces">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/golang-error-handling">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/golang-error-handling">
+    <meta property="og:title" content="Golang: Error Handling">
+    <meta property="og:description" content="Understanding the concept of errors in golang. How to handle errors in funciton calls, create custom error class with interfaces">
+    <meta property="og:image" content="https://meetgor-cdn.pages.dev/golang-020-error-handling.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Golang: Error Handling">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2022-09-17 20:15:00">
+    <meta property="article:modified_time" content="2022-09-17 20:15:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/golang-error-handling">
+    <meta name="twitter:title" content="Golang: Error Handling">
+    <meta name="twitter:description" content="Understanding the concept of errors in golang. How to handle errors in funciton calls, create custom error class with interfaces">
+    <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/golang-020-error-handling.png">
+    <meta name="twitter:image:alt" content="Golang: Error Handling">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/golang-error-handling"
+        },
+        "headline": "Golang: Error Handling",
+        "description": "Understanding the concept of errors in golang. How to handle errors in funciton calls, create custom error class with interfaces",
+        "datePublished": "2022-09-17 20:15:00",
+        "dateModified": "2022-09-17 20:15:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        "image": "https:\/\/meetgor-cdn.pages.dev\/golang-020-error-handling.png",
+        "keywords": "go",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Error handling is quite an important feature of any programming language to improve the quality and transparency between the user and the application. By raising appropriate error messages, the user can get a clear idea about the things happening in the interface as well as the application can handle the errors with appropriate actions.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In the 20th post of the series, we will be exploring the concept of error handling in golang. From this article, we will be able to learn the fundamentals of error or exception handling in golang, create custom error classes, raise and ignore error messages, and exit or redirect the flow of state of the application when an error is raised.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;why-we-need-error-type\u0026#34;\u0026gt;Why we need Error Type\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We need \u0026lt;a href=\u0026#34;https:\/\/go.dev\/blog\/error-handling-and-go\u0026#34;\u0026gt;error handling\u0026lt;\/a\u0026gt; and catching in order to stop or divert the flow of the application which will restrict the dubious or unintentional execution of the code. Let\u0026#39;s say, for example, we have a string as an input, and the user skipped the input and the string is returned as empty, we don\u0026#39;t want to execute the further program as the execution might depend on the value of the string. So, in order to catch these kinds of events, we might use errors and log the results for better transparency.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n)\n\nfunc main() {\n\n\tvar s string\n\tn, err := fmt.Scanf(\u0026#34;%s\u0026#34;, \u0026amp;s)\n\n\tif err != nil {\n\t\tfmt.Println(err)\n\t\t\/\/ panic(err)\n        \/\/ OR\n        \/\/ return\n\t} else {\n\t\tfmt.Println(n)\n\t\tif s[0] == \u0026#39;a\u0026#39; {\n\t\t\tfmt.Println(s)\n\t\t}\n\t}\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run main.go\nasdf\n1\nasdf\n\n\n$ go run main.go\n\nunexpected newline\n\n\n$ go run main.go\nwsd\n1\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, we have a simple string \u0026lt;code\u0026gt;s\u0026lt;\/code\u0026gt; input, we will input the string using the \u0026lt;code\u0026gt;Scanf\u0026lt;\/code\u0026gt; function that will return an integer as the number of variables it has scanned and error if any. Here, as the function might return two values, we need two variables to call the function. The \u0026lt;code\u0026gt;n\u0026lt;\/code\u0026gt; variable stores the number of variables successfully scanned and the \u0026lt;code\u0026gt;err\u0026lt;\/code\u0026gt; as the err from the function generated. If there is an error, that is the value stored in \u0026lt;code\u0026gt;err\u0026lt;\/code\u0026gt; is not empty, we will log the error. And move into the rest of the program.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This might be looking cool, but it doesn\u0026#39;t break out of the program if there is an error. We want it to log the error as well as exit from the program. We can do that using the panic function.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;catching-errors\u0026#34;\u0026gt;Catching Errors\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We\u0026#39;ll see a few examples, where we will catch errors in some of the regularly used functions. These error messages can be used in deciding the next procedure to be run.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;comma-okerror-syntax\u0026#34;\u0026gt;Comma OK\/Error syntax\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We use the \u0026lt;a href=\u0026#34;https:\/\/go.dev\/doc\/effective_go#:~:text=is%20called%20the%20%E2%80%9C-,comma%20ok,-%E2%80%9D%20idiom.%20In%20this\u0026#34;\u0026gt;comma ok, error\u0026lt;\/a\u0026gt; syntax where we want multiple return values from a function. It is a narrowed syntax for a two-type return value function, we either return a value that we are expecting as \u0026lt;code\u0026gt;OK\u0026lt;\/code\u0026gt;, or we get an \u0026lt;code\u0026gt;error\u0026lt;\/code\u0026gt; from the function call.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\nok, err := function()\nif err != nil {\n    \/\/ handle error\n    panic(err)\n} else {\n    \/\/ work with the ok object\n    fmt.Println(ok)\n}\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above code, we have used the comma-ok, error syntax, the function call will return two objects either an expected object or an error object if there were errors in the processing. We handle the error if the error object is not empty i.e. it contains something, else we can do the rest of the required processing of the program.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We can even ignore the \u0026lt;code\u0026gt;err\u0026lt;\/code\u0026gt; or the \u0026lt;code\u0026gt;ok\u0026lt;\/code\u0026gt; object using the \u0026lt;code\u0026gt;_\u0026lt;\/code\u0026gt; i.e. to say a don\u0026#39;t care variable. Remember you can ignore either of the values and not both. It is not recommended to ignore errors but if you know the obvious thing to process, you might as well sometimes.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;A more compressed code might look something like below:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\nif ok, err := function(); err != nil {\n    \/\/ handle error\n    panic(err)\n} else {\n    \/\/ work with the ok object\n    fmt.Println(ok)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above code wraps the initialization of \u0026lt;code\u0026gt;ok, err\u0026lt;\/code\u0026gt; objects by calling the function inside the if statement and checking for the error.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;making-http-requests\u0026#34;\u0026gt;Making HTTP requests\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s say we have a URL, and we want to check if the site exists or not, we can run the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http@go1.19.1#Client.Get\u0026#34;\u0026gt;http.Get\u0026lt;\/a\u0026gt; function from the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http\u0026#34;\u0026gt;net\/http\u0026lt;\/a\u0026gt; package. We will parse a URL in the function and this function also returns a \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#Response\u0026#34;\u0026gt;Response\u0026lt;\/a\u0026gt; type object and an error object if there are any errors generated during the function call. If there is an error while we call the function, we simply log the error and panic out of the program. Else we can log the status code and do further processing.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\nfunc main() {\n\turl := \u0026#34;https:\/\/meetgor.com\/\u0026#34;\n\tresp, err := http.Get(url)\n\tif err != nil {\n\t\tfmt.Println(err)\n\t\tpanic(err)\n\t} else {\n\t\tfmt.Println(resp.StatusCode)\n\t}\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run web.go\nURL: https:\/\/meetgor.com\/\n200\n\n\n\n$ go run web.go\n\nURL: htts:\/\/meetgor.com\/\nGet \u0026#34;htts:\/\/meetgor.com\/\u0026#34;: unsupported protocol scheme \u0026#34;htts\u0026#34;\npanic: Get \u0026#34;htts:\/\/meetgor.com\/\u0026#34;: unsupported protocol scheme \u0026#34;htts\u0026#34;\n\ngoroutine 1 [running]:\nmain.main()\n        \/home\/meet\/code\/100-days-of-golang\/scripts\/errors\/https.go:14 \u002b0x170\nexit status 2\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This is how we can validate a URL handling the error if the parsed URL is invalid or does not exist.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;There is one more variation of the above code style, it is a bit compressed and might be just a syntactic change.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\nfunc main() {\n\turl := \u0026#34;https:\/\/meetgor.com\/\u0026#34;\n\tif resp, err := http.Get(url); err != nil {\n\t\tfmt.Println(err)\n\t\tpanic(err)\n\t} else {\n\t\tfmt.Println(resp.StatusCode)\n\t}\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This can be used wherever you are using the \u0026lt;code\u0026gt;ok, err\u0026lt;\/code\u0026gt; kind of syntax, but I prefer the clean syntax so I won\u0026#39;t move ahead with this.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;opening-or-handling-of-file\u0026#34;\u0026gt;Opening or Handling of File\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We can even use error handling while dealing with Files or Folders. We can use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/os\u0026#34;\u0026gt;os\u0026lt;\/a\u0026gt; package to read the file in golang. The \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/os#Open\u0026#34;\u0026gt;Open\u0026lt;\/a\u0026gt; function will read the file if it exists or else it will return an error. We can catch the error from the comma \u0026lt;code\u0026gt;ok,error\u0026lt;\/code\u0026gt; syntax and do the required processing in the program.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;os\u0026#34;\n)\n\nfunc main() {\n\tfile_name := \u0026#34;hello.txt\u0026#34;\n\tfile, err := os.Open(file_name)\n\tif err != nil {\n\t\tfmt.Println(\u0026#34;Error: \u0026#34;, err)\n\n        \/\/ Create a File \n\n\t\t\/\/ _, err := os.Create(file_name)\n\t\t\/\/ if err != nil {\n\t\t\/\/ \tfmt.Println(err)\n\t\t\/\/ }\n\t\t\/\/ fmt.Println(\u0026#34;Created File\u0026#34;, file_name)\n\t\t\/\/ file, _ = os.Open(file_name)\n\t}\n\tfmt.Println(file.Stat())\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/res.cloudinary.com\/techstructive-blog\/image\/upload\/v1663425619\/blog-media\/golang-file-error.png\u0026#34; alt=\u0026#34;File handling Error\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We can use the error as a hint that the file doesn\u0026#39;t exist and create a file and then move toward the actual execution of the program. We can also ignore the file object while creating the file, as we are interested in only knowing that the file is just created without any errors, we use the \u0026lt;code\u0026gt;_\u0026lt;\/code\u0026gt; to ignore the variable in the assignment in the function call.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Inside the commented code, we use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/os#Create\u0026#34;\u0026gt;Create\u0026lt;\/a\u0026gt; function to create a file and check for any errors in the process. We finally create the file and \u0026lt;code\u0026gt;Open\u0026lt;\/code\u0026gt; the newly created file.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;custom-error\u0026#34;\u0026gt;Custom Error\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We can create custom error types in golang with the help of interfaces and structs. An Error struct will simply consist of a string \u0026lt;code\u0026gt;message\u0026lt;\/code\u0026gt;, that string will display the error. By overriding or creating the \u0026lt;code\u0026gt;Error\u0026lt;\/code\u0026gt; method as an interface for the struct we can construct custom errors.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;type Invalid_URL_Error struct {\n\tmessage string\n}\n\nfunc (e Invalid_URL_Error) Error() string {\n\treturn \u0026#34;Invalid URL\u0026#34;\n}\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Here, we have the \u0026lt;code\u0026gt;Invalid_URL_Error\u0026lt;\/code\u0026gt; as the custom struct name and the \u0026lt;code\u0026gt;Error()\u0026lt;\/code\u0026gt; method as an interface that will print the error log. This Error method will be used while raising errors in the program. It might be called from another function while doing the actual processing of the URL while sending a GET request.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Further, we can call this custom error method when we wish, by using the package functions, we can override the function call with the custom method.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n    \u0026#34;fmt\u0026#34;\n    \u0026#34;net\/http\u0026#34;\n)\n\ntype Invalid_URL_Error struct {\n\tmessage string\n}\n\nfunc (e Invalid_URL_Error) Error() string {\n\treturn \u0026#34;Invalid URL\u0026#34;\n}\n\nfunc main() {\n\turl := \u0026#34;htt:\/\/meetgor.com\u0026#34;\n\tresponse, err := http.Get(url)\n\tif err != nil {\n\t\tfmt.Println(Invalid_URL_Error{})\n\t\tfmt.Println(err)\n\t} else {\n\t\tfmt.Println(response)\n\t\tdefer response.Body.Close()\n\t}\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run custom_error.go\nInvalid URL \nGet \u0026#34;htt:\/\/meetgor.com\u0026#34;: unsupported protocol scheme \u0026#34;htt\u0026#34;\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above code, we are basically calling the function \u0026lt;code\u0026gt;http.Get\u0026lt;\/code\u0026gt; that will return a \u0026lt;code\u0026gt;Response\u0026lt;\/code\u0026gt; or an \u0026lt;code\u0026gt;err\u0026lt;\/code\u0026gt; object. We can even call the custom error method with an empty \u0026lt;code\u0026gt;Invalid_URL_Error\u0026lt;\/code\u0026gt; object, this will call the function \u0026lt;code\u0026gt;Error\u0026lt;\/code\u0026gt; from that interface. The function will print the custom error message and thereby we are able to log the custom error message for the invalid URL example.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Also, we can parse the default error method to the custom error method which will get us additional information inside the error interface method.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\ntype Invalid_URL_Error struct {\n\tmessage string\n}\n\nfunc (e Invalid_URL_Error) Error() string {\n\treturn \u0026#34;Invalid URL : \u0026#34; \u002b e.message\n}\n\nfunc main() {\n\turl := \u0026#34;htt:\/\/meetgor.com\u0026#34;\n\tresponse, err := http.Get(url)\n\tif err != nil {\n\t\tfmt.Println(Invalid_URL_Error{err.Error()})\n\t} else {\n\t\tfmt.Println(response)\n\t\tdefer response.Body.Close()\n\t}\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run custom_error.go\nInvalid URL : Get \u0026#34;htt:\/\/meetgor.com\u0026#34;: unsupported protocol scheme \u0026#34;htt\u0026#34;\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;When the URL is invalid, we will call the custom error interface by parsing the default \u0026lt;code\u0026gt;err.Error\u0026lt;\/code\u0026gt; method. This will get us the error object from the main method to our custom interface. That is how we will be able to fetch additional information about the error from the interface with the \u0026lt;code\u0026gt;.\u0026lt;\/code\u0026gt; operator as \u0026lt;code\u0026gt;e.message\u0026lt;\/code\u0026gt;. So, the syntax is \u0026lt;code\u0026gt;Invalid_URL_Error{err.Error()}\u0026lt;\/code\u0026gt;, i.e. an object of type \u0026lt;code\u0026gt;Invalid_URL_Error\u0026lt;\/code\u0026gt; with the message set as the value returned from the default \u0026lt;code\u0026gt;Error()\u0026lt;\/code\u0026gt; function. hence we can implement the custom error message.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We also need to look for the response object and close the Response Body as it is mandatory to do so and the responsibility of the caller.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;creating-a-function-that-returns-two-values-okerror\u0026#34;\u0026gt;Creating a function that returns two values (ok,error)\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We can even nest the calling of this error method inside another function. This will give us a good overview of how to deal with errors more thoroughly. We will construct a function with two return values one can be any normal desirable object (which we want from the function call) and the other as an error. This will check for any cases that we can call the custom error and return that error interface and the object which was to be returned will be nil if there is an error. If there are no errors, we will return the object and set the error as nil. This way, we can use the \u0026lt;code\u0026gt;ok, error\u0026lt;\/code\u0026gt; syntax while calling this function and thereby make it a lot easier in case of complex programs or multiple types of errors.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\ntype Invalid_URL_Error struct {\n\tmessage string\n}\n\nfunc (e Invalid_URL_Error) Error() string {\n\treturn \u0026#34;Invalid URL\u0026#34;\n}\n\nfunc get_resp(url_link string) (http.Response, error) {\n\n\tresp, err := http.Get(url_link)\n\n\tif err != nil {\n\t\treturn http.Response{}, \u0026amp;Invalid_URL_Error{}\n\t} else {\n\t\tdefer resp.Body.Close()\n\t\treturn *resp, nil\n\t}\n\n}\n\nfunc main() {\n\n\turl := \u0026#34;htts:\/\/meetgor.com\u0026#34;\n\tresp, err := get_resp(url)\n\tif err != nil {\n\t\tfmt.Println(err)\n\t} else {\n\t\tfmt.Println(resp)\n\t}\n\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run errors.go\nInvalid URL\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This is the simple function \u0026lt;code\u0026gt;get_resp\u0026lt;\/code\u0026gt; which will either fetch the \u0026lt;code\u0026gt;Response\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;error\u0026lt;\/code\u0026gt;. We call the \u0026lt;code\u0026gt;http.Get\u0026lt;\/code\u0026gt; method internally in the function and if something is invalid, it will return an empty Response but the error will be an \u0026lt;code\u0026gt;Invalid_URL_Error\u0026lt;\/code\u0026gt; object which is the custom error class. This means, that if we have an error, we will return a string object from the \u0026lt;code\u0026gt;Error\u0026lt;\/code\u0026gt; method in the interface and if there is no error, we will return the \u0026lt;code\u0026gt;Response\u0026lt;\/code\u0026gt; object and the error will be set as \u0026lt;code\u0026gt;nil\u0026lt;\/code\u0026gt;. Hence, you can now realize, why we check for \u0026lt;code\u0026gt;err != nil\u0026lt;\/code\u0026gt;, it is used for checking if an error object has returned a string or not. As said earlier, we also need to close the request Body.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Further, we can pass the default error method to the custom error class as \u0026lt;code\u0026gt;Invalid_URL_Error{err.Error()}\u0026lt;\/code\u0026gt;. This will ensure, we get additional context from the custom error interface.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\ntype Invalid_URL_Error struct {\n\tmessage string\n}\n\nfunc (e Invalid_URL_Error) Error() string {\n\treturn \u0026#34;Invalid URL : \u0026#34; \u002b e.message\n}\n\nfunc get_resp(url_link string) (http.Response, error) {\n\n\tresp, err := http.Get(url_link)\n\n\tif err != nil {\n\t\treturn http.Response{}, \u0026amp;Invalid_URL_Error{err.Error()}\n\t} else {\n\t\tdefer resp.Body.Close()\n\t\treturn *resp, nil\n\t}\n\n}\n\nfunc main() {\n\n\turl := \u0026#34;htts:\/\/meetgor.com\u0026#34;\n\tresp, err := get_resp(url)\n\tif err != nil {\n\t\tfmt.Println(err)\n\t} else {\n\t\tfmt.Println(resp)\n\t}\n\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run custom_error\nInvalid URL : Get \u0026#34;htts:\/\/meetgor.com\u0026#34;: unsupported protocol scheme \u0026#34;htts\u0026#34;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;That\u0026#39;s it from this part. Reference for all the code examples and commands can be found in the \u0026lt;a href=\u0026#34;https:\/\/github.com\/mr-destructive\/100-days-of-golang\/tree\/main\/scripts\/error-handling\/main.go\u0026#34;\u0026gt;100 days of Golang\u0026lt;\/a\u0026gt; GitHub repository.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;From this article, we were able to understand the basics of error handling in golang. We can now work with handling errors in function calls and create custom error interfaces. Thank you for reading, if you have any queries, feedback, or questions, you can freely ask me on my social handles. Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "golang-error-handling";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'" aria-label="Editor">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Golang: Error Handling</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2022-09-17 20:15:00">2022-09-17 20:15:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/100-days-of-golang" class="series-link">📖 100-days-of-golang</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=golang-error-handling&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>Error handling is quite an important feature of any programming language to improve the quality and transparency between the user and the application. By raising appropriate error messages, the user can get a clear idea about the things happening in the interface as well as the application can handle the errors with appropriate actions.</p>
+<p>In the 20th post of the series, we will be exploring the concept of error handling in golang. From this article, we will be able to learn the fundamentals of error or exception handling in golang, create custom error classes, raise and ignore error messages, and exit or redirect the flow of state of the application when an error is raised.</p>
+<h2 id="why-we-need-error-type">Why we need Error Type</h2>
+<p>We need <a href="https://go.dev/blog/error-handling-and-go">error handling</a> and catching in order to stop or divert the flow of the application which will restrict the dubious or unintentional execution of the code. Let's say, for example, we have a string as an input, and the user skipped the input and the string is returned as empty, we don't want to execute the further program as the execution might depend on the value of the string. So, in order to catch these kinds of events, we might use errors and log the results for better transparency.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+)
+
+func main() {
+
+	var s string
+	n, err := fmt.Scanf("%s", &s)
+
+	if err != nil {
+		fmt.Println(err)
+		// panic(err)
+        // OR
+        // return
+	} else {
+		fmt.Println(n)
+		if s[0] == 'a' {
+			fmt.Println(s)
+		}
+	}
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run main.go
+asdf
+1
+asdf
+
+
+$ go run main.go
+
+unexpected newline
+
+
+$ go run main.go
+wsd
+1
+</code></pre></div><p>In the above example, we have a simple string <code>s</code> input, we will input the string using the <code>Scanf</code> function that will return an integer as the number of variables it has scanned and error if any. Here, as the function might return two values, we need two variables to call the function. The <code>n</code> variable stores the number of variables successfully scanned and the <code>err</code> as the err from the function generated. If there is an error, that is the value stored in <code>err</code> is not empty, we will log the error. And move into the rest of the program.</p>
+<p>This might be looking cool, but it doesn't break out of the program if there is an error. We want it to log the error as well as exit from the program. We can do that using the panic function.</p>
+<h2 id="catching-errors">Catching Errors</h2>
+<p>We'll see a few examples, where we will catch errors in some of the regularly used functions. These error messages can be used in deciding the next procedure to be run.</p>
+<h3 id="comma-okerror-syntax">Comma OK/Error syntax</h3>
+<p>We use the <a href="https://go.dev/doc/effective_go#:~:text=is%20called%20the%20%E2%80%9C-,comma%20ok,-%E2%80%9D%20idiom.%20In%20this">comma ok, error</a> syntax where we want multiple return values from a function. It is a narrowed syntax for a two-type return value function, we either return a value that we are expecting as <code>OK</code>, or we get an <code>error</code> from the function call.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">
+ok, err := function()
+if err != nil {
+    // handle error
+    panic(err)
+} else {
+    // work with the ok object
+    fmt.Println(ok)
+}
+
+</code></pre></div><p>In the above code, we have used the comma-ok, error syntax, the function call will return two objects either an expected object or an error object if there were errors in the processing. We handle the error if the error object is not empty i.e. it contains something, else we can do the rest of the required processing of the program.</p>
+<p>We can even ignore the <code>err</code> or the <code>ok</code> object using the <code>_</code> i.e. to say a don't care variable. Remember you can ignore either of the values and not both. It is not recommended to ignore errors but if you know the obvious thing to process, you might as well sometimes.</p>
+<p>A more compressed code might look something like below:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">
+if ok, err := function(); err != nil {
+    // handle error
+    panic(err)
+} else {
+    // work with the ok object
+    fmt.Println(ok)
+}
+</code></pre></div><p>The above code wraps the initialization of <code>ok, err</code> objects by calling the function inside the if statement and checking for the error.</p>
+<h3 id="making-http-requests">Making HTTP requests</h3>
+<p>Let's say we have a URL, and we want to check if the site exists or not, we can run the <a href="https://pkg.go.dev/net/http@go1.19.1#Client.Get">http.Get</a> function from the <a href="https://pkg.go.dev/net/http">net/http</a> package. We will parse a URL in the function and this function also returns a <a href="https://pkg.go.dev/net/http#Response">Response</a> type object and an error object if there are any errors generated during the function call. If there is an error while we call the function, we simply log the error and panic out of the program. Else we can log the status code and do further processing.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	url := "https://meetgor.com/"
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	} else {
+		fmt.Println(resp.StatusCode)
+	}
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run web.go
+URL: https://meetgor.com/
+200
+
+
+
+$ go run web.go
+
+URL: htts://meetgor.com/
+Get "htts://meetgor.com/": unsupported protocol scheme "htts"
+panic: Get "htts://meetgor.com/": unsupported protocol scheme "htts"
+
+goroutine 1 [running]:
+main.main()
+        /home/meet/code/100-days-of-golang/scripts/errors/https.go:14 +0x170
+exit status 2
+</code></pre></div><p>This is how we can validate a URL handling the error if the parsed URL is invalid or does not exist.</p>
+<p>There is one more variation of the above code style, it is a bit compressed and might be just a syntactic change.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	url := "https://meetgor.com/"
+	if resp, err := http.Get(url); err != nil {
+		fmt.Println(err)
+		panic(err)
+	} else {
+		fmt.Println(resp.StatusCode)
+	}
+}
+</code></pre></div><p>This can be used wherever you are using the <code>ok, err</code> kind of syntax, but I prefer the clean syntax so I won't move ahead with this.</p>
+<h3 id="opening-or-handling-of-file">Opening or Handling of File</h3>
+<p>We can even use error handling while dealing with Files or Folders. We can use the <a href="https://pkg.go.dev/os">os</a> package to read the file in golang. The <a href="https://pkg.go.dev/os#Open">Open</a> function will read the file if it exists or else it will return an error. We can catch the error from the comma <code>ok,error</code> syntax and do the required processing in the program.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func main() {
+	file_name := "hello.txt"
+	file, err := os.Open(file_name)
+	if err != nil {
+		fmt.Println("Error: ", err)
+
+        // Create a File 
+
+		// _, err := os.Create(file_name)
+		// if err != nil {
+		// 	fmt.Println(err)
+		// }
+		// fmt.Println("Created File", file_name)
+		// file, _ = os.Open(file_name)
+	}
+	fmt.Println(file.Stat())
+}
+</code></pre></div><p><img src="https://res.cloudinary.com/techstructive-blog/image/upload/v1663425619/blog-media/golang-file-error.png" alt="File handling Error"></p>
+<p>We can use the error as a hint that the file doesn't exist and create a file and then move toward the actual execution of the program. We can also ignore the file object while creating the file, as we are interested in only knowing that the file is just created without any errors, we use the <code>_</code> to ignore the variable in the assignment in the function call.</p>
+<p>Inside the commented code, we use the <a href="https://pkg.go.dev/os#Create">Create</a> function to create a file and check for any errors in the process. We finally create the file and <code>Open</code> the newly created file.</p>
+<h2 id="custom-error">Custom Error</h2>
+<p>We can create custom error types in golang with the help of interfaces and structs. An Error struct will simply consist of a string <code>message</code>, that string will display the error. By overriding or creating the <code>Error</code> method as an interface for the struct we can construct custom errors.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">type Invalid_URL_Error struct {
+	message string
+}
+
+func (e Invalid_URL_Error) Error() string {
+	return "Invalid URL"
+}
+
+</code></pre></div><p>Here, we have the <code>Invalid_URL_Error</code> as the custom struct name and the <code>Error()</code> method as an interface that will print the error log. This Error method will be used while raising errors in the program. It might be called from another function while doing the actual processing of the URL while sending a GET request.</p>
+<p>Further, we can call this custom error method when we wish, by using the package functions, we can override the function call with the custom method.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+    "fmt"
+    "net/http"
+)
+
+type Invalid_URL_Error struct {
+	message string
+}
+
+func (e Invalid_URL_Error) Error() string {
+	return "Invalid URL"
+}
+
+func main() {
+	url := "htt://meetgor.com"
+	response, err := http.Get(url)
+	if err != nil {
+		fmt.Println(Invalid_URL_Error{})
+		fmt.Println(err)
+	} else {
+		fmt.Println(response)
+		defer response.Body.Close()
+	}
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run custom_error.go
+Invalid URL 
+Get "htt://meetgor.com": unsupported protocol scheme "htt"
+
+</code></pre></div><p>In the above code, we are basically calling the function <code>http.Get</code> that will return a <code>Response</code> or an <code>err</code> object. We can even call the custom error method with an empty <code>Invalid_URL_Error</code> object, this will call the function <code>Error</code> from that interface. The function will print the custom error message and thereby we are able to log the custom error message for the invalid URL example.</p>
+<p>Also, we can parse the default error method to the custom error method which will get us additional information inside the error interface method.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+type Invalid_URL_Error struct {
+	message string
+}
+
+func (e Invalid_URL_Error) Error() string {
+	return "Invalid URL : " + e.message
+}
+
+func main() {
+	url := "htt://meetgor.com"
+	response, err := http.Get(url)
+	if err != nil {
+		fmt.Println(Invalid_URL_Error{err.Error()})
+	} else {
+		fmt.Println(response)
+		defer response.Body.Close()
+	}
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run custom_error.go
+Invalid URL : Get "htt://meetgor.com": unsupported protocol scheme "htt"
+
+</code></pre></div><p>When the URL is invalid, we will call the custom error interface by parsing the default <code>err.Error</code> method. This will get us the error object from the main method to our custom interface. That is how we will be able to fetch additional information about the error from the interface with the <code>.</code> operator as <code>e.message</code>. So, the syntax is <code>Invalid_URL_Error{err.Error()}</code>, i.e. an object of type <code>Invalid_URL_Error</code> with the message set as the value returned from the default <code>Error()</code> function. hence we can implement the custom error message.</p>
+<p>We also need to look for the response object and close the Response Body as it is mandatory to do so and the responsibility of the caller.</p>
+<h3 id="creating-a-function-that-returns-two-values-okerror">Creating a function that returns two values (ok,error)</h3>
+<p>We can even nest the calling of this error method inside another function. This will give us a good overview of how to deal with errors more thoroughly. We will construct a function with two return values one can be any normal desirable object (which we want from the function call) and the other as an error. This will check for any cases that we can call the custom error and return that error interface and the object which was to be returned will be nil if there is an error. If there are no errors, we will return the object and set the error as nil. This way, we can use the <code>ok, error</code> syntax while calling this function and thereby make it a lot easier in case of complex programs or multiple types of errors.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+type Invalid_URL_Error struct {
+	message string
+}
+
+func (e Invalid_URL_Error) Error() string {
+	return "Invalid URL"
+}
+
+func get_resp(url_link string) (http.Response, error) {
+
+	resp, err := http.Get(url_link)
+
+	if err != nil {
+		return http.Response{}, &Invalid_URL_Error{}
+	} else {
+		defer resp.Body.Close()
+		return *resp, nil
+	}
+
+}
+
+func main() {
+
+	url := "htts://meetgor.com"
+	resp, err := get_resp(url)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(resp)
+	}
+
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run errors.go
+Invalid URL
+</code></pre></div><p>This is the simple function <code>get_resp</code> which will either fetch the <code>Response</code> or <code>error</code>. We call the <code>http.Get</code> method internally in the function and if something is invalid, it will return an empty Response but the error will be an <code>Invalid_URL_Error</code> object which is the custom error class. This means, that if we have an error, we will return a string object from the <code>Error</code> method in the interface and if there is no error, we will return the <code>Response</code> object and the error will be set as <code>nil</code>. Hence, you can now realize, why we check for <code>err != nil</code>, it is used for checking if an error object has returned a string or not. As said earlier, we also need to close the request Body.</p>
+<p>Further, we can pass the default error method to the custom error class as <code>Invalid_URL_Error{err.Error()}</code>. This will ensure, we get additional context from the custom error interface.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+type Invalid_URL_Error struct {
+	message string
+}
+
+func (e Invalid_URL_Error) Error() string {
+	return "Invalid URL : " + e.message
+}
+
+func get_resp(url_link string) (http.Response, error) {
+
+	resp, err := http.Get(url_link)
+
+	if err != nil {
+		return http.Response{}, &Invalid_URL_Error{err.Error()}
+	} else {
+		defer resp.Body.Close()
+		return *resp, nil
+	}
+
+}
+
+func main() {
+
+	url := "htts://meetgor.com"
+	resp, err := get_resp(url)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(resp)
+	}
+
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run custom_error
+Invalid URL : Get "htts://meetgor.com": unsupported protocol scheme "htts"
+</code></pre></div><p>That's it from this part. Reference for all the code examples and commands can be found in the <a href="https://github.com/mr-destructive/100-days-of-golang/tree/main/scripts/error-handling/main.go">100 days of Golang</a> GitHub repository.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>From this article, we were able to understand the basics of error handling in golang. We can now work with handling errors in function calls and create custom error interfaces. Thank you for reading, if you have any queries, feedback, or questions, you can freely ask me on my social handles. Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/golang-interfaces" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Golang: Interfaces</span>
+        </a>
+        
+
+        
+        
+        <a href="/posts/golang-paths" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Golang: Paths</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-delete-method" class="related-link">
+                <span class="related-post-title">Golang Web: DELETE Method</span>
+                <span class="related-post-date">2025-01-12 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-patch-method" class="related-link">
+                <span class="related-post-title">Golang Web: PATCH Method</span>
+                <span class="related-post-date">2025-01-11 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-5" class="related-link">
+                <span class="related-post-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+                <span class="related-post-date">2024-12-11 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-4" class="related-link">
+                <span class="related-post-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+                <span class="related-post-date">2024-12-09 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-3" class="related-link">
+                <span class="related-post-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+                <span class="related-post-date">2024-12-07 20:45:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

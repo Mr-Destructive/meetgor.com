@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Advent of Code Day 4 in Golang: Finding XMAS and X-MAS | Meet Gor</title>
+    <meta name="title" content="Advent of Code Day 4 in Golang: Finding XMAS and X-MAS | Meet Gor">
+    <meta name="description" content="Solving day 4 of Advent of Code 2024 in Golang. Diving into one of the possible approaches to the puzzle.">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go, aoc, advent-of-code, aoc-2024">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/aoc-2024-day-4">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/aoc-2024-day-4">
+    <meta property="og:title" content="Advent of Code Day 4 in Golang: Finding XMAS and X-MAS">
+    <meta property="og:description" content="Solving day 4 of Advent of Code 2024 in Golang. Diving into one of the possible approaches to the puzzle.">
+    <meta property="og:image" content="https://meetgor.com/tbicon.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Advent of Code Day 4 in Golang: Finding XMAS and X-MAS">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2024-12-09 20:45:00">
+    <meta property="article:modified_time" content="2024-12-09 20:45:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    <meta property="article:tag" content="aoc">
+    
+    <meta property="article:tag" content="advent-of-code">
+    
+    <meta property="article:tag" content="aoc-2024">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/aoc-2024-day-4">
+    <meta name="twitter:title" content="Advent of Code Day 4 in Golang: Finding XMAS and X-MAS">
+    <meta name="twitter:description" content="Solving day 4 of Advent of Code 2024 in Golang. Diving into one of the possible approaches to the puzzle.">
+    <meta name="twitter:image" content="https://meetgor.com/tbicon.png">
+    <meta name="twitter:image:alt" content="Advent of Code Day 4 in Golang: Finding XMAS and X-MAS">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/aoc-2024-day-4"
+        },
+        "headline": "Advent of Code Day 4 in Golang: Finding XMAS and X-MAS",
+        "description": "Solving day 4 of Advent of Code 2024 in Golang. Diving into one of the possible approaches to the puzzle.",
+        "datePublished": "2024-12-09 20:45:00",
+        "dateModified": "2024-12-09 20:45:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        
+        "keywords": "go, aoc, advent-of-code, aoc-2024",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Moving on to day 4, we have a grid problem in front of us, we are given some numbers in the form of a grid, i.e. some rows and columns with some upper case letters. What we need to do is to find is the word \u0026lt;code\u0026gt;XMAS\u0026lt;\/code\u0026gt; in any direction (up, left, down, right, diagonals), and in the second part we need to find the word \u0026lt;code\u0026gt;MAS\u0026lt;\/code\u0026gt; forming an X.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, let’s see how we can approach this and solve it in golang.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;You can check out my solutions \u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/advent_of_code\/blob\/main\/2024\/src\/day04\/main.go\u0026#34;\u0026gt;here on GitHub\u0026lt;\/a\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/advent_of_code\/blob\/main\/2024\/src\/day04\/main.go\u0026#34;\u0026gt;.\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;constructinhttpsgithubcommr-destructiveadvent-of-codeblobmain2024srcday02maingog-the-grid\u0026#34;\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/advent_of_code\/blob\/main\/2024\/src\/day02\/main.go\u0026#34;\u0026gt;Constructin\u0026lt;\/a\u0026gt;g the grid\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;The most fundamental part of the problem lies in actually converting the text into a grid or a matrix form. We can split the lines, into individual lines and append each character as an element in a list, and that way we can have a list of list of strings which is a matrix or grid-like (2-dimensional) structure.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, below is the input for the puzzle.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;MMMSXXMASM\nMSAMXMSMSA\nAMXSXMAAMM\nMSAMASMSMX\nXMASAMXAMM\nXXAMMXXAMA\nSMSMSASXSS\nSAXAMASAAA\nMAMMMXMMMM\nMXMXAXMASX\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We need to convert it into something like this\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;[\n    [M M M S X X M A S M]\n    [M S A M X M S M S A]\n    [A M X S X M A A M M]\n    [M S A M A S M S M X]\n    [X M A S A M X A M M]\n    [X X A M M X X A M A]\n    [S M S M S A S X S S]\n    [S A X A M A S A A A]\n    [M A M M M X M M M M]\n    [M X M X A X M A S X]\n]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, this is a list of strings, we can say in golang it is a \u0026lt;code\u0026gt;[][]string\u0026lt;\/code\u0026gt; . We can do that by creating a function like this:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;func ConstructGrid(lines []string) [][]string {\n\tgrid := [][]string{}\n\tfor _, line := range lines {\n\t\trow := []string{}\n\t\tfor _, char := range strings.Split(line, \u0026#34;\u0026#34;) {\n\t\t\trow = append(row, char)\n\t\t}\n\t\tgrid = append(grid, row)\n\t}\n\treturn grid\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above function takes in a list of strings and returns a list of list of strings that are individual letters in the grid.\u0026lt;br\u0026gt;\nWe can read the file bytes and split the bytes on newline characters and then this will be used as the input for this function.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, once the input is parsed into a grid, we can start thinking about the actual logic of finding the word \u0026lt;code\u0026gt;XMAS\u0026lt;\/code\u0026gt; in it.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;part-1\u0026#34;\u0026gt;Part 1\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;So, in the first part, we need to find the word \u0026lt;code\u0026gt;XMAS\u0026lt;\/code\u0026gt; in the matrix which could be appearing:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;forwards (as \u0026lt;code\u0026gt;XMAS\u0026lt;\/code\u0026gt;)\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;backward (as \u0026lt;code\u0026gt;SAMX\u0026lt;\/code\u0026gt;)\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;upwards\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;       S\n       A\n       M\n       X\n   \u0060\u0060\u0060\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;downwards\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;       X\n       M\n       A\n       S\n   \u0060\u0060\u0060\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Diagonal upwards (right or up left)\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;       S\n         A\n           M\n             X\n\n       OR\n             S\n           A\n         M \n       X\n   \u0060\u0060\u0060\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Diagonals downwards (right or left)\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;                X\n              M\n            A\n          S\n\n       OR\n       X\n         M\n           A\n             S\n   \u0060\u0060\u0060\n\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;So, there are 8 directions where \u0026lt;code\u0026gt;XMAS\u0026lt;\/code\u0026gt; could appear in the grid, there could n number of these \u0026lt;code\u0026gt;XMAS\u0026lt;\/code\u0026gt; . We need to find the count of these in the grid.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1733761379973\/8a0a0263-b286-47f1-a338-410dec2c6b7b.png\u0026#34; alt=\u0026#34;\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;To approach this, we can either find the first character in the word \u0026lt;code\u0026gt;XMAS\u0026lt;\/code\u0026gt; and then search in all directions one by one and check if we find \u0026lt;code\u0026gt;M\u0026lt;\/code\u0026gt; and if we have found \u0026lt;code\u0026gt;M\u0026lt;\/code\u0026gt; in any of the direction, we keep moving ahead in that direction and check if there is \u0026lt;code\u0026gt;A\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;S\u0026lt;\/code\u0026gt; in that direction.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The approach looks like this:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Initialize the counter to 0\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Iterate over each line\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Iterate over each character in the line\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Check if the character is equal to \u0026lt;code\u0026gt;X\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;If the character is \u0026lt;code\u0026gt;X\u0026lt;\/code\u0026gt;→\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Iterate over all the directions (up, down, right, left, up-left, up-right, down-left, down-right)\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;For that direction if we find the character to be \u0026lt;code\u0026gt;M\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Keep moving ahead in the same direction to find \u0026lt;code\u0026gt;A\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;S\u0026lt;\/code\u0026gt; similarly, if we found all the characters \u0026lt;code\u0026gt;XMAS\u0026lt;\/code\u0026gt; then, increment the counter\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Else choose another direction in the loop\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;This looks complex and large but is simple, focus one thing at a time and you can solve this easily.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, for the implementation of this, we need to define a few things first:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt; var directions [][]int = [][]int{\n\t[]int{0, -1},   \/\/ up\n\t[]int{0, 1},  \/\/ down\n\t[]int{1, 0},   \/\/ right\n\t[]int{-1, 0},  \/\/ left\n\t[]int{1, -1},   \/\/ up right\n\t[]int{-1, -1},  \/\/ up left\n\t[]int{1, 1},  \/\/ down right\n\t[]int{-1, 1}, \/\/ down left\n}\n\nvar wordList []string = []string{\u0026#34;X\u0026#34;, \u0026#34;M\u0026#34;, \u0026#34;A\u0026#34;, \u0026#34;S\u0026#34;}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, we have defined the list of integers in the directions which are the x and y coordinates that we need to add or subtract to get to the desired location. It is basically like a unit vector, it has a distance of 1 and a direction indicated by \u0026lt;code\u0026gt;\u002b\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;-\u0026lt;\/code\u0026gt; indicating to move the left or right for x coordinates and up and down for y c-ordinates.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, let me explain that more clearly, let’s say I am at \u0026lt;code\u0026gt;(1,2)\u0026lt;\/code\u0026gt; in the grid which is of 4x4 dimension.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;A B C D\nE F G H\nI J K L\nM N O P\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, at 2,1 we have \u0026lt;code\u0026gt;G\u0026lt;\/code\u0026gt; , so we check some directions for this\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;up → \u0026lt;code\u0026gt;0,-1\u0026lt;\/code\u0026gt; → 2\u002b0, 1-1 → 2,0, we have moved to \u0026lt;code\u0026gt;C\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;right → \u0026lt;code\u0026gt;1,0\u0026lt;\/code\u0026gt; → 2\u002b1, 1\u002b0 → 3,1 , we have moved to \u0026lt;code\u0026gt;H\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;down, left → \u0026lt;code\u0026gt;-1,1\u0026lt;\/code\u0026gt; → 2-1, 1\u002b1 → 1, 2, we have moved to \u0026lt;code\u0026gt;J\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, you get the idea, that we are moving in some directions using these coordinates.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We can use these to get the next direction jump we want to make to find if that element has the next character in the word that we are searching.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We will write a function that does this first and abstract the function that checks if we have found the word in the grid.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;func TraverseGrid(grid [][]string) int {\n\tscore := 0\n\tfor x, row := range grid {\n\t\tfor y, char := range row {\n\t\t\tif char == wordList[0] {\n\t\t\t\tfor _, direction := range directions {\n\t\t\t\t\tif FindXMAS(x, y, 1, direction, grid) {\n\t\t\t\t\t\tscore \u002b= 1\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\treturn score\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above function takes in a grid and returns an integer which will be the score i.e. the count of words \u0026lt;code\u0026gt;XMAS\u0026lt;\/code\u0026gt; found in the grid\/matrix.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;First, we need to iterate through each of the rows in the grid, for each row, we iterate over the character, so we will have x and y coordinates as the index of the grid. We need to then check if the current character is \u0026lt;code\u0026gt;X\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;wordList[0]\u0026lt;\/code\u0026gt; , if that is the case, we iterate over all the directions and check if we can find \u0026lt;code\u0026gt;XMAS\u0026lt;\/code\u0026gt; i.e. \u0026lt;code\u0026gt;MAS\u0026lt;\/code\u0026gt; in that direction, if so we increment the counter. What is the \u0026lt;code\u0026gt;FindXMAS\u0026lt;\/code\u0026gt; function, let’s abstract that away, and pass in the \u0026lt;code\u0026gt;x\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;y\u0026lt;\/code\u0026gt;, which are the coordinates of the current word, \u0026lt;code\u0026gt;1\u0026lt;\/code\u0026gt; which will be the word position of the \u0026lt;code\u0026gt;XMAS\u0026lt;\/code\u0026gt; and in this case, we already have found \u0026lt;code\u0026gt;X\u0026lt;\/code\u0026gt; we need to find \u0026lt;code\u0026gt;MAS\u0026lt;\/code\u0026gt; in that direction. We pass the grid and the direction, so this function will return true or false if that direction has \u0026lt;code\u0026gt;MAS\u0026lt;\/code\u0026gt; in it.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So to iterate:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;We iterate over the grid and get \u0026lt;code\u0026gt;row\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;x\u0026lt;\/code\u0026gt; as the list of strings and index of the current row.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;For each row i.e. list of strings, we iterate over the list of strings to get \u0026lt;code\u0026gt;char\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;y\u0026lt;\/code\u0026gt; as the character (string) and the index of that character in the list of the string.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;If we find the current character to be equal to \u0026lt;code\u0026gt;X\u0026lt;\/code\u0026gt; which is the 0th index of the \u0026lt;code\u0026gt;wordList\u0026lt;\/code\u0026gt; then\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;We iterate over all the directions and call the function \u0026lt;code\u0026gt;FindXMAS\u0026lt;\/code\u0026gt; to check if the remaining word \u0026lt;code\u0026gt;MAS\u0026lt;\/code\u0026gt; in that direction\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;If we find all the words, we increment the counter.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;So, we return the counter as we count the number of words \u0026lt;code\u0026gt;XMAS\u0026lt;\/code\u0026gt; in the grid\/matrix.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;Now, we can implement the \u0026lt;code\u0026gt;FindXMAS\u0026lt;\/code\u0026gt; function, that takes in a \u0026lt;code\u0026gt;x\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;y\u0026lt;\/code\u0026gt; coordinates, the \u0026lt;code\u0026gt;wordPosition\u0026lt;\/code\u0026gt;, the direction and the grid, and return if the word is found.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;First, we take the current x coordinates and add the direction’s x component (0th index or first element)\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;add current y coordinates to the direction’s y component (1st index or second element)\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;if the word position i.e.. the word index or the word itself in the current function is equal to the wordList, it means that it has found the required word completely\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;We need to check by adding the direction to the x and y coordinates, we are not overshooting the width and height of the grid, so if we do, we return a false\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;The final if is for checking if the current character is equal to the word that we are looking for, it could be \u0026lt;code\u0026gt;M\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;A\u0026lt;\/code\u0026gt; , or \u0026lt;code\u0026gt;S\u0026lt;\/code\u0026gt; . If so, we return the recursively call the \u0026lt;code\u0026gt;FindXMAS\u0026lt;\/code\u0026gt; function by passing the updated x and y coordinates and the next word in the wordList, we keep the direction the same and pass the entire grid.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;func FindXMAS(x, y, wordPosition int, direction []int, grid [][]string) bool {\n\txNext := x \u002b direction[0]\n\tyNext := y \u002b direction[1]\n\tif wordPosition \u0026gt; len(wordList)-1 {\n\t\treturn true\n\t}\n\n\tif xNext \u0026lt; 0 || xNext \u0026gt;= len(grid) || yNext \u0026lt; 0 || yNext \u0026gt;= len(grid[x]) {\n\t\treturn false\n\t}\n\n\tif grid[xNext][yNext] == wordList[wordPosition] {\n\t\treturn FindXMAS(xNext, yNext, wordPosition\u002b1, direction, grid)\n\t}\n\treturn false\n\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, we have implemented the \u0026lt;code\u0026gt;FindXMAS\u0026lt;\/code\u0026gt; function, this will just return if we have found the \u0026lt;code\u0026gt;MAS\u0026lt;\/code\u0026gt; word by going in a particular direction by updating the coordinates and checking if the word at that position in the gird is the next word in \u0026lt;code\u0026gt;MAS\u0026lt;\/code\u0026gt; list.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, this is what the entire first part looks like:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;func main() {\n\tlines := ReadFileLines(\u0026#34;sample.txt\u0026#34;)\n\tgrid := ConstructGrid(lines)\n\tscore := TraverseGrid(grid)\n\tfmt.Println(score)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We take in the lines as a list of strings and pass that to \u0026lt;code\u0026gt;ConstructGrid\u0026lt;\/code\u0026gt; and get the grid, finally, we call \u0026lt;code\u0026gt;TraverseGrid\u0026lt;\/code\u0026gt; , by passing the grid and getting the score as the count of the words \u0026lt;code\u0026gt;XMAS\u0026lt;\/code\u0026gt; in the grid.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That’s it from the part 1.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;part-2\u0026#34;\u0026gt;Part 2\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;For part two, we need to find \u0026lt;code\u0026gt;MAS\u0026lt;\/code\u0026gt; in the cross shape, like below:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;M.S\n.A.\nM.S\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, to solve this, we can do a similar approach but much simpler, we just need to find \u0026lt;code\u0026gt;A\u0026lt;\/code\u0026gt; as there will always be the word \u0026lt;code\u0026gt;MAS\u0026lt;\/code\u0026gt; in the center, so we just check if we have \u0026lt;code\u0026gt;A\u0026lt;\/code\u0026gt; and the top-left, top-right, or bottom-right, bottom-left has \u0026lt;code\u0026gt;M\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;S\u0026lt;\/code\u0026gt; .\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We get the coordinates of the top-right, top-left positions, down-right, and down-left positions by adding and subtracting 1 from it. We make a basic check if we are not overshooting the boundary of the grid. If we overshoot the boundaries, we won’t find the \u0026lt;code\u0026gt;MAS\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;But if we are within the grid, we now get the character at those 4 positions, we check if the top-left and bottom-right have \u0026lt;code\u0026gt;M\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;S\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;S\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;M\u0026lt;\/code\u0026gt;, similarly for top-right and bottom-left has \u0026lt;code\u0026gt;M\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;S\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;S\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;M\u0026lt;\/code\u0026gt; respectively. This is the diagonal search for \u0026lt;code\u0026gt;M\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;S\u0026lt;\/code\u0026gt; above and below the character \u0026lt;code\u0026gt;A\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, if we have both the diagonal matched we return true.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\n\nfunc FindMAS(x, y int, grid [][]string, wordList []string) bool {\n\txL, yT := x-1, y\u002b1 \/\/ Top-left neighbor\n\txR, yD := x\u002b1, y-1 \/\/ Bottom-right neighbor\n\n\t\/\/ Check if the indices are within bounds\n\tif xL \u0026lt; 0 || xR \u0026gt;= len(grid) || yT \u0026lt; 0 || yD \u0026lt; 0 ||\n\t\tyT \u0026gt;= len(grid[xL]) || yD \u0026gt;= len(grid[xR]) {\n\t\treturn false\n\t}\n\n\ttopLeft := grid[xL][yT]\n\tbottomRight := grid[xR][yD]\n\ttopRight := grid[xR][yT]\n\tbottomLeft := grid[xL][yD]\n\n\tword1, word3 := wordList[1], wordList[3]\n\n\tisDiagonalMatch := (topLeft == word1 \u0026amp;\u0026amp; bottomRight == word3) || (topLeft == word3 \u0026amp;\u0026amp; bottomRight == word1)\n\tisAntiDiagonalMatch := (topRight == word1 \u0026amp;\u0026amp; bottomLeft == word3) || (topRight == word3 \u0026amp;\u0026amp; bottomLeft == word1)\n\n\treturn isDiagonalMatch \u0026amp;\u0026amp; isAntiDiagonalMatch\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, that is the simple implementation for finding the \u0026lt;code\u0026gt;MAS\u0026lt;\/code\u0026gt; the diagonal.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Now, we need to change the \u0026lt;code\u0026gt;TraverseGrid\u0026lt;\/code\u0026gt; a bit, as we just iterate over the grid, and check if we have \u0026lt;code\u0026gt;A\u0026lt;\/code\u0026gt; in the character in the row, i.e. \u0026lt;code\u0026gt;wordList[2]\u0026lt;\/code\u0026gt;. Now, if we have \u0026lt;code\u0026gt;A\u0026lt;\/code\u0026gt;, we need to call the \u0026lt;code\u0026gt;FindMAS\u0026lt;\/code\u0026gt; function with the current coordinates and the grid, if that function returns true, we increment the counter,.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\nfunc TraverseGrid2(grid [][]string) int {\n\tscore := 0\n\tfor x, row := range grid {\n\t\tfor y, char := range row {\n\t\t\tif char == wordList[2] {\n\t\t\t\tif FindMAS(x, y, grid) {\n\t\t\t\t\tscore \u002b= 1\n\t\t\t\t}\n\n\t\t\t}\n\t\t}\n\t}\n\treturn score\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, that is the final implementation of part 2, we get the count of \u0026lt;code\u0026gt;MAS\u0026lt;\/code\u0026gt; in the cross direction.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;You can check out my solutions \u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/advent_of_code\/blob\/main\/2024\/src\/day04\/main.go\u0026#34;\u0026gt;here on GitHub\u0026lt;\/a\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/advent_of_code\/blob\/main\/2024\/src\/day04\/main.go\u0026#34;\u0026gt;.\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;So, that is it from day 4 of Advent of Code in Golang, let me know if you have any suggestions, and how you approached it. any better solutions?\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "aoc-2024-day-4";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2024-12-09 20:45:00">2024-12-09 20:45:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+                <a href="/tags/aoc">#aoc</a>
+                
+                <a href="/tags/advent-of-code">#advent-of-code</a>
+                
+                <a href="/tags/aoc-2024">#aoc-2024</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/Advent%20of%20Code%202024" class="series-link">📖 Advent of Code 2024</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>Moving on to day 4, we have a grid problem in front of us, we are given some numbers in the form of a grid, i.e. some rows and columns with some upper case letters. What we need to do is to find is the word <code>XMAS</code> in any direction (up, left, down, right, diagonals), and in the second part we need to find the word <code>MAS</code> forming an X.</p>
+<p>So, let’s see how we can approach this and solve it in golang.</p>
+<p>You can check out my solutions <a href="https://github.com/Mr-Destructive/advent_of_code/blob/main/2024/src/day04/main.go">here on GitHub</a><a href="https://github.com/Mr-Destructive/advent_of_code/blob/main/2024/src/day04/main.go">.</a></p>
+<h3 id="constructinhttpsgithubcommr-destructiveadvent-of-codeblobmain2024srcday02maingog-the-grid"><a href="https://github.com/Mr-Destructive/advent_of_code/blob/main/2024/src/day02/main.go">Constructin</a>g the grid</h3>
+<p>The most fundamental part of the problem lies in actually converting the text into a grid or a matrix form. We can split the lines, into individual lines and append each character as an element in a list, and that way we can have a list of list of strings which is a matrix or grid-like (2-dimensional) structure.</p>
+<p>So, below is the input for the puzzle.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">MMMSXXMASM
+MSAMXMSMSA
+AMXSXMAAMM
+MSAMASMSMX
+XMASAMXAMM
+XXAMMXXAMA
+SMSMSASXSS
+SAXAMASAAA
+MAMMMXMMMM
+MXMXAXMASX
+</code></pre></div><p>We need to convert it into something like this</p>
+<div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">[
+    [M M M S X X M A S M]
+    [M S A M X M S M S A]
+    [A M X S X M A A M M]
+    [M S A M A S M S M X]
+    [X M A S A M X A M M]
+    [X X A M M X X A M A]
+    [S M S M S A S X S S]
+    [S A X A M A S A A A]
+    [M A M M M X M M M M]
+    [M X M X A X M A S X]
+]
+</code></pre></div><p>So, this is a list of strings, we can say in golang it is a <code>[][]string</code> . We can do that by creating a function like this:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">func ConstructGrid(lines []string) [][]string {
+	grid := [][]string{}
+	for _, line := range lines {
+		row := []string{}
+		for _, char := range strings.Split(line, "") {
+			row = append(row, char)
+		}
+		grid = append(grid, row)
+	}
+	return grid
+}
+</code></pre></div><p>The above function takes in a list of strings and returns a list of list of strings that are individual letters in the grid.<br>
+We can read the file bytes and split the bytes on newline characters and then this will be used as the input for this function.</p>
+<p>So, once the input is parsed into a grid, we can start thinking about the actual logic of finding the word <code>XMAS</code> in it.</p>
+<h2 id="part-1">Part 1</h2>
+<p>So, in the first part, we need to find the word <code>XMAS</code> in the matrix which could be appearing:</p>
+<ul>
+<li>
+<p>forwards (as <code>XMAS</code>)</p>
+</li>
+<li>
+<p>backward (as <code>SAMX</code>)</p>
+</li>
+<li>
+<p>upwards</p>
+<div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">       S
+       A
+       M
+       X
+   ```
+
+</code></pre></div></li>
+<li>
+<p>downwards</p>
+<div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">       X
+       M
+       A
+       S
+   ```
+
+</code></pre></div></li>
+<li>
+<p>Diagonal upwards (right or up left)</p>
+<div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">       S
+         A
+           M
+             X
+
+       OR
+             S
+           A
+         M 
+       X
+   ```
+
+</code></pre></div></li>
+<li>
+<p>Diagonals downwards (right or left)</p>
+<div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">                X
+              M
+            A
+          S
+
+       OR
+       X
+         M
+           A
+             S
+   ```
+
+
+</code></pre></div></li>
+</ul>
+<p>So, there are 8 directions where <code>XMAS</code> could appear in the grid, there could n number of these <code>XMAS</code> . We need to find the count of these in the grid.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1733761379973/8a0a0263-b286-47f1-a338-410dec2c6b7b.png" alt=""></p>
+<p>To approach this, we can either find the first character in the word <code>XMAS</code> and then search in all directions one by one and check if we find <code>M</code> and if we have found <code>M</code> in any of the direction, we keep moving ahead in that direction and check if there is <code>A</code> and <code>S</code> in that direction.</p>
+<p>The approach looks like this:</p>
+<ul>
+<li>
+<p>Initialize the counter to 0</p>
+</li>
+<li>
+<p>Iterate over each line</p>
+<ul>
+<li>
+<p>Iterate over each character in the line</p>
+<ul>
+<li>
+<p>Check if the character is equal to <code>X</code></p>
+</li>
+<li>
+<p>If the character is <code>X</code>→</p>
+<ul>
+<li>
+<p>Iterate over all the directions (up, down, right, left, up-left, up-right, down-left, down-right)</p>
+<ul>
+<li>
+<p>For that direction if we find the character to be <code>M</code></p>
+</li>
+<li>
+<p>Keep moving ahead in the same direction to find <code>A</code> and <code>S</code> similarly, if we found all the characters <code>XMAS</code> then, increment the counter</p>
+</li>
+<li>
+<p>Else choose another direction in the loop</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>This looks complex and large but is simple, focus one thing at a time and you can solve this easily.</p>
+<p>So, for the implementation of this, we need to define a few things first:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go"> var directions [][]int = [][]int{
+	[]int{0, -1},   // up
+	[]int{0, 1},  // down
+	[]int{1, 0},   // right
+	[]int{-1, 0},  // left
+	[]int{1, -1},   // up right
+	[]int{-1, -1},  // up left
+	[]int{1, 1},  // down right
+	[]int{-1, 1}, // down left
+}
+
+var wordList []string = []string{"X", "M", "A", "S"}
+</code></pre></div><p>So, we have defined the list of integers in the directions which are the x and y coordinates that we need to add or subtract to get to the desired location. It is basically like a unit vector, it has a distance of 1 and a direction indicated by <code>+</code> or <code>-</code> indicating to move the left or right for x coordinates and up and down for y c-ordinates.</p>
+<p>So, let me explain that more clearly, let’s say I am at <code>(1,2)</code> in the grid which is of 4x4 dimension.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">A B C D
+E F G H
+I J K L
+M N O P
+</code></pre></div><p>So, at 2,1 we have <code>G</code> , so we check some directions for this</p>
+<p>up → <code>0,-1</code> → 2+0, 1-1 → 2,0, we have moved to <code>C</code></p>
+<p>right → <code>1,0</code> → 2+1, 1+0 → 3,1 , we have moved to <code>H</code></p>
+<p>down, left → <code>-1,1</code> → 2-1, 1+1 → 1, 2, we have moved to <code>J</code></p>
+<p>So, you get the idea, that we are moving in some directions using these coordinates.</p>
+<p>We can use these to get the next direction jump we want to make to find if that element has the next character in the word that we are searching.</p>
+<p>We will write a function that does this first and abstract the function that checks if we have found the word in the grid.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">func TraverseGrid(grid [][]string) int {
+	score := 0
+	for x, row := range grid {
+		for y, char := range row {
+			if char == wordList[0] {
+				for _, direction := range directions {
+					if FindXMAS(x, y, 1, direction, grid) {
+						score += 1
+					}
+				}
+			}
+		}
+	}
+	return score
+}
+</code></pre></div><p>The above function takes in a grid and returns an integer which will be the score i.e. the count of words <code>XMAS</code> found in the grid/matrix.</p>
+<p>First, we need to iterate through each of the rows in the grid, for each row, we iterate over the character, so we will have x and y coordinates as the index of the grid. We need to then check if the current character is <code>X</code> or <code>wordList[0]</code> , if that is the case, we iterate over all the directions and check if we can find <code>XMAS</code> i.e. <code>MAS</code> in that direction, if so we increment the counter. What is the <code>FindXMAS</code> function, let’s abstract that away, and pass in the <code>x</code>, <code>y</code>, which are the coordinates of the current word, <code>1</code> which will be the word position of the <code>XMAS</code> and in this case, we already have found <code>X</code> we need to find <code>MAS</code> in that direction. We pass the grid and the direction, so this function will return true or false if that direction has <code>MAS</code> in it.</p>
+<p>So to iterate:</p>
+<ul>
+<li>
+<p>We iterate over the grid and get <code>row</code> and <code>x</code> as the list of strings and index of the current row.</p>
+</li>
+<li>
+<p>For each row i.e. list of strings, we iterate over the list of strings to get <code>char</code> and <code>y</code> as the character (string) and the index of that character in the list of the string.</p>
+</li>
+<li>
+<p>If we find the current character to be equal to <code>X</code> which is the 0th index of the <code>wordList</code> then</p>
+<ul>
+<li>
+<p>We iterate over all the directions and call the function <code>FindXMAS</code> to check if the remaining word <code>MAS</code> in that direction</p>
+</li>
+<li>
+<p>If we find all the words, we increment the counter.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>So, we return the counter as we count the number of words <code>XMAS</code> in the grid/matrix.</p>
+</li>
+</ul>
+<p>Now, we can implement the <code>FindXMAS</code> function, that takes in a <code>x</code>, <code>y</code> coordinates, the <code>wordPosition</code>, the direction and the grid, and return if the word is found.</p>
+<ul>
+<li>
+<p>First, we take the current x coordinates and add the direction’s x component (0th index or first element)</p>
+</li>
+<li>
+<p>add current y coordinates to the direction’s y component (1st index or second element)</p>
+</li>
+<li>
+<p>if the word position i.e.. the word index or the word itself in the current function is equal to the wordList, it means that it has found the required word completely</p>
+</li>
+<li>
+<p>We need to check by adding the direction to the x and y coordinates, we are not overshooting the width and height of the grid, so if we do, we return a false</p>
+</li>
+<li>
+<p>The final if is for checking if the current character is equal to the word that we are looking for, it could be <code>M</code>, <code>A</code> , or <code>S</code> . If so, we return the recursively call the <code>FindXMAS</code> function by passing the updated x and y coordinates and the next word in the wordList, we keep the direction the same and pass the entire grid.</p>
+</li>
+</ul>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">func FindXMAS(x, y, wordPosition int, direction []int, grid [][]string) bool {
+	xNext := x + direction[0]
+	yNext := y + direction[1]
+	if wordPosition > len(wordList)-1 {
+		return true
+	}
+
+	if xNext < 0 || xNext >= len(grid) || yNext < 0 || yNext >= len(grid[x]) {
+		return false
+	}
+
+	if grid[xNext][yNext] == wordList[wordPosition] {
+		return FindXMAS(xNext, yNext, wordPosition+1, direction, grid)
+	}
+	return false
+
+}
+</code></pre></div><p>So, we have implemented the <code>FindXMAS</code> function, this will just return if we have found the <code>MAS</code> word by going in a particular direction by updating the coordinates and checking if the word at that position in the gird is the next word in <code>MAS</code> list.</p>
+<p>So, this is what the entire first part looks like:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">func main() {
+	lines := ReadFileLines("sample.txt")
+	grid := ConstructGrid(lines)
+	score := TraverseGrid(grid)
+	fmt.Println(score)
+}
+</code></pre></div><p>We take in the lines as a list of strings and pass that to <code>ConstructGrid</code> and get the grid, finally, we call <code>TraverseGrid</code> , by passing the grid and getting the score as the count of the words <code>XMAS</code> in the grid.</p>
+<p>That’s it from the part 1.</p>
+<h2 id="part-2">Part 2</h2>
+<p>For part two, we need to find <code>MAS</code> in the cross shape, like below:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">M.S
+.A.
+M.S
+</code></pre></div><p>So, to solve this, we can do a similar approach but much simpler, we just need to find <code>A</code> as there will always be the word <code>MAS</code> in the center, so we just check if we have <code>A</code> and the top-left, top-right, or bottom-right, bottom-left has <code>M</code> or <code>S</code> .</p>
+<p>We get the coordinates of the top-right, top-left positions, down-right, and down-left positions by adding and subtracting 1 from it. We make a basic check if we are not overshooting the boundary of the grid. If we overshoot the boundaries, we won’t find the <code>MAS</code></p>
+<p>But if we are within the grid, we now get the character at those 4 positions, we check if the top-left and bottom-right have <code>M</code> and <code>S</code> or <code>S</code> or <code>M</code>, similarly for top-right and bottom-left has <code>M</code> and <code>S</code> or <code>S</code> or <code>M</code> respectively. This is the diagonal search for <code>M</code> and <code>S</code> above and below the character <code>A</code>.</p>
+<p>So, if we have both the diagonal matched we return true.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">
+
+func FindMAS(x, y int, grid [][]string, wordList []string) bool {
+	xL, yT := x-1, y+1 // Top-left neighbor
+	xR, yD := x+1, y-1 // Bottom-right neighbor
+
+	// Check if the indices are within bounds
+	if xL < 0 || xR >= len(grid) || yT < 0 || yD < 0 ||
+		yT >= len(grid[xL]) || yD >= len(grid[xR]) {
+		return false
+	}
+
+	topLeft := grid[xL][yT]
+	bottomRight := grid[xR][yD]
+	topRight := grid[xR][yT]
+	bottomLeft := grid[xL][yD]
+
+	word1, word3 := wordList[1], wordList[3]
+
+	isDiagonalMatch := (topLeft == word1 && bottomRight == word3) || (topLeft == word3 && bottomRight == word1)
+	isAntiDiagonalMatch := (topRight == word1 && bottomLeft == word3) || (topRight == word3 && bottomLeft == word1)
+
+	return isDiagonalMatch && isAntiDiagonalMatch
+}
+</code></pre></div><p>So, that is the simple implementation for finding the <code>MAS</code> the diagonal.</p>
+<p>Now, we need to change the <code>TraverseGrid</code> a bit, as we just iterate over the grid, and check if we have <code>A</code> in the character in the row, i.e. <code>wordList[2]</code>. Now, if we have <code>A</code>, we need to call the <code>FindMAS</code> function with the current coordinates and the grid, if that function returns true, we increment the counter,.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">
+func TraverseGrid2(grid [][]string) int {
+	score := 0
+	for x, row := range grid {
+		for y, char := range row {
+			if char == wordList[2] {
+				if FindMAS(x, y, grid) {
+					score += 1
+				}
+
+			}
+		}
+	}
+	return score
+}
+</code></pre></div><p>So, that is the final implementation of part 2, we get the count of <code>MAS</code> in the cross direction.</p>
+<p>You can check out my solutions <a href="https://github.com/Mr-Destructive/advent_of_code/blob/main/2024/src/day04/main.go">here on GitHub</a><a href="https://github.com/Mr-Destructive/advent_of_code/blob/main/2024/src/day04/main.go">.</a></p>
+<h2 id="conclusion">Conclusion</h2>
+<p>So, that is it from day 4 of Advent of Code in Golang, let me know if you have any suggestions, and how you approached it. any better solutions?</p>
+<p>Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/aoc-2024-day-3" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+        </a>
+        
+
+        
+        
+        <a href="/posts/aoc-2024-day-5" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-5" class="related-link">
+                <span class="related-post-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+                <span class="related-post-date">2024-12-11 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-3" class="related-link">
+                <span class="related-post-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+                <span class="related-post-date">2024-12-07 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-2" class="related-link">
+                <span class="related-post-title">Advent of Code Day 2 in Golang: Slicing and Dicing Reports</span>
+                <span class="related-post-date">2024-12-02 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-1" class="related-link">
+                <span class="related-post-title">Advent of Code, 2024, Day 1 in Golang: Historian Hysteria</span>
+                <span class="related-post-date">2024-12-01 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-delete-method" class="related-link">
+                <span class="related-post-title">Golang Web: DELETE Method</span>
+                <span class="related-post-date">2025-01-12 20:30:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

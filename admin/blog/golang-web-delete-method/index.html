@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Golang Web: DELETE Method | Meet Gor</title>
+    <meta name="title" content="Golang Web: DELETE Method | Meet Gor">
+    <meta name="description" content="Exploring the fundamentals of a DELETE method in golang. How to request a resource, parse body, headers, etc. in a HTTP DELETE request.">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/golang-web-delete-method">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/golang-web-delete-method">
+    <meta property="og:title" content="Golang Web: DELETE Method">
+    <meta property="og:description" content="Exploring the fundamentals of a DELETE method in golang. How to request a resource, parse body, headers, etc. in a HTTP DELETE request.">
+    <meta property="og:image" content="https://meetgor-cdn.pages.dev/100-days-of-golang/golang-037-delete-method.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Golang Web: DELETE Method">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2025-01-12 20:30:00">
+    <meta property="article:modified_time" content="2025-01-12 20:30:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/golang-web-delete-method">
+    <meta name="twitter:title" content="Golang Web: DELETE Method">
+    <meta name="twitter:description" content="Exploring the fundamentals of a DELETE method in golang. How to request a resource, parse body, headers, etc. in a HTTP DELETE request.">
+    <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/100-days-of-golang/golang-037-delete-method.png">
+    <meta name="twitter:image:alt" content="Golang Web: DELETE Method">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/golang-web-delete-method"
+        },
+        "headline": "Golang Web: DELETE Method",
+        "description": "Exploring the fundamentals of a DELETE method in golang. How to request a resource, parse body, headers, etc. in a HTTP DELETE request.",
+        "datePublished": "2025-01-12 20:30:00",
+        "dateModified": "2025-01-12 20:30:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        "image": "https:\/\/meetgor-cdn.pages.dev\/100-days-of-golang\/golang-037-delete-method.png",
+        "keywords": "go",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We have explored GET, POST, PUT, and PATCH methods in our previous entries for this series. It is the final entry for all the HTTP methods which is going to be the \u0026lt;code\u0026gt;DELETE\u0026lt;\/code\u0026gt; method. In this entry of the series, we will take a view on how to construct and request an HTTP DELETE Method to an API Endpoint.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The DELETE Method is quite simple. You just provide the URI of the resource. Most often, the request body is not needed. That request will simply delete the request entity from the server (in the database or wherever the resource is stored).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let’s understand it in a more detailed way.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;what-is-a-delete-method\u0026#34;\u0026gt;What is a DELETE Method\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;The DELETE method requests that the server remove the association between the target resource and its URI (Uniform Resource Identifier). This doesn\u0026#39;t necessarily mean the underlying data is physically deleted; it means the resource is no longer accessible through that specific URL. DELETE can also be used to remove relationships between resources, effectively \u0026amp;quot;delinking\u0026amp;quot; them.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;According to the RFC:\u0026lt;\/p\u0026gt;\n\u0026lt;blockquote\u0026gt;\n\u0026lt;p\u0026gt;The DELETE method requests that the origin server remove the association between the target resource and its current functionality.\u0026lt;\/p\u0026gt;\n\u0026lt;\/blockquote\u0026gt;\n\u0026lt;p\u0026gt;Examples:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;Social Media\u0026lt;\/strong\u0026gt; (Deleting a Tweet): When you delete a tweet, you\u0026#39;re sending a DELETE request to the server. This removes the tweet from your timeline and makes it inaccessible via its URL. While the data might be archived or retained for a period, the key action is removing the public association between the tweet and its online presence. This is closer to a true deletion than the cart example.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;E-Commerce\u0026lt;\/strong\u0026gt; (Removing an Item from a Cart): When you remove an item from your online shopping cart, you\u0026#39;re sending a request (often a DELETE) to remove the item from your cart. The actual product remains available in the store\u0026#39;s inventory. This is a clear example of delinking. You\u0026#39;re deleting the link between your cart and the product, not the product itself.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;Let’s start constructing a simple DELETE Request in Golang.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;a-simple-delete-request\u0026#34;\u0026gt;A Simple DELETE Request\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We don’t have a specific method for \u0026lt;code\u0026gt;DELETE\u0026lt;\/code\u0026gt; in \u0026lt;code\u0026gt;net\/http\u0026lt;\/code\u0026gt; as we have for \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;POST\u0026lt;\/code\u0026gt;, so we need to create a request and use a client to send the request.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;constructing-the-url\u0026#34;\u0026gt;Constructing the URL\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We would need to define the endpoint that we are hitting. We can directly use the API URL or construct the API URL on the fly, depending on the ID and dynamic parameters. DELETE requests usually delete a particular entity. We would generally have some form of identifier for that entity\/object on the database, etc. So, in this case, it is the user\u0026#39;s ID, so we can pass the post to the URL.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\/\/ define URL to hit the API\napiURL := \u0026#34;https:\/\/reqres.in\/api\/users\/4\u0026#34;\n\n\/\/ OR\n\nbaseURL := \u0026#34;https:\/\/reqres.in\u0026#34;\nuserID := 4\napiURL := fmt.Sprintf(\u0026#34;%s\/api\/users\/%d\u0026#34;, baseURL, userID)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We can either directly define the URL or dynamically construct the URL, that is quite straightforward. The latter one is the one we usually use and design.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The DELETE Request doesn’t usually require a request body, however, if your server requires some specifications, you can construct the body as we did with the previous examples in POST, PUT, or PATCH method requests.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;constructing-and-sending-the-delete-request\u0026#34;\u0026gt;Constructing and sending the DELETE Request\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We can simply construct the request by specifying the http.MethodDelete as the request method, the URL to hit, and a body(optional) just like a \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; request. Once we have the request, we can create the default client and send the request.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\/\/ create a DELETE request\nreq, err := http.NewRequest(http.MethodDelete, apiURL, nil)\nif err != nil {\n\tlog.Fatal(err)\n}\n\n\/\/ construct the default http client and send the request\nclient := \u0026amp;http.Client{}\nresp, err := client.Do(req)\nif err != nil {\n\tlog.Fatal(err)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This is the normal code used for constructing an HTTP request in Golang, we create a request using the NewRequest function that takes in the method type, the URL to send the request, and the body if any. Then we need to create a http.Client for sending the request, we usually create a client with default values and send the request using the Do method on the created client using the request that we constructed earlier.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;fetching-the-response\u0026#34;\u0026gt;Fetching the Response\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Once the request is sent, we can fetch the response and read the body as bytes, and check the status if that succeeded or failed.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;fmt.Println(\u0026#34;Response Status:\u0026#34;, resp.Status)\nrespBody, err := io.ReadAll(resp.Body)\nif err != nil {\n    log.Fatal(err)\n}\nfmt.Println(\u0026#34;Response Body:\u0026#34;, string(respBody))\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We can grab the Status field for checking the status code and message for the request. Usually, the body would be empty since there is no resource we are expecting after deletion of the object. However, if the server is implemented in a way to return the deleted object, you can read the bytes of the body and unmarshal it to the desired struct.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, that is the entire code to create a simple Delete request with Go, simply construct the URL with the identifier for the resource to be deleted, create the request, and send the request, and if the status code is 204 (usually) then we can assume it succeeded.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;io\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n)\n\nfunc main() {\n\tbaseURL := \u0026#34;https:\/\/reqres.in\u0026#34;\n\tuserID := 2\n\tapiURL := fmt.Sprintf(\u0026#34;%s\/api\/users\/%d\u0026#34;, baseURL, userID)\n\n\treq, err := http.NewRequest(http.MethodDelete, apiURL, nil)\n\tif err != nil {\n\t\tfmt.Println(err)\n\t\treturn\n\t}\n\n\tclient := \u0026amp;http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\tfmt.Println(err)\n\t\treturn\n\t}\n\n\tfmt.Println(\u0026#34;Response Status:\u0026#34;, resp.Status)\n\trespBody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\tfmt.Println(err)\n\t\treturn\n\t}\n\tfmt.Println(\u0026#34;Response Body:\u0026#34;, string(respBody))\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;h2 id=\u0026#34;facts-about-the-delete-method\u0026#34;\u0026gt;Facts about the DELETE Method\u0026lt;\/h2\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;DELETE Method is idempotent: Similar requests will result in identical behavior or response since once the resource is deleted, the resource won’t exist and hence the behavior would not hinder any other parts.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;DELETE Method is not safe: The operation is quite dangerous as it could literally remove a resource from a database\/storage. Hence it is called not safe as it is making changes on the server.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;I have also included some more examples of DELETE requests \u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/100-days-of-golang\/blob\/main\/web\/methods\/delete\/\u0026#34;\u0026gt;\u0026lt;strong\u0026gt;here\u0026lt;\/strong\u0026gt;\u0026lt;\/a\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That\u0026#39;s it from the 36th part of the series, all the source code for the examples are linked in the GitHub on the \u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/100-days-of-golang\/tree\/main\/web\/methods\/delete\/\u0026#34;\u0026gt;\u0026lt;strong\u0026gt;100 days of Golang\u0026lt;\/strong\u0026gt;\u0026lt;\/a\u0026gt; repository.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/100-days-of-golang\u0026#34;\u0026gt;\u0026lt;strong\u0026gt;100-days-of-golang\u0026lt;\/strong\u0026gt;\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;That would be it from the DELETE Method in Golang. We can use this method just like a normal \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; request however a bit more carefully.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Hope you found this article, helpful, leave some feedback or any suggestions if you have any. Thank you for reading.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "golang-web-delete-method";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'" aria-label="Editor">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Golang Web: DELETE Method</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2025-01-12 20:30:00">2025-01-12 20:30:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/100-days-of-golang" class="series-link">📖 100-days-of-golang</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=golang-web-delete-method&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>We have explored GET, POST, PUT, and PATCH methods in our previous entries for this series. It is the final entry for all the HTTP methods which is going to be the <code>DELETE</code> method. In this entry of the series, we will take a view on how to construct and request an HTTP DELETE Method to an API Endpoint.</p>
+<p>The DELETE Method is quite simple. You just provide the URI of the resource. Most often, the request body is not needed. That request will simply delete the request entity from the server (in the database or wherever the resource is stored).</p>
+<p>Let’s understand it in a more detailed way.</p>
+<h2 id="what-is-a-delete-method">What is a DELETE Method</h2>
+<p>The DELETE method requests that the server remove the association between the target resource and its URI (Uniform Resource Identifier). This doesn't necessarily mean the underlying data is physically deleted; it means the resource is no longer accessible through that specific URL. DELETE can also be used to remove relationships between resources, effectively &quot;delinking&quot; them.</p>
+<p>According to the RFC:</p>
+<blockquote>
+<p>The DELETE method requests that the origin server remove the association between the target resource and its current functionality.</p>
+</blockquote>
+<p>Examples:</p>
+<ul>
+<li>
+<p><strong>Social Media</strong> (Deleting a Tweet): When you delete a tweet, you're sending a DELETE request to the server. This removes the tweet from your timeline and makes it inaccessible via its URL. While the data might be archived or retained for a period, the key action is removing the public association between the tweet and its online presence. This is closer to a true deletion than the cart example.</p>
+</li>
+<li>
+<p><strong>E-Commerce</strong> (Removing an Item from a Cart): When you remove an item from your online shopping cart, you're sending a request (often a DELETE) to remove the item from your cart. The actual product remains available in the store's inventory. This is a clear example of delinking. You're deleting the link between your cart and the product, not the product itself.</p>
+</li>
+</ul>
+<p>Let’s start constructing a simple DELETE Request in Golang.</p>
+<h2 id="a-simple-delete-request">A Simple DELETE Request</h2>
+<p>We don’t have a specific method for <code>DELETE</code> in <code>net/http</code> as we have for <code>GET</code> and <code>POST</code>, so we need to create a request and use a client to send the request.</p>
+<h3 id="constructing-the-url">Constructing the URL</h3>
+<p>We would need to define the endpoint that we are hitting. We can directly use the API URL or construct the API URL on the fly, depending on the ID and dynamic parameters. DELETE requests usually delete a particular entity. We would generally have some form of identifier for that entity/object on the database, etc. So, in this case, it is the user's ID, so we can pass the post to the URL.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">// define URL to hit the API
+apiURL := "https://reqres.in/api/users/4"
+
+// OR
+
+baseURL := "https://reqres.in"
+userID := 4
+apiURL := fmt.Sprintf("%s/api/users/%d", baseURL, userID)
+</code></pre></div><p>We can either directly define the URL or dynamically construct the URL, that is quite straightforward. The latter one is the one we usually use and design.</p>
+<p>The DELETE Request doesn’t usually require a request body, however, if your server requires some specifications, you can construct the body as we did with the previous examples in POST, PUT, or PATCH method requests.</p>
+<h3 id="constructing-and-sending-the-delete-request">Constructing and sending the DELETE Request</h3>
+<p>We can simply construct the request by specifying the http.MethodDelete as the request method, the URL to hit, and a body(optional) just like a <code>GET</code> request. Once we have the request, we can create the default client and send the request.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">// create a DELETE request
+req, err := http.NewRequest(http.MethodDelete, apiURL, nil)
+if err != nil {
+	log.Fatal(err)
+}
+
+// construct the default http client and send the request
+client := &http.Client{}
+resp, err := client.Do(req)
+if err != nil {
+	log.Fatal(err)
+}
+</code></pre></div><p>This is the normal code used for constructing an HTTP request in Golang, we create a request using the NewRequest function that takes in the method type, the URL to send the request, and the body if any. Then we need to create a http.Client for sending the request, we usually create a client with default values and send the request using the Do method on the created client using the request that we constructed earlier.</p>
+<h3 id="fetching-the-response">Fetching the Response</h3>
+<p>Once the request is sent, we can fetch the response and read the body as bytes, and check the status if that succeeded or failed.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">fmt.Println("Response Status:", resp.Status)
+respBody, err := io.ReadAll(resp.Body)
+if err != nil {
+    log.Fatal(err)
+}
+fmt.Println("Response Body:", string(respBody))
+</code></pre></div><p>We can grab the Status field for checking the status code and message for the request. Usually, the body would be empty since there is no resource we are expecting after deletion of the object. However, if the server is implemented in a way to return the deleted object, you can read the bytes of the body and unmarshal it to the desired struct.</p>
+<p>So, that is the entire code to create a simple Delete request with Go, simply construct the URL with the identifier for the resource to be deleted, create the request, and send the request, and if the status code is 204 (usually) then we can assume it succeeded.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+)
+
+func main() {
+	baseURL := "https://reqres.in"
+	userID := 2
+	apiURL := fmt.Sprintf("%s/api/users/%d", baseURL, userID)
+
+	req, err := http.NewRequest(http.MethodDelete, apiURL, nil)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("Response Status:", resp.Status)
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("Response Body:", string(respBody))
+}
+</code></pre></div><h2 id="facts-about-the-delete-method">Facts about the DELETE Method</h2>
+<ul>
+<li>
+<p>DELETE Method is idempotent: Similar requests will result in identical behavior or response since once the resource is deleted, the resource won’t exist and hence the behavior would not hinder any other parts.</p>
+</li>
+<li>
+<p>DELETE Method is not safe: The operation is quite dangerous as it could literally remove a resource from a database/storage. Hence it is called not safe as it is making changes on the server.</p>
+</li>
+</ul>
+<p>I have also included some more examples of DELETE requests <a href="https://github.com/Mr-Destructive/100-days-of-golang/blob/main/web/methods/delete/"><strong>here</strong></a>.</p>
+<p>That's it from the 36th part of the series, all the source code for the examples are linked in the GitHub on the <a href="https://github.com/Mr-Destructive/100-days-of-golang/tree/main/web/methods/delete/"><strong>100 days of Golang</strong></a> repository.</p>
+<p><a href="https://github.com/Mr-Destructive/100-days-of-golang"><strong>100-days-of-golang</strong></a></p>
+<h2 id="conclusion">Conclusion</h2>
+<p>That would be it from the DELETE Method in Golang. We can use this method just like a normal <code>GET</code> request however a bit more carefully.</p>
+<p>Hope you found this article, helpful, leave some feedback or any suggestions if you have any. Thank you for reading.</p>
+<p>Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/golang-web-patch-method" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Golang Web: PATCH Method</span>
+        </a>
+        
+
+        
+        <div class="nav-link nav-next nav-empty"></div>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-patch-method" class="related-link">
+                <span class="related-post-title">Golang Web: PATCH Method</span>
+                <span class="related-post-date">2025-01-11 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-5" class="related-link">
+                <span class="related-post-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+                <span class="related-post-date">2024-12-11 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-4" class="related-link">
+                <span class="related-post-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+                <span class="related-post-date">2024-12-09 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-3" class="related-link">
+                <span class="related-post-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+                <span class="related-post-date">2024-12-07 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-2" class="related-link">
+                <span class="related-post-title">Advent of Code Day 2 in Golang: Slicing and Dicing Reports</span>
+                <span class="related-post-date">2024-12-02 20:45:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

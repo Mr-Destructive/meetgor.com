@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Golang: File Write | Meet Gor</title>
+    <meta name="title" content="Golang: File Write | Meet Gor">
+    <meta name="description" content="Using system calls to write files in Golang. Performig writing, appending, deleting, replacing operations to a file">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/golang-file-write">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/golang-file-write">
+    <meta property="og:title" content="Golang: File Write">
+    <meta property="og:description" content="Using system calls to write files in Golang. Performig writing, appending, deleting, replacing operations to a file">
+    <meta property="og:image" content="https://meetgor-cdn.pages.dev/golang-024-file-write.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Golang: File Write">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2022-12-18 15:15:00">
+    <meta property="article:modified_time" content="2022-12-18 15:15:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/golang-file-write">
+    <meta name="twitter:title" content="Golang: File Write">
+    <meta name="twitter:description" content="Using system calls to write files in Golang. Performig writing, appending, deleting, replacing operations to a file">
+    <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/golang-024-file-write.png">
+    <meta name="twitter:image:alt" content="Golang: File Write">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/golang-file-write"
+        },
+        "headline": "Golang: File Write",
+        "description": "Using system calls to write files in Golang. Performig writing, appending, deleting, replacing operations to a file",
+        "datePublished": "2022-12-18 15:15:00",
+        "dateModified": "2022-12-18 15:15:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        "image": "https:\/\/meetgor-cdn.pages.dev\/golang-024-file-write.png",
+        "keywords": "go",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;In the 24th post of the series, we will be taking a look at how we can perform write operations to a file using golang. We will be using the \u0026lt;code\u0026gt;os\u0026lt;\/code\u0026gt; package in most operations along with \u0026lt;code\u0026gt;bufio\u0026lt;\/code\u0026gt; text manipulations. We will be performing write operations like appending, deleting, and replacing a file using golang. We will be heavily leveraging standard library packages like \u0026lt;code\u0026gt;os\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;bufio\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;bytes\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;fmt\u0026lt;\/code\u0026gt;. We will also be looking into overwriting and string formatting to a file.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;write-to-a-file\u0026#34;\u0026gt;Write to a File\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;The first part of this section is the basic write operation to a file, we assume we are writing to a fresh file and overriding the contents of the existing file. The next section will cover the appending of content to the file and so on. In this example, we will see how we perform basic writing operations to write a string, a slice of string to a file.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;log\u0026#34;\n\t\u0026#34;os\u0026#34;\n)\n\nfunc HandleError(err){\n    if err != nil {\n        log.Fatal(err)\n    }\n}\n\nfunc main() {\n\tstr := \u0026#34;Hi, I am a gopher!\n\u0026#34;\n\tf, err := os.OpenFile(\u0026#34;abc.txt\u0026#34;, os.O_WRONLY, 0660)\n    \/\/ f, err := os.Create(\u0026#34;abc.txt\u0026#34;)\n\tHandleError(err)\n\t_, err = f.Write([]byte(str))\n\tHandleError(err)\n\tdefer f.Close()\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ cat abc.txt\n\n$ go run main.go\n\n$ cat abc.txt\nHi, I am a gopher!\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, we have used a simple golang script to write to a file that exists\/has already been created. If you don\u0026#39;t want errors while having to write on a file that does not exist, use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/os#Create\u0026#34;\u0026gt;Create\u0026lt;\/a\u0026gt; method instead which is similar to the \u0026lt;code\u0026gt;Open\u0026lt;\/code\u0026gt; method but creates a file if it doesn\u0026#39;t exist. We use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/os#File.Write\u0026#34;\u0026gt;Write\u0026lt;\/a\u0026gt; method to overwrite contents to the file, it takes in a parameter as a slice of byte, so we typecast the string \u0026lt;code\u0026gt;str\u0026lt;\/code\u0026gt; into \u0026lt;code\u0026gt;[]byte\u0026lt;\/code\u0026gt; using the \u0026lt;code\u0026gt;[]byte(str)\u0026lt;\/code\u0026gt; syntax. Thereby we write the contents of the string into the file. We use the defer keyword for closing the file at the end of the script or the end of the main function scope.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;write-slice-of-strings-to-file\u0026#34;\u0026gt;Write slice of strings to file\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We can even write slice of string to file using a for loop and appending each string with a new line character.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;log\u0026#34;\n\t\u0026#34;os\u0026#34;\n)\n\nfunc HandleError(err){\n    if err != nil {\n        log.Fatal(err)\n    }\n}\n\nfunc main() {\n\tf, err := os.Create(\u0026#34;abc.txt\u0026#34;)\n\t\/\/f, err := os.Open(\u0026#34;abc.txt\u0026#34;, os.O_WRONLY, 0660)\n\tlangs := []string{\u0026#34;golang\u0026#34;, \u0026#34;python\u0026#34;, \u0026#34;rust\u0026#34;, \u0026#34;javascript\u0026#34;, \u0026#34;ruby\u0026#34;}\n\tfor _, lang := range langs {\n\t\t_, err := f.WriteString(lang \u002b \u0026#34;\n\u0026#34;)\n\t\tHandleError(err)\n\t}\n\tdefer f.Close()\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;$ cat abc.txt\n\n$ go run main.go\n\n$ cat abc.txt\ngolang\npython\nrust\njavascript\nruby\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We have used the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/os#File.WriteString\u0026#34;\u0026gt;WriteString\u0026lt;\/a\u0026gt; method which will take in a string as a parameter instead of a slice of bytes. So, we don\u0026#39;t have to type cast into slice of bytes. So, as we can see we have written the string slice into a file.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;over-write\u0026#34;\u0026gt;Over Write\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;The minimal code to write to a file is the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/os#WriteFile\u0026#34;\u0026gt;WriteFile\u0026lt;\/a\u0026gt; function in the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/os\u0026#34;\u0026gt;os\u0026lt;\/a\u0026gt; package, it overrides the content of the file with the provided slice of bytes, the name of the file, and the necessary permission to write. The funciton additionally creates a file if it does not exist, which is one less reason for the error. Though it returns an error object, the error might be created due to not right permissions to write to the file, encoding issues, etc.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;log\u0026#34;\n\t\u0026#34;os\u0026#34;\n)\n\nfunc main() {\n\tdata := []byte{115, 111, 109, 101, 65}\n\terr := os.WriteFile(\u0026#34;test.txt\u0026#34;, data, 0660)\n    log.Println(err)\n\n\ts := \u0026#34;Hello\u0026#34;\n\terr = os.WriteFile(\u0026#34;test.txt\u0026#34;, []byte(s), 0660)\n    log.Println(err)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;$ go run main.go\n2022\/12\/17 19:24:13 \u0026lt;nil\u0026gt;\n2022\/12\/17 19:24:13 \u0026lt;nil\u0026gt;\n\n$ cat test.txt\nHello\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, we have used the \u0026lt;code\u0026gt;WriteFile\u0026lt;\/code\u0026gt; method two times in the script, it first takes in a slice of bytes as it is defined as \u0026lt;code\u0026gt;data\u0026lt;\/code\u0026gt; which corresponds to \u0026lt;code\u0026gt;115 -\u0026amp;gt; s\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;111 -\u0026amp;gt; o\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;65 -\u0026amp;gt; A\u0026lt;\/code\u0026gt;, ASCII mapped to strings. The slice of bytes can be taken as a string like \u0026lt;code\u0026gt;someA\u0026lt;\/code\u0026gt; as the literal value of the underlying slice of the byte. So, we take that slice of byte and parse it to the second parameter of the WriteFile function. The first parameter is a string path of the file we want to write the contents to, the third parameter is the file permission. We have set it as \u0026lt;code\u0026gt;0660\u0026lt;\/code\u0026gt; indicating read(4) \u002b write(2) to the group and the user and no permission to the other users. The function will return an error if any, or else it simply overwrites the data in the file.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In this case, we have called the \u0026lt;code\u0026gt;WriteFile\u0026lt;\/code\u0026gt; method with string \u0026lt;code\u0026gt;s\u0026lt;\/code\u0026gt; type cast to slice of bytes at the end of the script so we see the file has contents as \u0026lt;code\u0026gt;Hello\u0026lt;\/code\u0026gt; instead of \u0026lt;code\u0026gt;someA\u0026lt;\/code\u0026gt;. If we reverse the action, we don\u0026#39;t see the \u0026lt;code\u0026gt;Hello\u0026lt;\/code\u0026gt; string in the file.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;log\u0026#34;\n\t\u0026#34;os\u0026#34;\n)\n\nfunc main() {\n\ts := \u0026#34;Hello\u0026#34;\n\terr := os.WriteFile(\u0026#34;test.txt\u0026#34;, []byte(s), 0660)\n    log.Println(err)\n\n\tdata := []byte{115, 111, 109, 101, 65}\n\terr = os.WriteFile(\u0026#34;test.txt\u0026#34;, data, 0660)\n    log.Println(err)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;$ go run main.go\n2022\/12\/17 19:24:13 \u0026lt;nil\u0026gt;\n2022\/12\/17 19:24:13 \u0026lt;nil\u0026gt;\n\n$ cat test.txt\nsomeA\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;As we can see the \u0026lt;code\u0026gt;Hello\u0026lt;\/code\u0026gt; has been overwritten by \u0026lt;code\u0026gt;someA\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;write-formatted-string\u0026#34;\u0026gt;Write formatted string\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We can even use fmt to write formatted strings to a file. Just like we can take inputs with \u0026lt;code\u0026gt;Scanf\u0026lt;\/code\u0026gt;, we can use \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/fmt#Fprint\u0026#34;\u0026gt;Fprint\u0026lt;\/a\u0026gt; and other similar functions like \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/fmt#Fprintf\u0026#34;\u0026gt;Fprintf\u0026lt;\/a\u0026gt;, and \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/fmt#Fprintln\u0026#34;\u0026gt;Fprintln\u0026lt;\/a\u0026gt; functions to print\/add contents to the file.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;log\u0026#34;\n\t\u0026#34;os\u0026#34;\n)\n\nfunc HandleErr(err error) {\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n}\nfunc main() {\n\tf, err := os.Create(\u0026#34;temp.txt\u0026#34;)\n\tHandleErr(err)\n\tname, lang, exp := \u0026#34;John\u0026#34;, \u0026#34;go\u0026#34;, 2\n\t_, err = fmt.Fprint(f, \u0026#34;Hi, I am \u0026#34;, name, \u0026#34;\n\u0026#34;)\n\tHandleErr(err)\n\t_, err = fmt.Fprintf(f, \u0026#34;Language of choice: %s.\n\u0026#34;, lang)\n\tHandleErr(err)\n\t_, err = fmt.Fprintln(f, \u0026#34;Having\u0026#34;, exp, \u0026#34;years of experience.\u0026#34;)\n\tHandleErr(err)\n\tdefer f.Close()\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;$ cat temp.txt\ncat: temp.txt: No such file or directory\n\n$ go run format.go\n\n$ cat test.txt\nHi, I am John.\nLanguage of choice: go.\nHaving 2 years of experience.\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, we can see that we have used all three methods having their own use cases, we can use \u0026lt;code\u0026gt;Fprint\u0026lt;\/code\u0026gt; for simple strings, \u0026lt;code\u0026gt;Fprintf\u0026lt;\/code\u0026gt; for formatting the block of a string with multiple placeholders, and the \u0026lt;code\u0026gt;Fprintln\u0026lt;\/code\u0026gt; which works simply like \u0026lt;code\u0026gt;Fprint\u0026lt;\/code\u0026gt; but it adds a new line itself, we don\u0026#39;t need to specify it explicitly.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;append\u0026#34;\u0026gt;Append\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;If we want to append text to a file, we can use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/os#OpenFile\u0026#34;\u0026gt;OpenFile\u0026lt;\/a\u0026gt; function and provide a few parameters to append the contents instead of overwriting.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Here, we have two steps, open the file and then write the contents in the file. So while opening the file, we provide a few options as parameters to make the fine-tuned system call like only open for read, write or append modes. These options are defined as constant int values in the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/os#pkg-constants\u0026#34;\u0026gt;os package\u0026lt;\/a\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;log\u0026#34;\n\t\u0026#34;os\u0026#34;\n)\n\nfunc HandleError(err error) {\n    if err != nil {\n        log.Fatal(err)\n    }\n}\n\nfunc main() {\n\ts := \u0026#34;Hello\u0026#34;\n\terr := os.WriteFile(\u0026#34;test.txt\u0026#34;, []byte(s), 0660)\n    HandleError(err)\n\n\ts = \u0026#34;World\u0026#34;\n\tf, err := os.OpenFile(\u0026#34;test.txt\u0026#34;, os.O_APPEND|os.O_WRONLY, 0660)\n\tHandleError(err)\n\t_, err = f.WriteString(s)\n\tHandleError(err)\n\tdefer f.Close()\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;$ go run main.go\n\n$ cat test.txt\nHelloWorld\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, from the above example, we are able to append text into a file, we have first added the \u0026lt;code\u0026gt;Hello\u0026lt;\/code\u0026gt; world string into the file using the \u0026lt;code\u0026gt;WriteFile\u0026lt;\/code\u0026gt; method to indicate we overwrite the previous contents of the file. We then use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/os#OpenFile\u0026#34;\u0026gt;OpenFile\u0026lt;\/a\u0026gt; method to open a file provided in the first parameter as a string path. The second parameter is the options to be passed for performing operations on the opened file, we always have to use them \u0026lt;code\u0026gt;defer\u0026lt;\/code\u0026gt; to close the file or other resource-locking operations.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We have specified the \u0026lt;code\u0026gt;os.O_WRONLY\u0026lt;\/code\u0026gt; and the \u0026lt;code\u0026gt;os.O_APPEND\u0026lt;\/code\u0026gt; options indicating we want to write to the file while the file is open and specifically append to the file. So this is fine-tuning the opened file operation. We can use the ReadFile or WriteFile operation which is just used for simple read and write operations respectively.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/os#File.WriteString\u0026#34;\u0026gt;WriteString\u0026lt;\/a\u0026gt; method, but we can even use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/os#File.Write\u0026#34;\u0026gt;Write\u0026lt;\/a\u0026gt; method to write a slice of byte instead. This is just used for exploring the different options in the file types of the os package.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;append-at-a-specific-line\u0026#34;\u0026gt;Append at a specific line\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We can also add content to a specific line or a portion of the file. There are no direct functions in golang to do the same, we will have to do some manual fine-tuning of file operations to append a particular text at a specific line.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n    \u0026#34;bufio\u0026#34;\n    \u0026#34;bytes\u0026#34;\n    \u0026#34;log\u0026#34;\n    \u0026#34;os\u0026#34;\n)\n\nfunc HandleError(err error) {\n    if err != nil {\n        log.Fatal(err)\n    }\n}\n\nfunc main() {\n    \/* test.txt\n    Hi\n    Hello\n    World\n    Gopher\n    *\/\n\tf, err = os.OpenFile(\u0026#34;test.txt\u0026#34;, os.O_RDWR, 0660)\n\tdefer f.Close()\n\tHandleError(err)\n\tm := bufio.NewScanner(f)\n\tbytes_till := 0\n\t\/\/ line to be appended\n\tline_till := 2\n\tvar lines_after string\n\tvar lines_till string\n\ti := 0\n\tfor m.Scan() {\n\t\tline := m.Text()\n\t\tif i \u0026lt; line_till {\n\t\t\tbytes_till \u002b= bytes.Count([]byte(line), []byte{})\n\t\t\tif i \u0026gt; 0 {\n\t\t\t\tlines_till \u002b= \u0026#34;\n\u0026#34;\n\t\t\t}\n\t\t\tlines_till \u002b= line\n\t\t} else {\n\t\t\tlines_after \u002b= \u0026#34;\n\u0026#34; \u002b line\n\t\t}\n\t\ti \u002b= 1\n\t}\n\tHandleError(m.Err())\n\tinsert_text := lines_till \u002b \u0026#34;\nInserted content\u0026#34;\n\tinsert_text_bytes := bytes.Count([]byte(insert_text), []byte{})\n\tlines_after_bytes := bytes.Count([]byte(lines_after), []byte{})\n\n\terr = os.WriteFile(\u0026#34;test.txt\u0026#34;, []byte(insert_text), 0660)\n\tHandleError(err)\n\t_, err = f.WriteAt([]byte(lines_after), int64(lines_after_bytes)\u002bint64(insert_text_bytes))\n\tHandleError(err)\n    \/* test.txt\n    Hi\n    Hello\n    Inserted content\n    World\n    Gopher\n    *\/\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;$ cat test.txt \nHi\nHello\nWorld\nGophers\n\n$ go run append.go \n\n$ cat test.txt \nHi\nHello\nInserted content\nWorld\nGophers\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We have inserted \u0026lt;code\u0026gt;Inserted content\u0026lt;\/code\u0026gt; after the second line because the \u0026lt;code\u0026gt;line_till\u0026lt;\/code\u0026gt; the variable is set to \u0026lt;code\u0026gt;2\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, in the above example, we have used a bunch of packages to append a string or any form of text to a particular line. We first read the contents of the file, by using the \u0026lt;code\u0026gt;OpenFile\u0026lt;\/code\u0026gt; method which will open the file with certain permissions. We need to close the file at the end of the script so we simply use the \u0026lt;code\u0026gt;defer\u0026lt;\/code\u0026gt; keyword before the \u0026lt;code\u0026gt;f.Close()\u0026lt;\/code\u0026gt; method call. We then start to scan the file buffer, by creating a \u0026lt;code\u0026gt;Scanner\u0026lt;\/code\u0026gt; object with the \u0026lt;code\u0026gt;NewScanner\u0026lt;\/code\u0026gt; method. Then, with the scanner object of the file content, we then can use the \u0026lt;code\u0026gt;Scan()\u0026lt;\/code\u0026gt; method to scan the file contents line by line. By converting the content at each line from a slice of bytes to a string using the \u0026lt;code\u0026gt;Text\u0026lt;\/code\u0026gt;, we append to a string \u0026lt;code\u0026gt;line\u0026lt;\/code\u0026gt;, this will be used for keeping the count of bytes for appending text before the newly inserted text.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The \u0026lt;code\u0026gt;line_till\u0026lt;\/code\u0026gt; variable is used for the line number from which we want to append to the text after.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We count the bytes for the current line and add it to the \u0026lt;code\u0026gt;bytes_till\u0026lt;\/code\u0026gt; variable indicating the number of bytes there before appending content. We have a simple if-else check for the first line that is for appending a new line of characters. We append the lines into a single string \u0026lt;code\u0026gt;lines_till\u0026lt;\/code\u0026gt;. The string \u0026lt;code\u0026gt;insert_text\u0026lt;\/code\u0026gt; is created by appending all the lines before the line number \u0026lt;code\u0026gt;line_till\u0026lt;\/code\u0026gt; with the actual content to be inserted. We calculate the number of bytes using the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/bytes#Count\u0026#34;\u0026gt;Count\u0026lt;\/a\u0026gt; method in the bytes package. The separator is kept blank. The \u0026lt;code\u0026gt;lines_after\u0026lt;\/code\u0026gt; is also been created as a single string of lines after the line number in the file.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We add the \u0026lt;code\u0026gt;insert_text\u0026lt;\/code\u0026gt; (lines before \u002b inserted text) into the file using the \u0026lt;code\u0026gt;WriteFile\u0026lt;\/code\u0026gt; which will override the contents of the file. Then we append the \u0026lt;code\u0026gt;lines_after\u0026lt;\/code\u0026gt; string as a slice of bytes to the \u0026lt;code\u0026gt;insert_text_bytes \u002b lines_after_bytes\u0026lt;\/code\u0026gt; so we get the byte number position to append the \u0026lt;code\u0026gt;lines_after\u0026lt;\/code\u0026gt; string.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In short, we basically overwrite the file by creating two strings (slice of bytes) one which has the lines before the line number with the text to be inserted and the second string has all the lines after the line number.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;replace-text-in-a-file\u0026#34;\u0026gt;Replace text in a file\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Using the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/bytes#Replace\u0026#34;\u0026gt;bytes.Replace\u0026lt;\/a\u0026gt; method, we can first read all the bytes and replace the old with the new text, and store them as a slice of bytes. We then write these slices of bytes to the file again, so we first read the contents into slices of bytes, replace the content of the byte and then overwrite the contents with the slice of bytes. It\u0026#39;s quite simple.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;bytes\u0026#34;\n\t\u0026#34;log\u0026#34;\n\t\u0026#34;os\u0026#34;\n)\n\nfunc HandleError(err error) {\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n}\n\nfunc main() {\n\tfilename := \u0026#34;test.txt\u0026#34;\n\tfile, err := os.ReadFile(filename)\n\tHandleError(err)\n\told_text := \u0026#34;Hello\nWorld\u0026#34;\n\tnew_text := \u0026#34;Bye\u0026#34;\n\tnew_content := bytes.Replace(file, []byte(old_text), []byte(new_text), -1)\n\terr = os.WriteFile(filename, new_content, 0660)\n\tHandleError(err)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;$ cat test.txt\nHi\nHello\nWorld\nGophers\n\n$ go run main.go\n\n\n$ cat test.txt\nHi\nBye\nGophers\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;As we can see we have replaced \u0026lt;code\u0026gt;Hello World\u0026lt;\/code\u0026gt; it with \u0026lt;code\u0026gt;Bye\u0026lt;\/code\u0026gt;. So, the [Replace] method in the bytes package takes in the parameters like the slice of bytes which should be the actual contents of the file, the old text to be replaced with again as a slice of bytes, and the new text to replace also as the slice of bytes, the final parameter is the number of replacements to be made. Here \u0026lt;code\u0026gt;-1\u0026lt;\/code\u0026gt; indicates there are no limits on how many replacements can be done, it can be \u0026lt;code\u0026gt;1\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;2\u0026lt;\/code\u0026gt; for replacing the first n occurrence of the old text, depending on how many times you want to replace the content in the file.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;delete-text-from-a-file\u0026#34;\u0026gt;Delete Text from a File\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We can use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/os#File.Truncate\u0026#34;\u0026gt;os.Truncate\u0026lt;\/a\u0026gt; method to delete the contents of the file. The \u0026lt;code\u0026gt;Truncate\u0026lt;\/code\u0026gt; method takes in the parameters like the file path string and the size of the file to truncate or set to. If we set the second parameter to \u0026lt;code\u0026gt;0\u0026lt;\/code\u0026gt;, the file size will be zero and all the contents will be deleted or removed.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;log\u0026#34;\n\t\u0026#34;os\u0026#34;\n)\n\nfunc main() {\n    \/* test.txt\n    Hi\n    Hello\n    World\n    Gophers\n    *\/\n\terr := os.Truncate(\u0026#34;test.txt\u0026#34;, 0)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n    \/* test.txt is empty\n    *\/\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;$ cat test.txt\nHi\nHello\nWorld\nGophers\n\n$ go run delete.go\n\n$ cat test.txt\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;As we can see that the contents of the file are emptied if we set the second parameter(size) of the \u0026lt;code\u0026gt;Truncate\u0026lt;\/code\u0026gt; method as 0.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We can also set the value of the size as the number of bytes to keep, so instead of \u0026lt;code\u0026gt;0\u0026lt;\/code\u0026gt; we can set it to \u0026lt;code\u0026gt;n\u0026lt;\/code\u0026gt; positive integer to only save the first \u0026lt;code\u0026gt;n\u0026lt;\/code\u0026gt; bytes in the file.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;log\u0026#34;\n\t\u0026#34;os\u0026#34;\n)\n\nfunc main() {\n    \/* test.txt\n    Hi\n    Hello\n    World\n    Gophers\n    *\/\n\terr := os.Truncate(\u0026#34;test.txt\u0026#34;, 6)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n    \/* test.txt \n    Hi\n    Hel\n    *\/\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;$ cat test.txt\nHi\nHello\nWorld\nGophers\n\n$ go run delete.go\n\n$ cat test.txt\nHi\nHel\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, in the above example, if we set the size parameter to the Truncate method as \u0026lt;code\u0026gt;6\u0026lt;\/code\u0026gt;, it will keep the size of the file to 6 bytes. So we only see \u0026lt;code\u0026gt;Hi Hel\u0026lt;\/code\u0026gt;, the new line is a single byte. The rest of the content is deleted. This is how we previously deleted all the bytes from the file by setting the size to \u0026lt;code\u0026gt;0\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That\u0026#39;s it from this part. Reference for all the code examples and commands can be found in the \u0026lt;a href=\u0026#34;https:\/\/github.com\/mr-destructive\/100-days-of-golang\/tree\/main\/scripts\/files\/write\/\u0026#34;\u0026gt;100 days of Golang\u0026lt;\/a\u0026gt; GitHub repository.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;So, from this section of the series, we were able to perform write operations on a file using golang. We used the packages from the standard library and performed operations like write, append, overwrite, delete and replace to a simple text file, but it could have been any file format.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Thank you for reading. If you have any queries, questions, or feedback, you can let me know in the discussion below or on my social handles. Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "golang-file-write";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'" aria-label="Editor">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Golang: File Write</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2022-12-18 15:15:00">2022-12-18 15:15:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/100-days-of-golang" class="series-link">📖 100-days-of-golang</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=golang-file-write&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>In the 24th post of the series, we will be taking a look at how we can perform write operations to a file using golang. We will be using the <code>os</code> package in most operations along with <code>bufio</code> text manipulations. We will be performing write operations like appending, deleting, and replacing a file using golang. We will be heavily leveraging standard library packages like <code>os</code>, <code>bufio</code>, <code>bytes</code> and <code>fmt</code>. We will also be looking into overwriting and string formatting to a file.</p>
+<h2 id="write-to-a-file">Write to a File</h2>
+<p>The first part of this section is the basic write operation to a file, we assume we are writing to a fresh file and overriding the contents of the existing file. The next section will cover the appending of content to the file and so on. In this example, we will see how we perform basic writing operations to write a string, a slice of string to a file.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"log"
+	"os"
+)
+
+func HandleError(err){
+    if err != nil {
+        log.Fatal(err)
+    }
+}
+
+func main() {
+	str := "Hi, I am a gopher!
+"
+	f, err := os.OpenFile("abc.txt", os.O_WRONLY, 0660)
+    // f, err := os.Create("abc.txt")
+	HandleError(err)
+	_, err = f.Write([]byte(str))
+	HandleError(err)
+	defer f.Close()
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ cat abc.txt
+
+$ go run main.go
+
+$ cat abc.txt
+Hi, I am a gopher!
+</code></pre></div><p>So, we have used a simple golang script to write to a file that exists/has already been created. If you don't want errors while having to write on a file that does not exist, use the <a href="https://pkg.go.dev/os#Create">Create</a> method instead which is similar to the <code>Open</code> method but creates a file if it doesn't exist. We use the <a href="https://pkg.go.dev/os#File.Write">Write</a> method to overwrite contents to the file, it takes in a parameter as a slice of byte, so we typecast the string <code>str</code> into <code>[]byte</code> using the <code>[]byte(str)</code> syntax. Thereby we write the contents of the string into the file. We use the defer keyword for closing the file at the end of the script or the end of the main function scope.</p>
+<h3 id="write-slice-of-strings-to-file">Write slice of strings to file</h3>
+<p>We can even write slice of string to file using a for loop and appending each string with a new line character.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"log"
+	"os"
+)
+
+func HandleError(err){
+    if err != nil {
+        log.Fatal(err)
+    }
+}
+
+func main() {
+	f, err := os.Create("abc.txt")
+	//f, err := os.Open("abc.txt", os.O_WRONLY, 0660)
+	langs := []string{"golang", "python", "rust", "javascript", "ruby"}
+	for _, lang := range langs {
+		_, err := f.WriteString(lang + "
+")
+		HandleError(err)
+	}
+	defer f.Close()
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">$ cat abc.txt
+
+$ go run main.go
+
+$ cat abc.txt
+golang
+python
+rust
+javascript
+ruby
+</code></pre></div><p>We have used the <a href="https://pkg.go.dev/os#File.WriteString">WriteString</a> method which will take in a string as a parameter instead of a slice of bytes. So, we don't have to type cast into slice of bytes. So, as we can see we have written the string slice into a file.</p>
+<h3 id="over-write">Over Write</h3>
+<p>The minimal code to write to a file is the <a href="https://pkg.go.dev/os#WriteFile">WriteFile</a> function in the <a href="https://pkg.go.dev/os">os</a> package, it overrides the content of the file with the provided slice of bytes, the name of the file, and the necessary permission to write. The funciton additionally creates a file if it does not exist, which is one less reason for the error. Though it returns an error object, the error might be created due to not right permissions to write to the file, encoding issues, etc.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"log"
+	"os"
+)
+
+func main() {
+	data := []byte{115, 111, 109, 101, 65}
+	err := os.WriteFile("test.txt", data, 0660)
+    log.Println(err)
+
+	s := "Hello"
+	err = os.WriteFile("test.txt", []byte(s), 0660)
+    log.Println(err)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">$ go run main.go
+2022/12/17 19:24:13 <nil>
+2022/12/17 19:24:13 <nil>
+
+$ cat test.txt
+Hello
+</code></pre></div><p>So, we have used the <code>WriteFile</code> method two times in the script, it first takes in a slice of bytes as it is defined as <code>data</code> which corresponds to <code>115 -&gt; s</code>, <code>111 -&gt; o</code>, <code>65 -&gt; A</code>, ASCII mapped to strings. The slice of bytes can be taken as a string like <code>someA</code> as the literal value of the underlying slice of the byte. So, we take that slice of byte and parse it to the second parameter of the WriteFile function. The first parameter is a string path of the file we want to write the contents to, the third parameter is the file permission. We have set it as <code>0660</code> indicating read(4) + write(2) to the group and the user and no permission to the other users. The function will return an error if any, or else it simply overwrites the data in the file.</p>
+<p>In this case, we have called the <code>WriteFile</code> method with string <code>s</code> type cast to slice of bytes at the end of the script so we see the file has contents as <code>Hello</code> instead of <code>someA</code>. If we reverse the action, we don't see the <code>Hello</code> string in the file.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"log"
+	"os"
+)
+
+func main() {
+	s := "Hello"
+	err := os.WriteFile("test.txt", []byte(s), 0660)
+    log.Println(err)
+
+	data := []byte{115, 111, 109, 101, 65}
+	err = os.WriteFile("test.txt", data, 0660)
+    log.Println(err)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">$ go run main.go
+2022/12/17 19:24:13 <nil>
+2022/12/17 19:24:13 <nil>
+
+$ cat test.txt
+someA
+</code></pre></div><p>As we can see the <code>Hello</code> has been overwritten by <code>someA</code>.</p>
+<h3 id="write-formatted-string">Write formatted string</h3>
+<p>We can even use fmt to write formatted strings to a file. Just like we can take inputs with <code>Scanf</code>, we can use <a href="https://pkg.go.dev/fmt#Fprint">Fprint</a> and other similar functions like <a href="https://pkg.go.dev/fmt#Fprintf">Fprintf</a>, and <a href="https://pkg.go.dev/fmt#Fprintln">Fprintln</a> functions to print/add contents to the file.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"log"
+	"os"
+)
+
+func HandleErr(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+func main() {
+	f, err := os.Create("temp.txt")
+	HandleErr(err)
+	name, lang, exp := "John", "go", 2
+	_, err = fmt.Fprint(f, "Hi, I am ", name, "
+")
+	HandleErr(err)
+	_, err = fmt.Fprintf(f, "Language of choice: %s.
+", lang)
+	HandleErr(err)
+	_, err = fmt.Fprintln(f, "Having", exp, "years of experience.")
+	HandleErr(err)
+	defer f.Close()
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">$ cat temp.txt
+cat: temp.txt: No such file or directory
+
+$ go run format.go
+
+$ cat test.txt
+Hi, I am John.
+Language of choice: go.
+Having 2 years of experience.
+</code></pre></div><p>So, we can see that we have used all three methods having their own use cases, we can use <code>Fprint</code> for simple strings, <code>Fprintf</code> for formatting the block of a string with multiple placeholders, and the <code>Fprintln</code> which works simply like <code>Fprint</code> but it adds a new line itself, we don't need to specify it explicitly.</p>
+<h3 id="append">Append</h3>
+<p>If we want to append text to a file, we can use the <a href="https://pkg.go.dev/os#OpenFile">OpenFile</a> function and provide a few parameters to append the contents instead of overwriting.</p>
+<p>Here, we have two steps, open the file and then write the contents in the file. So while opening the file, we provide a few options as parameters to make the fine-tuned system call like only open for read, write or append modes. These options are defined as constant int values in the <a href="https://pkg.go.dev/os#pkg-constants">os package</a>.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"log"
+	"os"
+)
+
+func HandleError(err error) {
+    if err != nil {
+        log.Fatal(err)
+    }
+}
+
+func main() {
+	s := "Hello"
+	err := os.WriteFile("test.txt", []byte(s), 0660)
+    HandleError(err)
+
+	s = "World"
+	f, err := os.OpenFile("test.txt", os.O_APPEND|os.O_WRONLY, 0660)
+	HandleError(err)
+	_, err = f.WriteString(s)
+	HandleError(err)
+	defer f.Close()
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">$ go run main.go
+
+$ cat test.txt
+HelloWorld
+</code></pre></div><p>So, from the above example, we are able to append text into a file, we have first added the <code>Hello</code> world string into the file using the <code>WriteFile</code> method to indicate we overwrite the previous contents of the file. We then use the <a href="https://pkg.go.dev/os#OpenFile">OpenFile</a> method to open a file provided in the first parameter as a string path. The second parameter is the options to be passed for performing operations on the opened file, we always have to use them <code>defer</code> to close the file or other resource-locking operations.</p>
+<p>We have specified the <code>os.O_WRONLY</code> and the <code>os.O_APPEND</code> options indicating we want to write to the file while the file is open and specifically append to the file. So this is fine-tuning the opened file operation. We can use the ReadFile or WriteFile operation which is just used for simple read and write operations respectively.</p>
+<p>We use the <a href="https://pkg.go.dev/os#File.WriteString">WriteString</a> method, but we can even use the <a href="https://pkg.go.dev/os#File.Write">Write</a> method to write a slice of byte instead. This is just used for exploring the different options in the file types of the os package.</p>
+<h3 id="append-at-a-specific-line">Append at a specific line</h3>
+<p>We can also add content to a specific line or a portion of the file. There are no direct functions in golang to do the same, we will have to do some manual fine-tuning of file operations to append a particular text at a specific line.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+    "bufio"
+    "bytes"
+    "log"
+    "os"
+)
+
+func HandleError(err error) {
+    if err != nil {
+        log.Fatal(err)
+    }
+}
+
+func main() {
+    /* test.txt
+    Hi
+    Hello
+    World
+    Gopher
+    */
+	f, err = os.OpenFile("test.txt", os.O_RDWR, 0660)
+	defer f.Close()
+	HandleError(err)
+	m := bufio.NewScanner(f)
+	bytes_till := 0
+	// line to be appended
+	line_till := 2
+	var lines_after string
+	var lines_till string
+	i := 0
+	for m.Scan() {
+		line := m.Text()
+		if i < line_till {
+			bytes_till += bytes.Count([]byte(line), []byte{})
+			if i > 0 {
+				lines_till += "
+"
+			}
+			lines_till += line
+		} else {
+			lines_after += "
+" + line
+		}
+		i += 1
+	}
+	HandleError(m.Err())
+	insert_text := lines_till + "
+Inserted content"
+	insert_text_bytes := bytes.Count([]byte(insert_text), []byte{})
+	lines_after_bytes := bytes.Count([]byte(lines_after), []byte{})
+
+	err = os.WriteFile("test.txt", []byte(insert_text), 0660)
+	HandleError(err)
+	_, err = f.WriteAt([]byte(lines_after), int64(lines_after_bytes)+int64(insert_text_bytes))
+	HandleError(err)
+    /* test.txt
+    Hi
+    Hello
+    Inserted content
+    World
+    Gopher
+    */
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">$ cat test.txt 
+Hi
+Hello
+World
+Gophers
+
+$ go run append.go 
+
+$ cat test.txt 
+Hi
+Hello
+Inserted content
+World
+Gophers
+</code></pre></div><p>We have inserted <code>Inserted content</code> after the second line because the <code>line_till</code> the variable is set to <code>2</code></p>
+<p>So, in the above example, we have used a bunch of packages to append a string or any form of text to a particular line. We first read the contents of the file, by using the <code>OpenFile</code> method which will open the file with certain permissions. We need to close the file at the end of the script so we simply use the <code>defer</code> keyword before the <code>f.Close()</code> method call. We then start to scan the file buffer, by creating a <code>Scanner</code> object with the <code>NewScanner</code> method. Then, with the scanner object of the file content, we then can use the <code>Scan()</code> method to scan the file contents line by line. By converting the content at each line from a slice of bytes to a string using the <code>Text</code>, we append to a string <code>line</code>, this will be used for keeping the count of bytes for appending text before the newly inserted text.</p>
+<p>The <code>line_till</code> variable is used for the line number from which we want to append to the text after.</p>
+<p>We count the bytes for the current line and add it to the <code>bytes_till</code> variable indicating the number of bytes there before appending content. We have a simple if-else check for the first line that is for appending a new line of characters. We append the lines into a single string <code>lines_till</code>. The string <code>insert_text</code> is created by appending all the lines before the line number <code>line_till</code> with the actual content to be inserted. We calculate the number of bytes using the <a href="https://pkg.go.dev/bytes#Count">Count</a> method in the bytes package. The separator is kept blank. The <code>lines_after</code> is also been created as a single string of lines after the line number in the file.</p>
+<p>We add the <code>insert_text</code> (lines before + inserted text) into the file using the <code>WriteFile</code> which will override the contents of the file. Then we append the <code>lines_after</code> string as a slice of bytes to the <code>insert_text_bytes + lines_after_bytes</code> so we get the byte number position to append the <code>lines_after</code> string.</p>
+<p>In short, we basically overwrite the file by creating two strings (slice of bytes) one which has the lines before the line number with the text to be inserted and the second string has all the lines after the line number.</p>
+<h2 id="replace-text-in-a-file">Replace text in a file</h2>
+<p>Using the <a href="https://pkg.go.dev/bytes#Replace">bytes.Replace</a> method, we can first read all the bytes and replace the old with the new text, and store them as a slice of bytes. We then write these slices of bytes to the file again, so we first read the contents into slices of bytes, replace the content of the byte and then overwrite the contents with the slice of bytes. It's quite simple.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"bytes"
+	"log"
+	"os"
+)
+
+func HandleError(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func main() {
+	filename := "test.txt"
+	file, err := os.ReadFile(filename)
+	HandleError(err)
+	old_text := "Hello
+World"
+	new_text := "Bye"
+	new_content := bytes.Replace(file, []byte(old_text), []byte(new_text), -1)
+	err = os.WriteFile(filename, new_content, 0660)
+	HandleError(err)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">$ cat test.txt
+Hi
+Hello
+World
+Gophers
+
+$ go run main.go
+
+
+$ cat test.txt
+Hi
+Bye
+Gophers
+</code></pre></div><p>As we can see we have replaced <code>Hello World</code> it with <code>Bye</code>. So, the [Replace] method in the bytes package takes in the parameters like the slice of bytes which should be the actual contents of the file, the old text to be replaced with again as a slice of bytes, and the new text to replace also as the slice of bytes, the final parameter is the number of replacements to be made. Here <code>-1</code> indicates there are no limits on how many replacements can be done, it can be <code>1</code>, <code>2</code> for replacing the first n occurrence of the old text, depending on how many times you want to replace the content in the file.</p>
+<h2 id="delete-text-from-a-file">Delete Text from a File</h2>
+<p>We can use the <a href="https://pkg.go.dev/os#File.Truncate">os.Truncate</a> method to delete the contents of the file. The <code>Truncate</code> method takes in the parameters like the file path string and the size of the file to truncate or set to. If we set the second parameter to <code>0</code>, the file size will be zero and all the contents will be deleted or removed.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"log"
+	"os"
+)
+
+func main() {
+    /* test.txt
+    Hi
+    Hello
+    World
+    Gophers
+    */
+	err := os.Truncate("test.txt", 0)
+	if err != nil {
+		log.Fatal(err)
+	}
+    /* test.txt is empty
+    */
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">$ cat test.txt
+Hi
+Hello
+World
+Gophers
+
+$ go run delete.go
+
+$ cat test.txt
+</code></pre></div><p>As we can see that the contents of the file are emptied if we set the second parameter(size) of the <code>Truncate</code> method as 0.</p>
+<p>We can also set the value of the size as the number of bytes to keep, so instead of <code>0</code> we can set it to <code>n</code> positive integer to only save the first <code>n</code> bytes in the file.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"log"
+	"os"
+)
+
+func main() {
+    /* test.txt
+    Hi
+    Hello
+    World
+    Gophers
+    */
+	err := os.Truncate("test.txt", 6)
+	if err != nil {
+		log.Fatal(err)
+	}
+    /* test.txt 
+    Hi
+    Hel
+    */
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">$ cat test.txt
+Hi
+Hello
+World
+Gophers
+
+$ go run delete.go
+
+$ cat test.txt
+Hi
+Hel
+</code></pre></div><p>So, in the above example, if we set the size parameter to the Truncate method as <code>6</code>, it will keep the size of the file to 6 bytes. So we only see <code>Hi Hel</code>, the new line is a single byte. The rest of the content is deleted. This is how we previously deleted all the bytes from the file by setting the size to <code>0</code>.</p>
+<p>That's it from this part. Reference for all the code examples and commands can be found in the <a href="https://github.com/mr-destructive/100-days-of-golang/tree/main/scripts/files/write/">100 days of Golang</a> GitHub repository.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>So, from this section of the series, we were able to perform write operations on a file using golang. We used the packages from the standard library and performed operations like write, append, overwrite, delete and replace to a simple text file, but it could have been any file format.</p>
+<p>Thank you for reading. If you have any queries, questions, or feedback, you can let me know in the discussion below or on my social handles. Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/golang-config-file-read" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Golang: JSON YAML TOML (config) File Reading.</span>
+        </a>
+        
+
+        
+        
+        <a href="/posts/golang-command-line-args" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Golang: Command Line Arguments</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-delete-method" class="related-link">
+                <span class="related-post-title">Golang Web: DELETE Method</span>
+                <span class="related-post-date">2025-01-12 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-patch-method" class="related-link">
+                <span class="related-post-title">Golang Web: PATCH Method</span>
+                <span class="related-post-date">2025-01-11 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-5" class="related-link">
+                <span class="related-post-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+                <span class="related-post-date">2024-12-11 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-4" class="related-link">
+                <span class="related-post-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+                <span class="related-post-date">2024-12-09 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-3" class="related-link">
+                <span class="related-post-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+                <span class="related-post-date">2024-12-07 20:45:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

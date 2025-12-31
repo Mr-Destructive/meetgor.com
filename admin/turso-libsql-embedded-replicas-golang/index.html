@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Use Embedded Replicas of LibSQL Database hosted on Turso with a Golang Application | Meet Gor</title>
+    <meta name="title" content="Use Embedded Replicas of LibSQL Database hosted on Turso with a Golang Application | Meet Gor">
+    <meta name="description" content="Understanding and exploring how to create, connect, and query local embedded replicas of LibSQL database hosted on Turso with a Golang application.">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go, turso, libsql">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/turso-libsql-embedded-replicas-golang">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/turso-libsql-embedded-replicas-golang">
+    <meta property="og:title" content="Use Embedded Replicas of LibSQL Database hosted on Turso with a Golang Application">
+    <meta property="og:description" content="Understanding and exploring how to create, connect, and query local embedded replicas of LibSQL database hosted on Turso with a Golang application.">
+    <meta property="og:image" content="https://meetgor-cdn.pages.dev/embedded-replicas-libsql-turso-go.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Use Embedded Replicas of LibSQL Database hosted on Turso with a Golang Application">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2024-10-31 21:45:00">
+    <meta property="article:modified_time" content="2024-10-31 21:45:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    <meta property="article:tag" content="turso">
+    
+    <meta property="article:tag" content="libsql">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/turso-libsql-embedded-replicas-golang">
+    <meta name="twitter:title" content="Use Embedded Replicas of LibSQL Database hosted on Turso with a Golang Application">
+    <meta name="twitter:description" content="Understanding and exploring how to create, connect, and query local embedded replicas of LibSQL database hosted on Turso with a Golang application.">
+    <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/embedded-replicas-libsql-turso-go.png">
+    <meta name="twitter:image:alt" content="Use Embedded Replicas of LibSQL Database hosted on Turso with a Golang Application">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/turso-libsql-embedded-replicas-golang"
+        },
+        "headline": "Use Embedded Replicas of LibSQL Database hosted on Turso with a Golang Application",
+        "description": "Understanding and exploring how to create, connect, and query local embedded replicas of LibSQL database hosted on Turso with a Golang application.",
+        "datePublished": "2024-10-31 21:45:00",
+        "dateModified": "2024-10-31 21:45:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        "image": "https:\/\/meetgor-cdn.pages.dev\/embedded-replicas-libsql-turso-go.png",
+        "keywords": "go, turso, libsql",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Welcome to the Let\u0026#39;s Go with Turso series. In this series, we will learn how to interact with LibSQL databases with Golang. In the past article of the series, we explored how to connect remote\/local LibSQL database in golang.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;With this section, we will specifally dive into understanding how to create, connect, and query local embedded replicas of LibSQL database hosted on Turso with a Golang application.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;If you want to check out the YouTube video, check this out:\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/www.youtube.com\/watch?v=BitxB40rdVw\u0026#34;\u0026gt;LibSQL Embedded Replicas on Turso in Golang\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;!-- raw HTML omitted --\u0026gt;\n\u0026lt;h2 id=\u0026#34;libsql-embedded-replicas-on-turso-in-golang\u0026#34;\u0026gt;LibSQL Embedded Replicas on Turso in Golang\u0026lt;\/h2\u0026gt;\n\u0026lt;h3 id=\u0026#34;embedded-replicas\u0026#34;\u0026gt;Embedded Replicas\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;The embedded replica is a native feature of the libSQL database. With embedded replicas, we can have faster writes as with the local database and global read access from the remote database.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Embedded replica is like creating a copy of a primary remote database and using it for performing any operations from the applications as a local database and then it has a mechanism or standard to sync up with the primary remote database. The primary remote database serves as a single source of truth, however we can use the database locally as well. This however should be done carefully to avoid data corruption or stale data. To cope up with this stale or corruption of data, the periodic syncing can be used.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Embedded replicas have a 3 fold process\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Create a copy of the primary remote database\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Perform any operations on the local database\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Sync up with the primary remote database\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/embedded-replicas-flow.png\u0026#34; alt=\u0026#34;Embedded Replicas for LibSQL\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;There are a few things to remember here:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;The local database can read it\u0026#39;s newly written data, however other local replica databases can only view those changes once the sync has happened and the primary database has been updated from the local copy.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;These would require to sync the local with the primary database first and then the other local database also needs to sync with the primary database.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;You can read more about it \u0026lt;a href=\u0026#34;https:\/\/docs.turso.tech\/features\/embedded-replicas\/introduction\u0026#34;\u0026gt;here\u0026lt;\/a\u0026gt; on the Turso documentation.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s get started,\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;What we are going to do is create a step by step procedure to understand how to work with embedded replicas of LibSQL database.\u0026lt;\/p\u0026gt;\n\u0026lt;ol\u0026gt;\n\u0026lt;li\u0026gt;Perform the operations on the local LibSQL database\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Create a Embedded Replica and sync up with the primary remote database\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Fetch data from the primary remote database\u0026lt;\/li\u0026gt;\n\u0026lt;\/ol\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/LibSQL_Embedded_Replicas_on_Turso_in_Golang.gif\u0026#34; alt=\u0026#34;Embedded Replicas of LibSQL with Golang\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In this way, we can understand how to operate the Embedded Replicas as a whole from locally as well as remotely\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;initializing-a-golang-project\u0026#34;\u0026gt;Initializing a Golang project\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s start with initializing a Golang project.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;# go mod init \u0026lt;git-provider-domain\u0026gt;\/\u0026lt;username\u0026gt;\/\u0026lt;project-name\u0026gt;\n# Example\n\ngo mod init github.com\/mr-destructive\/lets-go-with-turso\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This will initialize the project in the current directory, creating a \u0026lt;code\u0026gt;go.mod\u0026lt;\/code\u0026gt; file with the specification of the Golang version and the packages that we will install and use in this module.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;installing-go-libsql-package\u0026#34;\u0026gt;Installing go-libsql package\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We will need to install the \u0026lt;a href=\u0026#34;https:\/\/github.com\/tursodatabase\/go-libsql\u0026#34;\u0026gt;go-libsql\u0026lt;\/a\u0026gt; package, this is the driver for LibSQL for Golang. To install simply use the \u0026lt;code\u0026gt;go get\u0026lt;\/code\u0026gt; command to be installed as the dependency for the project\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;go get github.com\/tursodatabase\/go-libsql\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Once this is done, we can create a local LibSQL database.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;creating-a-local-libsql-database\u0026#34;\u0026gt;Creating a local LibSQL database\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s create a local LibSQL database. With the \u0026lt;code\u0026gt;go-libsql\u0026lt;\/code\u0026gt; package, we can connect to the local database. This will be done using the \u0026lt;code\u0026gt;libsql\u0026lt;\/code\u0026gt; driver. There is really no much difference than the normal SQLite database driver, this works just like SQLite, the only difference being the ability to connect to the remote database.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;database\/sql\u0026#34;\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;os\u0026#34;\n\n\t_ \u0026#34;github.com\/tursodatabase\/go-libsql\u0026#34;\n)\n\nfunc main() {\n\tdbName := \u0026#34;file:.\/local.db\u0026#34;\n\n\tdb, err := sql.Open(\u0026#34;libsql\u0026#34;, dbName)\n\tif err != nil {\n\t\tfmt.Fprintf(os.Stderr, \u0026#34;failed to open db %s\u0026#34;, err)\n\t\tos.Exit(1)\n\t}\n\tdefer db.Close()\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above code will simply connect to the local LibSQL database which resides as the \u0026lt;code\u0026gt;local.db\u0026lt;\/code\u0026gt; file. Now, to demonstrate that it is an actual sqlite-like database, we can execute queries on the connected database.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;database\/sql\u0026#34;\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;os\u0026#34;\n\n\t_ \u0026#34;github.com\/tursodatabase\/go-libsql\u0026#34;\n)\n\nfunc main() {\n\tdbName := \u0026#34;file:.\/local.db\u0026#34;\n\n\tdb, err := sql.Open(\u0026#34;libsql\u0026#34;, dbName)\n\tif err != nil {\n\t\tfmt.Fprintf(os.Stderr, \u0026#34;failed to open db %s\u0026#34;, err)\n\t\tos.Exit(1)\n\t}\n\tdefer db.Close()\n\trows, err := db.Query(\u0026#34;SELECT ABS(RANDOM()%5) FROM generate_series(1,10)\u0026#34;)\n\tif err != nil {\n\t\tfmt.Fprintf(os.Stderr, \u0026#34;failed to query %s\u0026#34;, err)\n\t\tos.Exit(1)\n\t}\n\tdefer rows.Close()\n\tfor rows.Next() {\n\t\tvar i int\n\t\tif err := rows.Scan(\u0026amp;i); err != nil {\n\t\t\tfmt.Fprintf(os.Stderr, \u0026#34;failed to scan %s\u0026#34;, err)\n\t\t\tos.Exit(1)\n\t\t}\n\t\tfmt.Println(i)\n\t}\n\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Output:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run main.go\n\n3\n0\n4\n4\n2\n1\n2\n3\n4\n1\n\n$ go run main.go\n\n0\n2\n1\n2\n3\n2\n2\n1\n0\n2\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Just a simple \u0026lt;code\u0026gt;SELECT ABS(RANDOM()%5) FROM generate_series(1,10)\u0026lt;\/code\u0026gt; query will be executed on the connected database. This query will basically genrate a random number between \u0026lt;code\u0026gt;-4\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;4\u0026lt;\/code\u0026gt; and take the absolute value i.e. now between 0 and 4, this will genrate 10 such numbers.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Now, we can move into the actual embedded replica creation of the primary remote database and use it as a local database to perform operations.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;creating-an-embedded-replica-of-tursos-libsql-database\u0026#34;\u0026gt;Creating an Embedded Replica of Turso\u0026#39;s LibSQL database\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We need a few things to specify before we create the embedded replica, first being the primary remote database, that typically is a libsql database hosted on turso or self hosted. We also need to provide the local database path, where the local-replica will be stored or we can say the copy of the primary libsql database will be created.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We will be using the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/github.com\/levydsa\/libsql-go#NewEmbeddedReplicaConnector\u0026#34;\u0026gt;LibSQL.NewEmbeddedReplicaConnector\u0026lt;\/a\u0026gt; to create a local replica of a libsql database. The function takes in two paramters, the first paramter being the local database filename path to create the copy into, and the second paramter being the primary database URL. The function returns a connector object or an error if any. The connector object is then further used with \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/database\/sql#OpenDB\u0026#34;\u0026gt;OpenDB\u0026lt;\/a\u0026gt; function to create a database connection. The \u0026lt;code\u0026gt;OpenDB\u0026lt;\/code\u0026gt; function returns a reference of database connections which we\u0026#39;ll use to connect and perform operations on the database.\nThe same \u0026lt;code\u0026gt;connector\u0026lt;\/code\u0026gt; object could be used to sync with the primary database after performing operations on the local database with the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/github.com\/levydsa\/libsql-go#Connector.Sync\u0026#34;\u0026gt;Sync\u0026lt;\/a\u0026gt; method. This will pull or push the changes from the local database to the primary database.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We can configure the syncing mechanism while creating the embedded replica with the additional parameters to the \u0026lt;code\u0026gt;NewEmbeddedReplicaConnector\u0026lt;\/code\u0026gt; function. There are \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/github.com\/levydsa\/libsql-go#Option\u0026#34;\u0026gt;Options\u0026lt;\/a\u0026gt; to include for the paramters that could be passed like:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;code\u0026gt;WithAuthToken(string)\u0026lt;\/code\u0026gt;: This will be used to authenticate with the primary database.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;code\u0026gt;WithSyncInterval(time.Duration)\u0026lt;\/code\u0026gt;: This will be used to specify the interval of syncing between the local and primary database.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;code\u0026gt;WithEncrytion(string)\u0026lt;\/code\u0026gt;: This will be used to encrypt the local database.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;code\u0026gt;WithReadYourWrites(bool)\u0026lt;\/code\u0026gt;: This will be used to specify if the local database can read the newly written changes or not.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;So, let\u0026#39;s create a exmaple to create a embedded replica, make some changes by creating tables and then syncing the local with primary, finally appending some data to the local and reading those.\u0026lt;\/p\u0026gt;\n\u0026lt;h4 id=\u0026#34;create-the-embedded-replica\u0026#34;\u0026gt;Create the Embedded Replica\u0026lt;\/h4\u0026gt;\n\u0026lt;p\u0026gt;We first need to create a copy of the primary database, as said, we will configure the 2 paramters that we need to create the embedded replica with \u0026lt;code\u0026gt;NewEmbeddedReplicaConnector\u0026lt;\/code\u0026gt;. Then once we have the connector object, we open up a database connection, at that point we can further run queries on the local replica that was just created from the primary remote LibSQL database.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;database\/sql\u0026#34;\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;os\u0026#34;\n\t\u0026#34;path\/filepath\u0026#34;\n\n\t\u0026#34;github.com\/tursodatabase\/go-libsql\u0026#34;\n)\n\nfunc main() {\n\n\tdbName := \u0026#34;local.db\u0026#34;\n    \/\/ this is not required, but can be used to create a temporary directory and then delete it later\n\tdir, err := os.MkdirTemp(\u0026#34;\u0026#34;, \u0026#34;libsql-*\u0026#34;)\n\tif err != nil {\n\t\tfmt.Println(\u0026#34;Error creating temporary directory:\u0026#34;, err)\n\t\tos.Exit(1)\n\t}\n\tdefer os.RemoveAll(dir)\n\n    \/\/ first paramter required for creating NewEmbeddedReplicaConnector\n\tdbPath := filepath.Join(dir, dbName)\n\tfmt.Println(dbPath)\n\n    \/\/ second paramter required for creating NewEmbeddedReplicaConnector\n\tdbURL := os.Getenv(\u0026#34;TURSO_DATABASE_URL\u0026#34;)\n\tdbAuthToken := os.Getenv(\u0026#34;TURSO_AUTH_TOKEN\u0026#34;)\n\n\tconnector, err := libsql.NewEmbeddedReplicaConnector(dbPath, dbURL, libsql.WithAuthToken(dbAuthToken))\n\tfmt.Println(connector)\n\tif err != nil {\n\t\tfmt.Fprintf(os.Stderr, \u0026#34;failed to open db %s\u0026#34;, err)\n\t\tos.Exit(1)\n\t}\n\tdefer connector.Close()\n\n    \/\/ open a database connection from the connector object\n\tdb := sql.OpenDB(connector)\n\tfmt.Println(\u0026#34;Connected to database\u0026#34;)\n\tif err != nil {\n\t\tfmt.Fprintf(os.Stderr, \u0026#34;failed to open db %s\u0026#34;, err)\n\t\tos.Exit(1)\n\t}\n\tdefer db.Close()\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above code, we first create a temporary directory with the help of \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/os#MkdirTemp\u0026#34;\u0026gt;MkdirTemp\u0026lt;\/a\u0026gt;, this is not required, but would be easier for cleanup later. We then the path for the local database to be created. The combined path string \u0026lt;code\u0026gt;dbPath\u0026lt;\/code\u0026gt; will serve as the first paramter to the \u0026lt;code\u0026gt;NewEmbeddedReplicaConnector\u0026lt;\/code\u0026gt;. Then we have taken the \u0026lt;code\u0026gt;dbURL\u0026lt;\/code\u0026gt; and the \u0026lt;code\u0026gt;dbAuthToken\u0026lt;\/code\u0026gt; from the environment variables \u0026lt;code\u0026gt;TURSO_DATABASE_URL\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;TURSO_AUTH_TOKEN\u0026lt;\/code\u0026gt; respectively. The \u0026lt;code\u0026gt;dbURL\u0026lt;\/code\u0026gt; will serve as the second paramter for the \u0026lt;code\u0026gt;NewEmbeddedReplicaConnector\u0026lt;\/code\u0026gt; that is the URL of the primary remote LibSQL database. The function \u0026lt;code\u0026gt;NewEmbeddedReplicaConnector\u0026lt;\/code\u0026gt; will return the \u0026lt;code\u0026gt;Connector\u0026lt;\/code\u0026gt; object if successfull in creation of the replica, else return \u0026lt;code\u0026gt;err\u0026lt;\/code\u0026gt; if it fails. The connector object needs to be closed at the end of the program, so we use the \u0026lt;code\u0026gt;defer connector.Close()\u0026lt;\/code\u0026gt; that will close the connection to the primary database at the end of the program. The \u0026lt;code\u0026gt;sql.OpenDB\u0026lt;\/code\u0026gt; is used to create the connection with the local database that will be created from the \u0026lt;code\u0026gt;connector\u0026lt;\/code\u0026gt; object. Finally we also need to close the local database connection at the end of the program.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Further, we will try to query the local replica and create tables and append data to it.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;adding-data-to-teh-local-replica\u0026#34;\u0026gt;Adding data to teh local replica\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Once we have the \u0026lt;code\u0026gt;db\u0026lt;\/code\u0026gt; connection to the local database, we can noramlly query the database as we did in the previous example, of querying the local LibSQL database. Let\u0026#39;s start by creating a table \u0026lt;code\u0026gt;posts\u0026lt;\/code\u0026gt; to the local replica, this will basically create the schema in the local database.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;    ....\n\n\tcreatePostTableQuery := \u0060CREATE TABLE IF NOT EXISTS posts(\n        id INTEGER PRIMARY KEY,\n        title VARCHAR(100),\n        description VARCHAR(255),\n        content TEXT\n    );\u0060\n\n\t_, err = db.Exec(createPostTableQuery)\n\tif err != nil {\n\t\tfmt.Fprintf(os.Stderr, \u0026#34;failed to create table %s\u0026#34;, err)\n\t\tos.Exit(1)\n\t}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The \u0026lt;code\u0026gt;createPostTableQuery\u0026lt;\/code\u0026gt; will be the \u0026lt;code\u0026gt;SQL\u0026lt;\/code\u0026gt; to create the table \u0026lt;code\u0026gt;posts\u0026lt;\/code\u0026gt; if it doesn\u0026#39;t already exist in the database (local replica). Then with the help of \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/database\/sql#DB.Exec\u0026#34;\u0026gt;db.Exec\u0026lt;\/a\u0026gt; function, we can execute the query and return back the rows if it had created any. In this case it won\u0026#39;t as we have just added a table.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Then, we can either sync the database to the primary, but let\u0026#39;s populate the table \u0026lt;code\u0026gt;posts\u0026lt;\/code\u0026gt; with some data before syncing with the primary db.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\n\tcreatePostQuery := \u0060INSERT INTO posts(title, description, content) \n        VALUES(?, ?, ?)\u0060\n\n\t_, err = db.Exec(createPostQuery, \u0026#34;test title\u0026#34;, \u0026#34;test description\u0026#34;, \u0026#34;test content\u0026#34;)\n\tif err != nil {\n\t\tfmt.Fprintf(os.Stderr, \u0026#34;failed to insert %s\u0026#34;, err)\n\t\tos.Exit(1)\n\t}\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We have created the \u0026lt;code\u0026gt;createPostQuery\u0026lt;\/code\u0026gt; similarly to insert into the \u0026lt;code\u0026gt;posts\u0026lt;\/code\u0026gt; table in the local replica. The values are added with the placeholders in the \u0026lt;code\u0026gt;Exec\u0026lt;\/code\u0026gt; function as positional parameters. Once we have executed the query, this will populate the \u0026lt;code\u0026gt;posts\u0026lt;\/code\u0026gt; table in the lcoal replica.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We can now finally sync with the primary remote LibSQL database to make sure that the primary database also has these migrations applied.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;syncing-the-local-replica\u0026#34;\u0026gt;Syncing the local replica\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Remember, \u0026lt;code\u0026gt;connector\u0026lt;\/code\u0026gt; is for primary database and \u0026lt;code\u0026gt;db\u0026lt;\/code\u0026gt; is for the local replica. So, we will sync the remote database from the replica that was created with the \u0026lt;code\u0026gt;connector.Sync\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\n\t_, err = connector.Sync()\n\tif err != nil {\n\t\tfmt.Fprintf(os.Stderr, \u0026#34;failed to sync %s\u0026#34;, err)\n\t\tos.Exit(1)\n\t}\n\n\tfmt.Printf(\u0026#34;Successfully synced %s db\n\u0026#34;, dbPath)\n\trows, err := db.Query(\u0026#34;SELECT * FROM posts\u0026#34;)\n\tif err != nil {\n\t\tfmt.Fprintf(os.Stderr, \u0026#34;failed to query %s\u0026#34;, err)\n\t\tos.Exit(1)\n\t}\n\tdefer rows.Close()\n\tfor rows.Next() {\n\t\tvar id int\n\t\tvar title string\n\t\tvar description string\n\t\tvar content string\n\t\tif err := rows.Scan(\u0026amp;id, \u0026amp;title, \u0026amp;description, \u0026amp;content); err != nil {\n\t\t\tfmt.Fprintf(os.Stderr, \u0026#34;failed to scan %s\u0026#34;, err)\n\t\t\tos.Exit(1)\n\t\t}\n\t\tfmt.Println(id, title, description, content)\n\t}\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Output:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;\n$ go run main.go                                                            \n\n\/tmp\/libsql-349052144\/local.db\n\u0026amp;{0x2eec9d0 \u0026lt;nil\u0026gt; \u0026lt;nil\u0026gt;}\nConnected to database\nSuccessfully synced \/tmp\/libsql-349052144\/local.db db\n1 test title test description test content\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Once we have synced the local replica, we can now query the database i.e. the local replica, with the changes, also note that this could also be done without syncing the database, but the primary database won\u0026#39;t have the applied changes.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We finally Query the local replica with the query \u0026lt;code\u0026gt;SELECT * FROM posts\u0026lt;\/code\u0026gt; and print out the results. This has the 1 record in the \u0026lt;code\u0026gt;posts\u0026lt;\/code\u0026gt; table that we inserted.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, that\u0026#39;s how we basically create a local replica from a remote LibSQL database hosted on Turso. We first create the path for the local database to be copied, then provide the primary database URL and credentials, then request a copy of the primary database, then we perform any mutation or operations on the local copy and finally sync up with the remote primary database to persist the data from that replica (acting like a session of database operation).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That wraps the article for now.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;For all the code related to this article, you can check out the \u0026lt;a href=\u0026#34;https:\/\/github.com\/mr-destructive\/lets-go-with-turso\u0026#34;\u0026gt;Let\u0026#39;s Go with Turso\u0026lt;\/a\u0026gt; GitHub repo for all the examples and additional examples for using LibSQL with Golang.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;So, that is a wrap for this part of the series, we have explored how to create a local embedded replica from a remote LibSQL database hosted on Turso with Golang. In the next part of the series, we will explore how to setup a local LibSQL database server and then connect it with Golang.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Thank you for reading this post, If you have any questions, feedback, and suggestions, feel free to drop them in the comments.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "turso-libsql-embedded-replicas-golang";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'" aria-label="Editor">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Use Embedded Replicas of LibSQL Database hosted on Turso with a Golang Application</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2024-10-31 21:45:00">2024-10-31 21:45:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+                <a href="/tags/turso">#turso</a>
+                
+                <a href="/tags/libsql">#libsql</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/lets-go-with-turso" class="series-link">📖 lets-go-with-turso</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=turso-libsql-embedded-replicas-golang&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>Welcome to the Let's Go with Turso series. In this series, we will learn how to interact with LibSQL databases with Golang. In the past article of the series, we explored how to connect remote/local LibSQL database in golang.</p>
+<p>With this section, we will specifally dive into understanding how to create, connect, and query local embedded replicas of LibSQL database hosted on Turso with a Golang application.</p>
+<p>If you want to check out the YouTube video, check this out:</p>
+<p><a href="https://www.youtube.com/watch?v=BitxB40rdVw">LibSQL Embedded Replicas on Turso in Golang</a></p>
+<!-- raw HTML omitted -->
+<h2 id="libsql-embedded-replicas-on-turso-in-golang">LibSQL Embedded Replicas on Turso in Golang</h2>
+<h3 id="embedded-replicas">Embedded Replicas</h3>
+<p>The embedded replica is a native feature of the libSQL database. With embedded replicas, we can have faster writes as with the local database and global read access from the remote database.</p>
+<p>Embedded replica is like creating a copy of a primary remote database and using it for performing any operations from the applications as a local database and then it has a mechanism or standard to sync up with the primary remote database. The primary remote database serves as a single source of truth, however we can use the database locally as well. This however should be done carefully to avoid data corruption or stale data. To cope up with this stale or corruption of data, the periodic syncing can be used.</p>
+<p>Embedded replicas have a 3 fold process</p>
+<ul>
+<li>Create a copy of the primary remote database</li>
+<li>Perform any operations on the local database</li>
+<li>Sync up with the primary remote database</li>
+</ul>
+<p><img src="https://meetgor-cdn.pages.dev/embedded-replicas-flow.png" alt="Embedded Replicas for LibSQL"></p>
+<p>There are a few things to remember here:</p>
+<ul>
+<li>The local database can read it's newly written data, however other local replica databases can only view those changes once the sync has happened and the primary database has been updated from the local copy.</li>
+<li>These would require to sync the local with the primary database first and then the other local database also needs to sync with the primary database.</li>
+</ul>
+<p>You can read more about it <a href="https://docs.turso.tech/features/embedded-replicas/introduction">here</a> on the Turso documentation.</p>
+<p>Let's get started,</p>
+<p>What we are going to do is create a step by step procedure to understand how to work with embedded replicas of LibSQL database.</p>
+<ol>
+<li>Perform the operations on the local LibSQL database</li>
+<li>Create a Embedded Replica and sync up with the primary remote database</li>
+<li>Fetch data from the primary remote database</li>
+</ol>
+<p><img src="https://meetgor-cdn.pages.dev/LibSQL_Embedded_Replicas_on_Turso_in_Golang.gif" alt="Embedded Replicas of LibSQL with Golang"></p>
+<p>In this way, we can understand how to operate the Embedded Replicas as a whole from locally as well as remotely</p>
+<h2 id="initializing-a-golang-project">Initializing a Golang project</h2>
+<p>Let's start with initializing a Golang project.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash"># go mod init <git-provider-domain>/<username>/<project-name>
+# Example
+
+go mod init github.com/mr-destructive/lets-go-with-turso
+
+</code></pre></div><p>This will initialize the project in the current directory, creating a <code>go.mod</code> file with the specification of the Golang version and the packages that we will install and use in this module.</p>
+<h2 id="installing-go-libsql-package">Installing go-libsql package</h2>
+<p>We will need to install the <a href="https://github.com/tursodatabase/go-libsql">go-libsql</a> package, this is the driver for LibSQL for Golang. To install simply use the <code>go get</code> command to be installed as the dependency for the project</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">go get github.com/tursodatabase/go-libsql
+</code></pre></div><p>Once this is done, we can create a local LibSQL database.</p>
+<h2 id="creating-a-local-libsql-database">Creating a local LibSQL database</h2>
+<p>Let's create a local LibSQL database. With the <code>go-libsql</code> package, we can connect to the local database. This will be done using the <code>libsql</code> driver. There is really no much difference than the normal SQLite database driver, this works just like SQLite, the only difference being the ability to connect to the remote database.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"database/sql"
+	"fmt"
+	"os"
+
+	_ "github.com/tursodatabase/go-libsql"
+)
+
+func main() {
+	dbName := "file:./local.db"
+
+	db, err := sql.Open("libsql", dbName)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to open db %s", err)
+		os.Exit(1)
+	}
+	defer db.Close()
+}
+</code></pre></div><p>The above code will simply connect to the local LibSQL database which resides as the <code>local.db</code> file. Now, to demonstrate that it is an actual sqlite-like database, we can execute queries on the connected database.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"database/sql"
+	"fmt"
+	"os"
+
+	_ "github.com/tursodatabase/go-libsql"
+)
+
+func main() {
+	dbName := "file:./local.db"
+
+	db, err := sql.Open("libsql", dbName)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to open db %s", err)
+		os.Exit(1)
+	}
+	defer db.Close()
+	rows, err := db.Query("SELECT ABS(RANDOM()%5) FROM generate_series(1,10)")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to query %s", err)
+		os.Exit(1)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var i int
+		if err := rows.Scan(&i); err != nil {
+			fmt.Fprintf(os.Stderr, "failed to scan %s", err)
+			os.Exit(1)
+		}
+		fmt.Println(i)
+	}
+
+}
+</code></pre></div><p>Output:</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run main.go
+
+3
+0
+4
+4
+2
+1
+2
+3
+4
+1
+
+$ go run main.go
+
+0
+2
+1
+2
+3
+2
+2
+1
+0
+2
+</code></pre></div><p>Just a simple <code>SELECT ABS(RANDOM()%5) FROM generate_series(1,10)</code> query will be executed on the connected database. This query will basically genrate a random number between <code>-4</code> and <code>4</code> and take the absolute value i.e. now between 0 and 4, this will genrate 10 such numbers.</p>
+<p>Now, we can move into the actual embedded replica creation of the primary remote database and use it as a local database to perform operations.</p>
+<h2 id="creating-an-embedded-replica-of-tursos-libsql-database">Creating an Embedded Replica of Turso's LibSQL database</h2>
+<p>We need a few things to specify before we create the embedded replica, first being the primary remote database, that typically is a libsql database hosted on turso or self hosted. We also need to provide the local database path, where the local-replica will be stored or we can say the copy of the primary libsql database will be created.</p>
+<p>We will be using the <a href="https://pkg.go.dev/github.com/levydsa/libsql-go#NewEmbeddedReplicaConnector">LibSQL.NewEmbeddedReplicaConnector</a> to create a local replica of a libsql database. The function takes in two paramters, the first paramter being the local database filename path to create the copy into, and the second paramter being the primary database URL. The function returns a connector object or an error if any. The connector object is then further used with <a href="https://pkg.go.dev/database/sql#OpenDB">OpenDB</a> function to create a database connection. The <code>OpenDB</code> function returns a reference of database connections which we'll use to connect and perform operations on the database.
+The same <code>connector</code> object could be used to sync with the primary database after performing operations on the local database with the <a href="https://pkg.go.dev/github.com/levydsa/libsql-go#Connector.Sync">Sync</a> method. This will pull or push the changes from the local database to the primary database.</p>
+<p>We can configure the syncing mechanism while creating the embedded replica with the additional parameters to the <code>NewEmbeddedReplicaConnector</code> function. There are <a href="https://pkg.go.dev/github.com/levydsa/libsql-go#Option">Options</a> to include for the paramters that could be passed like:</p>
+<ul>
+<li><code>WithAuthToken(string)</code>: This will be used to authenticate with the primary database.</li>
+<li><code>WithSyncInterval(time.Duration)</code>: This will be used to specify the interval of syncing between the local and primary database.</li>
+<li><code>WithEncrytion(string)</code>: This will be used to encrypt the local database.</li>
+<li><code>WithReadYourWrites(bool)</code>: This will be used to specify if the local database can read the newly written changes or not.</li>
+</ul>
+<p>So, let's create a exmaple to create a embedded replica, make some changes by creating tables and then syncing the local with primary, finally appending some data to the local and reading those.</p>
+<h4 id="create-the-embedded-replica">Create the Embedded Replica</h4>
+<p>We first need to create a copy of the primary database, as said, we will configure the 2 paramters that we need to create the embedded replica with <code>NewEmbeddedReplicaConnector</code>. Then once we have the connector object, we open up a database connection, at that point we can further run queries on the local replica that was just created from the primary remote LibSQL database.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"database/sql"
+	"fmt"
+	"os"
+	"path/filepath"
+
+	"github.com/tursodatabase/go-libsql"
+)
+
+func main() {
+
+	dbName := "local.db"
+    // this is not required, but can be used to create a temporary directory and then delete it later
+	dir, err := os.MkdirTemp("", "libsql-*")
+	if err != nil {
+		fmt.Println("Error creating temporary directory:", err)
+		os.Exit(1)
+	}
+	defer os.RemoveAll(dir)
+
+    // first paramter required for creating NewEmbeddedReplicaConnector
+	dbPath := filepath.Join(dir, dbName)
+	fmt.Println(dbPath)
+
+    // second paramter required for creating NewEmbeddedReplicaConnector
+	dbURL := os.Getenv("TURSO_DATABASE_URL")
+	dbAuthToken := os.Getenv("TURSO_AUTH_TOKEN")
+
+	connector, err := libsql.NewEmbeddedReplicaConnector(dbPath, dbURL, libsql.WithAuthToken(dbAuthToken))
+	fmt.Println(connector)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to open db %s", err)
+		os.Exit(1)
+	}
+	defer connector.Close()
+
+    // open a database connection from the connector object
+	db := sql.OpenDB(connector)
+	fmt.Println("Connected to database")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to open db %s", err)
+		os.Exit(1)
+	}
+	defer db.Close()
+}
+</code></pre></div><p>In the above code, we first create a temporary directory with the help of <a href="https://pkg.go.dev/os#MkdirTemp">MkdirTemp</a>, this is not required, but would be easier for cleanup later. We then the path for the local database to be created. The combined path string <code>dbPath</code> will serve as the first paramter to the <code>NewEmbeddedReplicaConnector</code>. Then we have taken the <code>dbURL</code> and the <code>dbAuthToken</code> from the environment variables <code>TURSO_DATABASE_URL</code> and <code>TURSO_AUTH_TOKEN</code> respectively. The <code>dbURL</code> will serve as the second paramter for the <code>NewEmbeddedReplicaConnector</code> that is the URL of the primary remote LibSQL database. The function <code>NewEmbeddedReplicaConnector</code> will return the <code>Connector</code> object if successfull in creation of the replica, else return <code>err</code> if it fails. The connector object needs to be closed at the end of the program, so we use the <code>defer connector.Close()</code> that will close the connection to the primary database at the end of the program. The <code>sql.OpenDB</code> is used to create the connection with the local database that will be created from the <code>connector</code> object. Finally we also need to close the local database connection at the end of the program.</p>
+<p>Further, we will try to query the local replica and create tables and append data to it.</p>
+<h3 id="adding-data-to-teh-local-replica">Adding data to teh local replica</h3>
+<p>Once we have the <code>db</code> connection to the local database, we can noramlly query the database as we did in the previous example, of querying the local LibSQL database. Let's start by creating a table <code>posts</code> to the local replica, this will basically create the schema in the local database.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">    ....
+
+	createPostTableQuery := `CREATE TABLE IF NOT EXISTS posts(
+        id INTEGER PRIMARY KEY,
+        title VARCHAR(100),
+        description VARCHAR(255),
+        content TEXT
+    );`
+
+	_, err = db.Exec(createPostTableQuery)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to create table %s", err)
+		os.Exit(1)
+	}
+</code></pre></div><p>The <code>createPostTableQuery</code> will be the <code>SQL</code> to create the table <code>posts</code> if it doesn't already exist in the database (local replica). Then with the help of <a href="https://pkg.go.dev/database/sql#DB.Exec">db.Exec</a> function, we can execute the query and return back the rows if it had created any. In this case it won't as we have just added a table.</p>
+<p>Then, we can either sync the database to the primary, but let's populate the table <code>posts</code> with some data before syncing with the primary db.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">
+	createPostQuery := `INSERT INTO posts(title, description, content) 
+        VALUES(?, ?, ?)`
+
+	_, err = db.Exec(createPostQuery, "test title", "test description", "test content")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to insert %s", err)
+		os.Exit(1)
+	}
+
+</code></pre></div><p>We have created the <code>createPostQuery</code> similarly to insert into the <code>posts</code> table in the local replica. The values are added with the placeholders in the <code>Exec</code> function as positional parameters. Once we have executed the query, this will populate the <code>posts</code> table in the lcoal replica.</p>
+<p>We can now finally sync with the primary remote LibSQL database to make sure that the primary database also has these migrations applied.</p>
+<h3 id="syncing-the-local-replica">Syncing the local replica</h3>
+<p>Remember, <code>connector</code> is for primary database and <code>db</code> is for the local replica. So, we will sync the remote database from the replica that was created with the <code>connector.Sync</code></p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">
+	_, err = connector.Sync()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to sync %s", err)
+		os.Exit(1)
+	}
+
+	fmt.Printf("Successfully synced %s db
+", dbPath)
+	rows, err := db.Query("SELECT * FROM posts")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to query %s", err)
+		os.Exit(1)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var id int
+		var title string
+		var description string
+		var content string
+		if err := rows.Scan(&id, &title, &description, &content); err != nil {
+			fmt.Fprintf(os.Stderr, "failed to scan %s", err)
+			os.Exit(1)
+		}
+		fmt.Println(id, title, description, content)
+	}
+
+</code></pre></div><p>Output:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">
+$ go run main.go                                                            
+
+/tmp/libsql-349052144/local.db
+&{0x2eec9d0 <nil> <nil>}
+Connected to database
+Successfully synced /tmp/libsql-349052144/local.db db
+1 test title test description test content
+</code></pre></div><p>Once we have synced the local replica, we can now query the database i.e. the local replica, with the changes, also note that this could also be done without syncing the database, but the primary database won't have the applied changes.</p>
+<p>We finally Query the local replica with the query <code>SELECT * FROM posts</code> and print out the results. This has the 1 record in the <code>posts</code> table that we inserted.</p>
+<p>So, that's how we basically create a local replica from a remote LibSQL database hosted on Turso. We first create the path for the local database to be copied, then provide the primary database URL and credentials, then request a copy of the primary database, then we perform any mutation or operations on the local copy and finally sync up with the remote primary database to persist the data from that replica (acting like a session of database operation).</p>
+<p>That wraps the article for now.</p>
+<p>For all the code related to this article, you can check out the <a href="https://github.com/mr-destructive/lets-go-with-turso">Let's Go with Turso</a> GitHub repo for all the examples and additional examples for using LibSQL with Golang.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>So, that is a wrap for this part of the series, we have explored how to create a local embedded replica from a remote LibSQL database hosted on Turso with Golang. In the next part of the series, we will explore how to setup a local LibSQL database server and then connect it with Golang.</p>
+<p>Thank you for reading this post, If you have any questions, feedback, and suggestions, feel free to drop them in the comments.</p>
+<p>Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/turso-libsql-db-golang" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Connect LibSQL Database hosted on Turso in a Golang Application</span>
+        </a>
+        
+
+        
+        <div class="nav-link nav-next nav-empty"></div>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/turso-libsql-db-golang" class="related-link">
+                <span class="related-post-title">Connect LibSQL Database hosted on Turso in a Golang Application</span>
+                <span class="related-post-date">2024-09-30 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-delete-method" class="related-link">
+                <span class="related-post-title">Golang Web: DELETE Method</span>
+                <span class="related-post-date">2025-01-12 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-patch-method" class="related-link">
+                <span class="related-post-title">Golang Web: PATCH Method</span>
+                <span class="related-post-date">2025-01-11 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-5" class="related-link">
+                <span class="related-post-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+                <span class="related-post-date">2024-12-11 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-4" class="related-link">
+                <span class="related-post-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+                <span class="related-post-date">2024-12-09 20:45:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

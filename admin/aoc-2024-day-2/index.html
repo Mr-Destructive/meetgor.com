@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Advent of Code Day 2 in Golang: Slicing and Dicing Reports | Meet Gor</title>
+    <meta name="title" content="Advent of Code Day 2 in Golang: Slicing and Dicing Reports | Meet Gor">
+    <meta name="description" content="Solving day 2 of Advent of Code 2024 in Golang. Diving into one of the possible approaches to the puzzle.">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go, aoc, advent-of-code, aoc-2024">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/aoc-2024-day-2">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/aoc-2024-day-2">
+    <meta property="og:title" content="Advent of Code Day 2 in Golang: Slicing and Dicing Reports">
+    <meta property="og:description" content="Solving day 2 of Advent of Code 2024 in Golang. Diving into one of the possible approaches to the puzzle.">
+    <meta property="og:image" content="https://meetgor.com/tbicon.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Advent of Code Day 2 in Golang: Slicing and Dicing Reports">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2024-12-02 20:45:00">
+    <meta property="article:modified_time" content="2024-12-02 20:45:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    <meta property="article:tag" content="aoc">
+    
+    <meta property="article:tag" content="advent-of-code">
+    
+    <meta property="article:tag" content="aoc-2024">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/aoc-2024-day-2">
+    <meta name="twitter:title" content="Advent of Code Day 2 in Golang: Slicing and Dicing Reports">
+    <meta name="twitter:description" content="Solving day 2 of Advent of Code 2024 in Golang. Diving into one of the possible approaches to the puzzle.">
+    <meta name="twitter:image" content="https://meetgor.com/tbicon.png">
+    <meta name="twitter:image:alt" content="Advent of Code Day 2 in Golang: Slicing and Dicing Reports">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/aoc-2024-day-2"
+        },
+        "headline": "Advent of Code Day 2 in Golang: Slicing and Dicing Reports",
+        "description": "Solving day 2 of Advent of Code 2024 in Golang. Diving into one of the possible approaches to the puzzle.",
+        "datePublished": "2024-12-02 20:45:00",
+        "dateModified": "2024-12-02 20:45:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        
+        "keywords": "go, aoc, advent-of-code, aoc-2024",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;So, this is day 2 of the Advent of Code 2024 in Golang, and we will be exploring my approach and solution for the same. The problem was not as easy but was pretty simple after implemented and found correct.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;You can check out my solutions \u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/advent_of_code\/blob\/main\/2024\/src\/day02\/main.go\u0026#34;\u0026gt;here on GitHub\u0026lt;\/a\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;part-1\u0026#34;\u0026gt;Part 1\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We have been given some lines called reports, and each report has a bunch of levels. and the requirement of the report is that it needs to be either strictly increasing or decreasing by a factor of at least 1 or at most 3.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This means if the first two elements are increasing even by one, the other subsequent elements in that report should be increasing (by 1, 2, or 3) levels, and there cannot be any change (i.e. 0 change in two adjacent numbers, or two adjacent numbers cannot be same)\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;7 6 4 2 1\n1 2 7 8 9\n9 7 6 2 1\n1 3 2 4 5\n8 6 4 4 1\n1 3 6 7 9\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;We first do the input parsing, it is pretty straightforward, we need to split it by \u0026lt;code\u0026gt; \u0026lt;\/code\u0026gt; to get individual reports, this will be a string so \u0026lt;code\u0026gt;”7 6 4 2 1\u0026amp;quot;\u0026lt;\/code\u0026gt; , we want to get a slice of integers.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;So we go ahead and split by spaces\/whitespace \u0026lt;code\u0026gt;” “\u0026lt;\/code\u0026gt; to get the individual levels (numbers) and we need to convert them into integers.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Once we have individual strings of the report i.e. levels as \u0026lt;code\u0026gt;[“7”, “6”, “4”, “2”, “1”]\u0026lt;\/code\u0026gt; , we need to cast them to integers.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;We iterate over each of them and cast them to integers and append to the list.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Once we have constructed the list, we append to the reports list which will be the array of arrays, i.e. each line is a report, and each report has many levels so slice of slice of integers.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;func SplitLevels(lines []string) [][]int {\n\treportLevels := [][]int{}\n\tfor i, reportLine := range lines {\n\t\treportLevels = append(reportLevels, []int{})\n\t\tfor _, levelStr := range strings.Split(reportLine, \u0026#34; \u0026#34;) {\n\t\t\tlevel, err := strconv.Atoi(levelStr)\n\t\t\tif err != nil {\n\t\t\t\tlog.Fatal(err)\n\t\t\t}\n\t\t\treportLevels[i] = append(reportLevels[i], level)\n\t\t}\n\t}\n\treturn reportLevels\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Once we have constructed the reports and levels, we move ahead in actually analyzing the patterns within the levels in the individual reports.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;For that:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;We first take individual reports, calculate the difference between the first two elements, and remember to use absolute difference carefully here.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;We need to maintain a flag which indicates whether the levels in the report are increasing or decreasing, which can be determined with the first two elements.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That is if the first two elements are increasing, the subsequent levels should also be increasing and if they are decreasing then all the levels should be decreasing as well\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;We first have a guard check, if the difference between them is 0 or greater than 3 or less than -3 which is the condition of the levels to be safe. If that is the case then we return false that is the report is not safe.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;We now iterate on the report after the first two elements, we then compute the difference between the next two levels, if the flag is increasing is true and the current difference is less than or equal to 0 or it exceeding 3 we also mark it as false\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;The other condition is that if the flag is is decreasing, which means the first two elements were having a negative difference, so we check if the current difference is greater than or equal to 0 or it is less than -3, if that is the case we mark that as false\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;After computing the difference for all the levels, if we come out of the loop, we return true as we didn’t see any discrepancy in the levels.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\n\nfunc IsSafe(report []int) (bool) {\n\tprevDiff := report[1] - report[0]\n\tisIcreasing := prevDiff \u0026gt; 0\n\tif prevDiff == 0 || prevDiff \u0026gt; 3 || prevDiff \u0026lt; -3 {\n\t\treturn false\n\t}\n\n\tfor i := 2; i \u0026lt; len(report); i\u002b\u002b {\n\t\tcurrDiff := report[i] - report[i-1]\n\t\tif isIcreasing {\n\t\t\tif currDiff \u0026lt;= 0 || currDiff \u0026gt; 3 {\n\t\t\t\treturn false\n\t\t\t}\n\t\t} else {\n\t\t\tif currDiff \u0026gt;= 0 || currDiff \u0026lt; -3 {\n\t\t\t\treturn false\n\t\t\t}\n\t\t}\n\t}\n\treturn true\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;h2 id=\u0026#34;part-2\u0026#34;\u0026gt;Part 2\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;For part two, we need to do a few things, we need to compute if the report is safe or not, and if that is unsafe, we can almost remove one element from the report to make it safe.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;For that the approach is:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Get the index where we first saw the discrepancy in the levels\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Check by removing that element from the report, if that makes the report safe, then return true i.e. we found the safe report\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;If we still find the report unsafe, remove the element before the index where the discrepancy was found, if now we find it safe after removing that element, then mark it safe\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;If still we find the report unsafe, then remove the element after the index where we originally found the discrepancy, if the report becomes safe, we mark that report safe\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Else we mark the report unsafe, as we cannot find only the element removable that makes the report safe.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;func RemoveAndCheck(report []int, index int) bool {\n\tif index \u0026gt; len(report)-1 || index \u0026lt; 0 {\n\t\treturn false\n\t}\n\treportNew := append([]int{}, report[:index]...)\n\treportNew = append(reportNew, report[index\u002b1:]...)\n\tsafe, _ := IsSafe(reportNew)\n\tfmt.Println(safe, report)\n\treturn safe\n}\n\nfunc RemoveLevels(report []int) bool {\n\tsafe, unsafeIndex := IsSafe(report)\n\tif safe {\n\t\treturn true\n\t} else {\n\t\tif RemoveAndCheck(report, unsafeIndex) {\n\t\t\treturn true\n\t\t}\n\t\tif RemoveAndCheck(report, unsafeIndex-1) {\n\t\t\treturn true\n\t\t}\n\t\tif RemoveAndCheck(report, unsafeIndex\u002b1) {\n\t\t\treturn true\n\t\t}\n\t\treturn false\n\t}\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;You can check out my solutions \u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/advent_of_code\/blob\/main\/2024\/src\/day02\/main.go\u0026#34;\u0026gt;here on GitHub\u0026lt;\/a\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;So that was it, a pretty simple problem for day 2 of the advent of code 2024 in Golang. Hope you enjoyed this walkthrough of the day one puzzle in the Advent of Code 2024 in Golang.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let me know if you have any other interesting solutions, or if you have anything to share about this, any feedback, questions, or suggestions are welcome.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Thank you for reading, and I will see you tomorrow for day 3\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "aoc-2024-day-2";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'" aria-label="Editor">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Advent of Code Day 2 in Golang: Slicing and Dicing Reports</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2024-12-02 20:45:00">2024-12-02 20:45:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+                <a href="/tags/aoc">#aoc</a>
+                
+                <a href="/tags/advent-of-code">#advent-of-code</a>
+                
+                <a href="/tags/aoc-2024">#aoc-2024</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/Advent%20of%20Code%202024" class="series-link">📖 Advent of Code 2024</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=aoc-2024-day-2&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>So, this is day 2 of the Advent of Code 2024 in Golang, and we will be exploring my approach and solution for the same. The problem was not as easy but was pretty simple after implemented and found correct.</p>
+<p>You can check out my solutions <a href="https://github.com/Mr-Destructive/advent_of_code/blob/main/2024/src/day02/main.go">here on GitHub</a>.</p>
+<h2 id="part-1">Part 1</h2>
+<p>We have been given some lines called reports, and each report has a bunch of levels. and the requirement of the report is that it needs to be either strictly increasing or decreasing by a factor of at least 1 or at most 3.</p>
+<p>This means if the first two elements are increasing even by one, the other subsequent elements in that report should be increasing (by 1, 2, or 3) levels, and there cannot be any change (i.e. 0 change in two adjacent numbers, or two adjacent numbers cannot be same)</p>
+<div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">7 6 4 2 1
+1 2 7 8 9
+9 7 6 2 1
+1 3 2 4 5
+8 6 4 4 1
+1 3 6 7 9
+</code></pre></div><ul>
+<li>
+<p>We first do the input parsing, it is pretty straightforward, we need to split it by <code> </code> to get individual reports, this will be a string so <code>”7 6 4 2 1&quot;</code> , we want to get a slice of integers.</p>
+</li>
+<li>
+<p>So we go ahead and split by spaces/whitespace <code>” “</code> to get the individual levels (numbers) and we need to convert them into integers.</p>
+</li>
+<li>
+<p>Once we have individual strings of the report i.e. levels as <code>[“7”, “6”, “4”, “2”, “1”]</code> , we need to cast them to integers.</p>
+</li>
+<li>
+<p>We iterate over each of them and cast them to integers and append to the list.</p>
+</li>
+<li>
+<p>Once we have constructed the list, we append to the reports list which will be the array of arrays, i.e. each line is a report, and each report has many levels so slice of slice of integers.</p>
+</li>
+</ul>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">func SplitLevels(lines []string) [][]int {
+	reportLevels := [][]int{}
+	for i, reportLine := range lines {
+		reportLevels = append(reportLevels, []int{})
+		for _, levelStr := range strings.Split(reportLine, " ") {
+			level, err := strconv.Atoi(levelStr)
+			if err != nil {
+				log.Fatal(err)
+			}
+			reportLevels[i] = append(reportLevels[i], level)
+		}
+	}
+	return reportLevels
+}
+</code></pre></div><p>Once we have constructed the reports and levels, we move ahead in actually analyzing the patterns within the levels in the individual reports.</p>
+<p>For that:</p>
+<ul>
+<li>
+<p>We first take individual reports, calculate the difference between the first two elements, and remember to use absolute difference carefully here.</p>
+</li>
+<li>
+<p>We need to maintain a flag which indicates whether the levels in the report are increasing or decreasing, which can be determined with the first two elements.</p>
+<p>That is if the first two elements are increasing, the subsequent levels should also be increasing and if they are decreasing then all the levels should be decreasing as well</p>
+</li>
+<li>
+<p>We first have a guard check, if the difference between them is 0 or greater than 3 or less than -3 which is the condition of the levels to be safe. If that is the case then we return false that is the report is not safe.</p>
+</li>
+<li>
+<p>We now iterate on the report after the first two elements, we then compute the difference between the next two levels, if the flag is increasing is true and the current difference is less than or equal to 0 or it exceeding 3 we also mark it as false</p>
+</li>
+<li>
+<p>The other condition is that if the flag is is decreasing, which means the first two elements were having a negative difference, so we check if the current difference is greater than or equal to 0 or it is less than -3, if that is the case we mark that as false</p>
+</li>
+<li>
+<p>After computing the difference for all the levels, if we come out of the loop, we return true as we didn’t see any discrepancy in the levels.</p>
+</li>
+</ul>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">
+
+func IsSafe(report []int) (bool) {
+	prevDiff := report[1] - report[0]
+	isIcreasing := prevDiff > 0
+	if prevDiff == 0 || prevDiff > 3 || prevDiff < -3 {
+		return false
+	}
+
+	for i := 2; i < len(report); i++ {
+		currDiff := report[i] - report[i-1]
+		if isIcreasing {
+			if currDiff <= 0 || currDiff > 3 {
+				return false
+			}
+		} else {
+			if currDiff >= 0 || currDiff < -3 {
+				return false
+			}
+		}
+	}
+	return true
+}
+</code></pre></div><h2 id="part-2">Part 2</h2>
+<p>For part two, we need to do a few things, we need to compute if the report is safe or not, and if that is unsafe, we can almost remove one element from the report to make it safe.</p>
+<p>For that the approach is:</p>
+<ul>
+<li>
+<p>Get the index where we first saw the discrepancy in the levels</p>
+</li>
+<li>
+<p>Check by removing that element from the report, if that makes the report safe, then return true i.e. we found the safe report</p>
+</li>
+<li>
+<p>If we still find the report unsafe, remove the element before the index where the discrepancy was found, if now we find it safe after removing that element, then mark it safe</p>
+</li>
+<li>
+<p>If still we find the report unsafe, then remove the element after the index where we originally found the discrepancy, if the report becomes safe, we mark that report safe</p>
+</li>
+<li>
+<p>Else we mark the report unsafe, as we cannot find only the element removable that makes the report safe.</p>
+</li>
+</ul>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">func RemoveAndCheck(report []int, index int) bool {
+	if index > len(report)-1 || index < 0 {
+		return false
+	}
+	reportNew := append([]int{}, report[:index]...)
+	reportNew = append(reportNew, report[index+1:]...)
+	safe, _ := IsSafe(reportNew)
+	fmt.Println(safe, report)
+	return safe
+}
+
+func RemoveLevels(report []int) bool {
+	safe, unsafeIndex := IsSafe(report)
+	if safe {
+		return true
+	} else {
+		if RemoveAndCheck(report, unsafeIndex) {
+			return true
+		}
+		if RemoveAndCheck(report, unsafeIndex-1) {
+			return true
+		}
+		if RemoveAndCheck(report, unsafeIndex+1) {
+			return true
+		}
+		return false
+	}
+}
+</code></pre></div><p>You can check out my solutions <a href="https://github.com/Mr-Destructive/advent_of_code/blob/main/2024/src/day02/main.go">here on GitHub</a>.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>So that was it, a pretty simple problem for day 2 of the advent of code 2024 in Golang. Hope you enjoyed this walkthrough of the day one puzzle in the Advent of Code 2024 in Golang.</p>
+<p>Let me know if you have any other interesting solutions, or if you have anything to share about this, any feedback, questions, or suggestions are welcome.</p>
+<p>Thank you for reading, and I will see you tomorrow for day 3</p>
+<p>Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/aoc-2024-day-1" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Advent of Code, 2024, Day 1 in Golang: Historian Hysteria</span>
+        </a>
+        
+
+        
+        
+        <a href="/posts/aoc-2024-day-3" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-5" class="related-link">
+                <span class="related-post-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+                <span class="related-post-date">2024-12-11 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-4" class="related-link">
+                <span class="related-post-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+                <span class="related-post-date">2024-12-09 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-3" class="related-link">
+                <span class="related-post-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+                <span class="related-post-date">2024-12-07 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-1" class="related-link">
+                <span class="related-post-title">Advent of Code, 2024, Day 1 in Golang: Historian Hysteria</span>
+                <span class="related-post-date">2024-12-01 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-delete-method" class="related-link">
+                <span class="related-post-title">Golang Web: DELETE Method</span>
+                <span class="related-post-date">2025-01-12 20:30:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Django Blog DevLog: Load Frontmatter data into Template/Model Form Fields | Meet Gor</title>
+    <meta name="title" content="Django Blog DevLog: Load Frontmatter data into Template/Model Form Fields | Meet Gor">
+    <meta name="description" content="Rendering frontatter from content field into the Template Form field using HTMX and frontmatter libraries">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="django, htmx, python">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/til/django-form-load-frontmatter">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/til/django-form-load-frontmatter">
+    <meta property="og:title" content="Django Blog DevLog: Load Frontmatter data into Template/Model Form Fields">
+    <meta property="og:description" content="Rendering frontatter from content field into the Template Form field using HTMX and frontmatter libraries">
+    <meta property="og:image" content="https://meetgor.com/tbicon.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Django Blog DevLog: Load Frontmatter data into Template/Model Form Fields">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2022-08-01 20:30:00">
+    <meta property="article:modified_time" content="2022-08-01 20:30:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="django">
+    
+    <meta property="article:tag" content="htmx">
+    
+    <meta property="article:tag" content="python">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/til/django-form-load-frontmatter">
+    <meta name="twitter:title" content="Django Blog DevLog: Load Frontmatter data into Template/Model Form Fields">
+    <meta name="twitter:description" content="Rendering frontatter from content field into the Template Form field using HTMX and frontmatter libraries">
+    <meta name="twitter:image" content="https://meetgor.com/tbicon.png">
+    <meta name="twitter:image:alt" content="Django Blog DevLog: Load Frontmatter data into Template/Model Form Fields">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/til\/django-form-load-frontmatter"
+        },
+        "headline": "Django Blog DevLog: Load Frontmatter data into Template\/Model Form Fields",
+        "description": "Rendering frontatter from content field into the Template Form field using HTMX and frontmatter libraries",
+        "datePublished": "2022-08-01 20:30:00",
+        "dateModified": "2022-08-01 20:30:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        
+        "keywords": "django, htmx, python",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;I have an Article Form where I load my post into it directly, it might have frontmatter. So what I wish to achieve is when I paste in the content, the frontmatter should be picked up and it should render the form fields like \u0026lt;code\u0026gt;title\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;description\u0026lt;\/code\u0026gt;, and then also remove the frontmatter from the content.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;To do that, we will require a model to work with and a form based on that model. We will exclude a few fields from that model so as to process these attributes on the server side. I am working on my Blog project which is a simple Django application.  You can get the source code for the project on the \u0026lt;a href=\u0026#34;https:\/\/github.com\/mr-destructive\/techstructive-blog\/\u0026#34;\u0026gt;GitHub repository\u0026lt;\/a\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;django-project-context\u0026#34;\u0026gt;Django Project Context\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;The techstructive-blog is a django project, which has a couple of applications currently, not in a good situation. There are apps like \u0026lt;code\u0026gt;article\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;blog\u0026lt;\/code\u0026gt;, and \u0026lt;code\u0026gt;user\u0026lt;\/code\u0026gt;. This project has templates and static folder in the base directory. The project is deployed on \u0026lt;a href=\u0026#34;https:\/\/www.railway.app\u0026#34;\u0026gt;railway\u0026lt;\/a\u0026gt; this is an always under development project, you can check out the \u0026lt;a href=\u0026#34;https:\/\/django-blog.up.railway.app\u0026#34;\u0026gt;techstructive-blog\u0026lt;\/a\u0026gt;. We can get the bits and pieces of the project details required for understanding what I want to do with the following sections.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;article-model\u0026#34;\u0026gt;Article Model\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We have an \u0026lt;code\u0026gt;Article\u0026lt;\/code\u0026gt; model with attributes like \u0026lt;code\u0026gt;title\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;description\u0026lt;\/code\u0026gt;,  \u0026lt;code\u0026gt;author\u0026lt;\/code\u0026gt; as a Foreign Key to the user model, and a few other attributes which is not related to what we are trying to achieve right now or at least don\u0026#39;t require an explanation. We have a model method called \u0026lt;code\u0026gt;get_absolute_url\u0026lt;\/code\u0026gt; for getting a URL in order to redirect the client when the model instance is created or updated from the backend. You can definitely check out the details of these small components or templates in the project repository.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;python\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-python\u0026#34;\u0026gt;# articles\/models.py\n\n\nclass Article(TimeStampedModel):\n    class Article_Status(models.TextChoices):\n        DRAFT = (\n            \u0026#34;DRAFT\u0026#34;,\n            _(\u0026#34;Draft\u0026#34;),\n        )\n        PUBLISHED = (\n            \u0026#34;PUBLISHED\u0026#34;,\n            _(\u0026#34;Published\u0026#34;),\n        )\n\n    title = models.CharField(max_length=128)\n    description = models.CharField(max_length=256)\n    content = models.TextField(default=\u0026#34;\u0026#34;, null=False, blank=False)\n    status = models.CharField(\n        max_length=16,\n        choices=Article_Status.choices,\n        default=Article_Status.DRAFT,\n    )\n    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, null=True, blank=True)\n    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name=\u0026#34;author\u0026#34;)\n\n    def __str__(self):\n        return self.title\n\n    def get_absolute_url(self):      \n        return reverse(\u0026#39;articles:article-detail\u0026#39;, args=[str(self.id)])\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the below snippet, we have the forms defined in the article application for creating or updating of article instance.  We will be using model forms as our form data should contain fields related to a model in this case the \u0026lt;code\u0026gt;Article\u0026lt;\/code\u0026gt; model. So when we inherit the \u0026lt;code\u0026gt;forms.ModelForm\u0026lt;\/code\u0026gt; in our custom \u0026lt;code\u0026gt;ArticleForm\u0026lt;\/code\u0026gt; we simply need to specify the model and it will take in all the attributes of that model by default, but if we specify the \u0026lt;code\u0026gt;fields\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;exclude\u0026lt;\/code\u0026gt; tuples, it will include only or exclude only the provided list of attributes from the model.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We have also added the widgets for the form fields which will allow us to customize the way the fields in the template\/form will render. We can specify the HTML attributes like \u0026lt;code\u0026gt;width\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;height\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;style\u0026lt;\/code\u0026gt;, etc.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;article-form\u0026#34;\u0026gt;Article Form\u0026lt;\/h3\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;python\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-python\u0026#34;\u0026gt;# article\/forms.py\n\n\nfrom django import forms\nfrom .models import Article\n\n\nclass ArticleForm(forms.ModelForm):\n    class Meta:\n        model = Article\n        exclude = (\n            \u0026#34;created\u0026#34;,\n            \u0026#34;updated\u0026#34;,\n            \u0026#34;author\u0026#34;,\n        )\n        widgets = {\n            \u0026#34;title\u0026#34;: forms.TextInput(\n                attrs={\n                    \u0026#34;class\u0026#34;: \u0026#34;form-control\u0026#34;,\n                    \u0026#34;style\u0026#34;: \u0026#34;max-width: 450px; align: center;\u0026#34;,\n                    \u0026#34;placeholder\u0026#34;: \u0026#34;Title\u0026#34;,\n                }\n            ),\n            \u0026#34;description\u0026#34;: forms.TextInput(\n                attrs={\n                    \u0026#34;class\u0026#34;: \u0026#34;form-control\u0026#34;,\n                    \u0026#34;style\u0026#34;: \u0026#34;max-width: 900px; \u0026#34;,\n                    \u0026#34;placeholder\u0026#34;: \u0026#34;Description\u0026#34;,\n                }\n            ),\n            \u0026#34;content\u0026#34;: forms.Textarea(\n                attrs={\n                    \u0026#34;class\u0026#34;: \u0026#34;form-control post-body\u0026#34;,\n                    \u0026#34;id\u0026#34;: \u0026#34;text-content\u0026#34;,\n                    \u0026#34;style\u0026#34;: \u0026#34;max-width:900px;\u0026#34;,\n                    \u0026#34;hx-post\u0026#34;: \u0026#34;\/article\/meta\/\u0026#34;,\n                    \u0026#34;placeholder\u0026#34;: \u0026#34;Content\u0026#34;,\n                }\n            ),\n            \u0026#34;blog\u0026#34;: forms.Select(\n                attrs={\n                    \u0026#34;class\u0026#34;: \u0026#34;form-control\u0026#34;,\n                    \u0026#34;placeholder\u0026#34;: \u0026#34;Blog Publication\u0026#34;,\n                }\n            ),\n        }\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, these are my models and form files in the article app. Using htmx and without any javascript I want to update the form so that it picks up the front matter in the content field which is a text area and fills the title, description other attributes automatically for me.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This can be done in a lot of ways, but I will be sharing one of the ways that I recently used in my blog project. This process involves creating a class-based view and adding a \u0026lt;code\u0026gt;POST\u0026lt;\/code\u0026gt; method that won\u0026#39;t post any data to the backend but will send necessary data to the view.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s see the process before diving into any of the code:\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;gist-of-the-process\u0026#34;\u0026gt;Gist of the Process\u0026lt;\/h2\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Attach a \u0026lt;code\u0026gt;hx-post\u0026lt;\/code\u0026gt; attribute to the form field for sending the request to a view\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;When the request is sent, the data is loaded with \u0026lt;code\u0026gt;request.POST\u0026lt;\/code\u0026gt;, it is cleaned and converted in python-readable format with json.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Once we have the data, we try to use the \u0026lt;code\u0026gt;frontmatter.loads\u0026lt;\/code\u0026gt; function that will load the content and if we have a frontmatter in the text, it will load it as a \u0026lt;code\u0026gt;frontmatter.POST\u0026lt;\/code\u0026gt; object.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;We will extract \u0026lt;code\u0026gt;title\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;description\u0026lt;\/code\u0026gt;, and other data fields from the object.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;We will initialize a Form instance of Article, with the initial data values as the extracted data from the frontmatter.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Now we have two options:\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;If the article instance already exists i.e. we are updating the article\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Else we are creating a new article\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;Accordingly, we will load the form in the respective templates i.e. \u0026lt;code\u0026gt;update.html\u0026lt;\/code\u0026gt; for updating the existing articles and \u0026lt;code\u0026gt;article-form.html\u0026lt;\/code\u0026gt; for a new article.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;adding-htmx-magic\u0026#34;\u0026gt;Adding HTMX Magic\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;If you\u0026#39;d have seen we have a \u0026lt;code\u0026gt;hx-post\u0026lt;\/code\u0026gt; attribute in the \u0026lt;code\u0026gt;article\/forms.py\u0026lt;\/code\u0026gt; file, the \u0026lt;code\u0026gt;content\u0026lt;\/code\u0026gt; widget has a \u0026lt;code\u0026gt;hx-post\u0026lt;\/code\u0026gt; attribute which sends a post request to the \u0026lt;code\u0026gt;article\/meta\/\u0026lt;\/code\u0026gt; URL route. This route we will bind to the \u0026lt;code\u0026gt;ArticleMetaView\u0026lt;\/code\u0026gt; which we will define in a few moments. This is usually sent once we change a certain text in the content field, so we can modify it as per your requirement with \u0026lt;code\u0026gt;hx-trigger\u0026lt;\/code\u0026gt; that can enable us to specify the trigger event or the type of trigger we want. Further, you can read from the \u0026lt;a href=\u0026#34;https:\/\/htmx.org\/docs\/#trigger-modifiers\u0026#34;\u0026gt;htmx docs\u0026lt;\/a\u0026gt; about these triggers and other attributes.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;python\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-python\u0026#34;\u0026gt;# article\/urls.py\n\nfrom django.urls import path\nfrom . import views\n\napp_name = \u0026#34;articles\u0026#34;\n\nurlpatterns = [\n    path(\u0026#34;\u0026#34;, views.ArticleCreateView.as_view(), name=\u0026#34;article-create\u0026#34;),\n    path(\u0026#34;\u0026lt;int:pk\u0026gt;\/\u0026#34;, views.ArticleDetailView.as_view(), name=\u0026#34;article-detail\u0026#34;),\n    path(\u0026#34;delete\/\u0026lt;int:pk\u0026gt;\/\u0026#34;, views.ArticleDetailView.as_view(), name=\u0026#34;article-delete\u0026#34;),\n    path(\u0026#34;edit\/\u0026lt;int:pk\u0026gt;\u0026#34;, views.ArticleDetailView.as_view(), name=\u0026#34;article-update\u0026#34;),\n\n    # the new view that we will create\n    path(\u0026#34;meta\/\u0026#34;, views.ArticleMetaView.as_view(), name=\u0026#34;article-meta\u0026#34;),\n]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;h2 id=\u0026#34;capture-frontmatter-meta-data-view\u0026#34;\u0026gt;Capture Frontmatter Meta-data View\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Along with the Create, Detail\/List, Update, Delete View, I will create a separate class called \u0026lt;code\u0026gt;ArticleMetaView\u0026lt;\/code\u0026gt; that will fetch the form fields and render the templates again but this time it will fill in the frontmatter meta-data in the fields if the content is parsed with the relvant frontmatter.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;python\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-python\u0026#34;\u0026gt;# articles\/view.py\n\nclass ArticleMetaView(View):\n    model = Article\n\n    def post(self, request, *args, **kwargs):\n        \n        data = json.loads(json.dumps(dict(request.POST)))\n        loaded_frontmatter = frontmatter.loads(data[\u0026#39;content\u0026#39;][0])\n\n       # frontmatter has keys i.e. attributes like title, description, etc.\n        if dict(loaded_frontmatter):\n            article_title = loaded_frontmatter[\u0026#39;title\u0026#39;]\n            article_description = loaded_frontmatter[\u0026#39;description\u0026#39;]\n            form = ArticleForm(initial={\u0026#39;title\u0026#39;: article_title, \n            \u0026#39;description\u0026#39;: article_description, \u0026#39;content\u0026#39;: loaded_frontmatter.content})\n            context = {\u0026#39;form\u0026#39;: form}\n            article_list = Article.objects.filter(title=article_title)\n            if article_list:\n                article = article_list.last()\n                context[\u0026#39;article\u0026#39;] = article\n                return render(request, \u0026#39;articles\/edit_article.html\u0026#39;, context)\n            return render(request, \u0026#39;articles\/article_form.html\u0026#39;, context)\n\n        article_list = Article.objects.filter(title=data[\u0026#39;title\u0026#39;][0])\n       \n       # if the article title has been already taken i.e. we are updating an article\n\n        if article_list:\n            article = article_list.last()\n            form = ArticleForm(data=request.POST)\n            context = {\u0026#39;form\u0026#39;: form}\n            context[\u0026#39;article\u0026#39;] = article\n            return render(request, \u0026#39;articles\/edit_article.html\u0026#39;, context)\n\n        form = ArticleForm(data=request.POST)\n        context = {\u0026#39;form\u0026#39;: form}\n        return render(request, \u0026#39;articles\/article_form.html\u0026#39;, context)\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above \u0026lt;code\u0026gt;ArticleMetaView\u0026lt;\/code\u0026gt; we have created a \u0026lt;code\u0026gt;post\u0026lt;\/code\u0026gt; method as we want to get hold of the content from the form. So, we start by extracting and converting the \u0026lt;code\u0026gt;request.body\u0026lt;\/code\u0026gt; data into an appropriate type for easily working with python. So, the \u0026lt;code\u0026gt;request.body\u0026lt;\/code\u0026gt; will contain the data like \u0026lt;code\u0026gt;csrf_token\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;form_data\u0026lt;\/code\u0026gt;, etc. received from the frontend template. We store the received data as \u0026lt;code\u0026gt;data\u0026lt;\/code\u0026gt; and now from this data, we can load the content field which will have the content information.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Firstly we will extract the \u0026lt;code\u0026gt;request.body\u0026lt;\/code\u0026gt; which will contain the data from the form as we have made a \u0026lt;code\u0026gt;POST\u0026lt;\/code\u0026gt; request to this endpoint. For doing that we need to parse the content in a apropriate format such that it is python friendly. So we wrap the \u0026lt;code\u0026gt;request.body\u0026lt;\/code\u0026gt; into json format and then decode it back into the json string. This will give us the dict of the request data.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;python\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-python\u0026#34;\u0026gt;data = json.loads(json.dumps(dict(request.POST)))\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;{\u0026#39;csrfmiddlewaretoken\u0026#39;: [\u0026#39;bSYJxD39XH509tD1tZGd0WU21PUaKaLeqjjGbyzRvLXF4P8iIxb5l0fmTWVFjELQ\u0026#39;], \u0026#39;title\u0026#39;: [\u0026#39;test2\u0026#39;], \u0026#39;description\u0026#39;: [\u0026#39;test\u0026#39;], \u0026#39;content\u0026#39;: [\u0026#39;test something\u0026#39;], \u0026#39;status\u0026#39;: [\u0026#39;DRAFT\u0026#39;], \u0026#39;blog\u0026#39;: [\u0026#39;\u0026#39;]}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, this will grab the request data as a dict, we can then extract the data from this as it has data from the Form fields. We are interested in the content field in the Form, so we can get it by specifying the key \u0026lt;code\u0026gt;content\u0026lt;\/code\u0026gt; from the extracted data. But as we can see the data doesn\u0026#39;t contain the actual data instead it is wrapped in a list i.e. \u0026lt;code\u0026gt;[\u0026#39;test something\u0026#39;]\u0026lt;\/code\u0026gt;, so we will have to index it and then fetch it.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;python\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-python\u0026#34;\u0026gt;content_string = data[\u0026#39;content\u0026#39;][0]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This will give us the exact content field as a string. So, we can now move into extracting the frontmatter from the fields.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Now, we can use the \u0026lt;a href=\u0026#34;https:\/\/python-frontmatter.readthedocs.io\/en\/latest\/index.html\u0026#34;\u0026gt;frontmatter\u0026lt;\/a\u0026gt; library to parse the content into the \u0026lt;a href=\u0026#34;https:\/\/python-frontmatter.readthedocs.io\/en\/latest\/api.html#frontmatter.loads\u0026#34;\u0026gt;loads\u0026lt;\/a\u0026gt; funciton and extract the frontmatter if it is present in the content field. The frontmatter library has a \u0026lt;code\u0026gt;loads\u0026lt;\/code\u0026gt; function which takes in a string and can give out a \u0026lt;a href=\u0026#34;https:\/\/python-frontmatter.readthedocs.io\/en\/latest\/api.html#post-objects\u0026#34;\u0026gt;frontmatter.Post\u0026lt;\/a\u0026gt; object. The loads function is differnet from the \u0026lt;a href=\u0026#34;https:\/\/python-frontmatter.readthedocs.io\/en\/latest\/api.html#frontmatter.load\u0026#34;\u0026gt;load\u0026lt;\/a\u0026gt; function as the load frunciton is for reading data from a stream of bytes i.e. a file or othe related byte object. The differnece is subtle but it took a read at the \u0026lt;a href=\u0026#34;https:\/\/python-frontmatter.readthedocs.io\/en\/latest\/api.html#module-frontmatter\u0026#34;\u0026gt;documentation\u0026lt;\/a\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;python\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-python\u0026#34;\u0026gt;post = data[\u0026#39;content\u0026#39;][0]\nloaded_frontmatter = frontmatter.loads(post)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This wil load the content and give us a \u0026lt;code\u0026gt;frontmatter.Post\u0026lt;\/code\u0026gt; as said earlier. This will contain a dict with all the frontmatter if it has any and will by default parse the non-frontmatter data i.e. the remaining text into the \u0026lt;code\u0026gt;content\u0026lt;\/code\u0026gt; key. We need a chack if the Form field had any fronmatter this can be checked by the \u0026lt;code\u0026gt;dict(loaded_frontmatter)\u0026lt;\/code\u0026gt; which will return None if it cannot load the frontmatter.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;python\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-python\u0026#34;\u0026gt;loaded_frontmatter = frontmatter.loads(data[\u0026#39;content\u0026#39;][0])\nif dict(loaded_frontmatter):\n  print(loaded_frontmatter.keys())\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;dict_keys([\u0026#39;templateKey\u0026#39;, \u0026#39;title\u0026#39;, \u0026#39;description\u0026#39;, \u0026#39;date\u0026#39;, \u0026#39;status\u0026#39;])\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So once we have the frontmatter loaded we can get specific keys from it and initialize the form vaues to them. But we have made clear distictions that we want to perform a specific task if we have frontmatter keys in the content field of the Form else we can do something else.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;First let\u0026#39;s handle the loading of the frontmatter into the form. For doing that we will get all the required attributes from the frontmatter like \u0026lt;code\u0026gt;title\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;description\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;content\u0026lt;\/code\u0026gt;, etc which can be accessed normally as we extract the value from a key in a dict.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Once we have got those keys, we can start filling in the Form data with initial values. The \u0026lt;a href=\u0026#34;https:\/\/docs.djangoproject.com\/en\/4.0\/topics\/forms\/modelforms\/\u0026#34;\u0026gt;Django Model form\u0026lt;\/a\u0026gt; takes in a parameter like \u0026lt;a href=\u0026#34;https:\/\/docs.djangoproject.com\/en\/4.0\/topics\/forms\/modelforms\/#providing-initial-values\u0026#34;\u0026gt;initial\u0026lt;\/a\u0026gt; which can be a dict of the fiields along with the value that can be used for rendering the form initially when we load the template.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;python\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-python\u0026#34;\u0026gt;article_title = loaded_frontmatter[\u0026#39;title\u0026#39;]\narticle_description = loaded_frontmatter[\u0026#39;description\u0026#39;]\n\nform = ArticleForm(initial={\u0026#39;title\u0026#39;: article_title, \u0026#39;description\u0026#39;: article_description, \u0026#39;content\u0026#39;: loaded_frontmatter.content})\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This will take in a \u0026lt;code\u0026gt;ArticleForm\u0026lt;\/code\u0026gt; and fill the initial values like \u0026lt;code\u0026gt;title\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;description\u0026lt;\/code\u0026gt;, etc which we have provided in the dict with the values. Now, we need to parse this form in the current template or re-render the template. But before that, we need to parse this context into the template. We will create a dict with \u0026lt;code\u0026gt;form\u0026lt;\/code\u0026gt; as the key which can be used to render in the template.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Also, we have a two ways here, either the user is creating a new article or it is updating a existing article. We need to make sure that we preserve the initial fields in the form as we are updating the existing article. So, we can filter the article objects as per the title of the current title and then if we find a article with that title, we will parse the context with that article object.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;python\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-python\u0026#34;\u0026gt;article_list = Article.objects.filter(title=article_title)\nif article_list:\n    article = article_list.last()\n    context{\n      \u0026#39;form\u0026#39;: form,\n      \u0026#39;article\u0026#39;: article\n    }\n    return render(request, \u0026#39;articles\/edit_article.html\u0026#39;, context)\ncontext = {\u0026#39;form\u0026#39;: form}\nreturn render(request, \u0026#39;articles\/article_form.html\u0026#39;, context)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Now, we have form data along with the article instance used for rendering the form with appropriate content. So, this will work for editing an already existing article. For a new article, we have to simply parse the form to the template and it will render the title picked from the fotnmatter or leave it empty.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Similarly, for the article with no frontmatter we will iterate over the article and if the article\u0026#39;s title already exist, we will render the article data with the form else render the form with the parsed title and other meta-data in the form.\u0026lt;\/p\u0026gt;\n\u0026lt;!-- raw HTML omitted --\u0026gt;\n\u0026lt;p\u0026gt;So that is how we render the form data with frontmatter into appropriate meta-data in the form. We have used Django forms and make use of HTMX for the dynamic updation of form.\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "til\/django-form-load-frontmatter";
+                const type = "til";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'" aria-label="Editor">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Django Blog DevLog: Load Frontmatter data into Template/Model Form Fields</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2022-08-01 20:30:00">2022-08-01 20:30:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/til">til</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/django">#django</a>
+                
+                <a href="/tags/htmx">#htmx</a>
+                
+                <a href="/tags/python">#python</a>
+                
+            </div>
+            
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=til\/django-form-load-frontmatter&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>I have an Article Form where I load my post into it directly, it might have frontmatter. So what I wish to achieve is when I paste in the content, the frontmatter should be picked up and it should render the form fields like <code>title</code>, <code>description</code>, and then also remove the frontmatter from the content.</p>
+<p>To do that, we will require a model to work with and a form based on that model. We will exclude a few fields from that model so as to process these attributes on the server side. I am working on my Blog project which is a simple Django application.  You can get the source code for the project on the <a href="https://github.com/mr-destructive/techstructive-blog/">GitHub repository</a>.</p>
+<h2 id="django-project-context">Django Project Context</h2>
+<p>The techstructive-blog is a django project, which has a couple of applications currently, not in a good situation. There are apps like <code>article</code>, <code>blog</code>, and <code>user</code>. This project has templates and static folder in the base directory. The project is deployed on <a href="https://www.railway.app">railway</a> this is an always under development project, you can check out the <a href="https://django-blog.up.railway.app">techstructive-blog</a>. We can get the bits and pieces of the project details required for understanding what I want to do with the following sections.</p>
+<h3 id="article-model">Article Model</h3>
+<p>We have an <code>Article</code> model with attributes like <code>title</code>, <code>description</code>,  <code>author</code> as a Foreign Key to the user model, and a few other attributes which is not related to what we are trying to achieve right now or at least don't require an explanation. We have a model method called <code>get_absolute_url</code> for getting a URL in order to redirect the client when the model instance is created or updated from the backend. You can definitely check out the details of these small components or templates in the project repository.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># articles/models.py
+
+
+class Article(TimeStampedModel):
+    class Article_Status(models.TextChoices):
+        DRAFT = (
+            "DRAFT",
+            _("Draft"),
+        )
+        PUBLISHED = (
+            "PUBLISHED",
+            _("Published"),
+        )
+
+    title = models.CharField(max_length=128)
+    description = models.CharField(max_length=256)
+    content = models.TextField(default="", null=False, blank=False)
+    status = models.CharField(
+        max_length=16,
+        choices=Article_Status.choices,
+        default=Article_Status.DRAFT,
+    )
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, null=True, blank=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="author")
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):      
+        return reverse('articles:article-detail', args=[str(self.id)])
+</code></pre></div><p>In the below snippet, we have the forms defined in the article application for creating or updating of article instance.  We will be using model forms as our form data should contain fields related to a model in this case the <code>Article</code> model. So when we inherit the <code>forms.ModelForm</code> in our custom <code>ArticleForm</code> we simply need to specify the model and it will take in all the attributes of that model by default, but if we specify the <code>fields</code> or <code>exclude</code> tuples, it will include only or exclude only the provided list of attributes from the model.</p>
+<p>We have also added the widgets for the form fields which will allow us to customize the way the fields in the template/form will render. We can specify the HTML attributes like <code>width</code>, <code>height</code>, <code>style</code>, etc.</p>
+<h3 id="article-form">Article Form</h3>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># article/forms.py
+
+
+from django import forms
+from .models import Article
+
+
+class ArticleForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        exclude = (
+            "created",
+            "updated",
+            "author",
+        )
+        widgets = {
+            "title": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "style": "max-width: 450px; align: center;",
+                    "placeholder": "Title",
+                }
+            ),
+            "description": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "style": "max-width: 900px; ",
+                    "placeholder": "Description",
+                }
+            ),
+            "content": forms.Textarea(
+                attrs={
+                    "class": "form-control post-body",
+                    "id": "text-content",
+                    "style": "max-width:900px;",
+                    "hx-post": "/article/meta/",
+                    "placeholder": "Content",
+                }
+            ),
+            "blog": forms.Select(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Blog Publication",
+                }
+            ),
+        }
+
+</code></pre></div><p>So, these are my models and form files in the article app. Using htmx and without any javascript I want to update the form so that it picks up the front matter in the content field which is a text area and fills the title, description other attributes automatically for me.</p>
+<p>This can be done in a lot of ways, but I will be sharing one of the ways that I recently used in my blog project. This process involves creating a class-based view and adding a <code>POST</code> method that won't post any data to the backend but will send necessary data to the view.</p>
+<p>Let's see the process before diving into any of the code:</p>
+<h2 id="gist-of-the-process">Gist of the Process</h2>
+<ul>
+<li>Attach a <code>hx-post</code> attribute to the form field for sending the request to a view</li>
+<li>When the request is sent, the data is loaded with <code>request.POST</code>, it is cleaned and converted in python-readable format with json.</li>
+<li>Once we have the data, we try to use the <code>frontmatter.loads</code> function that will load the content and if we have a frontmatter in the text, it will load it as a <code>frontmatter.POST</code> object.</li>
+<li>We will extract <code>title</code>, <code>description</code>, and other data fields from the object.</li>
+<li>We will initialize a Form instance of Article, with the initial data values as the extracted data from the frontmatter.</li>
+<li>Now we have two options:
+<ul>
+<li>If the article instance already exists i.e. we are updating the article</li>
+<li>Else we are creating a new article</li>
+</ul>
+</li>
+</ul>
+<p>Accordingly, we will load the form in the respective templates i.e. <code>update.html</code> for updating the existing articles and <code>article-form.html</code> for a new article.</p>
+<h2 id="adding-htmx-magic">Adding HTMX Magic</h2>
+<p>If you'd have seen we have a <code>hx-post</code> attribute in the <code>article/forms.py</code> file, the <code>content</code> widget has a <code>hx-post</code> attribute which sends a post request to the <code>article/meta/</code> URL route. This route we will bind to the <code>ArticleMetaView</code> which we will define in a few moments. This is usually sent once we change a certain text in the content field, so we can modify it as per your requirement with <code>hx-trigger</code> that can enable us to specify the trigger event or the type of trigger we want. Further, you can read from the <a href="https://htmx.org/docs/#trigger-modifiers">htmx docs</a> about these triggers and other attributes.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># article/urls.py
+
+from django.urls import path
+from . import views
+
+app_name = "articles"
+
+urlpatterns = [
+    path("", views.ArticleCreateView.as_view(), name="article-create"),
+    path("<int:pk>/", views.ArticleDetailView.as_view(), name="article-detail"),
+    path("delete/<int:pk>/", views.ArticleDetailView.as_view(), name="article-delete"),
+    path("edit/<int:pk>", views.ArticleDetailView.as_view(), name="article-update"),
+
+    # the new view that we will create
+    path("meta/", views.ArticleMetaView.as_view(), name="article-meta"),
+]
+</code></pre></div><h2 id="capture-frontmatter-meta-data-view">Capture Frontmatter Meta-data View</h2>
+<p>Along with the Create, Detail/List, Update, Delete View, I will create a separate class called <code>ArticleMetaView</code> that will fetch the form fields and render the templates again but this time it will fill in the frontmatter meta-data in the fields if the content is parsed with the relvant frontmatter.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># articles/view.py
+
+class ArticleMetaView(View):
+    model = Article
+
+    def post(self, request, *args, **kwargs):
+        
+        data = json.loads(json.dumps(dict(request.POST)))
+        loaded_frontmatter = frontmatter.loads(data['content'][0])
+
+       # frontmatter has keys i.e. attributes like title, description, etc.
+        if dict(loaded_frontmatter):
+            article_title = loaded_frontmatter['title']
+            article_description = loaded_frontmatter['description']
+            form = ArticleForm(initial={'title': article_title, 
+            'description': article_description, 'content': loaded_frontmatter.content})
+            context = {'form': form}
+            article_list = Article.objects.filter(title=article_title)
+            if article_list:
+                article = article_list.last()
+                context['article'] = article
+                return render(request, 'articles/edit_article.html', context)
+            return render(request, 'articles/article_form.html', context)
+
+        article_list = Article.objects.filter(title=data['title'][0])
+       
+       # if the article title has been already taken i.e. we are updating an article
+
+        if article_list:
+            article = article_list.last()
+            form = ArticleForm(data=request.POST)
+            context = {'form': form}
+            context['article'] = article
+            return render(request, 'articles/edit_article.html', context)
+
+        form = ArticleForm(data=request.POST)
+        context = {'form': form}
+        return render(request, 'articles/article_form.html', context)
+
+</code></pre></div><p>In the above <code>ArticleMetaView</code> we have created a <code>post</code> method as we want to get hold of the content from the form. So, we start by extracting and converting the <code>request.body</code> data into an appropriate type for easily working with python. So, the <code>request.body</code> will contain the data like <code>csrf_token</code>, <code>form_data</code>, etc. received from the frontend template. We store the received data as <code>data</code> and now from this data, we can load the content field which will have the content information.</p>
+<p>Firstly we will extract the <code>request.body</code> which will contain the data from the form as we have made a <code>POST</code> request to this endpoint. For doing that we need to parse the content in a apropriate format such that it is python friendly. So we wrap the <code>request.body</code> into json format and then decode it back into the json string. This will give us the dict of the request data.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">data = json.loads(json.dumps(dict(request.POST)))
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>{'csrfmiddlewaretoken': ['bSYJxD39XH509tD1tZGd0WU21PUaKaLeqjjGbyzRvLXF4P8iIxb5l0fmTWVFjELQ'], 'title': ['test2'], 'description': ['test'], 'content': ['test something'], 'status': ['DRAFT'], 'blog': ['']}
+</code></pre></div><p>So, this will grab the request data as a dict, we can then extract the data from this as it has data from the Form fields. We are interested in the content field in the Form, so we can get it by specifying the key <code>content</code> from the extracted data. But as we can see the data doesn't contain the actual data instead it is wrapped in a list i.e. <code>['test something']</code>, so we will have to index it and then fetch it.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">content_string = data['content'][0]
+</code></pre></div><p>This will give us the exact content field as a string. So, we can now move into extracting the frontmatter from the fields.</p>
+<p>Now, we can use the <a href="https://python-frontmatter.readthedocs.io/en/latest/index.html">frontmatter</a> library to parse the content into the <a href="https://python-frontmatter.readthedocs.io/en/latest/api.html#frontmatter.loads">loads</a> funciton and extract the frontmatter if it is present in the content field. The frontmatter library has a <code>loads</code> function which takes in a string and can give out a <a href="https://python-frontmatter.readthedocs.io/en/latest/api.html#post-objects">frontmatter.Post</a> object. The loads function is differnet from the <a href="https://python-frontmatter.readthedocs.io/en/latest/api.html#frontmatter.load">load</a> function as the load frunciton is for reading data from a stream of bytes i.e. a file or othe related byte object. The differnece is subtle but it took a read at the <a href="https://python-frontmatter.readthedocs.io/en/latest/api.html#module-frontmatter">documentation</a>.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">post = data['content'][0]
+loaded_frontmatter = frontmatter.loads(post)
+</code></pre></div><p>This wil load the content and give us a <code>frontmatter.Post</code> as said earlier. This will contain a dict with all the frontmatter if it has any and will by default parse the non-frontmatter data i.e. the remaining text into the <code>content</code> key. We need a chack if the Form field had any fronmatter this can be checked by the <code>dict(loaded_frontmatter)</code> which will return None if it cannot load the frontmatter.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">loaded_frontmatter = frontmatter.loads(data['content'][0])
+if dict(loaded_frontmatter):
+  print(loaded_frontmatter.keys())
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>dict_keys(['templateKey', 'title', 'description', 'date', 'status'])
+</code></pre></div><p>So once we have the frontmatter loaded we can get specific keys from it and initialize the form vaues to them. But we have made clear distictions that we want to perform a specific task if we have frontmatter keys in the content field of the Form else we can do something else.</p>
+<p>First let's handle the loading of the frontmatter into the form. For doing that we will get all the required attributes from the frontmatter like <code>title</code>, <code>description</code>, <code>content</code>, etc which can be accessed normally as we extract the value from a key in a dict.</p>
+<p>Once we have got those keys, we can start filling in the Form data with initial values. The <a href="https://docs.djangoproject.com/en/4.0/topics/forms/modelforms/">Django Model form</a> takes in a parameter like <a href="https://docs.djangoproject.com/en/4.0/topics/forms/modelforms/#providing-initial-values">initial</a> which can be a dict of the fiields along with the value that can be used for rendering the form initially when we load the template.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">article_title = loaded_frontmatter['title']
+article_description = loaded_frontmatter['description']
+
+form = ArticleForm(initial={'title': article_title, 'description': article_description, 'content': loaded_frontmatter.content})
+</code></pre></div><p>This will take in a <code>ArticleForm</code> and fill the initial values like <code>title</code>, <code>description</code>, etc which we have provided in the dict with the values. Now, we need to parse this form in the current template or re-render the template. But before that, we need to parse this context into the template. We will create a dict with <code>form</code> as the key which can be used to render in the template.</p>
+<p>Also, we have a two ways here, either the user is creating a new article or it is updating a existing article. We need to make sure that we preserve the initial fields in the form as we are updating the existing article. So, we can filter the article objects as per the title of the current title and then if we find a article with that title, we will parse the context with that article object.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">article_list = Article.objects.filter(title=article_title)
+if article_list:
+    article = article_list.last()
+    context{
+      'form': form,
+      'article': article
+    }
+    return render(request, 'articles/edit_article.html', context)
+context = {'form': form}
+return render(request, 'articles/article_form.html', context)
+</code></pre></div><p>Now, we have form data along with the article instance used for rendering the form with appropriate content. So, this will work for editing an already existing article. For a new article, we have to simply parse the form to the template and it will render the title picked from the fotnmatter or leave it empty.</p>
+<p>Similarly, for the article with no frontmatter we will iterate over the article and if the article's title already exist, we will render the article data with the form else render the form with the parsed title and other meta-data in the form.</p>
+<!-- raw HTML omitted -->
+<p>So that is how we render the form data with frontmatter into appropriate meta-data in the form. We have used Django forms and make use of HTMX for the dynamic updation of form.</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/til/vimscript-to-lua-keymapper" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Map Vimscript Keymaps to Lua with a single function</span>
+        </a>
+        
+
+        
+        
+        <a href="/til/django-list-models" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Django: Get list of all models and associated fields in a django project</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/django-htmx-chat-app" class="related-link">
+                <span class="related-post-title">Creating a Chat Application with Django and HTMX</span>
+                <span class="related-post-date">2023-02-05 17:15:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/django-htmx-crud" class="related-link">
+                <span class="related-post-title">Django &#43; HTMX CRUD application</span>
+                <span class="related-post-date">2022-07-31 12:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/til/django-non-clustered-index-pg" class="related-link">
+                <span class="related-post-title">Create a Non-Clustered Index in Django with Postgres as DB</span>
+                <span class="related-post-date">2022-11-10 22:10:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/til/django-bulk-update-queryset" class="related-link">
+                <span class="related-post-title">Django Bulk Update QuerySet objects</span>
+                <span class="related-post-date">2022-10-31 18:00:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/projects/django-mermaid" class="related-link">
+                <span class="related-post-title">Django-Mermaid</span>
+                <span class="related-post-date">2022-08-03 16:44:59</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

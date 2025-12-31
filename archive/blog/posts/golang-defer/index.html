@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Golang: Defer | Meet Gor</title>
+    <meta name="title" content="Golang: Defer | Meet Gor">
+    <meta name="description" content="Understanding the concpet of the defer keyword in golang">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/posts/golang-defer">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/posts/golang-defer">
+    <meta property="og:title" content="Golang: Defer">
+    <meta property="og:description" content="Understanding the concpet of the defer keyword in golang">
+    <meta property="og:image" content="https://meetgor-cdn.pages.dev/golang-016-defer.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Golang: Defer">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2022-06-29 22:30:00">
+    <meta property="article:modified_time" content="2022-06-29 22:30:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/posts/golang-defer">
+    <meta name="twitter:title" content="Golang: Defer">
+    <meta name="twitter:description" content="Understanding the concpet of the defer keyword in golang">
+    <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/golang-016-defer.png">
+    <meta name="twitter:image:alt" content="Golang: Defer">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/posts\/golang-defer"
+        },
+        "headline": "Golang: Defer",
+        "description": "Understanding the concpet of the defer keyword in golang",
+        "datePublished": "2022-06-29 22:30:00",
+        "dateModified": "2022-06-29 22:30:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        "image": "https:\/\/meetgor-cdn.pages.dev\/golang-016-defer.png",
+        "keywords": "go",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;In this part of the series, we will be taking a look at the \u0026lt;code\u0026gt;defer\u0026lt;\/code\u0026gt; keyword in golang. The defer keyword is used for delaying the function call in a particular block of program(function or a loop).\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;defer-keyword\u0026#34;\u0026gt;Defer Keyword\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;The \u0026lt;code\u0026gt;defer\u0026lt;\/code\u0026gt; keyword is an interesting keyword in golang, it basically holds up the execution of the statement until all the statements around the local scope has been executed. It is basically like a stack holding the execution of statements. You can have multiple defer keywords in the single code block(function or a loop), those will be called by the principle of \u0026lt;strong\u0026gt;first in last out\u0026lt;\/strong\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, let\u0026#39;s take a simple example, the syntax is quite simple just add \u0026lt;code\u0026gt;defer\u0026lt;\/code\u0026gt; before the statement you want to hold up.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport \u0026#34;fmt\u0026#34;\n\nfunc main() {\n\tfmt.Println(\u0026#34;First\u0026#34;)\n\tdefer fmt.Println(\u0026#34;Second Ahhh..\u0026#34;)\n\tfmt.Println(\u0026#34;Third\u0026#34;)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;go run defer.go                                                                                                               \n\nFirst\nThird\nSecond Ahhh..\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;As, you can see the function call \u0026lt;code\u0026gt;Second\u0026lt;\/code\u0026gt; was executed at the end of all the function calls in the main function. This is because of the defer keyword. It will halt or postpone the calling of a statement\/function before all the statements have bee executed in the local scope. This keyword can be stacked for calling different statements at the specific time in the state of the program.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;multiple-defer-keyword\u0026#34;\u0026gt;Multiple defer keyword\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We can understand the \u0026lt;code\u0026gt;defer\u0026lt;\/code\u0026gt; keyword in a better way if we modify the previous example a bit. We will use multiple defer statements in it for understanding the flow of the program.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport \u0026#34;fmt\u0026#34;\n\nfunc main() {\n\tfmt.Println(\u0026#34;bag\u0026#34;)\n\tdefer fmt.Println(\u0026#34;book\u0026#34;)\n\tdefer fmt.Println(\u0026#34;cap\u0026#34;)\n\tfmt.Println(\u0026#34;laptop\u0026#34;)\n\tdefer fmt.Println(\u0026#34;wallet\u0026#34;)\n\tfmt.Println(\u0026#34;headphones\u0026#34;)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;go run defer.go                                                                                                            \n\nbag\nlaptop\nheadphones\nwallet\ncap\nbook\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Here, we can see that the \u0026lt;code\u0026gt;bag\u0026lt;\/code\u0026gt; is printed out first, then \u0026lt;code\u0026gt;laptop\u0026lt;\/code\u0026gt; and then \u0026lt;code\u0026gt;headphones\u0026lt;\/code\u0026gt;, but after these, we have maintained a stack for calling out the defer statements.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Initially, consider a empty stack \u0026lt;code\u0026gt;[]\u0026lt;\/code\u0026gt; for storing defer statements. Firstly, the \u0026lt;code\u0026gt;bag\u0026lt;\/code\u0026gt; statement will be printed. After printing the \u0026lt;code\u0026gt;bag\u0026lt;\/code\u0026gt; keyword, there is a defer key word, so we add the statement to the stack \u0026lt;code\u0026gt;[\u0026amp;quot;book\u0026amp;quot;]\u0026lt;\/code\u0026gt;. Just for convenience, ignore the function syntax and the actual statements, just focus on what is printed when. So, we have printed \u0026lt;code\u0026gt;bag\u0026lt;\/code\u0026gt; and we have stack as \u0026lt;code\u0026gt;[\u0026amp;quot;book\u0026amp;quot;,]\u0026lt;\/code\u0026gt;. We again encounter a \u0026lt;code\u0026gt;defer\u0026lt;\/code\u0026gt; keyword, so we push the statement \u0026lt;code\u0026gt;cap\u0026lt;\/code\u0026gt; into the stack \u0026lt;code\u0026gt;[\u0026amp;quot;book\u0026amp;quot;, \u0026amp;quot;cap\u0026amp;quot;,]\u0026lt;\/code\u0026gt;. Further, we encounter the normal statement, so we print \u0026lt;code\u0026gt;\u0026amp;quot;laptop\u0026amp;quot;\u0026lt;\/code\u0026gt;. Next up, we encounter a defer keyword and thereby we push \u0026lt;code\u0026gt;\u0026amp;quot;wallet\u0026amp;quot;\u0026lt;\/code\u0026gt; into the stack, which then becomes \u0026lt;code\u0026gt;[\u0026amp;quot;book\u0026amp;quot;, \u0026amp;quot;cap\u0026amp;quot;, \u0026amp;quot;wallet\u0026amp;quot;]\u0026lt;\/code\u0026gt;. The last statement in the main function is \u0026lt;code\u0026gt;\u0026amp;quot;headphones\u0026amp;quot;\u0026lt;\/code\u0026gt;, so we print \u0026lt;code\u0026gt;\u0026amp;quot;headphones\u0026amp;quot;\u0026lt;\/code\u0026gt; with the \u0026lt;code\u0026gt;Println\u0026lt;\/code\u0026gt; function. Since, there are no further statements to execute in the main function, we start poping out the function calls from the stack. Remember last in first out, so we will print the statement which were pushed last into the stack. Since the stack is \u0026lt;code\u0026gt;[\u0026amp;quot;book\u0026amp;quot;, \u0026amp;quot;cap\u0026amp;quot;, \u0026amp;quot;wallet\u0026amp;quot;]\u0026lt;\/code\u0026gt;, so we will pop out \u0026lt;code\u0026gt;\u0026amp;quot;wallet\u0026amp;quot;\u0026lt;\/code\u0026gt; from the stack since we have pushed it last in the stack. Thereby we print \u0026lt;code\u0026gt;\u0026amp;quot;wallet\u0026amp;quot;\u0026lt;\/code\u0026gt; after \u0026lt;code\u0026gt;\u0026amp;quot;headphones\u0026amp;quot;\u0026lt;\/code\u0026gt; and the stack now becomes \u0026lt;code\u0026gt;[\u0026amp;quot;book\u0026amp;quot;, \u0026amp;quot;cap\u0026amp;quot;]\u0026lt;\/code\u0026gt;. Next, we have to pop out the second last element that we pushed into the stack which was \u0026lt;code\u0026gt;\u0026amp;quot;cap\u0026amp;quot;\u0026lt;\/code\u0026gt;, thus we print \u0026lt;code\u0026gt;\u0026amp;quot;cap\u0026amp;quot;\u0026lt;\/code\u0026gt;. The stack only has one element in the stack and we pop out that as well which is \u0026lt;code\u0026gt;\u0026amp;quot;book\u0026amp;quot;\u0026lt;\/code\u0026gt;. So, this is how the defer keyword stacks up in golang.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;NOTE: The defer keyword calls functions after the execution of all other functions in it\u0026#39;s scope but the parameters are evaluated before handed which means just the function is executed later, but the parameters are already loaded\u0026lt;\/strong\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;defer-keyword-in-function-call\u0026#34;\u0026gt;defer keyword in function call\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;The defer keyword is quite similarly used while calling the functions. The \u0026lt;code\u0026gt;fmt.Println\u0026lt;\/code\u0026gt; is also a function, but writing custom functions gives a different feeling to us.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport \u0026#34;fmt\u0026#34;\n\nfunc square(x int) int {\n\tfmt.Println(x * x)\n\treturn x * x\n}\n\nfunc main() {\n\t\/\/ defer keyword in function\n\tdefer square(12)\n\tdefer square(10)\n\tsquare(15)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;go run defer.go                                                                                                            \n\n225\n100\n144\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, we have created the \u0026lt;code\u0026gt;square\u0026lt;\/code\u0026gt; function and called it thrice and twice we have used the \u0026lt;code\u0026gt;defer\u0026lt;\/code\u0026gt; keyword. The defer keyword first pushes the function call \u0026lt;code\u0026gt;square(12)\u0026lt;\/code\u0026gt; to the stack, so the stack is \u0026lt;code\u0026gt;[square(12) ]\u0026lt;\/code\u0026gt;. Next, we again have the defer keyword, so we push the \u0026lt;code\u0026gt;square(10)\u0026lt;\/code\u0026gt; to the stack which becomes \u0026lt;code\u0026gt;[square(12) square(10)]\u0026lt;\/code\u0026gt;. The next statement is immediately called the function \u0026lt;code\u0026gt;square(15)\u0026lt;\/code\u0026gt; and thereby we end the main function. So, we have to pop the function calls from the stack. The last element \u0026lt;code\u0026gt;square(10)\u0026lt;\/code\u0026gt; is called first and then the only call to the \u0026lt;code\u0026gt;square(12)\u0026lt;\/code\u0026gt;. Thereby, the order of the calling becomes \u0026lt;code\u0026gt;225 100 144\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That\u0026#39;s it from this part. Reference for all the code examples and commands can be found in the \u0026lt;a href=\u0026#34;https:\/\/github.com\/mr-destructive\/100-days-of-golang\/tree\/main\/scripts\/defer\/defer.go\u0026#34;\u0026gt;100 days of Golang\u0026lt;\/a\u0026gt; GitHub repository.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;So, from this post, we were able to understand the defer keyword in golang. We were able to explore how we can delay the calling of a function in a particular scope of the program.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Thank you for reading, if you have any queries, feedback, or questions, you can freely ask me on my social handles. Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "posts\/golang-defer";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Golang: Defer</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2022-06-29 22:30:00">2022-06-29 22:30:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/100-days-of-golang" class="series-link">📖 100-days-of-golang</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>In this part of the series, we will be taking a look at the <code>defer</code> keyword in golang. The defer keyword is used for delaying the function call in a particular block of program(function or a loop).</p>
+<h2 id="defer-keyword">Defer Keyword</h2>
+<p>The <code>defer</code> keyword is an interesting keyword in golang, it basically holds up the execution of the statement until all the statements around the local scope has been executed. It is basically like a stack holding the execution of statements. You can have multiple defer keywords in the single code block(function or a loop), those will be called by the principle of <strong>first in last out</strong>.</p>
+<p>So, let's take a simple example, the syntax is quite simple just add <code>defer</code> before the statement you want to hold up.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("First")
+	defer fmt.Println("Second Ahhh..")
+	fmt.Println("Third")
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>go run defer.go                                                                                                               
+
+First
+Third
+Second Ahhh..
+</code></pre></div><p>As, you can see the function call <code>Second</code> was executed at the end of all the function calls in the main function. This is because of the defer keyword. It will halt or postpone the calling of a statement/function before all the statements have bee executed in the local scope. This keyword can be stacked for calling different statements at the specific time in the state of the program.</p>
+<h3 id="multiple-defer-keyword">Multiple defer keyword</h3>
+<p>We can understand the <code>defer</code> keyword in a better way if we modify the previous example a bit. We will use multiple defer statements in it for understanding the flow of the program.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("bag")
+	defer fmt.Println("book")
+	defer fmt.Println("cap")
+	fmt.Println("laptop")
+	defer fmt.Println("wallet")
+	fmt.Println("headphones")
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>go run defer.go                                                                                                            
+
+bag
+laptop
+headphones
+wallet
+cap
+book
+</code></pre></div><p>Here, we can see that the <code>bag</code> is printed out first, then <code>laptop</code> and then <code>headphones</code>, but after these, we have maintained a stack for calling out the defer statements.</p>
+<p>Initially, consider a empty stack <code>[]</code> for storing defer statements. Firstly, the <code>bag</code> statement will be printed. After printing the <code>bag</code> keyword, there is a defer key word, so we add the statement to the stack <code>[&quot;book&quot;]</code>. Just for convenience, ignore the function syntax and the actual statements, just focus on what is printed when. So, we have printed <code>bag</code> and we have stack as <code>[&quot;book&quot;,]</code>. We again encounter a <code>defer</code> keyword, so we push the statement <code>cap</code> into the stack <code>[&quot;book&quot;, &quot;cap&quot;,]</code>. Further, we encounter the normal statement, so we print <code>&quot;laptop&quot;</code>. Next up, we encounter a defer keyword and thereby we push <code>&quot;wallet&quot;</code> into the stack, which then becomes <code>[&quot;book&quot;, &quot;cap&quot;, &quot;wallet&quot;]</code>. The last statement in the main function is <code>&quot;headphones&quot;</code>, so we print <code>&quot;headphones&quot;</code> with the <code>Println</code> function. Since, there are no further statements to execute in the main function, we start poping out the function calls from the stack. Remember last in first out, so we will print the statement which were pushed last into the stack. Since the stack is <code>[&quot;book&quot;, &quot;cap&quot;, &quot;wallet&quot;]</code>, so we will pop out <code>&quot;wallet&quot;</code> from the stack since we have pushed it last in the stack. Thereby we print <code>&quot;wallet&quot;</code> after <code>&quot;headphones&quot;</code> and the stack now becomes <code>[&quot;book&quot;, &quot;cap&quot;]</code>. Next, we have to pop out the second last element that we pushed into the stack which was <code>&quot;cap&quot;</code>, thus we print <code>&quot;cap&quot;</code>. The stack only has one element in the stack and we pop out that as well which is <code>&quot;book&quot;</code>. So, this is how the defer keyword stacks up in golang.</p>
+<p><strong>NOTE: The defer keyword calls functions after the execution of all other functions in it's scope but the parameters are evaluated before handed which means just the function is executed later, but the parameters are already loaded</strong></p>
+<h3 id="defer-keyword-in-function-call">defer keyword in function call</h3>
+<p>The defer keyword is quite similarly used while calling the functions. The <code>fmt.Println</code> is also a function, but writing custom functions gives a different feeling to us.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import "fmt"
+
+func square(x int) int {
+	fmt.Println(x * x)
+	return x * x
+}
+
+func main() {
+	// defer keyword in function
+	defer square(12)
+	defer square(10)
+	square(15)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>go run defer.go                                                                                                            
+
+225
+100
+144
+</code></pre></div><p>So, we have created the <code>square</code> function and called it thrice and twice we have used the <code>defer</code> keyword. The defer keyword first pushes the function call <code>square(12)</code> to the stack, so the stack is <code>[square(12) ]</code>. Next, we again have the defer keyword, so we push the <code>square(10)</code> to the stack which becomes <code>[square(12) square(10)]</code>. The next statement is immediately called the function <code>square(15)</code> and thereby we end the main function. So, we have to pop the function calls from the stack. The last element <code>square(10)</code> is called first and then the only call to the <code>square(12)</code>. Thereby, the order of the calling becomes <code>225 100 144</code>.</p>
+<p>That's it from this part. Reference for all the code examples and commands can be found in the <a href="https://github.com/mr-destructive/100-days-of-golang/tree/main/scripts/defer/defer.go">100 days of Golang</a> GitHub repository.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>So, from this post, we were able to understand the defer keyword in golang. We were able to explore how we can delay the calling of a function in a particular scope of the program.</p>
+<p>Thank you for reading, if you have any queries, feedback, or questions, you can freely ask me on my social handles. Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/golang-strings" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Golang: String Manipulation</span>
+        </a>
+        
+
+        
+        
+        <a href="/posts/golang-anonymous-functions" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Golang: Anonymous Functions</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-delete-method" class="related-link">
+                <span class="related-post-title">Golang Web: DELETE Method</span>
+                <span class="related-post-date">2025-01-12 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-patch-method" class="related-link">
+                <span class="related-post-title">Golang Web: PATCH Method</span>
+                <span class="related-post-date">2025-01-11 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-5" class="related-link">
+                <span class="related-post-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+                <span class="related-post-date">2024-12-11 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-4" class="related-link">
+                <span class="related-post-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+                <span class="related-post-date">2024-12-09 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-3" class="related-link">
+                <span class="related-post-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+                <span class="related-post-date">2024-12-07 20:45:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

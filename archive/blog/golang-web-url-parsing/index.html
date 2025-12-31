@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Golang Web: URL Parsing | Meet Gor</title>
+    <meta name="title" content="Golang Web: URL Parsing | Meet Gor">
+    <meta name="description" content="Understanding the fundamentals of web development with URL parsing in Golang. Intro to the net package in golang.">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/golang-web-url-parsing">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/golang-web-url-parsing">
+    <meta property="og:title" content="Golang Web: URL Parsing">
+    <meta property="og:description" content="Understanding the fundamentals of web development with URL parsing in Golang. Intro to the net package in golang.">
+    <meta property="og:image" content="https://meetgor-cdn.pages.dev/100-days-of-golang/golang-032-url-parsing.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Golang Web: URL Parsing">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2023-09-05 21:30:00">
+    <meta property="article:modified_time" content="2023-09-05 21:30:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/golang-web-url-parsing">
+    <meta name="twitter:title" content="Golang Web: URL Parsing">
+    <meta name="twitter:description" content="Understanding the fundamentals of web development with URL parsing in Golang. Intro to the net package in golang.">
+    <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/100-days-of-golang/golang-032-url-parsing.png">
+    <meta name="twitter:image:alt" content="Golang Web: URL Parsing">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/golang-web-url-parsing"
+        },
+        "headline": "Golang Web: URL Parsing",
+        "description": "Understanding the fundamentals of web development with URL parsing in Golang. Intro to the net package in golang.",
+        "datePublished": "2023-09-05 21:30:00",
+        "dateModified": "2023-09-05 21:30:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        "image": "https:\/\/meetgor-cdn.pages.dev\/100-days-of-golang\/golang-032-url-parsing.png",
+        "keywords": "go",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We have done around 32 posts on the fundamental concepts in golang, With that basic foundation, I\u0026#39;d like to start with the new section of this series which will be a major one as \u0026lt;code\u0026gt;web-development\u0026lt;\/code\u0026gt;. This section will have nearly 40-50 posts, this will cover the fundamental concepts for web development like APIs, Database integrations, Authentication and Authorizations, Web applications, static sites, etc.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;what-is-a-url\u0026#34;\u0026gt;What is a URL?\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;A URL is a Uniform Resource Locator. It is a string of characters that identifies a resource on the Internet. URLs are the building blocks of the web, allowing us to access websites, documents, and data with just a click. URLs are all over the place, if we want to build a strong foundation in web development, it\u0026#39;s quite important to understand what URLs actually mean and what can they store.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;A URL looks something like this:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;[scheme:][\/\/[userinfo@]host][\/]path[?query][#fragment]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Not all the URLs are like this, majority of the URLs that the common user sees are simply the ones with the \u0026lt;code\u0026gt;scheme\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;host\u0026lt;\/code\u0026gt;, and \u0026lt;code\u0026gt;paths\u0026lt;\/code\u0026gt;. However other components are equally important and are vital in the exchanging of information over the network.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;scheme\u0026lt;\/code\u0026gt; is the protocol used for accessing the resource like \u0026lt;code\u0026gt;http\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;https\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;ftp\u0026lt;\/code\u0026gt;, etc.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;userinfo\u0026lt;\/code\u0026gt; is the username and password used to access the resource.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;host\u0026lt;\/code\u0026gt; is the domain name of the resource.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;path\u0026lt;\/code\u0026gt; is the path or folder to the resource.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;query\u0026lt;\/code\u0026gt; is the query string of the resource. It is usually a key-value pair as a paramter to access resources.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;fragment\u0026lt;\/code\u0026gt; is used as a reference within the resource.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;We will see the use cases of most of them throughout this series for example, the \u0026lt;code\u0026gt;userinfo\u0026lt;\/code\u0026gt; is commonly used in accessing databases over the internet\/cloud. The query parameters will be used in making dynamic API calls, etc.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;basic-url-parsing\u0026#34;\u0026gt;Basic URL Parsing\u0026lt;\/h2\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/url\u0026#34;\n)\n\nfunc main() {\n\t\/\/ simple url\n\turlString := \u0026#34;http:\/\/www.google.com\u0026#34;\n\tparsedUrl, err := url.Parse(urlString)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tfmt.Println(parsedUrl)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run main.go\n\nhttp:\/\/www.google.com\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, what is getting parsed here, we gave the URL as a string we get the URL back, the only difference is that instead of the URL being a string, it is now a structure of components. For instance, we want the protocol the host name, the port, etc. from the URL.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;fmt.Printf(\u0026#34;%T\n\u0026#34;, parsedUrl)\n\/\/ *url.URL\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The \u0026lt;code\u0026gt;parsedUrl\u0026lt;\/code\u0026gt; is a pointer to a \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url#URL\u0026#34;\u0026gt;url.URL\u0026lt;\/a\u0026gt; structure. The structure \u0026lt;code\u0026gt;url.URL\u0026lt;\/code\u0026gt; has a lot of components to it like \u0026lt;code\u0026gt;Scheme\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;Host\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;User\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;Path\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;RawQuery\u0026lt;\/code\u0026gt;, etc. We will dive into each of these soon.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We could get those specific components ourselves, but that would be a bit tedious and might be even prone to bugs.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s try to get those components from the URL without any functions, just string manipulation.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n    \u0026#34;fmt\u0026#34;\n)\n\nfunc main() {\n    urlString := \u0026#34;http:\/\/www.google.com\u0026#34;\n    protocol := urlString.split(\u0026#34;:\u0026#34;)[0]\n    hostName := urlString.split(\u0026#34;\/\/\u0026#34;)[1]\n    fmt.Println(protocol)\n    fmt.Println(hostName)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This might work for a simple URL, but what if we have more complex URLs which have paths, query parameters, fragments, username, port, etc? This could mess up quickly if we tried to get the parts of the URL ourselves. So, golang has a package called \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url\u0026#34;\u0026gt;net\/url\u0026lt;\/a\u0026gt; explicitly for parsing URLs.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;strings\u0026#34;\n)\n\nfunc main() {\n\turlString := []string{\u0026#34;http:\/\/www.google.com\u0026#34;,\n\t\t\u0026#34;http:\/\/www.google.com\/about\/\u0026#34;,\n\t\t\u0026#34;http:\/\/www.google.com\/about?q=hello\u0026#34;,\n\t\t\u0026#34;http:\/\/www.google.com:8080\/about?q=hello\u0026#34;,\n\t\t\u0026#34;http:\/\/user:password@example.com:8080\/path\/to\/resource?query=value#fragment\u0026#34;,\n\t}\n\tfor _, url := range urlString {\n\t\thostStr := strings.Split(url, \u0026#34;\/\/\u0026#34;)[1]\n        hostName := strings.Split(hostStr, \u0026#34;\/\u0026#34;)[0]\n\t\tfmt.Println(hostName)\n\t}\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run main.go\n\nwww.google.com\nwww.google.com\nwww.google.com\nwww.google.com:8080\nuser:password@example.com:8080\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above code might work for most of the URLs, but what if we have a more complex URL like the one with \u0026lt;code\u0026gt;port\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;user\u0026lt;\/code\u0026gt;, it doesn\u0026#39;t give the thing we want exactly. In the above example, we have created a list of URLs as strings and simply iterated over each of the \u0026lt;code\u0026gt;url\u0026lt;\/code\u0026gt; in the \u0026lt;code\u0026gt;urlString\u0026lt;\/code\u0026gt;. Thereafter, we split the \u0026lt;code\u0026gt;url\u0026lt;\/code\u0026gt; on \u0026lt;code\u0026gt;\/\/\u0026lt;\/code\u0026gt; so we get \u0026lt;code\u0026gt;https:\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;www.google.com\u0026lt;\/code\u0026gt;, if we want the host\/domain name, we could simply get the \u0026lt;code\u0026gt;1\u0026lt;\/code\u0026gt; index in the slice since the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/strings#Split\u0026#34;\u0026gt;strings.Split\u0026lt;\/a\u0026gt; method returns a slice after splitting the string with the provided separator. The \u0026lt;code\u0026gt;hostName\u0026lt;\/code\u0026gt; could be fetched from the \u0026lt;code\u0026gt;1\u0026lt;\/code\u0026gt; index. However, this time for the 2nd element in the list, we have \u0026lt;code\u0026gt;https:\/\/www.google.com\/about\u0026lt;\/code\u0026gt;, which would return \u0026lt;code\u0026gt;www.google.com\/about\u0026lt;\/code\u0026gt; as the hostname which is not ideal, so we will again have to split this string with \u0026lt;code\u0026gt;\/\u0026lt;\/code\u0026gt; and grab the first part i.e. 0th index.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The above code would work for \u0026lt;code\u0026gt;paths\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;query\u0026lt;\/code\u0026gt; parameters but if we had ports, and username, and password, it would not work as expected as evident from the last 2 examples in the list.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, now we know the downsides of manually parsing the URLs, we can use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url\u0026#34;\u0026gt;net\/url\u0026lt;\/a\u0026gt; package to do it for us.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;parsing-db-urls\u0026#34;\u0026gt;Parsing DB URLs\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Databases have a connection URL or connection string which provides a standard way to connect to a database\/database server. The format of the URL is just the \u0026lt;code\u0026gt;URL\u0026lt;\/code\u0026gt; with all the components from the \u0026lt;code\u0026gt;scheme\u0026lt;\/code\u0026gt; to the \u0026lt;code\u0026gt;path\u0026lt;\/code\u0026gt;. The common examples of some database connection URLs might include:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;# PostgreSQL DB Connection URL\/string\npostgresql:\/\/username:password@hostname:port\/database_name\n\n# MongoDB Connection URL\/string\nmongodb:\/\/username:password@hostname:port\/database_name\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above are examples of the Postgres and MongoDB connection URLs, they have a \u0026lt;code\u0026gt;protocol\u0026lt;\/code\u0026gt; which usually for databases is their short name, the user credentials i.e. \u0026lt;code\u0026gt;username\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;password\u0026lt;\/code\u0026gt;, the \u0026lt;code\u0026gt;hostname\u0026lt;\/code\u0026gt; i.e. the server IP address, the \u0026lt;code\u0026gt;port\u0026lt;\/code\u0026gt; on which the database is running, and finally the path as the \u0026lt;code\u0026gt;database name\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We can construct a simple snippet in golang to grab all the details from the simple connection URL string with the \u0026lt;code\u0026gt;net\/url\u0026lt;\/code\u0026gt; package.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/url\u0026#34;\n)\n\nfunc main() {\n\t\/\/postgres db url\n\tdbUrl, err := url.Parse(\u0026#34;postgres:\/\/admin:pass1234@localhost:5432\/mydb\u0026#34;)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tfmt.Println(dbUrl)\n\tfmt.Println(\u0026#34;Scheme\/Protocol = \u0026#34;, dbUrl.Scheme)\n\tfmt.Println(\u0026#34;User = \u0026#34;, dbUrl.User)\n\t\/\/fmt.Println(\u0026#34;User = \u0026#34;, dbUrl.User.String())\n\tfmt.Println(\u0026#34;Username = \u0026#34;, dbUrl.User.Username())\n\tpassword, _ := dbUrl.User.Password()\n\tfmt.Println(\u0026#34;Password = \u0026#34;, password)\n\tfmt.Println(\u0026#34;Host = \u0026#34;, dbUrl.Host)\n\tfmt.Println(\u0026#34;HostName = \u0026#34;, dbUrl.Hostname())\n\tfmt.Println(\u0026#34;Port = \u0026#34;, dbUrl.Port())\n\tfmt.Println(\u0026#34;DB Name = \u0026#34;, dbUrl.Path)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run main.go\n\npostgres:\/\/postgres:pass1234@localhost:5432\/mydb\nScheme\/Protocol =  postgres\nUser = admin:pass1234\nUsername =  admin\nPassword =  pass1234\nHost =  localhost:5432\nHostName =  localhost\nPort =  5432\nDB Name =  mydb\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above code, we have given the string \u0026lt;code\u0026gt;postgres:\/\/admin:pass1234@localhost:5432\/mydb\u0026lt;\/code\u0026gt;, and we have parsed the URL using the \u0026lt;code\u0026gt;net\/url\u0026lt;\/code\u0026gt; package. The result is we have a \u0026lt;code\u0026gt;parsedUrl\u0026lt;\/code\u0026gt; object which has all the components that can be accessed as either fields or methods. Let\u0026#39;s break down each field\/method we used in the above example:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;Scheme\u0026lt;\/code\u0026gt; is simply a string representing the protocol of the resource(URL).\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;User\u0026lt;\/code\u0026gt; is the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url#Userinfo\u0026#34;\u0026gt;UserInfo\u0026lt;\/a\u0026gt; object having immutable username and password fields.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;Username\u0026lt;\/code\u0026gt; is the method on \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url#Userinfo.Username\u0026#34;\u0026gt;UserInfo\u0026lt;\/a\u0026gt; that returns the string representing the username of the URL.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;Password\u0026lt;\/code\u0026gt; is the method on \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url#Userinfo.Password\u0026#34;\u0026gt;UserInfo\u0026lt;\/a\u0026gt; that returns the string representing the password of the URL.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;Host\u0026lt;\/code\u0026gt; is the field on \u0026lt;code\u0026gt;URL\u0026lt;\/code\u0026gt; as a string representing the host:port of the URL.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;Hostname\u0026lt;\/code\u0026gt; is the method on \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url#URL.Hostname\u0026#34;\u0026gt;URL\u0026lt;\/a\u0026gt; that returns the string representing the hostname of the URL.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;Port\u0026lt;\/code\u0026gt; is the method on \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url#URL.Port\u0026#34;\u0026gt;URL\u0026lt;\/a\u0026gt; that returns the string representing the port of the URL.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The \u0026lt;code\u0026gt;Path\u0026lt;\/code\u0026gt; is the field as the string representing the path of the URL.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;So, this is how we can get almost every detail like \u0026lt;code\u0026gt;db protocol\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;username\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;password\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;hostname\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;port\u0026lt;\/code\u0026gt;, and the \u0026lt;code\u0026gt;database name\u0026lt;\/code\u0026gt; from the database connection string URL.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;parsing-query-parameters\u0026#34;\u0026gt;Parsing Query Parameters\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We can even get the query parameters of a URL using the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url#URL.Query\u0026#34;\u0026gt;Query\u0026lt;\/a\u0026gt; method on the \u0026lt;code\u0026gt;URL\u0026lt;\/code\u0026gt; object. The \u0026lt;code\u0026gt;Query\u0026lt;\/code\u0026gt; method returns a \u0026lt;code\u0026gt;map[string][]string\u0026lt;\/code\u0026gt; which is to say a map with the key as \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt; and the value as a \u0026lt;code\u0026gt;[]string\u0026lt;\/code\u0026gt; slice of string. For example, if the URL is something like \u0026lt;code\u0026gt;https:\/\/google.com\/?q=hello\u0026lt;\/code\u0026gt;, the \u0026lt;code\u0026gt;Query\u0026lt;\/code\u0026gt; method will return \u0026lt;code\u0026gt;map[q:[hello]]\u0026lt;\/code\u0026gt; which means the key is \u0026lt;code\u0026gt;q\u0026lt;\/code\u0026gt; and the value is a list of strings of which the only element is \u0026lt;code\u0026gt;hello\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/url\u0026#34;\n)\n\nfunc main() {\n\t\/\/ a complex url with query params\n\turlStr := \u0026#34;http:\/\/www.google.com\/?q=hello\u0026amp;q=world\u0026amp;lang=en\u0026#34;\n\tparsedUrl, err := url.Parse(urlStr)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tfmt.Println(parsedUrl)\n\tfmt.Println(parsedUrl.Query())\n\tfor k, v := range parsedUrl.Query() {\n\t\tfmt.Println(\u0026#34;KEY:\u0026#34;, k)\n\t\tfor _, vv := range v {\n\t\t\tfmt.Println(vv)\n\t\t}\n\t}\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run main.go\n\nhttp:\/\/www.google.com\/?q=hello\u002bworld\u0026amp;lang=en\u0026amp;q=gopher\nmap[lang:[en] q:[hello world gopher]]\nKEY: q\nhello world\ngopher\nKEY: lang\nen\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We have taken a bit of a complex example that might cover many use cases of the \u0026lt;code\u0026gt;Query\u0026lt;\/code\u0026gt; method. We have a URL as \u0026lt;code\u0026gt;http:\/\/www.google.com\/?q=hello\u0026amp;amp;q=world\u0026amp;amp;lang=en\u0026lt;\/code\u0026gt;, and the \u0026lt;code\u0026gt;Query\u0026lt;\/code\u0026gt; method returns \u0026lt;code\u0026gt;map[lang:[en] q:[hello world]]\u0026lt;\/code\u0026gt; which means the \u0026lt;code\u0026gt;q\u0026lt;\/code\u0026gt; key has a slice of a string with elements \u0026lt;code\u0026gt;hello world\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;gopher\u0026lt;\/code\u0026gt; and the \u0026lt;code\u0026gt;lang\u0026lt;\/code\u0026gt; key has a value of \u0026lt;code\u0026gt;en\u0026lt;\/code\u0026gt;. Here, the first paramter, \u0026lt;code\u0026gt;q=hello\u002bworld\u0026lt;\/code\u0026gt; is basically \u0026lt;code\u0026gt;hello world\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;hello%20world\u0026lt;\/code\u0026gt;, which is to say escaping the space in the URL. We can have multiple values for the same key, which is evident as we have added \u0026lt;code\u0026gt;q=gopher\u0026lt;\/code\u0026gt; at the end of the \u0026lt;code\u0026gt;URL\u0026lt;\/code\u0026gt;, the key \u0026lt;code\u0026gt;q\u0026lt;\/code\u0026gt; has two elements in the slice as \u0026lt;code\u0026gt;hello world\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;gopher\u0026lt;\/code\u0026gt;. The \u0026lt;code\u0026gt;lang=en\u0026lt;\/code\u0026gt; is simply a key as \u0026lt;code\u0026gt;lang\u0026lt;\/code\u0026gt; with the only element as \u0026lt;code\u0026gt;en\u0026lt;\/code\u0026gt; in the slice. We use \u0026lt;code\u0026gt;\u0026amp;amp;\u0026lt;\/code\u0026gt; to separate different query parameters in the URL.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;checking-values-in-query-parameters\u0026#34;\u0026gt;Checking Values in Query Parameters\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We can even check the values in the query parameters without requiring the construction of for loops to find a particular value in a key. The \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url#Values\u0026#34;\u0026gt;Values\u0026lt;\/a\u0026gt; is a type that stores the map as a return value from the \u0026lt;code\u0026gt;Query\u0026lt;\/code\u0026gt; method. It has a few handy methods like:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url#Values.Has\u0026#34;\u0026gt;Has\u0026lt;\/a\u0026gt; to check if the key exists in the map (paramter as key \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt; and returns a \u0026lt;code\u0026gt;bool\u0026lt;\/code\u0026gt;).\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url#Values.Get\u0026#34;\u0026gt;Get\u0026lt;\/a\u0026gt; to fetch the first value of the given key as a string or if not present then returns an empty string (paramter as key \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt; and returns \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt;).\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url#Values.Add\u0026#34;\u0026gt;Add\u0026lt;\/a\u0026gt; method is used to append the value for a given key (paramter as key \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt; and value to be added as \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt;).\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url#Values.Set\u0026#34;\u0026gt;Set\u0026lt;\/a\u0026gt; method is used to replace the value for a given key if already exists (paramter as key \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt; and value as \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt;).\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url#Values.Del\u0026#34;\u0026gt;Del\u0026lt;\/a\u0026gt; method is used to delete the value for a given key (paramter as key \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt;).\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/url\u0026#34;\n)\n\nfunc main() {\n\t\/\/ a complex url with query params\n\turlStr := \u0026#34;http:\/\/www.google.com\/?q=hello\u002bworld\u0026amp;lang=en\u0026amp;q=gopher\u0026#34;\n\tparsedUrl, err := url.Parse(urlStr)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tfmt.Println(parsedUrl)\n\tfmt.Println(parsedUrl.Query())\n\n\tqueryParams := parsedUrl.Query()\n\n\tfmt.Println(queryParams.Get(\u0026#34;q\u0026#34;))\n\n\tfmt.Println(queryParams.Has(\u0026#34;q\u0026#34;))\n\n\tif queryParams.Has(\u0026#34;lang\u0026#34;) {\n\t\tfmt.Println(queryParams.Get(\u0026#34;lang\u0026#34;))\n\t}\n\n\tqueryParams.Add(\u0026#34;q\u0026#34;, \u0026#34;ferris\u0026#34;)\n\tfmt.Println(queryParams)\n\n\tqueryParams.Set(\u0026#34;q\u0026#34;, \u0026#34;books\u0026#34;)\n\tfmt.Println(queryParams)\n\n\tqueryParams.Del(\u0026#34;q\u0026#34;)\n\tfmt.Println(queryParams)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run main.go\n\nhttp:\/\/www.google.com\/?q=hello\u002bworld\u0026amp;lang=en\u0026amp;q=gopher\nhello world\ntrue\nen\nmap[lang:[en] q:[hello world gopher ferris]]\nmap[lang:[en] q:[books]]\nmap[lang:[en]]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above code example demonstrates almost all the methods available on the \u0026lt;code\u0026gt;Values\u0026lt;\/code\u0026gt; type. The \u0026lt;code\u0026gt;Get\u0026lt;\/code\u0026gt; method is used to fetch the first value for a given key, so we parse the key as a \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt; to the method and it would return a \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt;. We checked for the \u0026lt;code\u0026gt;q\u0026lt;\/code\u0026gt; as the key and it returned the first element in the \u0026lt;code\u0026gt;queryParams\u0026lt;\/code\u0026gt; for key \u0026lt;code\u0026gt;q\u0026lt;\/code\u0026gt; as \u0026lt;code\u0026gt;hello world\u0026lt;\/code\u0026gt; from the list \u0026lt;code\u0026gt;[hello world, gopher]\u0026lt;\/code\u0026gt;. The \u0026lt;code\u0026gt;Has\u0026lt;\/code\u0026gt; method takes in the paramter as key as \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt; and returns if the key exists in the \u0026lt;code\u0026gt;queryParams\u0026lt;\/code\u0026gt; or not as a bool. The \u0026lt;code\u0026gt;Add\u0026lt;\/code\u0026gt; method, we have used to \u0026lt;code\u0026gt;Add\u0026lt;\/code\u0026gt; a key with a particular value, we added the value \u0026lt;code\u0026gt;ferris\u0026lt;\/code\u0026gt; to the key \u0026lt;code\u0026gt;q\u0026lt;\/code\u0026gt; hence it appended to the list and the list of \u0026lt;code\u0026gt;queryParams[q]\u0026lt;\/code\u0026gt; became \u0026lt;code\u0026gt;[hello world, gopher, ferris]\u0026lt;\/code\u0026gt;. The \u0026lt;code\u0026gt;Set\u0026lt;\/code\u0026gt; method is used to override the existing key with a particular value, here we have set the value \u0026lt;code\u0026gt;books\u0026lt;\/code\u0026gt; to the key \u0026lt;code\u0026gt;q\u0026lt;\/code\u0026gt; and hence the list of \u0026lt;code\u0026gt;queryParams[q]\u0026lt;\/code\u0026gt; becomes \u0026lt;code\u0026gt;[books]\u0026lt;\/code\u0026gt;. We can use the \u0026lt;code\u0026gt;Del\u0026lt;\/code\u0026gt; method to remove the key from the \u0026lt;code\u0026gt;queryParams\u0026lt;\/code\u0026gt;, so we delete \u0026lt;code\u0026gt;q\u0026lt;\/code\u0026gt; from \u0026lt;code\u0026gt;queryParams\u0026lt;\/code\u0026gt;, then the \u0026lt;code\u0026gt;queryParams\u0026lt;\/code\u0026gt; simply has no key as \u0026lt;code\u0026gt;q\u0026lt;\/code\u0026gt; in it.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;parsing-query-parameters-to-string\u0026#34;\u0026gt;Parsing Query Parameters to String\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Now, that you have manipulated the query parameters, let\u0026#39;s say you want to construct back that string representation of the query particular or the URL for it. The \u0026lt;a href=\u0026#34;\u0026#34;\u0026gt;Encode\u0026lt;\/a\u0026gt; method is used to grab the \u0026lt;code\u0026gt;queryParams\u0026lt;\/code\u0026gt; i.e. \u0026lt;code\u0026gt;Values\u0026lt;\/code\u0026gt; object and convert it into the \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt; representation of the encoded URL.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/url\u0026#34;\n)\n\nfunc main() {\n\t\/\/ a complex url with query params\n\turlStr := \u0026#34;http:\/\/www.google.com\/?q=hello\u002bworld\u0026amp;lang=en\u0026amp;q=gopher\u0026#34;\n\tparsedUrl, err := url.Parse(urlStr)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n    queryParams := parsedUrl.Query()\n    queryParams.Add(\u0026#34;name\u0026#34;, \u0026#34;ferris\u0026#34;)\n\n    q := queryParams.Encode()\n    fmt.Println(q)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run main.go\n\nlang=en\u0026amp;name=ferris\u0026amp;q=hello\u002bworld\u0026amp;q=gopher\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, we can see the \u0026lt;code\u0026gt;Encode\u0026lt;\/code\u0026gt; method has given a query parameter in the form of a URL encoded string. We first grab the query parameters from the \u0026lt;code\u0026gt;parsedUrl\u0026lt;\/code\u0026gt; which is a \u0026lt;code\u0026gt;URL\u0026lt;\/code\u0026gt; object via the \u0026lt;code\u0026gt;Query\u0026lt;\/code\u0026gt; method, we then \u0026lt;code\u0026gt;Add\u0026lt;\/code\u0026gt; the key \u0026lt;code\u0026gt;name\u0026lt;\/code\u0026gt; with a value of \u0026lt;code\u0026gt;ferris\u0026lt;\/code\u0026gt; to the \u0026lt;code\u0026gt;queryParams\u0026lt;\/code\u0026gt;. This is then used to \u0026lt;code\u0026gt;Encode\u0026lt;\/code\u0026gt; the object back to a string representation. This could be useful to construct a query paramter for requesting other websites\/APIs.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;parsing-url-object-back-to-string\u0026#34;\u0026gt;Parsing URL object back to String\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We can even get the \u0026lt;code\u0026gt;URL\u0026lt;\/code\u0026gt; object back to a string representation using the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url#URL.String\u0026#34;\u0026gt;String\u0026lt;\/a\u0026gt; method on the \u0026lt;code\u0026gt;URL\u0026lt;\/code\u0026gt; object. The \u0026lt;code\u0026gt;String\u0026lt;\/code\u0026gt; method returns a \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt; representation of the URL object.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/url\u0026#34;\n)\n\nfunc main() {\n\turlStr := \u0026#34;http:\/\/www.google.com\/?q=hello\u002bworld\u0026amp;lang=en\u0026amp;q=gopher\u0026#34;\n\tfmt.Println(\u0026#34;URL:\u0026#34;, urlStr)\n\tparsedUrl, err := url.Parse(urlStr)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tqueryParams := parsedUrl.Query()\n\tqueryParams.Add(\u0026#34;name\u0026#34;, \u0026#34;ferris\u0026#34;)\n\n\tq := queryParams.Encode()\n\tfmt.Println(q)\n\tparsedUrl.RawQuery = q\n\tnewUrl := parsedUrl.String()\n\tfmt.Println(\u0026#34;New URL:\u0026#34;, newUrl)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run main.go\n\nURL: http:\/\/www.google.com\/?q=hello\u002bworld\u0026amp;lang=en\u0026amp;q=gopher\nlang=en\u0026amp;name=ferris\u0026amp;q=hello\u002bworld\u0026amp;q=gopher\nNew URL: http:\/\/www.google.com\/?lang=en\u0026amp;name=ferris\u0026amp;q=hello\u002bworld\u0026amp;q=gopher\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the example above, we parse a URL string into a \u0026lt;code\u0026gt;URL\u0026lt;\/code\u0026gt; object as \u0026lt;code\u0026gt;parsedUrl\u0026lt;\/code\u0026gt;, then we \u0026lt;code\u0026gt;Add\u0026lt;\/code\u0026gt; the key \u0026lt;code\u0026gt;name\u0026lt;\/code\u0026gt; with a value of \u0026lt;code\u0026gt;ferris\u0026lt;\/code\u0026gt; to the \u0026lt;code\u0026gt;queryParams\u0026lt;\/code\u0026gt;. We then \u0026lt;code\u0026gt;Encode\u0026lt;\/code\u0026gt; the \u0026lt;code\u0026gt;URL\u0026lt;\/code\u0026gt; object back to a string representation. But this won\u0026#39;t change the \u0026lt;code\u0026gt;parsedUrl\u0026lt;\/code\u0026gt; object we want to change the entire \u0026lt;code\u0026gt;URL\u0026lt;\/code\u0026gt; object. For that, we have overwritten the \u0026lt;code\u0026gt;RawQuery\u0026lt;\/code\u0026gt; field of the \u0026lt;code\u0026gt;URL\u0026lt;\/code\u0026gt; object with the query parameter encoded string as \u0026lt;code\u0026gt;q\u0026lt;\/code\u0026gt;. The \u0026lt;code\u0026gt;String\u0026lt;\/code\u0026gt; method returns a \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt; representation of the \u0026lt;code\u0026gt;URL\u0026lt;\/code\u0026gt; object.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;parsing-fragments\u0026#34;\u0026gt;Parsing Fragments\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;The fragment in a URL is usually present in a static website like \u0026lt;code\u0026gt;#about\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;#contact\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;#blog\u0026lt;\/code\u0026gt;, etc. The \u0026lt;code\u0026gt;Fragment\u0026lt;\/code\u0026gt; is a string that is usually a reference to a specific section or anchor point within a web page or resource. When a URL with a fragment is accessed, the web browser or user agent will scroll the page to display the section identified by the fragment.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/url\u0026#34;\n)\n\nfunc main() {\n\t\/\/ url with fragments\n\turlStr := \u0026#34;https:\/\/pkg.go.dev\/math\/rand#Norm Float64\u0026#34;\n\tparsedUrl, err := url.Parse(urlStr)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tfmt.Println(parsedUrl)\n\tfmt.Println(parsedUrl.Fragment)\n\tfmt.Println(parsedUrl.RawFragment)\n\tfmt.Println(parsedUrl.EscapedFragment())\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run main.go\n\nhttps:\/\/pkg.go.dev\/math\/rand#Norm Float64\n\nNorm Float64\nNorm Float64\nNorm%20Float64\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above code is used to fetch the \u0026lt;code\u0026gt;#Norm Float64\u0026lt;\/code\u0026gt; fragment from the URL \u0026lt;code\u0026gt;https:\/\/pkg.go.dev\/math\/rand#NormFloat64\u0026lt;\/code\u0026gt;. We can use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url#URL\u0026#34;\u0026gt;Fragment\u0026lt;\/a\u0026gt; field in the \u0026lt;code\u0026gt;URL\u0026lt;\/code\u0026gt; object to get the fragment text. There is \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url#URL\u0026#34;\u0026gt;RawFragment\u0026lt;\/a\u0026gt; field that is used to parse the fragment text as it is, without trying to escape any special characters in the URL. The \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url#URL.EscapedFragment\u0026#34;\u0026gt;EscapedFragment\u0026lt;\/a\u0026gt; is used to parse the fragment text by escaping the characters in the URL.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That\u0026#39;s it from the 32nd part of the series, all the source code for the examples are linked in the GitHub on the \u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/100-days-of-golang\/tree\/main\/web\/url-parsing\u0026#34;\u0026gt;100 days of Golang\u0026lt;\/a\u0026gt; repository.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/100-days-of-golang\u0026#34;\u0026gt;100-days-of-golang\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;From the first post of the web development section, we covered the fundamentals of URL parsing and got a bit introduced to the \u0026lt;code\u0026gt;net\u0026lt;\/code\u0026gt; package, which will be heavily used for most of the core language\u0026#39;s features for working with the web. We covered the concepts for parsing URLs, getting components of URLs from the parsed object, Database connection URL resolving, parsing query parameters, and some other URL-related concepts.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Hopefully, you found this section helpful, if you have any comments or feedback, please let me know in the comments section or on my social handles. Thank you for reading. Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "golang-web-url-parsing";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Golang Web: URL Parsing</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2023-09-05 21:30:00">2023-09-05 21:30:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/100-days-of-golang" class="series-link">📖 100-days-of-golang</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>We have done around 32 posts on the fundamental concepts in golang, With that basic foundation, I'd like to start with the new section of this series which will be a major one as <code>web-development</code>. This section will have nearly 40-50 posts, this will cover the fundamental concepts for web development like APIs, Database integrations, Authentication and Authorizations, Web applications, static sites, etc.</p>
+<h2 id="what-is-a-url">What is a URL?</h2>
+<p>A URL is a Uniform Resource Locator. It is a string of characters that identifies a resource on the Internet. URLs are the building blocks of the web, allowing us to access websites, documents, and data with just a click. URLs are all over the place, if we want to build a strong foundation in web development, it's quite important to understand what URLs actually mean and what can they store.</p>
+<p>A URL looks something like this:</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>[scheme:][//[userinfo@]host][/]path[?query][#fragment]
+</code></pre></div><p>Not all the URLs are like this, majority of the URLs that the common user sees are simply the ones with the <code>scheme</code>, <code>host</code>, and <code>paths</code>. However other components are equally important and are vital in the exchanging of information over the network.</p>
+<ul>
+<li>The <code>scheme</code> is the protocol used for accessing the resource like <code>http</code>, <code>https</code>, <code>ftp</code>, etc.</li>
+<li>The <code>userinfo</code> is the username and password used to access the resource.</li>
+<li>The <code>host</code> is the domain name of the resource.</li>
+<li>The <code>path</code> is the path or folder to the resource.</li>
+<li>The <code>query</code> is the query string of the resource. It is usually a key-value pair as a paramter to access resources.</li>
+<li>The <code>fragment</code> is used as a reference within the resource.</li>
+</ul>
+<p>We will see the use cases of most of them throughout this series for example, the <code>userinfo</code> is commonly used in accessing databases over the internet/cloud. The query parameters will be used in making dynamic API calls, etc.</p>
+<h2 id="basic-url-parsing">Basic URL Parsing</h2>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/url"
+)
+
+func main() {
+	// simple url
+	urlString := "http://www.google.com"
+	parsedUrl, err := url.Parse(urlString)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(parsedUrl)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run main.go
+
+http://www.google.com
+</code></pre></div><p>So, what is getting parsed here, we gave the URL as a string we get the URL back, the only difference is that instead of the URL being a string, it is now a structure of components. For instance, we want the protocol the host name, the port, etc. from the URL.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>fmt.Printf("%T
+", parsedUrl)
+// *url.URL
+</code></pre></div><p>The <code>parsedUrl</code> is a pointer to a <a href="https://pkg.go.dev/net/url#URL">url.URL</a> structure. The structure <code>url.URL</code> has a lot of components to it like <code>Scheme</code>, <code>Host</code>, <code>User</code>, <code>Path</code>, <code>RawQuery</code>, etc. We will dive into each of these soon.</p>
+<p>We could get those specific components ourselves, but that would be a bit tedious and might be even prone to bugs.</p>
+<p>Let's try to get those components from the URL without any functions, just string manipulation.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+    "fmt"
+)
+
+func main() {
+    urlString := "http://www.google.com"
+    protocol := urlString.split(":")[0]
+    hostName := urlString.split("//")[1]
+    fmt.Println(protocol)
+    fmt.Println(hostName)
+}
+</code></pre></div><p>This might work for a simple URL, but what if we have more complex URLs which have paths, query parameters, fragments, username, port, etc? This could mess up quickly if we tried to get the parts of the URL ourselves. So, golang has a package called <a href="https://pkg.go.dev/net/url">net/url</a> explicitly for parsing URLs.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"strings"
+)
+
+func main() {
+	urlString := []string{"http://www.google.com",
+		"http://www.google.com/about/",
+		"http://www.google.com/about?q=hello",
+		"http://www.google.com:8080/about?q=hello",
+		"http://user:password@example.com:8080/path/to/resource?query=value#fragment",
+	}
+	for _, url := range urlString {
+		hostStr := strings.Split(url, "//")[1]
+        hostName := strings.Split(hostStr, "/")[0]
+		fmt.Println(hostName)
+	}
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run main.go
+
+www.google.com
+www.google.com
+www.google.com
+www.google.com:8080
+user:password@example.com:8080
+</code></pre></div><p>The above code might work for most of the URLs, but what if we have a more complex URL like the one with <code>port</code> or <code>user</code>, it doesn't give the thing we want exactly. In the above example, we have created a list of URLs as strings and simply iterated over each of the <code>url</code> in the <code>urlString</code>. Thereafter, we split the <code>url</code> on <code>//</code> so we get <code>https:</code> and <code>www.google.com</code>, if we want the host/domain name, we could simply get the <code>1</code> index in the slice since the <a href="https://pkg.go.dev/strings#Split">strings.Split</a> method returns a slice after splitting the string with the provided separator. The <code>hostName</code> could be fetched from the <code>1</code> index. However, this time for the 2nd element in the list, we have <code>https://www.google.com/about</code>, which would return <code>www.google.com/about</code> as the hostname which is not ideal, so we will again have to split this string with <code>/</code> and grab the first part i.e. 0th index.</p>
+<p>The above code would work for <code>paths</code> and <code>query</code> parameters but if we had ports, and username, and password, it would not work as expected as evident from the last 2 examples in the list.</p>
+<p>So, now we know the downsides of manually parsing the URLs, we can use the <a href="https://pkg.go.dev/net/url">net/url</a> package to do it for us.</p>
+<h2 id="parsing-db-urls">Parsing DB URLs</h2>
+<p>Databases have a connection URL or connection string which provides a standard way to connect to a database/database server. The format of the URL is just the <code>URL</code> with all the components from the <code>scheme</code> to the <code>path</code>. The common examples of some database connection URLs might include:</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code># PostgreSQL DB Connection URL/string
+postgresql://username:password@hostname:port/database_name
+
+# MongoDB Connection URL/string
+mongodb://username:password@hostname:port/database_name
+</code></pre></div><p>The above are examples of the Postgres and MongoDB connection URLs, they have a <code>protocol</code> which usually for databases is their short name, the user credentials i.e. <code>username</code> and <code>password</code>, the <code>hostname</code> i.e. the server IP address, the <code>port</code> on which the database is running, and finally the path as the <code>database name</code>.</p>
+<p>We can construct a simple snippet in golang to grab all the details from the simple connection URL string with the <code>net/url</code> package.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/url"
+)
+
+func main() {
+	//postgres db url
+	dbUrl, err := url.Parse("postgres://admin:pass1234@localhost:5432/mydb")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(dbUrl)
+	fmt.Println("Scheme/Protocol = ", dbUrl.Scheme)
+	fmt.Println("User = ", dbUrl.User)
+	//fmt.Println("User = ", dbUrl.User.String())
+	fmt.Println("Username = ", dbUrl.User.Username())
+	password, _ := dbUrl.User.Password()
+	fmt.Println("Password = ", password)
+	fmt.Println("Host = ", dbUrl.Host)
+	fmt.Println("HostName = ", dbUrl.Hostname())
+	fmt.Println("Port = ", dbUrl.Port())
+	fmt.Println("DB Name = ", dbUrl.Path)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run main.go
+
+postgres://postgres:pass1234@localhost:5432/mydb
+Scheme/Protocol =  postgres
+User = admin:pass1234
+Username =  admin
+Password =  pass1234
+Host =  localhost:5432
+HostName =  localhost
+Port =  5432
+DB Name =  mydb
+</code></pre></div><p>In the above code, we have given the string <code>postgres://admin:pass1234@localhost:5432/mydb</code>, and we have parsed the URL using the <code>net/url</code> package. The result is we have a <code>parsedUrl</code> object which has all the components that can be accessed as either fields or methods. Let's break down each field/method we used in the above example:</p>
+<ul>
+<li>The <code>Scheme</code> is simply a string representing the protocol of the resource(URL).</li>
+<li>The <code>User</code> is the <a href="https://pkg.go.dev/net/url#Userinfo">UserInfo</a> object having immutable username and password fields.</li>
+<li>The <code>Username</code> is the method on <a href="https://pkg.go.dev/net/url#Userinfo.Username">UserInfo</a> that returns the string representing the username of the URL.</li>
+<li>The <code>Password</code> is the method on <a href="https://pkg.go.dev/net/url#Userinfo.Password">UserInfo</a> that returns the string representing the password of the URL.</li>
+<li>The <code>Host</code> is the field on <code>URL</code> as a string representing the host:port of the URL.</li>
+<li>The <code>Hostname</code> is the method on <a href="https://pkg.go.dev/net/url#URL.Hostname">URL</a> that returns the string representing the hostname of the URL.</li>
+<li>The <code>Port</code> is the method on <a href="https://pkg.go.dev/net/url#URL.Port">URL</a> that returns the string representing the port of the URL.</li>
+<li>The <code>Path</code> is the field as the string representing the path of the URL.</li>
+</ul>
+<p>So, this is how we can get almost every detail like <code>db protocol</code>, <code>username</code>, <code>password</code>, <code>hostname</code>, <code>port</code>, and the <code>database name</code> from the database connection string URL.</p>
+<h2 id="parsing-query-parameters">Parsing Query Parameters</h2>
+<p>We can even get the query parameters of a URL using the <a href="https://pkg.go.dev/net/url#URL.Query">Query</a> method on the <code>URL</code> object. The <code>Query</code> method returns a <code>map[string][]string</code> which is to say a map with the key as <code>string</code> and the value as a <code>[]string</code> slice of string. For example, if the URL is something like <code>https://google.com/?q=hello</code>, the <code>Query</code> method will return <code>map[q:[hello]]</code> which means the key is <code>q</code> and the value is a list of strings of which the only element is <code>hello</code>.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/url"
+)
+
+func main() {
+	// a complex url with query params
+	urlStr := "http://www.google.com/?q=hello&q=world&lang=en"
+	parsedUrl, err := url.Parse(urlStr)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(parsedUrl)
+	fmt.Println(parsedUrl.Query())
+	for k, v := range parsedUrl.Query() {
+		fmt.Println("KEY:", k)
+		for _, vv := range v {
+			fmt.Println(vv)
+		}
+	}
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run main.go
+
+http://www.google.com/?q=hello+world&lang=en&q=gopher
+map[lang:[en] q:[hello world gopher]]
+KEY: q
+hello world
+gopher
+KEY: lang
+en
+</code></pre></div><p>We have taken a bit of a complex example that might cover many use cases of the <code>Query</code> method. We have a URL as <code>http://www.google.com/?q=hello&amp;q=world&amp;lang=en</code>, and the <code>Query</code> method returns <code>map[lang:[en] q:[hello world]]</code> which means the <code>q</code> key has a slice of a string with elements <code>hello world</code> and <code>gopher</code> and the <code>lang</code> key has a value of <code>en</code>. Here, the first paramter, <code>q=hello+world</code> is basically <code>hello world</code> or <code>hello%20world</code>, which is to say escaping the space in the URL. We can have multiple values for the same key, which is evident as we have added <code>q=gopher</code> at the end of the <code>URL</code>, the key <code>q</code> has two elements in the slice as <code>hello world</code> and <code>gopher</code>. The <code>lang=en</code> is simply a key as <code>lang</code> with the only element as <code>en</code> in the slice. We use <code>&amp;</code> to separate different query parameters in the URL.</p>
+<h3 id="checking-values-in-query-parameters">Checking Values in Query Parameters</h3>
+<p>We can even check the values in the query parameters without requiring the construction of for loops to find a particular value in a key. The <a href="https://pkg.go.dev/net/url#Values">Values</a> is a type that stores the map as a return value from the <code>Query</code> method. It has a few handy methods like:</p>
+<ul>
+<li><a href="https://pkg.go.dev/net/url#Values.Has">Has</a> to check if the key exists in the map (paramter as key <code>string</code> and returns a <code>bool</code>).</li>
+<li><a href="https://pkg.go.dev/net/url#Values.Get">Get</a> to fetch the first value of the given key as a string or if not present then returns an empty string (paramter as key <code>string</code> and returns <code>string</code>).</li>
+<li><a href="https://pkg.go.dev/net/url#Values.Add">Add</a> method is used to append the value for a given key (paramter as key <code>string</code> and value to be added as <code>string</code>).</li>
+<li><a href="https://pkg.go.dev/net/url#Values.Set">Set</a> method is used to replace the value for a given key if already exists (paramter as key <code>string</code> and value as <code>string</code>).</li>
+<li><a href="https://pkg.go.dev/net/url#Values.Del">Del</a> method is used to delete the value for a given key (paramter as key <code>string</code>).</li>
+</ul>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/url"
+)
+
+func main() {
+	// a complex url with query params
+	urlStr := "http://www.google.com/?q=hello+world&lang=en&q=gopher"
+	parsedUrl, err := url.Parse(urlStr)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(parsedUrl)
+	fmt.Println(parsedUrl.Query())
+
+	queryParams := parsedUrl.Query()
+
+	fmt.Println(queryParams.Get("q"))
+
+	fmt.Println(queryParams.Has("q"))
+
+	if queryParams.Has("lang") {
+		fmt.Println(queryParams.Get("lang"))
+	}
+
+	queryParams.Add("q", "ferris")
+	fmt.Println(queryParams)
+
+	queryParams.Set("q", "books")
+	fmt.Println(queryParams)
+
+	queryParams.Del("q")
+	fmt.Println(queryParams)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run main.go
+
+http://www.google.com/?q=hello+world&lang=en&q=gopher
+hello world
+true
+en
+map[lang:[en] q:[hello world gopher ferris]]
+map[lang:[en] q:[books]]
+map[lang:[en]]
+</code></pre></div><p>The above code example demonstrates almost all the methods available on the <code>Values</code> type. The <code>Get</code> method is used to fetch the first value for a given key, so we parse the key as a <code>string</code> to the method and it would return a <code>string</code>. We checked for the <code>q</code> as the key and it returned the first element in the <code>queryParams</code> for key <code>q</code> as <code>hello world</code> from the list <code>[hello world, gopher]</code>. The <code>Has</code> method takes in the paramter as key as <code>string</code> and returns if the key exists in the <code>queryParams</code> or not as a bool. The <code>Add</code> method, we have used to <code>Add</code> a key with a particular value, we added the value <code>ferris</code> to the key <code>q</code> hence it appended to the list and the list of <code>queryParams[q]</code> became <code>[hello world, gopher, ferris]</code>. The <code>Set</code> method is used to override the existing key with a particular value, here we have set the value <code>books</code> to the key <code>q</code> and hence the list of <code>queryParams[q]</code> becomes <code>[books]</code>. We can use the <code>Del</code> method to remove the key from the <code>queryParams</code>, so we delete <code>q</code> from <code>queryParams</code>, then the <code>queryParams</code> simply has no key as <code>q</code> in it.</p>
+<h3 id="parsing-query-parameters-to-string">Parsing Query Parameters to String</h3>
+<p>Now, that you have manipulated the query parameters, let's say you want to construct back that string representation of the query particular or the URL for it. The <a href="">Encode</a> method is used to grab the <code>queryParams</code> i.e. <code>Values</code> object and convert it into the <code>string</code> representation of the encoded URL.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/url"
+)
+
+func main() {
+	// a complex url with query params
+	urlStr := "http://www.google.com/?q=hello+world&lang=en&q=gopher"
+	parsedUrl, err := url.Parse(urlStr)
+	if err != nil {
+		panic(err)
+	}
+    queryParams := parsedUrl.Query()
+    queryParams.Add("name", "ferris")
+
+    q := queryParams.Encode()
+    fmt.Println(q)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run main.go
+
+lang=en&name=ferris&q=hello+world&q=gopher
+</code></pre></div><p>So, we can see the <code>Encode</code> method has given a query parameter in the form of a URL encoded string. We first grab the query parameters from the <code>parsedUrl</code> which is a <code>URL</code> object via the <code>Query</code> method, we then <code>Add</code> the key <code>name</code> with a value of <code>ferris</code> to the <code>queryParams</code>. This is then used to <code>Encode</code> the object back to a string representation. This could be useful to construct a query paramter for requesting other websites/APIs.</p>
+<h2 id="parsing-url-object-back-to-string">Parsing URL object back to String</h2>
+<p>We can even get the <code>URL</code> object back to a string representation using the <a href="https://pkg.go.dev/net/url#URL.String">String</a> method on the <code>URL</code> object. The <code>String</code> method returns a <code>string</code> representation of the URL object.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/url"
+)
+
+func main() {
+	urlStr := "http://www.google.com/?q=hello+world&lang=en&q=gopher"
+	fmt.Println("URL:", urlStr)
+	parsedUrl, err := url.Parse(urlStr)
+	if err != nil {
+		panic(err)
+	}
+	queryParams := parsedUrl.Query()
+	queryParams.Add("name", "ferris")
+
+	q := queryParams.Encode()
+	fmt.Println(q)
+	parsedUrl.RawQuery = q
+	newUrl := parsedUrl.String()
+	fmt.Println("New URL:", newUrl)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run main.go
+
+URL: http://www.google.com/?q=hello+world&lang=en&q=gopher
+lang=en&name=ferris&q=hello+world&q=gopher
+New URL: http://www.google.com/?lang=en&name=ferris&q=hello+world&q=gopher
+</code></pre></div><p>In the example above, we parse a URL string into a <code>URL</code> object as <code>parsedUrl</code>, then we <code>Add</code> the key <code>name</code> with a value of <code>ferris</code> to the <code>queryParams</code>. We then <code>Encode</code> the <code>URL</code> object back to a string representation. But this won't change the <code>parsedUrl</code> object we want to change the entire <code>URL</code> object. For that, we have overwritten the <code>RawQuery</code> field of the <code>URL</code> object with the query parameter encoded string as <code>q</code>. The <code>String</code> method returns a <code>string</code> representation of the <code>URL</code> object.</p>
+<h2 id="parsing-fragments">Parsing Fragments</h2>
+<p>The fragment in a URL is usually present in a static website like <code>#about</code>, <code>#contact</code>, <code>#blog</code>, etc. The <code>Fragment</code> is a string that is usually a reference to a specific section or anchor point within a web page or resource. When a URL with a fragment is accessed, the web browser or user agent will scroll the page to display the section identified by the fragment.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/url"
+)
+
+func main() {
+	// url with fragments
+	urlStr := "https://pkg.go.dev/math/rand#Norm Float64"
+	parsedUrl, err := url.Parse(urlStr)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(parsedUrl)
+	fmt.Println(parsedUrl.Fragment)
+	fmt.Println(parsedUrl.RawFragment)
+	fmt.Println(parsedUrl.EscapedFragment())
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run main.go
+
+https://pkg.go.dev/math/rand#Norm Float64
+
+Norm Float64
+Norm Float64
+Norm%20Float64
+</code></pre></div><p>The above code is used to fetch the <code>#Norm Float64</code> fragment from the URL <code>https://pkg.go.dev/math/rand#NormFloat64</code>. We can use the <a href="https://pkg.go.dev/net/url#URL">Fragment</a> field in the <code>URL</code> object to get the fragment text. There is <a href="https://pkg.go.dev/net/url#URL">RawFragment</a> field that is used to parse the fragment text as it is, without trying to escape any special characters in the URL. The <a href="https://pkg.go.dev/net/url#URL.EscapedFragment">EscapedFragment</a> is used to parse the fragment text by escaping the characters in the URL.</p>
+<p>That's it from the 32nd part of the series, all the source code for the examples are linked in the GitHub on the <a href="https://github.com/Mr-Destructive/100-days-of-golang/tree/main/web/url-parsing">100 days of Golang</a> repository.</p>
+<p><a href="https://github.com/Mr-Destructive/100-days-of-golang">100-days-of-golang</a></p>
+<h2 id="conclusion">Conclusion</h2>
+<p>From the first post of the web development section, we covered the fundamentals of URL parsing and got a bit introduced to the <code>net</code> package, which will be heavily used for most of the core language's features for working with the web. We covered the concepts for parsing URLs, getting components of URLs from the parsed object, Database connection URL resolving, parsing query parameters, and some other URL-related concepts.</p>
+<p>Hopefully, you found this section helpful, if you have any comments or feedback, please let me know in the comments section or on my social handles. Thank you for reading. Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/golang-channels" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Golang: Channels</span>
+        </a>
+        
+
+        
+        
+        <a href="/posts/golang-web-get-method" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Golang Web: GET Method</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-delete-method" class="related-link">
+                <span class="related-post-title">Golang Web: DELETE Method</span>
+                <span class="related-post-date">2025-01-12 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-patch-method" class="related-link">
+                <span class="related-post-title">Golang Web: PATCH Method</span>
+                <span class="related-post-date">2025-01-11 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-5" class="related-link">
+                <span class="related-post-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+                <span class="related-post-date">2024-12-11 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-4" class="related-link">
+                <span class="related-post-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+                <span class="related-post-date">2024-12-09 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-3" class="related-link">
+                <span class="related-post-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+                <span class="related-post-date">2024-12-07 20:45:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

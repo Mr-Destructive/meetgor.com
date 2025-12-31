@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Golang Web: PATCH Method | Meet Gor</title>
+    <meta name="title" content="Golang Web: PATCH Method | Meet Gor">
+    <meta name="description" content="Exploring the fundamentals of a PATCH method in golang. How to request a resource, parse body, headers, etc. in a HTTP PATCH request.">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/posts/golang-web-patch-method">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/posts/golang-web-patch-method">
+    <meta property="og:title" content="Golang Web: PATCH Method">
+    <meta property="og:description" content="Exploring the fundamentals of a PATCH method in golang. How to request a resource, parse body, headers, etc. in a HTTP PATCH request.">
+    <meta property="og:image" content="https://meetgor-cdn.pages.dev/100-days-of-golang/golang-036-patch-method.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Golang Web: PATCH Method">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2025-01-11 20:30:00">
+    <meta property="article:modified_time" content="2025-01-11 20:30:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/posts/golang-web-patch-method">
+    <meta name="twitter:title" content="Golang Web: PATCH Method">
+    <meta name="twitter:description" content="Exploring the fundamentals of a PATCH method in golang. How to request a resource, parse body, headers, etc. in a HTTP PATCH request.">
+    <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/100-days-of-golang/golang-036-patch-method.png">
+    <meta name="twitter:image:alt" content="Golang Web: PATCH Method">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/posts\/golang-web-patch-method"
+        },
+        "headline": "Golang Web: PATCH Method",
+        "description": "Exploring the fundamentals of a PATCH method in golang. How to request a resource, parse body, headers, etc. in a HTTP PATCH request.",
+        "datePublished": "2025-01-11 20:30:00",
+        "dateModified": "2025-01-11 20:30:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        "image": "https:\/\/meetgor-cdn.pages.dev\/100-days-of-golang\/golang-036-patch-method.png",
+        "keywords": "go",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;In previous sections of this series, we\u0026#39;ve covered the GET, POST, and PUT methods. Now, we will explore the PATCH method, which differs from the others in several key ways. The PATCH method is somewhat more flexible and depends on how the server or API you\u0026#39;re working with is designed.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In this section, we\u0026#39;ll focus on understanding what the PATCH method is and how to use it. While we will dive deeper into building and structuring a full CRUD API later in the series, the focus here will be on the what and why of the PATCH method, not the how.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;what-is-the-patch-method\u0026#34;\u0026gt;What is the PATCH Method?\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;The PATCH method is often compared to the PUT method, but with one important distinction: PATCH is used to perform partial updates on a resource. Unlike PUT, which typically requires you to send the entire resource to update it, PATCH allows you to send only the fields that need to be updated. This makes it a more efficient option when updating a subset of a resource.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In a PATCH request, the body usually contains instructions in a format like JSON, which specifies the fields to update. These instructions define the changes to be applied to the resource. For example, you may only want to change one field of a user\u0026#39;s profile, such as their email address, while leaving the rest of the data untouched.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;patch-vs-put\u0026#34;\u0026gt;PATCH vs. PUT\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Key Differences While both PATCH and PUT are used to modify resources, there are significant differences in their behavior:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;PUT replaces the entire resource. When you send a PUT request, you must include the full representation of the resource, even if you\u0026#39;re only changing a small part of it.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;PATCH, on the other hand, is for partial updates. You only need to include the fields that are changing, not the entire resource.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;If the update involves more fields than just the ones you\u0026#39;re changing, PUT may be the better choice. However, the scope of this article is to focus solely on the PATCH method.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;how-does-a-patch-request-work\u0026#34;\u0026gt;How Does a PATCH Request Work?\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;In the simplest terms, a PATCH request allows you to perform a partial update on a resource. It is similar to a PUT request, but more specific in how it updates the resource. According to the HTTP specification, an ideal PATCH request should:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Accept a \u0026amp;quot;patch document\u0026amp;quot; in the request body, which contains the list of operations to apply (e.g., \u0026amp;quot;replace\u0026amp;quot;, \u0026amp;quot;add\u0026amp;quot;, \u0026amp;quot;remove\u0026amp;quot;).\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Apply these updates to the target resource.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;If the update cannot be applied correctly, the operation should fail without applying any of the changes.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;This ensures that no partial or inconsistent updates are left behind\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;For example, if you\u0026#39;re updating a user\u0026#39;s email address and something goes wrong in the middle of the operation, the PATCH request should ensure that the email isn\u0026#39;t updated partially. If there’s an error, none of the updates should be applied, ensuring data consistency.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Also, the patch method is not idempotent, meaning that if you send the same input\/request, it need not necessarily return the same output. Because we are not sending the actual original entity, we are sending the partial data fields that need to be updated, so it might update the original entity on subsequent requests since there is no original request sent in the request; it only identifies the resource from the URI and fields to update in the request body.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Now, let’s sum up the patch request in a few words\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Updates specific fields mentioned in the patch document\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Can be partial (only the fields that need to be updated are sent, unlike PUT, which typically replaces the entire resource)\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Not necessarily idempotent (depends on the implementation)\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Not Safe (since resources will be updated on the server side)\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;h2 id=\u0026#34;basic-patch-request\u0026#34;\u0026gt;Basic PATCH request\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Let’s start with the basic PATCH request that we can create in Golang. The [net\/http]() package will be used to construct the request, and will be using \u0026lt;code\u0026gt;encoding\/json\u0026lt;\/code\u0026gt; and some other utilities for string and byte parsing.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, first we will construct a HTTP request using the [http.NewRequest]() with the parameters like the http method to use, the URL to hit, and the request body if any. We will then need to send the json body which would consist of the fields to be updated.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;defining-the-apiserver-endpoint-url\u0026#34;\u0026gt;Defining the API\/Server Endpoint URL\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We would need to define the endpoint that we are hitting, we can directly use the API URL or we can construct the API URL on the fly depending on the id, and parameter that will be dynamic. As PATCH request, usually modify a particular entity, we would generally have some form of identifier for that entity\/object on the database, etc. So in this case, it is \u0026lt;code\u0026gt;id\u0026lt;\/code\u0026gt; of the post, so, we can pass the post in the URL.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;\/\/ define URL to hit the API\napiURL := \u0026#34;https:\/\/jsonplaceholder.typicode.com\/posts\/4\u0026#34;\n\n\/\/ OR\n\/\/ baseURL := \u0026#34;https:\/\/jsonplaceholder.typicode.com\u0026#34;\n\/\/ postId := 4\n\/\/ postURL := fmt.Sprintf(\u0026#34;%s\/posts\/%d\u0026#34;, baseURL, postId)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We can either directly define the URL or dynamically construct the URL, that is quite straightforward. The later one is the one we usually use and design.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;constructing-the-json-body\u0026#34;\u0026gt;Constructing the JSON Body\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;This section is a little dependent on the context as you might have a direct json string that you can directly pass to the API or you might have a golang object that you need to Marshal in order to convert that object into string\/bytes.\u0026lt;\/p\u0026gt;\n\u0026lt;ol\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Direct JSON String\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, there is nothing to do here, since the object is already in the form of a json string.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;reqBody := \u0060{\u0026#34;body\u0026#34;: \u0026#34;new body\u0026#34;}\u0060\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;However, if you have certain fields that you need to exclude or omit, you have to construct a struct and then marshal it\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Marshalling (converting object into bytes\/string)\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We need to convert the Golang native object into some form of a json string or bytes that could be sent over the network. That process is called \u0026lt;a href=\u0026#34;https:\/\/en.wikipedia.org\/wiki\/Marshalling_(computer_science)\u0026#34;\u0026gt;marshalling\u0026lt;\/a\u0026gt; or serialisation.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ol\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;type Post struct {\n\tID     int    \u0060json:\u0026#34;id,omitempty\u0026#34;\u0060\n\tTitle  string \u0060json:\u0026#34;title,omitempty\u0026#34;\u0060\n\tBody   string \u0060json:\u0026#34;body,omitempty\u0026#34;\u0060\n\tUserId int    \u0060json:\u0026#34;userId,omitempty\u0026#34;\u0060\n}\n\nuserObj := Post{\n    Body: \u0026#34;New Body\u0026#34;,\n}\n\nvar reqBody []byte\nreqBody, err := json.Marshal(userObj)\nif err != nil {\n\tlog.Fatal(err)\n}\n\nlog.Println(\u0026#34;New body:\u0026#34;, string(reqBody))\n\/\/ New body: {\u0026#34;body\u0026#34;:\u0026#34;New Body\u0026#34;}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above snippet, we have defined a \u0026lt;code\u0026gt;Post\u0026lt;\/code\u0026gt; struct with the fields like \u0026lt;code\u0026gt;ID\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;Title\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;Body\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;UserID\u0026lt;\/code\u0026gt; , and those have \u0026lt;code\u0026gt;omitempty\u0026lt;\/code\u0026gt; tag along with the json fields that we want to marshal into. The omitempty will omit or ignore the fields if they are empty or not present in the object\/instance of this structure. So in the example, \u0026lt;code\u0026gt;userObj\u0026lt;\/code\u0026gt; is the instance of the \u0026lt;code\u0026gt;Post\u0026lt;\/code\u0026gt; struct and it only has the \u0026lt;code\u0026gt;Body\u0026lt;\/code\u0026gt; populated, so the reqBody will only contain one field \u0026lt;code\u0026gt;body\u0026lt;\/code\u0026gt; in the json representation. The [json.Marshal]() is the function that we use to convert the object\/instance into a byte form.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This \u0026lt;code\u0026gt;reqBody\u0026lt;\/code\u0026gt; will serve as the request body for the request that will be a \u0026lt;code\u0026gt;PATCH\u0026lt;\/code\u0026gt; method to the mentioned endpoint \/ API URL.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;constructing-the-http-patch-request\u0026#34;\u0026gt;Constructing the HTTP PATCH Request\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Now, we have the parts that we need to construct the request, we can combine the parts and hit the endpoint. However, it is a bit different compared to \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;POST\u0026lt;\/code\u0026gt; request that we do in Golang, the HTTP package has built in methods for the \u0026lt;code\u0026gt;GET\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;POST\u0026lt;\/code\u0026gt; methods, however for methods like \u0026lt;code\u0026gt;PUT\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;PATCH\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;DELETE\u0026lt;\/code\u0026gt; and others, we need to construct a \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#Request\u0026#34;\u0026gt;Request\u0026lt;\/a\u0026gt; object and then send that request.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;req, err := http.NewRequest(\u0026#34;PATCH\u0026#34;, postURL, strings.NewReader(reqBody))\nif err != nil {\n\tlog.Fatal(err)\n}\nreq.Header.Set(\u0026#34;Content-Type\u0026#34;, \u0026#34;application\/json\u0026#34;)\n\n\/\/ in case of wired utf-8 characters appear in the body\n\/\/req.Header.Set(\u0026#34;Content-Type\u0026#34;, \u0026#34;application\/json; charset=utf-8\u0026#34;)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;To do that, we call the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#NewRequest\u0026#34;\u0026gt;NewRequest\u0026lt;\/a\u0026gt; method with the parameters like the HTTP method, the URL, and the request Body all of which we have at the moment.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;The method is \u0026lt;code\u0026gt;PATCH\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;The URL is \u0026lt;code\u0026gt;postURL\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;The body is \u0026lt;code\u0026gt;strings.NewReader(reqBody)\u0026lt;\/code\u0026gt; as we need a \u0026lt;code\u0026gt;io.Reader\u0026lt;\/code\u0026gt; object instead of string or byte slice\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;So, once we have that, we would also set the \u0026lt;code\u0026gt;Header\u0026lt;\/code\u0026gt; with the field of \u0026lt;code\u0026gt;Content-Type\u0026lt;\/code\u0026gt; and the value as \u0026lt;code\u0026gt;application\/json\u0026lt;\/code\u0026gt; since the request body has json representation of the patch document that will be sent.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;sending-the-request\u0026#34;\u0026gt;Sending the Request\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Once, the \u0026lt;code\u0026gt;req\u0026lt;\/code\u0026gt; object is created, we also need a \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#Client\u0026#34;\u0026gt;Client\u0026lt;\/a\u0026gt; to send the request, so we create the client as default http.Client object with defaults and call the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#Client.Do\u0026#34;\u0026gt;Do\u0026lt;\/a\u0026gt; method with the \u0026lt;code\u0026gt;req\u0026lt;\/code\u0026gt; as the request parameter in order to send the request with the default client.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This method returns the response object, and an error if any.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We also add the \u0026lt;code\u0026gt;defer resp.Body.Close()\u0026lt;\/code\u0026gt; in order to avoid leaks and safely access the response body.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;client := \u0026amp;http.Client{}\nresp, err := client.Do(req)\nif err != nil {\n\tlog.Fatal(err)\n}\ndefer resp.Body.Close()\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;At this point, we can now start consuming the response and use it for further processing as per the needs.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;unmarshalling-the-response\u0026#34;\u0026gt;Unmarshalling the Response\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We first read the response into a string or byte representation using the io.ReadAll method and then use the json.Unmarshal to convert the bytes into golang object\/instance.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;var updatedPost Post\n\nrespBody, err := io.ReadAll(resp.Body)\nif err != nil {\n\tlog.Fatal(err)\n}\n    \n\/\/ convert the response json bytes to Post object in golang\nerr = json.Unmarshal(respBody, \u0026amp;updatedPost)\nif err != nil {\n\tlog.Fatal(err)\n}\n\nfmt.Println(updatedPost)\nfmt.Println(updatedPost.Title)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, we have read the response Body which can be accessed as the \u0026lt;code\u0026gt;Body\u0026lt;\/code\u0026gt; field in the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/http#Response\u0026#34;\u0026gt;Response\u0026lt;\/a\u0026gt; object via the \u0026lt;code\u0026gt;resp\u0026lt;\/code\u0026gt; variable. So, the function will return the \u0026lt;code\u0026gt;respBody\u0026lt;\/code\u0026gt; as a string or an error if any. Then using this string object, we can use the json.Unmarshal function to send this string and create this \u0026lt;code\u0026gt;updatedPost\u0026lt;\/code\u0026gt; object of Post struct. This method will mutate this object as we have passed it by reference indicated by \u0026lt;code\u0026gt;\u0026amp;amp;updatedPost\u0026lt;\/code\u0026gt; . So, this will do two things, one update \/ mutate the \u0026lt;code\u0026gt;updatedPost\u0026lt;\/code\u0026gt; instance from the \u0026lt;code\u0026gt;respBody\u0026lt;\/code\u0026gt; and give any error if any arrises during the \u0026lt;a href=\u0026#34;https:\/\/developer.mozilla.org\/en-US\/docs\/Glossary\/Deserialization\u0026#34;\u0026gt;deserialsation\u0026lt;\/a\u0026gt; of the response .\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Now, we have the object in golang from the response bytes, we can use it as per requirements.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, that is the example in the entirety.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let’s simplify the steps which are similar to the POST\/PUT method as well\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Define\/construct URL\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Marshal the object into JSON string as the request body\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Construct the request object (method, URL and the body)\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Send the request with the default client\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Read the response and deserialise\/unmarshall\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;Access the object in golang\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;encoding\/json\u0026#34;\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;io\u0026#34;\n\t\u0026#34;log\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n\t\u0026#34;strings\u0026#34;\n)\n\ntype Post struct {\n\tID     int    \u0060json:\u0026#34;id,omitempty\u0026#34;\u0060\n\tTitle  string \u0060json:\u0026#34;title,omitempty\u0026#34;\u0060\n\tBody   string \u0060json:\u0026#34;body,omitempty\u0026#34;\u0060\n\tUserId int    \u0060json:\u0026#34;userId,omitempty\u0026#34;\u0060\n}\n\nfunc main() {\n\n\t\/\/ define URL to hit the API\n    baseURL := \u0026#34;https:\/\/jsonplaceholder.typicode.com\u0026#34;\n    postId := 4\n    postURL := fmt.Sprintf(\u0026#34;%s\/posts\/%d\u0026#34;, baseURL, postId)\n\n    \/\/ define the body -\u0026gt; with the field to update\n\treqBody := \u0060{\u0026#34;body\u0026#34;: \u0026#34;new body\u0026#34;}\u0060\n\tfmt.Println(\u0026#34;New body:\u0026#34;, reqBody)\n\n    \/\/ send a new request, with the \u0060PATCH\u0060 method, url and the body\n\treq, err := http.NewRequest(\u0026#34;PATCH\u0026#34;, postURL, strings.NewReader(reqBody))\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n    \/\/ set the header content type to json\n\treq.Header.Set(\u0026#34;Content-Type\u0026#34;, \u0026#34;application\/json\u0026#34;)\n\n\tclient := \u0026amp;http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer resp.Body.Close()\n\tfmt.Println(\u0026#34;Response status code:\u0026#34;, resp.StatusCode)\n\tfmt.Println(\u0026#34;Response Status:\u0026#34;, resp.Status)\n\t\n    var updatedPost Post\n\n\trespBody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n    \n    \/\/ convert the response json bytes to Post object in golang\n\terr = json.Unmarshal(respBody, \u0026amp;updatedPost)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\n\tfmt.Println(updatedPost)\n\tfmt.Println(updatedPost.Title)\n\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;New body: {\u0026#34;body\u0026#34;: \u0026#34;new body\u0026#34;}\nResponse status code: 200\nResponse Status: 200 OK\n{4 eum et est occaecati new body 1}\n\ntitle: eum et est occaecati                                                                         \nbody: new body\nid: 4\nuser id: 1\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;As you would see, it has only updated the \u0026lt;code\u0026gt;body\u0026lt;\/code\u0026gt; and has not updated the other fields.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;If you would have sent a similar body with a \u0026lt;code\u0026gt;PUT\u0026lt;\/code\u0026gt; method, the results would have been different. That would have been dependent on the implementation of the API of course, but if there is only a few fields in the request body for a PUT method, it would have replaced the values with the empry values which are not present in the request body.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That is the difference between a \u0026lt;code\u0026gt;PUT\u0026lt;\/code\u0026gt; and a \u0026lt;code\u0026gt;PATCH\u0026lt;\/code\u0026gt; method, the \u0026lt;code\u0026gt;PATCH\u0026lt;\/code\u0026gt; method, ideally should only update the fields of the entity which are mentioned in the request body, whereas the \u0026lt;code\u0026gt;PUT\u0026lt;\/code\u0026gt; method has to update the entire resource whether the fields are provided or not. Again, the implementation of these API on the server plays a vital role in how the behaviour defers and the method in itself would perform.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This is also called as \u0026lt;code\u0026gt;JSON Merge Patch\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;json-merge-patch\u0026#34;\u0026gt;JSON Merge PATCH\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;The above API is implementing a \u0026lt;a href=\u0026#34;https:\/\/datatracker.ietf.org\/doc\/html\/rfc7386\u0026#34;\u0026gt;Merge PATCH\u0026lt;\/a\u0026gt; which is to say, merge the changes in the actual entity.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let’s say there is a Blog post Entity on a Server, you have a post that you are writing as an author. The post has a id of \u0026lt;code\u0026gt;4\u0026lt;\/code\u0026gt; let’s say and you are constantly changing the body of the post.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, you don’t want to send the \u0026lt;code\u0026gt;title\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;author_id\u0026lt;\/code\u0026gt; or any field that is not changing from the client again and again while saving, so the \u0026lt;code\u0026gt;MERGE PATCH\u0026lt;\/code\u0026gt; endpoint will be helpful in that case, where the client only sends the required fields to be updated.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In this example, the user would only send the \u0026lt;code\u0026gt;body\u0026lt;\/code\u0026gt; of the post to the API every time it makes changes or saves the draft. In some cases, it might also want to change the title, so it will include the title, but not all the fields. The API will know it is a \u0026lt;code\u0026gt;PATCH\u0026lt;\/code\u0026gt; request and the content type is \u0026lt;code\u0026gt;json\u0026lt;\/code\u0026gt; so it will only change or update the fields that are provided in the request body to the actual entity in the database or wherever it is stored on the server.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, that is what is the JSON Merge PATCH or Merge PATCH in general. JSON Merge PATCH is specific to the JSON based document APIs.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Below is the example, the same steps but a different endpoint. A user API that I have specifically created for demonstrating the difference in a PUT vs Merge PATCH vs JSON PATCH requests.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;encoding\/json\u0026#34;\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;io\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n\t\u0026#34;strings\u0026#34;\n)\n\ntype User struct {\n\tID    int    \u0060json:\u0026#34;id,omitempty\u0026#34;\u0060\n\tName  string \u0060json:\u0026#34;name,omitempty\u0026#34;\u0060\n\tEmail string \u0060json:\u0026#34;email,omitempty\u0026#34;\u0060\n\tRoles string \u0060json:\u0026#34;roles,omitempty\u0026#34;\u0060\n}\n\nfunc main() {\n    baseURL := \u0026#34;https:\/\/dummy-json-patch.netlify.app\/.netlify\/functions\u0026#34;\n    userID := 2\n\tapiURL := fmt.Sprintf(\u0026#34;%s\/users\/?id=%d\u0026#34;, baseURL, userID)\n    \n    userObj := User{\n\t\tName:  \u0026#34;dummy name\u0026#34;,\n\t\tRoles: \u0026#34;dummy role\u0026#34;,\n\t}\n\n\tvar jsonPatchBody []byte\n\tjsonPatchBody, err := json.Marshal(userObj)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n    \n    \/\/ OR directly define the json as string\n\t\/\/jsonMergePatchBody := \u0060{\n    \/\/    \u0026#34;name\u0026#34;: \u0026#34;new dummy name\u0026#34;,\n    \/\/    \u0026#34;roles\u0026#34;: \u0026#34;new dummy role\u0026#34;\n    \/\/}\u0060\n\n\treq, err := http.NewRequest(\u0026#34;PATCH\u0026#34;, apiURL, strings.NewReader(jsonMergePatchBody))\n\treq.Header.Set(\u0026#34;Content-Type\u0026#34;, \u0026#34;application\/json\u0026#34;)\n\n\tclient := \u0026amp;http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tdefer resp.Body.Close()\n\n\tvar user User\n\n\tresBody, err := io.ReadAll(resp.Body)\n\tfmt.Println(string(resBody))\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\terr = json.Unmarshal(resBody, \u0026amp;user)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\n\tfmt.Println(\u0026#34;Updated\/Patched User\u0026#34;, user)\n\tfmt.Println(\u0026#34;Id:\u0026#34;, user.ID)\n\tfmt.Println(\u0026#34;Name:\u0026#34;, user.Name)\n\tfmt.Println(\u0026#34;Email:\u0026#34;, user.Email)\n    fmt.Println(\u0026#34;Bio:\u0026#34;, user.Bio)\n\tfmt.Println(\u0026#34;Roles:\u0026#34;, user.Roles)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Original User with id 2\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;{\u0026#34;id\u0026#34;:2,\u0026#34;name\u0026#34;:\u0026#34;dummy\u0026#34;,\u0026#34;email\u0026#34;:\u0026#34;dummyyummy@user.com\u0026#34;,\u0026#34;bio\u0026#34;:\u0026#34;empty bio\u0026#34;,\u0026#34;roles\u0026#34;:\u0026#34;read\u0026#34;}\n\nId: 2\nName: dummy\nEmail: dummyyummy@user.com\nBio: empty bio\nRoles: read\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Output of the program\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;Request Body: {\u0026#34;name\u0026#34;:\u0026#34;dummy name\u0026#34;,\u0026#34;roles\u0026#34;:\u0026#34;dummy role\u0026#34;}\n\n{\u0026#34;id\u0026#34;:2,\u0026#34;name\u0026#34;:\u0026#34;dummy name\u0026#34;,\u0026#34;email\u0026#34;:\u0026#34;dummyyummy@user.com\u0026#34;,\u0026#34;bio\u0026#34;:\u0026#34;empty bio\u0026#34;,\u0026#34;roles\u0026#34;:\u0026#34;dummy role\u0026#34;}\n\nUpdated\/Patched User {2 dummy name dummyyummy@user.com empty bio dummy role}\n\nId: 2\nName: dummy name\nEmail: dummyyummy@user.com\nBio: empty bio\nRoles: dummy role \n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, the only fields that will be updated are \u0026lt;code\u0026gt;name\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;roles\u0026lt;\/code\u0026gt; , since the API is implemented to only update the fields provided in the json merge patch document (request body).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;As you can see that, only the \u0026lt;code\u0026gt;name\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;roles\u0026lt;\/code\u0026gt; are changed. The name was \u0026lt;code\u0026gt;dummy\u0026lt;\/code\u0026gt; that changed to \u0026lt;code\u0026gt;dummy name\u0026lt;\/code\u0026gt; and role changed from \u0026lt;code\u0026gt;read\u0026lt;\/code\u0026gt; to \u0026lt;code\u0026gt;dummy role\u0026lt;\/code\u0026gt; .\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Now, let’s see the same request but with PUT method on it.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Before we hit this API however, let’s note what the user with id 2 is\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;json\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-json\u0026#34;\u0026gt;{\n  \u0026#34;id\u0026#34;: 2,\n  \u0026#34;name\u0026#34;: \u0026#34;dummy name\u0026#34;,\n  \u0026#34;email\u0026#34;: \u0026#34;dummyyummy@user.com\u0026#34;,\n  \u0026#34;bio\u0026#34;: \u0026#34;empty bio\u0026#34;,\n  \u0026#34;roles\u0026#34;: \u0026#34;dummy role\u0026#34;\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This is the result of our recent patch request. Now, we will send a PUT request to the same user with a different body.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;encoding\/json\u0026#34;\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;io\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n\t\u0026#34;strings\u0026#34;\n)\n\ntype User struct {\n\tID    int    \u0060json:\u0026#34;id,omitempty\u0026#34;\u0060\n\tName  string \u0060json:\u0026#34;name,omitempty\u0026#34;\u0060\n\tEmail string \u0060json:\u0026#34;email,omitempty\u0026#34;\u0060\n\tBio   string \u0060json:\u0026#34;bio,omitempty\u0026#34;\u0060\n\tRoles string \u0060json:\u0026#34;roles,omitempt\u0026#34;\u0060\n}\n\nfunc main() {\n    baseURL := \u0026#34;https:\/\/dummy-json-patch.netlify.app\/.netlify\/functions\u0026#34;\n    userID := 2\n\tapiURL := fmt.Sprintf(\u0026#34;%s\/users\/?id=%d\u0026#34;, baseURL, userID)\n    \n\tuserObj := User{\n\t\tName:  \u0026#34;not a dummy name\u0026#34;,\n\t\tRoles: \u0026#34;not a dummy role\u0026#34;,\n\t}\n\n\tvar jsonPatchBody []byte\n\tjsonPatchBody, err := json.Marshal(userObj)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tfmt.Println(\u0026#34;Request Body:\u0026#34;, string(jsonPatchBody))\n\n\t\/\/jsonPatchBody := \u0060{\n\t\/\/    \u0026#34;name\u0026#34;: \u0026#34;dummy\u0026#34;,\n\t\/\/    \u0026#34;roles\u0026#34;: \u0026#34;new dummy role\u0026#34;\n\t\/\/}\u0060\n\n\treq, err := http.NewRequest(\u0026#34;PUT\u0026#34;, apiURL, strings.NewReader(string(jsonPatchBody)))\n\treq.Header.Set(\u0026#34;Content-Type\u0026#34;, \u0026#34;application\/merge-patch\u002bjson\u0026#34;)\n\n\tclient := \u0026amp;http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tdefer resp.Body.Close()\n\n\tvar user User\n\n\tresBody, err := io.ReadAll(resp.Body)\n\tfmt.Println(string(resBody))\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\terr = json.Unmarshal(resBody, \u0026amp;user)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\n\tfmt.Println(\u0026#34;Updated\/Patched User\u0026#34;, user)\n\tfmt.Println(\u0026#34;Id:\u0026#34;, user.ID)\n\tfmt.Println(\u0026#34;Name:\u0026#34;, user.Name)\n\tfmt.Println(\u0026#34;Bio:\u0026#34;, user.Bio)\n\tfmt.Println(\u0026#34;Email:\u0026#34;, user.Email)\n\tfmt.Println(\u0026#34;Roles:\u0026#34;, user.Roles)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Output:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;Request Body: {\u0026#34;name\u0026#34;:\u0026#34;not a dummy name\u0026#34;,\u0026#34;roles\u0026#34;:\u0026#34;not a dummy role\u0026#34;}\n\n{\u0026#34;id\u0026#34;:2,\u0026#34;name\u0026#34;:\u0026#34;not a dummy name\u0026#34;,\u0026#34;email\u0026#34;:\u0026#34;\u0026#34;,\u0026#34;bio\u0026#34;:\u0026#34;\u0026#34;,\u0026#34;roles\u0026#34;:\u0026#34;not a dummy role\u0026#34;}\n\nUpdated\/Patched User {2 not a dummy name   not a dummy role}\n\nId: 2\nName: not a dummy name\nBio:\nEmail:\nRoles: not a dummy role\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;As you can see the \u0026lt;code\u0026gt;name\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;roles\u0026lt;\/code\u0026gt; are updated, however the \u0026lt;code\u0026gt;bio\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;email\u0026lt;\/code\u0026gt; fields are empty. Since we only said to update the \u0026lt;code\u0026gt;name\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;roles\u0026lt;\/code\u0026gt; fields, but it was a \u0026lt;code\u0026gt;PUT\u0026lt;\/code\u0026gt; request, it expects all the fields, and if any of the fields are missing, it will consider them as empty and update those as well.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, the difference might be crystal clear now. When to use \u0026lt;code\u0026gt;PATCH\u0026lt;\/code\u0026gt; and when to avoid \u0026lt;code\u0026gt;PUT\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;When you have a large set of updates, preference could be given to PUT\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;If you have very specific fields to update and a very limited fields PATCH is recommended\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;There is other type of PATCH specifically designed for JSON APIs, or I should say JSON Documents APIs.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;json-patch\u0026#34;\u0026gt;JSON PATCH\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;The \u0026lt;a href=\u0026#34;https:\/\/datatracker.ietf.org\/doc\/html\/rfc6902\/\u0026#34;\u0026gt;JSON PATCH\u0026lt;\/a\u0026gt; is a specification in which we can define what operations to perform on which fields, or path of the fields to replace, move or copy to.\u0026lt;\/p\u0026gt;\n\u0026lt;blockquote\u0026gt;\n\u0026lt;p\u0026gt;A JSON Patch document is a JSON document that represents an array of objects. Each object represents a single operation to be applied to the target JSON document.\u0026lt;\/p\u0026gt;\n\u0026lt;\/blockquote\u0026gt;\n\u0026lt;p\u0026gt;As it takes this operations, it applies them sequentially and hence it won’t replace all the fields for the entity, as that is the expected behavior of the PATCH method. In other words, it would only apply changes to the fields and the related fields provided in the json patch document (request body).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;There are a few operations that you can perform with this json patch method, and provide the instructions accordingly for individual operations in the JSON PATCH document.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Operations\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;add\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;remove\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;replace\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;move\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;copy\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;test\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;So, for each of the operations, a high level definition can be considered as:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;To add a field you can specify the operation as \u0026lt;code\u0026gt;add\u0026lt;\/code\u0026gt; , the path as the field to be added, and the value as the actual value to be added\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;To remove a field, you can specify the operation as \u0026lt;code\u0026gt;remove\u0026lt;\/code\u0026gt; , and the path as the field to remove\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;To replace a field, you can specify the operation as \u0026lt;code\u0026gt;replace\u0026lt;\/code\u0026gt;, the path as the field to be updated\/replaced, and the value of the actual value to be added\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;To move a field, you can specify the operation as \u0026lt;code\u0026gt;move\u0026lt;\/code\u0026gt;, the \u0026lt;strong\u0026gt;from\u0026lt;\/strong\u0026gt; as the field to be updated\/moved from and the path to the field the from value should be moved to.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;To copy a field, you can specify the operation as \u0026lt;code\u0026gt;copy\u0026lt;\/code\u0026gt;, the from as the field to updated\/copied from and the path to the field to which the value should be copied to.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;The test operation is a bit different as it is used for comparison of a \u0026lt;code\u0026gt;path\u0026lt;\/code\u0026gt; value to the actual value specified in the object. It might return true or false, but not actually return it might be used as a checkpoint for continuing with the operation in the document.\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;In this example, we are creating a similar patch request, but using this json patch document kind of structure.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;construct-the-json-patch-document\u0026#34;\u0026gt;Construct the json-patch document\u0026lt;\/h3\u0026gt;\n\u0026lt;h3 id=\u0026#34;send-the-request\u0026#34;\u0026gt;Send the request\u0026lt;\/h3\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;encoding\/json\u0026#34;\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;io\u0026#34;\n\t\u0026#34;net\/http\u0026#34;\n\t\u0026#34;strings\u0026#34;\n)\n\ntype User struct {\n\tID    int    \u0060json:\u0026#34;id\u0026#34;\u0060\n\tName  string \u0060json:\u0026#34;name\u0026#34;\u0060\n\tEmail string \u0060json:\u0026#34;email\u0026#34;\u0060\n    Bio   string \u0060json:\u0026#34;bio\u0026#34;\u0060\n\tRoles string \u0060json:\u0026#34;roles\u0026#34;\u0060\n}\n\nfunc main() {\n\tbaseURL := \u0026#34;https:\/\/dummy-json-patch.netlify.app\/.netlify\/functions\u0026#34;\n    userID := 2\n\tapiURL := fmt.Sprintf(\u0026#34;%s\/users\/?id=%d\u0026#34;, baseURL, userID)\n\n\tjsonPatchBody := \u0060[\n        {\n            \u0026#34;op\u0026#34;: \u0026#34;replace\u0026#34;,\n            \u0026#34;path\u0026#34;: \u0026#34;\/name\u0026#34;,\n            \u0026#34;value\u0026#34;: \u0026#34;new dummy name\u0026#34;\n        },\n        {\n            \u0026#34;op\u0026#34;: \u0026#34;replace\u0026#34;,\n            \u0026#34;path\u0026#34;: \u0026#34;\/roles\u0026#34;,\n            \u0026#34;value\u0026#34;: \u0026#34;new dummy role\u0026#34;\n        },\n    ]\u0060\n\n\treq, err := http.NewRequest(\u0026#34;PATCH\u0026#34;, apiURL, strings.NewReader(jsonPatchBody))\n\treq.Header.Set(\u0026#34;Content-Type\u0026#34;, \u0026#34;application\/json-patch\u002bjson\u0026#34;)\n\n\tclient := \u0026amp;http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\tdefer resp.Body.Close()\n\n\tvar user User\n\n\tresBody, err := io.ReadAll(resp.Body)\n\tfmt.Println(string(resBody))\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\terr = json.Unmarshal(resBody, \u0026amp;user)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\n\tfmt.Println(\u0026#34;Updated\/Patched User\u0026#34;, user)\n\tfmt.Println(\u0026#34;Id:\u0026#34;, user.ID)\n\tfmt.Println(\u0026#34;Name:\u0026#34;, user.Name)\n\tfmt.Println(\u0026#34;Bio:\u0026#34;, user.Bio)\n\tfmt.Println(\u0026#34;Email:\u0026#34;, user.Email)\n\tfmt.Println(\u0026#34;Roles:\u0026#34;, user.Roles)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Original User (id=2) before the request\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;json\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-json\u0026#34;\u0026gt;{\n  \u0026#34;id\u0026#34;: 2,\n  \u0026#34;name\u0026#34;: \u0026#34;dummy name\u0026#34;,\n  \u0026#34;email\u0026#34;: \u0026#34;dummyyummy@user.com\u0026#34;,\n  \u0026#34;bio\u0026#34;: \u0026#34;empty bio\u0026#34;,\n  \u0026#34;roles\u0026#34;: \u0026#34;dummy role\u0026#34;\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Output of the Program (JSON PATCH Request)\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;plaintext\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-plaintext\u0026#34;\u0026gt;{\u0026#34;id\u0026#34;:2,\u0026#34;name\u0026#34;:\u0026#34;new dummy name\u0026#34;,\u0026#34;email\u0026#34;:\u0026#34;dummyyummy@user.com\u0026#34;,\u0026#34;bio\u0026#34;: \u0026#34;empty bio\u0026#34;, \u0026#34;roles\u0026#34;:\u0026#34;new dummy role\u0026#34;}     \n\nUpdated\/Patched User {2 new dummy name dummyyummy@user.com empty bio new dummy role} \n\nId: 2\nName: new dummy name\nEmail: dummyyummy@user.com\nBio: empty bio\nRoles: read\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;h3 id=\u0026#34;references\u0026#34;\u0026gt;References:\u0026lt;\/h3\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/en.wikipedia.org\/wiki\/HTTP#Request_methods\u0026#34;\u0026gt;Wikipedia: HTTP Request Methods\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/rubyonrails.org\/2012\/2\/26\/edge-rails-patch-is-the-new-primary-http-method-for-updates\u0026#34;\u0026gt;Ruby on Rails: Patch is the new primary HTTP method for updates\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/datatracker.ietf.org\/doc\/html\/rfc5789\u0026#34;\u0026gt;RFC 5789\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "posts\/golang-web-patch-method";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Golang Web: PATCH Method</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2025-01-11 20:30:00">2025-01-11 20:30:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/100-days-of-golang" class="series-link">📖 100-days-of-golang</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>In previous sections of this series, we've covered the GET, POST, and PUT methods. Now, we will explore the PATCH method, which differs from the others in several key ways. The PATCH method is somewhat more flexible and depends on how the server or API you're working with is designed.</p>
+<p>In this section, we'll focus on understanding what the PATCH method is and how to use it. While we will dive deeper into building and structuring a full CRUD API later in the series, the focus here will be on the what and why of the PATCH method, not the how.</p>
+<h2 id="what-is-the-patch-method">What is the PATCH Method?</h2>
+<p>The PATCH method is often compared to the PUT method, but with one important distinction: PATCH is used to perform partial updates on a resource. Unlike PUT, which typically requires you to send the entire resource to update it, PATCH allows you to send only the fields that need to be updated. This makes it a more efficient option when updating a subset of a resource.</p>
+<p>In a PATCH request, the body usually contains instructions in a format like JSON, which specifies the fields to update. These instructions define the changes to be applied to the resource. For example, you may only want to change one field of a user's profile, such as their email address, while leaving the rest of the data untouched.</p>
+<h2 id="patch-vs-put">PATCH vs. PUT</h2>
+<p>Key Differences While both PATCH and PUT are used to modify resources, there are significant differences in their behavior:</p>
+<ul>
+<li>
+<p>PUT replaces the entire resource. When you send a PUT request, you must include the full representation of the resource, even if you're only changing a small part of it.</p>
+</li>
+<li>
+<p>PATCH, on the other hand, is for partial updates. You only need to include the fields that are changing, not the entire resource.</p>
+</li>
+</ul>
+<p>If the update involves more fields than just the ones you're changing, PUT may be the better choice. However, the scope of this article is to focus solely on the PATCH method.</p>
+<h2 id="how-does-a-patch-request-work">How Does a PATCH Request Work?</h2>
+<p>In the simplest terms, a PATCH request allows you to perform a partial update on a resource. It is similar to a PUT request, but more specific in how it updates the resource. According to the HTTP specification, an ideal PATCH request should:</p>
+<ul>
+<li>
+<p>Accept a &quot;patch document&quot; in the request body, which contains the list of operations to apply (e.g., &quot;replace&quot;, &quot;add&quot;, &quot;remove&quot;).</p>
+</li>
+<li>
+<p>Apply these updates to the target resource.</p>
+</li>
+<li>
+<p>If the update cannot be applied correctly, the operation should fail without applying any of the changes.</p>
+</li>
+</ul>
+<p>This ensures that no partial or inconsistent updates are left behind</p>
+<p>For example, if you're updating a user's email address and something goes wrong in the middle of the operation, the PATCH request should ensure that the email isn't updated partially. If there’s an error, none of the updates should be applied, ensuring data consistency.</p>
+<p>Also, the patch method is not idempotent, meaning that if you send the same input/request, it need not necessarily return the same output. Because we are not sending the actual original entity, we are sending the partial data fields that need to be updated, so it might update the original entity on subsequent requests since there is no original request sent in the request; it only identifies the resource from the URI and fields to update in the request body.</p>
+<p>Now, let’s sum up the patch request in a few words</p>
+<ul>
+<li>
+<p>Updates specific fields mentioned in the patch document</p>
+</li>
+<li>
+<p>Can be partial (only the fields that need to be updated are sent, unlike PUT, which typically replaces the entire resource)</p>
+</li>
+<li>
+<p>Not necessarily idempotent (depends on the implementation)</p>
+</li>
+<li>
+<p>Not Safe (since resources will be updated on the server side)</p>
+</li>
+</ul>
+<h2 id="basic-patch-request">Basic PATCH request</h2>
+<p>Let’s start with the basic PATCH request that we can create in Golang. The [net/http]() package will be used to construct the request, and will be using <code>encoding/json</code> and some other utilities for string and byte parsing.</p>
+<p>So, first we will construct a HTTP request using the [http.NewRequest]() with the parameters like the http method to use, the URL to hit, and the request body if any. We will then need to send the json body which would consist of the fields to be updated.</p>
+<h3 id="defining-the-apiserver-endpoint-url">Defining the API/Server Endpoint URL</h3>
+<p>We would need to define the endpoint that we are hitting, we can directly use the API URL or we can construct the API URL on the fly depending on the id, and parameter that will be dynamic. As PATCH request, usually modify a particular entity, we would generally have some form of identifier for that entity/object on the database, etc. So in this case, it is <code>id</code> of the post, so, we can pass the post in the URL.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">// define URL to hit the API
+apiURL := "https://jsonplaceholder.typicode.com/posts/4"
+
+// OR
+// baseURL := "https://jsonplaceholder.typicode.com"
+// postId := 4
+// postURL := fmt.Sprintf("%s/posts/%d", baseURL, postId)
+</code></pre></div><p>We can either directly define the URL or dynamically construct the URL, that is quite straightforward. The later one is the one we usually use and design.</p>
+<h3 id="constructing-the-json-body">Constructing the JSON Body</h3>
+<p>This section is a little dependent on the context as you might have a direct json string that you can directly pass to the API or you might have a golang object that you need to Marshal in order to convert that object into string/bytes.</p>
+<ol>
+<li>
+<p>Direct JSON String</p>
+<p>So, there is nothing to do here, since the object is already in the form of a json string.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">reqBody := `{"body": "new body"}`
+</code></pre></div><p>However, if you have certain fields that you need to exclude or omit, you have to construct a struct and then marshal it</p>
+</li>
+<li>
+<p>Marshalling (converting object into bytes/string)</p>
+<p>We need to convert the Golang native object into some form of a json string or bytes that could be sent over the network. That process is called <a href="https://en.wikipedia.org/wiki/Marshalling_(computer_science)">marshalling</a> or serialisation.</p>
+</li>
+</ol>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">type Post struct {
+	ID     int    `json:"id,omitempty"`
+	Title  string `json:"title,omitempty"`
+	Body   string `json:"body,omitempty"`
+	UserId int    `json:"userId,omitempty"`
+}
+
+userObj := Post{
+    Body: "New Body",
+}
+
+var reqBody []byte
+reqBody, err := json.Marshal(userObj)
+if err != nil {
+	log.Fatal(err)
+}
+
+log.Println("New body:", string(reqBody))
+// New body: {"body":"New Body"}
+</code></pre></div><p>In the above snippet, we have defined a <code>Post</code> struct with the fields like <code>ID</code>, <code>Title</code>, <code>Body</code>, <code>UserID</code> , and those have <code>omitempty</code> tag along with the json fields that we want to marshal into. The omitempty will omit or ignore the fields if they are empty or not present in the object/instance of this structure. So in the example, <code>userObj</code> is the instance of the <code>Post</code> struct and it only has the <code>Body</code> populated, so the reqBody will only contain one field <code>body</code> in the json representation. The [json.Marshal]() is the function that we use to convert the object/instance into a byte form.</p>
+<p>This <code>reqBody</code> will serve as the request body for the request that will be a <code>PATCH</code> method to the mentioned endpoint / API URL.</p>
+<h3 id="constructing-the-http-patch-request">Constructing the HTTP PATCH Request</h3>
+<p>Now, we have the parts that we need to construct the request, we can combine the parts and hit the endpoint. However, it is a bit different compared to <code>GET</code> and <code>POST</code> request that we do in Golang, the HTTP package has built in methods for the <code>GET</code> and <code>POST</code> methods, however for methods like <code>PUT</code>, <code>PATCH</code>, <code>DELETE</code> and others, we need to construct a <a href="https://pkg.go.dev/net/http#Request">Request</a> object and then send that request.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">req, err := http.NewRequest("PATCH", postURL, strings.NewReader(reqBody))
+if err != nil {
+	log.Fatal(err)
+}
+req.Header.Set("Content-Type", "application/json")
+
+// in case of wired utf-8 characters appear in the body
+//req.Header.Set("Content-Type", "application/json; charset=utf-8")
+</code></pre></div><p>To do that, we call the <a href="https://pkg.go.dev/net/http#NewRequest">NewRequest</a> method with the parameters like the HTTP method, the URL, and the request Body all of which we have at the moment.</p>
+<ul>
+<li>
+<p>The method is <code>PATCH</code></p>
+</li>
+<li>
+<p>The URL is <code>postURL</code></p>
+</li>
+<li>
+<p>The body is <code>strings.NewReader(reqBody)</code> as we need a <code>io.Reader</code> object instead of string or byte slice</p>
+</li>
+</ul>
+<p>So, once we have that, we would also set the <code>Header</code> with the field of <code>Content-Type</code> and the value as <code>application/json</code> since the request body has json representation of the patch document that will be sent.</p>
+<h3 id="sending-the-request">Sending the Request</h3>
+<p>Once, the <code>req</code> object is created, we also need a <a href="https://pkg.go.dev/net/http#Client">Client</a> to send the request, so we create the client as default http.Client object with defaults and call the <a href="https://pkg.go.dev/net/http#Client.Do">Do</a> method with the <code>req</code> as the request parameter in order to send the request with the default client.</p>
+<p>This method returns the response object, and an error if any.</p>
+<p>We also add the <code>defer resp.Body.Close()</code> in order to avoid leaks and safely access the response body.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">client := &http.Client{}
+resp, err := client.Do(req)
+if err != nil {
+	log.Fatal(err)
+}
+defer resp.Body.Close()
+</code></pre></div><p>At this point, we can now start consuming the response and use it for further processing as per the needs.</p>
+<h3 id="unmarshalling-the-response">Unmarshalling the Response</h3>
+<p>We first read the response into a string or byte representation using the io.ReadAll method and then use the json.Unmarshal to convert the bytes into golang object/instance.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">var updatedPost Post
+
+respBody, err := io.ReadAll(resp.Body)
+if err != nil {
+	log.Fatal(err)
+}
+    
+// convert the response json bytes to Post object in golang
+err = json.Unmarshal(respBody, &updatedPost)
+if err != nil {
+	log.Fatal(err)
+}
+
+fmt.Println(updatedPost)
+fmt.Println(updatedPost.Title)
+</code></pre></div><p>In the above example, we have read the response Body which can be accessed as the <code>Body</code> field in the <a href="https://pkg.go.dev/net/http#Response">Response</a> object via the <code>resp</code> variable. So, the function will return the <code>respBody</code> as a string or an error if any. Then using this string object, we can use the json.Unmarshal function to send this string and create this <code>updatedPost</code> object of Post struct. This method will mutate this object as we have passed it by reference indicated by <code>&amp;updatedPost</code> . So, this will do two things, one update / mutate the <code>updatedPost</code> instance from the <code>respBody</code> and give any error if any arrises during the <a href="https://developer.mozilla.org/en-US/docs/Glossary/Deserialization">deserialsation</a> of the response .</p>
+<p>Now, we have the object in golang from the response bytes, we can use it as per requirements.</p>
+<p>So, that is the example in the entirety.</p>
+<p>Let’s simplify the steps which are similar to the POST/PUT method as well</p>
+<ul>
+<li>
+<p>Define/construct URL</p>
+</li>
+<li>
+<p>Marshal the object into JSON string as the request body</p>
+</li>
+<li>
+<p>Construct the request object (method, URL and the body)</p>
+</li>
+<li>
+<p>Send the request with the default client</p>
+</li>
+<li>
+<p>Read the response and deserialise/unmarshall</p>
+</li>
+<li>
+<p>Access the object in golang</p>
+</li>
+</ul>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"strings"
+)
+
+type Post struct {
+	ID     int    `json:"id,omitempty"`
+	Title  string `json:"title,omitempty"`
+	Body   string `json:"body,omitempty"`
+	UserId int    `json:"userId,omitempty"`
+}
+
+func main() {
+
+	// define URL to hit the API
+    baseURL := "https://jsonplaceholder.typicode.com"
+    postId := 4
+    postURL := fmt.Sprintf("%s/posts/%d", baseURL, postId)
+
+    // define the body -> with the field to update
+	reqBody := `{"body": "new body"}`
+	fmt.Println("New body:", reqBody)
+
+    // send a new request, with the `PATCH` method, url and the body
+	req, err := http.NewRequest("PATCH", postURL, strings.NewReader(reqBody))
+	if err != nil {
+		log.Fatal(err)
+	}
+    // set the header content type to json
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+	fmt.Println("Response status code:", resp.StatusCode)
+	fmt.Println("Response Status:", resp.Status)
+	
+    var updatedPost Post
+
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+    
+    // convert the response json bytes to Post object in golang
+	err = json.Unmarshal(respBody, &updatedPost)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(updatedPost)
+	fmt.Println(updatedPost.Title)
+
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">New body: {"body": "new body"}
+Response status code: 200
+Response Status: 200 OK
+{4 eum et est occaecati new body 1}
+
+title: eum et est occaecati                                                                         
+body: new body
+id: 4
+user id: 1
+</code></pre></div><p>As you would see, it has only updated the <code>body</code> and has not updated the other fields.</p>
+<p>If you would have sent a similar body with a <code>PUT</code> method, the results would have been different. That would have been dependent on the implementation of the API of course, but if there is only a few fields in the request body for a PUT method, it would have replaced the values with the empry values which are not present in the request body.</p>
+<p>That is the difference between a <code>PUT</code> and a <code>PATCH</code> method, the <code>PATCH</code> method, ideally should only update the fields of the entity which are mentioned in the request body, whereas the <code>PUT</code> method has to update the entire resource whether the fields are provided or not. Again, the implementation of these API on the server plays a vital role in how the behaviour defers and the method in itself would perform.</p>
+<p>This is also called as <code>JSON Merge Patch</code></p>
+<h2 id="json-merge-patch">JSON Merge PATCH</h2>
+<p>The above API is implementing a <a href="https://datatracker.ietf.org/doc/html/rfc7386">Merge PATCH</a> which is to say, merge the changes in the actual entity.</p>
+<p>Let’s say there is a Blog post Entity on a Server, you have a post that you are writing as an author. The post has a id of <code>4</code> let’s say and you are constantly changing the body of the post.</p>
+<p>So, you don’t want to send the <code>title</code> or <code>author_id</code> or any field that is not changing from the client again and again while saving, so the <code>MERGE PATCH</code> endpoint will be helpful in that case, where the client only sends the required fields to be updated.</p>
+<p>In this example, the user would only send the <code>body</code> of the post to the API every time it makes changes or saves the draft. In some cases, it might also want to change the title, so it will include the title, but not all the fields. The API will know it is a <code>PATCH</code> request and the content type is <code>json</code> so it will only change or update the fields that are provided in the request body to the actual entity in the database or wherever it is stored on the server.</p>
+<p>So, that is what is the JSON Merge PATCH or Merge PATCH in general. JSON Merge PATCH is specific to the JSON based document APIs.</p>
+<p>Below is the example, the same steps but a different endpoint. A user API that I have specifically created for demonstrating the difference in a PUT vs Merge PATCH vs JSON PATCH requests.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"strings"
+)
+
+type User struct {
+	ID    int    `json:"id,omitempty"`
+	Name  string `json:"name,omitempty"`
+	Email string `json:"email,omitempty"`
+	Roles string `json:"roles,omitempty"`
+}
+
+func main() {
+    baseURL := "https://dummy-json-patch.netlify.app/.netlify/functions"
+    userID := 2
+	apiURL := fmt.Sprintf("%s/users/?id=%d", baseURL, userID)
+    
+    userObj := User{
+		Name:  "dummy name",
+		Roles: "dummy role",
+	}
+
+	var jsonPatchBody []byte
+	jsonPatchBody, err := json.Marshal(userObj)
+	if err != nil {
+		panic(err)
+	}
+    
+    // OR directly define the json as string
+	//jsonMergePatchBody := `{
+    //    "name": "new dummy name",
+    //    "roles": "new dummy role"
+    //}`
+
+	req, err := http.NewRequest("PATCH", apiURL, strings.NewReader(jsonMergePatchBody))
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	var user User
+
+	resBody, err := io.ReadAll(resp.Body)
+	fmt.Println(string(resBody))
+	if err != nil {
+		panic(err)
+	}
+	err = json.Unmarshal(resBody, &user)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Updated/Patched User", user)
+	fmt.Println("Id:", user.ID)
+	fmt.Println("Name:", user.Name)
+	fmt.Println("Email:", user.Email)
+    fmt.Println("Bio:", user.Bio)
+	fmt.Println("Roles:", user.Roles)
+}
+</code></pre></div><p>Original User with id 2</p>
+<div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">{"id":2,"name":"dummy","email":"dummyyummy@user.com","bio":"empty bio","roles":"read"}
+
+Id: 2
+Name: dummy
+Email: dummyyummy@user.com
+Bio: empty bio
+Roles: read
+</code></pre></div><p>Output of the program</p>
+<div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">Request Body: {"name":"dummy name","roles":"dummy role"}
+
+{"id":2,"name":"dummy name","email":"dummyyummy@user.com","bio":"empty bio","roles":"dummy role"}
+
+Updated/Patched User {2 dummy name dummyyummy@user.com empty bio dummy role}
+
+Id: 2
+Name: dummy name
+Email: dummyyummy@user.com
+Bio: empty bio
+Roles: dummy role 
+</code></pre></div><p>In the above example, the only fields that will be updated are <code>name</code> and <code>roles</code> , since the API is implemented to only update the fields provided in the json merge patch document (request body).</p>
+<p>As you can see that, only the <code>name</code> and <code>roles</code> are changed. The name was <code>dummy</code> that changed to <code>dummy name</code> and role changed from <code>read</code> to <code>dummy role</code> .</p>
+<p>Now, let’s see the same request but with PUT method on it.</p>
+<p>Before we hit this API however, let’s note what the user with id 2 is</p>
+<div class="code-block"><div class="code-header"><span class="language-name">json</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-json">{
+  "id": 2,
+  "name": "dummy name",
+  "email": "dummyyummy@user.com",
+  "bio": "empty bio",
+  "roles": "dummy role"
+}
+</code></pre></div><p>This is the result of our recent patch request. Now, we will send a PUT request to the same user with a different body.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"strings"
+)
+
+type User struct {
+	ID    int    `json:"id,omitempty"`
+	Name  string `json:"name,omitempty"`
+	Email string `json:"email,omitempty"`
+	Bio   string `json:"bio,omitempty"`
+	Roles string `json:"roles,omitempt"`
+}
+
+func main() {
+    baseURL := "https://dummy-json-patch.netlify.app/.netlify/functions"
+    userID := 2
+	apiURL := fmt.Sprintf("%s/users/?id=%d", baseURL, userID)
+    
+	userObj := User{
+		Name:  "not a dummy name",
+		Roles: "not a dummy role",
+	}
+
+	var jsonPatchBody []byte
+	jsonPatchBody, err := json.Marshal(userObj)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Request Body:", string(jsonPatchBody))
+
+	//jsonPatchBody := `{
+	//    "name": "dummy",
+	//    "roles": "new dummy role"
+	//}`
+
+	req, err := http.NewRequest("PUT", apiURL, strings.NewReader(string(jsonPatchBody)))
+	req.Header.Set("Content-Type", "application/merge-patch+json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	var user User
+
+	resBody, err := io.ReadAll(resp.Body)
+	fmt.Println(string(resBody))
+	if err != nil {
+		panic(err)
+	}
+	err = json.Unmarshal(resBody, &user)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Updated/Patched User", user)
+	fmt.Println("Id:", user.ID)
+	fmt.Println("Name:", user.Name)
+	fmt.Println("Bio:", user.Bio)
+	fmt.Println("Email:", user.Email)
+	fmt.Println("Roles:", user.Roles)
+}
+</code></pre></div><p>Output:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">Request Body: {"name":"not a dummy name","roles":"not a dummy role"}
+
+{"id":2,"name":"not a dummy name","email":"","bio":"","roles":"not a dummy role"}
+
+Updated/Patched User {2 not a dummy name   not a dummy role}
+
+Id: 2
+Name: not a dummy name
+Bio:
+Email:
+Roles: not a dummy role
+</code></pre></div><p>As you can see the <code>name</code> and <code>roles</code> are updated, however the <code>bio</code> and <code>email</code> fields are empty. Since we only said to update the <code>name</code> and <code>roles</code> fields, but it was a <code>PUT</code> request, it expects all the fields, and if any of the fields are missing, it will consider them as empty and update those as well.</p>
+<p>So, the difference might be crystal clear now. When to use <code>PATCH</code> and when to avoid <code>PUT</code>.</p>
+<ul>
+<li>
+<p>When you have a large set of updates, preference could be given to PUT</p>
+</li>
+<li>
+<p>If you have very specific fields to update and a very limited fields PATCH is recommended</p>
+</li>
+</ul>
+<p>There is other type of PATCH specifically designed for JSON APIs, or I should say JSON Documents APIs.</p>
+<h2 id="json-patch">JSON PATCH</h2>
+<p>The <a href="https://datatracker.ietf.org/doc/html/rfc6902/">JSON PATCH</a> is a specification in which we can define what operations to perform on which fields, or path of the fields to replace, move or copy to.</p>
+<blockquote>
+<p>A JSON Patch document is a JSON document that represents an array of objects. Each object represents a single operation to be applied to the target JSON document.</p>
+</blockquote>
+<p>As it takes this operations, it applies them sequentially and hence it won’t replace all the fields for the entity, as that is the expected behavior of the PATCH method. In other words, it would only apply changes to the fields and the related fields provided in the json patch document (request body).</p>
+<p>There are a few operations that you can perform with this json patch method, and provide the instructions accordingly for individual operations in the JSON PATCH document.</p>
+<p>Operations</p>
+<ul>
+<li>
+<p>add</p>
+</li>
+<li>
+<p>remove</p>
+</li>
+<li>
+<p>replace</p>
+</li>
+<li>
+<p>move</p>
+</li>
+<li>
+<p>copy</p>
+</li>
+<li>
+<p>test</p>
+</li>
+</ul>
+<p>So, for each of the operations, a high level definition can be considered as:</p>
+<ul>
+<li>
+<p>To add a field you can specify the operation as <code>add</code> , the path as the field to be added, and the value as the actual value to be added</p>
+</li>
+<li>
+<p>To remove a field, you can specify the operation as <code>remove</code> , and the path as the field to remove</p>
+</li>
+<li>
+<p>To replace a field, you can specify the operation as <code>replace</code>, the path as the field to be updated/replaced, and the value of the actual value to be added</p>
+</li>
+<li>
+<p>To move a field, you can specify the operation as <code>move</code>, the <strong>from</strong> as the field to be updated/moved from and the path to the field the from value should be moved to.</p>
+</li>
+<li>
+<p>To copy a field, you can specify the operation as <code>copy</code>, the from as the field to updated/copied from and the path to the field to which the value should be copied to.</p>
+</li>
+<li>
+<p>The test operation is a bit different as it is used for comparison of a <code>path</code> value to the actual value specified in the object. It might return true or false, but not actually return it might be used as a checkpoint for continuing with the operation in the document.</p>
+</li>
+</ul>
+<p>In this example, we are creating a similar patch request, but using this json patch document kind of structure.</p>
+<h3 id="construct-the-json-patch-document">Construct the json-patch document</h3>
+<h3 id="send-the-request">Send the request</h3>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"strings"
+)
+
+type User struct {
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
+    Bio   string `json:"bio"`
+	Roles string `json:"roles"`
+}
+
+func main() {
+	baseURL := "https://dummy-json-patch.netlify.app/.netlify/functions"
+    userID := 2
+	apiURL := fmt.Sprintf("%s/users/?id=%d", baseURL, userID)
+
+	jsonPatchBody := `[
+        {
+            "op": "replace",
+            "path": "/name",
+            "value": "new dummy name"
+        },
+        {
+            "op": "replace",
+            "path": "/roles",
+            "value": "new dummy role"
+        },
+    ]`
+
+	req, err := http.NewRequest("PATCH", apiURL, strings.NewReader(jsonPatchBody))
+	req.Header.Set("Content-Type", "application/json-patch+json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	var user User
+
+	resBody, err := io.ReadAll(resp.Body)
+	fmt.Println(string(resBody))
+	if err != nil {
+		panic(err)
+	}
+	err = json.Unmarshal(resBody, &user)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Updated/Patched User", user)
+	fmt.Println("Id:", user.ID)
+	fmt.Println("Name:", user.Name)
+	fmt.Println("Bio:", user.Bio)
+	fmt.Println("Email:", user.Email)
+	fmt.Println("Roles:", user.Roles)
+}
+</code></pre></div><p>Original User (id=2) before the request</p>
+<div class="code-block"><div class="code-header"><span class="language-name">json</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-json">{
+  "id": 2,
+  "name": "dummy name",
+  "email": "dummyyummy@user.com",
+  "bio": "empty bio",
+  "roles": "dummy role"
+}
+</code></pre></div><p>Output of the Program (JSON PATCH Request)</p>
+<div class="code-block"><div class="code-header"><span class="language-name">plaintext</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-plaintext">{"id":2,"name":"new dummy name","email":"dummyyummy@user.com","bio": "empty bio", "roles":"new dummy role"}     
+
+Updated/Patched User {2 new dummy name dummyyummy@user.com empty bio new dummy role} 
+
+Id: 2
+Name: new dummy name
+Email: dummyyummy@user.com
+Bio: empty bio
+Roles: read
+</code></pre></div><h3 id="references">References:</h3>
+<ul>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/HTTP#Request_methods">Wikipedia: HTTP Request Methods</a></p>
+</li>
+<li>
+<p><a href="https://rubyonrails.org/2012/2/26/edge-rails-patch-is-the-new-primary-http-method-for-updates">Ruby on Rails: Patch is the new primary HTTP method for updates</a></p>
+</li>
+<li>
+<p><a href="https://datatracker.ietf.org/doc/html/rfc5789">RFC 5789</a></p>
+</li>
+</ul>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/golang-web-put-method" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Golang Web: PUT Method</span>
+        </a>
+        
+
+        
+        
+        <a href="/posts/golang-web-delete-method" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Golang Web: DELETE Method</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-delete-method" class="related-link">
+                <span class="related-post-title">Golang Web: DELETE Method</span>
+                <span class="related-post-date">2025-01-12 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-5" class="related-link">
+                <span class="related-post-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+                <span class="related-post-date">2024-12-11 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-4" class="related-link">
+                <span class="related-post-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+                <span class="related-post-date">2024-12-09 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-3" class="related-link">
+                <span class="related-post-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+                <span class="related-post-date">2024-12-07 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-2" class="related-link">
+                <span class="related-post-title">Advent of Code Day 2 in Golang: Slicing and Dicing Reports</span>
+                <span class="related-post-date">2024-12-02 20:45:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

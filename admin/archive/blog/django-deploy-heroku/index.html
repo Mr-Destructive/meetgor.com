@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Django &#43; PostgreSQL Deployment on Heroku | Meet Gor</title>
+    <meta name="title" content="Django &#43; PostgreSQL Deployment on Heroku | Meet Gor">
+    <meta name="description" content="">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="django, web-development, python">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/django-deploy-heroku">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/django-deploy-heroku">
+    <meta property="og:title" content="Django &#43; PostgreSQL Deployment on Heroku">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="https://meetgor-cdn.pages.dev/django-deploy-heroku.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Django &#43; PostgreSQL Deployment on Heroku">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2022-05-15 20:00:00">
+    <meta property="article:modified_time" content="2022-05-15 20:00:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="django">
+    
+    <meta property="article:tag" content="web-development">
+    
+    <meta property="article:tag" content="python">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/django-deploy-heroku">
+    <meta name="twitter:title" content="Django &#43; PostgreSQL Deployment on Heroku">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/django-deploy-heroku.png">
+    <meta name="twitter:image:alt" content="Django &#43; PostgreSQL Deployment on Heroku">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/django-deploy-heroku"
+        },
+        "headline": "Django \u002b PostgreSQL Deployment on Heroku",
+        "description": "",
+        "datePublished": "2022-05-15 20:00:00",
+        "dateModified": "2022-05-15 20:00:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        "image": "https:\/\/meetgor-cdn.pages.dev\/django-deploy-heroku.png",
+        "keywords": "django, web-development, python",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Django projects are quite easy to build and simple to understand, you might have created a Django application and wanted to show it to the world? You can deploy a basic Django application with a database(PostgreSQL) with Heroku. It provides a decent free tier with some great features and add-ons. A free tier Heroku account has a limitation of 5 apps, limited data in the database, limited connections to the server per month, and so on.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Though the free tier is not a great option for bigger applications, it suits really well for smaller scale and ide projects, so we will be looking into the details of how to deploy a Django application to \u0026lt;a href=\u0026#34;https:\/\/heroku.com\/\u0026#34;\u0026gt;Heroku\u0026lt;\/a\u0026gt; which is a Platform as Service (PaS).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This series will be an extension of the series \u0026lt;a href=\u0026#34;https:\/\/techstructiveblog.hashnode.dev\/series\/django-basics\u0026#34;\u0026gt;Django basics\u0026lt;\/a\u0026gt; which covered the basics of the Django framework, we covered from basic Django fundamentals to building a CRUD API. In this series, we will be exploring some platforms for giving a better understanding of how things work and understanding a few components that were left as default while understanding the basics of Django. Let\u0026#39;s get started with \u0026lt;a href=\u0026#34;https:\/\/techstructiveblog.hashnode.dev\/series\/django-deployment\u0026#34;\u0026gt;Django Deployment\u0026lt;\/a\u0026gt;!\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;creating-a-django-application\u0026#34;\u0026gt;Creating a Django Application\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;For deploying an app, we definitely need an app, we need to create a basic Django application to deploy on the web. We\u0026#39;ll be creating a simple blog application with a couple of views and a simple model structure. As for the database, we\u0026#39;ll be using Postgres as Heroku has an add-on for it and it is pretty easy to configure.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;set-up-a-virtual-environment\u0026#34;\u0026gt;Set up a virtual environment\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We need to set up a virtual environment in order to keep the Django project neat and tidy by managing the project-specific dependencies and packages. We can use the \u0026lt;a href=\u0026#34;https:\/\/pypi.org\/project\/virtualenv\/\u0026#34;\u0026gt;virtualenv\u0026lt;\/a\u0026gt; package to isolate a python project from the rest of the system.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;# install the virtualenv package\npip install virtualenv\n\n# create a virtual env for the project\nvirtualenv .venv\n\n# activate the virtualenv\nWindows:\n.venv\\Scripts\u0007ctivate\n\nLinux\/macOS:\nsource .venv\/bin\/activate\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This will set up the project nicely for a Django project, you now install the core Django package and get started with creating a Django application.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;# install django\npip install django\n\n# start a django project\ndjango-admin startproject blog .\n\ncd blog\n\n# create a application in django project\npython manage.py createapp api\n\n# Create some models, views, URLs, templates\n\n# run the server\npython manag.py runserver\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We assume you already have a Django project configured with some basic URLs, views and templates or static files as per your project and requirements, for this tutorial I will be using the simple blog application from my previous Django tutorials as a reference. You can follow along with my \u0026lt;a href=\u0026#34;https:\/\/techstructiveblog.hashnode.dev\/series\/django-basics\u0026#34;\u0026gt;Django Basics\u0026lt;\/a\u0026gt; series and refer to the Blog Application project on \u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/django-blog\u0026#34;\u0026gt;GitHub\u0026lt;\/a\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;configuring-the-django-application\u0026#34;\u0026gt;Configuring the Django Application\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Make sure to create and activate the virtual environment for this django project. This should be done to manage the dependencies and packages used in the project. If you are not aware of the virtual environment and django setup, you can follow up with this \u0026lt;a href=\u0026#34;https:\/\/mr-destructive.github.io\/techstructive-blog\/django-setup-script\/\u0026#34;\u0026gt;post\u0026lt;\/a\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;creating-a-runtimetxt-file\u0026#34;\u0026gt;Creating a runtime.txt file\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Now, Firstly we need to specify which type and version of language we are using. Since Django is a Python-based web framework, we need to select the python version in a text file.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;runtime.txt\u0026lt;\/strong\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;python-3.9.5\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Here, the version can be anything as per your project and the packages installed.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;creating-requirementstxt-file\u0026#34;\u0026gt;Creating requirements.txt file\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We\u0026#39;ll first create a \u0026lt;code\u0026gt;requirements.txt\u0026lt;\/code\u0026gt; file for storing all the dependencies and packages installed in the application. This will help in installing dependencies while deploying the application. We can either use a \u0026lt;code\u0026gt;requirements.txt\u0026lt;\/code\u0026gt; file using \u0026lt;code\u0026gt;virtualenv\u0026lt;\/code\u0026gt; or a \u0026lt;code\u0026gt;Pipfile\u0026lt;\/code\u0026gt; using Pipenv. Both serve the same purpose but a bit differently.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Assuming you are in an isolated virtual environment for this Django project, you can create a requirements.txt file using the below command:\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Make sure the virtualenv is activated before running the command:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;pip freeze \u0026gt; requirements.txt\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This will create a simple text file that contains the package names along with the versions used in the current virtual environment. A simple Django requirements file would look something like this:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;asgiref==3.4.1\nDjango==3.2.11\npytz==2021.3\nsqlparse==0.4.2\ntyping_extensions==4.0.1\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652614060461\/kPTZ9R8Xp.png\u0026#34; alt=\u0026#34;image.png\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This is vanilla Django without any additional dependencies but if you have integrated other functionalities like Django Rest Framework, PostgreSQL, Crispy Forms, Schedulers, etc. there might be additional dependencies that become quite crucial for the smooth working of the project.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;If you are using pipenv, you don\u0026#39;t need to make any efforts to manually activate and manage virtual environment, the dependencies are installed and taken care of by the pipenv installer. You just need to make sure to install any package with \u0026lt;code\u0026gt;pipenv install\u0026lt;\/code\u0026gt; and not \u0026lt;code\u0026gt;pip install\u0026lt;\/code\u0026gt; for better and improved package tracking.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, that\u0026#39;s all we need to take care of packages and keep a list of these integrated packages for the project. You need to update the requirements.txt file every time you install any new package or modify the dependencies for a project. Simply use the command \u0026lt;code\u0026gt;pip freeze \u0026amp;gt; requirements.txt\u0026lt;\/code\u0026gt; in the activated virtual environment.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;creating-a-procfile\u0026#34;\u0026gt;Creating a Procfile\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Next up, we have the \u0026lt;code\u0026gt;Procfile\u0026lt;\/code\u0026gt;, a procfile is a special file that holds information about the processes to be run to start or activate the project. In our case, for django we need a web process that can manage the server.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;A Procfile is a simple file without any extension, make sure to write \u0026lt;code\u0026gt;Procfile\u0026lt;\/code\u0026gt; as it is as the name of the file in the root folder of the project. Inside the file add the following contents:\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;Procfile\u0026lt;\/strong\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;Procfile\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-Procfile\u0026#34;\u0026gt;web: gunicorn \u0026lt;project_name\u0026gt;.wsgi\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;As we can see we have defined the \u0026lt;code\u0026gt;web\u0026lt;\/code\u0026gt; process using \u0026lt;code\u0026gt;gunicorn\u0026lt;\/code\u0026gt;, \u0026lt;a href=\u0026#34;https:\/\/pypi.org\/project\/gunicorn\/\u0026#34;\u0026gt;Gunicorn\u0026lt;\/a\u0026gt; is a python package that helps in creating WSGI HTTP Server for the UNIX operating systems. So, we need to install the package and update the package dependency list.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;pip install gunicorn\n\npip freeze \u0026gt; requirements.txt\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;That would be good to go for creating and serving up the project while deploying the project on Heroku.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;creating-a-heroku-app\u0026#34;\u0026gt;Creating a Heroku App\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;A Heroku App is basically like your Django Project, you can create apps for deploying your django projects on Heroku. You are limited to 5 apps on the Free tier but that can be expanded on the paid plans.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652456732519\/cyOQZ3UZK.png\u0026#34; alt=\u0026#34;image.png\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The name of your heroku app should be unique globally, you need to try a few combinations before a good one fits your project. This name has no significance on your django project code, though it would be the name from which you would access the web application as a name \u0026lt;code\u0026gt;\u0026amp;lt;app-name\u0026amp;gt;.herokuapp.com\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, choose it wisely if you are not attaching a custom domain. You can attach a custom domain, you can navigate to the \u0026lt;code\u0026gt;domain\u0026lt;\/code\u0026gt; section in the settings tab.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;setting-up-the-database\u0026#34;\u0026gt;Setting up the database\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;To set up and configure a database in django on Heroku, we need to manually acquire and attach a PostgreSQL add-on to the heroku app.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Firstly locate to the Resources Tab in your Heroku app.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Search \u0026lt;code\u0026gt;postgres\u0026lt;\/code\u0026gt; in the Add-ons Search bar\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Click on the \u0026lt;code\u0026gt;Heroku Postgres\u0026lt;\/code\u0026gt; Add-on\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Submit the Order Form and you have the add-on enabled in the app.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652456842273\/ijeWsVdOf.png\u0026#34; alt=\u0026#34;image.png\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652456877447\/dLG30ac_m.png\u0026#34; alt=\u0026#34;image.png\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Alternately, you can use the Heroku CLI,\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;heroku-cli-setup\u0026#34;\u0026gt;Heroku CLI Setup\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;You can use the Heroku CLI which is a command-line interface for managing and creating Heroku applications.  You need to first install the CLI by heading towards the \u0026lt;a href=\u0026#34;https:\/\/devcenter.heroku.com\/articles\/heroku-command-line\u0026#34;\u0026gt;heroku documentation\u0026lt;\/a\u0026gt;. Once the CLI is installed, you need to login into your Heroku account by entering the following command:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;heroku login\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652605604920\/HnTr2KbTi.png\u0026#34; alt=\u0026#34;image.png\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This will allow us to work with heroku commands and manage our heroku application from the command line itself. The below command will create a add-on for \u0026lt;code\u0026gt;heroku-postgres\u0026lt;\/code\u0026gt; for the application provided as the parameter options\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;heroku addons:create heroku-postgresql:hobby-dev --app \u0026lt;app_name\u0026gt;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652507166978\/i1IJ5EGjJ.png\u0026#34; alt=\u0026#34;image.png\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This should hopefully add a fresh instance of a postgres database for your heroku app. You can now configure the database for your project, we simply need the Database URL from the heroku app dashboard. We\u0026#39;ll see how to configure the environment variables in Django for Heroku to keep your secrets like the \u0026lt;code\u0026gt;SECRET_KEY\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;DATABSE_URL\u0026lt;\/code\u0026gt;, etc.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;If you want MySQL as a database, you can check out the \u0026lt;a href=\u0026#34;https:\/\/devcenter.heroku.com\/articles\/cleardb\u0026#34;\u0026gt;ClearDB\u0026lt;\/a\u0026gt; Add-On for Heroku to simply attach it like Postgres on your Heroku application. Also, if you wish to add \u0026lt;a href=\u0026#34;https:\/\/www.mongodb.com\/compatibility\/mongodb-and-django\u0026#34;\u0026gt;MongoDB\u0026lt;\/a\u0026gt; into your Django application on Heroku, you can use \u0026lt;a href=\u0026#34;https:\/\/devcenter.heroku.com\/articles\/ormongo\u0026#34;\u0026gt;Object Rocket\u0026lt;\/a\u0026gt;(OR Mongo). It is not available in the free tier though, unlike PostgreSQL and MySQL.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;configuring-environment-variables\u0026#34;\u0026gt;Configuring Environment Variables\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We need to keep our secrets for the django project out of the deployed code and in a safe place, we can create environment variables and keep them in a \u0026lt;code\u0026gt;.env\u0026lt;\/code\u0026gt; file which will be git-ignored. We do not want this \u0026lt;code\u0026gt;.env\u0026lt;\/code\u0026gt; file to be open source and thus should not be committed.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We first need to create a new secret key if you already have a GitHub repository, chances are you would have committed the default secret key open for the world to see, it is an insecure way of deploying django apps in production.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, open up a terminal and launch a python REPL:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;python\n\nimport secrets\nsecrets.token_hex(24)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652512239319\/5AACaTGOD.png\u0026#34; alt=\u0026#34;image.png\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This should generate a secret key that only you know now. So, just copy the key without the quotes and create a file \u0026lt;code\u0026gt;.env\u0026lt;\/code\u0026gt; in the root project folder.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;strong\u0026gt;.env\u0026lt;\/strong\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;SECRET_KEY=76419fd6885a677f802fd1d2b5acd0188e23e001042b05a8\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The \u0026lt;code\u0026gt;.env\u0026lt;\/code\u0026gt; file should also be added to the \u0026lt;code\u0026gt;.gitignore\u0026lt;\/code\u0026gt; file, so simply append the following in the \u0026lt;code\u0026gt;.gitignore\u0026lt;\/code\u0026gt; file\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;.env\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This file is only created to test the project locally, so we need to also make this key available on heroku. For doing that we need to add Config Variables to the heroku app.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Locate to the Settings Tab in your Heroku Application Dashboard\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;We have the \u0026lt;code\u0026gt;Config Vars\u0026lt;\/code\u0026gt; section in the located tab\n= We need to reveal those variables and we will be able to see all the variables.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652456988713\/5VM6E29_o.png\u0026#34; alt=\u0026#34;image.png\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We already have a \u0026lt;code\u0026gt;DATABASE_URL\u0026lt;\/code\u0026gt; variable declared when we attached the \u0026lt;code\u0026gt;django-postgres\u0026lt;\/code\u0026gt; database to our application. We will now add one more variable to the Application, i.e. the \u0026lt;code\u0026gt;SECRET_KEY\u0026lt;\/code\u0026gt;. Simply, enter the name of the key and also enter the value of the key, so basically a key-value pair. Simply click on the \u0026lt;code\u0026gt;Add\u0026lt;\/code\u0026gt; button and this will add the variable to your application.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652515244870\/LRyPzJr41.png\u0026#34; alt=\u0026#34;image.png\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;You also need to copy the \u0026lt;code\u0026gt;DATABSE_URL\u0026lt;\/code\u0026gt; into our local setup file(\u0026lt;code\u0026gt;.env\u0026lt;\/code\u0026gt; file). Copy the Database URL and paste it into the \u0026lt;code\u0026gt;.env\u0026lt;\/code\u0026gt; file as follows:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;env\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-env\u0026#34;\u0026gt;DATABASE_URL=postgres:\/\/sjxgipufegmgsw:78cbb568e@ec2-52-4-104-184.compute-1.amazonaws.com:5432\/dbmuget\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The format for the postgres URL is as follows:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;postgresql:\/\/[user[:password]@][netloc][:port][\/dbname]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We have now created environment variables for our django application and also added config vars in the heroku app, we now need a way to parse these environment variables into the Django project.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;parsing-environment-variables-using-python-dotenv\u0026#34;\u0026gt;Parsing Environment variables using python-dotenv\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We will use \u0026lt;a href=\u0026#34;https:\/\/pypi.org\/project\/python-dotenv\/\u0026#34;\u0026gt;python-dotenv\u0026lt;\/a\u0026gt; to parse variables into the django settings configurations like \u0026lt;code\u0026gt;SECRET_KEY\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;DATABASES\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Install \u0026lt;code\u0026gt;python-dotenv\u0026lt;\/code\u0026gt; with pip with the command :\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;pip install python-dotenv\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We need to then modify the default variables in the \u0026lt;code\u0026gt;settings.py\u0026lt;\/code\u0026gt; file. Firstly, we will load in the \u0026lt;code\u0026gt;.env\u0026lt;\/code\u0026gt; file for accessing the environment variables for the configuration of the project.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Append the following code, to the top of the \u0026lt;code\u0026gt;settings.py\u0026lt;\/code\u0026gt; file, make sure don\u0026#39;t override the configuration so remove unnecessary imports and configurations.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;python\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-python\u0026#34;\u0026gt;# \u0026lt;project_name\u0026gt;\/settings.py\n\nimport os\nfrom dotenv import load_dotenv\n\nBASE_DIR = Path(__file__).resolve().parent.parent\n\nload_dotenv(os.path.join(BASE_DIR, \u0026#34;.env\u0026#34;))\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We have imported the package \u0026lt;code\u0026gt;dotenv\u0026lt;\/code\u0026gt; basically the \u0026lt;code\u0026gt;python-dotenv\u0026lt;\/code\u0026gt; into the \u0026lt;code\u0026gt;settings.py\u0026lt;\/code\u0026gt; file and the module \u0026lt;code\u0026gt;os\u0026lt;\/code\u0026gt; for loading the \u0026lt;code\u0026gt;.env\u0026lt;\/code\u0026gt; file. The \u0026lt;code\u0026gt;load_dotenv\u0026lt;\/code\u0026gt; function helps in loading the \u0026lt;code\u0026gt;key-value\u0026lt;\/code\u0026gt; pairs which are the configuration variables that can act as actual environment variables. We provide in a file to the \u0026lt;a href=\u0026#34;https:\/\/saurabh-kumar.com\/python-dotenv\/\u0026#34;\u0026gt;load_dotenv\u0026lt;\/a\u0026gt; function which is the \u0026lt;code\u0026gt;.env\u0026lt;\/code\u0026gt; file in our case, you can pick up any location for the \u0026lt;code\u0026gt;.env\u0026lt;\/code\u0026gt; file but make sure to change the location while parsing the file into the \u0026lt;code\u0026gt;load_dotenv\u0026lt;\/code\u0026gt; function.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;After loading the variables into the \u0026lt;code\u0026gt;settings.py\u0026lt;\/code\u0026gt; file, we now need to access those variables and set the appropriate variables the configuration from the variables received from the \u0026lt;code\u0026gt;load_dotenv\u0026lt;\/code\u0026gt; function. The \u0026lt;code\u0026gt;os.getenv\u0026lt;\/code\u0026gt; function to access the environment variables. The \u0026lt;code\u0026gt;os.getenv\u0026lt;\/code\u0026gt; function takes a parameter as the \u0026lt;code\u0026gt;key\u0026lt;\/code\u0026gt; for the environment variable and returns the value of the environment variable.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;python\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-python\u0026#34;\u0026gt;SECRET_KEY = os.getenv(\u0026#34;SECRET_KEY\u0026#34;)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We have secretly configured the \u0026lt;code\u0026gt;SECRET_KEY\u0026lt;\/code\u0026gt; for the django project. If you have any other variables as simple key-value pairs like \u0026lt;code\u0026gt;AUTH\u0026lt;\/code\u0026gt; passwords, username, etc. you can use this method to get the configuration variables.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;loading-database-configuration\u0026#34;\u0026gt;Loading Database configuration\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Databases are a bit different as compared to other simple configurations in django. We need to make a few adjustments to the default database configuration. We will install another package \u0026lt;code\u0026gt;dj-database-url\u0026lt;\/code\u0026gt; to configure \u0026lt;code\u0026gt;DATABASE_URL\u0026lt;\/code\u0026gt;. Since the databse_url has a few components we need a way to extract the details like the \u0026lt;code\u0026gt;hostname\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;port\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;database_name\u0026lt;\/code\u0026gt;, and \u0026lt;code\u0026gt;password\u0026lt;\/code\u0026gt;. Using the \u0026lt;code\u0026gt;dj-database-url\u0026lt;\/code\u0026gt; package we have a few functions that can serve the purpose.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;pip install dj-database-url\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;At the end of your \u0026lt;code\u0026gt;settings.py\u0026lt;\/code\u0026gt; file, append the following code.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;python\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-python\u0026#34;\u0026gt;import dj_database_url\n\nDATABASE_URL = os.getenv(\u0026#34;DATABASE_URL\u0026#34;)\n\nDATABASES = {\n    \u0026#34;default\u0026#34;: dj_database_url.config(default=DATABASE_URL, conn_max_age=1800),\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We would need an adapter for making migrations to the \u0026lt;code\u0026gt;PostgreSQL\u0026lt;\/code\u0026gt; database i.e. the \u0026lt;code\u0026gt;psycopg2\u0026lt;\/code\u0026gt; package. This is a mandatory step if you are working with \u0026lt;code\u0026gt;postgres\u0026lt;\/code\u0026gt; database. This can be installed with the simple pip install:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;pip install psycopg2\n\n# If it does not work try\npip install psycopg2-binary\n\n\n# if still error persists try installing setuptools\npip install -U setuptools\npip install psycopg2\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Now, that we have configured the database, we can now apply migrations to the fresh database of postgres provided by heroku. We will simply run the migrate command and in the heroku app the PostgreSQL database would have been modified and an appropriate schema should be applied.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;python manage.py migrate\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652602284553\/oTtGev28-.png\u0026#34; alt=\u0026#34;image.png\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Make sure to update the \u0026lt;code\u0026gt;requirements.txt\u0026lt;\/code\u0026gt; file before pushing the project to Heroku for making sure everything works as expected. Since we have installed a few additional packages that are directly used in the \u0026lt;code\u0026gt;settings.py\u0026lt;\/code\u0026gt; file, we need to run the \u0026lt;code\u0026gt;pip freeze\u0026lt;\/code\u0026gt; command to update the \u0026lt;code\u0026gt;requiremnets.txt\u0026lt;\/code\u0026gt; file.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;serving-static-files\u0026#34;\u0026gt;Serving Static Files\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Now, if you have some static files like \u0026lt;code\u0026gt;CSS\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;Javascript\u0026lt;\/code\u0026gt;, or \u0026lt;code\u0026gt;images\u0026lt;\/code\u0026gt;, you need to configure the staticfiles in order to serve them from the heroku server. We will require another config variable for collecting the static files from the selected repository.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;python\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-python\u0026#34;\u0026gt;\nSTATIC_URL = \u0026#34;static\/\u0026#34;\nSTATICFILES_DIRS = [os.path.join(BASE_DIR, \u0026#34;static\u0026#34;)]\nSTATIC_ROOT = os.path.join(BASE_DIR, \u0026#34;staticfiles\u0026#34;)\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Here, if you have served your static files from the \u0026lt;code\u0026gt;static\u0026lt;\/code\u0026gt; folder in the root directory of your django project, you can add the above code in the settings.py file. We will collect all static files in the folder along with the default static files provided by django in the \u0026lt;code\u0026gt;staticfiles\u0026lt;\/code\u0026gt; directory. Run the following command if you want to test whether the static files are properly collected and served.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;python manage.py collectstatic \n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652600828657\/JgL4nLuiL.png\u0026#34; alt=\u0026#34;image.png\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, this command will collect all the static files and store them in a single place. We see that the files from the admin section are also copied as well as the custom static files from the project configuration. Now, we can move on to set the config variable for the heroku app.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;DISABLE_COLLECTSTATIC = 0\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We can set the \u0026lt;code\u0026gt;DISABLE_COLLECTSTATIC\u0026lt;\/code\u0026gt; variable as \u0026lt;code\u0026gt;0\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;1\u0026lt;\/code\u0026gt; indicating whether to disable it or not. We have currently enabled the static file collection while deploying the app but you can set it to \u0026lt;code\u0026gt;1\u0026lt;\/code\u0026gt; to disable the collection of static files.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652613798420\/mbqzf1Kqd.png\u0026#34; alt=\u0026#34;image.png\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Since I first tested the application on heroku, the static files don\u0026#39;t work as expected, we need another package to make sure the staticfiles are served property. We will be installing the \u0026lt;code\u0026gt;whitenoise\u0026lt;\/code\u0026gt; package which serves as the middleware for serving the static files.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;pip install whitenoise\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Add the whitenoise middleware \u0026lt;code\u0026gt;whitenoise.middleware.WhiteNoiseMiddleware\u0026lt;\/code\u0026gt; to the \u0026lt;code\u0026gt;MIDDLEWARE\u0026lt;\/code\u0026gt; list in the \u0026lt;code\u0026gt;settings.py\u0026lt;\/code\u0026gt; file.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;python\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-python\u0026#34;\u0026gt;MIDDLEWARE = [\n...\n...\n...\n    \u0026#39;whitenoise.middleware.WhiteNoiseMiddleware\u0026#39;,\n]\n\n\u0060\u0060\u0060\n\nThat should be enough to make the most of the deployment on heroku. You will have to make a few adjustments as per your requirements and project.\n\n## Deploy from GitHub\n\nWe are now all set to deploy the application on Heroku, we can use the \u0060Connect to GitHub\u0060 or \u0060Heroku CLI\u0060 to push the code into production. Heroku CLI is quite easy with a few sets of commands but if your project is deployed on GitHub, you can straightaway let the deployment start the build on a push to a specific branch. This becomes quite automotive and easy to scale while deploying a large-scale application. \n\n\u0060\u0060\u0060\npip freeze \u0026gt; requirements.txt\n\u0060\u0060\u0060\n\nThis step is quite important because you need to make sure that all the packages are listed in the \u0060requirements.txt\u0060 file else you will have to wait for the build to fail and redeploy.\n\nMake sure the server is running first on your local machine, remember the server will be set up from scratch but the database will already have applied migrations if you have applied migrations before after connecting the Heroku Postgres database.\n \n\u0060\u0060\u0060\npython manage.py collectstatic\n\npython manage.py runserver\n\u0060\u0060\u0060\n\nThis will set up the origin of the remote repository that will be pushing the project code. Next, make sure to commit the code which will contain all the required stuff for deploying the code.\n\nChecklist for deploying the code\n\n\u0060\u0060\u0060\n- requirements.txt\n- Procfile\n- runtime.txt\n- django-project\n- environment variables \/ config variables \n- static file configuration\n- database configuration\n- migrate schema of database \n- gitignore file for ignoring virtualenvs, .env file, staticfiles, etc\n\u0060\u0060\u0060\n\nhere\u0026#39;s a sample \u0060.gitignore\u0060 for a minimal django project.\n\n\u0060\u0060\u0060gitignore\n.env\/\n.venv\/\nenv\/\nvenv\/\n*.env\n\n*.pyc\ndb.sqlite3\nstaticfiles\/\n\u0060\u0060\u0060\n\nIf you want a full-fledged \u0060.gitignore\u0060 for a complex django project, you can take the reference from Jose Padilla\u0026#39;s [gitignore Template](https:\/\/github.com\/jpadilla\/django-project-template\/blob\/master\/.gitignore) for a django project.  \n\n### Git Commit the Django Project\n\u0060\u0060\u0060\ngit status \n\ngit add .\n\ngit commit -m \u0026#34;config for heroku deployment\u0026#34;\n\u0060\u0060\u0060\nCarefully check the status of the git repository before committing and make sure you don\u0026#39;t forget anything by mistake, it won\u0026#39;t a big problem but it would mess up the build process.\n\n\n![image.png](https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652613991525\/hxQgtGOoM.png)\n\nAfter committing the code, we can now push the code to GitHub. We first need to set the remote repository reference to be able to push the code to it. \n\n\u0060\u0060\u0060\ngit remote add origin https:\/\/github.com\/\u0026lt;username\u0026gt;\/\u0026lt;repo_name\u0026gt;\n\u0060\u0060\u0060\nThis will set up the \u0060origin\u0060 as the remote repository on GitHub. Once the remote repository is created, we can move into the push of the git repository that will trigger the build. First, navigate to the \u0060Deploy\u0060 section in the heroku app\u0026#39;s dashboard where we want to connect the \u0060GitHub\u0060 repository and allow the automatic deploy from a branch in this case we have chosen the \u0060main\u0060 branch.\n\nDue to some \u0060Heroku\u0060 Internal Server Issues, the GitHub integration seems to have broken and isn\u0026#39;t working as of May 2022, but it might work later. \n\nBelow is a screenshot of my previous project deployed to Heroku using a GitHub repository.\n\n![image.png](https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652605497382\/5VuQUQ0t0.png)\n\n\u0060\u0060\u0060\ngit push origin main\n\u0060\u0060\u0060\n\nThis will prompt you for your GitHub credentials and will deploy the commits to the remote repository on GitHub. This push on the main branch should also trigger the build process of the heroku app for this django project. You can navigate to the Activity section for the Build logs. \n\nIf you have followed the article well, and your repository has all the correct configurations, the build will succeed, else chances are you might have missed a few things and the app might have crashed. You can debug your application build with the simple heroku CLI command:\n\n\u0060\u0060\u0060\nheroku logs --tail -a \u0026lt;app_name\u0026gt;\n\u0060\u0060\u0060\n\nThis can be quite handy and saves a lot of time in understanding what went wrong in the build. It might be related to database migration, static files, python package not found, and some silly mistakes and errors that can be fixed after committing the code and pushing it to GitHub again.\n\nIf you do not want a GitHub repository, you can directly push the code from the local git repository to the remote heroku app center. This will require us the Heroku CLI.\n\n## Heroku CLI\n\nWe can use the heroku CLI for pushing the code via the simple git repository. We can push the references via the branch and a remote repository on heroku to build our app.  For this, we assume you have heroku installed and logged in. We will require the django project code and heroku cli to build the django web application.\n\n\u0060\u0060\u0060bash\nheroku git:remote -a \u0026lt;heroku_app_name\u0026gt;\n\n# for my case\nheroku git:remote -a blog-django-dep\n\u0060\u0060\u0060\n\n![image.png](https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652614221069\/vCAKD0zsz.png)\n\nAfter this, you can commit your code and the project as git repository. We have added the remote repository location on heroku, we can now simply push the code to the remote repository.\n\n\u0060\u0060\u0060\ngit push heroku main\n\u0060\u0060\u0060\n\n![image.png](https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652614125785\/uEzFQ9VvQ.png)\n\nHere, \u0060heroku\u0060 is the remote repository location and \u0060main\u0060 is the branch of the repository. This will push the code to the repository and thereafter create a build to deploy the Django project as a Heroku application.\n\n![image.png](https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652614381808\/kYTmB3EO2p.png)\n\nYou can hit the \u0060Open App\u0060 button on the top right corner and there should be your deployed Django application. \n\n![image.png](https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652610395538\/xjUiODhoK.png)\n\n\n## A Few Tricks and Gotchas\n\nThere are a few tricks and issues that you might pop into while deploying a django project on heroku, especially the build process. It requires a few iterations to get the complete app setup.\n\n### Run command from the Dashboard console\n\nIf you don\u0026#39;t have heroku CLI set up and want to fix a few things on the pushed code to the heroku app, you can use the \u0060Run Console\u0060 option from the \u0060More\u0060 Tab on the top right corner of theApplication dashboard. This is a great way to run migrations, configure static files or tweak a few things here and there without messing up the code on GitHub or the remote git repositories. \n\n![image.png](https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652614775294\/lgDPwr2yr.png)\n\n\n![image.png](https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652614821950\/uTzQVB8sC.png)\n\n\n![image.png](https:\/\/cdn.hashnode.com\/res\/hashnode\/image\/upload\/v1652614845269\/BkZhu3SGH.png)\n\n### Deploy with Docker \n\nYou can even use the docker container to deploy a Django application on Heroku. It is a great way of learning a lot of deployment strategies and techniques using Docker. You\u0026#39;ll get familiar with interesting concepts like virtualization, and containerization, and also learn Docker on the way. You can follow this tutorial on [Deploying Django applications with Docker on Heroku](https:\/\/testdriven.io\/blog\/deploying-django-to-heroku-with-docker\/). Also, you can check out the official Heroku documentation for [deploying python applications](https:\/\/devcenter.heroku.com\/articles\/deploying-python).\n\n### What are Dynos?\n\nDynos are simply web processes or workers that serve your web application. Dynos in Heroku are allocated based on the build process, once the slug is created a dyno is created as it runs on a VM container. This simply means there are limitations on how to use the web application and its sleep process. The hobby tier is sufficient for normal testing projects and side projects though you will have to pay and move into advance tiers to increase the dyno allocations and scaling of those web processes. \n\nIt\u0026#39;s not a simple thing to understand but to keep it simple, it might be a container to process the client\u0026#39;s request and serve the page for a finite duration of the interaction. Also, your application will sleep after half an hour, if you try to reload the application every half an hour it will consume your resource allocation for the month and this is how the tiers and divided for paid services on Heroku. You can check out the detail over [here](https:\/\/www.heroku.com\/pricing#containers).\n\n## Conclusion\n\nSo, that is one of the ways we can deploy a Django application on Heroku with the PostgreSQL database. You can find the [django-blog project] on [GitHub] for following along with the deployment process.  In the next few parts of the series, we will be hopefully covering other platforms where you can deploy a Django o application.\n\nHopefully, you liked the above tutorial, if you have any questions. feedback, or queries, you can contact me on the Social handles provided below. Thank you for reading and till the next post Happy Coding :) \n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "django-deploy-heroku";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'" aria-label="Editor">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Django &#43; PostgreSQL Deployment on Heroku</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2022-05-15 20:00:00">2022-05-15 20:00:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/django">#django</a>
+                
+                <a href="/tags/web-development">#web-development</a>
+                
+                <a href="/tags/python">#python</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/Django-Deployment" class="series-link">📖 Django-Deployment</a>
+                    
+                    <a href="/series/Django-Series" class="series-link">📖 Django-Series</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=django-deploy-heroku&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>Django projects are quite easy to build and simple to understand, you might have created a Django application and wanted to show it to the world? You can deploy a basic Django application with a database(PostgreSQL) with Heroku. It provides a decent free tier with some great features and add-ons. A free tier Heroku account has a limitation of 5 apps, limited data in the database, limited connections to the server per month, and so on.</p>
+<p>Though the free tier is not a great option for bigger applications, it suits really well for smaller scale and ide projects, so we will be looking into the details of how to deploy a Django application to <a href="https://heroku.com/">Heroku</a> which is a Platform as Service (PaS).</p>
+<p>This series will be an extension of the series <a href="https://techstructiveblog.hashnode.dev/series/django-basics">Django basics</a> which covered the basics of the Django framework, we covered from basic Django fundamentals to building a CRUD API. In this series, we will be exploring some platforms for giving a better understanding of how things work and understanding a few components that were left as default while understanding the basics of Django. Let's get started with <a href="https://techstructiveblog.hashnode.dev/series/django-deployment">Django Deployment</a>!</p>
+<h2 id="creating-a-django-application">Creating a Django Application</h2>
+<p>For deploying an app, we definitely need an app, we need to create a basic Django application to deploy on the web. We'll be creating a simple blog application with a couple of views and a simple model structure. As for the database, we'll be using Postgres as Heroku has an add-on for it and it is pretty easy to configure.</p>
+<h3 id="set-up-a-virtual-environment">Set up a virtual environment</h3>
+<p>We need to set up a virtual environment in order to keep the Django project neat and tidy by managing the project-specific dependencies and packages. We can use the <a href="https://pypi.org/project/virtualenv/">virtualenv</a> package to isolate a python project from the rest of the system.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code># install the virtualenv package
+pip install virtualenv
+
+# create a virtual env for the project
+virtualenv .venv
+
+# activate the virtualenv
+Windows:
+.venv\Scriptsctivate
+
+Linux/macOS:
+source .venv/bin/activate
+</code></pre></div><p>This will set up the project nicely for a Django project, you now install the core Django package and get started with creating a Django application.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash"># install django
+pip install django
+
+# start a django project
+django-admin startproject blog .
+
+cd blog
+
+# create a application in django project
+python manage.py createapp api
+
+# Create some models, views, URLs, templates
+
+# run the server
+python manag.py runserver
+</code></pre></div><p>We assume you already have a Django project configured with some basic URLs, views and templates or static files as per your project and requirements, for this tutorial I will be using the simple blog application from my previous Django tutorials as a reference. You can follow along with my <a href="https://techstructiveblog.hashnode.dev/series/django-basics">Django Basics</a> series and refer to the Blog Application project on <a href="https://github.com/Mr-Destructive/django-blog">GitHub</a>.</p>
+<h2 id="configuring-the-django-application">Configuring the Django Application</h2>
+<p>Make sure to create and activate the virtual environment for this django project. This should be done to manage the dependencies and packages used in the project. If you are not aware of the virtual environment and django setup, you can follow up with this <a href="https://mr-destructive.github.io/techstructive-blog/django-setup-script/">post</a>.</p>
+<h3 id="creating-a-runtimetxt-file">Creating a runtime.txt file</h3>
+<p>Now, Firstly we need to specify which type and version of language we are using. Since Django is a Python-based web framework, we need to select the python version in a text file.</p>
+<p><strong>runtime.txt</strong></p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>python-3.9.5
+</code></pre></div><p>Here, the version can be anything as per your project and the packages installed.</p>
+<h3 id="creating-requirementstxt-file">Creating requirements.txt file</h3>
+<p>We'll first create a <code>requirements.txt</code> file for storing all the dependencies and packages installed in the application. This will help in installing dependencies while deploying the application. We can either use a <code>requirements.txt</code> file using <code>virtualenv</code> or a <code>Pipfile</code> using Pipenv. Both serve the same purpose but a bit differently.</p>
+<p>Assuming you are in an isolated virtual environment for this Django project, you can create a requirements.txt file using the below command:</p>
+<p>Make sure the virtualenv is activated before running the command:</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>pip freeze > requirements.txt
+</code></pre></div><p>This will create a simple text file that contains the package names along with the versions used in the current virtual environment. A simple Django requirements file would look something like this:</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>asgiref==3.4.1
+Django==3.2.11
+pytz==2021.3
+sqlparse==0.4.2
+typing_extensions==4.0.1
+</code></pre></div><p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652614060461/kPTZ9R8Xp.png" alt="image.png"></p>
+<p>This is vanilla Django without any additional dependencies but if you have integrated other functionalities like Django Rest Framework, PostgreSQL, Crispy Forms, Schedulers, etc. there might be additional dependencies that become quite crucial for the smooth working of the project.</p>
+<p>If you are using pipenv, you don't need to make any efforts to manually activate and manage virtual environment, the dependencies are installed and taken care of by the pipenv installer. You just need to make sure to install any package with <code>pipenv install</code> and not <code>pip install</code> for better and improved package tracking.</p>
+<p>So, that's all we need to take care of packages and keep a list of these integrated packages for the project. You need to update the requirements.txt file every time you install any new package or modify the dependencies for a project. Simply use the command <code>pip freeze &gt; requirements.txt</code> in the activated virtual environment.</p>
+<h3 id="creating-a-procfile">Creating a Procfile</h3>
+<p>Next up, we have the <code>Procfile</code>, a procfile is a special file that holds information about the processes to be run to start or activate the project. In our case, for django we need a web process that can manage the server.</p>
+<p>A Procfile is a simple file without any extension, make sure to write <code>Procfile</code> as it is as the name of the file in the root folder of the project. Inside the file add the following contents:</p>
+<p><strong>Procfile</strong></p>
+<div class="code-block"><div class="code-header"><span class="language-name">Procfile</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-Procfile">web: gunicorn <project_name>.wsgi
+</code></pre></div><p>As we can see we have defined the <code>web</code> process using <code>gunicorn</code>, <a href="https://pypi.org/project/gunicorn/">Gunicorn</a> is a python package that helps in creating WSGI HTTP Server for the UNIX operating systems. So, we need to install the package and update the package dependency list.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>pip install gunicorn
+
+pip freeze > requirements.txt
+</code></pre></div><p>That would be good to go for creating and serving up the project while deploying the project on Heroku.</p>
+<h2 id="creating-a-heroku-app">Creating a Heroku App</h2>
+<p>A Heroku App is basically like your Django Project, you can create apps for deploying your django projects on Heroku. You are limited to 5 apps on the Free tier but that can be expanded on the paid plans.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652456732519/cyOQZ3UZK.png" alt="image.png"></p>
+<p>The name of your heroku app should be unique globally, you need to try a few combinations before a good one fits your project. This name has no significance on your django project code, though it would be the name from which you would access the web application as a name <code>&lt;app-name&gt;.herokuapp.com</code>.</p>
+<p>So, choose it wisely if you are not attaching a custom domain. You can attach a custom domain, you can navigate to the <code>domain</code> section in the settings tab.</p>
+<h2 id="setting-up-the-database">Setting up the database</h2>
+<p>To set up and configure a database in django on Heroku, we need to manually acquire and attach a PostgreSQL add-on to the heroku app.</p>
+<ul>
+<li>Firstly locate to the Resources Tab in your Heroku app.</li>
+<li>Search <code>postgres</code> in the Add-ons Search bar</li>
+<li>Click on the <code>Heroku Postgres</code> Add-on</li>
+<li>Submit the Order Form and you have the add-on enabled in the app.</li>
+</ul>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652456842273/ijeWsVdOf.png" alt="image.png"></p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652456877447/dLG30ac_m.png" alt="image.png"></p>
+<p>Alternately, you can use the Heroku CLI,</p>
+<h3 id="heroku-cli-setup">Heroku CLI Setup</h3>
+<p>You can use the Heroku CLI which is a command-line interface for managing and creating Heroku applications.  You need to first install the CLI by heading towards the <a href="https://devcenter.heroku.com/articles/heroku-command-line">heroku documentation</a>. Once the CLI is installed, you need to login into your Heroku account by entering the following command:</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>heroku login
+
+</code></pre></div><p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652605604920/HnTr2KbTi.png" alt="image.png"></p>
+<p>This will allow us to work with heroku commands and manage our heroku application from the command line itself. The below command will create a add-on for <code>heroku-postgres</code> for the application provided as the parameter options</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>heroku addons:create heroku-postgresql:hobby-dev --app <app_name>
+</code></pre></div><p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652507166978/i1IJ5EGjJ.png" alt="image.png"></p>
+<p>This should hopefully add a fresh instance of a postgres database for your heroku app. You can now configure the database for your project, we simply need the Database URL from the heroku app dashboard. We'll see how to configure the environment variables in Django for Heroku to keep your secrets like the <code>SECRET_KEY</code>, <code>DATABSE_URL</code>, etc.</p>
+<p>If you want MySQL as a database, you can check out the <a href="https://devcenter.heroku.com/articles/cleardb">ClearDB</a> Add-On for Heroku to simply attach it like Postgres on your Heroku application. Also, if you wish to add <a href="https://www.mongodb.com/compatibility/mongodb-and-django">MongoDB</a> into your Django application on Heroku, you can use <a href="https://devcenter.heroku.com/articles/ormongo">Object Rocket</a>(OR Mongo). It is not available in the free tier though, unlike PostgreSQL and MySQL.</p>
+<h2 id="configuring-environment-variables">Configuring Environment Variables</h2>
+<p>We need to keep our secrets for the django project out of the deployed code and in a safe place, we can create environment variables and keep them in a <code>.env</code> file which will be git-ignored. We do not want this <code>.env</code> file to be open source and thus should not be committed.</p>
+<p>We first need to create a new secret key if you already have a GitHub repository, chances are you would have committed the default secret key open for the world to see, it is an insecure way of deploying django apps in production.</p>
+<p>So, open up a terminal and launch a python REPL:</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>python
+
+import secrets
+secrets.token_hex(24)
+</code></pre></div><p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652512239319/5AACaTGOD.png" alt="image.png"></p>
+<p>This should generate a secret key that only you know now. So, just copy the key without the quotes and create a file <code>.env</code> in the root project folder.</p>
+<p><strong>.env</strong></p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>SECRET_KEY=76419fd6885a677f802fd1d2b5acd0188e23e001042b05a8
+</code></pre></div><p>The <code>.env</code> file should also be added to the <code>.gitignore</code> file, so simply append the following in the <code>.gitignore</code> file</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>.env
+</code></pre></div><p>This file is only created to test the project locally, so we need to also make this key available on heroku. For doing that we need to add Config Variables to the heroku app.</p>
+<ul>
+<li>Locate to the Settings Tab in your Heroku Application Dashboard</li>
+<li>We have the <code>Config Vars</code> section in the located tab
+= We need to reveal those variables and we will be able to see all the variables.</li>
+</ul>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652456988713/5VM6E29_o.png" alt="image.png"></p>
+<p>We already have a <code>DATABASE_URL</code> variable declared when we attached the <code>django-postgres</code> database to our application. We will now add one more variable to the Application, i.e. the <code>SECRET_KEY</code>. Simply, enter the name of the key and also enter the value of the key, so basically a key-value pair. Simply click on the <code>Add</code> button and this will add the variable to your application.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652515244870/LRyPzJr41.png" alt="image.png"></p>
+<p>You also need to copy the <code>DATABSE_URL</code> into our local setup file(<code>.env</code> file). Copy the Database URL and paste it into the <code>.env</code> file as follows:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">env</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-env">DATABASE_URL=postgres://sjxgipufegmgsw:78cbb568e@ec2-52-4-104-184.compute-1.amazonaws.com:5432/dbmuget
+</code></pre></div><p>The format for the postgres URL is as follows:</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>postgresql://[user[:password]@][netloc][:port][/dbname]
+</code></pre></div><p>We have now created environment variables for our django application and also added config vars in the heroku app, we now need a way to parse these environment variables into the Django project.</p>
+<h3 id="parsing-environment-variables-using-python-dotenv">Parsing Environment variables using python-dotenv</h3>
+<p>We will use <a href="https://pypi.org/project/python-dotenv/">python-dotenv</a> to parse variables into the django settings configurations like <code>SECRET_KEY</code> and <code>DATABASES</code>.</p>
+<ul>
+<li>Install <code>python-dotenv</code> with pip with the command :</li>
+</ul>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>pip install python-dotenv
+</code></pre></div><p>We need to then modify the default variables in the <code>settings.py</code> file. Firstly, we will load in the <code>.env</code> file for accessing the environment variables for the configuration of the project.</p>
+<p>Append the following code, to the top of the <code>settings.py</code> file, make sure don't override the configuration so remove unnecessary imports and configurations.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python"># <project_name>/settings.py
+
+import os
+from dotenv import load_dotenv
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(os.path.join(BASE_DIR, ".env"))
+
+</code></pre></div><p>We have imported the package <code>dotenv</code> basically the <code>python-dotenv</code> into the <code>settings.py</code> file and the module <code>os</code> for loading the <code>.env</code> file. The <code>load_dotenv</code> function helps in loading the <code>key-value</code> pairs which are the configuration variables that can act as actual environment variables. We provide in a file to the <a href="https://saurabh-kumar.com/python-dotenv/">load_dotenv</a> function which is the <code>.env</code> file in our case, you can pick up any location for the <code>.env</code> file but make sure to change the location while parsing the file into the <code>load_dotenv</code> function.</p>
+<p>After loading the variables into the <code>settings.py</code> file, we now need to access those variables and set the appropriate variables the configuration from the variables received from the <code>load_dotenv</code> function. The <code>os.getenv</code> function to access the environment variables. The <code>os.getenv</code> function takes a parameter as the <code>key</code> for the environment variable and returns the value of the environment variable.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">SECRET_KEY = os.getenv("SECRET_KEY")
+</code></pre></div><p>We have secretly configured the <code>SECRET_KEY</code> for the django project. If you have any other variables as simple key-value pairs like <code>AUTH</code> passwords, username, etc. you can use this method to get the configuration variables.</p>
+<h3 id="loading-database-configuration">Loading Database configuration</h3>
+<p>Databases are a bit different as compared to other simple configurations in django. We need to make a few adjustments to the default database configuration. We will install another package <code>dj-database-url</code> to configure <code>DATABASE_URL</code>. Since the databse_url has a few components we need a way to extract the details like the <code>hostname</code>, <code>port</code>, <code>database_name</code>, and <code>password</code>. Using the <code>dj-database-url</code> package we have a few functions that can serve the purpose.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>pip install dj-database-url
+</code></pre></div><p>At the end of your <code>settings.py</code> file, append the following code.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">import dj_database_url
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+DATABASES = {
+    "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1800),
+}
+</code></pre></div><p>We would need an adapter for making migrations to the <code>PostgreSQL</code> database i.e. the <code>psycopg2</code> package. This is a mandatory step if you are working with <code>postgres</code> database. This can be installed with the simple pip install:</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>pip install psycopg2
+
+# If it does not work try
+pip install psycopg2-binary
+
+
+# if still error persists try installing setuptools
+pip install -U setuptools
+pip install psycopg2
+</code></pre></div><p>Now, that we have configured the database, we can now apply migrations to the fresh database of postgres provided by heroku. We will simply run the migrate command and in the heroku app the PostgreSQL database would have been modified and an appropriate schema should be applied.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>python manage.py migrate
+</code></pre></div><p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652602284553/oTtGev28-.png" alt="image.png"></p>
+<p>Make sure to update the <code>requirements.txt</code> file before pushing the project to Heroku for making sure everything works as expected. Since we have installed a few additional packages that are directly used in the <code>settings.py</code> file, we need to run the <code>pip freeze</code> command to update the <code>requiremnets.txt</code> file.</p>
+<h2 id="serving-static-files">Serving Static Files</h2>
+<p>Now, if you have some static files like <code>CSS</code>, <code>Javascript</code>, or <code>images</code>, you need to configure the staticfiles in order to serve them from the heroku server. We will require another config variable for collecting the static files from the selected repository.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">
+STATIC_URL = "static/"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+</code></pre></div><p>Here, if you have served your static files from the <code>static</code> folder in the root directory of your django project, you can add the above code in the settings.py file. We will collect all static files in the folder along with the default static files provided by django in the <code>staticfiles</code> directory. Run the following command if you want to test whether the static files are properly collected and served.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>python manage.py collectstatic 
+</code></pre></div><p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652600828657/JgL4nLuiL.png" alt="image.png"></p>
+<p>So, this command will collect all the static files and store them in a single place. We see that the files from the admin section are also copied as well as the custom static files from the project configuration. Now, we can move on to set the config variable for the heroku app.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>DISABLE_COLLECTSTATIC = 0
+</code></pre></div><p>We can set the <code>DISABLE_COLLECTSTATIC</code> variable as <code>0</code> or <code>1</code> indicating whether to disable it or not. We have currently enabled the static file collection while deploying the app but you can set it to <code>1</code> to disable the collection of static files.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1652613798420/mbqzf1Kqd.png" alt="image.png"></p>
+<p>Since I first tested the application on heroku, the static files don't work as expected, we need another package to make sure the staticfiles are served property. We will be installing the <code>whitenoise</code> package which serves as the middleware for serving the static files.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>pip install whitenoise
+</code></pre></div><p>Add the whitenoise middleware <code>whitenoise.middleware.WhiteNoiseMiddleware</code> to the <code>MIDDLEWARE</code> list in the <code>settings.py</code> file.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">python</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-python">MIDDLEWARE = [
+...
+...
+...
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+]
+
+```
+
+That should be enough to make the most of the deployment on heroku. You will have to make a few adjustments as per your requirements and project.
+
+## Deploy from GitHub
+
+We are now all set to deploy the application on Heroku, we can use the `Connect to GitHub` or `Heroku CLI` to push the code into production. Heroku CLI is quite easy with a few sets of commands but if your project is deployed on GitHub, you can straightaway let the deployment start the build on a push to a specific branch. This becomes quite automotive and easy to scale while deploying a large-scale application. 
+
+```
+pip freeze > requirements.txt
+```
+
+This step is quite important because you need to make sure that all the packages are listed in the `requirements.txt` file else you will have to wait for the build to fail and redeploy.
+
+Make sure the server is running first on your local machine, remember the server will be set up from scratch but the database will already have applied migrations if you have applied migrations before after connecting the Heroku Postgres database.
+ 
+```
+python manage.py collectstatic
+
+python manage.py runserver
+```
+
+This will set up the origin of the remote repository that will be pushing the project code. Next, make sure to commit the code which will contain all the required stuff for deploying the code.
+
+Checklist for deploying the code
+
+```
+- requirements.txt
+- Procfile
+- runtime.txt
+- django-project
+- environment variables / config variables 
+- static file configuration
+- database configuration
+- migrate schema of database 
+- gitignore file for ignoring virtualenvs, .env file, staticfiles, etc
+```
+
+here's a sample `.gitignore` for a minimal django project.
+
+```gitignore
+.env/
+.venv/
+env/
+venv/
+*.env
+
+*.pyc
+db.sqlite3
+staticfiles/
+```
+
+If you want a full-fledged `.gitignore` for a complex django project, you can take the reference from Jose Padilla's [gitignore Template](https://github.com/jpadilla/django-project-template/blob/master/.gitignore) for a django project.  
+
+### Git Commit the Django Project
+```
+git status 
+
+git add .
+
+git commit -m "config for heroku deployment"
+```
+Carefully check the status of the git repository before committing and make sure you don't forget anything by mistake, it won't a big problem but it would mess up the build process.
+
+
+![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1652613991525/hxQgtGOoM.png)
+
+After committing the code, we can now push the code to GitHub. We first need to set the remote repository reference to be able to push the code to it. 
+
+```
+git remote add origin https://github.com/<username>/<repo_name>
+```
+This will set up the `origin` as the remote repository on GitHub. Once the remote repository is created, we can move into the push of the git repository that will trigger the build. First, navigate to the `Deploy` section in the heroku app's dashboard where we want to connect the `GitHub` repository and allow the automatic deploy from a branch in this case we have chosen the `main` branch.
+
+Due to some `Heroku` Internal Server Issues, the GitHub integration seems to have broken and isn't working as of May 2022, but it might work later. 
+
+Below is a screenshot of my previous project deployed to Heroku using a GitHub repository.
+
+![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1652605497382/5VuQUQ0t0.png)
+
+```
+git push origin main
+```
+
+This will prompt you for your GitHub credentials and will deploy the commits to the remote repository on GitHub. This push on the main branch should also trigger the build process of the heroku app for this django project. You can navigate to the Activity section for the Build logs. 
+
+If you have followed the article well, and your repository has all the correct configurations, the build will succeed, else chances are you might have missed a few things and the app might have crashed. You can debug your application build with the simple heroku CLI command:
+
+```
+heroku logs --tail -a <app_name>
+```
+
+This can be quite handy and saves a lot of time in understanding what went wrong in the build. It might be related to database migration, static files, python package not found, and some silly mistakes and errors that can be fixed after committing the code and pushing it to GitHub again.
+
+If you do not want a GitHub repository, you can directly push the code from the local git repository to the remote heroku app center. This will require us the Heroku CLI.
+
+## Heroku CLI
+
+We can use the heroku CLI for pushing the code via the simple git repository. We can push the references via the branch and a remote repository on heroku to build our app.  For this, we assume you have heroku installed and logged in. We will require the django project code and heroku cli to build the django web application.
+
+```bash
+heroku git:remote -a <heroku_app_name>
+
+# for my case
+heroku git:remote -a blog-django-dep
+```
+
+![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1652614221069/vCAKD0zsz.png)
+
+After this, you can commit your code and the project as git repository. We have added the remote repository location on heroku, we can now simply push the code to the remote repository.
+
+```
+git push heroku main
+```
+
+![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1652614125785/uEzFQ9VvQ.png)
+
+Here, `heroku` is the remote repository location and `main` is the branch of the repository. This will push the code to the repository and thereafter create a build to deploy the Django project as a Heroku application.
+
+![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1652614381808/kYTmB3EO2p.png)
+
+You can hit the `Open App` button on the top right corner and there should be your deployed Django application. 
+
+![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1652610395538/xjUiODhoK.png)
+
+
+## A Few Tricks and Gotchas
+
+There are a few tricks and issues that you might pop into while deploying a django project on heroku, especially the build process. It requires a few iterations to get the complete app setup.
+
+### Run command from the Dashboard console
+
+If you don't have heroku CLI set up and want to fix a few things on the pushed code to the heroku app, you can use the `Run Console` option from the `More` Tab on the top right corner of theApplication dashboard. This is a great way to run migrations, configure static files or tweak a few things here and there without messing up the code on GitHub or the remote git repositories. 
+
+![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1652614775294/lgDPwr2yr.png)
+
+
+![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1652614821950/uTzQVB8sC.png)
+
+
+![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1652614845269/BkZhu3SGH.png)
+
+### Deploy with Docker 
+
+You can even use the docker container to deploy a Django application on Heroku. It is a great way of learning a lot of deployment strategies and techniques using Docker. You'll get familiar with interesting concepts like virtualization, and containerization, and also learn Docker on the way. You can follow this tutorial on [Deploying Django applications with Docker on Heroku](https://testdriven.io/blog/deploying-django-to-heroku-with-docker/). Also, you can check out the official Heroku documentation for [deploying python applications](https://devcenter.heroku.com/articles/deploying-python).
+
+### What are Dynos?
+
+Dynos are simply web processes or workers that serve your web application. Dynos in Heroku are allocated based on the build process, once the slug is created a dyno is created as it runs on a VM container. This simply means there are limitations on how to use the web application and its sleep process. The hobby tier is sufficient for normal testing projects and side projects though you will have to pay and move into advance tiers to increase the dyno allocations and scaling of those web processes. 
+
+It's not a simple thing to understand but to keep it simple, it might be a container to process the client's request and serve the page for a finite duration of the interaction. Also, your application will sleep after half an hour, if you try to reload the application every half an hour it will consume your resource allocation for the month and this is how the tiers and divided for paid services on Heroku. You can check out the detail over [here](https://www.heroku.com/pricing#containers).
+
+## Conclusion
+
+So, that is one of the ways we can deploy a Django application on Heroku with the PostgreSQL database. You can find the [django-blog project] on [GitHub] for following along with the deployment process.  In the next few parts of the series, we will be hopefully covering other platforms where you can deploy a Django o application.
+
+Hopefully, you liked the above tutorial, if you have any questions. feedback, or queries, you can contact me on the Social handles provided below. Thank you for reading and till the next post Happy Coding :) 
+</code></pre></div>
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        <div class="nav-link nav-prev nav-empty"></div>
+        
+
+        
+        
+        <a href="/posts/django-deploy-railway" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Django Project with PostgreSQL Deployment on Railway App</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/django-deploy-railway" class="related-link">
+                <span class="related-post-title">Django Project with PostgreSQL Deployment on Railway App</span>
+                <span class="related-post-date">2022-05-19 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/django-basics-admin" class="related-link">
+                <span class="related-post-title">Django Basics: Admin Section</span>
+                <span class="related-post-date">2022-01-26 22:25:00 &#43;0530</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/django-database-conf" class="related-link">
+                <span class="related-post-title">Django Basics: Database Configurations</span>
+                <span class="related-post-date">2022-01-21T16:40:34</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/django-basics-models" class="related-link">
+                <span class="related-post-title">Django Basics: Creating Models</span>
+                <span class="related-post-date">2022-01-04 22:15:00 &#43;0530</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/django-basics-static-files" class="related-link">
+                <span class="related-post-title">Django Basics: Static Files</span>
+                <span class="related-post-date">2021-12-27 22:45:00 &#43;0530</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

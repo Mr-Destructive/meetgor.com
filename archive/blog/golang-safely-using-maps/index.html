@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Safely using Maps in Golang: Differences in declaration and initialization | Meet Gor</title>
+    <meta name="title" content="Safely using Maps in Golang: Differences in declaration and initialization | Meet Gor">
+    <meta name="description" content="Walkthrough the differences and pitfalls in declaring and initializing maps in Golang">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/golang-safely-using-maps">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/golang-safely-using-maps">
+    <meta property="og:title" content="Safely using Maps in Golang: Differences in declaration and initialization">
+    <meta property="og:description" content="Walkthrough the differences and pitfalls in declaring and initializing maps in Golang">
+    <meta property="og:image" content="https://meetgor-cdn.pages.dev/golang-safe-map-usage.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Safely using Maps in Golang: Differences in declaration and initialization">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2024-08-31 18:30:00">
+    <meta property="article:modified_time" content="2024-08-31 18:30:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/golang-safely-using-maps">
+    <meta name="twitter:title" content="Safely using Maps in Golang: Differences in declaration and initialization">
+    <meta name="twitter:description" content="Walkthrough the differences and pitfalls in declaring and initializing maps in Golang">
+    <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/golang-safe-map-usage.png">
+    <meta name="twitter:image:alt" content="Safely using Maps in Golang: Differences in declaration and initialization">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/golang-safely-using-maps"
+        },
+        "headline": "Safely using Maps in Golang: Differences in declaration and initialization",
+        "description": "Walkthrough the differences and pitfalls in declaring and initializing maps in Golang",
+        "datePublished": "2024-08-31 18:30:00",
+        "dateModified": "2024-08-31 18:30:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        "image": "https:\/\/meetgor-cdn.pages.dev\/golang-safe-map-usage.png",
+        "keywords": "go",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;This week, I was working on one of the API wrapper packages for golang, and that dealt with sending post requests with URL encoded values, setting cookies, and all the fun stuff. However, while I was constructing the body, I was using \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url#Values\u0026#34;\u0026gt;url.Value\u0026lt;\/a\u0026gt; type to construct the body, and use that to add and set key-value pairs. However, I was getting a wired \u0026lt;code\u0026gt;nil\u0026lt;\/code\u0026gt; pointer reference error in some of the parts, I thought it was because of some of the variables I set manually. However, by debugging closer, I found out a common pitfall or bad practice of just declaring a type but initializing it and that causing \u0026lt;code\u0026gt;nil\u0026lt;\/code\u0026gt; reference errors.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In this post, I will cover, what are maps, how to create maps, and especially how to properly declare and initialize them. Create a proper distinction between the declaration and initialization of maps or any similar data type in golang.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;what-is-a-map-in-golang\u0026#34;\u0026gt;What is a map in Golang?\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;A \u0026lt;a href=\u0026#34;https:\/\/go.dev\/src\/runtime\/map.go\u0026#34;\u0026gt;map\u0026lt;\/a\u0026gt; or a hashmap in golang is a basic data type that allows us to store key-value pairs. Under the hood, it is a header map-like data structure that holds buckets, which are basically pointers to bucket arrays (contiguous memory). It has hash codes that store the actual key-value pairs, and pointers to new buckets if the current overflows with the number of keys. This is a really smart data structure that provides almost constant time access.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;how-to-create-maps-in-golang\u0026#34;\u0026gt;How to create maps in Golang\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;To create a simple map in golang, you can take an example of a letter frequency counter using a map of string and integer. The map will store the letters as keys and their frequency as values.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport \u0026#34;fmt\u0026#34;\n\nfunc main() {\n    words := \u0026#34;hello how are you\u0026#34;\n    letters := map[string]int{}\n\n    for _, word := range words {\n        wordCount[word]\u002b\u002b\n    }\n\n    fmt.Println(\u0026#34;Word counts:\u0026#34;)\n    for word, count := range wordCount {\n        fmt.Printf(\u0026#34;%s: %d\n\u0026#34;, word, count)\n    }\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\n\nWord counts:\ne: 2\n : 3\nw: 1\nr: 1\ny: 1\nu: 1\nh: 2\nl: 2\no: 3\na: 1\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, by initializing the map as \u0026lt;code\u0026gt;map[string]int{}\u0026lt;\/code\u0026gt; you will get an empty map. This can be then used to populate the keys and values, we iterate over the string, and for each character (rune) we cast that byte of character into the string and increment the value, the zero value for int is \u0026lt;code\u0026gt;0\u0026lt;\/code\u0026gt;, so by default if the key is not present, it will be zero, it is a bit of double-edged swords though, we never know the key is present in the map with the value \u0026lt;code\u0026gt;0\u0026lt;\/code\u0026gt; or the key is not present but the default value is \u0026lt;code\u0026gt;0\u0026lt;\/code\u0026gt;. For that, you need to check if the \u0026lt;code\u0026gt;key\u0026lt;\/code\u0026gt; exists in the map or not.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;For further details, you can check out my \u0026lt;a href=\u0026#34;https:\/\/www.meetgor.com\/golang-maps\/\u0026#34;\u0026gt;Golang Maps\u0026lt;\/a\u0026gt; post in detail.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;difference-between-declaration-and-initialization\u0026#34;\u0026gt;Difference between declaration and initialization\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;There is a difference in declaring and initializing any variable in a programming language and has to do a lot more with the implementation of the underlying type. In the case of primary data types like \u0026lt;code\u0026gt;int\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;float\u0026lt;\/code\u0026gt;, etc. there are default\/zero values, so that is the same as the declaration and initialization of the variables. However, in the case of maps and slices, the declaration is just making sure the variable is available to the scope of the program, however for initialization is setting it to its default\/zero value or the actual value that should be assigned.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, declaration simply makes the variable available within the scope of the program. For maps and slices, declaring a variable without initialization sets it to \u0026lt;code\u0026gt;nil\u0026lt;\/code\u0026gt;, meaning it points to no allocated memory and cannot be used directly.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Whereas the \u0026lt;code\u0026gt;initialization\u0026lt;\/code\u0026gt; allocates memory and sets the variable to a usable state. For maps and slices, you need to explicitly initialize them using syntax like \u0026lt;code\u0026gt;myMap = make(map[keyType]valueType)\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;slice = []type{}\u0026lt;\/code\u0026gt;. Without this initialization, attempting to use the map or slice will lead to runtime errors, such as panics for accessing or modifying a nil map or slice.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s looks at the values of a map when it is declared\/initialized\/not initialized.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Imagine you\u0026#39;re building a configuration manager that reads settings from a map. The map will be declared globally but initialized only when the configuration is loaded.\u0026lt;\/p\u0026gt;\n\u0026lt;ol\u0026gt;\n\u0026lt;li\u0026gt;Declared but not initialized\u0026lt;\/li\u0026gt;\n\u0026lt;\/ol\u0026gt;\n\u0026lt;p\u0026gt;The below code demonstrates a map access that is not initialized.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;log\u0026#34;\n)\n\n\/\/ Global map to store configuration settings\nvar configSettings map[string]string \/\/ Declared but not initialized\n\nfunc main() {\n\t\/\/ Attempt to get a configuration setting before initializing the map\n\tserverPort := getConfigSetting(\u0026#34;server_port\u0026#34;)\n\tfmt.Printf(\u0026#34;Server port: %s\n\u0026#34;, serverPort)\n}\n\nfunc getConfigSetting(key string) string {\n\tif configSettings == nil {\n\t\tlog.Fatal(\u0026#34;Configuration settings map is not initialized\u0026#34;)\n\t}\n\tvalue, exists := configSettings[key]\n\tif !exists {\n\t\treturn \u0026#34;Setting not found\u0026#34;\n\t}\n\treturn value\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\nServer port: Setting not found\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;ol start=\u0026#34;2\u0026#34;\u0026gt;\n\u0026lt;li\u0026gt;Declared and Initialized at the same time\u0026lt;\/li\u0026gt;\n\u0026lt;\/ol\u0026gt;\n\u0026lt;p\u0026gt;The below code demonstrates a map access that is initialized at the same time.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;log\u0026#34;\n)\n\n\/\/ Global map to store configuration settings\nvar configSettings = map[string]string{\n\t\u0026#34;server_port\u0026#34;:  \u0026#34;8080\u0026#34;,\n\t\u0026#34;database_url\u0026#34;: \u0026#34;localhost:5432\u0026#34;,\n}\n\nfunc main() {\n\tserverPort := getConfigSetting(\u0026#34;server_port\u0026#34;)\n\tfmt.Printf(\u0026#34;Server port: %s\n\u0026#34;, serverPort)\n}\n\nfunc getConfigSetting(key string) string {\n\tvalue, exists := configSettings[key]\n\tif !exists {\n\t\treturn \u0026#34;Setting not found\u0026#34;\n\t}\n\treturn value\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\nServer port: 8080\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;ol start=\u0026#34;3\u0026#34;\u0026gt;\n\u0026lt;li\u0026gt;Declared and later initialized\u0026lt;\/li\u0026gt;\n\u0026lt;\/ol\u0026gt;\n\u0026lt;p\u0026gt;The below code demonstrates a map access that is initialized later.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;log\u0026#34;\n)\n\n\/\/ Global map to store configuration settings\nvar configSettings map[string]string \/\/ declared but not initialized\n\nfunc main() {\n\t\/\/ Initialize configuration settings\n\tinitializeConfigSettings()\n    \/\/ if the function is not called, the map will be nil\n\n\t\/\/ Get a configuration setting safely\n\tserverPort := getConfigSetting(\u0026#34;server_port\u0026#34;)\n\tfmt.Printf(\u0026#34;Server port: %s\n\u0026#34;, serverPort)\n}\n\nfunc initializeConfigSettings() {\n\tif configSettings == nil {\n\t\tconfigSettings = make(map[string]string) \/\/ Properly initialize the map\n\t\tconfigSettings[\u0026#34;server_port\u0026#34;] = \u0026#34;8080\u0026#34;\n\t\tconfigSettings[\u0026#34;database_url\u0026#34;] = \u0026#34;localhost:5432\u0026#34;\n\t\tfmt.Println(\u0026#34;Configuration settings initialized\u0026#34;)\n\t}\n}\n\nfunc getConfigSetting(key string) string {\n\tif configSettings == nil {\n\t\tlog.Fatal(\u0026#34;Configuration settings map is not initialized\u0026#34;)\n\t}\n\tvalue, exists := configSettings[key]\n\tif !exists {\n\t\treturn \u0026#34;Setting not found\u0026#34;\n\t}\n\treturn value\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run main.go\nConfiguration settings initialized\nServer port: 8080\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above code, we declared the global map \u0026lt;code\u0026gt;configSettings\u0026lt;\/code\u0026gt; but didn\u0026#39;t initialize it at that point, until we wanted to access the map. We initialize the map in the main function, this main function could be other specific parts of the code, and the global variable \u0026lt;code\u0026gt;configSettings\u0026lt;\/code\u0026gt; a map from another part of the code, by initializing it in the required scope, we prevent it from causing nil pointer access errors. We only initialize the map if it is \u0026lt;code\u0026gt;nil\u0026lt;\/code\u0026gt; i.e. it has not been initialized elsewhere in the code. This prevents overriding the map\/flushing out the config set from other parts of the scope.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;pitfalls-in-access-of-un-initialized-maps\u0026#34;\u0026gt;Pitfalls in access of un-initialized maps\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;But since it deals with pointers, it comes with its own pitfalls like nil pointers access when the map is not initialized.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s take a look at an example, a real case where this might happen.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/url\u0026#34;\n)\n\nfunc main() {\n        var vals url.Values\n        vals.Add(\u0026#34;foo\u0026#34;, \u0026#34;bar\u0026#34;)\n        fmt.Println(vals)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This will result in a runtime panic.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;nginx\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-nginx\u0026#34;\u0026gt;$ go run main.go\npanic: assignment to entry in nil map\n\ngoroutine 1 [running]:\nnet\/url.Values.Add(...)\n        \/usr\/local\/go\/src\/net\/url\/url.go:902\nmain.main()\n        \/home\/meet\/code\/playground\/go\/main.go:10 \u002b0x2d\nexit status 2\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This is because the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/net\/url#Values\u0026#34;\u0026gt;url.Values\u0026lt;\/a\u0026gt; is a map of string and a list of string values. Since the underlying type is a map for \u0026lt;code\u0026gt;Values\u0026lt;\/code\u0026gt;, and in the example, we only have declared the variable \u0026lt;code\u0026gt;vals\u0026lt;\/code\u0026gt; with the type \u0026lt;code\u0026gt;url.Values\u0026lt;\/code\u0026gt;, it will point to a \u0026lt;code\u0026gt;nil\u0026lt;\/code\u0026gt; reference, hence the message on adding the value to the type. So, it is a good practice to use \u0026lt;code\u0026gt;make\u0026lt;\/code\u0026gt; while declaring or initializing a map data type. If you are not sure the underlying type is \u0026lt;code\u0026gt;map\u0026lt;\/code\u0026gt; then you could use \u0026lt;code\u0026gt;Type{}\u0026lt;\/code\u0026gt; to initialize an empty value of that type.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;net\/url\u0026#34;\n)\n\nfunc main() {\n        vals := make(url.Values)\n        \/\/ OR\n        \/\/ vals := url.Values{}\n        vals.Add(\u0026#34;foo\u0026#34;, \u0026#34;bar\u0026#34;)\n        fmt.Println(vals)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run urlvals.go\nmap[foo:[bar]]\nfoo=bar\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;It is also recommended by the \u0026lt;a href=\u0026#34;https:\/\/go.dev\/blog\/maps\u0026#34;\u0026gt;golang team\u0026lt;\/a\u0026gt; to use the make function while initializing a map. So, either use \u0026lt;code\u0026gt;make\u0026lt;\/code\u0026gt; for maps, slices, and channels, or initialize the empty value variable with \u0026lt;code\u0026gt;Type{}\u0026lt;\/code\u0026gt;. Both of them work similarly, but the latter is more generally applicable to structs as well.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Understanding the difference between declaring and initializing maps in Golang is essential for any developer, not just in golang, but in general. As we\u0026#39;ve explored, simply declaring a map variable without initializing it can lead to runtime errors, such as panics when attempting to access or modify a nil map. Initializing a map ensures that it is properly allocated in memory and ready for use, thereby avoiding these pitfalls.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;By following best practices—such as using the make function or initializing with Type{}—you can prevent common issues related to uninitialized maps. Always ensure that maps and slices are explicitly initialized before use to safeguard against unexpected nil pointer dereferences\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Thank you for reading this post, If you have any questions, feedback, and suggestions, feel free to drop them in the comments.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "golang-safely-using-maps";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Safely using Maps in Golang: Differences in declaration and initialization</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2024-08-31 18:30:00">2024-08-31 18:30:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+            </div>
+            
+            
+            
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>This week, I was working on one of the API wrapper packages for golang, and that dealt with sending post requests with URL encoded values, setting cookies, and all the fun stuff. However, while I was constructing the body, I was using <a href="https://pkg.go.dev/net/url#Values">url.Value</a> type to construct the body, and use that to add and set key-value pairs. However, I was getting a wired <code>nil</code> pointer reference error in some of the parts, I thought it was because of some of the variables I set manually. However, by debugging closer, I found out a common pitfall or bad practice of just declaring a type but initializing it and that causing <code>nil</code> reference errors.</p>
+<p>In this post, I will cover, what are maps, how to create maps, and especially how to properly declare and initialize them. Create a proper distinction between the declaration and initialization of maps or any similar data type in golang.</p>
+<h2 id="what-is-a-map-in-golang">What is a map in Golang?</h2>
+<p>A <a href="https://go.dev/src/runtime/map.go">map</a> or a hashmap in golang is a basic data type that allows us to store key-value pairs. Under the hood, it is a header map-like data structure that holds buckets, which are basically pointers to bucket arrays (contiguous memory). It has hash codes that store the actual key-value pairs, and pointers to new buckets if the current overflows with the number of keys. This is a really smart data structure that provides almost constant time access.</p>
+<h2 id="how-to-create-maps-in-golang">How to create maps in Golang</h2>
+<p>To create a simple map in golang, you can take an example of a letter frequency counter using a map of string and integer. The map will store the letters as keys and their frequency as values.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import "fmt"
+
+func main() {
+    words := "hello how are you"
+    letters := map[string]int{}
+
+    for _, word := range words {
+        wordCount[word]++
+    }
+
+    fmt.Println("Word counts:")
+    for word, count := range wordCount {
+        fmt.Printf("%s: %d
+", word, count)
+    }
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+
+Word counts:
+e: 2
+ : 3
+w: 1
+r: 1
+y: 1
+u: 1
+h: 2
+l: 2
+o: 3
+a: 1
+</code></pre></div><p>So, by initializing the map as <code>map[string]int{}</code> you will get an empty map. This can be then used to populate the keys and values, we iterate over the string, and for each character (rune) we cast that byte of character into the string and increment the value, the zero value for int is <code>0</code>, so by default if the key is not present, it will be zero, it is a bit of double-edged swords though, we never know the key is present in the map with the value <code>0</code> or the key is not present but the default value is <code>0</code>. For that, you need to check if the <code>key</code> exists in the map or not.</p>
+<p>For further details, you can check out my <a href="https://www.meetgor.com/golang-maps/">Golang Maps</a> post in detail.</p>
+<h2 id="difference-between-declaration-and-initialization">Difference between declaration and initialization</h2>
+<p>There is a difference in declaring and initializing any variable in a programming language and has to do a lot more with the implementation of the underlying type. In the case of primary data types like <code>int</code>, <code>string</code>, <code>float</code>, etc. there are default/zero values, so that is the same as the declaration and initialization of the variables. However, in the case of maps and slices, the declaration is just making sure the variable is available to the scope of the program, however for initialization is setting it to its default/zero value or the actual value that should be assigned.</p>
+<p>So, declaration simply makes the variable available within the scope of the program. For maps and slices, declaring a variable without initialization sets it to <code>nil</code>, meaning it points to no allocated memory and cannot be used directly.</p>
+<p>Whereas the <code>initialization</code> allocates memory and sets the variable to a usable state. For maps and slices, you need to explicitly initialize them using syntax like <code>myMap = make(map[keyType]valueType)</code> or <code>slice = []type{}</code>. Without this initialization, attempting to use the map or slice will lead to runtime errors, such as panics for accessing or modifying a nil map or slice.</p>
+<p>Let's looks at the values of a map when it is declared/initialized/not initialized.</p>
+<p>Imagine you're building a configuration manager that reads settings from a map. The map will be declared globally but initialized only when the configuration is loaded.</p>
+<ol>
+<li>Declared but not initialized</li>
+</ol>
+<p>The below code demonstrates a map access that is not initialized.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"log"
+)
+
+// Global map to store configuration settings
+var configSettings map[string]string // Declared but not initialized
+
+func main() {
+	// Attempt to get a configuration setting before initializing the map
+	serverPort := getConfigSetting("server_port")
+	fmt.Printf("Server port: %s
+", serverPort)
+}
+
+func getConfigSetting(key string) string {
+	if configSettings == nil {
+		log.Fatal("Configuration settings map is not initialized")
+	}
+	value, exists := configSettings[key]
+	if !exists {
+		return "Setting not found"
+	}
+	return value
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+Server port: Setting not found
+</code></pre></div><ol start="2">
+<li>Declared and Initialized at the same time</li>
+</ol>
+<p>The below code demonstrates a map access that is initialized at the same time.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"log"
+)
+
+// Global map to store configuration settings
+var configSettings = map[string]string{
+	"server_port":  "8080",
+	"database_url": "localhost:5432",
+}
+
+func main() {
+	serverPort := getConfigSetting("server_port")
+	fmt.Printf("Server port: %s
+", serverPort)
+}
+
+func getConfigSetting(key string) string {
+	value, exists := configSettings[key]
+	if !exists {
+		return "Setting not found"
+	}
+	return value
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+Server port: 8080
+</code></pre></div><ol start="3">
+<li>Declared and later initialized</li>
+</ol>
+<p>The below code demonstrates a map access that is initialized later.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"log"
+)
+
+// Global map to store configuration settings
+var configSettings map[string]string // declared but not initialized
+
+func main() {
+	// Initialize configuration settings
+	initializeConfigSettings()
+    // if the function is not called, the map will be nil
+
+	// Get a configuration setting safely
+	serverPort := getConfigSetting("server_port")
+	fmt.Printf("Server port: %s
+", serverPort)
+}
+
+func initializeConfigSettings() {
+	if configSettings == nil {
+		configSettings = make(map[string]string) // Properly initialize the map
+		configSettings["server_port"] = "8080"
+		configSettings["database_url"] = "localhost:5432"
+		fmt.Println("Configuration settings initialized")
+	}
+}
+
+func getConfigSetting(key string) string {
+	if configSettings == nil {
+		log.Fatal("Configuration settings map is not initialized")
+	}
+	value, exists := configSettings[key]
+	if !exists {
+		return "Setting not found"
+	}
+	return value
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run main.go
+Configuration settings initialized
+Server port: 8080
+</code></pre></div><p>In the above code, we declared the global map <code>configSettings</code> but didn't initialize it at that point, until we wanted to access the map. We initialize the map in the main function, this main function could be other specific parts of the code, and the global variable <code>configSettings</code> a map from another part of the code, by initializing it in the required scope, we prevent it from causing nil pointer access errors. We only initialize the map if it is <code>nil</code> i.e. it has not been initialized elsewhere in the code. This prevents overriding the map/flushing out the config set from other parts of the scope.</p>
+<h2 id="pitfalls-in-access-of-un-initialized-maps">Pitfalls in access of un-initialized maps</h2>
+<p>But since it deals with pointers, it comes with its own pitfalls like nil pointers access when the map is not initialized.</p>
+<p>Let's take a look at an example, a real case where this might happen.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/url"
+)
+
+func main() {
+        var vals url.Values
+        vals.Add("foo", "bar")
+        fmt.Println(vals)
+}
+</code></pre></div><p>This will result in a runtime panic.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">nginx</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-nginx">$ go run main.go
+panic: assignment to entry in nil map
+
+goroutine 1 [running]:
+net/url.Values.Add(...)
+        /usr/local/go/src/net/url/url.go:902
+main.main()
+        /home/meet/code/playground/go/main.go:10 +0x2d
+exit status 2
+</code></pre></div><p>This is because the <a href="https://pkg.go.dev/net/url#Values">url.Values</a> is a map of string and a list of string values. Since the underlying type is a map for <code>Values</code>, and in the example, we only have declared the variable <code>vals</code> with the type <code>url.Values</code>, it will point to a <code>nil</code> reference, hence the message on adding the value to the type. So, it is a good practice to use <code>make</code> while declaring or initializing a map data type. If you are not sure the underlying type is <code>map</code> then you could use <code>Type{}</code> to initialize an empty value of that type.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/url"
+)
+
+func main() {
+        vals := make(url.Values)
+        // OR
+        // vals := url.Values{}
+        vals.Add("foo", "bar")
+        fmt.Println(vals)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run urlvals.go
+map[foo:[bar]]
+foo=bar
+</code></pre></div><p>It is also recommended by the <a href="https://go.dev/blog/maps">golang team</a> to use the make function while initializing a map. So, either use <code>make</code> for maps, slices, and channels, or initialize the empty value variable with <code>Type{}</code>. Both of them work similarly, but the latter is more generally applicable to structs as well.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Understanding the difference between declaring and initializing maps in Golang is essential for any developer, not just in golang, but in general. As we've explored, simply declaring a map variable without initializing it can lead to runtime errors, such as panics when attempting to access or modify a nil map. Initializing a map ensures that it is properly allocated in memory and ready for use, thereby avoiding these pitfalls.</p>
+<p>By following best practices—such as using the make function or initializing with Type{}—you can prevent common issues related to uninitialized maps. Always ensure that maps and slices are explicitly initialized before use to safeguard against unexpected nil pointer dereferences</p>
+<p>Thank you for reading this post, If you have any questions, feedback, and suggestions, feel free to drop them in the comments.</p>
+<p>Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/nginx-02-web-servers" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">NGINX Survival Guide: Serving Web Applications</span>
+        </a>
+        
+
+        
+        
+        <a href="/posts/turso-libsql-db-golang" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Connect LibSQL Database hosted on Turso in a Golang Application</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-delete-method" class="related-link">
+                <span class="related-post-title">Golang Web: DELETE Method</span>
+                <span class="related-post-date">2025-01-12 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-patch-method" class="related-link">
+                <span class="related-post-title">Golang Web: PATCH Method</span>
+                <span class="related-post-date">2025-01-11 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-5" class="related-link">
+                <span class="related-post-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+                <span class="related-post-date">2024-12-11 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-4" class="related-link">
+                <span class="related-post-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+                <span class="related-post-date">2024-12-09 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-3" class="related-link">
+                <span class="related-post-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+                <span class="related-post-date">2024-12-07 20:45:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Connect LibSQL Database hosted on Turso in a Golang Application | Meet Gor</title>
+    <meta name="title" content="Connect LibSQL Database hosted on Turso in a Golang Application | Meet Gor">
+    <meta name="description" content="Exploring how to connect and query a LibSQL database hosted on Turso/Cloud in a Golang Application using libsql-client.">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go, turso, libsql">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/posts/turso-libsql-db-golang">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/posts/turso-libsql-db-golang">
+    <meta property="og:title" content="Connect LibSQL Database hosted on Turso in a Golang Application">
+    <meta property="og:description" content="Exploring how to connect and query a LibSQL database hosted on Turso/Cloud in a Golang Application using libsql-client.">
+    <meta property="og:image" content="https://meetgor-cdn.pages.dev/connect-turso-libsql-golang.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Connect LibSQL Database hosted on Turso in a Golang Application">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2024-09-30 23:45:00">
+    <meta property="article:modified_time" content="2024-09-30 23:45:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    <meta property="article:tag" content="turso">
+    
+    <meta property="article:tag" content="libsql">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/posts/turso-libsql-db-golang">
+    <meta name="twitter:title" content="Connect LibSQL Database hosted on Turso in a Golang Application">
+    <meta name="twitter:description" content="Exploring how to connect and query a LibSQL database hosted on Turso/Cloud in a Golang Application using libsql-client.">
+    <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/connect-turso-libsql-golang.png">
+    <meta name="twitter:image:alt" content="Connect LibSQL Database hosted on Turso in a Golang Application">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/posts\/turso-libsql-db-golang"
+        },
+        "headline": "Connect LibSQL Database hosted on Turso in a Golang Application",
+        "description": "Exploring how to connect and query a LibSQL database hosted on Turso\/Cloud in a Golang Application using libsql-client.",
+        "datePublished": "2024-09-30 23:45:00",
+        "dateModified": "2024-09-30 23:45:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        "image": "https:\/\/meetgor-cdn.pages.dev\/connect-turso-libsql-golang.png",
+        "keywords": "go, turso, libsql",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Welcome to the new series in Golang, Let\u0026#39;s Go with Turso. In this series, we will learn how to interact with LibSQL databases with Golang. We will connect with a remote\/local LibSQL database, create Embedded replicas, set up a local LibSQL database, and so much more as we explore and find out more features of LibSQL.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;connect-a-libsql-database-in-a-golang-application\u0026#34;\u0026gt;Connect a LibSQL database in a Golang application\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;In this post, we will learn how to connect and query a LibSQL database hosted on Turso\/Cloud in a Golang Application using libsql-client package. We will go from setting up golang project, installing turso-cli, creating a database on turso with the cli, connecting to the database with shell, and golang and finally, we can query the database using Golang.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;If you want to check out the YouTube video, check this out:\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/www.youtube.com\/watch?v=vBrvX0X0phw\u0026#34;\u0026gt;Conenct LibSQL Database hosted on Turso with Golang\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;!-- raw HTML omitted --\u0026gt;\n\u0026lt;h3 id=\u0026#34;initializing-a-golang-project\u0026#34;\u0026gt;Initializing a Golang project\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s start with initializing a Golang project.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;# go mod init \u0026lt;git-provider-domain\u0026gt;\/\u0026lt;username\u0026gt;\/\u0026lt;project-name\u0026gt;\n# Example\n\ngo mod init github.com\/mr-destructive\/lets-go-with-turso\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This will initialize the project in the current directory, creating a \u0026lt;code\u0026gt;go.mod\u0026lt;\/code\u0026gt; file with the specification of the Golang version and the packages that we will install and use in this module.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;installing-turso-cli\u0026#34;\u0026gt;Installing Turso CLI\u0026lt;\/h3\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;# Linux\/Windows\ncurl -sSfL https:\/\/get.tur.so\/install.sh | bash\ncurl -sSfL https:\/\/get.tur.so\/install.sh | bash\n\n# macOS\nbrew install tursodatabase\/tap\/turso\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This will install the Turso CLI. To verify that Turso CLI is installed properly, you can run the version command to check the setup.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;turso --version\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Once it is installed, we can now log in into Turso platform, simply by running the \u0026lt;code\u0026gt;auth signup\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;auth login\u0026lt;\/code\u0026gt; to Register or Log-in.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;turso auth signup\n\n# OR\n\nturso auth login\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This will redirect to the browser for the OAuth flow, once signed up and logged in, this will allow to interact with the Turso platform with the CLI that we downloaded.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;To make sure we are logged in as the correct user, we can run the \u0026lt;code\u0026gt;auth whoami\u0026lt;\/code\u0026gt; command to get the currently logged-in user.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;turso auth whoami\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This will print the username if you are logged-in. If everything seems correct, we can move ahead with the database creation step.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;creating-a-remote-libsql-database-on-turso\u0026#34;\u0026gt;Creating a Remote LibSQL Database on Turso\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;To create a LibSQL database hosted on Turso, we will use the \u0026lt;code\u0026gt;turso db create\u0026lt;\/code\u0026gt; command.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;turso db create\n\n# OR\n\nturso db create \u0026lt;name\u0026gt;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This will create a database with the specified name, even if you don\u0026#39;t provide the name, it will give out a random friendly two-word name to your database. It will create a database on the nearest location available from your location.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This command will output the following:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;Created database \u0026lt;db-name\u0026gt; at group default in 1.99s.\n\nStart an interactive SQL shell with the following:\n    turso db shell \u0026lt;db-name\u0026gt;\n\nTo see information about the database, including a connection URL, run:\n    turso db show \u0026lt;db-name\u0026gt;\n\nTo get an authentication token for the database, run:\n    turso db tokens create \u0026lt;db-name\u0026gt;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The next step, it shows to start an interactive shell, to see information about the database, and to generate an authentication token for the database.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We will move to the next part, which would be to create an authentication token for accessing the database from an external application.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;generating-and-storing-authentication-token-for-libsql-database\u0026#34;\u0026gt;Generating and Storing Authentication Token for LibSQL Database\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;After we executed the \u0026lt;code\u0026gt;db create\u0026lt;\/code\u0026gt; command, and it created the database on the Turso cloud, there was a command hint for creating a \u0026lt;code\u0026gt;token\u0026lt;\/code\u0026gt; with the command \u0026lt;code\u0026gt;db tokens create\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, this command will create a JWT authentication token, that will be used to connect and read\/write to the database.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;turso db tokens create \u0026lt;db-name\u0026gt;\n\n# OR\n\nturso db tokens create \u0026lt;db-name\u0026gt; --read-only\n\n# OR\n\nturso db tokens create \u0026lt;db-name\u0026gt; --expiration 30d\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We can use the simple \u0026lt;code\u0026gt;db tokens create \u0026amp;lt;db-name\u0026amp;gt;\u0026lt;\/code\u0026gt; to create an authentication token for the database with (read \u002b write access). You can copy that returned token into a environment variable, or wherever your application can read that token.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This could be stored in the environment variable as follows:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;export TURSO_AUTH_TOKEN=\u0026#34;\u0026lt;token\u0026gt;\u0026#34;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;To make a \u0026lt;code\u0026gt;read-only\u0026lt;\/code\u0026gt; token, we can use the flag \u0026lt;code\u0026gt;--read-only\u0026lt;\/code\u0026gt;. This will be handy, if you only have a database as a local replica, and the only purpose of the database is for querying data.\nThis will prevent any write operation on the database.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We can also use the \u0026lt;code\u0026gt;--expiration\u0026lt;\/code\u0026gt; flag that will be used to set the duration of the token. By default the value for expiry is \u0026lt;code\u0026gt;never\u0026lt;\/code\u0026gt;, but that could be a little too risky if you are making a serious application. You can either set it to \u0026lt;code\u0026gt;7d\u0026lt;\/code\u0026gt; which will make the token expire after seven days.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Now, we can get the remote database URL and connect to the database. The URL could be obtained by running the command \u0026lt;code\u0026gt;db show \u0026amp;lt;db-name\u0026amp;gt;\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;turso db show \u0026lt;db-name\u0026gt;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This will output the following:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;Name:           \u0026lt;db-name\u0026gt;\nURL:            libsql:\/\/\u0026lt;db-name\u0026gt;-\u0026lt;username\u0026gt;.turso.io\nID:             \u0026lt;db-id\u0026gt;   \nGroup:          default\nVersion:        0.24.22\nLocations:      bom\nSize:           4.1 kB\nArchived:       No\nBytes Synced:   0 B\nIs Schema:      No\n\nDatabase Instances:\nNAME        TYPE        LOCATION\nbom         primary     bom\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above output shows the meta-information of the database. This also has the URL hosted on Turso. We can construct the URL using the name of the database and your username as \u0026lt;code\u0026gt;libsql:\/\/\u0026amp;lt;db-name\u0026amp;gt;-\u0026amp;lt;username\u0026amp;gt;.turso.io\u0026lt;\/code\u0026gt;, you can set this in an environment variable or in the configuration wherever you can access it from the application.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;To set the URL of the database in your application, you can use the \u0026lt;code\u0026gt;TURSO_DB_URL\u0026lt;\/code\u0026gt; environment variable.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;export TURSO_DATABASE_URL=\u0026#34;libsql:\/\/\u0026lt;db-name\u0026gt;-\u0026lt;username\u0026gt;.turso.io\u0026#34;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, we have a remote database URL, and the access token configured, these are the two pieces that we will need to connect, read and write to the libsql database.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;installing-libsql-client-for-golang\u0026#34;\u0026gt;Installing LibSQL Client for Golang\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;So, we can install the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/github.com\/tursodatabase\/libsql-client-go\/libsql\u0026#34;\u0026gt;libsql-client-go\u0026lt;\/a\u0026gt; package for Golang which will be used as an SDK in Golang to interact with a remote LibSQL database.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;go get github.com\/tursodatabase\/libsql-client-go\/libsql\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This will install the package \u0026lt;code\u0026gt;libsql\u0026lt;\/code\u0026gt; into the golang module. Now, we can use this in our golang application.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;populating-the-libsql-database\u0026#34;\u0026gt;Populating the LibSQL Database\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Moving ahead, we have a database, but it doesn\u0026#39;t have data! So let\u0026#39;s create some tables and insert some rows. We can use the \u0026lt;code\u0026gt;db shell\u0026lt;\/code\u0026gt; command to open an interactive SQL shell on a remote LibSQL database.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;turso db shell libsql:\/\/\u0026lt;db-name\u0026gt;-\u0026lt;username\u0026gt;.turso.io\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This will be a default \u0026lt;code\u0026gt;sqlite3\u0026lt;\/code\u0026gt; like a shell, where we can execute SQL commands, like \u0026lt;code\u0026gt;.schema\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;.mode\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;.tables\u0026lt;\/code\u0026gt;, etc.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;  .dump       Render database content as SQL\n  .help       List of all available commands.\n  .indexes    List indexes in a table or database\n  .mode       Set output mode\n  .quit       Exit this program\n  .read       Execute commands from a file\n  .schema     Show table schemas.\n  .tables     List all existing tables in the database.\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;And definitely, we can use the normal SQL queries, to read, write and delete data from the database.\u0026lt;\/p\u0026gt;\n\u0026lt;h4 id=\u0026#34;creating-a-table\u0026#34;\u0026gt;Creating a Table\u0026lt;\/h4\u0026gt;\n\u0026lt;p\u0026gt;First, let\u0026#39;s create a simple table, called \u0026lt;code\u0026gt;posts\u0026lt;\/code\u0026gt; with columns like \u0026lt;code\u0026gt;id\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;title\u0026lt;\/code\u0026gt; as a \u0026lt;code\u0026gt;VARCHAR(100)\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;description\u0026lt;\/code\u0026gt; as a \u0026lt;code\u0026gt;VARCHAR(255)\u0026lt;\/code\u0026gt;, and \u0026lt;code\u0026gt;content\u0026lt;\/code\u0026gt; as \u0026lt;code\u0026gt;TEXT\u0026lt;\/code\u0026gt; which won\u0026#39;t be \u0026lt;code\u0026gt;NULL\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;CREATE TABLE posts\n  (\n     id          INTEGER PRIMARY KEY,\n     title       VARCHAR(100),\n     description VARCHAR(255),\n     content     TEXT NOT NULL\n  ); \n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This will create a table \u0026lt;code\u0026gt;posts\u0026lt;\/code\u0026gt; on the LibSQL database, yes this will mutate the primary LibSQL database which is hosted on Turso.\u0026lt;\/p\u0026gt;\n\u0026lt;h4 id=\u0026#34;inserting-rows\u0026#34;\u0026gt;Inserting Rows\u0026lt;\/h4\u0026gt;\n\u0026lt;p\u0026gt;Now, since we have the \u0026lt;code\u0026gt;posts\u0026lt;\/code\u0026gt; table, we will insert some rows into the table.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;INSERT INTO posts (title, description, content)\nVALUES \n    (\u0026#39;test title\u0026#39;, \u0026#39;test description\u0026#39;, \u0026#39;test content\u0026#39;);\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Now, we have some rows populated in the \u0026lt;code\u0026gt;posts\u0026lt;\/code\u0026gt; table. We can add more tables, and rows into the database, as usual, but this is just an example, so I\u0026#39;ll keep it short.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;connecting-to-the-libsql-database\u0026#34;\u0026gt;Connecting to the LibSQL Database\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Now, we have something to query from a database, after we connect to the database via the Golang application program.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;First, we will grab two pieces to connect to the database.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;export TURSO_DATABASE_URL=\u0026#34;libsql:\/\/\u0026lt;db-name\u0026gt;-\u0026lt;username\u0026gt;.turso.io\u0026#34;\nexport TURSO_AUTH_TOKEN=\u0026#34;\u0026lt;token\u0026gt;\u0026#34;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Now, let\u0026#39;s start with the Golang program code.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n    \u0026#34;fmt\u0026#34;\n    \u0026#34;os\u0026#34;\n)\n\nfunc main() {\n    dbURL := os.Getenv(\u0026#34;TURSO_DATABASE_URL\u0026#34;)\n    dbToken := os.Getenv(\u0026#34;TURSO_AUTH_TOKEN\u0026#34;)\n    dbUrl := fmt.Sprintf(\u0026#34;%s?authToken=%s\u0026#34;, dbURL, dbToken)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This will be the basic config to grab the database URL and the authentication token, then we can construct the \u0026lt;code\u0026gt;dbURL\u0026lt;\/code\u0026gt; along with \u0026lt;code\u0026gt;dbToken\u0026lt;\/code\u0026gt; to construct the complete dbURL which will allow to access the database.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Moving ahead, we will import \u0026lt;code\u0026gt;database\/sql\u0026lt;\/code\u0026gt; package that will be used to open the database connection and \u0026lt;code\u0026gt;github.com\/tursodatabase\/libsql-client-go\/libsql\u0026lt;\/code\u0026gt; to connect to the remote LibSQL database.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;database\/sql\u0026#34;\n    \u0026#34;fmt\u0026#34;\n    \u0026#34;os\u0026#34;\n\n\t_ \u0026#34;github.com\/tursodatabase\/libsql-client-go\/libsql\u0026#34;\n)\n\nfunc main() {\n\tdbURL := os.Getenv(\u0026#34;TURSO_DATABASE_URL\u0026#34;)\n\tdbToken := os.Getenv(\u0026#34;TURSO_AUTH_TOKEN\u0026#34;)\n\tdbUrl := fmt.Sprintf(\u0026#34;%s?authToken=%s\u0026#34;, dbURL, dbToken)\n\n\tdb, err := sql.Open(\u0026#34;libsql\u0026#34;, dbUrl)\n\tif err != nil {\n\t\tfmt.Fprintf(os.Stderr, \u0026#34;failed to open db %s: %s\u0026#34;, dbUrl, err)\n\t\tos.Exit(1)\n\t}\n\tdefer db.Close()\n\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The \u0026lt;code\u0026gt;sql.Open\u0026lt;\/code\u0026gt; function will open the connection to the database, this will return a \u0026lt;code\u0026gt;sql.DB\u0026lt;\/code\u0026gt; object. The driver selected is \u0026lt;code\u0026gt;libsql\u0026lt;\/code\u0026gt; and the \u0026lt;code\u0026gt;dbURL\u0026lt;\/code\u0026gt; is the entire URL along with the authentication token.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;type Post struct {\n\tId          int\n\tTitle       string\n\tDescription string\n\tContent     string\n}\n\nrows, err := db.Query(\u0026#34;SELECT * FROM posts\u0026#34;)\nif err != nil {\n    fmt.Fprintf(os.Stderr, \u0026#34;failed to query: %s\u0026#34;, err)\n    os.Exit(1)\n}\n\nfor rows.Next() {\n    var post Post\n    if err := rows.Scan(\u0026amp;post.Id, \u0026amp;post.Title, \u0026amp;post.Description, \u0026amp;post.Content); err != nil {\n        fmt.Fprintf(os.Stderr, \u0026#34;failed to scan: %s\u0026#34;, err)\n        os.Exit(1)\n    }\n    fmt.Println(post)\n}\ndefer rows.Close()\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Now, let\u0026#39;s query some data from the database. We can construct the \u0026lt;code\u0026gt;Post\u0026lt;\/code\u0026gt; struct that will be used to grab the required fields like \u0026lt;code\u0026gt;Id\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;Title\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;Description\u0026lt;\/code\u0026gt;, and \u0026lt;code\u0026gt;Content\u0026lt;\/code\u0026gt; from the \u0026lt;code\u0026gt;posts\u0026lt;\/code\u0026gt; table in the database.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Then, we will use the \u0026lt;code\u0026gt;db.Query\u0026lt;\/code\u0026gt; function to query the database. This function takes in a query and returns a \u0026lt;code\u0026gt;sql.Rows\u0026lt;\/code\u0026gt; object. We will iterate over all the \u0026lt;code\u0026gt;rows\u0026lt;\/code\u0026gt; returned from the database, with the \u0026lt;code\u0026gt;rows.Next()\u0026lt;\/code\u0026gt; that will fetch each row. Then we can \u0026lt;code\u0026gt;row.Scan\u0026lt;\/code\u0026gt; the row object with the appropriate and respective fields returned in the row. In this case, the \u0026lt;code\u0026gt;Id\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;Title\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;Description\u0026lt;\/code\u0026gt;, and the \u0026lt;code\u0026gt;Content\u0026lt;\/code\u0026gt; is fetched and stored into the \u0026lt;code\u0026gt;post\u0026lt;\/code\u0026gt; fields.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We have fetched the rows and we can do operations on them as required, this was just a basic example. So the entire code can be found below.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;database\/sql\u0026#34;\n\t\u0026#34;fmt\u0026#34;\n\t\u0026#34;os\u0026#34;\n\n\t_ \u0026#34;github.com\/tursodatabase\/libsql-client-go\/libsql\u0026#34;\n)\n\ntype Post struct {\n\tId          int\n\tTitle       string\n\tDescription string\n\tContent     string\n}\n\nfunc main() {\n\tdbURL := os.Getenv(\u0026#34;TURSO_DATABASE_URL\u0026#34;)\n\tdbToken := os.Getenv(\u0026#34;TURSO_AUTH_TOKEN\u0026#34;)\n\tdbUrl := fmt.Sprintf(\u0026#34;%s?authToken=%s\u0026#34;, dbURL, dbToken)\n\n\tdb, err := sql.Open(\u0026#34;libsql\u0026#34;, dbUrl)\n\tif err != nil {\n\t\tfmt.Fprintf(os.Stderr, \u0026#34;failed to open db %s: %s\u0026#34;, dbUrl, err)\n\t\tos.Exit(1)\n\t}\n\tdefer db.Close()\n\n\trows, err := db.Query(\u0026#34;SELECT * FROM posts\u0026#34;)\n\tif err != nil {\n\t\tfmt.Fprintf(os.Stderr, \u0026#34;failed to query: %s\u0026#34;, err)\n\t\tos.Exit(1)\n\t}\n\n\tfor rows.Next() {\n\t\tvar post Post\n\t\tif err := rows.Scan(\u0026amp;post.Id, \u0026amp;post.Title, \u0026amp;post.Description, \u0026amp;post.Content); err != nil {\n\t\t\tfmt.Fprintf(os.Stderr, \u0026#34;failed to scan: %s\u0026#34;, err)\n\t\t\tos.Exit(1)\n\t\t}\n\t\tfmt.Println(post)\n\t}\n\tdefer rows.Close()\n\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The output of the above code will result in all the rows present in the post table of the LibSQL database.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;$ go run remote.go\n\n{1 test title test description test content}\n{2 test title test description test content}\n{3 sample post libsql tutorial create db, connect, create tables, insert rows, sync}\n{4 test title test description test content}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;I have added a few more rows to the post table, as you can see we have successfully connected, inserted, and read from the post table in the LibSQL database hosted on Turso.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;For all the code related to this article, you can check out the \u0026lt;a href=\u0026#34;https:\/\/github.com\/mr-destructive\/lets-go-with-turso\u0026#34;\u0026gt;Let\u0026#39;s Go with Turso\u0026lt;\/a\u0026gt; GitHub repo for all the examples and additional examples for using LibSQL with Golang.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;So, that is a wrap for this part of the series, we have explored how to connect a remote LibSQL database hosted on Turso with Golang. In the next part of the series, we will explore how to create embedded replicas on Turso\u0026#39;s LibSQL database in Golang.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Thank you for reading this post, If you have any questions, feedback, and suggestions, feel free to drop them in the comments.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "posts\/turso-libsql-db-golang";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'" aria-label="Editor">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Connect LibSQL Database hosted on Turso in a Golang Application</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2024-09-30 23:45:00">2024-09-30 23:45:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+                <a href="/tags/turso">#turso</a>
+                
+                <a href="/tags/libsql">#libsql</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/lets-go-with-turso" class="series-link">📖 lets-go-with-turso</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=posts\/turso-libsql-db-golang&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>Welcome to the new series in Golang, Let's Go with Turso. In this series, we will learn how to interact with LibSQL databases with Golang. We will connect with a remote/local LibSQL database, create Embedded replicas, set up a local LibSQL database, and so much more as we explore and find out more features of LibSQL.</p>
+<h2 id="connect-a-libsql-database-in-a-golang-application">Connect a LibSQL database in a Golang application</h2>
+<p>In this post, we will learn how to connect and query a LibSQL database hosted on Turso/Cloud in a Golang Application using libsql-client package. We will go from setting up golang project, installing turso-cli, creating a database on turso with the cli, connecting to the database with shell, and golang and finally, we can query the database using Golang.</p>
+<p>If you want to check out the YouTube video, check this out:</p>
+<p><a href="https://www.youtube.com/watch?v=vBrvX0X0phw">Conenct LibSQL Database hosted on Turso with Golang</a></p>
+<!-- raw HTML omitted -->
+<h3 id="initializing-a-golang-project">Initializing a Golang project</h3>
+<p>Let's start with initializing a Golang project.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash"># go mod init <git-provider-domain>/<username>/<project-name>
+# Example
+
+go mod init github.com/mr-destructive/lets-go-with-turso
+
+</code></pre></div><p>This will initialize the project in the current directory, creating a <code>go.mod</code> file with the specification of the Golang version and the packages that we will install and use in this module.</p>
+<h3 id="installing-turso-cli">Installing Turso CLI</h3>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash"># Linux/Windows
+curl -sSfL https://get.tur.so/install.sh | bash
+curl -sSfL https://get.tur.so/install.sh | bash
+
+# macOS
+brew install tursodatabase/tap/turso
+
+</code></pre></div><p>This will install the Turso CLI. To verify that Turso CLI is installed properly, you can run the version command to check the setup.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>turso --version
+</code></pre></div><p>Once it is installed, we can now log in into Turso platform, simply by running the <code>auth signup</code> or <code>auth login</code> to Register or Log-in.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>turso auth signup
+
+# OR
+
+turso auth login
+</code></pre></div><p>This will redirect to the browser for the OAuth flow, once signed up and logged in, this will allow to interact with the Turso platform with the CLI that we downloaded.</p>
+<p>To make sure we are logged in as the correct user, we can run the <code>auth whoami</code> command to get the currently logged-in user.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>turso auth whoami
+</code></pre></div><p>This will print the username if you are logged-in. If everything seems correct, we can move ahead with the database creation step.</p>
+<h3 id="creating-a-remote-libsql-database-on-turso">Creating a Remote LibSQL Database on Turso</h3>
+<p>To create a LibSQL database hosted on Turso, we will use the <code>turso db create</code> command.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>turso db create
+
+# OR
+
+turso db create <name>
+</code></pre></div><p>This will create a database with the specified name, even if you don't provide the name, it will give out a random friendly two-word name to your database. It will create a database on the nearest location available from your location.</p>
+<p>This command will output the following:</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>Created database <db-name> at group default in 1.99s.
+
+Start an interactive SQL shell with the following:
+    turso db shell <db-name>
+
+To see information about the database, including a connection URL, run:
+    turso db show <db-name>
+
+To get an authentication token for the database, run:
+    turso db tokens create <db-name>
+</code></pre></div><p>The next step, it shows to start an interactive shell, to see information about the database, and to generate an authentication token for the database.</p>
+<p>We will move to the next part, which would be to create an authentication token for accessing the database from an external application.</p>
+<h3 id="generating-and-storing-authentication-token-for-libsql-database">Generating and Storing Authentication Token for LibSQL Database</h3>
+<p>After we executed the <code>db create</code> command, and it created the database on the Turso cloud, there was a command hint for creating a <code>token</code> with the command <code>db tokens create</code></p>
+<p>So, this command will create a JWT authentication token, that will be used to connect and read/write to the database.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">turso db tokens create <db-name>
+
+# OR
+
+turso db tokens create <db-name> --read-only
+
+# OR
+
+turso db tokens create <db-name> --expiration 30d
+</code></pre></div><p>We can use the simple <code>db tokens create &lt;db-name&gt;</code> to create an authentication token for the database with (read + write access). You can copy that returned token into a environment variable, or wherever your application can read that token.</p>
+<p>This could be stored in the environment variable as follows:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">export TURSO_AUTH_TOKEN="<token>"
+</code></pre></div><p>To make a <code>read-only</code> token, we can use the flag <code>--read-only</code>. This will be handy, if you only have a database as a local replica, and the only purpose of the database is for querying data.
+This will prevent any write operation on the database.</p>
+<p>We can also use the <code>--expiration</code> flag that will be used to set the duration of the token. By default the value for expiry is <code>never</code>, but that could be a little too risky if you are making a serious application. You can either set it to <code>7d</code> which will make the token expire after seven days.</p>
+<p>Now, we can get the remote database URL and connect to the database. The URL could be obtained by running the command <code>db show &lt;db-name&gt;</code></p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>turso db show <db-name>
+</code></pre></div><p>This will output the following:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">Name:           <db-name>
+URL:            libsql://<db-name>-<username>.turso.io
+ID:             <db-id>   
+Group:          default
+Version:        0.24.22
+Locations:      bom
+Size:           4.1 kB
+Archived:       No
+Bytes Synced:   0 B
+Is Schema:      No
+
+Database Instances:
+NAME        TYPE        LOCATION
+bom         primary     bom
+</code></pre></div><p>The above output shows the meta-information of the database. This also has the URL hosted on Turso. We can construct the URL using the name of the database and your username as <code>libsql://&lt;db-name&gt;-&lt;username&gt;.turso.io</code>, you can set this in an environment variable or in the configuration wherever you can access it from the application.</p>
+<p>To set the URL of the database in your application, you can use the <code>TURSO_DB_URL</code> environment variable.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">export TURSO_DATABASE_URL="libsql://<db-name>-<username>.turso.io"
+</code></pre></div><p>So, we have a remote database URL, and the access token configured, these are the two pieces that we will need to connect, read and write to the libsql database.</p>
+<h3 id="installing-libsql-client-for-golang">Installing LibSQL Client for Golang</h3>
+<p>So, we can install the <a href="https://pkg.go.dev/github.com/tursodatabase/libsql-client-go/libsql">libsql-client-go</a> package for Golang which will be used as an SDK in Golang to interact with a remote LibSQL database.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">go get github.com/tursodatabase/libsql-client-go/libsql
+</code></pre></div><p>This will install the package <code>libsql</code> into the golang module. Now, we can use this in our golang application.</p>
+<h3 id="populating-the-libsql-database">Populating the LibSQL Database</h3>
+<p>Moving ahead, we have a database, but it doesn't have data! So let's create some tables and insert some rows. We can use the <code>db shell</code> command to open an interactive SQL shell on a remote LibSQL database.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">turso db shell libsql://<db-name>-<username>.turso.io
+</code></pre></div><p>This will be a default <code>sqlite3</code> like a shell, where we can execute SQL commands, like <code>.schema</code>, <code>.mode</code>, <code>.tables</code>, etc.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">  .dump       Render database content as SQL
+  .help       List of all available commands.
+  .indexes    List indexes in a table or database
+  .mode       Set output mode
+  .quit       Exit this program
+  .read       Execute commands from a file
+  .schema     Show table schemas.
+  .tables     List all existing tables in the database.
+</code></pre></div><p>And definitely, we can use the normal SQL queries, to read, write and delete data from the database.</p>
+<h4 id="creating-a-table">Creating a Table</h4>
+<p>First, let's create a simple table, called <code>posts</code> with columns like <code>id</code>, <code>title</code> as a <code>VARCHAR(100)</code>, <code>description</code> as a <code>VARCHAR(255)</code>, and <code>content</code> as <code>TEXT</code> which won't be <code>NULL</code>.</p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">CREATE TABLE posts
+  (
+     id          INTEGER PRIMARY KEY,
+     title       VARCHAR(100),
+     description VARCHAR(255),
+     content     TEXT NOT NULL
+  ); 
+</code></pre><div class="output"></div></div><p>This will create a table <code>posts</code> on the LibSQL database, yes this will mutate the primary LibSQL database which is hosted on Turso.</p>
+<h4 id="inserting-rows">Inserting Rows</h4>
+<p>Now, since we have the <code>posts</code> table, we will insert some rows into the table.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">INSERT INTO posts (title, description, content)
+VALUES 
+    ('test title', 'test description', 'test content');
+</code></pre></div><p>Now, we have some rows populated in the <code>posts</code> table. We can add more tables, and rows into the database, as usual, but this is just an example, so I'll keep it short.</p>
+<h3 id="connecting-to-the-libsql-database">Connecting to the LibSQL Database</h3>
+<p>Now, we have something to query from a database, after we connect to the database via the Golang application program.</p>
+<p>First, we will grab two pieces to connect to the database.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">export TURSO_DATABASE_URL="libsql://<db-name>-<username>.turso.io"
+export TURSO_AUTH_TOKEN="<token>"
+</code></pre></div><p>Now, let's start with the Golang program code.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+    "fmt"
+    "os"
+)
+
+func main() {
+    dbURL := os.Getenv("TURSO_DATABASE_URL")
+    dbToken := os.Getenv("TURSO_AUTH_TOKEN")
+    dbUrl := fmt.Sprintf("%s?authToken=%s", dbURL, dbToken)
+}
+</code></pre></div><p>This will be the basic config to grab the database URL and the authentication token, then we can construct the <code>dbURL</code> along with <code>dbToken</code> to construct the complete dbURL which will allow to access the database.</p>
+<p>Moving ahead, we will import <code>database/sql</code> package that will be used to open the database connection and <code>github.com/tursodatabase/libsql-client-go/libsql</code> to connect to the remote LibSQL database.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"database/sql"
+    "fmt"
+    "os"
+
+	_ "github.com/tursodatabase/libsql-client-go/libsql"
+)
+
+func main() {
+	dbURL := os.Getenv("TURSO_DATABASE_URL")
+	dbToken := os.Getenv("TURSO_AUTH_TOKEN")
+	dbUrl := fmt.Sprintf("%s?authToken=%s", dbURL, dbToken)
+
+	db, err := sql.Open("libsql", dbUrl)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to open db %s: %s", dbUrl, err)
+		os.Exit(1)
+	}
+	defer db.Close()
+
+}
+</code></pre></div><p>The <code>sql.Open</code> function will open the connection to the database, this will return a <code>sql.DB</code> object. The driver selected is <code>libsql</code> and the <code>dbURL</code> is the entire URL along with the authentication token.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">type Post struct {
+	Id          int
+	Title       string
+	Description string
+	Content     string
+}
+
+rows, err := db.Query("SELECT * FROM posts")
+if err != nil {
+    fmt.Fprintf(os.Stderr, "failed to query: %s", err)
+    os.Exit(1)
+}
+
+for rows.Next() {
+    var post Post
+    if err := rows.Scan(&post.Id, &post.Title, &post.Description, &post.Content); err != nil {
+        fmt.Fprintf(os.Stderr, "failed to scan: %s", err)
+        os.Exit(1)
+    }
+    fmt.Println(post)
+}
+defer rows.Close()
+</code></pre></div><p>Now, let's query some data from the database. We can construct the <code>Post</code> struct that will be used to grab the required fields like <code>Id</code>, <code>Title</code>, <code>Description</code>, and <code>Content</code> from the <code>posts</code> table in the database.</p>
+<p>Then, we will use the <code>db.Query</code> function to query the database. This function takes in a query and returns a <code>sql.Rows</code> object. We will iterate over all the <code>rows</code> returned from the database, with the <code>rows.Next()</code> that will fetch each row. Then we can <code>row.Scan</code> the row object with the appropriate and respective fields returned in the row. In this case, the <code>Id</code>, <code>Title</code>, <code>Description</code>, and the <code>Content</code> is fetched and stored into the <code>post</code> fields.</p>
+<p>We have fetched the rows and we can do operations on them as required, this was just a basic example. So the entire code can be found below.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"database/sql"
+	"fmt"
+	"os"
+
+	_ "github.com/tursodatabase/libsql-client-go/libsql"
+)
+
+type Post struct {
+	Id          int
+	Title       string
+	Description string
+	Content     string
+}
+
+func main() {
+	dbURL := os.Getenv("TURSO_DATABASE_URL")
+	dbToken := os.Getenv("TURSO_AUTH_TOKEN")
+	dbUrl := fmt.Sprintf("%s?authToken=%s", dbURL, dbToken)
+
+	db, err := sql.Open("libsql", dbUrl)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to open db %s: %s", dbUrl, err)
+		os.Exit(1)
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM posts")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to query: %s", err)
+		os.Exit(1)
+	}
+
+	for rows.Next() {
+		var post Post
+		if err := rows.Scan(&post.Id, &post.Title, &post.Description, &post.Content); err != nil {
+			fmt.Fprintf(os.Stderr, "failed to scan: %s", err)
+			os.Exit(1)
+		}
+		fmt.Println(post)
+	}
+	defer rows.Close()
+
+}
+</code></pre></div><p>The output of the above code will result in all the rows present in the post table of the LibSQL database.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">$ go run remote.go
+
+{1 test title test description test content}
+{2 test title test description test content}
+{3 sample post libsql tutorial create db, connect, create tables, insert rows, sync}
+{4 test title test description test content}
+</code></pre></div><p>I have added a few more rows to the post table, as you can see we have successfully connected, inserted, and read from the post table in the LibSQL database hosted on Turso.</p>
+<p>For all the code related to this article, you can check out the <a href="https://github.com/mr-destructive/lets-go-with-turso">Let's Go with Turso</a> GitHub repo for all the examples and additional examples for using LibSQL with Golang.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>So, that is a wrap for this part of the series, we have explored how to connect a remote LibSQL database hosted on Turso with Golang. In the next part of the series, we will explore how to create embedded replicas on Turso's LibSQL database in Golang.</p>
+<p>Thank you for reading this post, If you have any questions, feedback, and suggestions, feel free to drop them in the comments.</p>
+<p>Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        <div class="nav-link nav-prev nav-empty"></div>
+        
+
+        
+        
+        <a href="/posts/turso-libsql-embedded-replicas-golang" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Use Embedded Replicas of LibSQL Database hosted on Turso with a Golang Application</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/turso-libsql-embedded-replicas-golang" class="related-link">
+                <span class="related-post-title">Use Embedded Replicas of LibSQL Database hosted on Turso with a Golang Application</span>
+                <span class="related-post-date">2024-10-31 21:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-delete-method" class="related-link">
+                <span class="related-post-title">Golang Web: DELETE Method</span>
+                <span class="related-post-date">2025-01-12 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-patch-method" class="related-link">
+                <span class="related-post-title">Golang Web: PATCH Method</span>
+                <span class="related-post-date">2025-01-11 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-5" class="related-link">
+                <span class="related-post-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+                <span class="related-post-date">2024-12-11 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-4" class="related-link">
+                <span class="related-post-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+                <span class="related-post-date">2024-12-09 20:45:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

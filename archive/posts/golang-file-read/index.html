@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Golang: File Reading | Meet Gor</title>
+    <meta name="title" content="Golang: File Reading | Meet Gor">
+    <meta name="description" content="Using system calls to read files in Golang. Reading files using various styles like line by line, word, character, chunk and any other specifc delimiter. Using os, bufio, io, encoding packages for helper funcitons making system calls.">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/posts/golang-file-read">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/posts/golang-file-read">
+    <meta property="og:title" content="Golang: File Reading">
+    <meta property="og:description" content="Using system calls to read files in Golang. Reading files using various styles like line by line, word, character, chunk and any other specifc delimiter. Using os, bufio, io, encoding packages for helper funcitons making system calls.">
+    <meta property="og:image" content="https://meetgor-cdn.pages.dev/golang-022-file-read.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Golang: File Reading">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2022-10-23 23:15:00">
+    <meta property="article:modified_time" content="2022-10-23 23:15:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/posts/golang-file-read">
+    <meta name="twitter:title" content="Golang: File Reading">
+    <meta name="twitter:description" content="Using system calls to read files in Golang. Reading files using various styles like line by line, word, character, chunk and any other specifc delimiter. Using os, bufio, io, encoding packages for helper funcitons making system calls.">
+    <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/golang-022-file-read.png">
+    <meta name="twitter:image:alt" content="Golang: File Reading">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/posts\/golang-file-read"
+        },
+        "headline": "Golang: File Reading",
+        "description": "Using system calls to read files in Golang. Reading files using various styles like line by line, word, character, chunk and any other specifc delimiter. Using os, bufio, io, encoding packages for helper funcitons making system calls.",
+        "datePublished": "2022-10-23 23:15:00",
+        "dateModified": "2022-10-23 23:15:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        "image": "https:\/\/meetgor-cdn.pages.dev\/golang-022-file-read.png",
+        "keywords": "go",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;In the 22nd post of the series, we will be looking into the file-handling process in golang, in the next few posts, we will cover the operations on file using golang. In this first entry of the file handling sub-series, we will understand the \u0026lt;code\u0026gt;READ\u0026lt;\/code\u0026gt; operation with files. We will see different ways to read a file, it can be word by word, line by line, or even custom chink by chunk.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;While dealing with files, we will also use standard library packages such as \u0026lt;code\u0026gt;os\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;bufio\u0026lt;\/code\u0026gt;, etc. We\u0026#39;ll also touch on how we can read files from a remote location. Using golang, we will have a low-level interaction with file management but golang also abstracts the most of heavy lifting and management of files for us, so it becomes quite easy to work with files.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;read-the-file-as-a-single-string-using-osreadfile\u0026#34;\u0026gt;Read the file as a single string (using os.ReadFile)\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We can use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/os\u0026#34;\u0026gt;os\u0026lt;\/a\u0026gt; package in golang, in which we have access to the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/os#ReadFile\u0026#34;\u0026gt;ReadFile\u0026lt;\/a\u0026gt; funciton. The \u0026lt;code\u0026gt;ReadFile\u0026lt;\/code\u0026gt; function takes in a parameter as a string which should be a file name, it returns a slice of bytes or an error. We have discussed the error handling in the previous part of the series. So, we have to use the comma ok error syntax to get the appropriate return value from the funciton. We can grab the slice of bytes as the text we want or an error if there are errors like a file doesn\u0026#39;t exist, it\u0026#39;s a folder, etc.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;os\u0026#34;\n\t\u0026#34;log\u0026#34;\n)\n\nfunc main() {\n\n\ttext, err := os.ReadFile(\u0026#34;sample.txt\u0026#34;)\n\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\n\tlog.Println(string(text))\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run main.go                                                                                                                                                         \n2022\/10\/23 22:39:11 Golang is a programming language.                                                                                                                    \ncreated: 2007                                                                                                                                                            \ntype:static \n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, under the hood here, we have text as a slice of bytes. We can iterate over the text as a slice and get the character by character-in the content of the file. Though we don\u0026#39;t directly interact with the file content, we are storing it in a variable. In technical words, the file is directly loaded into the memory at once. We thereby return a single string object containing the content of the file.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;read-file-line-by-line\u0026#34;\u0026gt;Read file line by line\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We can even read a file line by line. Using the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/bufio#NewScanner\u0026#34;\u0026gt;bufio.NewScanner()\u0026lt;\/a\u0026gt;, the function takes in a \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/io#Reader\u0026#34;\u0026gt;Reader\u0026lt;\/a\u0026gt; object in our case it will be a file object. The function returns a scanner object that can be used to read the text with a particular scanner method. The returned object can be used in the loop to iterate over the content, in our case, we use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/bufio#Scanner.Scan\u0026#34;\u0026gt;Scan\u0026lt;\/a\u0026gt; method to split the file into lines. But we can use other methods like \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/bufio#ScanWords\u0026#34;\u0026gt;ScanWords\u0026lt;\/a\u0026gt; for scanning words, \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/bufio#ScanRunes\u0026#34;\u0026gt;ScanRunes\u0026lt;\/a\u0026gt; for scanning character by character, \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/bufio#ScanBytes\u0026#34;\u0026gt;ScanBytes\u0026lt;\/a\u0026gt; for scanning byte by byte.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;bufio\u0026#34;\n\t\u0026#34;log\u0026#34;\n\t\u0026#34;os\u0026#34;\n)\n\nfunc main() {\n\n\tf, err := os.Open(\u0026#34;sample.txt\u0026#34;)\n\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tline_list := []string{}\n\n\tdefer f.Close()\n\tscanner := bufio.NewScanner(f)\n\tfor scanner.Scan() {\n\t\tline := scanner.Text()\n\t\tline_list = append(line_list, line)\n\t}\n\tif err := scanner.Err(); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfor _, line := range line_list {\n\t\tlog.Println(line)\n\t}\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run line.go\n\n2022\/10\/23 22:39:50 Golang is a programming language.\n2022\/10\/23 22:39:50 created: 2007\n2022\/10\/23 22:39:50 type:static\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, the file is read in with the \u0026lt;code\u0026gt;bufio.NewScanner\u0026lt;\/code\u0026gt; and is iterated line by line with the help of the \u0026lt;code\u0026gt;Scan\u0026lt;\/code\u0026gt; function. The text in the line is scanned and stored in the variable \u0026lt;code\u0026gt;line\u0026lt;\/code\u0026gt; which is a string, this is further appended to the string slice \u0026lt;code\u0026gt;line_list\u0026lt;\/code\u0026gt;. Hence we can iterate over the file content line by line and store the results as a string array.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Here we have used the \u0026lt;code\u0026gt;defer\u0026lt;\/code\u0026gt; keyword before calling the \u0026lt;code\u0026gt;f.Close()\u0026lt;\/code\u0026gt; method because we want to close the file after performing operations on the file. The defer will call the function at almost the end of the main function i.e. at the end of the program.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;read-file-by-a-delimiter\u0026#34;\u0026gt;Read File by a delimiter\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We can even read a file with a custom delimiter which can be used to read CSV or other delimiters. The \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/encoding\/csv\u0026#34;\u0026gt;csv\u0026lt;\/a\u0026gt; package has a \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/encoding\/csv#NewReader\u0026#34;\u0026gt;NewReader\u0026lt;\/a\u0026gt; function which takes in a object of file content, and it will return a \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/encoding\/csv#Reader\u0026#34;\u0026gt;Reader\u0026lt;\/a\u0026gt; object. We can alter the attribute \u0026lt;code\u0026gt;Comma\u0026lt;\/code\u0026gt; in the \u0026lt;code\u0026gt;Reader\u0026lt;\/code\u0026gt; object and set it to any value we want as a delimiter. Thereafter we can read the whole content or read it as words, lines, bytes, or chunks as per your criteria. The extracted content will be split as a slice of the data separated by the delimiter set in the \u0026lt;code\u0026gt;Comma\u0026lt;\/code\u0026gt; attribute.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;encoding\/csv\u0026#34;\n\t\u0026#34;log\u0026#34;\n\t\u0026#34;os\u0026#34;\n)\n\nfunc main() {\n\n\tf, err := os.Open(\u0026#34;delimeter.txt\u0026#34;)\n\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer f.Close()\n\n\treader := csv.NewReader(f)\n\n\treader.Comma = \u0026#39;:\u0026#39;\n\t\n    data, err := reader.ReadAll()\n\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tlog.Println(data)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ cat delimiter.txt\n\n10:22:2022\ngolang:21:read\n\n\n$ go run delimiter.go\n\n2022\/10\/23 22:40:44 [[10 22 2022] [golang 21 read]]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, the delimiter is set as \u0026lt;code\u0026gt;:\u0026lt;\/code\u0026gt; so by using the \u0026lt;code\u0026gt;Comma\u0026lt;\/code\u0026gt; attribute we can set the delimiter. By using the \u0026lt;code\u0026gt;NewReader\u0026lt;\/code\u0026gt; function, we fetch the reader object and by using the \u0026lt;code\u0026gt;ReadAll\u0026lt;\/code\u0026gt; function associated to the reader object, we read the contents. The content is fetched as a slice of strings which will be separated by the delimiter.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;reading-file-word-by-word\u0026#34;\u0026gt;Reading File word by word\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We can even use \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/bufio#ScanWords\u0026#34;\u0026gt;ScanWords\u0026lt;\/a\u0026gt; to read a file word by word. A word can be a collection of characters that are separated by space. Instead of reading it line by line, this function reads the file content after a space.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;bufio\u0026#34;\n\t\u0026#34;log\u0026#34;\n\t\u0026#34;os\u0026#34;\n)\n\nfunc main() {\n\tf, err := os.Open(\u0026#34;sample.txt\u0026#34;)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer f.Close()\n\n\tscanner := bufio.NewScanner(f)\n\tscanner.Split(bufio.ScanWords)\n\n\tif err := scanner.Err(); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\n\twordlist := []string{}\n\tfor scanner.Scan() {\n\t\tword := scanner.Text()\n\t\twordlist = append(wordlist, word)\n\t\tlog.Println(word)\n\t}\n\tlog.Println(wordlist)\n\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run word.go\n\n2022\/10\/23 22:42:03 Golang\n2022\/10\/23 22:42:03 is\n2022\/10\/23 22:42:03 a\n2022\/10\/23 22:42:03 programming\n2022\/10\/23 22:42:03 language.\n2022\/10\/23 22:42:03 created:\n2022\/10\/23 22:42:03 2007\n2022\/10\/23 22:42:03 type:static\n\n2022\/10\/23 22:42:03 [Golang is a programming language. created: 2007 type:static] \n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;With the \u0026lt;code\u0026gt;ScanWords\u0026lt;\/code\u0026gt; function, we can read the contents of the file word by word. The scanner object which has the actual content of the file is split by the \u0026lt;code\u0026gt;Split\u0026lt;\/code\u0026gt; function, the split criteria are used as Word, where the delimiter will be used as space. The \u0026lt;code\u0026gt;wordlist\u0026lt;\/code\u0026gt; is a slice of strings to which we append the string \u0026lt;code\u0026gt;word\u0026lt;\/code\u0026gt; that in turn is read from the \u0026lt;code\u0026gt;scanner.Text()\u0026lt;\/code\u0026gt; function.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;reading-files-in-chunks\u0026#34;\u0026gt;Reading Files in chunks\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We can even read files in chunks, a chunk is a collection\/array of bytes. We can specify the number of bytes we want to read in one go and the file reader will scan the content as a slice of that number of bytes each iteration. The \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/bufio#Reader.Read\u0026#34;\u0026gt;Read\u0026lt;\/a\u0026gt; funciton takes in a slice of bytes and will return the number of bytes in the reader object.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;bufio\u0026#34;\n\t\u0026#34;io\u0026#34;\n\t\u0026#34;log\u0026#34;\n\t\u0026#34;os\u0026#34;\n)\n\nfunc main() {\n\n\tf, err := os.Open(\u0026#34;sample.txt\u0026#34;)\n\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\n\tdefer f.Close()\n\n\treader := bufio.NewReader(f)\n\tchunk_size := 16\n\tchunk_list := []string{}\n\tbuf := make([]byte, chunk_size)\n\n\tfor {\n\t\tn, err := reader.Read(buf)\n\n\t\tif err != nil {\n\t\t\tif err != io.EOF {\n\t\t\t\tlog.Fatal(err)\n\t\t\t}\n\t\t\tbreak\n\t\t}\n\t\tchunk_list = append(chunk_list, string(buf[0:n]))\n\t}\n\tfor _, chunk := range chunk_list {\n\t\tlog.Print(chunk)\n\t}\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run chunks.go\n\n2022\/10\/23 22:44:41 Golang is a prog\n2022\/10\/23 22:44:41 ramming language\n2022\/10\/23 22:44:41 .\ncreated: 2007\n2022\/10\/23 22:44:41 type:static\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, we have opened the file and loaded the content into the \u0026lt;code\u0026gt;f\u0026lt;\/code\u0026gt; variable. the contents are read with the help of the \u0026lt;code\u0026gt;NewReader\u0026lt;\/code\u0026gt; function which returns a reader object which further can be used to read contents into chunks of bytes. The \u0026lt;code\u0026gt;chunk_size\u0026lt;\/code\u0026gt; defines the size we want to use for reading the content, \u0026lt;code\u0026gt;chunk_list\u0026lt;\/code\u0026gt; as a slice of strings which will hold the slice of chunks\/bytes as a type caste into a slice of strings. With the \u0026lt;code\u0026gt;Read\u0026lt;\/code\u0026gt; function, the bytes are read into the function, and the buffer is split as per the chunk size obtained in the \u0026lt;code\u0026gt;Read\u0026lt;\/code\u0026gt; function. We append the slice of bytes into the sliced array and thereby we obtain the slice of strings.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;read-file-character-by-character\u0026#34;\u0026gt;Read file character by character\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We can even read file each character at a time, using the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/bufio#ScanRunes\u0026#34;\u0026gt;ScanRunes\u0026lt;\/a\u0026gt; function, this function scans a single rune\/byte at a time. So, we can scan these runes one at a time and store them as a slice of bytes. Thereby we will have the content of the file stored as a slice of bytes.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;bufio\u0026#34;\n\t\u0026#34;log\u0026#34;\n\t\u0026#34;os\u0026#34;\n)\n\nfunc main() {\n\tf, err := os.Open(\u0026#34;sample.txt\u0026#34;)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer f.Close()\n\n\tscanner := bufio.NewScanner(f)\n\tscanner.Split(bufio.ScanRunes)\n\n\tif err := scanner.Err(); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\n\tcharlist := []byte{}\n\tfor scanner.Scan() {\n\t\tchar := byte(scanner.Text()[0])\n\t\tcharlist = append(charlist, char)\n\t}\n\tlog.Println(charlist)\n\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run char.go\n\n2022\/10\/23 22:48:55 [71 111 108 97 110 103 32 105 115 32 97 32 112 114 111 103 114 97 109 109 105 110 103 32 108 97 110 103 117 97 103 101 46 10 99 114 101 97 116 101 100 58 32 50 48 48 55 10 116 121 112 101 58 115 116 97 116 105 99 10]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We can see in the above example, the output is a slice of byte, hence these are \u0026lt;code\u0026gt;uint8\u0026lt;\/code\u0026gt;, we can cast them to \u0026lt;code\u0026gt;string\u0026lt;\/code\u0026gt; and obtain the equivalent ASCII representation of the bytes. The \u0026lt;code\u0026gt;ScanRunes\u0026lt;\/code\u0026gt; function allows us to read the content from the reader object as a rune as we split the reader object into the unit bytes\/runes.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That\u0026#39;s it from this part. Reference for all the code examples and commands can be found in the \u0026lt;a href=\u0026#34;https:\/\/github.com\/mr-destructive\/100-days-of-golang\/tree\/main\/scripts\/files\/read\/\u0026#34;\u0026gt;100 days of Golang\u0026lt;\/a\u0026gt; GitHub repository.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;In this section, we explored the functions and packages related to file reading. We saw how we can use packages like \u0026lt;code\u0026gt;os\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;bufio\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;encoding\u0026lt;\/code\u0026gt;, etc. to read files in a different way. We saw how to read files as a single string, line by line, word by word, character by character, in chunks, and also with a custom delimiter. Hopefully, the basics of file reading will have been cleared and with the examples, the syntactical construct was understood.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Thank you for reading. If you have any queries, questions, or feedback, you can let me know in the discussion below or on my social handles. Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "posts\/golang-file-read";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Golang: File Reading</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2022-10-23 23:15:00">2022-10-23 23:15:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/100-days-of-golang" class="series-link">📖 100-days-of-golang</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>In the 22nd post of the series, we will be looking into the file-handling process in golang, in the next few posts, we will cover the operations on file using golang. In this first entry of the file handling sub-series, we will understand the <code>READ</code> operation with files. We will see different ways to read a file, it can be word by word, line by line, or even custom chink by chunk.</p>
+<p>While dealing with files, we will also use standard library packages such as <code>os</code>, <code>bufio</code>, etc. We'll also touch on how we can read files from a remote location. Using golang, we will have a low-level interaction with file management but golang also abstracts the most of heavy lifting and management of files for us, so it becomes quite easy to work with files.</p>
+<h2 id="read-the-file-as-a-single-string-using-osreadfile">Read the file as a single string (using os.ReadFile)</h2>
+<p>We can use the <a href="https://pkg.go.dev/os">os</a> package in golang, in which we have access to the <a href="https://pkg.go.dev/os#ReadFile">ReadFile</a> funciton. The <code>ReadFile</code> function takes in a parameter as a string which should be a file name, it returns a slice of bytes or an error. We have discussed the error handling in the previous part of the series. So, we have to use the comma ok error syntax to get the appropriate return value from the funciton. We can grab the slice of bytes as the text we want or an error if there are errors like a file doesn't exist, it's a folder, etc.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"os"
+	"log"
+)
+
+func main() {
+
+	text, err := os.ReadFile("sample.txt")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println(string(text))
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run main.go                                                                                                                                                         
+2022/10/23 22:39:11 Golang is a programming language.                                                                                                                    
+created: 2007                                                                                                                                                            
+type:static 
+</code></pre></div><p>So, under the hood here, we have text as a slice of bytes. We can iterate over the text as a slice and get the character by character-in the content of the file. Though we don't directly interact with the file content, we are storing it in a variable. In technical words, the file is directly loaded into the memory at once. We thereby return a single string object containing the content of the file.</p>
+<h2 id="read-file-line-by-line">Read file line by line</h2>
+<p>We can even read a file line by line. Using the <a href="https://pkg.go.dev/bufio#NewScanner">bufio.NewScanner()</a>, the function takes in a <a href="https://pkg.go.dev/io#Reader">Reader</a> object in our case it will be a file object. The function returns a scanner object that can be used to read the text with a particular scanner method. The returned object can be used in the loop to iterate over the content, in our case, we use the <a href="https://pkg.go.dev/bufio#Scanner.Scan">Scan</a> method to split the file into lines. But we can use other methods like <a href="https://pkg.go.dev/bufio#ScanWords">ScanWords</a> for scanning words, <a href="https://pkg.go.dev/bufio#ScanRunes">ScanRunes</a> for scanning character by character, <a href="https://pkg.go.dev/bufio#ScanBytes">ScanBytes</a> for scanning byte by byte.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"bufio"
+	"log"
+	"os"
+)
+
+func main() {
+
+	f, err := os.Open("sample.txt")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	line_list := []string{}
+
+	defer f.Close()
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		line := scanner.Text()
+		line_list = append(line_list, line)
+	}
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+	for _, line := range line_list {
+		log.Println(line)
+	}
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run line.go
+
+2022/10/23 22:39:50 Golang is a programming language.
+2022/10/23 22:39:50 created: 2007
+2022/10/23 22:39:50 type:static
+</code></pre></div><p>In the above example, the file is read in with the <code>bufio.NewScanner</code> and is iterated line by line with the help of the <code>Scan</code> function. The text in the line is scanned and stored in the variable <code>line</code> which is a string, this is further appended to the string slice <code>line_list</code>. Hence we can iterate over the file content line by line and store the results as a string array.</p>
+<p>Here we have used the <code>defer</code> keyword before calling the <code>f.Close()</code> method because we want to close the file after performing operations on the file. The defer will call the function at almost the end of the main function i.e. at the end of the program.</p>
+<h2 id="read-file-by-a-delimiter">Read File by a delimiter</h2>
+<p>We can even read a file with a custom delimiter which can be used to read CSV or other delimiters. The <a href="https://pkg.go.dev/encoding/csv">csv</a> package has a <a href="https://pkg.go.dev/encoding/csv#NewReader">NewReader</a> function which takes in a object of file content, and it will return a <a href="https://pkg.go.dev/encoding/csv#Reader">Reader</a> object. We can alter the attribute <code>Comma</code> in the <code>Reader</code> object and set it to any value we want as a delimiter. Thereafter we can read the whole content or read it as words, lines, bytes, or chunks as per your criteria. The extracted content will be split as a slice of the data separated by the delimiter set in the <code>Comma</code> attribute.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"encoding/csv"
+	"log"
+	"os"
+)
+
+func main() {
+
+	f, err := os.Open("delimeter.txt")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+
+	reader := csv.NewReader(f)
+
+	reader.Comma = ':'
+	
+    data, err := reader.ReadAll()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(data)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ cat delimiter.txt
+
+10:22:2022
+golang:21:read
+
+
+$ go run delimiter.go
+
+2022/10/23 22:40:44 [[10 22 2022] [golang 21 read]]
+</code></pre></div><p>In the above example, the delimiter is set as <code>:</code> so by using the <code>Comma</code> attribute we can set the delimiter. By using the <code>NewReader</code> function, we fetch the reader object and by using the <code>ReadAll</code> function associated to the reader object, we read the contents. The content is fetched as a slice of strings which will be separated by the delimiter.</p>
+<h3 id="reading-file-word-by-word">Reading File word by word</h3>
+<p>We can even use <a href="https://pkg.go.dev/bufio#ScanWords">ScanWords</a> to read a file word by word. A word can be a collection of characters that are separated by space. Instead of reading it line by line, this function reads the file content after a space.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"bufio"
+	"log"
+	"os"
+)
+
+func main() {
+	f, err := os.Open("sample.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+
+	scanner := bufio.NewScanner(f)
+	scanner.Split(bufio.ScanWords)
+
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	wordlist := []string{}
+	for scanner.Scan() {
+		word := scanner.Text()
+		wordlist = append(wordlist, word)
+		log.Println(word)
+	}
+	log.Println(wordlist)
+
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run word.go
+
+2022/10/23 22:42:03 Golang
+2022/10/23 22:42:03 is
+2022/10/23 22:42:03 a
+2022/10/23 22:42:03 programming
+2022/10/23 22:42:03 language.
+2022/10/23 22:42:03 created:
+2022/10/23 22:42:03 2007
+2022/10/23 22:42:03 type:static
+
+2022/10/23 22:42:03 [Golang is a programming language. created: 2007 type:static] 
+</code></pre></div><p>With the <code>ScanWords</code> function, we can read the contents of the file word by word. The scanner object which has the actual content of the file is split by the <code>Split</code> function, the split criteria are used as Word, where the delimiter will be used as space. The <code>wordlist</code> is a slice of strings to which we append the string <code>word</code> that in turn is read from the <code>scanner.Text()</code> function.</p>
+<h3 id="reading-files-in-chunks">Reading Files in chunks</h3>
+<p>We can even read files in chunks, a chunk is a collection/array of bytes. We can specify the number of bytes we want to read in one go and the file reader will scan the content as a slice of that number of bytes each iteration. The <a href="https://pkg.go.dev/bufio#Reader.Read">Read</a> funciton takes in a slice of bytes and will return the number of bytes in the reader object.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"bufio"
+	"io"
+	"log"
+	"os"
+)
+
+func main() {
+
+	f, err := os.Open("sample.txt")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer f.Close()
+
+	reader := bufio.NewReader(f)
+	chunk_size := 16
+	chunk_list := []string{}
+	buf := make([]byte, chunk_size)
+
+	for {
+		n, err := reader.Read(buf)
+
+		if err != nil {
+			if err != io.EOF {
+				log.Fatal(err)
+			}
+			break
+		}
+		chunk_list = append(chunk_list, string(buf[0:n]))
+	}
+	for _, chunk := range chunk_list {
+		log.Print(chunk)
+	}
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run chunks.go
+
+2022/10/23 22:44:41 Golang is a prog
+2022/10/23 22:44:41 ramming language
+2022/10/23 22:44:41 .
+created: 2007
+2022/10/23 22:44:41 type:static
+</code></pre></div><p>In the above example, we have opened the file and loaded the content into the <code>f</code> variable. the contents are read with the help of the <code>NewReader</code> function which returns a reader object which further can be used to read contents into chunks of bytes. The <code>chunk_size</code> defines the size we want to use for reading the content, <code>chunk_list</code> as a slice of strings which will hold the slice of chunks/bytes as a type caste into a slice of strings. With the <code>Read</code> function, the bytes are read into the function, and the buffer is split as per the chunk size obtained in the <code>Read</code> function. We append the slice of bytes into the sliced array and thereby we obtain the slice of strings.</p>
+<h3 id="read-file-character-by-character">Read file character by character</h3>
+<p>We can even read file each character at a time, using the <a href="https://pkg.go.dev/bufio#ScanRunes">ScanRunes</a> function, this function scans a single rune/byte at a time. So, we can scan these runes one at a time and store them as a slice of bytes. Thereby we will have the content of the file stored as a slice of bytes.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"bufio"
+	"log"
+	"os"
+)
+
+func main() {
+	f, err := os.Open("sample.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+
+	scanner := bufio.NewScanner(f)
+	scanner.Split(bufio.ScanRunes)
+
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	charlist := []byte{}
+	for scanner.Scan() {
+		char := byte(scanner.Text()[0])
+		charlist = append(charlist, char)
+	}
+	log.Println(charlist)
+
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run char.go
+
+2022/10/23 22:48:55 [71 111 108 97 110 103 32 105 115 32 97 32 112 114 111 103 114 97 109 109 105 110 103 32 108 97 110 103 117 97 103 101 46 10 99 114 101 97 116 101 100 58 32 50 48 48 55 10 116 121 112 101 58 115 116 97 116 105 99 10]
+</code></pre></div><p>We can see in the above example, the output is a slice of byte, hence these are <code>uint8</code>, we can cast them to <code>string</code> and obtain the equivalent ASCII representation of the bytes. The <code>ScanRunes</code> function allows us to read the content from the reader object as a rune as we split the reader object into the unit bytes/runes.</p>
+<p>That's it from this part. Reference for all the code examples and commands can be found in the <a href="https://github.com/mr-destructive/100-days-of-golang/tree/main/scripts/files/read/">100 days of Golang</a> GitHub repository.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>In this section, we explored the functions and packages related to file reading. We saw how we can use packages like <code>os</code>, <code>bufio</code>, <code>encoding</code>, etc. to read files in a different way. We saw how to read files as a single string, line by line, word by word, character by character, in chunks, and also with a custom delimiter. Hopefully, the basics of file reading will have been cleared and with the examples, the syntactical construct was understood.</p>
+<p>Thank you for reading. If you have any queries, questions, or feedback, you can let me know in the discussion below or on my social handles. Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/golang-paths" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Golang: Paths</span>
+        </a>
+        
+
+        
+        
+        <a href="/posts/golang-config-file-read" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Golang: JSON YAML TOML (config) File Reading.</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-delete-method" class="related-link">
+                <span class="related-post-title">Golang Web: DELETE Method</span>
+                <span class="related-post-date">2025-01-12 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-patch-method" class="related-link">
+                <span class="related-post-title">Golang Web: PATCH Method</span>
+                <span class="related-post-date">2025-01-11 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-5" class="related-link">
+                <span class="related-post-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+                <span class="related-post-date">2024-12-11 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-4" class="related-link">
+                <span class="related-post-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+                <span class="related-post-date">2024-12-09 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-3" class="related-link">
+                <span class="related-post-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+                <span class="related-post-date">2024-12-07 20:45:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>SQLite SQL: One to Many Relation with Foreign Key | Meet Gor</title>
+    <meta name="title" content="SQLite SQL: One to Many Relation with Foreign Key | Meet Gor">
+    <meta name="description" content="">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="sqlite, sql">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/sqlog/sqlite-one-to-many-foreign-key">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/sqlog/sqlite-one-to-many-foreign-key">
+    <meta property="og:title" content="SQLite SQL: One to Many Relation with Foreign Key">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="https://meetgor.com/tbicon.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="SQLite SQL: One to Many Relation with Foreign Key">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2025-09-16">
+    <meta property="article:modified_time" content="2025-09-16">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="sqlite">
+    
+    <meta property="article:tag" content="sql">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/sqlog/sqlite-one-to-many-foreign-key">
+    <meta name="twitter:title" content="SQLite SQL: One to Many Relation with Foreign Key">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:image" content="https://meetgor.com/tbicon.png">
+    <meta name="twitter:image:alt" content="SQLite SQL: One to Many Relation with Foreign Key">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/sqlog\/sqlite-one-to-many-foreign-key"
+        },
+        "headline": "SQLite SQL: One to Many Relation with Foreign Key",
+        "description": "",
+        "datePublished": "2025-09-16",
+        "dateModified": "2025-09-16",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        
+        "keywords": "sqlite, sql",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;one-to-many-relation-with-foreign-key\u0026#34;\u0026gt;One to Many Relation with Foreign Key\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Back to the question that we raised in the \u0026lt;a href=\u0026#34;https:\/\/www.meetgor.com\/sqlog\/sqlite-foreign-key-table-constraint\/\u0026#34;\u0026gt;previous\u0026lt;\/a\u0026gt; post, \u0026amp;quot;What would happen if there are more than one row in the primary table that references the same id in the foreign table?\u0026amp;quot;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This is what is precisely called the \u0026lt;code\u0026gt;one-to-many\u0026lt;\/code\u0026gt; relation, or what the foreign key is used for.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;One row in the foreign(parent\/other) table\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;that can be referenced by many rows in the primary(child) table\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;So, taking the example from the previous post of author and posts,\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s define the schema again:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;CREATE TABLE users (\n    id INTEGER PRIMARY KEY,\n    name TEXT NOT NULL\n);\n\nCREATE TABLE posts (\n    id INTEGER PRIMARY KEY,\n    content TEXT NOT NULL,\n    author_id INTEGER,\n    FOREIGN KEY (author_id) REFERENCES users (id)\n);\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;the analogy can be stated as:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;One author can have many posts\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;One post can have only one author\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;Right?\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;If you look at the schema, the posts table is having the foreign key \u0026lt;code\u0026gt;author_id\u0026lt;\/code\u0026gt; that is referencing the primary key \u0026lt;code\u0026gt;id\u0026lt;\/code\u0026gt; of the \u0026lt;code\u0026gt;users\u0026lt;\/code\u0026gt; table. So the author can be referenced by multiple posts, however one post record can be refer only one author. I mean that is the design, a post can have multiple authors if we wanted to but we then would have to change the design then, we check that in the next post.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s keep the \u0026lt;code\u0026gt;Foreign Key\u0026lt;\/code\u0026gt; pragma\/setting constraint on throughout this post.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;PRAGMA foreign_keys=on;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Let\u0026#39;s insert a few users and posts to get what we mean by the \u0026lt;code\u0026gt;one-to-many\u0026lt;\/code\u0026gt; relation.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;INSERT INTO users(name) VALUES(\u0026#39;harry\u0026#39;), (\u0026#39;ron\u0026#39;), (\u0026#39;malfoy\u0026#39;);\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We are inserting 3 users, \u0026lt;code\u0026gt;harry\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;ron\u0026lt;\/code\u0026gt;, and \u0026lt;code\u0026gt;malfoy\u0026lt;\/code\u0026gt; which will have ids as \u0026lt;code\u0026gt;1\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;2\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;3\u0026lt;\/code\u0026gt; respectively.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;SELECT * FROM users;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;As you would see in the output, we have 3 users with ids \u0026lt;code\u0026gt;1\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;2\u0026lt;\/code\u0026gt;, and \u0026lt;code\u0026gt;3\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Now, let\u0026#39;s insert a few posts.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;INSERT INTO posts(content, author_id) VALUES\n(\u0026#39;hi, I am harry\u0026#39;, 1),\n(\u0026#39;Expecto Patronum\u0026#39;, 1),\n(\u0026#39;hi, I am ron\u0026#39;, 2),\n(\u0026#39;hi, I am malfoy\u0026#39;, 3);\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;I am inserting the \u0026lt;code\u0026gt;2nd\u0026lt;\/code\u0026gt; post as \u0026lt;code\u0026gt;harry\u0026lt;\/code\u0026gt;\u0026#39;s because it will confuse with the author_id and the \u0026lt;code\u0026gt;post.id\u0026lt;\/code\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;SELECT * FROM posts;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;As you would see in the output, we have 4 posts with ids \u0026lt;code\u0026gt;1\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;2\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;3\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;4\u0026lt;\/code\u0026gt; the first 2 are of \u0026lt;code\u0026gt;harry\u0026lt;\/code\u0026gt;, then the next ron and malfoy respectively.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Below are some neat little queries to visualize it better.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;SELECT * FROM posts JOIN users ON posts.author_id = users.id;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;sql-playground\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;controls\u0026#34;\u0026gt;\u0026lt;button class=\u0026#34;run-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-play\u0026#34;\u0026gt;\u0026lt;polygon points=\u0026#34;5 3 19 12 5 21 5 3\u0026#34;\u0026gt;\u0026lt;\/polygon\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;edit-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-edit\u0026#34;\u0026gt;\u0026lt;path d=\u0026#34;M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;path d=\u0026#34;M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;button class=\u0026#34;reset-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-refresh-cw\u0026#34;\u0026gt;\u0026lt;polyline points=\u0026#34;23 4 23 10 17 10\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;polyline points=\u0026#34;1 20 1 14 7 14\u0026#34;\u0026gt;\u0026lt;\/polyline\u0026gt;\u0026lt;path d=\u0026#34;M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sql\u0026#34;\u0026gt;SELECT posts.*, users.name AS author FROM posts JOIN users ON posts.author_id = users.id;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;div class=\u0026#34;output\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;This is the sqlog for the things that we did so far.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;sqlite\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-sqlite\u0026#34;\u0026gt;sqlite\u0026gt; CREATE TABLE users (\n    id INTEGER PRIMARY KEY,\n    name TEXT NOT NULL\n);\n\nCREATE TABLE posts (\n    id INTEGER PRIMARY KEY,\n    content TEXT NOT NULL,\n    author_id INTEGER,\n    FOREIGN KEY (author_id) REFERENCES users (id)\n);\nsqlite\u0026gt; PRAGMA foreign_keys=on;\nsqlite\u0026gt; INSERT INTO users(name) VALUES(\u0026#39;harry\u0026#39;), (\u0026#39;ron\u0026#39;), (\u0026#39;malfoy\u0026#39;);\nsqlite\u0026gt; .mode table\nsqlite\u0026gt; SELECT * FROM users;\n\u002b----\u002b--------\u002b\n| id |  name  |\n\u002b----\u002b--------\u002b\n| 1  | harry  |\n| 2  | ron    |\n| 3  | malfoy |\n\u002b----\u002b--------\u002b\nsqlite\u0026gt; INSERT INTO posts(content, author_id) VALUES\n(\u0026#39;hi, I am harry\u0026#39;, 1),\n(\u0026#39;Expecto Patronum\u0026#39;, 1),\n(\u0026#39;hi, I am ron\u0026#39;, 2),\n(\u0026#39;hi, I am malfoy\u0026#39;, 3);\nsqlite\u0026gt; SELECT * FROM posts;\n\u002b----\u002b------------------\u002b-----------\u002b\n| id |     content      | author_id |\n\u002b----\u002b------------------\u002b-----------\u002b\n| 1  | hi, I am harry   | 1         |\n| 2  | Expecto Patronum | 1         |\n| 3  | hi, I am ron     | 2         |\n| 4  | hi, I am malfoy  | 3         |\n\u002b----\u002b------------------\u002b-----------\u002b\nsqlite\u0026gt; SELECT * FROM posts JOIN users ON posts.author_id = users.id;\n\u002b----\u002b------------------\u002b-----------\u002b----\u002b--------\u002b\n| id |     content      | author_id | id |  name  |\n\u002b----\u002b------------------\u002b-----------\u002b----\u002b--------\u002b\n| 1  | hi, I am harry   | 1         | 1  | harry  |\n| 2  | Expecto Patronum | 1         | 1  | harry  |\n| 3  | hi, I am ron     | 2         | 2  | ron    |\n| 4  | hi, I am malfoy  | 3         | 3  | malfoy |\n\u002b----\u002b------------------\u002b-----------\u002b----\u002b--------\u002b\nsqlite\u0026gt; SELECT posts.*, users.name AS author_name FROM posts JOIN users ON posts.author_id = users.id;\n\u002b----\u002b------------------\u002b-----------\u002b-------------\u002b\n| id |     content      | author_id | author_name |\n\u002b----\u002b------------------\u002b-----------\u002b-------------\u002b\n| 1  | hi, I am harry   | 1         | harry       |\n| 2  | Expecto Patronum | 1         | harry       |\n| 3  | hi, I am ron     | 2         | ron         |\n| 4  | hi, I am malfoy  | 3         | malfoy      |\n\u002b----\u002b------------------\u002b-----------\u002b-------------\u002b\nsqlite\u0026gt;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Now, let\u0026#39;s explore this:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Harry has 2 posts, which means one user can author multiple post by design.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;One post can be always be author by only one user.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s assume all the \u0026lt;code\u0026gt;NULL\u0026lt;\/code\u0026gt; values are not allowed for now, we can see one post can only be by one author, that is a constraint of the \u0026lt;code\u0026gt;FOREIGN KEY\u0026lt;\/code\u0026gt;, as we are referencing only one foreign key in the posts table.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This is what we call \u0026lt;code\u0026gt;one-author-many-posts\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;one-to-many\u0026lt;\/code\u0026gt; relation. You can also call it \u0026lt;code\u0026gt;many-to-one\u0026lt;\/code\u0026gt; but then you have to change it to \u0026lt;code\u0026gt;many-posts-one-author\u0026lt;\/code\u0026gt; that sounds a little wired. Its basically the same thing but from the different perspective, I prefer saying \u0026lt;code\u0026gt;one-to-many\u0026lt;\/code\u0026gt; since most of the times, the foreign\/parent table needs to exist first inorder for the parent\/primary table to reference any key from it.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;One is on the side of the parent table (foreign table) and the Many is usually on the primary or the place where the \u0026lt;code\u0026gt;foreign key\u0026lt;\/code\u0026gt; is placed (in this case it is placed in the posts table).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;What about multiple foreign keys?\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Yes, you can have multiple foreign keys, but those will be different keys, you can\u0026#39;t have \u0026lt;code\u0026gt;author_id_1\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;author_id_2\u0026lt;\/code\u0026gt; and then refer the same foreign key as \u0026lt;code\u0026gt;users.id\u0026lt;\/code\u0026gt;, that is possible. However, we need to define separate table for mapping users and posts and that will be called as \u0026lt;code\u0026gt;many-to-many\u0026lt;\/code\u0026gt; relations as will check in the next post.\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "sqlog\/sqlite-one-to-many-foreign-key";
+                const type = "sqlog";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>SQLite SQL: One to Many Relation with Foreign Key</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2025-09-16">2025-09-16</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/sqlog">sqlog</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/sqlite">#sqlite</a>
+                
+                <a href="/tags/sql">#sql</a>
+                
+            </div>
+            
+            
+            
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="one-to-many-relation-with-foreign-key">One to Many Relation with Foreign Key</h2>
+<p>Back to the question that we raised in the <a href="https://www.meetgor.com/sqlog/sqlite-foreign-key-table-constraint/">previous</a> post, &quot;What would happen if there are more than one row in the primary table that references the same id in the foreign table?&quot;</p>
+<p>This is what is precisely called the <code>one-to-many</code> relation, or what the foreign key is used for.</p>
+<ul>
+<li>One row in the foreign(parent/other) table</li>
+<li>that can be referenced by many rows in the primary(child) table</li>
+</ul>
+<p>So, taking the example from the previous post of author and posts,</p>
+<p>Let's define the schema again:</p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">CREATE TABLE users (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE posts (
+    id INTEGER PRIMARY KEY,
+    content TEXT NOT NULL,
+    author_id INTEGER,
+    FOREIGN KEY (author_id) REFERENCES users (id)
+);
+</code></pre><div class="output"></div></div><p>the analogy can be stated as:</p>
+<ul>
+<li>One author can have many posts</li>
+<li>One post can have only one author</li>
+</ul>
+<p>Right?</p>
+<p>If you look at the schema, the posts table is having the foreign key <code>author_id</code> that is referencing the primary key <code>id</code> of the <code>users</code> table. So the author can be referenced by multiple posts, however one post record can be refer only one author. I mean that is the design, a post can have multiple authors if we wanted to but we then would have to change the design then, we check that in the next post.</p>
+<p>Let's keep the <code>Foreign Key</code> pragma/setting constraint on throughout this post.</p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">PRAGMA foreign_keys=on;
+</code></pre><div class="output"></div></div><p>Let's insert a few users and posts to get what we mean by the <code>one-to-many</code> relation.</p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">INSERT INTO users(name) VALUES('harry'), ('ron'), ('malfoy');
+</code></pre><div class="output"></div></div><p>We are inserting 3 users, <code>harry</code>, <code>ron</code>, and <code>malfoy</code> which will have ids as <code>1</code>, <code>2</code>, <code>3</code> respectively.</p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">SELECT * FROM users;
+</code></pre><div class="output"></div></div><p>As you would see in the output, we have 3 users with ids <code>1</code>, <code>2</code>, and <code>3</code>.</p>
+<p>Now, let's insert a few posts.</p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">INSERT INTO posts(content, author_id) VALUES
+('hi, I am harry', 1),
+('Expecto Patronum', 1),
+('hi, I am ron', 2),
+('hi, I am malfoy', 3);
+</code></pre><div class="output"></div></div><p>I am inserting the <code>2nd</code> post as <code>harry</code>'s because it will confuse with the author_id and the <code>post.id</code></p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">SELECT * FROM posts;
+</code></pre><div class="output"></div></div><p>As you would see in the output, we have 4 posts with ids <code>1</code>, <code>2</code>, <code>3</code>, <code>4</code> the first 2 are of <code>harry</code>, then the next ron and malfoy respectively.</p>
+<p>Below are some neat little queries to visualize it better.</p>
+<div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">SELECT * FROM posts JOIN users ON posts.author_id = users.id;
+</code></pre><div class="output"></div></div><div class="sql-playground"><div class="controls"><button class="run-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button><button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="reset-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64M3.51 15A9 9 0 0 0 18.36 18.36"></path></svg></button></div><pre><code class="language-sql">SELECT posts.*, users.name AS author FROM posts JOIN users ON posts.author_id = users.id;
+</code></pre><div class="output"></div></div><p>This is the sqlog for the things that we did so far.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">sqlite</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-sqlite">sqlite> CREATE TABLE users (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE posts (
+    id INTEGER PRIMARY KEY,
+    content TEXT NOT NULL,
+    author_id INTEGER,
+    FOREIGN KEY (author_id) REFERENCES users (id)
+);
+sqlite> PRAGMA foreign_keys=on;
+sqlite> INSERT INTO users(name) VALUES('harry'), ('ron'), ('malfoy');
+sqlite> .mode table
+sqlite> SELECT * FROM users;
++----+--------+
+| id |  name  |
++----+--------+
+| 1  | harry  |
+| 2  | ron    |
+| 3  | malfoy |
++----+--------+
+sqlite> INSERT INTO posts(content, author_id) VALUES
+('hi, I am harry', 1),
+('Expecto Patronum', 1),
+('hi, I am ron', 2),
+('hi, I am malfoy', 3);
+sqlite> SELECT * FROM posts;
++----+------------------+-----------+
+| id |     content      | author_id |
++----+------------------+-----------+
+| 1  | hi, I am harry   | 1         |
+| 2  | Expecto Patronum | 1         |
+| 3  | hi, I am ron     | 2         |
+| 4  | hi, I am malfoy  | 3         |
++----+------------------+-----------+
+sqlite> SELECT * FROM posts JOIN users ON posts.author_id = users.id;
++----+------------------+-----------+----+--------+
+| id |     content      | author_id | id |  name  |
++----+------------------+-----------+----+--------+
+| 1  | hi, I am harry   | 1         | 1  | harry  |
+| 2  | Expecto Patronum | 1         | 1  | harry  |
+| 3  | hi, I am ron     | 2         | 2  | ron    |
+| 4  | hi, I am malfoy  | 3         | 3  | malfoy |
++----+------------------+-----------+----+--------+
+sqlite> SELECT posts.*, users.name AS author_name FROM posts JOIN users ON posts.author_id = users.id;
++----+------------------+-----------+-------------+
+| id |     content      | author_id | author_name |
++----+------------------+-----------+-------------+
+| 1  | hi, I am harry   | 1         | harry       |
+| 2  | Expecto Patronum | 1         | harry       |
+| 3  | hi, I am ron     | 2         | ron         |
+| 4  | hi, I am malfoy  | 3         | malfoy      |
++----+------------------+-----------+-------------+
+sqlite>
+</code></pre></div><p>Now, let's explore this:</p>
+<ul>
+<li>Harry has 2 posts, which means one user can author multiple post by design.</li>
+<li>One post can be always be author by only one user.</li>
+</ul>
+<p>Let's assume all the <code>NULL</code> values are not allowed for now, we can see one post can only be by one author, that is a constraint of the <code>FOREIGN KEY</code>, as we are referencing only one foreign key in the posts table.</p>
+<p>This is what we call <code>one-author-many-posts</code> or <code>one-to-many</code> relation. You can also call it <code>many-to-one</code> but then you have to change it to <code>many-posts-one-author</code> that sounds a little wired. Its basically the same thing but from the different perspective, I prefer saying <code>one-to-many</code> since most of the times, the foreign/parent table needs to exist first inorder for the parent/primary table to reference any key from it.</p>
+<p>One is on the side of the parent table (foreign table) and the Many is usually on the primary or the place where the <code>foreign key</code> is placed (in this case it is placed in the posts table).</p>
+<p>What about multiple foreign keys?</p>
+<p>Yes, you can have multiple foreign keys, but those will be different keys, you can't have <code>author_id_1</code>, <code>author_id_2</code> and then refer the same foreign key as <code>users.id</code>, that is possible. However, we need to define separate table for mapping users and posts and that will be called as <code>many-to-many</code> relations as will check in the next post.</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/sqlog/sqlite-foreign-key-table-constraint" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">SQLite SQL: Foreign KEY table constraint</span>
+        </a>
+        
+
+        
+        
+        <a href="/sqlog/sqlite-self-join-relations" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">SQLite SQL: Self Join Relations</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-15" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 15: Confirmation Phrase Dispatches</span>
+                <span class="related-post-date">2025-12-28 20:30 &#43;0530</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-14" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 14: Ski Resort Paths</span>
+                <span class="related-post-date">2025-12-28 15:30 &#43;0530</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-13" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 13: XML Travel Manifests</span>
+                <span class="related-post-date">2025-12-27 20:30 &#43;0530</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-12" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 12: Archive Flight Records</span>
+                <span class="related-post-date">2025-12-27 15:30 &#43;0530</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-11" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 11: Behavior Score</span>
+                <span class="related-post-date">2025-12-26 15:30 &#43;0530</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>

@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Golang: Regex | Meet Gor</title>
+    <meta name="title" content="Golang: Regex | Meet Gor">
+    <meta name="description" content="Understanding the fundamentals and usage of regular expressions in golang with the regexp package. Exploring the package with the matching, finding, replacing and submatches methods and utilities with regular expressions.">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="go">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://meetgor.com/posts/golang-regex">
+    
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://meetgor.com/posts/golang-regex">
+    <meta property="og:title" content="Golang: Regex">
+    <meta property="og:description" content="Understanding the fundamentals and usage of regular expressions in golang with the regexp package. Exploring the package with the matching, finding, replacing and submatches methods and utilities with regular expressions.">
+    <meta property="og:image" content="https://meetgor-cdn.pages.dev/golang-026-regex.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Golang: Regex">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2023-03-22 12:30:00">
+    <meta property="article:modified_time" content="2023-03-22 12:30:00">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="go">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    <meta name="twitter:url" content="https://meetgor.com/posts/golang-regex">
+    <meta name="twitter:title" content="Golang: Regex">
+    <meta name="twitter:description" content="Understanding the fundamentals and usage of regular expressions in golang with the regexp package. Exploring the package with the matching, finding, replacing and submatches methods and utilities with regular expressions.">
+    <meta name="twitter:image" content="https://meetgor-cdn.pages.dev/golang-026-regex.png">
+    <meta name="twitter:image:alt" content="Golang: Regex">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/meetgor.com/posts\/golang-regex"
+        },
+        "headline": "Golang: Regex",
+        "description": "Understanding the fundamentals and usage of regular expressions in golang with the regexp package. Exploring the package with the matching, finding, replacing and submatches methods and utilities with regular expressions.",
+        "datePublished": "2023-03-22 12:30:00",
+        "dateModified": "2023-03-22 12:30:00",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/meetgor.com/tbicon.png"
+            }
+        },
+        "image": "https:\/\/meetgor-cdn.pages.dev\/golang-026-regex.png",
+        "keywords": "go",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;In this 26th part of the series, we will be covering the basics of using regular expressions in golang. This article will cover the basic operations like matching, finding, replacing, and sub-matches in a regular expression pattern from string source or file content. This will have examples for each of the concepts and similar variants will follow the same ideology in self-exploring the syntax.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;regex-in-golang\u0026#34;\u0026gt;Regex in golang\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;So, let\u0026#39;s start with what are regular expressions.\u0026lt;\/p\u0026gt;\n\u0026lt;blockquote\u0026gt;\n\u0026lt;p\u0026gt;Regular expressions are basic building blocks for searching, pattern matching, and manipulation from a source of text using computational logic.\u0026lt;\/p\u0026gt;\n\u0026lt;\/blockquote\u0026gt;\n\u0026lt;p\u0026gt;This is not the formal definition, but have written it in words for my understanding of regular expressions till now. Might not be accurate, but makes sense to me after I had played and explored it (not fully).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So regular expressions use some pattern-matching techniques using basic logic operators like concatenation, quantifiers, etc. These relate to the study of the theory of computation quite closely but you don\u0026#39;t need to get into too much theory in order to understand the working of regular expressions. However, it won\u0026#39;t harm you if you are curious about it and want to explore it further.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Some resources to learn the fundamentals of regular expressions:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/cs.lmu.edu\/~ray\/notes\/regex\/\u0026#34;\u0026gt;Regular Expressions LMU notes\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;a href=\u0026#34;https:\/\/regexone.com\/\u0026#34;\u0026gt;RegexOne\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;h2 id=\u0026#34;regexp-package\u0026#34;\u0026gt;Regexp package\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We will be using the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp\u0026#34;\u0026gt;regexp\u0026lt;\/a\u0026gt; package in the golang standard library to get some quick and important methods for quick and neat pattern matching and searching. It provides a \u0026lt;code\u0026gt;Regexp\u0026lt;\/code\u0026gt; type and a lot of methods on top of it to perform matching, finding, replacing, and sub-matches in the source text.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This package also supports two types of methods serving different purposes and use cases for string and slice of bytes, this can be useful for reading from a buffer, file, etc., and also flexible enough to search for a simple string.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;matching-patterns\u0026#34;\u0026gt;Matching Patterns\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;One of the fundamental aspects of the regular expression is to check if a particular pattern is present or not in a source string. The \u0026lt;code\u0026gt;regexp\u0026lt;\/code\u0026gt; package provides some methods like \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp#Match\u0026#34;\u0026gt;Match\u0026lt;\/a\u0026gt;, \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp#MatchString\u0026#34;\u0026gt;MatchString\u0026lt;\/a\u0026gt; methods on a slice of bytes and string respectively from the pattern string.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;matching-strings\u0026#34;\u0026gt;Matching Strings\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;The basic operations with regex or regular expression can be performed to compare and match if the pattern matches a given string.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In golang, the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp\u0026#34;\u0026gt;regexp\u0026lt;\/a\u0026gt; package provides a few functions to simply match expressions with strings or text. One of the easy-to-understand ones include the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp#MatchString\u0026#34;\u0026gt;MtachString\u0026lt;\/a\u0026gt;, and \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp#Match\u0026#34;\u0026gt;Match\u0026lt;\/a\u0026gt; methods.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;log\u0026#34;\n\t\u0026#34;regexp\u0026#34;\n)\n\nfunc log_error(err error) {\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n}\n\nfunc main() {\n\n\tstr := \u0026#34;gophers of the goland\u0026#34;\n\tis_matching, err := regexp.MatchString(\u0026#34;go\u0026#34;, str)\n\tlog_error(err)\n\tlog.Println(is_matching)\n\tis_matching, err := regexp.MatchString(\u0026#34;no\u0026#34;, str)\n\tlog_error(err)\n\tlog.Println(is_matching)\n\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;console\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-console\u0026#34;\u0026gt;$ go run main.go\n\ntrue\nfalse\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above code, we have used the \u0026lt;code\u0026gt;MatchString\u0026lt;\/code\u0026gt; method that takes in two parameters string\/pattern to find, and the source string. The function returns a boolean as \u0026lt;code\u0026gt;true\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;false\u0026lt;\/code\u0026gt; if the pattern is present in the source string, also it might return an error if the pattern(first parameter) is parsed as an incorrect regular expression.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, we can clearly see, the string \u0026lt;code\u0026gt;go\u0026lt;\/code\u0026gt; is present in the string \u0026lt;code\u0026gt;gophers of the goland\u0026lt;\/code\u0026gt; and the string \u0026lt;code\u0026gt;no\u0026lt;\/code\u0026gt; is not a substring.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We also have \u0026lt;code\u0026gt;Match\u0026lt;\/code\u0026gt; method which is a more general version of \u0026lt;code\u0026gt;MatchString\u0026lt;\/code\u0026gt; it excepts a slice of byte rather than a string as the source string. The first parameter is still a string, but the second parameter is a slice of bytes.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;is_matching, err = regexp.Match(\u0060.*land\u0060, []byte(\u0026#34;goland is a land of gophers\u0026#34;))\nlog_error(err)\nlog.Println(is_matching)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;console\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-console\u0026#34;\u0026gt;$ go run main.go\n\ntrue\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We can use the \u0026lt;code\u0026gt;Match\u0026lt;\/code\u0026gt; method to simply parse a slice of bytes to use as the source text to check the pattern.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;log\u0026#34;\n    \u0026#34;os\u0026#34;\n\t\u0026#34;regexp\u0026#34;\n)\n\nfunc log_error(err error) {\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n}\n\nfunc main() {\n\tfile_content, err := os.ReadFile(\u0026#34;temp.txt\u0026#34;)\n\tlog_error(err)\n\tis_matching, err = regexp.Match(\u0060memory\u0060, file_content)\n\tlog_error(err)\n\tlog.Println(is_matching)\n\tis_matching, err = regexp.Match(\u0060text \u0060, file_content)\n\tlog_error(err)\n\tlog.Println(is_matching)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;# temp.txt\n\nOne of the gophers used a slice,\nthe other one used a arrays.\nSome gophers were idle in the memory.\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;console\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-console\u0026#34;\u0026gt;$ go run main.go\n\ntrue\nfalse\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We can now even parse the contents of a file as a slice of bytes. So, it would be really nice to compare and check for a string pattern in a file quickly. Here in the above example, we have checked if \u0026lt;code\u0026gt;memory\u0026lt;\/code\u0026gt; is present in the text which it is, and in the second call, we check if \u0026lt;code\u0026gt;text\u0026lt;\/code\u0026gt; string is present anywhere in the file content which it is not.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;find-patterns\u0026#34;\u0026gt;Find Patterns\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;We can even use regular expressions for searching text or string with the struct\/type \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp#Regexp\u0026#34;\u0026gt;Regexp\u0026lt;\/a\u0026gt; provided by golang\u0026#39;s regexp. We can create a regular expression and use other functions like \u0026lt;code\u0026gt;MatchString\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;Match\u0026lt;\/code\u0026gt;, and others that we will explore to match or find a pattern in the text.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;find-string-from-regex\u0026#34;\u0026gt;Find String from RegEx\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We can get a slice of byte from the \u0026lt;code\u0026gt;FindAll\u0026lt;\/code\u0026gt; method which will take in a slice of byte, the second parameter as -1 for all matches. The function returns a slice of slice of byte with the byte representation of the matched string in the source text.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;exp, err := regexp.Compile(\u0060\u0008\\d{5}(?:[-\\s]\\d{4})?\u0008\u0060)\nlog_error(err)\npincode_file, err := os.ReadFile(\u0026#34;pincode.txt\u0026#34;)\nlog_error(err)\nmatch := exp.FindAll(pincode_file, -1)\nlog.Println(match)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;# pincode.txt\n\nPincode: 12345-1234\nCity, 40084\nState 123\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;console\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-console\u0026#34;\u0026gt;$ go run main.go\n\n[[49 50 51 52 53 45 49 50 51 52] [52 48 48 56 52]]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, we have used the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp#Compile\u0026#34;\u0026gt;Compile\u0026lt;\/a\u0026gt; method to create a regular expression and \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp#Regexp.FindAll\u0026#34;\u0026gt;FindAll\u0026lt;\/a\u0026gt; to get all the occurrences of the matching patterns in the text. We have again read the contents from the file. In this example, the \u0026lt;code\u0026gt;exp\u0026lt;\/code\u0026gt; is a regular expression for a postal code, which can either have 5 digit or 5digits-4digit combination. We read the file \u0026lt;code\u0026gt;pincode.txt\u0026lt;\/code\u0026gt; as a slice of bytes and use the \u0026lt;code\u0026gt;FindAll\u0026lt;\/code\u0026gt; method. The FindAll method takes in the parameter as a slice of byte and the integer as the number of occurrences to search. If we use a negative number it will include all the matches.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We search for the pin code in the file and the funciton returns a list of bytes that match the regular expression in the provided object \u0026lt;code\u0026gt;exp\u0026lt;\/code\u0026gt;. Finally, we get the result as \u0026lt;code\u0026gt;12345-1234\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;40084\u0026lt;\/code\u0026gt; which are present in the file. It doesn\u0026#39;t match the number \u0026lt;code\u0026gt;123\u0026lt;\/code\u0026gt; which is not a valid match for the given regular expression.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;There is also a version of \u0026lt;code\u0026gt;FindAll\u0026lt;\/code\u0026gt; as \u0026lt;code\u0026gt;FindAllString\u0026lt;\/code\u0026gt; which will take in a string as the text source and return a slice of strings.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;matches := exp.FindAllString(string(pincode_file), -1)\nlog.Println(matches)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;console\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-console\u0026#34;\u0026gt;$ go run main.go\n\n[\u0026#34;12345-1234\u0026#34; \u0026#34;40084\u0026#34;]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, the \u0026lt;code\u0026gt;FindAllString\u0026lt;\/code\u0026gt; would return a slice of strings of the matches in the text.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;find-the-index-of-string-from-regex\u0026#34;\u0026gt;Find the Index of String from RegEx\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We can even get the start and end index of the matched string in the text using the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp#Regexp.FindIndex\u0026#34;\u0026gt;FindIndex\u0026lt;\/a\u0026gt; and \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp#Regexp.FindAllIndex\u0026#34;\u0026gt;FindAllIndex\u0026lt;\/a\u0026gt; methods to get the indexes of the match, or all the matches of the file content.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;exp, err := regexp.Compile(\u0060\u0008\\d{5}(?:[-\\s]\\d{4})?\u0008\u0060)\nlog_error(err)\npincode_file, err := os.ReadFile(\u0026#34;pincode.txt\u0026#34;)\nlog_error(err)\n\nmatch_index := exp.FindIndex(pincode_file)\nlog.Printf(\u0026#34;%T\n\u0026#34;, match_index)\nlog.Println(match_index)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;console\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-console\u0026#34;\u0026gt;$ go run main.go\n\n[]int\n[9 19]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above code is using the \u0026lt;code\u0026gt;FindIndex\u0026lt;\/code\u0026gt; method to get the indexes of the first match of the regular expression. The output of the code gives a single slice of an integer with length two as the start and last index of the matched string in the text file. So, here, the \u0026lt;code\u0026gt;9\u0026lt;\/code\u0026gt; represents the position(index) of the first character match in the string, and \u0026lt;code\u0026gt;19\u0026lt;\/code\u0026gt; is the last index of the matched string.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;bash\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-bash\u0026#34;\u0026gt;Pincode: 12345-1234\n01234567890123456789\n\nAssume 0 as 10 after 9, 11, and so on\nIt starts from the 9th character as \u00601\u0060 and ends at the \u00604\u0060 character\nat position 18 but it returns the end position \u002b 1 for the ease of slicing\n \nCity, 40084\n012345678901\n\nState 123\n234567890\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The character at 9 and 18 are the first and the last character position\/index of the source string, so it returns the end position \u002b 1 as the index. This makes retrieval of slicing source string much easier, as we won\u0026#39;t be offset by one.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;If we want to get the text in the source string, we can use the slicing as:\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;exp, err := regexp.Compile(\u0060\u0008\\d{5}(?:[-\\s]\\d{4})?\u0008\u0060)\nlog_error(err)\npincode_file, err := os.ReadFile(\u0026#34;pincode.txt\u0026#34;)\nlog_error(err)\n\nmatch_index := exp.FindIndex(pincode_file)\nif len(match_index) \u0026gt; 0 {\n    \n    \/\/ Get the slice of the original string from start to end index\n    sliced_string := pincode_file[match_index[0]:match_index[1]]\n    log.Printf(\u0026#34;%q\n\u0026#34;, sliced_string)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;console\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-console\u0026#34;\u0026gt;$ go run main.go\n\n\u0026#34;12345-1234\u0026#34;\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, we can access the string from the source text without calling other functions, simply slicing the original string will retrieve the expected results. This is the convention of the golang standard library to make the end index exclusive.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Similarly, the \u0026lt;code\u0026gt;FindAllIndex\u0026lt;\/code\u0026gt; method can be used to get a list of list of such indexes of matched strings.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;exp, err := regexp.Compile(\u0060\u0008\\d{5}(?:[-\\s]\\d{4})?\u0008\u0060)\nlog_error(err)\npincode_file, err := os.ReadFile(\u0026#34;pincode.txt\u0026#34;)\nlog_error(err)\n\nmatch_indexes := exp.FindAllIndex(pincode_file)\nlog.Printf(\u0026#34;%T\n\u0026#34;, match_indexes)\nlog.Println(match_indexes)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;console\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-console\u0026#34;\u0026gt;$ go run main.go\n\n[][]int\n[[9 19] [26 31]]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above example gets the list of slices as for all the search pattern indexes in the source string\/text. We can iterate over the list and get each matched string index.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;find-submatch\u0026#34;\u0026gt;Find Submatch\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;the \u0026lt;code\u0026gt;regexp\u0026lt;\/code\u0026gt; package also has a utility function for finding the sub-match of a given regular expression. The method returns a list of strings (or slices of bytes) containing the leftmost match and the sub-matches in that match. This also has the \u0026lt;code\u0026gt;All\u0026lt;\/code\u0026gt; version which instead of returning a single match i.e. the leftmost match it returns all the matches and the corresponding sub-matches.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;log\u0026#34;\n\t\u0026#34;regexp\u0026#34;\n)\n\nfunc main() {\n\n\tstr := \u0026#34;abc@def.com is the mail address of 8th user with id 12\u0026#34;\n\texp := regexp.MustCompile(\n        \u0060([a-zA-Z0-9]\u002b@[a-zA-Z0-9]\u002b\\.[a-zA-Z]{2,})\u0060 \u002b \n            \u0060|(email|mail)|\u0060 \u002b \n            \u0060(\\d{1,3})\u0060)\u0060,\n    )\n\tmatch := exp.FindStringSubmatch(str)\n\tlog.Println(match)\n\tmatches := exp.FindAllStringSubmatch(str, -1)\n\tlog.Println(matches)\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;console\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-console\u0026#34;\u0026gt;$ go run main.go\n\n[abc@def.com abc@def.com  ]\n[[abc@def.com abc@def.com  ] [mail  mail ] [8   8] [12   12]]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above example uses a regex to compute a few things like email address, words like \u0026lt;code\u0026gt;mail\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;email\u0026lt;\/code\u0026gt;, also a number of up to 3 digits. The \u0026lt;code\u0026gt;|\u0026lt;\/code\u0026gt; between these expressions indicates any combination of these three things would be matched for the regular expression. The \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp#Regexp.FindStringSubmatch\u0026#34;\u0026gt;FindStringSubmatch\u0026lt;\/a\u0026gt; method, takes in a string as the source and returns a slice of the matching pattern. The first element is the leftmost match in the string source for the given regular expression, and the subsequent elements are the sub-matches in the matched string.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We can now move a little step ahead for actually understanding the sub-match in a regular expression.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;str := \u0026#34;abe21@def.com is the mail address of 8th user with id 124\u0026#34;\nexp := regexp.MustCompile(\n    \u0060([a-zA-Z]\u002b(\\d*)[a-zA-Z]*@[a-zA-Z]*(\\d*)[a-zA-Z]\u002b\\.[a-z|A-Z]{2,})\u0060 \u002b\n        \u0060|(mail|email)\u0060 \u002b\n        \u0060|(\\d{1,3})\u0060,\n)\n\nmatch := exp.FindStringSubmatch(str)\nlog.Println(match)\nmatches := exp.FindAllStringSubmatch(str, -1)\nlog.Println(matches)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;console\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-console\u0026#34;\u0026gt;$ go run main.go\n\n[abe21@def.com abe21@def.com 21   ]\n[[abe21@def.com abe21@def.com 21   ] [mail    mail ] [8     8] [124     124]]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;In the above example, there are a few things to take away, let us break it down into small pieces. We have a regex for matching either a mail address, the word \u0026lt;code\u0026gt;mail\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;email\u0026lt;\/code\u0026gt;, or a number up to 3 digits. The regex is a bit different from the previous example for understanding the sub-matches within an expression. We find the sub-matches in the string which will be handled by the \u0026lt;code\u0026gt;FindStringSubmatch\u0026lt;\/code\u0026gt;. This function takes in a string and returns a list of strings that are the leftmost matches in the source string.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;First, we need to understand the regex to get a clear idea of the code snippet. The first sub-match is for the email address. However, we use \u0026lt;code\u0026gt;[a-zA-Z]\u0026lt;\/code\u0026gt; in the picking of the username and the domain name, we don\u0026#39;t want to directly match numbers yet. The goal of this regex is to pick up numbers inside an email address. So, we can have 1 or more characters \u0026lt;code\u0026gt;[a-zA-z]\u002b\u0026lt;\/code\u0026gt;, followed by 0 or more digits \u0026lt;code\u0026gt;(\\d*)\u0026lt;\/code\u0026gt;, and again we can have 0 or more characters \u0026lt;code\u0026gt;[a-zA-Z]*\u0026lt;\/code\u0026gt;. The \u0026lt;code\u0026gt;\u002b\u0026lt;\/code\u0026gt; is for 1 or more, \u0026lt;code\u0026gt;*\u0026lt;\/code\u0026gt; is for 0 or more, \u0026lt;code\u0026gt;\\d\u0026lt;\/code\u0026gt; is for digits. After this, we have the \u0026lt;code\u0026gt;@\u0026lt;\/code\u0026gt; as a compulsory character in the mail, followed by the same sequence in the username i.e. 1 or more characters, 0 or more digits, 0 or more characters. Finally, we have the \u0026lt;code\u0026gt;.com\u0026lt;\/code\u0026gt; and the domain name extensions, as a group of 2 or more characters \u0026lt;code\u0026gt;[a-z|A-Z]{2,}\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, the regex accepts an email, with a sub-match of the number anywhere in the username or the domain name.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The \u0026lt;code\u0026gt;FindStringSubmatch\u0026lt;\/code\u0026gt; function lists out the sub-matches for the leftmost(first) match of the regex in the source string. So it finds the string \u0026lt;code\u0026gt;abc21@def.com\u0026lt;\/code\u0026gt; which is the email id. This regex \u0026lt;code\u0026gt;([a-zA-Z]\u002b(\\d*)[a-zA-Z]*@[a-zA-Z]\u002b(\\d*)[a-zA-Z]*\\.[a-z|A-Z]{2,})\u0026lt;\/code\u0026gt; has two sub-matches \u0026lt;code\u0026gt;\\d*\u0026lt;\/code\u0026gt; in the username part and also in the domain part. So, the list returns the email address as the match and the match as itself, as well as the number in the sub-match inside the mail address. So the result, \u0026lt;code\u0026gt;[abc21@def.com abc21@def.com 21 ]\u0026lt;\/code\u0026gt;, there are a few empty string sub-matches because the second sub-match for the domain name number returns an empty string.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Similarly, the \u0026lt;code\u0026gt;FindAllStringSubmatch\u0026lt;\/code\u0026gt; will return the list of all the matches in the source string. The other matches don\u0026#39;t have any sub-matches in the regular expression so it just gets the match and the sub-match as itself in the case of string \u0026lt;code\u0026gt;mail\u0026lt;\/code\u0026gt;, digit \u0026lt;code\u0026gt;8\u0026lt;\/code\u0026gt;, and digit \u0026lt;code\u0026gt;124\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We can also use this example from a file as a slice of bytes. This will return a list of slice of slice of bytes instead of slice of slice of strings.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;log\u0026#34;\n\t\u0026#34;regexp\u0026#34;\n)\n\nfunc main() {\n\n    exp := regexp.MustCompile(\n        \u0060([a-zA-Z]\u002b(\\d*)[a-zA-Z]*@[a-zA-Z]*(\\d*)[a-zA-Z]\u002b\\.[a-z|A-Z]{2,})\u0060 \u002b\n            \u0060|(mail|email)\u0060 \u002b\n            \u0060|(\\d{1,3})\u0060,\n    )\n\temail_file, err := os.ReadFile(\u0026#34;subtext.txt\u0026#34;)\n\tlog_error(err)\n\tmail_match := exp.FindSubmatch(email_file)\n\tlog.Printf(\u0026#34;%s\n\u0026#34;, mail_match)\n\tmail_matches := exp.FindAllSubmatch(email_file, -1)\n\t\/\/log.Println(mail_matches)\n\tlog.Printf(\u0026#34;%s\n\u0026#34;, mail_matches)\n\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;txt\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-txt\u0026#34;\u0026gt;# submatch.txt\n\nabc21@def.com is the mail address of user id 1234\nThe email address abe2def.com is of user name abc\na2be.@def.com\nEmail address: abe@de2f.com, User id: 45\njohndoe@example.com\njane.doe123@example.com\njanedoe@example.co.uk\njohn123@example.org\njanedoe456@example.net\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;console\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-console\u0026#34;\u0026gt;$ go run main.go\n\n[][]unit8\n[abc21@def.com abc21@def.com 21   ]\n\n[][][]unit8\n[\n    [abc21@def.com abc21@def.com 21   ] [mail    mail ] [123 123] [4     4] \n    [email    email ] [2     2] [2     2] [mail    mail ] \n    [abe@de2f.com abe@de2f.com  2  ] [45     45] \n    [johndoe@example.com johndoe@example.com    ] \n    [doe123@example.com doe123@example.com 123   ] \n    [janedoe@example.co janedoe@example.co    ] \n    [john123@example.org john123@example.org 123   ] \n    [janedoe456@example.net janedoe456@example.net 456   ]\n]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;As we can see from the dummy email ids and some random text, we are able to match the email ids and the numbers in them as the sub-match of the string. This is a \u0026lt;code\u0026gt;[][]unit8\u0026lt;\/code\u0026gt; in case of the \u0026lt;code\u0026gt;FindSubmatch\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;[][][]unit8\u0026lt;\/code\u0026gt; in case of \u0026lt;code\u0026gt;FindAllSubmatch\u0026lt;\/code\u0026gt;. The working remains the same for the bytes as it was for the strings.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;find-submatch-index\u0026#34;\u0026gt;Find Submatch Index\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;We also have the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp#Regexp.FindSubmatchIndex\u0026#34;\u0026gt;FindSubmatchIndex\u0026lt;\/a\u0026gt; and \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp#Regexp.FindAllSubmatchIndex\u0026#34;\u0026gt;FindAllSubmatchIndex\u0026lt;\/a\u0026gt;, and the string variants to get the index(es) of the sub-matches in the pattern picked from the regular expression.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;str := \u0026#34;abe21@def.com is the mail address of 8th user with id 124\u0026#34;\nexp := regexp.MustCompile(\n    \u0060([a-zA-Z]\u002b(\\d*)[a-zA-Z]*@[a-zA-Z]*(\\d*)[a-zA-Z]\u002b\\.[a-z|A-Z]{2,})\u0060 \u002b\n        \u0060|(mail|email)\u0060 \u002b\n        \u0060|(\\d{1,3})\u0060,\n)\n\nmatch := exp.FindStringSubmatch(str)\nmatch_index := exp.FindStringSubmatchIndex(str)\nlog.Println(match)\nlog.Println(match_index)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;console\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-console\u0026#34;\u0026gt;$ go run main.go\n\n[abe21@def.com abe21@def.com 21   ]\n[0 13 0 13 3 5 9 9 -1 -1 -1 -1]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So this returns a list of pairs, here consider the list as \u0026lt;code\u0026gt;[(0, 13) (0, 13), (3, 5), (9, 9), (-1, -1), (-1, -1)]\u0026lt;\/code\u0026gt;. Because the list represents the start and end indexes of the sub-matches in the source string. The match is the first pair, i.e. at the first character \u0026lt;code\u0026gt;0\u0026lt;\/code\u0026gt; -\u0026amp;gt; \u0026lt;code\u0026gt;a\u0026lt;\/code\u0026gt;, and ends at space i.e. \u0026lt;code\u0026gt;13\u0026lt;\/code\u0026gt; character off by one. Then we have the sub-match itself with the same indexes. Then the \u0026lt;code\u0026gt;3\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;5\u0026lt;\/code\u0026gt; indicating the number sub-match \u0026lt;code\u0026gt;21\u0026lt;\/code\u0026gt; in the \u0026lt;code\u0026gt;abc21@def.com\u0026lt;\/code\u0026gt; it starts at 3 and ends at 5, so it occupies 3 and 4 characters in the source string. Similarly, the domain level number doesn\u0026#39;t have any number in the source string so it has returned the domain name end index as an empty string.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We had used \u0026lt;code\u0026gt;(\\d*)\u0026lt;\/code\u0026gt; which can return 0 or more occurrences of the digit, so it returned no match in the case of the domain level name, hence we get the \u0026lt;code\u0026gt;9\u0026lt;\/code\u0026gt; as an empty string at the end of the sub-match for it. The rest are for the \u0026lt;code\u0026gt;email\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;mail\u0026lt;\/code\u0026gt;, and the lone digit sub-matches in the regular expression which we don\u0026#39;t have in the first match in the source string.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;str := \u0026#34;abe21@def.com is the mail address of 8th user with id 124\u0026#34;\nexp := regexp.MustCompile(\n    \u0060([a-zA-Z]\u002b(\\d*)[a-zA-Z]*@[a-zA-Z]*(\\d*)[a-zA-Z]\u002b\\.[a-z|A-Z]{2,})\u0060 \u002b\n        \u0060|(mail|email)\u0060 \u002b\n        \u0060|(\\d{1,3})\u0060,\n)\n\nmatch := exp.FindAllStringSubmatch(str, -1)\nmatch_indexes := exp.FindAllStringSubmatchIndex(str, -1)\nlog.Println(match_indexes)\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;console\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-console\u0026#34;\u0026gt;$ go run main.go\n\n[[abe21@def.com abe21@def.com 21   ] [mail    mail ] [8     8] [124     124]]\n[\n    [0 13 0 13 3 5 9 9 -1 -1 -1 -1]\n    [21 25 -1 -1 -1 -1 -1 -1 21 25 -1 -1]\n    [37 38 -1 -1 -1 -1 -1 -1 -1 -1 37 38]\n    [54 56 -1 -1 -1 -1 -1 -1 -1 -1 54 57]\n]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Similarly, we have used the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp#Regexp.FindAllStringSubmatchIndex\u0026#34;\u0026gt;FindAllStringSubmatchIndex\u0026lt;\/a\u0026gt; for getting the list of a slice of indexes(int) for the sub-match of the expression in the source string.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The first element is the same as the previous example, the next match in the source string is \u0026lt;code\u0026gt;mail\u0026lt;\/code\u0026gt; which comes at index 21 and ends at the 24th index which golang does 24\u002b1 as a convention. Similarly, the number \u0026lt;code\u0026gt;8\u0026lt;\/code\u0026gt; is matched at index \u0026lt;code\u0026gt;37\u0026lt;\/code\u0026gt; and the number \u0026lt;code\u0026gt;124\u0026lt;\/code\u0026gt; at index \u0026lt;code\u0026gt;54\u0026lt;\/code\u0026gt;, rest of the sub-matches for these matches are not present so it turns up to be -1 for the rest of the sub-matches.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So this can also be used for the byte\/uint8 type of variants with \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp#Regexp.FindSubmatchIndex\u0026#34;\u0026gt;FindSubmatchIndex\u0026lt;\/a\u0026gt; and \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp#Regexp.FindAllSubmatchIndex\u0026#34;\u0026gt;FindAllSubmatchIndex\u0026lt;\/a\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;replace-patterns\u0026#34;\u0026gt;Replace Patterns\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;The replace method is used for replacing the matched patterns.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp#Regexp.ReplaceAll\u0026#34;\u0026gt;ReplaceAll\u0026lt;\/a\u0026gt; and \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp#Regexp.ReplaceAllLiteral\u0026#34;\u0026gt;ReplaceAllLiteral\u0026lt;\/a\u0026gt; with some string and byte slice variations can help us in replacing the source text with a replacement string against a regular expression.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Let\u0026#39;s start with a simple example of strings.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;package main\n\nimport (\n\t\u0026#34;log\u0026#34;\n\t\u0026#34;regexp\u0026#34;\n)\n\nfunc main() {\n\n\tstr := \u0026#34;Gophy gophers go in the golang grounds\u0026#34;\n\texp := regexp.MustCompile(\u0060(Go|go)\u0060)\n\treplaced_str := exp.ReplaceAllString(str, \u0026#34;to\u0026#34;)\n\tlog.Println(replaced_str)\n\n}\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above code can replace the string with regex with the replacement string. The regex provided in the \u0026lt;code\u0026gt;exp\u0026lt;\/code\u0026gt; variable has a pattern matching for \u0026lt;code\u0026gt;Go\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;go\u0026lt;\/code\u0026gt;. So, the \u0026lt;code\u0026gt;ReplaceAllString\u0026lt;\/code\u0026gt; method takes in two arguments as strings and returns the string after replacing the character.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;console\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-console\u0026#34;\u0026gt;$ go run replace.go\n\nOriginal:  Gophy gophers go in the golang grounds\nReplaced:  tophy tophers to in the tolang grounds\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;So, this replaces all the characters with \u0026lt;code\u0026gt;Go\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;go\u0026lt;\/code\u0026gt; in the source string with \u0026lt;code\u0026gt;to\u0026lt;\/code\u0026gt;.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;There is a special value available in the replacement string which can expand the regular expression literals. Since the regular expression consists of multiple literals\/quantifiers, we can use those to replace or keep the string in a particular expression\u0026#39;s evaluation.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;str = \u0026#34;Gophy gophers go in the golang grounds\u0026#34;\nexp2 := regexp.MustCompile(\u0060(Go|go)|(phers)|(rounds)\u0060)\nlog.Println(exp2.ReplaceAllString(str, \u0026#34;hop\u0026#34;))\nlog.Println(exp2.ReplaceAllString(str, \u0026#34;$1\u0026#34;))\nlog.Println(exp2.ReplaceAllString(str, \u0026#34;$2\u0026#34;))\nlog.Println(exp2.ReplaceAllString(str, \u0026#34;$3\u0026#34;))\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;console\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-console\u0026#34;\u0026gt;$ go run replace.go\n\nhopphy hophop hop in the hoplang ghop\nGophy go go in the golang g\nphy phers  in the lang g\nphy   in the lang grounds\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;The above code uses the regular expression match string have been replaced with the literals. So, the regex \u0026lt;code\u0026gt;(Go|go)|(phers)|(rounds)\u0026lt;\/code\u0026gt; has three parts \u0026lt;code\u0026gt;Go|go\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;phers\u0026lt;\/code\u0026gt;, and \u0026lt;code\u0026gt;rounds\u0026lt;\/code\u0026gt;. Each of the literals is separated by an operator, indicating either the match or all matches should be considered.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In the first statement, we replace the regex with \u0026lt;code\u0026gt;hop\u0026lt;\/code\u0026gt; as you can see all the matches are replaced with the replacement string. For instance, the word \u0026lt;code\u0026gt;gophers\u0026lt;\/code\u0026gt; is replaced by \u0026lt;code\u0026gt;hophop\u0026lt;\/code\u0026gt;, because \u0026lt;code\u0026gt;go\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;phers\u0026lt;\/code\u0026gt; is matched separately and replaced.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In the second statement, we replace the source string with \u0026lt;code\u0026gt;$1\u0026lt;\/code\u0026gt; indicating the first literal in the regex i.e. \u0026lt;code\u0026gt;Go|go\u0026lt;\/code\u0026gt;. These statements will expand the \u0026lt;code\u0026gt;$1\u0026lt;\/code\u0026gt; and keep the match only where the literal matches and rest are removed. So, \u0026lt;code\u0026gt;Gophy\u0026lt;\/code\u0026gt; is matched with \u0026lt;code\u0026gt;Go|go\u0026lt;\/code\u0026gt; so it is kept as is in the replacement. However, for \u0026lt;code\u0026gt;grounds\u0026lt;\/code\u0026gt;, the literal match for \u0026lt;code\u0026gt;$1\u0026lt;\/code\u0026gt; i.e. \u0026lt;code\u0026gt;Go|go\u0026lt;\/code\u0026gt; does not match and hence is not kept and removed, so the resulting string becomes \u0026lt;code\u0026gt;g\u0026lt;\/code\u0026gt; rest is substituted with an empty string.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In the third print statement, the source string is replaced with the second literal \u0026lt;code\u0026gt;$2\u0026lt;\/code\u0026gt; i.e. \u0026lt;code\u0026gt;phers\u0026lt;\/code\u0026gt;. So if any string matches the literal, only those are kept and the rest are substituted by an empty string. So, \u0026lt;code\u0026gt;Gophy\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;Go\u0026lt;\/code\u0026gt; doesn\u0026#39;t match \u0026lt;code\u0026gt;phers\u0026lt;\/code\u0026gt; and hence is replaced, however, \u0026lt;code\u0026gt;gophers\u0026lt;\/code\u0026gt; match the \u0026lt;code\u0026gt;phers\u0026lt;\/code\u0026gt; part and is kept as it is, but the \u0026lt;code\u0026gt;go\u0026lt;\/code\u0026gt; part is substituted.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Similarly, for the fourth print statement, the source string is replaced with the third literal i.e. \u0026lt;code\u0026gt;rounds\u0026lt;\/code\u0026gt;. So if only the third literal is kept as is, the rest matching strings from the regex are substituted with an empty string. So, \u0026lt;code\u0026gt;grounds\u0026lt;\/code\u0026gt; remain as it is because it matches the \u0026lt;code\u0026gt;rounds\u0026lt;\/code\u0026gt; in the replacement literal.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In short, we replace the literal back after replacing the regex patterns in the source string. This can be used to fine-tune or access specific literals or expressions in the regular expressions.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;str = \u0026#34;Gophy gophers go in the golang grounds\u0026#34;\nexp2 := regexp.MustCompile(\u0060(Go|go)|(phers)|(rounds)\u0060)\nlog.Println(exp2.ReplaceAllString(str, \u0026#34;$1$2\u0026#34;))\n\nstr = \u0026#34;Gophy gophers go in the golang cophers grounds\u0026#34;\nlog.Println(exp2.ReplaceAllString(str, \u0026#34;$1$3\u0026#34;))\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;console\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-console\u0026#34;\u0026gt;$ go run replace.go\n\nGophy gophers go in the golang g\nGophy go go in the golang co grounds\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;We can even concatenate and make some minor string literal adjustments to the replacement string. As we have done in the example, where both the \u0026lt;code\u0026gt;$1$2\u0026lt;\/code\u0026gt; are used as the replacement string. The two literals combine to make a string with \u0026lt;code\u0026gt;Go|go\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;phers\u0026lt;\/code\u0026gt;. So, we can see the result, in the first statement, \u0026lt;code\u0026gt;Gophy gophers go in the golang g\u0026lt;\/code\u0026gt;, all the character that have \u0026lt;code\u0026gt;Go|go\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;phers\u0026lt;\/code\u0026gt; are kept as it is(substituted the same string), the \u0026lt;code\u0026gt;grounds\u0026lt;\/code\u0026gt; however does not match and hence are replaced with the empty string(because the capture group \u0026lt;code\u0026gt;$1$2\u0026lt;\/code\u0026gt; does not match \u0026lt;code\u0026gt;rounds\u0026lt;\/code\u0026gt;).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Similarly, for the third example, the \u0026lt;code\u0026gt;$1$3\u0026lt;\/code\u0026gt; i.e. \u0026lt;code\u0026gt;Go|go\u0026lt;\/code\u0026gt; or \u0026lt;code\u0026gt;rounds\u0026lt;\/code\u0026gt; are matched with the source string. So, we the \u0026lt;code\u0026gt;phers\u0026lt;\/code\u0026gt; in \u0026lt;code\u0026gt;gophers\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;cophers\u0026lt;\/code\u0026gt; does not match the capture group \u0026lt;code\u0026gt;$1$3\u0026lt;\/code\u0026gt; and hence is replaced by an empty group(string). However, the \u0026lt;code\u0026gt;Gophy\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;golang\u0026lt;\/code\u0026gt;, and \u0026lt;code\u0026gt;grounds\u0026lt;\/code\u0026gt; match the capture group and are replaced by that match string (which is the same string).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;If we want to avoid expansion of the strings as we did in the previous example with \u0026lt;code\u0026gt;$1\u0026lt;\/code\u0026gt; and other parameters, we can use the \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp#Regexp.ReplaceAllLiteral\u0026#34;\u0026gt;ReplaceAllLiteral\u0026lt;\/a\u0026gt; or \u0026lt;a href=\u0026#34;https:\/\/pkg.go.dev\/regexp#Regexp.ReplaceAllLiteralString\u0026#34;\u0026gt;ReplaceAllLiteralString\u0026lt;\/a\u0026gt; to parse the string as it is.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;go\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-go\u0026#34;\u0026gt;str := \u0026#34;Gophy gophers go in the golang cophers grounds\u0026#34;\nexp2 := regexp.MustCompile(\u0060(Go|go)|(phers)|(rounds)\u0060)\nlog.Println(exp2.ReplaceAllLiteralString(str, \u0026#34;$1\u0026#34;))\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;$ go run replace.go\n\n$1phy $1$1 $1 in the $1lang co$1 g$1\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;As we can see the \u0026lt;code\u0026gt;$1\u0026lt;\/code\u0026gt; is not expanded and parsed as it is for replacing the pattern in the regular expression. The \u0026lt;code\u0026gt;Go\u0026lt;\/code\u0026gt; is replaced with \u0026lt;code\u0026gt;$1\u0026lt;\/code\u0026gt; to look like \u0026lt;code\u0026gt;$1phy\u0026lt;\/code\u0026gt;, and similarly for the rest of the patterns.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That\u0026#39;s it from the 26th part of the series, all the source code for the examples are linked in the GitHub on the \u0026lt;a href=\u0026#34;https:\/\/github.com\/Mr-Destructive\/100-days-of-golang\/tree\/main\/scripts\/regex\u0026#34;\u0026gt;100 days of Golang\u0026lt;\/a\u0026gt; repository.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;This article covered the fundamentals of using the \u0026lt;code\u0026gt;regexp\u0026lt;\/code\u0026gt; package for working with regular expressions in golang. We explored the methods and \u0026lt;code\u0026gt;Regexp\u0026lt;\/code\u0026gt; type in the package with various methods available through the type interface. By exploring the examples and simple snippets, various ways for pattern matching, finding, and replacing were walked over and found.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, hopefully, the article might have found useful to you, if you have any queries, questions, feedback, or mistakes in the article, you can let me know in the discussion or on my social handles. Happy Coding :)\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    
+    <link rel="icon" href="/tbicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/tbicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const slug = "posts\/golang-regex";
+                const type = "posts";
+                console.log("Editing post:", slug, type);
+                const url = "https:\/\/devmeetgor.netlify.app/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav>
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'" aria-label="Editor">
+      Editor
+    </button>
+  
+</header>
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Golang: Regex</h1>
+            
+            <div class="post-meta">
+                Published on 📅 <time datetime="2023-03-22 12:30:00">2023-03-22 12:30:00</time>
+            </div>
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">🏷️ Tags:</span>
+                
+                <a href="/tags/go">#go</a>
+                
+            </div>
+            
+            
+            <div class="post-series">
+                <span class="series-label">Part of the
+                <span class="series-list">
+                    
+                    <a href="/series/100-days-of-golang" class="series-link">📖 100-days-of-golang</a>
+                    
+                </span></span>
+                <span class="series-label">series</span>
+            </div>
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=posts\/golang-regex&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <h2 id="introduction">Introduction</h2>
+<p>In this 26th part of the series, we will be covering the basics of using regular expressions in golang. This article will cover the basic operations like matching, finding, replacing, and sub-matches in a regular expression pattern from string source or file content. This will have examples for each of the concepts and similar variants will follow the same ideology in self-exploring the syntax.</p>
+<h2 id="regex-in-golang">Regex in golang</h2>
+<p>So, let's start with what are regular expressions.</p>
+<blockquote>
+<p>Regular expressions are basic building blocks for searching, pattern matching, and manipulation from a source of text using computational logic.</p>
+</blockquote>
+<p>This is not the formal definition, but have written it in words for my understanding of regular expressions till now. Might not be accurate, but makes sense to me after I had played and explored it (not fully).</p>
+<p>So regular expressions use some pattern-matching techniques using basic logic operators like concatenation, quantifiers, etc. These relate to the study of the theory of computation quite closely but you don't need to get into too much theory in order to understand the working of regular expressions. However, it won't harm you if you are curious about it and want to explore it further.</p>
+<p>Some resources to learn the fundamentals of regular expressions:</p>
+<ul>
+<li>
+<p><a href="https://cs.lmu.edu/~ray/notes/regex/">Regular Expressions LMU notes</a></p>
+</li>
+<li>
+<p><a href="https://regexone.com/">RegexOne</a></p>
+</li>
+</ul>
+<h2 id="regexp-package">Regexp package</h2>
+<p>We will be using the <a href="https://pkg.go.dev/regexp">regexp</a> package in the golang standard library to get some quick and important methods for quick and neat pattern matching and searching. It provides a <code>Regexp</code> type and a lot of methods on top of it to perform matching, finding, replacing, and sub-matches in the source text.</p>
+<p>This package also supports two types of methods serving different purposes and use cases for string and slice of bytes, this can be useful for reading from a buffer, file, etc., and also flexible enough to search for a simple string.</p>
+<h2 id="matching-patterns">Matching Patterns</h2>
+<p>One of the fundamental aspects of the regular expression is to check if a particular pattern is present or not in a source string. The <code>regexp</code> package provides some methods like <a href="https://pkg.go.dev/regexp#Match">Match</a>, <a href="https://pkg.go.dev/regexp#MatchString">MatchString</a> methods on a slice of bytes and string respectively from the pattern string.</p>
+<h3 id="matching-strings">Matching Strings</h3>
+<p>The basic operations with regex or regular expression can be performed to compare and match if the pattern matches a given string.</p>
+<p>In golang, the <a href="https://pkg.go.dev/regexp">regexp</a> package provides a few functions to simply match expressions with strings or text. One of the easy-to-understand ones include the <a href="https://pkg.go.dev/regexp#MatchString">MtachString</a>, and <a href="https://pkg.go.dev/regexp#Match">Match</a> methods.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"log"
+	"regexp"
+)
+
+func log_error(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func main() {
+
+	str := "gophers of the goland"
+	is_matching, err := regexp.MatchString("go", str)
+	log_error(err)
+	log.Println(is_matching)
+	is_matching, err := regexp.MatchString("no", str)
+	log_error(err)
+	log.Println(is_matching)
+
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">console</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-console">$ go run main.go
+
+true
+false
+</code></pre></div><p>In the above code, we have used the <code>MatchString</code> method that takes in two parameters string/pattern to find, and the source string. The function returns a boolean as <code>true</code> or <code>false</code> if the pattern is present in the source string, also it might return an error if the pattern(first parameter) is parsed as an incorrect regular expression.</p>
+<p>So, we can clearly see, the string <code>go</code> is present in the string <code>gophers of the goland</code> and the string <code>no</code> is not a substring.</p>
+<p>We also have <code>Match</code> method which is a more general version of <code>MatchString</code> it excepts a slice of byte rather than a string as the source string. The first parameter is still a string, but the second parameter is a slice of bytes.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">is_matching, err = regexp.Match(`.*land`, []byte("goland is a land of gophers"))
+log_error(err)
+log.Println(is_matching)
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">console</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-console">$ go run main.go
+
+true
+</code></pre></div><p>We can use the <code>Match</code> method to simply parse a slice of bytes to use as the source text to check the pattern.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"log"
+    "os"
+	"regexp"
+)
+
+func log_error(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func main() {
+	file_content, err := os.ReadFile("temp.txt")
+	log_error(err)
+	is_matching, err = regexp.Match(`memory`, file_content)
+	log_error(err)
+	log.Println(is_matching)
+	is_matching, err = regexp.Match(`text `, file_content)
+	log_error(err)
+	log.Println(is_matching)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash"># temp.txt
+
+One of the gophers used a slice,
+the other one used a arrays.
+Some gophers were idle in the memory.
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">console</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-console">$ go run main.go
+
+true
+false
+</code></pre></div><p>We can now even parse the contents of a file as a slice of bytes. So, it would be really nice to compare and check for a string pattern in a file quickly. Here in the above example, we have checked if <code>memory</code> is present in the text which it is, and in the second call, we check if <code>text</code> string is present anywhere in the file content which it is not.</p>
+<h2 id="find-patterns">Find Patterns</h2>
+<p>We can even use regular expressions for searching text or string with the struct/type <a href="https://pkg.go.dev/regexp#Regexp">Regexp</a> provided by golang's regexp. We can create a regular expression and use other functions like <code>MatchString</code>, <code>Match</code>, and others that we will explore to match or find a pattern in the text.</p>
+<h3 id="find-string-from-regex">Find String from RegEx</h3>
+<p>We can get a slice of byte from the <code>FindAll</code> method which will take in a slice of byte, the second parameter as -1 for all matches. The function returns a slice of slice of byte with the byte representation of the matched string in the source text.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">exp, err := regexp.Compile(`\d{5}(?:[-\s]\d{4})?`)
+log_error(err)
+pincode_file, err := os.ReadFile("pincode.txt")
+log_error(err)
+match := exp.FindAll(pincode_file, -1)
+log.Println(match)
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash"># pincode.txt
+
+Pincode: 12345-1234
+City, 40084
+State 123
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">console</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-console">$ go run main.go
+
+[[49 50 51 52 53 45 49 50 51 52] [52 48 48 56 52]]
+</code></pre></div><p>In the above example, we have used the <a href="https://pkg.go.dev/regexp#Compile">Compile</a> method to create a regular expression and <a href="https://pkg.go.dev/regexp#Regexp.FindAll">FindAll</a> to get all the occurrences of the matching patterns in the text. We have again read the contents from the file. In this example, the <code>exp</code> is a regular expression for a postal code, which can either have 5 digit or 5digits-4digit combination. We read the file <code>pincode.txt</code> as a slice of bytes and use the <code>FindAll</code> method. The FindAll method takes in the parameter as a slice of byte and the integer as the number of occurrences to search. If we use a negative number it will include all the matches.</p>
+<p>We search for the pin code in the file and the funciton returns a list of bytes that match the regular expression in the provided object <code>exp</code>. Finally, we get the result as <code>12345-1234</code> and <code>40084</code> which are present in the file. It doesn't match the number <code>123</code> which is not a valid match for the given regular expression.</p>
+<p>There is also a version of <code>FindAll</code> as <code>FindAllString</code> which will take in a string as the text source and return a slice of strings.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">matches := exp.FindAllString(string(pincode_file), -1)
+log.Println(matches)
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">console</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-console">$ go run main.go
+
+["12345-1234" "40084"]
+</code></pre></div><p>So, the <code>FindAllString</code> would return a slice of strings of the matches in the text.</p>
+<h3 id="find-the-index-of-string-from-regex">Find the Index of String from RegEx</h3>
+<p>We can even get the start and end index of the matched string in the text using the <a href="https://pkg.go.dev/regexp#Regexp.FindIndex">FindIndex</a> and <a href="https://pkg.go.dev/regexp#Regexp.FindAllIndex">FindAllIndex</a> methods to get the indexes of the match, or all the matches of the file content.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">exp, err := regexp.Compile(`\d{5}(?:[-\s]\d{4})?`)
+log_error(err)
+pincode_file, err := os.ReadFile("pincode.txt")
+log_error(err)
+
+match_index := exp.FindIndex(pincode_file)
+log.Printf("%T
+", match_index)
+log.Println(match_index)
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">console</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-console">$ go run main.go
+
+[]int
+[9 19]
+</code></pre></div><p>The above code is using the <code>FindIndex</code> method to get the indexes of the first match of the regular expression. The output of the code gives a single slice of an integer with length two as the start and last index of the matched string in the text file. So, here, the <code>9</code> represents the position(index) of the first character match in the string, and <code>19</code> is the last index of the matched string.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">bash</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-bash">Pincode: 12345-1234
+01234567890123456789
+
+Assume 0 as 10 after 9, 11, and so on
+It starts from the 9th character as `1` and ends at the `4` character
+at position 18 but it returns the end position + 1 for the ease of slicing
+ 
+City, 40084
+012345678901
+
+State 123
+234567890
+</code></pre></div><p>The character at 9 and 18 are the first and the last character position/index of the source string, so it returns the end position + 1 as the index. This makes retrieval of slicing source string much easier, as we won't be offset by one.</p>
+<p>If we want to get the text in the source string, we can use the slicing as:</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">exp, err := regexp.Compile(`\d{5}(?:[-\s]\d{4})?`)
+log_error(err)
+pincode_file, err := os.ReadFile("pincode.txt")
+log_error(err)
+
+match_index := exp.FindIndex(pincode_file)
+if len(match_index) > 0 {
+    
+    // Get the slice of the original string from start to end index
+    sliced_string := pincode_file[match_index[0]:match_index[1]]
+    log.Printf("%q
+", sliced_string)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">console</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-console">$ go run main.go
+
+"12345-1234"
+</code></pre></div><p>So, we can access the string from the source text without calling other functions, simply slicing the original string will retrieve the expected results. This is the convention of the golang standard library to make the end index exclusive.</p>
+<p>Similarly, the <code>FindAllIndex</code> method can be used to get a list of list of such indexes of matched strings.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">exp, err := regexp.Compile(`\d{5}(?:[-\s]\d{4})?`)
+log_error(err)
+pincode_file, err := os.ReadFile("pincode.txt")
+log_error(err)
+
+match_indexes := exp.FindAllIndex(pincode_file)
+log.Printf("%T
+", match_indexes)
+log.Println(match_indexes)
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">console</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-console">$ go run main.go
+
+[][]int
+[[9 19] [26 31]]
+</code></pre></div><p>The above example gets the list of slices as for all the search pattern indexes in the source string/text. We can iterate over the list and get each matched string index.</p>
+<h2 id="find-submatch">Find Submatch</h2>
+<p>the <code>regexp</code> package also has a utility function for finding the sub-match of a given regular expression. The method returns a list of strings (or slices of bytes) containing the leftmost match and the sub-matches in that match. This also has the <code>All</code> version which instead of returning a single match i.e. the leftmost match it returns all the matches and the corresponding sub-matches.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"log"
+	"regexp"
+)
+
+func main() {
+
+	str := "abc@def.com is the mail address of 8th user with id 12"
+	exp := regexp.MustCompile(
+        `([a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,})` + 
+            `|(email|mail)|` + 
+            `(\d{1,3})`)`,
+    )
+	match := exp.FindStringSubmatch(str)
+	log.Println(match)
+	matches := exp.FindAllStringSubmatch(str, -1)
+	log.Println(matches)
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">console</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-console">$ go run main.go
+
+[abc@def.com abc@def.com  ]
+[[abc@def.com abc@def.com  ] [mail  mail ] [8   8] [12   12]]
+</code></pre></div><p>The above example uses a regex to compute a few things like email address, words like <code>mail</code> or <code>email</code>, also a number of up to 3 digits. The <code>|</code> between these expressions indicates any combination of these three things would be matched for the regular expression. The <a href="https://pkg.go.dev/regexp#Regexp.FindStringSubmatch">FindStringSubmatch</a> method, takes in a string as the source and returns a slice of the matching pattern. The first element is the leftmost match in the string source for the given regular expression, and the subsequent elements are the sub-matches in the matched string.</p>
+<p>We can now move a little step ahead for actually understanding the sub-match in a regular expression.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">str := "abe21@def.com is the mail address of 8th user with id 124"
+exp := regexp.MustCompile(
+    `([a-zA-Z]+(\d*)[a-zA-Z]*@[a-zA-Z]*(\d*)[a-zA-Z]+\.[a-z|A-Z]{2,})` +
+        `|(mail|email)` +
+        `|(\d{1,3})`,
+)
+
+match := exp.FindStringSubmatch(str)
+log.Println(match)
+matches := exp.FindAllStringSubmatch(str, -1)
+log.Println(matches)
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">console</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-console">$ go run main.go
+
+[abe21@def.com abe21@def.com 21   ]
+[[abe21@def.com abe21@def.com 21   ] [mail    mail ] [8     8] [124     124]]
+</code></pre></div><p>In the above example, there are a few things to take away, let us break it down into small pieces. We have a regex for matching either a mail address, the word <code>mail</code> or <code>email</code>, or a number up to 3 digits. The regex is a bit different from the previous example for understanding the sub-matches within an expression. We find the sub-matches in the string which will be handled by the <code>FindStringSubmatch</code>. This function takes in a string and returns a list of strings that are the leftmost matches in the source string.</p>
+<p>First, we need to understand the regex to get a clear idea of the code snippet. The first sub-match is for the email address. However, we use <code>[a-zA-Z]</code> in the picking of the username and the domain name, we don't want to directly match numbers yet. The goal of this regex is to pick up numbers inside an email address. So, we can have 1 or more characters <code>[a-zA-z]+</code>, followed by 0 or more digits <code>(\d*)</code>, and again we can have 0 or more characters <code>[a-zA-Z]*</code>. The <code>+</code> is for 1 or more, <code>*</code> is for 0 or more, <code>\d</code> is for digits. After this, we have the <code>@</code> as a compulsory character in the mail, followed by the same sequence in the username i.e. 1 or more characters, 0 or more digits, 0 or more characters. Finally, we have the <code>.com</code> and the domain name extensions, as a group of 2 or more characters <code>[a-z|A-Z]{2,}</code>.</p>
+<p>So, the regex accepts an email, with a sub-match of the number anywhere in the username or the domain name.</p>
+<p>The <code>FindStringSubmatch</code> function lists out the sub-matches for the leftmost(first) match of the regex in the source string. So it finds the string <code>abc21@def.com</code> which is the email id. This regex <code>([a-zA-Z]+(\d*)[a-zA-Z]*@[a-zA-Z]+(\d*)[a-zA-Z]*\.[a-z|A-Z]{2,})</code> has two sub-matches <code>\d*</code> in the username part and also in the domain part. So, the list returns the email address as the match and the match as itself, as well as the number in the sub-match inside the mail address. So the result, <code>[abc21@def.com abc21@def.com 21 ]</code>, there are a few empty string sub-matches because the second sub-match for the domain name number returns an empty string.</p>
+<p>Similarly, the <code>FindAllStringSubmatch</code> will return the list of all the matches in the source string. The other matches don't have any sub-matches in the regular expression so it just gets the match and the sub-match as itself in the case of string <code>mail</code>, digit <code>8</code>, and digit <code>124</code>.</p>
+<p>We can also use this example from a file as a slice of bytes. This will return a list of slice of slice of bytes instead of slice of slice of strings.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"log"
+	"regexp"
+)
+
+func main() {
+
+    exp := regexp.MustCompile(
+        `([a-zA-Z]+(\d*)[a-zA-Z]*@[a-zA-Z]*(\d*)[a-zA-Z]+\.[a-z|A-Z]{2,})` +
+            `|(mail|email)` +
+            `|(\d{1,3})`,
+    )
+	email_file, err := os.ReadFile("subtext.txt")
+	log_error(err)
+	mail_match := exp.FindSubmatch(email_file)
+	log.Printf("%s
+", mail_match)
+	mail_matches := exp.FindAllSubmatch(email_file, -1)
+	//log.Println(mail_matches)
+	log.Printf("%s
+", mail_matches)
+
+}
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">txt</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-txt"># submatch.txt
+
+abc21@def.com is the mail address of user id 1234
+The email address abe2def.com is of user name abc
+a2be.@def.com
+Email address: abe@de2f.com, User id: 45
+johndoe@example.com
+jane.doe123@example.com
+janedoe@example.co.uk
+john123@example.org
+janedoe456@example.net
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">console</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-console">$ go run main.go
+
+[][]unit8
+[abc21@def.com abc21@def.com 21   ]
+
+[][][]unit8
+[
+    [abc21@def.com abc21@def.com 21   ] [mail    mail ] [123 123] [4     4] 
+    [email    email ] [2     2] [2     2] [mail    mail ] 
+    [abe@de2f.com abe@de2f.com  2  ] [45     45] 
+    [johndoe@example.com johndoe@example.com    ] 
+    [doe123@example.com doe123@example.com 123   ] 
+    [janedoe@example.co janedoe@example.co    ] 
+    [john123@example.org john123@example.org 123   ] 
+    [janedoe456@example.net janedoe456@example.net 456   ]
+]
+</code></pre></div><p>As we can see from the dummy email ids and some random text, we are able to match the email ids and the numbers in them as the sub-match of the string. This is a <code>[][]unit8</code> in case of the <code>FindSubmatch</code> and <code>[][][]unit8</code> in case of <code>FindAllSubmatch</code>. The working remains the same for the bytes as it was for the strings.</p>
+<h3 id="find-submatch-index">Find Submatch Index</h3>
+<p>We also have the <a href="https://pkg.go.dev/regexp#Regexp.FindSubmatchIndex">FindSubmatchIndex</a> and <a href="https://pkg.go.dev/regexp#Regexp.FindAllSubmatchIndex">FindAllSubmatchIndex</a>, and the string variants to get the index(es) of the sub-matches in the pattern picked from the regular expression.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">str := "abe21@def.com is the mail address of 8th user with id 124"
+exp := regexp.MustCompile(
+    `([a-zA-Z]+(\d*)[a-zA-Z]*@[a-zA-Z]*(\d*)[a-zA-Z]+\.[a-z|A-Z]{2,})` +
+        `|(mail|email)` +
+        `|(\d{1,3})`,
+)
+
+match := exp.FindStringSubmatch(str)
+match_index := exp.FindStringSubmatchIndex(str)
+log.Println(match)
+log.Println(match_index)
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">console</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-console">$ go run main.go
+
+[abe21@def.com abe21@def.com 21   ]
+[0 13 0 13 3 5 9 9 -1 -1 -1 -1]
+</code></pre></div><p>So this returns a list of pairs, here consider the list as <code>[(0, 13) (0, 13), (3, 5), (9, 9), (-1, -1), (-1, -1)]</code>. Because the list represents the start and end indexes of the sub-matches in the source string. The match is the first pair, i.e. at the first character <code>0</code> -&gt; <code>a</code>, and ends at space i.e. <code>13</code> character off by one. Then we have the sub-match itself with the same indexes. Then the <code>3</code> and <code>5</code> indicating the number sub-match <code>21</code> in the <code>abc21@def.com</code> it starts at 3 and ends at 5, so it occupies 3 and 4 characters in the source string. Similarly, the domain level number doesn't have any number in the source string so it has returned the domain name end index as an empty string.</p>
+<p>We had used <code>(\d*)</code> which can return 0 or more occurrences of the digit, so it returned no match in the case of the domain level name, hence we get the <code>9</code> as an empty string at the end of the sub-match for it. The rest are for the <code>email</code> or <code>mail</code>, and the lone digit sub-matches in the regular expression which we don't have in the first match in the source string.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">str := "abe21@def.com is the mail address of 8th user with id 124"
+exp := regexp.MustCompile(
+    `([a-zA-Z]+(\d*)[a-zA-Z]*@[a-zA-Z]*(\d*)[a-zA-Z]+\.[a-z|A-Z]{2,})` +
+        `|(mail|email)` +
+        `|(\d{1,3})`,
+)
+
+match := exp.FindAllStringSubmatch(str, -1)
+match_indexes := exp.FindAllStringSubmatchIndex(str, -1)
+log.Println(match_indexes)
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">console</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-console">$ go run main.go
+
+[[abe21@def.com abe21@def.com 21   ] [mail    mail ] [8     8] [124     124]]
+[
+    [0 13 0 13 3 5 9 9 -1 -1 -1 -1]
+    [21 25 -1 -1 -1 -1 -1 -1 21 25 -1 -1]
+    [37 38 -1 -1 -1 -1 -1 -1 -1 -1 37 38]
+    [54 56 -1 -1 -1 -1 -1 -1 -1 -1 54 57]
+]
+</code></pre></div><p>Similarly, we have used the <a href="https://pkg.go.dev/regexp#Regexp.FindAllStringSubmatchIndex">FindAllStringSubmatchIndex</a> for getting the list of a slice of indexes(int) for the sub-match of the expression in the source string.</p>
+<p>The first element is the same as the previous example, the next match in the source string is <code>mail</code> which comes at index 21 and ends at the 24th index which golang does 24+1 as a convention. Similarly, the number <code>8</code> is matched at index <code>37</code> and the number <code>124</code> at index <code>54</code>, rest of the sub-matches for these matches are not present so it turns up to be -1 for the rest of the sub-matches.</p>
+<p>So this can also be used for the byte/uint8 type of variants with <a href="https://pkg.go.dev/regexp#Regexp.FindSubmatchIndex">FindSubmatchIndex</a> and <a href="https://pkg.go.dev/regexp#Regexp.FindAllSubmatchIndex">FindAllSubmatchIndex</a>.</p>
+<h2 id="replace-patterns">Replace Patterns</h2>
+<p>The replace method is used for replacing the matched patterns.</p>
+<p>The <a href="https://pkg.go.dev/regexp#Regexp.ReplaceAll">ReplaceAll</a> and <a href="https://pkg.go.dev/regexp#Regexp.ReplaceAllLiteral">ReplaceAllLiteral</a> with some string and byte slice variations can help us in replacing the source text with a replacement string against a regular expression.</p>
+<p>Let's start with a simple example of strings.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">package main
+
+import (
+	"log"
+	"regexp"
+)
+
+func main() {
+
+	str := "Gophy gophers go in the golang grounds"
+	exp := regexp.MustCompile(`(Go|go)`)
+	replaced_str := exp.ReplaceAllString(str, "to")
+	log.Println(replaced_str)
+
+}
+</code></pre></div><p>The above code can replace the string with regex with the replacement string. The regex provided in the <code>exp</code> variable has a pattern matching for <code>Go</code> or <code>go</code>. So, the <code>ReplaceAllString</code> method takes in two arguments as strings and returns the string after replacing the character.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">console</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-console">$ go run replace.go
+
+Original:  Gophy gophers go in the golang grounds
+Replaced:  tophy tophers to in the tolang grounds
+</code></pre></div><p>So, this replaces all the characters with <code>Go</code> or <code>go</code> in the source string with <code>to</code>.</p>
+<p>There is a special value available in the replacement string which can expand the regular expression literals. Since the regular expression consists of multiple literals/quantifiers, we can use those to replace or keep the string in a particular expression's evaluation.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">str = "Gophy gophers go in the golang grounds"
+exp2 := regexp.MustCompile(`(Go|go)|(phers)|(rounds)`)
+log.Println(exp2.ReplaceAllString(str, "hop"))
+log.Println(exp2.ReplaceAllString(str, "$1"))
+log.Println(exp2.ReplaceAllString(str, "$2"))
+log.Println(exp2.ReplaceAllString(str, "$3"))
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">console</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-console">$ go run replace.go
+
+hopphy hophop hop in the hoplang ghop
+Gophy go go in the golang g
+phy phers  in the lang g
+phy   in the lang grounds
+</code></pre></div><p>The above code uses the regular expression match string have been replaced with the literals. So, the regex <code>(Go|go)|(phers)|(rounds)</code> has three parts <code>Go|go</code>, <code>phers</code>, and <code>rounds</code>. Each of the literals is separated by an operator, indicating either the match or all matches should be considered.</p>
+<p>In the first statement, we replace the regex with <code>hop</code> as you can see all the matches are replaced with the replacement string. For instance, the word <code>gophers</code> is replaced by <code>hophop</code>, because <code>go</code> and <code>phers</code> is matched separately and replaced.</p>
+<p>In the second statement, we replace the source string with <code>$1</code> indicating the first literal in the regex i.e. <code>Go|go</code>. These statements will expand the <code>$1</code> and keep the match only where the literal matches and rest are removed. So, <code>Gophy</code> is matched with <code>Go|go</code> so it is kept as is in the replacement. However, for <code>grounds</code>, the literal match for <code>$1</code> i.e. <code>Go|go</code> does not match and hence is not kept and removed, so the resulting string becomes <code>g</code> rest is substituted with an empty string.</p>
+<p>In the third print statement, the source string is replaced with the second literal <code>$2</code> i.e. <code>phers</code>. So if any string matches the literal, only those are kept and the rest are substituted by an empty string. So, <code>Gophy</code> or <code>Go</code> doesn't match <code>phers</code> and hence is replaced, however, <code>gophers</code> match the <code>phers</code> part and is kept as it is, but the <code>go</code> part is substituted.</p>
+<p>Similarly, for the fourth print statement, the source string is replaced with the third literal i.e. <code>rounds</code>. So if only the third literal is kept as is, the rest matching strings from the regex are substituted with an empty string. So, <code>grounds</code> remain as it is because it matches the <code>rounds</code> in the replacement literal.</p>
+<p>In short, we replace the literal back after replacing the regex patterns in the source string. This can be used to fine-tune or access specific literals or expressions in the regular expressions.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">str = "Gophy gophers go in the golang grounds"
+exp2 := regexp.MustCompile(`(Go|go)|(phers)|(rounds)`)
+log.Println(exp2.ReplaceAllString(str, "$1$2"))
+
+str = "Gophy gophers go in the golang cophers grounds"
+log.Println(exp2.ReplaceAllString(str, "$1$3"))
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name">console</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-console">$ go run replace.go
+
+Gophy gophers go in the golang g
+Gophy go go in the golang co grounds
+</code></pre></div><p>We can even concatenate and make some minor string literal adjustments to the replacement string. As we have done in the example, where both the <code>$1$2</code> are used as the replacement string. The two literals combine to make a string with <code>Go|go</code> and <code>phers</code>. So, we can see the result, in the first statement, <code>Gophy gophers go in the golang g</code>, all the character that have <code>Go|go</code> or <code>phers</code> are kept as it is(substituted the same string), the <code>grounds</code> however does not match and hence are replaced with the empty string(because the capture group <code>$1$2</code> does not match <code>rounds</code>).</p>
+<p>Similarly, for the third example, the <code>$1$3</code> i.e. <code>Go|go</code> or <code>rounds</code> are matched with the source string. So, we the <code>phers</code> in <code>gophers</code> and <code>cophers</code> does not match the capture group <code>$1$3</code> and hence is replaced by an empty group(string). However, the <code>Gophy</code>, <code>golang</code>, and <code>grounds</code> match the capture group and are replaced by that match string (which is the same string).</p>
+<p>If we want to avoid expansion of the strings as we did in the previous example with <code>$1</code> and other parameters, we can use the <a href="https://pkg.go.dev/regexp#Regexp.ReplaceAllLiteral">ReplaceAllLiteral</a> or <a href="https://pkg.go.dev/regexp#Regexp.ReplaceAllLiteralString">ReplaceAllLiteralString</a> to parse the string as it is.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">go</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-go">str := "Gophy gophers go in the golang cophers grounds"
+exp2 := regexp.MustCompile(`(Go|go)|(phers)|(rounds)`)
+log.Println(exp2.ReplaceAllLiteralString(str, "$1"))
+</code></pre></div><div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>$ go run replace.go
+
+$1phy $1$1 $1 in the $1lang co$1 g$1
+</code></pre></div><p>As we can see the <code>$1</code> is not expanded and parsed as it is for replacing the pattern in the regular expression. The <code>Go</code> is replaced with <code>$1</code> to look like <code>$1phy</code>, and similarly for the rest of the patterns.</p>
+<p>That's it from the 26th part of the series, all the source code for the examples are linked in the GitHub on the <a href="https://github.com/Mr-Destructive/100-days-of-golang/tree/main/scripts/regex">100 days of Golang</a> repository.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>This article covered the fundamentals of using the <code>regexp</code> package for working with regular expressions in golang. We explored the methods and <code>Regexp</code> type in the package with various methods available through the type interface. By exploring the examples and simple snippets, various ways for pattern matching, finding, and replacing were walked over and found.</p>
+<p>So, hopefully, the article might have found useful to you, if you have any queries, questions, feedback, or mistakes in the article, you can let me know in the discussion or on my social handles. Happy Coding :)</p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/golang-command-line-args" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Golang: Command Line Arguments</span>
+        </a>
+        
+
+        
+        
+        <a href="/posts/golang-random-numbers" class="nav-link nav-next" title="Next Post">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Golang: Random Numbers</span>
+            <span class="nav-arrow">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">📚 Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-delete-method" class="related-link">
+                <span class="related-post-title">Golang Web: DELETE Method</span>
+                <span class="related-post-date">2025-01-12 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/golang-web-patch-method" class="related-link">
+                <span class="related-post-title">Golang Web: PATCH Method</span>
+                <span class="related-post-date">2025-01-11 20:30:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-5" class="related-link">
+                <span class="related-post-title">Advent of Code Day 5 in Golang: Ordering Pages</span>
+                <span class="related-post-date">2024-12-11 23:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-4" class="related-link">
+                <span class="related-post-title">Advent of Code Day 4 in Golang: Finding XMAS and X-MAS</span>
+                <span class="related-post-date">2024-12-09 20:45:00</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/posts/aoc-2024-day-3" class="related-link">
+                <span class="related-post-title">Advent of Code Day 3 in Golang: Do Or Don’t Regex</span>
+                <span class="related-post-date">2024-12-07 20:45:00</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <p>&copy; Meet Gor. All rights reserved.</p>
+    <div class="social-links">
+      <a href="/contact" aria-label="Connect with me">Connect with me</a>
+    </div>
+  </div>
+</footer>
+    
+</body>
+</html>
