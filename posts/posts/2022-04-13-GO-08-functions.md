@@ -1,18 +1,14 @@
-{
-  "type": "posts",
-  "title": "Golang: Functions",
-  "description": "Understanding the basics of functions in Golang",
-  "date": "2022-04-13 09:00:00",
-  "status": "published",
-  "slug": "golang-functions",
-  "tags": [
-    "go"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/golang-008-functions.png",
-  "series": [
-    "100-days-of-golang"
-  ]
-}
+---
+type: posts
+title: "Golang: Functions"
+date: 2022-04-13
+slug: "golang-functions"
+series: ["100-days-of-golang"]
+tags:
+  - go
+image_url: https://meetgor-cdn.pages.dev/golang-008-functions.png
+---
+
 
 ## Introduction
 

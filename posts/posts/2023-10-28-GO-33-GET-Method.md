@@ -1,18 +1,14 @@
-{
-  "type": "posts",
-  "title": "Golang Web: GET Method",
-  "description": "Exploring the fundamentals of a GET method in golang. How to request a resource, parse body, headers, etc. in a HTTP GET request.",
-  "date": "2023-10-28 20:15:00",
-  "status": "published",
-  "slug": "golang-web-get-method",
-  "tags": [
-    "go"
-  ],
-  "series": [
-    "100-days-of-golang"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/100-days-of-golang/golang-033-get-method.png"
-}
+---
+type: posts
+title: "Golang Web: GET Method"
+date: 2023-10-28
+slug: "golang-web-get-method"
+series: ["100-days-of-golang"]
+tags:
+  - go
+image_url: https://meetgor-cdn.pages.dev/100-days-of-golang/golang-033-get-method.png
+---
+
 
 ## Introduction
 

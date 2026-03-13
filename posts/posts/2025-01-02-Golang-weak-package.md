@@ -1,10 +1,61 @@
-{
-  "type": "posts",
-  "title": "Golang weak package",
-  "date": "2025-01-02 00:00:00",
-  "draft": true,
-  "description": "Golang weak package"
-}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+type: posts
+title: "Golang weak package"
+date: 2025-01-02
+tags:
+  - golang
+  - typescript
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
 
 ## Introduction
 

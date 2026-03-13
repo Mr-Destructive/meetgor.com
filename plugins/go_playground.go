@@ -2,13 +2,12 @@ package plugins
 
 import (
 	"fmt"
-	"reflect"
 
+	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/renderer"
 	"github.com/yuin/goldmark/renderer/html"
 	"github.com/yuin/goldmark/util"
-	"github.com/yuin/goldmark"
 )
 
 // goPlaygroundRenderer is a custom renderer for fenced code blocks.
@@ -99,6 +98,4 @@ func (e *GoPlaygroundExtender) Extend(m goldmark.Markdown) {
 	)
 }
 
-func init() {
-	RegisterPlugin("GoPlayground", reflect.TypeOf(GoPlaygroundExtender{}))
-}
+// Not a build plugin; this is a Goldmark extension.

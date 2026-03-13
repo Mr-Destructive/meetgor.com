@@ -5,8 +5,9 @@ description: "Setting up SSH config for using multiple accounts for Git reposito
 status: published
 slug: git-ssh-multiple-accounts
 tags: ["git", "github"]
-date: 2024-03-22 22:30:00
+date: 2024-03-22
 ---
+
 
 Let's  say you have multiple github accounts. One for your personal projects, one for your company that you work at, and one other remote repository account (let's say gitlab).
 

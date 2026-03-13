@@ -1,20 +1,16 @@
-{
-  "type": "posts",
-  "title": "Django Basics: CRUD API",
-  "subtitle": "Understanding the entire workflow of creating a app in django and making a CRUD API",
-  "date": "2022-02-03 23:45:00 +0530",
-  "status": "published",
-  "tags": [
-    "django",
-    "python"
-  ],
-  "slug": "django-basics-crud-api",
-  "image_url": "https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643910006/blogmedia/yp2nvrkqkxmjzcsu0weu.png",
-  "series": [
-    "Django-Basics",
-    "Django-Series"
-  ]
-}
+---
+type: posts
+title: "Django Basics: CRUD API"
+subtitle: "Understanding the entire workflow of creating a app in django and making a CRUD API"
+date: 2022-02-03
+slug: "django-basics-crud-api"
+series: ["Django-Basics"]
+tags:
+  - django
+  - python
+image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643910006/blogmedia/yp2nvrkqkxmjzcsu0weu.png
+---
+
 
 ## Introduction
 

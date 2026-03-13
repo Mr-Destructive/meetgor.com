@@ -1,8 +1,69 @@
 ---
-title: "Techstructive Weekly #0"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+title: 'Techstructive Weekly #0'
 date: 2024-07-27
-type: "newsletter"
-slug: "techstructive-weekly-0"
+type: newsletter
+slug: techstructive-weekly-0
+tags:
+- ai
+- devops
+- git
+- newsletter
+- python
+- sql
+source_url: 'https://techstructively.substack.com/p/techstructive-weekly-0'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ---
 
 ## Week #0

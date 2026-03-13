@@ -1,8 +1,13 @@
 ---
-type: "sqlog"
+type: sqlog
 title: "SQLite functions: Generate_Series Examples"
-date: 2025-08-22
+tags:
+  - typescript
+  - sql
+  - sqlite
+date:  2025-08-22
 ---
+
 
 After taking a look at what the Generate Series function does, now let's see some examples that might be handy.
 

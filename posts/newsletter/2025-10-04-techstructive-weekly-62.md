@@ -1,13 +1,67 @@
-{
-    "author":"meet",
-    "date":"2025-10-04",
-    "post_dir":"newsletter",
-    "status":"published",
-    "title": "Techstructive Weekly #62",
-    "type":"newsletter",
-    "slug": "techstructive-weekly-62"
-}
+---
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+type: newsletter
+title: 'Techstructive Weekly #62'
+date: 2025-10-04
+slug: techstructive-weekly-62
+tags:
+- ai
+- career
+- database
+- newsletter
+- sql
+source_url: 'https://techstructively.substack.com/p/techstructive-weekly-62'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
 
 ## Week #62
 
@@ -113,8 +167,3 @@ Double click to interact with video
 
 Models are getting launched but not having a significant bumps in their capabilities, which is a good sign for humans. But these labs are just going crazy. They are putting AI in any possible thing they can, social media, if that was not a worse place to be in, developing anxiety, loneliness and pressure, adding AI to it is going to doom the peace from humans.
 
----
-
-Happy Coding :)
-
-For more news, follow the [Hackernewsletter](https://buttondown.com/hacker-newsletter/archive/hacker-newsletter-765) (#765th edition) , and for software development/coding articles, join [daily.dev](http://daily.dev/).

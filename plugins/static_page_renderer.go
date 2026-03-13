@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
+	"io/fs"
 	"log"
 	"os"
 	"path/filepath"
@@ -11,7 +12,7 @@ import (
 
 	"github.com/yuin/goldmark"
 	"gopkg.in/yaml.v3"
-	
+
 	models "github.com/mr-destructive/mr-destructive.github.io/models"
 )
 
@@ -23,14 +24,26 @@ func (p *StaticPageRendererPlugin) Name() string {
 	return p.PluginName
 }
 
-func (p *StaticPageRendererPlugin) Execute(ssg *models.SSG) {
+func (p *StaticPageRendererPlugin) Phase() Phase {
+	return PhaseRender
+}
+
+func (p *StaticPageRendererPlugin) Requires() []string {
+	return []string{"renderTemplates"}
+}
+
+func (p *StaticPageRendererPlugin) AdminPolicy() AdminPolicy {
+	return AdminRun
+}
+
+func (p *StaticPageRendererPlugin) Execute(ssg *models.SSG) error {
 	config := &ssg.Config
 	templateFS := os.DirFS(config.Blog.TemplatesDir)
 
 	outputPath := filepath.Join(".", config.Blog.OutputDir)
 	err := os.MkdirAll(outputPath, os.ModePerm)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	// Check if public directory exists and process markdown files
@@ -39,14 +52,14 @@ func (p *StaticPageRendererPlugin) Execute(ssg *models.SSG) {
 		// Public directory exists, process markdown files
 		files, err := os.ReadDir(publicPath)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 
 		for _, file := range files {
 			if !file.IsDir() && strings.HasSuffix(file.Name(), ".md") {
 				// Process markdown files like about.md, contact.md
 				pageName := strings.TrimSuffix(file.Name(), ".md")
-				
+
 				// Check if this page is configured in pages config
 				if pageConfig, exists := config.Blog.PagesConfig[pageName]; exists && pageConfig.TemplatePath != "" && pageName != "posts" {
 					content, err := os.ReadFile(filepath.Join(publicPath, file.Name()))
@@ -57,7 +70,7 @@ func (p *StaticPageRendererPlugin) Execute(ssg *models.SSG) {
 
 					// Parse frontmatter and content
 					frontmatter, markdownContent := parseFrontMatter(content)
-					
+
 					// Convert markdown to HTML
 					var htmlContent bytes.Buffer
 					if err := goldmark.Convert([]byte(markdownContent), &htmlContent); err != nil {
@@ -68,7 +81,7 @@ func (p *StaticPageRendererPlugin) Execute(ssg *models.SSG) {
 					pageOutputPath := filepath.Join(outputPath, pageName)
 					err = os.MkdirAll(pageOutputPath, os.ModePerm)
 					if err != nil {
-						log.Fatal(err)
+						return err
 					}
 					outputPagePath := filepath.Join(pageOutputPath, "index.html")
 
@@ -82,6 +95,8 @@ func (p *StaticPageRendererPlugin) Execute(ssg *models.SSG) {
 							Blog:      config.Blog,
 							AdminMode: config.AdminMode,
 						},
+						Years:     YearsFromPosts(ssg.Posts),
+						FeedPosts: ssg.FeedPosts,
 						Post: models.Post{
 							Frontmatter: frontmatter,
 							Content:     template.HTML(htmlContent.String()),
@@ -94,24 +109,24 @@ func (p *StaticPageRendererPlugin) Execute(ssg *models.SSG) {
 					}
 					fmt.Println("Rendering static page:", pageName, "using template:", pageConfig.TemplatePath)
 
-					// Parse all templates that might be needed
-			patterns := []string{pageConfig.TemplatePath, "*.html"}
-			t, err := template.ParseFS(templateFS, patterns...)
-			if err != nil {
-				log.Printf("Error parsing templates for %s: %v", pageConfig.TemplatePath, err)
-				// Fallback to just the main template
-				t, err = template.ParseFS(templateFS, pageConfig.TemplatePath)
-				if err != nil {
-					log.Fatal(err)
-				}
-			}
-			err = t.ExecuteTemplate(&buffer, pageConfig.TemplatePath, context)
+					// Parse all templates that might be needed with helper funcs
+					patterns := []string{pageConfig.TemplatePath, "*.html"}
+					t, err := parseTemplates(templateFS, patterns...)
 					if err != nil {
-						log.Fatal(err)
+						log.Printf("Error parsing templates for %s: %v", pageConfig.TemplatePath, err)
+						// Fallback to just the main template
+						t, err = parseTemplates(templateFS, pageConfig.TemplatePath)
+						if err != nil {
+							return err
+						}
+					}
+					err = t.ExecuteTemplate(&buffer, pageConfig.TemplatePath, context)
+					if err != nil {
+						return err
 					}
 					err = os.WriteFile(outputPagePath, buffer.Bytes(), 0660)
 					if err != nil {
-						log.Fatal(err)
+						return err
 					}
 				}
 			}
@@ -131,7 +146,7 @@ func (p *StaticPageRendererPlugin) Execute(ssg *models.SSG) {
 			pageOutputPath := filepath.Join(outputPath, pageName)
 			err = os.MkdirAll(pageOutputPath, os.ModePerm)
 			if err != nil {
-				log.Fatal(err)
+				return err
 			}
 			outputPagePath := filepath.Join(pageOutputPath, "index.html")
 
@@ -145,6 +160,8 @@ func (p *StaticPageRendererPlugin) Execute(ssg *models.SSG) {
 					Blog:      config.Blog,
 					AdminMode: config.AdminMode,
 				},
+				Years:     YearsFromPosts(ssg.Posts),
+				FeedPosts: ssg.FeedPosts,
 				FeedInfo: models.Feed{
 					Title: strings.ToTitle(pageName),
 					Type:  pageName,
@@ -155,25 +172,41 @@ func (p *StaticPageRendererPlugin) Execute(ssg *models.SSG) {
 
 			// Parse all templates that might be needed
 			patterns := []string{pageConfig.TemplatePath, "*.html"}
-			t, err := template.ParseFS(templateFS, patterns...)
+			t, err := parseTemplates(templateFS, patterns...)
 			if err != nil {
 				log.Printf("Error parsing templates for %s: %v", pageConfig.TemplatePath, err)
 				// Fallback to just the main template
-				t, err = template.ParseFS(templateFS, pageConfig.TemplatePath)
+				t, err = parseTemplates(templateFS, pageConfig.TemplatePath)
 				if err != nil {
-					log.Fatal(err)
+					return err
 				}
 			}
 			err = t.ExecuteTemplate(&buffer, pageConfig.TemplatePath, context)
 			if err != nil {
-				log.Fatal(err)
+				return err
 			}
 			err = os.WriteFile(outputPagePath, buffer.Bytes(), 0660)
 			if err != nil {
-				log.Fatal(err)
+				return err
 			}
 		}
 	}
+	return nil
+}
+
+func parseTemplates(templateFS fs.FS, patterns ...string) (*template.Template, error) {
+	t := template.New("").Funcs(template.FuncMap{
+		"dateOnly": func(dateStr string) string {
+			if len(dateStr) >= 10 {
+				return dateStr[:10]
+			}
+			return dateStr
+		},
+	})
+	if len(patterns) == 0 {
+		return t, nil
+	}
+	return t.ParseFS(templateFS, patterns...)
 }
 
 func parseFrontMatter(content []byte) (models.FrontMatter, string) {
@@ -181,7 +214,7 @@ func parseFrontMatter(content []byte) (models.FrontMatter, string) {
 	lines := strings.Split(string(content), "\n")
 	frontmatter := models.FrontMatter{}
 	contentStart := len(lines) // Default to whole content if no frontmatter
-	
+
 	if len(lines) > 0 && strings.TrimSpace(lines[0]) == "---" {
 		// Found start of frontmatter
 		for i := 1; i < len(lines); i++ {
@@ -191,15 +224,21 @@ func parseFrontMatter(content []byte) (models.FrontMatter, string) {
 				break
 			}
 		}
-		
+
 		// Parse YAML frontmatter if we found both --- markers
 		if contentStart < len(lines) {
 			frontmatterContent := strings.Join(lines[1:contentStart-1], "\n")
 			yaml.Unmarshal([]byte(frontmatterContent), &frontmatter)
 		}
 	}
-	
+
 	// Return frontmatter and content
 	contentLines := lines[contentStart:]
 	return frontmatter, strings.Join(contentLines, "\n")
+}
+
+func init() {
+	RegisterPlugin("StaticPageRenderer", func() Plugin {
+		return &StaticPageRendererPlugin{PluginName: "StaticPageRenderer"}
+	})
 }

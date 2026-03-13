@@ -1,264 +1,122 @@
-{
-    "author":"meet",
-    "date":"2025-05-03",
-    "post_dir":"newsletter",
-    "status":"published",
-    "title": "Techstructive Weekly #40",
-    "type":"newsletter",
-    "slug": "techstructive-weekly-40"
-}
+---
 
-## Week #40
 
-What a week, I knew the silence was just temporary, it would come at once, thankfully it was not too much releases to keep track of. There was, however, one release of a model (or a family of models) from Alibaba Cloud with the Qwen suite of models, that overthrew the Meta AI LLama Models from the SOTA standard for open source models.
 
-This week, I explored a bit about LLMs and how to operate with them effectively, thanks to the prompt engineering masterclass from Anthropic. I created a bunch of things, leaving aside my fear and procrastination. This week, I was a bit self-critical of myself but was able to break through the chains and took some hard decisions and executed, the results? Not sure, maybe good, might not work. But that is not in my hands; whatever was, is done. Time to move ahead and explore this AI revolution firsthand.
 
-### Quote of the week
 
-> "Instead of a celebration of everything you know, an anti-library is an ode to everything you want to explore."
-> 
-> — Anne-Laure Le Cunff
 
-I want to do this and this, nope, that might be output oriented
 
-Let’s try to explore this and this, what might we need to do, what we need to go through to feel this?  
-That is the question that is answered in a process-oriented way.
 
-I want to change this, and I have been reading the book, Tiny Experiments, so far it has changed quite a few things about my procrastination behaviour and helped me take action over being scared or fretting over the perfectionism bug.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+type: newsletter
+title: 'Techstructive Weekly #40'
+date: 2025-05-03
+slug: techstructive-weekly-40
+tags:
+- ai
+- database
+- devops
+- newsletter
+- python
+source_url: 'https://techstructively.substack.com/p/techstructive-weekly-40'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ---
 
-## Created
+<div class="available-content"><div class="body markup" dir="auto"><h2 class="header-anchor-post">Week #40<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§week-40"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/162701120/week-40" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><p>What a week, I knew the silence was just temporary, it would come at once, thankfully it was not too much releases to keep track of. There was however one release of a model (or a family of models) from Alibaba Cloud with the Qwen suite of models, that overthrew the Meta AI LLama Models from the SOTA standard for open source models.</p><p>This week, I explored a bit about LLMs and how to operate with them effectively, thanks to the prompt engineering masterclass from Anthropic. I created a bunch of things, leaving aside my fear and procrastination. This week, I was a bit specitical on myself but was able to break through the chains and took some hard decisions and executed, the results? Not sure, maybe good, might not work. But that is not in my hands, whatever was, is done. Time to move ahead and explore this AI revolution first hand.</p><h3 class="header-anchor-post">Quote of the week<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§quote-of-the-week"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/162701120/quote-of-the-week" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h3><blockquote><p>"Instead of a celebration of everything you know, an anti-library is an ode to everything you want to explore."</p><p>— Anne-Laure Le Cunff</p></blockquote><p>I want to do this and this, nope, that might be output oriented</p><p><span>Let’s try to explore this and this, what might we need to do, what we need to go through to feel this?</span><br/><span>That is the question that is answered in a process-oriented way.</span></p><p>I want to change this, and I have been reading the book, Tiny Experiments, so far it has changed quite a few things about my procrastination behaviour and helped me take actions over being scared or fretting over the perfectionism bug.</p><div><hr/></div><h2 class="header-anchor-post">Created<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§created"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/162701120/created" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><p>This week, I started a different approach in creating, just publishing at the end of the day.</p><h3 class="header-anchor-post">Built<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§built"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/162701120/built" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h3><ul><li><p><span>Published the </span><a href="https://github.com/Mr-Destructive/meta_ai_api_tool_call" rel="nofollow ugc noopener">meta-ai-api tool-call</a><span> python package</span></p></li><li><p><a href="https://agentic-calculator.vercel.app/" rel="nofollow ugc noopener">Agentic Calculator</a><span>: LLM with math tools using Pydnatic AI and Vercel</span></p><ul><li><p>LLM: Meta AI Llama 4 (on API Wrapper with tool calls)</p></li><li><p>Agent Framework: Pydantic AI</p></li><li><p>Deployment: Vercel Lambda Functions</p></li></ul><p></p></li></ul><h3 class="header-anchor-post">Wrote<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§wrote"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/162701120/wrote" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h3><ul><li><p>Outlined a couple of articles (will publish and reveal soon) </p></li><li><p><span>Thought: </span><a href="https://meetgor.bearblog.dev/chatgpt-is-online-on-whatsapp/" rel="nofollow ugc noopener">ChatGPT on WhatsApp</a><span> → might redirect in some time to → </span><a href="https://meetgor.com/thoughts/chatgpt-is-online-on-whatsapp/" rel="nofollow ugc noopener">meetgor.com</a></p><p></p></li></ul><h3 class="header-anchor-post">Recorded<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§recorded"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/162701120/recorded" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h3><ul><li><p><span>2 YouTube Shorts on </span><a href="https://www.youtube.com/shorts/R0FA-GFNgcM" rel="nofollow ugc noopener">ChatGPT</a><span> and </span><a href="https://www.youtube.com/shorts/V4WM1SmxrEI" rel="nofollow ugc noopener">Perplexity</a><span> released as WhatsApp Chatbots</span></p></li><li><p>Livestreamed</p><ul><li><p><a href="https://www.youtube.com/live/tBRQSlpgEUg" rel="nofollow ugc noopener">Creating the Meta AI API wrapper with a tool call and a Pydantic AI model wrapper for the Meta AI API</a></p><div class="youtube-wrap" data-attrs='{"videoId":"tBRQSlpgEUg","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-tBRQSlpgEUg"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/tBRQSlpgEUg?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div></li><li><p><a href="https://www.youtube.com/live/yA5d-R6O8h0" rel="nofollow ugc noopener">Building an Agentic Calculator with Pydantic, Appwrite (failed, then moved to Vercel), Meta AI API wrapper with tool calls</a></p><div class="youtube-wrap" data-attrs='{"videoId":"yA5d-R6O8h0","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-yA5d-R6O8h0"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/yA5d-R6O8h0?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div><p></p></li></ul></li></ul><h2 class="header-anchor-post">Read<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§read"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/162701120/read" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://koomen.dev/essays/horseless-carriages/" rel="nofollow ugc noopener">Horseless Carriages</a><span> : </span></p><ul><li><p>This was a great read. People making AI-based applications are too naive to understand the actual technology behind LLM and how the approach needs to be changed. </p></li><li><p>Right now, it is the assumption that the  developer is attached to the system prompt; however, LLMs at this stage need customisation from the user perspective and ndo ot have the dependency on the developer. </p></li><li><p>The shift in developer-user responsibility is quite unnoticed, and this article highlights that effectively. </p></li></ul></li><li><p><a href="https://boz.com/articles/be-kind" rel="nofollow ugc noopener">Be Kind</a><span> : </span></p><ul><li><p>As a developer, we need to be kind, not just yes, thank you but really understand the person from other end and be humble about his/her situation and feelings.</p></li><li><p>That might be too realistic for a developer to do (right? We are nerds, I think), but having that kindness and insight about the person we are interacting with sets us apart as an effective engineer.</p></li></ul></li><li><p><a href="https://www.saiyangrowthletter.com/p/habits-i-recommend-to-succeed-as" rel="nofollow ugc noopener">Habits I recommend to a software developer</a></p><ul><li><p>Reading a book</p></li><li><p>Build projects (keep building)</p></li><li><p>Write to reflect the learnings</p></li><li><p>Learn and build in public</p><p></p></li></ul></li><li><p><a href="https://awsfundamentals.com/blog/pulumi-getting-started" rel="nofollow ugc noopener">Getting started with Pulumi</a></p><ul><li><p>I always wanted to understand Infrastructue and code, but no article helps me understand what it actually is solving, no one has yet shown the problem before the solution. I might find and write it myself one day (day one?).</p></li></ul></li><li><p><a href="https://www.fightforthehuman.com/why-i-cannot-be-technical" rel="nofollow ugc noopener">Why can’t I be technical</a></p><ul><li><p>I didn’t completely read this, but this makes an interesting point, that we need to understand the opposite end of the thinking on the thing we are working on, kind of wired but that makes sense now.</p></li></ul><p></p></li></ul><h2 class="header-anchor-post">Watched<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§watched"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/162701120/watched" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://youtu.be/CXhYDOvgpuU" rel="nofollow ugc noopener">Lessons on AI Agents from Claude plays Pokemon</a></p><ul><li><p>Wow, agents are already playing games, not exactly but quite fair I would say. Anthropic is really a lab, like they are researching LLM behaviors through and through; they are technical scientists.</p></li><li><p>Claude plays Pokemon Red:</p><ul><li><p>Send screenshot of the current state</p></li><li><p>Describe the game mechanics</p></li><li><p>Ask for the action</p></li><li><p>Iterate</p></li></ul></li><li><p>It’s quite a fascinating experiment. Maybe we can try with different types of games with LLMs. They tried a Pokémon-like game, because that isa  very user-paced game, not a very rapid pace, or live-like games. Very smooth transitions and turn based game.</p></li></ul></li></ul><div class="youtube-wrap" data-attrs='{"videoId":"CXhYDOvgpuU","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-CXhYDOvgpuU"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/CXhYDOvgpuU?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div><p></p><ul><li><p><a href="https://youtu.be/T9aRN5JkmL8" rel="nofollow ugc noopener">AI Prompt Engineering: Deep dive</a></p><ul><li><p>This is a masterclass in prompt engineering. Must watch</p></li><li><p>Anthropic really cares about the craft and art of LLMs, they really understand what to think when interfacing to am LLM.</p></li><li><p>First principle thinking</p></li></ul></li></ul><div class="youtube-wrap" data-attrs='{"videoId":"T9aRN5JkmL8","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-T9aRN5JkmL8"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/T9aRN5JkmL8?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div><p></p><ul><li><p><a href="https://youtu.be/3VuM1GCadt4" rel="nofollow ugc noopener">Advice for juniors on manager-engineer relation and Theo’s experience (must watch)</a></p><ul><li><p>TLDR: Don’t try to do the job that you are not asked, if the environment is pulling each other down.</p></li><li><p>It’s doesn’t mean you not following your curiosity or doing the things you are excited to do, rather than knowing when to and when not to.</p><div class="youtube-wrap" data-attrs='{"videoId":"3VuM1GCadt4","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-3VuM1GCadt4"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/3VuM1GCadt4?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div></li></ul></li></ul><p></p><ul><li><p><a href="https://youtu.be/2TIXl2rlA6Q" rel="nofollow ugc noopener">AI Coding is not enough we need Agnetic Coding:</a></p><ul><li><p>This is wild. I have been sleeping on Claude Code and Warp</p></li><li><p>Those are the ones that are truly agentic editors.</p></li><li><p>AI Coding (which people are pissed at) versus, Agentic Coding, that is really the difference. Agentic coding opens a wild number of possibilities. This is the second time, I am overwhelmed in life in programming. One was with Vim and Linux, there was so many things to learn and experiment with. And this time, its LLMs, models, tools, and so many details to learn, so many behaviours to understand. This is fascinating. Just watch this vide, I can’t be thankful to this person enough.</p><div class="youtube-wrap" data-attrs='{"videoId":"2TIXl2rlA6Q","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-2TIXl2rlA6Q"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/2TIXl2rlA6Q?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div></li></ul></li></ul><h2 class="header-anchor-post">Learnt<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§learnt"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/162701120/learnt" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://vickiboykis.com/2024/02/28/gguf-the-long-way-around/" rel="nofollow ugc noopener">GGUF, the file format for storing LLM model weights</a><span> </span></p><ul><li><p>I wanted to evaluate a idea for a project. Running models from a file, and this file format is what I needed. Using this format and a binding with llama.cpp and other libraries, this can be used for inferencing later to actually run the model</p></li></ul></li><li><p>Using llama.cpp python bindings to run a model with a gguf file</p><ul><li><p>We can use the llama.cpp or other library binding, to load the file in memory and the binding library will be using the inference to get the tokens out from the given prompt</p></li></ul></li><li><p>Creating Python Lambda functions in Vercel</p><ul><li><p>The snippet is what you need to get up and running with python serverless functions in Vercel</p><pre><code>import json
+from http.server import BaseHTTPRequestHandler
+from urllib.parse import parse_qs, urlparse
 
-This week, I started a different approach in creating, just publishing at the end of the day.
 
-### Built
+class handler(BaseHTTPRequestHandler):
+    
+    def do_GET(self):
+        parsed_path = urlparse(self.path)
+        query_params = parse_qs(parsed_path.query)
+        
+        query = query_params.get('q', [''])[0]
+        result = {"message": "hello, world!"}
+        response_data = {"result": result}
 
-* Published the [meta-ai-api tool-call](https://github.com/Mr-Destructive/meta_ai_api_tool_call) python package
-    
-* [Agentic Calculator](https://agentic-calculator.vercel.app/): LLM with math tools using Pydnatic AI and Vercel
-    
-    * LLM: Meta AI Llama 4 (on API Wrapper with tool calls)
-        
-    * Agent Framework: Pydantic AI
-        
-    * Deployment: Vercel Lambda Functions
-        
-    
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json')
+        self.end_headers()
+        self.wfile.write(json.dumps(response_data).encode('utf-8'))
+        print(response_data)
+        return
 
-### Wrote
 
-* Outlined a couple of articles (will publish and reveal soon)
-    
-* Thought: [ChatGPT on WhatsApp](https://meetgor.bearblog.dev/chatgpt-is-online-on-whatsapp/) → might redirect in some time to → [meetgor.com](https://meetgor.com/thoughts/chatgpt-is-online-on-whatsapp/)
-    
+    def do_POST(self):
+        try:
+            content_length = int(self.headers.get('Content-Length', 0))
 
-### Recorded
+            post_data_bytes = self.rfile.read(content_length)
 
-* 2 YouTube Shorts on [ChatGPT](https://www.youtube.com/shorts/R0FA-GFNgcM) and [Perplexity](https://www.youtube.com/shorts/V4WM1SmxrEI) released as WhatsApp Chatbots
-    
-* Livestreamed
-    
-    * [Creating the Meta AI API wrapper with a tool call and a Pydantic AI model wrapper for the Meta AI API](https://www.youtube.com/live/tBRQSlpgEUg)
-        
-    * [Building an Agentic Calculator with Pydantic, Appwrite (failed, then moved to Vercel), Meta AI API wrapper with tool calls](https://www.youtube.com/live/yA5d-R6O8h0)
-        
-
-## Read
-
-* [Horseless Carriages](https://koomen.dev/essays/horseless-carriages/) :
-    
-    * This was a great read. People making AI-based applications are too naive to understand the actual technology behind LLM and how the approach needs to be changed.
-        
-    * Right now, it is the assumption that the developer is attached to the system prompt; however, LLMs at this stage need customisation from the user perspective and ndo ot have the dependency on the developer.
-        
-    * The shift in developer-user responsibility is quite unnoticed, and this article highlights that effectively.
-        
-* [Be Kind](https://boz.com/articles/be-kind) :
-    
-    * As a developer, we need to be kind, not just yes, thank you but really understand the person from the other end and be humble about his/her situation and feelings.
-        
-    * That might be too realistic for a developer to do (right? We are nerds, I think), but having that kindness and insight about the person we are interacting with sets us apart as an effective engineer.
-        
-* [Habits I recommend to a software developer](https://www.saiyangrowthletter.com/p/habits-i-recommend-to-succeed-as)
-    
-    * Reading a book
-        
-    * Build projects (keep building)
-        
-    * Write to reflect the learnings
-        
-    * Learn and build in public
-        
-* [Getting started with Pulumi](https://awsfundamentals.com/blog/pulumi-getting-started)
-    
-    * I always wanted to understand Infrastructure and code, but no article helps me understand what it actually solves, no one has yet shown the problem before the solution. I might find and write it myself one day (day one?).
-        
-* [Why can’t I be technical](https://www.fightforthehuman.com/why-i-cannot-be-technical)?
-    
-    * I didn’t completely read this, but this makes an interesting point, that we need to understand the opposite end of the thinking on the thing we are working on, kind of wired but that makes sense now.
-        
-    
-
-## Watched
-
-* [Lessons on AI Agents from Claude playing Pokémon](https://youtu.be/CXhYDOvgpuU)
-    
-    * Wow, agents are already playing games, not exactly, but quite fair, I would say. Anthropic is really a lab, like they are researching LLM behaviors through and through; they are technical scientists.
-        
-    * Claude plays Pokémon Red:
-        
-        * Send a screenshot of the current state
-            
-        * Describe the game mechanics
-            
-        * Ask for the action
-            
-        * Iterate
-            
-    * It’s quite a fascinating experiment. Maybe we can try with different types of games with LLMs. They tried a Pokémon-like game, because that is a very user-paced game, not a very rapid pace, or live-like games. Very smooth transitions and turn based game.
-        
-
-* [AI Prompt Engineering: Deep dive](https://youtu.be/T9aRN5JkmL8)
-    
-    * This is a masterclass in prompt engineering. Must watch
-        
-    * Anthropic really cares about the craft and art of LLMs, they really understand what to think when interfacing with an LLM.
-        
-    * First principle thinking
-        
-
-* [Advice for juniors on manager-engineer relation and Theo’s experience (must watch)](https://youtu.be/3VuM1GCadt4)
-    
-    * TLDR: Don’t try to do a job that you are not asked, if the environment is pulling each other down.
-        
-    * It doesn’t mean you are not following your curiosity or doing the things you are excited to do, rather than knowing when to and when not to.
-        
-
-* [AI Coding is not enough we need Agnetic Coding:](https://youtu.be/2TIXl2rlA6Q)
-    
-    * This is wild. I have been sleeping on Claude Code and Warp
-        
-    * Those are the ones that are truly agentic editors.
-        
-    * AI Coding (which people are pissed at) versus, Agentic Coding, that is really the difference. Agentic coding opens a wild number of possibilities. This is the second time I am overwhelmed in life in programming. One was with Vim and Linux, there were so many things to learn and experiment with. And this time, it’s LLMs, models, tools, and so many details to learn, so many behaviours to understand. This is fascinating. Just watch this video, I can’t be thankful to this person enough.
-        
-
-## Learnt
-
-* [GGUF is the file format for storing LLM model weights](https://vickiboykis.com/2024/02/28/gguf-the-long-way-around/)
-    
-    * I wanted to evaluate an idea for a project. Running models from a file, and this file format is what I needed. Using this format and a binding with llama.cpp and other libraries, this can be used for inference later to actually run the model
-        
-* Using llama.cpp python bindings to run a model with a gguf file
-    
-    * We can use the llama.cpp or other library binding to load the file in memory, and the binding library will use the inference to get the tokens out from the given prompt
-        
-* Creating Python Lambda functions in Vercel
-    
-    * The snippet is what you need to get up and running with Python serverless functions in Vercel
-        
-        ```bash
-        import json
-        from http.server import BaseHTTPRequestHandler
-        from urllib.parse import parse_qs, urlparse
-        
-        
-        class handler(BaseHTTPRequestHandler):
-            
-            def do_GET(self):
-                parsed_path = urlparse(self.path)
-                query_params = parse_qs(parsed_path.query)
-                
-                query = query_params.get('q', [''])[0]
-                result = {"message": "hello, world!"}
-                response_data = {"result": result}
-        
-                self.send_response(200)
+            try:
+                request_body = json.loads(post_data_bytes.decode('utf-8')
+            except json.JSONDecodeError:
+                self.send_response(400) # Bad Request
                 self.send_header('Content-type', 'application/json')
                 self.end_headers()
-                self.wfile.write(json.dumps(response_data).encode('utf-8'))
-                print(response_data)
+                self.wfile.write(json.dumps({"error": "Invalid JSON"}).encode('utf-8'))
                 return
-        
-        
-            def do_POST(self):
-                try:
-                    content_length = int(self.headers.get('Content-Length', 0))
-        
-                    post_data_bytes = self.rfile.read(content_length)
-        
-                    try:
-                        request_body = json.loads(post_data_bytes.decode('utf-8')
-                    except json.JSONDecodeError:
-                        self.send_response(400) # Bad Request
-                        self.send_header('Content-type', 'application/json')
-                        self.end_headers()
-                        self.wfile.write(json.dumps({"error": "Invalid JSON"}).encode('utf-8'))
-                        return
-        
-                   
-                    response_message = {"status": "success", "received": request_body}
-        
-                    self.send_response(200)
-                    self.send_header('Content-type', 'application/json')
-                    self.end_headers()
-                    self.wfile.write(json.dumps(response_message).encode('utf-8'))
-        
-                except Exception as e:
-                    print(f"Error handling POST request: {e}")
-                  
-                    if not self.headers_sent:
-                         try:
-                             self.send_error(500, f"Server error during POST: {e}")
-                         except Exception as send_err:
-                             print(send_err)
-                return
-        ```
-        
-* Using the Warp terminal
-    
-    * Warp is a terminal and it also has agentic flow, as well as nice auto-completion, really awesome.
-        
 
-## Tech News
+           
+            response_message = {"status": "success", "received": request_body}
 
-* [Qwen 3](https://qwenlm.github.io/blog/qwen3/) punches Meta on the face, becomes the sota model in open source models
-    
-    * Alibaba released the Qwen 3 family of models with almost Gemini 2.5-like results on an open weight model
-        
-    * The release was almost perfect, the integration so nice, the’ve put effort in making sure the model is available to all vendors on day 1, a state-of-the-art model release, set a standard for release as observed by [Simon Wilson](https://simonwillison.net/2025/Apr/29/qwen-3/) and a [few others](https://www.interconnects.ai/p/qwen-3-the-new-open-standard).
-        
-* [ChatGPT](https://help.openai.com/en/articles/10193193-1-800-chatgpt-calling-and-messaging-chatgpt-with-your-phone) and [Perplexity](https://x.com/AravSrinivas/status/1918138605203333264) make the chatbot available to chat on [WhatsApp](https://x.com/OpenAI/status/1916947244852646202)
-    
-    * This is a bit of a hot take, it can be revolutionary, it is exposing the LLMs to a wider audience, adoption rate might go high. I am not negative or positive at the moment, but it’s kind of revolutionary to see this thing. Open AI is again heading a revolution(not able to lead, however).
-        
-* [Redis becomes open source again](https://redis.io/blog/agplv3/)
-    
-    * Wow! A comeback from the tiny database that holds the internet.
-        
-    * More than that, the [v8 release](https://redis.io/blog/redis-8-ga/) sounds amazing! deep dive next week
-        
-* [Cloudflare launches a Python runtime for serverless functions](https://blog.cloudflare.com/streamable-http-mcp-servers-python/)
-    
-    * This is interesting, Cloudflare has Python runtime for serverless functions for quite some time now. I found that a few months back. It’s kind of there, and not. As it’s a Pyodide runtime and not a native Python runtime, so there are limitations there. Only a few selected packages are compatible or made available to the Pydodide runtime.
-        
-    * Kind of limiting, since other providers like Appwrite, Vercel, support full-fledged support for Python
-        
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps(response_message).encode('utf-8'))
 
----
-
-Phew — that was a long, wild week. Feels like the whole ecosystem is shifting under our feet. Everything’s speeding up. If I had to bet, next week’s bombshell will come from Google or Anthropic — probably on May the 4th. Just a feeling.
-
-That’s it for this week, will see you in the next one!
-
-Thanks for reading
-
-[Leave a comment](%%half_magic_comments_url%%)
-
-Thanks for reading Techstructive Weekly! This post is public, so feel free to share it.
-
-[Share](%%share_url%%)
-
-Thanks for reading Techstructive Weekly! Subscribe for free to receive new posts and support my work.
+        except Exception as e:
+            print(f"Error handling POST request: {e}")
+          
+            if not self.headers_sent:
+                 try:
+                     self.send_error(500, f"Server error during POST: {e}")
+                 except Exception as send_err:
+                     print(send_err)
+        return</code></pre></li></ul></li><li><p>Using the Warp terminal</p><ul><li><p>Warp is a terminal and it also has agentic flow, as well nice auto-completion, really awesome.</p><p></p></li></ul></li></ul><h2 class="header-anchor-post">Tech News<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§tech-news"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/162701120/tech-news" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://qwenlm.github.io/blog/qwen3/" rel="nofollow ugc noopener">Qwen 3</a><span> punches Meta on the face, becomes the sota model in open source models</span></p><ul><li><p>Alibaba released the Qwen 3 family of models with almost Gemini 2.5-like results on an open weight model</p></li><li><p><span>The release was almost perfect, the integration so nice, the’ve put effort in making sure the model is available to all vendors on day 1, a state-of-the-art model release, set a standard for release as observed by </span><a href="https://simonwillison.net/2025/Apr/29/qwen-3/" rel="nofollow ugc noopener">Simon Wilson</a><span> and a </span><a href="https://www.interconnects.ai/p/qwen-3-the-new-open-standard" rel="nofollow ugc noopener">few others</a><span>.</span></p></li></ul></li><li><p><a href="https://help.openai.com/en/articles/10193193-1-800-chatgpt-calling-and-messaging-chatgpt-with-your-phone" rel="nofollow ugc noopener">ChatGPT</a><span> and </span><a href="https://x.com/AravSrinivas/status/1918138605203333264" rel="nofollow ugc noopener">Perplexity</a><span> make the chatbot available to chat on </span><a href="https://x.com/OpenAI/status/1916947244852646202" rel="nofollow ugc noopener">WhatsApp</a></p><ul><li><p>This is a bit of a hot take, it can be revolutionary, it is exposing the LLMs to a wider audience, adoption rate might go high. I am not negative or positive at the moment, but it’s kind of revolutionary to see this things. Open AI again leading this revolution.</p></li></ul></li><li><p><a href="https://redis.io/blog/agplv3/" rel="nofollow ugc noopener">Redis becomes open source again</a></p><ul><li><p>Wow! A comeback from the tiny database that holds the internet.</p></li><li><p><span>More than that, the </span><a href="https://redis.io/blog/redis-8-ga/" rel="nofollow ugc noopener">v8 release</a><span> sounds amazing! deep dive next week</span></p></li></ul></li><li><p><a href="https://blog.cloudflare.com/streamable-http-mcp-servers-python/" rel="nofollow ugc noopener">Cloudflare launches a Python runtime for serverless functions</a></p><ul><li><p>This is interesting, Cloudflare has Python runtime for serverless functions for quite some time now. I found that a few months back. It’s kind of there, and not. As it’s a Pyodide runtime and not a native Python runtime, so there are limitations there. Only a few selected packages are compatible or made available to the pydodide runtime.</p></li><li><p>Kind of limiting, since other providers like Appwrite, Vercel, support full-fledged support for Python</p></li></ul></li></ul><p></p><div><hr/></div><p>Phew — that was a long, wild week. Feels like the whole ecosystem is shifting under our feet. Everything’s speeding up. If I had to bet, next week’s bombshell will come from Google or Anthropic — probably on May the 4th. Just a feeling.</p><p>That’s it from this week, will see you in the next one! </p><p>Thanks for reading</p><p class="button-wrapper" data-attrs='{"url":"https://techstructively.substack.com/p/techstructive-weekly-40/comments","text":"Leave a comment","action":null,"class":null}' data-component-name="ButtonCreateButton"><a class="button primary" href="https://techstructively.substack.com/p/techstructive-weekly-40/comments" rel="nofollow ugc noopener"><span>Leave a comment</span></a></p><div class="captioned-button-wrap" data-attrs='{"url":"https://techstructively.substack.com/p/techstructive-weekly-40?utm_source=substack&amp;utm_medium=email&amp;utm_content=share&amp;action=share","text":"Share"}' data-component-name="CaptionedButtonToDOM"><div class="preamble"><p class="cta-caption">Thanks for reading Techstructive Weekly! This post is public so feel free to share it.</p></div><p class="button-wrapper" data-attrs='{"url":"https://techstructively.substack.com/p/techstructive-weekly-40?utm_source=substack&amp;utm_medium=email&amp;utm_content=share&amp;action=share","text":"Share"}' data-component-name="ButtonCreateButton"><a class="button primary" href="https://techstructively.substack.com/p/techstructive-weekly-40?utm_source=substack&amp;utm_medium=email&amp;utm_content=share&amp;action=share" rel="nofollow ugc noopener"><span>Share</span></a></p></div><p></p></div></div>

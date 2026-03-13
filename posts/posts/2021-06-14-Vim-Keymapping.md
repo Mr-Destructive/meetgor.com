@@ -1,15 +1,14 @@
-{
-  "type": "posts",
-  "title": "Vim: Keymapping Guide",
-  "subtitle": "A comprehensive guide for getting started with key bindings in Vim",
-  "date": "2021-06-14 15:27:44 +0530",
-  "status": "published",
-  "tags": [
-    "vim"
-  ],
-  "slug": "vim-keymaps",
-  "image_url": "https://meetgor-cdn.pages.dev/vim-keymapping-guide.webp"
-}
+---
+type: posts
+title: "Vim: Keymapping Guide"
+subtitle: "A comprehensive guide for getting started with key bindings in Vim"
+date: 2021-06-14
+slug: "vim-keymaps"
+tags:
+  - vim
+image_url: https://meetgor-cdn.pages.dev/vim-keymapping-guide.webp
+---
+
 
 ## Introduction
 

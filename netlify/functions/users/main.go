@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -20,6 +21,14 @@ func main() {
 	lambda.Start(handler)
 }
 
+var openDB = sql.Open
+var newQueries = libsqlssg.New
+var execDDL = func(ctx context.Context, db *sql.DB) error {
+	_, err := db.ExecContext(ctx, plugins.DDL)
+	return err
+}
+var hashPassword = bcrypt.GenerateFromPassword
+
 func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	switch req.HTTPMethod {
 	case "POST":
@@ -29,14 +38,14 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 
 		var err error
 		dbString := fmt.Sprintf("libsql://%s?authToken=%s", dbName, dbToken)
-		db, err := sql.Open("libsql", dbString)
+		db, err := openDB("libsql", dbString)
 		if err != nil {
 			return errorResponse(http.StatusInternalServerError, "Database connection failed"), nil
 		}
 		defer db.Close()
 
-		queries := libsqlssg.New(db)
-		if _, err := db.ExecContext(ctx, plugins.DDL); err != nil {
+		queries := newQueries(db)
+		if err := execDDL(ctx, db); err != nil {
 			return errorResponse(http.StatusInternalServerError, "Database connection failed"), nil
 		}
 
@@ -45,7 +54,7 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 		if err != nil {
 			return errorResponse(http.StatusInternalServerError, "Invalid Payload"), nil
 		}
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(payload.Password), bcrypt.DefaultCost)
+		hashedPassword, err := hashPassword([]byte(payload.Password), bcrypt.DefaultCost)
 		if err != nil {
 			return errorResponse(http.StatusInternalServerError, "Invalid Payload"), nil
 		}
@@ -60,7 +69,7 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 		}
 		return jsonResponse(http.StatusOK, map[string]string{
 			"username": user.Username,
-			"id":       string(user.ID),
+			"id":       strconv.FormatInt(user.ID, 10),
 		}), nil
 	default:
 		return errorResponse(http.StatusMethodNotAllowed, "Method Not Allowed"), nil

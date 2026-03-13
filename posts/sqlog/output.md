@@ -1,8 +1,13 @@
 ---
-type: "sqlog"
+type: sqlog
 title: "SQLite Dot command: Output"
-date: 2025-08-19
+tags:
+  - typescript
+  - sql
+  - sqlite
+date:  2025-08-19
 ---
+
 
 I will be starting to post something I learn daily about sql,sqlite or anything sql.
 

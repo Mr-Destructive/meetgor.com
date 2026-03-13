@@ -1,15 +1,14 @@
-{
-  "type": "posts",
-  "title": "Vim: Window Splits",
-  "subtitle": "Learning to create, navigate in Window splits in Vim",
-  "date": "2021-08-06 15:40:49 +0530",
-  "status": "published",
-  "tags": [
-    "vim"
-  ],
-  "slug": "vim-window-splits",
-  "image_url": "https://cdn.hashnode.com/res/hashnode/image/upload/v1628151057227/gZey9TYHd.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress"
-}
+---
+type: posts
+title: "Vim: Window Splits"
+subtitle: "Learning to create, navigate in Window splits in Vim"
+date: 2021-08-06
+slug: "vim-window-splits"
+tags:
+  - vim
+image_url: https://cdn.hashnode.com/res/hashnode/image/upload/v1628151057227/gZey9TYHd.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress
+---
+
 
 ## Introduction
 

@@ -1,18 +1,14 @@
-{
-  "type": "posts",
-  "title": "Golang: Variables and Types",
-  "description": "Understanding and creating variables and their types in Golang",
-  "date": "2022-04-03 10:45:00",
-  "status": "published",
-  "slug": "golang-variables",
-  "tags": [
-    "go"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/golang-002-variables-types.png",
-  "series": [
-    "100-days-of-golang"
-  ]
-}
+---
+type: posts
+title: "Golang: Variables and Types"
+date: 2022-04-03
+slug: "golang-variables"
+series: ["100-days-of-golang"]
+tags:
+  - go
+image_url: https://meetgor-cdn.pages.dev/golang-002-variables-types.png
+---
+
 
 ## Introduction
 

@@ -1,15 +1,14 @@
-{
-  "type": "posts",
-  "title": "Crossposting with a single script: Crossposter.sh",
-  "subtitle": "Crosspost on dev.to, medium.com and hashnode.com with a single click",
-  "date": "2021-10-31 15:45:00 +0530",
-  "status": "published",
-  "tags": [
-    "bash"
-  ],
-  "slug": "crossposter-shellscript",
-  "image_url": "https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643288989/blogmedia/trssl38erkdbcqlnjdvp.png"
-}
+---
+type: posts
+title: "Crossposting with a single script: Crossposter.sh"
+subtitle: "Crosspost on dev.to, medium.com and hashnode.com with a single click"
+date: 2021-10-31
+tags:
+  - bash
+slug: crossposter-shellscript
+image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643288989/blogmedia/trssl38erkdbcqlnjdvp.png
+---
+
 
 ## Introduction
 

@@ -1,19 +1,15 @@
-{
-  "type": "posts",
-  "title": "NGINX Survival Guide: Serving Web Applications",
-  "description": "NGINX Fundamentals: Setting Up Simple HTTP Servers, Serving Custom Content, multiple upstream servers",
-  "date": "2024-07-21 22:45:00",
-  "status": "published",
-  "slug": "nginx-02-web-servers",
-  "tags": [
-    "nginx",
-    "web-development"
-  ],
-  "series": [
-    "nginx-survival-guide"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/nginx-survival-guide/nginx-sg-2.png"
-}
+---
+type: posts
+title: "NGINX Survival Guide: Serving Web Applications"
+date: 2024-07-21
+slug: "nginx-02-web-servers"
+series: ["nginx-survival-guide"]
+tags:
+  - nginx
+  - web-development
+image_url: https://meetgor-cdn.pages.dev/nginx-survival-guide/nginx-sg-2.png
+---
+
 
 ## Introduction
 

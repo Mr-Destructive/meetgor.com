@@ -1,13 +1,12 @@
 {
   "title": "OpenAI releases Open Weight models GPT-OSS",
-  "post_dir": "thoughts",
-  "type": "thoughts",
+  "post_dir":"links",
+  "type":"links",
   "status": "published",
   "link": "https://openai.com/index/introducing-gpt-oss/",
   "slug": "openai-open-weight-oss-model",
   "date": "2025-08-06"
 }
-
 
 # [Introducing gpt-oss](https://openai.com/index/introducing-gpt-oss/)
 

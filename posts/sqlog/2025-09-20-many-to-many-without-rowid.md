@@ -2,9 +2,10 @@
 type: sqlog
 slug: sqlite-many-to-many-table-without-rowid
 title: "SQLite SQL: Many to Many Table without RowID"
-date: "2025-09-20"
+date: 2025-09-20
 tags: ["sqlite", "sql"]
 ---
+
 
 ## Many to Many Relation
 

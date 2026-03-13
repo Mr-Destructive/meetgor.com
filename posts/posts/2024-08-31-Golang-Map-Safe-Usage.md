@@ -1,15 +1,13 @@
-{
-  "type": "posts",
-  "title": "Safely using Maps in Golang: Differences in declaration and initialization",
-  "description": "Walkthrough the differences and pitfalls in declaring and initializing maps in Golang",
-  "date": "2024-08-31 18:30:00",
-  "status": "published",
-  "slug": "golang-safely-using-maps",
-  "tags": [
-    "go"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/golang-safe-map-usage.png"
-}
+---
+type: posts
+title: "Safely using Maps in Golang: Differences in declaration and initialization"
+date: 2024-08-31
+slug: "golang-safely-using-maps"
+tags:
+  - go
+image_url: https://meetgor-cdn.pages.dev/golang-safe-map-usage.png
+---
+
 
 ## Introduction
 

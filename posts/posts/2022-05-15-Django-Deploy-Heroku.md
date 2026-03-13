@@ -1,18 +1,16 @@
-{
-  "type": "posts",
-  "title": "Django + PostgreSQL Deployment on Heroku",
-  "description": "",
-  "date": "2022-05-15 20:00:00",
-  "status": "published",
-  "slug": "django-deploy-heroku",
-  "tags": ["django","web-development","python"],
-  "image_url": "https://meetgor-cdn.pages.dev/django-deploy-heroku.png",
-  "series": [
-    "Django-Deployment",
-    "Django-Series"
-  ],
-  "series_description": "Django Deployment is a series for understanding various platforms for Django project deployment with database attachment. Platforms to be covered: Heroku, Railway, Qovery, Python Anywhere, etc."
-}
+---
+type: posts
+title: "Django + PostgreSQL Deployment on Heroku"
+date: 2022-05-15
+slug: "django-deploy-heroku"
+series: ["Django-Deployment"]
+tags:
+  - django
+  - web-development
+  - python
+image_url: https://meetgor-cdn.pages.dev/django-deploy-heroku.png
+---
+
 
 ## Introduction
 
@@ -519,4 +517,4 @@ It's not a simple thing to understand but to keep it simple, it might be a conta
 
 So, that is one of the ways we can deploy a Django application on Heroku with the PostgreSQL database. You can find the [django-blog project] on [GitHub] for following along with the deployment process.  In the next few parts of the series, we will be hopefully covering other platforms where you can deploy a Django o application.
 
-Hopefully, you liked the above tutorial, if you have any questions. feedback, or queries, you can contact me on the Social handles provided below. Thank you for reading and till the next post Happy Coding :) 
+Hopefully, you liked the above tutorial, if you have any questions. feedback, or queries, you can contact me on the Social handles provided below. Thank you for reading and till the next post Happy Coding :)

@@ -5,8 +5,9 @@ description: "Understanding how to add a non-clustered index in a postgres datab
 status: published
 slug: django-non-clustered-index-pg
 tags: ["django", "python", "sql", "postgres"]
-date: 2022-11-10 22:10:00
+date: 2022-11-10
 ---
+
 
 ## What is a non-clustered index?
 

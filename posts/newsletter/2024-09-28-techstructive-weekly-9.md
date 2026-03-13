@@ -1,119 +1,70 @@
 ---
-type: "newsletter"
-title: "Techstructive Weekly #9"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+type: newsletter
+title: 'Techstructive Weekly #9'
 date: 2024-09-28
-slug: "techstructive-weekly-9"
+slug: techstructive-weekly-9
+tags:
+- ai
+- career
+- database
+- docker
+- newsletter
+- python
+- sql
+source_url: 'https://techstructively.substack.com/p/techstructive-weekly-9'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ---
 
-## Week #9
-
-This week was a bit of refreshing as I was able to write some code, bunch of experimentation and feeling a bit back after some slump in the past week. Need to get one video out this weekend to get into the habit. This October I will be trying to build my own writing routine, it won’t be for technical articles, but I won’t be surprised if I find it helpful to write more technical articles.
-
-This week, I had times where I said, I can still solve problems, Look LLMs you are still idiot. The next day, it just helped me just a function with some function signature and proper data type of parameters and return value. I am not saying, LLMs are complete idiots, but they don’t have sense what they are talking about, they sound like they have, but no, sorry. I would love to improve my productivity, by that I mean to speed up my process for searching, copy pasting from elsewhere, scrambling all over the internet to understand something. It just is like a little pipeline, I throw at it some things, If it makes sense to me, I accept, else I trash it, back to old ways.
-
-Thanks for reading Techstructive Weekly! Subscribe for free to receive new posts and support my work.
-
-I will be making up for the [last week](https://techstructively.substack.com/p/techstructive-weekly-8) slump, I said in the quote
-
-> “Courage doesn't always roar. Sometimes courage is the quiet voice at the end of the day saying, ‘I will try again tomorrow”
-> 
-> — Mary Anne Radmacher
-
-Here I am proving it, I am excited to get into the weekend, pumped up and ready for a change in habits and routine. Last week I was frustrated, maybe burned out, I practically didn’t do anything last weekend, but I din’t quit, I said will be back next week.
-
-Actually last week I had my convocation, I remembered it now. The Saturday, the whole day went in that, hanging out with friends, maybe for the last time officially. It feels a bit bitter-sweet that I completed 4 years of the degree college.
-
-## Quote of the week
-
-> *""Fall seven times, stand up eight."  
-> — Japanese Proverb*
-
-The past few weeks were tough for me, not as any bad thing, but just things are bit off for me. This week, I still showed up and tackled every thing that came my way, successful or not, I am still standing and doing the thing I love, debugging code :)
-
-Keep walking
-
-## Read
-
-* **How important is Clarity and Kindness in Engineering:** Clarity and Kindness, this are really important in any field, but for engineering especially as the dynamics of software development requires patience and focus, which are result of clarity and kindness.
-    
-    ![](https://substack-post-media.s3.amazonaws.com/public/images/d1ce67e6-46f2-4ffd-83eb-a496f5851ea4_1024x1024.png align="left")
-    
-    [The Caring Techie Newsletter](https://www.thecaringtechie.com/p/how-to-cultivate-clarity-and-kindness?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [How to Cultivate Clarity and Kindness in Your Engineering Team](https://www.thecaringtechie.com/p/how-to-cultivate-clarity-and-kindness?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [Throughout my career in different Tech jobs - from Software Engineer to Tech Lead Manager - I often faced unclear situations…](https://www.thecaringtechie.com/p/how-to-cultivate-clarity-and-kindness?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [Read more](https://www.thecaringtechie.com/p/how-to-cultivate-clarity-and-kindness?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [3 months ago · 21 likes · 2 comments · Irina Stanescu](https://www.thecaringtechie.com/p/how-to-cultivate-clarity-and-kindness?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-* **Different way of working with SQL in Golang**
-    
-    ![](https://substack-post-media.s3.amazonaws.com/public/images/42332f2e-7531-44b1-920c-bba7831fcdbe_777x777.png align="left")
-    
-    [packagemain.tech](http://packagemain.tech)
-    
-    [Different ways of working with SQL Databases in Go](https://packagemain.tech/p/different-ways-of-working-with-sql?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [Different programming languages have their own ways of working with relational databases and SQL. Ruby on Rails has its Active Record, Python has SQLAlchemy, Typescript - Drizzle, etc. Go, being a language with quite diverse standard library which includes well-known…](https://packagemain.tech/p/different-ways-of-working-with-sql?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [Read more](https://packagemain.tech/p/different-ways-of-working-with-sql?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [3 months ago · 9 likes · Alex Pliutau](https://packagemain.tech/p/different-ways-of-working-with-sql?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-* [**Generating music with AI and Python**](https://generativeai.pub/generating-music-using-ai-and-python-d47ab834f0d4) : I actually went ahead and tried a few words to check that out. It actually creates some sound, though it takes time and is bit off track and I actually don’t know what would be the right words for that music that comes to my mind, so I would be experimenting with it just for fun.  
-    
-* **The New Era of Writing Code**: This is so relatable, I was just using some AI to wire up some functions and making it easier at certain task, but worse at the other, I won’t be surprised to see something like a AI Stack in the upcoming months, Like a set of Models, Providers, templates and prompt cheat sheet for developers and other tasks.
-    
-    ![](https://substack-post-media.s3.amazonaws.com/public/images/fb980aa1-65a4-4e90-aacb-fc07a563b5f7_500x500.png align="left")
-    
-    [The Developing Dev](https://www.developing.dev/p/a-new-era-of-writing-code?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [A New Era of Writing Code](https://www.developing.dev/p/a-new-era-of-writing-code?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [Large language models (LLM) will change how software engineers write code forever…](https://www.developing.dev/p/a-new-era-of-writing-code?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [Read more](https://www.developing.dev/p/a-new-era-of-writing-code?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [3 months ago · 144 likes · 19 comments · Ryan Peterman](https://www.developing.dev/p/a-new-era-of-writing-code?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-
-## Watched
-
-* **Chat with DHH, TJ Devries and The Primeagen**:  
-    This is worth the 2 hours. I would say that much, it is fun and at the same time, so much value for a junior as well any software developer (leaving out the kids part XD)
-    
-* **Mult DB Schema in Turso**  
-    Learn how to create child databases from a parent database keeping the same schema, using Turso CLI, this will make any changes on schema of parent db get reflected on the child db.
-    
-
-## Learnt
-
-* [Setup a](https://github.com/tursodatabase/libsql/blob/main/docs/DOCKER.md) `sqld` [server with docker](https://github.com/tursodatabase/libsql/blob/main/docs/DOCKER.md): I was checking out SQLD, a server daemon for LibSQL, a SQLite fork database. This is really handy for connecting a sqlite-like database over the network. I am using docker for running it locally and it is a breeze to set it up.
-    
-* [Download LLMs locally with ollama](https://ollama.com/blog/llama3.2): I was quite impressed by the speed of the LLAMA 3.2 1B model. It worked smoothly, on my 8GB laptop. This would be quite handy in case of network issues, vendor outages and other politics.
-    
-* [LLM package in python by Simon Wilson](https://llm.datasette.io/en/stable/): This is neat and handy for experimenting and playing around with sophisticated techniques to solve certain problems or even debugging certain hands on problems.
-    
-
-## Tidbits of Advice/Quotes/Rambling from others
-
-> “College Grads take their work as work, but self taught take it as a hobby, an interesting observation”: [Twitter](https://x.com/wagslane/status/1838791235495989590) Not trying to quote anyone just agreeing on it.
-
-## Tech News
-
-* [Meta releases LLAMA 3.2](https://ai.meta.com/blog/llama-3-2-connect-2024-vision-edge-mobile-devices/) models with lightweight Text (1b and 3b paramters) and multi-modal models(11b and 90b parameters). Read [Simon Wilson’s post](https://simonwillison.net/2024/Sep/25/llama-32/) on his thoughts.
-    
-* [Mark Zuckerberg says Meta AI has nearly 500 million users](https://techcrunch.com/2024/09/25/mark-zuckerberg-says-meta-ai-has-nearly-500-million-users/) : That is quite the number, really who is using these model? Is it that good? and how are they tracking these as I know these could be used locally as well.
-    
-
-For more news, follow the [Hackernewsletter](https://buttondown.com/hacker-newsletter/archive/hacker-newsletter-717) and for daily developer articles, join [daily.dev](http://daily.dev)
-
-That’s it from this week, hope you did well this week, and have a happy week and weekend ahead!
-
-Thank you for reading, let’s catch up in the next week.
-
-Happy Coding :)
-
-Thanks for reading Techstructive Weekly! Subscribe for free to receive new posts and support my work.
+<div class="available-content"><div class="body markup" dir="auto"><h2 class="header-anchor-post">Week #9<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§week-9"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/149358464/week-9" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><p>This week was a bit of refreshing as I was able to write some code, bunch of experimentation and feeling a bit back after some slump in the past week. Need to get one video out this weekend to get into the habit. This October I will be trying to build my own writing routine, it won’t be for technical articles, but I won’t be surprised if I find it helpful to write more technical articles.</p><p>This week, I had times where I said, I can still solve problems, Look LLMs you are still idiot. The next day, it just helped me just a function with some function signature and proper data type of parameters and return value. I am not saying, LLMs are complete idiots, but they don’t have sense what they are talking about, they sound like they have, but no, sorry. I would love to improve my productivity, by that I mean to speed up my process for searching, copy pasting from elsewhere, scrambling all over the internet to understand something. It just is like a little pipeline, I throw at it some things, If it makes sense to me, I accept, else I trash it, back to old ways. </p><p><span>I will be making up for the </span><a href="https://techstructively.substack.com/p/techstructive-weekly-8" rel="nofollow ugc noopener">last week</a><span> slump, I said in the quote </span></p><blockquote><p>“Courage doesn't always roar. Sometimes courage is the quiet voice at the end of the day saying, ‘I will try again tomorrow”</p><p>— Mary Anne Radmacher</p></blockquote><p>Here I am proving it, I am excited to get into the weekend, pumped up and ready for a change in habits and routine. Last week I was frustrated, maybe burned out, I practically didn’t do anything last weekend, but I din’t quit, I said will be back next week.</p><p>Actually last week I had my convocation, I remembered it now. The Saturday, the whole day went in that, hanging out with friends, maybe for the last time officially. It feels a bit bitter-sweet that I completed 4 years of the degree college.</p><h2 class="header-anchor-post">Quote of the week<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§quote-of-the-week"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/149358464/quote-of-the-week" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><blockquote><p><em><span>""Fall seven times, stand up eight."</span><br/><span>— Japanese Proverb</span></em></p></blockquote><p>The past few weeks were tough for me, not as any bad thing, but just things are bit off for me. This week, I still showed up and tackled every thing that came my way, successful or not, I am still standing and doing the thing I love, debugging code :)</p><p>Keep walking</p><h2 class="header-anchor-post">Read<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§read"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/149358464/read" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><strong>How important is Clarity and Kindness in Engineering: </strong><span>Clarity and Kindness, this are really important in any field, but for engineering especially as the dynamics of software development requires patience and focus, which are result of clarity and kindness.</span></p><div class="embedded-post-wrap" data-attrs='{"id":149333464,"url":"https://www.thecaringtechie.com/p/how-to-cultivate-clarity-and-kindness","publication_id":341480,"publication_name":"The Caring Techie Newsletter","publication_logo_url":"https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd1ce67e6-46f2-4ffd-83eb-a496f5851ea4_1024x1024.png","title":"How to Cultivate Clarity and Kindness in Your Engineering Team","truncated_body_text":"Throughout my career in different Tech jobs - from Software Engineer to Tech Lead Manager - I often faced unclear situations.","date":"2024-09-24T11:46:06.292Z","like_count":21,"comment_count":2,"bylines":[{"id":4332862,"name":"Irina Stanescu","handle":"thecaringtechie","previous_name":null,"photo_url":"https://substack-post-media.s3.amazonaws.com/public/images/0b5f25e8-fc37-4485-b9a5-4369c7dc56aa_910x828.png","bio":"Staff Software Engineer turned hands-on leader and leadership coach. Ex-Google, ex-Uber. \n\nI write a weekly newsletter for leaders and ICs about leadership, tech culture, and building a thriving career in Tech.","profile_set_up_at":"2021-04-26T22:53:28.565Z","publicationUsers":[{"id":262680,"user_id":4332862,"publication_id":341480,"role":"admin","public":true,"is_primary":false,"publication":{"id":341480,"name":"The Caring Techie Newsletter","subdomain":"thecaringtechie","custom_domain":"www.thecaringtechie.com","custom_domain_optional":false,"hero_text":"Most people know the potential they carry, but few reach it. This newsletter teaches you how. Lessons from my experience at Google, Uber, and startups.","logo_url":"https://substack-post-media.s3.amazonaws.com/public/images/d1ce67e6-46f2-4ffd-83eb-a496f5851ea4_1024x1024.png","author_id":4332862,"theme_var_background_pop":"#67bdfc","created_at":"2021-04-20T02:08:08.146Z","rss_website_url":null,"email_from_name":"Irina Stanescu from The Caring Techie","copyright":"Irina Stanescu","founding_plan_name":"Founding Member","community_enabled":true,"invite_only":false,"payments_state":"enabled","language":null,"explicit":false,"is_personal_mode":false}}],"is_guest":false,"bestseller_tier":100}],"utm_campaign":null,"belowTheFold":true,"type":"newsletter","language":"en"}' data-component-name="EmbeddedPostToDOM"><a class="embedded-post" href="https://www.thecaringtechie.com/p/how-to-cultivate-clarity-and-kindness?utm_source=substack&amp;utm_campaign=post_embed&amp;utm_medium=web" native="true" rel="nofollow ugc noopener"><div class="embedded-post-header"><img class="embedded-post-publication-logo" loading="lazy" src="https://substackcdn.com/image/fetch/$s_!N9qP!,w_56,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd1ce67e6-46f2-4ffd-83eb-a496f5851ea4_1024x1024.png"/><span class="embedded-post-publication-name">The Caring Techie Newsletter</span></div><div class="embedded-post-title-wrapper"><div class="embedded-post-title">How to Cultivate Clarity and Kindness in Your Engineering Team</div></div><div class="embedded-post-body">Throughout my career in different Tech jobs - from Software Engineer to Tech Lead Manager - I often faced unclear situations…</div><div class="embedded-post-cta-wrapper"><span class="embedded-post-cta">Read more</span></div><div class="embedded-post-meta">a year ago · 21 likes · 2 comments · Irina Stanescu</div></a></div><p></p></li><li><p><strong>Different way of working with SQL in Golang</strong></p><div class="embedded-post-wrap" data-attrs="{&quot;id&quot;:149097592,&quot;url&quot;:&quot;https://packagemain.tech/p/different-ways-of-working-with-sql&quot;,&quot;publication_id&quot;:2652085,&quot;publication_name&quot;:&quot;packagemain.tech&quot;,&quot;publication_logo_url&quot;:&quot;https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F42332f2e-7531-44b1-920c-bba7831fcdbe_777x777.png&quot;,&quot;title&quot;:&quot;Different ways of working with SQL Databases in Go&quot;,&quot;truncated_body_text&quot;:&quot;Different programming languages have their own ways of working with relational databases and SQL. Ruby on Rails has its Active Record, Python has SQLAlchemy, Typescript - Drizzle, etc. Go, being a language with quite diverse standard library which includes well-known&quot;,&quot;date&quot;:&quot;2024-09-23T08:44:28.412Z&quot;,&quot;like_count&quot;:9,&quot;comment_count&quot;:0,&quot;bylines&quot;:[{&quot;id&quot;:45896486,&quot;name&quot;:&quot;Alex Pliutau&quot;,&quot;handle&quot;:&quot;pliutau&quot;,&quot;previous_name&quot;:null,&quot;photo_url&quot;:&quot;https://substack-post-media.s3.amazonaws.com/public/images/8f2f4024-9fc2-43d5-9b95-9320201997de_1757x1757.png&quot;,&quot;bio&quot;:&quot;Software Engineering Lead passionate about Backend, Cloud, DevOps, APIs.&quot;,&quot;profile_set_up_at&quot;:&quot;2024-05-25T08:51:11.292Z&quot;,&quot;publicationUsers&quot;:[{&quot;id&quot;:2689019,&quot;user_id&quot;:45896486,&quot;publication_id&quot;:2652085,&quot;role&quot;:&quot;admin&quot;,&quot;public&quot;:true,&quot;is_primary&quot;:false,&quot;publication&quot;:{&quot;id&quot;:2652085,&quot;name&quot;:&quot;packagemain.tech&quot;,&quot;subdomain&quot;:&quot;packagemain&quot;,&quot;custom_domain&quot;:&quot;packagemain.tech&quot;,&quot;custom_domain_optional&quot;:false,&quot;hero_text&quot;:&quot;Welcome to packagemain.tech, your one-stop shop for mastering Backend, Cloud, Kubernetes, Microservices, APIs, and more. We'll provide you with hands-on, practical and real-world tutorials that you can use to build your software development skills.&quot;,&quot;logo_url&quot;:&quot;https://substack-post-media.s3.amazonaws.com/public/images/42332f2e-7531-44b1-920c-bba7831fcdbe_777x777.png&quot;,&quot;author_id&quot;:45896486,&quot;theme_var_background_pop&quot;:&quot;#6C0095&quot;,&quot;created_at&quot;:&quot;2024-05-25T08:53:10.506Z&quot;,&quot;rss_website_url&quot;:null,&quot;email_from_name&quot;:&quot;packagemain.tech&quot;,&quot;copyright&quot;:&quot;Alex Pliutau&quot;,&quot;founding_plan_name&quot;:&quot;Founding Member&quot;,&quot;community_enabled&quot;:true,&quot;invite_only&quot;:false,&quot;payments_state&quot;:&quot;enabled&quot;,&quot;language&quot;:null,&quot;explicit&quot;:false,&quot;is_personal_mode&quot;:false}}],&quot;is_guest&quot;:false,&quot;bestseller_tier&quot;:null}],&quot;utm_campaign&quot;:null,&quot;belowTheFold&quot;:true,&quot;type&quot;:&quot;newsletter&quot;,&quot;language&quot;:&quot;en&quot;}" data-component-name="EmbeddedPostToDOM"><a class="embedded-post" href="https://packagemain.tech/p/different-ways-of-working-with-sql?utm_source=substack&amp;utm_campaign=post_embed&amp;utm_medium=web" native="true" rel="nofollow ugc noopener"><div class="embedded-post-header"><img class="embedded-post-publication-logo" loading="lazy" src="https://substackcdn.com/image/fetch/$s_!ya8w!,w_56,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F42332f2e-7531-44b1-920c-bba7831fcdbe_777x777.png"/><span class="embedded-post-publication-name">packagemain.tech</span></div><div class="embedded-post-title-wrapper"><div class="embedded-post-title">Different ways of working with SQL Databases in Go</div></div><div class="embedded-post-body">Different programming languages have their own ways of working with relational databases and SQL. Ruby on Rails has its Active Record, Python has SQLAlchemy, Typescript - Drizzle, etc. Go, being a language with quite diverse standard library which includes well-known…</div><div class="embedded-post-cta-wrapper"><span class="embedded-post-cta">Read more</span></div><div class="embedded-post-meta">a year ago · 9 likes · Alex Pliutau</div></a></div></li><li><p><strong><a href="https://generativeai.pub/generating-music-using-ai-and-python-d47ab834f0d4" rel="nofollow ugc noopener">Generating music with AI and Python</a></strong><span> : I actually went ahead and tried a few words to check that out. It actually creates some sound, though it takes time and is bit off track and I actually don’t know what would be the right words for that music that comes to my mind, so I would be experimenting with it just for fun.</span><br/></p></li><li><p><strong>The New Era of Writing Code</strong><span>: This is so relatable, I was just using some AI to wire up some functions and making it easier at certain task, but worse at the other, I won’t be surprised to see something like a AI Stack in the upcoming months, Like a set of Models, Providers, templates and prompt cheat sheet for developers and other tasks.</span></p><div class="embedded-post-wrap" data-attrs='{"id":148987055,"url":"https://www.developing.dev/p/a-new-era-of-writing-code","publication_id":1340878,"publication_name":"The Developing Dev","publication_logo_url":"https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ffb980aa1-65a4-4e90-aacb-fc07a563b5f7_500x500.png","title":"A New Era of Writing Code","truncated_body_text":"Large language models (LLM) will change how software engineers write code forever.","date":"2024-09-20T13:03:14.823Z","like_count":144,"comment_count":19,"bylines":[{"id":38830210,"name":"Ryan Peterman","handle":"ryanlpeterman","previous_name":null,"photo_url":"https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F20f314b5-e648-438c-87ae-94017be476b4_400x400.jpeg","bio":"Staff software engineer @instagram helping close the gap for engineers without mentors. Writing about software engineering &amp; career growth.","profile_set_up_at":"2023-01-18T22:33:03.111Z","publicationUsers":[{"id":1301048,"user_id":38830210,"publication_id":1340878,"role":"admin","public":true,"is_primary":false,"publication":{"id":1340878,"name":"The Developing Dev","subdomain":"ryanlpeterman","custom_domain":"www.developing.dev","custom_domain_optional":false,"hero_text":"Brief, weekly posts to help you accelerate your software engineering career, written by a Staff Software Engineer @ Instagram\n\n","logo_url":"https://substack-post-media.s3.amazonaws.com/public/images/fb980aa1-65a4-4e90-aacb-fc07a563b5f7_500x500.png","author_id":38830210,"theme_var_background_pop":"#FF5CD7","created_at":"2023-01-24T07:51:25.087Z","rss_website_url":null,"email_from_name":"Ryan Peterman","copyright":"Ryan Peterman","founding_plan_name":"Founding Member","community_enabled":true,"invite_only":false,"payments_state":"disabled","language":null,"explicit":false,"is_personal_mode":false}}],"twitter_screen_name":"ryanlpeterman","is_guest":false,"bestseller_tier":null}],"utm_campaign":null,"belowTheFold":true,"type":"newsletter","language":"en"}' data-component-name="EmbeddedPostToDOM"><a class="embedded-post" href="https://www.developing.dev/p/a-new-era-of-writing-code?utm_source=substack&amp;utm_campaign=post_embed&amp;utm_medium=web" native="true" rel="nofollow ugc noopener"><div class="embedded-post-header"><img class="embedded-post-publication-logo" loading="lazy" src="https://substackcdn.com/image/fetch/$s_!bzfD!,w_56,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ffb980aa1-65a4-4e90-aacb-fc07a563b5f7_500x500.png"/><span class="embedded-post-publication-name">The Developing Dev</span></div><div class="embedded-post-title-wrapper"><div class="embedded-post-title">A New Era of Writing Code</div></div><div class="embedded-post-body">Large language models (LLM) will change how software engineers write code forever…</div><div class="embedded-post-cta-wrapper"><span class="embedded-post-cta">Read more</span></div><div class="embedded-post-meta">a year ago · 144 likes · 19 comments · Ryan Peterman</div></a></div></li></ul><p></p><h2 class="header-anchor-post">Watched<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§watched"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/149358464/watched" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><strong>Chat with DHH, TJ Devries and The Primeagen</strong><span>:</span><br/><span>This is worth the 2 hours. I would say that much, it is fun and at the same time, so much value for a junior as well any software developer (leaving out the kids part XD)  </span></p><div class="youtube-wrap" data-attrs='{"videoId":"mTa2d3OLXhg","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-mTa2d3OLXhg"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/mTa2d3OLXhg?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div></li><li><p><strong>Mult DB Schema in Turso</strong><br/><span>Learn how to create child databases from a parent database keeping the same schema, using Turso CLI, this will make any changes on schema of parent db get reflected on the child db.</span></p><div class="youtube-wrap" data-attrs='{"videoId":"Slacu1aGm8A","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-Slacu1aGm8A"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/Slacu1aGm8A?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div></li></ul><h2 class="header-anchor-post">Learnt<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§learnt"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/149358464/learnt" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://github.com/tursodatabase/libsql/blob/main/docs/DOCKER.md" rel="nofollow ugc noopener">Setup a </a><code>sqld</code><a href="https://github.com/tursodatabase/libsql/blob/main/docs/DOCKER.md" rel="nofollow ugc noopener"> server with docker</a><span>:  I was checking out SQLD, a server daemon for LibSQL, a SQLite fork database. This is really handy for connecting a sqlite-like database over the network. I am using docker for running it locally and it is a breeze to set it up.</span></p></li><li><p><a href="https://ollama.com/blog/llama3.2" rel="nofollow ugc noopener">Download LLMs locally with ollama</a><span>: I was quite impressed by the speed of the LLAMA 3.2 1B model. It worked smoothly, on my 8GB laptop. This would be quite handy in case of network issues, vendor outages and other politics.</span></p></li><li><p><a href="https://llm.datasette.io/en/stable/" rel="nofollow ugc noopener">LLM package in python by Simon Wilson</a><span>: This is neat and handy for experimenting and playing around with sophisticated techniques to solve certain problems or even debugging certain hands on problems.</span></p></li></ul><p></p><h2 class="header-anchor-post">Tidbits of Advice/Quotes/Rambling from others<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§tidbits-of-advicequotesrambling-from-others"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/149358464/tidbits-of-advicequotesrambling-from-others" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><blockquote><p><span>“College Grads take their work as work, but self taught take it as a hobby, an interesting observation”:  </span><a href="https://x.com/wagslane/status/1838791235495989590" rel="nofollow ugc noopener">Twitter</a><span> Not trying to quote anyone just agreeing on it.</span></p></blockquote><p></p><h2 class="header-anchor-post">Tech News<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§tech-news"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/149358464/tech-news" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://ai.meta.com/blog/llama-3-2-connect-2024-vision-edge-mobile-devices/" rel="nofollow ugc noopener">Meta releases LLAMA 3.2 </a><span>models with lightweight Text (1b and 3b paramters) and multi-modal models(11b and 90b parameters). Read </span><a href="https://simonwillison.net/2024/Sep/25/llama-32/" rel="nofollow ugc noopener">Simon Wilson’s post</a><span> on his thoughts.</span></p></li><li><p><a href="https://techcrunch.com/2024/09/25/mark-zuckerberg-says-meta-ai-has-nearly-500-million-users/" rel="nofollow ugc noopener">Mark Zuckerberg says Meta AI has nearly 500 million users </a><span>: That is quite the number, really who is using these model? Is it that good? and how are they tracking these as I know these could be used locally as well.</span></p></li></ul><p><span>For more news, follow the </span><a href="https://buttondown.com/hacker-newsletter/archive/hacker-newsletter-717" rel="nofollow ugc noopener">Hackernewsletter</a><span>  and for daily developer articles, join </span><a href="https://dly.to/LVQFgrjOUhf" rel="nofollow ugc noopener">daily.dev</a></p><p>That’s it from this week, hope you did well this week, and have a happy week and weekend ahead!</p><p>Thank you for reading, let’s catch up in the next week.</p><p>Happy Coding :)</p></div></div>

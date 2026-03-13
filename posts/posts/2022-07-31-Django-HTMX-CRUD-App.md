@@ -1,20 +1,16 @@
-{
-  "type": "posts",
-  "title": "Django + HTMX CRUD application",
-  "description": "Creating a basic CRUD application with Django and HTMX",
-  "status": "published",
-  "tags": [
-    "django",
-    "htmx",
-    "python"
-  ],
-  "date": "2022-07-31 12:30:00",
-  "slug": "django-htmx-crud",
-  "image_url": "https://meetgor-cdn.pages.dev/django-htmx-crud.png",
-  "series": [
-    "Django-Series"
-  ]
-}
+---
+type: posts
+title: "Django + HTMX CRUD application"
+date: 2022-07-31
+slug: "django-htmx-crud"
+series: ["Django-Series"]
+tags:
+  - django
+  - htmx
+  - python
+image_url: https://meetgor-cdn.pages.dev/django-htmx-crud.png
+---
+
 
 ## Introduction
 

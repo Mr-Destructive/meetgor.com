@@ -1,12 +1,12 @@
 ---
-type: til 
+type: til
 title: "Map Vimscript Keymaps to Lua with a single function"
 description: "Takeout the vimscript keymaps into lua with a single function call in Neovim"
-date: 2022-07-11 22:30:00
-status: published
+date: 2022-07-11
 slug: vimscript-to-lua-keymapper
 tags: ['vim', 'lua',]
 ---
+
 
 ## Introduction
 

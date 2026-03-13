@@ -1,189 +1,78 @@
 ---
-type: "newsletter"
-title: "Techstructive Weekly #17"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+type: newsletter
+title: 'Techstructive Weekly #17'
 date: 2024-11-23
-slug: "techstructive-weekly-17"
+slug: techstructive-weekly-17
+tags:
+- go
+- newsletter
+- python
+source_url: 'https://techstructively.substack.com/p/techstructive-weekly-17'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ---
 
-## Week #17
+<div class="available-content"><div class="body markup" dir="auto"><h2 class="header-anchor-post">Week #17<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§week-17"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/152024694/week-17" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><p> What a week, had written code through all the days, thought a lot about solving certain issues, integrated reviewed changes, and also wrote and created a video on the weekend.</p><p>This was the week of releasing the thing that I have been building over the span of the past 2 months and really felt good this Thursday to release it. Tested it and worked perfectly, now on to a new set of experiments and building on top of the thing in the upcoming weeks or months even, exciting times ahead.</p><p>I completed a 50-day writing routine by publishing three article series: 9, 21, and 17 pieces each. Those are related to mythology (I am revealing it now) but not just yet, let it grow, and will post it here shortly. It felt really good, now thinking of expanding the writing routine to something else or more personal and making reach a wider audience after all I want to see myself as a writer.</p><h3 class="header-anchor-post">Stats for the week<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§stats-for-the-week"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/152024694/stats-for-the-week" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h3><ul><li><p>Release the code written and experimented over the past 2 months</p></li><li><p>Prototype for the new changes as an enhancement on top of the experiment</p></li><li><p>Fixed 3 bugs</p><p></p></li></ul><h3 class="header-anchor-post">Plans for the next week<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§plans-for-the-next-week"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/152024694/plans-for-the-next-week" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h3><ul><li><p>Streaming for the SSG project</p></li><li><p><span>Create a video for the Golang </span><code>omitzero</code><span> tag in 1.24</span></p><p></p></li></ul><h2 class="header-anchor-post">Quote of the week<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§quote-of-the-week"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/152024694/quote-of-the-week" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><blockquote><p><strong>"It always seems impossible until it’s done."</strong></p><p><strong> — Nelson Mandela</strong></p></blockquote><p>While starting the quarter it seemed the task would be almost impossible or not expected to be going to release, but this week it was released. From experiment to release, it felt like a journey, I enjoyed it, initially, it was a hurdle, but after falling a couple of times, getting up, learning, and diving a little deep, helpful feedback from my mentors and friendly environment, I am here on the other side of the hurdle. It really feels impossible until it’s done, believe in yourself, because if you don’t no one will believe in you.</p><h2 class="header-anchor-post"><br/><span>Created</span><div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§created"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/152024694/created" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><span>Video: </span><a href="https://youtu.be/hee9KUhvQsY?si=gwAjbrxtEQfL1NHC" rel="nofollow ugc noopener">What’s new in Golang 1.24, SplitSeq and SplitAfterSeq</a><span>:</span><br/><span>Last weekend I dived into the golang 1.24, and set up the system to install the latest version of Go that later became a TIL by experimenting and exploring the new change, the video about Split and the new SplitSeq was created.</span></p><p>The basic difference is about how we store and iterate the splitter strings, the prior stores it as a slice, the other creates a specific type as an iterator to iterate it on the go.</p><div class="youtube-wrap" data-attrs='{"videoId":"hee9KUhvQsY","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-hee9KUhvQsY"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/hee9KUhvQsY?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div></li></ul><p></p><ul><li><p><span>Wrote: TIL: Build Golang from Source for v1.23+</span><br/><span>My first post on  the substack is an awkward TIL, I don’t care if it provides value or not, it is just a thing I learned myself while doing something. So, thought of sharing it here.</span><br/><span>This was learned while creating the above-mentioned video, I wanted to explore the features coming to Go in 1.24 which is supposed to be released in February 2025. So, while installing I found a couple of ways to build golang from the source, with a bit of trial and error was able to get the simplest way I can think of here.</span></p><div class="embedded-post-wrap" data-attrs="{&quot;id&quot;:151882359,&quot;url&quot;:&quot;https://meetgor.substack.com/p/til-build-golang-from-source-for&quot;,&quot;publication_id&quot;:1675572,&quot;publication_name&quot;:&quot;Meet's Substack&quot;,&quot;publication_logo_url&quot;:&quot;https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F9786b965-3564-4542-8687-a55727236ab5_325x325.png&quot;,&quot;title&quot;:&quot;TIL: Build Golang from Source for v1.23+&quot;,&quot;truncated_body_text&quot;:&quot;Introduction&quot;,&quot;date&quot;:&quot;2024-11-19T17:48:57.689Z&quot;,&quot;like_count&quot;:0,&quot;comment_count&quot;:0,&quot;bylines&quot;:[{&quot;id&quot;:90157803,&quot;name&quot;:&quot;Meet&quot;,&quot;handle&quot;:&quot;meetgor&quot;,&quot;previous_name&quot;:null,&quot;photo_url&quot;:&quot;https://substack-post-media.s3.amazonaws.com/public/images/00b10c40-508f-48c7-b23c-0fec963564f9_325x325.png&quot;,&quot;bio&quot;:&quot;A developer's mind with a writer's heart. Exploring the intersection of tech and creativity, one line of code and one sentence at a time(trying to). Find me here: meetgor.com&quot;,&quot;profile_set_up_at&quot;:&quot;2023-05-21T15:46:39.325Z&quot;,&quot;publicationUsers&quot;:[{&quot;id&quot;:1652481,&quot;user_id&quot;:90157803,&quot;publication_id&quot;:1675572,&quot;role&quot;:&quot;admin&quot;,&quot;public&quot;:true,&quot;is_primary&quot;:false,&quot;publication&quot;:{&quot;id&quot;:1675572,&quot;name&quot;:&quot;Meet's Substack&quot;,&quot;subdomain&quot;:&quot;meetgor&quot;,&quot;custom_domain&quot;:null,&quot;custom_domain_optional&quot;:false,&quot;hero_text&quot;:&quot;A Tech newsletter about the things I screw up and build&quot;,&quot;logo_url&quot;:&quot;https://substack-post-media.s3.amazonaws.com/public/images/9786b965-3564-4542-8687-a55727236ab5_325x325.png&quot;,&quot;author_id&quot;:90157803,&quot;theme_var_background_pop&quot;:&quot;#8AE1A2&quot;,&quot;created_at&quot;:&quot;2023-05-21T15:48:24.028Z&quot;,&quot;rss_website_url&quot;:null,&quot;email_from_name&quot;:&quot;Meet from Techstructive Blog&quot;,&quot;copyright&quot;:&quot;Meet&quot;,&quot;founding_plan_name&quot;:null,&quot;community_enabled&quot;:true,&quot;invite_only&quot;:false,&quot;payments_state&quot;:&quot;disabled&quot;,&quot;language&quot;:null,&quot;explicit&quot;:false,&quot;is_personal_mode&quot;:false}},{&quot;id&quot;:1857563,&quot;user_id&quot;:90157803,&quot;publication_id&quot;:1870173,&quot;role&quot;:&quot;admin&quot;,&quot;public&quot;:true,&quot;is_primary&quot;:false,&quot;publication&quot;:{&quot;id&quot;:1870173,&quot;name&quot;:&quot;Techstructive Takes&quot;,&quot;subdomain&quot;:&quot;techstructivetakes&quot;,&quot;custom_domain&quot;:null,&quot;custom_domain_optional&quot;:false,&quot;hero_text&quot;:&quot;Personal Opinions from the perspective of a developer/techy.&quot;,&quot;logo_url&quot;:&quot;https://substack-post-media.s3.amazonaws.com/public/images/2e79cdb3-9074-43d5-95c8-1e0950dd873b_500x500.png&quot;,&quot;author_id&quot;:90157803,&quot;theme_var_background_pop&quot;:&quot;#121BFA&quot;,&quot;created_at&quot;:&quot;2023-08-11T15:07:07.579Z&quot;,&quot;rss_website_url&quot;:null,&quot;email_from_name&quot;:null,&quot;copyright&quot;:&quot;Meet&quot;,&quot;founding_plan_name&quot;:null,&quot;community_enabled&quot;:true,&quot;invite_only&quot;:false,&quot;payments_state&quot;:&quot;disabled&quot;,&quot;language&quot;:null,&quot;explicit&quot;:false,&quot;is_personal_mode&quot;:false}},{&quot;id&quot;:2869075,&quot;user_id&quot;:90157803,&quot;publication_id&quot;:2824037,&quot;role&quot;:&quot;admin&quot;,&quot;public&quot;:true,&quot;is_primary&quot;:false,&quot;publication&quot;:{&quot;id&quot;:2824037,&quot;name&quot;:&quot;Techstructive Weekly&quot;,&quot;subdomain&quot;:&quot;techstructively&quot;,&quot;custom_domain&quot;:null,&quot;custom_domain_optional&quot;:false,&quot;hero_text&quot;:&quot;Weekly Summary of the tech things I learnt, read, and listened&quot;,&quot;logo_url&quot;:&quot;https://substack-post-media.s3.amazonaws.com/public/images/8e223692-eb8c-4b4a-9167-e21c23e2af5d_500x500.png&quot;,&quot;author_id&quot;:90157803,&quot;theme_var_background_pop&quot;:&quot;#B599F1&quot;,&quot;created_at&quot;:&quot;2024-07-25T16:55:41.379Z&quot;,&quot;rss_website_url&quot;:null,&quot;email_from_name&quot;:null,&quot;copyright&quot;:&quot;Meet&quot;,&quot;founding_plan_name&quot;:null,&quot;community_enabled&quot;:true,&quot;invite_only&quot;:false,&quot;payments_state&quot;:&quot;disabled&quot;,&quot;language&quot;:null,&quot;explicit&quot;:false,&quot;is_personal_mode&quot;:false}}],&quot;is_guest&quot;:false,&quot;bestseller_tier&quot;:null}],&quot;utm_campaign&quot;:null,&quot;belowTheFold&quot;:true,&quot;type&quot;:&quot;newsletter&quot;,&quot;language&quot;:&quot;en&quot;}" data-component-name="EmbeddedPostToDOM"><a class="embedded-post" href="https://meetgor.substack.com/p/til-build-golang-from-source-for?utm_source=substack&amp;utm_campaign=post_embed&amp;utm_medium=web" native="true" rel="nofollow ugc noopener"><div class="embedded-post-header"><img class="embedded-post-publication-logo" loading="lazy" src="https://substackcdn.com/image/fetch/$s_!Zyre!,w_56,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F9786b965-3564-4542-8687-a55727236ab5_325x325.png"/><span class="embedded-post-publication-name">Meet's Substack</span></div><div class="embedded-post-title-wrapper"><div class="embedded-post-title">TIL: Build Golang from Source for v1.23+</div></div><div class="embedded-post-body">Introduction…</div><div class="embedded-post-cta-wrapper"><span class="embedded-post-cta">Read more</span></div><div class="embedded-post-meta">a year ago · Meet</div></a></div></li></ul><p></p><h2 class="header-anchor-post">Read<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§read"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/152024694/read" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://registerspill.thorstenball.com/p/they-all-use-it?lli=1" rel="nofollow ugc noopener">They all use it</a><span>, don’t they?</span><br/><span>LLMs, Code Completions, and AI Assistants, all are just tools, they might not be fit for all the cases, but they should just be used for something specific. Also, I agree with Thorsten here, if you are not curious then you are falling in keeping up with tech. The curiosity, the spark, the excitement to learn the technology under the hood is really needed to sustain in tech.</span></p><div class="embedded-post-wrap" data-attrs="{&quot;id&quot;:151910861,&quot;url&quot;:&quot;https://registerspill.thorstenball.com/p/they-all-use-it&quot;,&quot;publication_id&quot;:1543843,&quot;publication_name&quot;:&quot;Register Spill&quot;,&quot;publication_logo_url&quot;:&quot;https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4f5a67d6-4135-44ed-8f39-8c7554ab5abc_1280x1280.png&quot;,&quot;title&quot;:&quot;They all use it&quot;,&quot;truncated_body_text&quot;:&quot;Last week, at a conference, I had a random hallway conversation with another engineer. We ended up talking about Zed and he told me he’ll try it, but does it have any AI features? If so, can you turn them off?&quot;,&quot;date&quot;:&quot;2024-11-20T17:13:58.304Z&quot;,&quot;like_count&quot;:33,&quot;comment_count&quot;:44,&quot;bylines&quot;:[{&quot;id&quot;:1234646,&quot;name&quot;:&quot;Thorsten Ball&quot;,&quot;handle&quot;:&quot;thorstenball&quot;,&quot;previous_name&quot;:null,&quot;photo_url&quot;:&quot;https://substack-post-media.s3.amazonaws.com/public/images/767e2aa6-bdc8-4dce-a08d-0f194b633a43_1770x1770.jpeg&quot;,&quot;bio&quot;:null,&quot;profile_set_up_at&quot;:&quot;2022-05-30T19:09:11.400Z&quot;,&quot;publicationUsers&quot;:[{&quot;id&quot;:1512738,&quot;user_id&quot;:1234646,&quot;publication_id&quot;:1543843,&quot;role&quot;:&quot;admin&quot;,&quot;public&quot;:true,&quot;is_primary&quot;:false,&quot;publication&quot;:{&quot;id&quot;:1543843,&quot;name&quot;:&quot;Register Spill&quot;,&quot;subdomain&quot;:&quot;thorstenball&quot;,&quot;custom_domain&quot;:&quot;registerspill.thorstenball.com&quot;,&quot;custom_domain_optional&quot;:false,&quot;hero_text&quot;:&quot;Thoughts about software engineering I can't keep in my head. Too ephemeral for blog posts, too long for social media.\n\nIt's the messages I'd sent if you'd asked me what's on my mind.&quot;,&quot;logo_url&quot;:&quot;https://substack-post-media.s3.amazonaws.com/public/images/4f5a67d6-4135-44ed-8f39-8c7554ab5abc_1280x1280.png&quot;,&quot;author_id&quot;:1234646,&quot;theme_var_background_pop&quot;:&quot;#99A2F1&quot;,&quot;created_at&quot;:&quot;2023-04-02T13:45:13.459Z&quot;,&quot;rss_website_url&quot;:null,&quot;email_from_name&quot;:&quot;Thorsten Ball&quot;,&quot;copyright&quot;:&quot;Thorsten Ball&quot;,&quot;founding_plan_name&quot;:null,&quot;community_enabled&quot;:true,&quot;invite_only&quot;:false,&quot;payments_state&quot;:&quot;disabled&quot;,&quot;language&quot;:null,&quot;explicit&quot;:false,&quot;is_personal_mode&quot;:false}}],&quot;twitter_screen_name&quot;:&quot;thorstenball&quot;,&quot;is_guest&quot;:false,&quot;bestseller_tier&quot;:null}],&quot;utm_campaign&quot;:null,&quot;belowTheFold&quot;:true,&quot;type&quot;:&quot;newsletter&quot;,&quot;language&quot;:&quot;en&quot;}" data-component-name="EmbeddedPostToDOM"><a class="embedded-post" href="https://registerspill.thorstenball.com/p/they-all-use-it?utm_source=substack&amp;utm_campaign=post_embed&amp;utm_medium=web" native="true" rel="nofollow ugc noopener"><div class="embedded-post-header"><img class="embedded-post-publication-logo" loading="lazy" src="https://substackcdn.com/image/fetch/$s_!Rr5r!,w_56,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4f5a67d6-4135-44ed-8f39-8c7554ab5abc_1280x1280.png"/><span class="embedded-post-publication-name">Register Spill</span></div><div class="embedded-post-title-wrapper"><div class="embedded-post-title">They all use it</div></div><div class="embedded-post-body">Last week, at a conference, I had a random hallway conversation with another engineer. We ended up talking about Zed and he told me he’ll try it, but does it have any AI features? If so, can you turn them off…</div><div class="embedded-post-cta-wrapper"><span class="embedded-post-cta">Read more</span></div><div class="embedded-post-meta">a year ago · 33 likes · 44 comments · Thorsten Ball</div></a></div><p></p></li><li><p><a href="https://blog.rpanachi.com/after-25-years-writing-software-here-some-things-learned-so-far?ref=dailydev" rel="nofollow ugc noopener">Lessons learned from 25 years of writing software</a><span>:</span><br/><span>There are so many valuable tips here, </span></p><ul><li><p>Master at least one programming language/database </p></li><li><p>Use Linux</p></li><li><p>Write simple and boring code</p></li><li><p>Build trust</p></li><li><p>Don’t be shy from using bare bones or simple tools</p><p>And many more, really a good post to follow and become a better developer.</p></li></ul></li></ul><ul><li><p><a href="https://registerspill.thorstenball.com/p/playful-programming" rel="nofollow ugc noopener">Playful Programming</a><span>: </span><br/><span>I want to watch that video, there is so much explained by Thorsten, should be worth watching then, he is a great deep-diving programmer, can’t ignore his recommendations. Just by reading at the explanations of his observations on the video, it seems there is a lot to learn. Next week will be in the watched section.</span></p><div class="embedded-post-wrap" data-attrs="{&quot;id&quot;:138749554,&quot;url&quot;:&quot;https://registerspill.thorstenball.com/p/playful-programming&quot;,&quot;publication_id&quot;:1543843,&quot;publication_name&quot;:&quot;Register Spill&quot;,&quot;publication_logo_url&quot;:&quot;https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4f5a67d6-4135-44ed-8f39-8c7554ab5abc_1280x1280.png&quot;,&quot;title&quot;:&quot;Playful Programming&quot;,&quot;truncated_body_text&quot;:&quot;Last weekend I watched this video of Andreas Kling prototyping a JIT compiler for his Ladybird browser:&quot;,&quot;date&quot;:&quot;2023-11-10T06:14:23.613Z&quot;,&quot;like_count&quot;:21,&quot;comment_count&quot;:3,&quot;bylines&quot;:[{&quot;id&quot;:1234646,&quot;name&quot;:&quot;Thorsten Ball&quot;,&quot;handle&quot;:&quot;thorstenball&quot;,&quot;previous_name&quot;:null,&quot;photo_url&quot;:&quot;https://substack-post-media.s3.amazonaws.com/public/images/767e2aa6-bdc8-4dce-a08d-0f194b633a43_1770x1770.jpeg&quot;,&quot;bio&quot;:null,&quot;profile_set_up_at&quot;:&quot;2022-05-30T19:09:11.400Z&quot;,&quot;publicationUsers&quot;:[{&quot;id&quot;:1512738,&quot;user_id&quot;:1234646,&quot;publication_id&quot;:1543843,&quot;role&quot;:&quot;admin&quot;,&quot;public&quot;:true,&quot;is_primary&quot;:false,&quot;publication&quot;:{&quot;id&quot;:1543843,&quot;name&quot;:&quot;Register Spill&quot;,&quot;subdomain&quot;:&quot;thorstenball&quot;,&quot;custom_domain&quot;:&quot;registerspill.thorstenball.com&quot;,&quot;custom_domain_optional&quot;:false,&quot;hero_text&quot;:&quot;Thoughts about software engineering I can't keep in my head. Too ephemeral for blog posts, too long for social media.\n\nIt's the messages I'd sent if you'd asked me what's on my mind.&quot;,&quot;logo_url&quot;:&quot;https://substack-post-media.s3.amazonaws.com/public/images/4f5a67d6-4135-44ed-8f39-8c7554ab5abc_1280x1280.png&quot;,&quot;author_id&quot;:1234646,&quot;theme_var_background_pop&quot;:&quot;#99A2F1&quot;,&quot;created_at&quot;:&quot;2023-04-02T13:45:13.459Z&quot;,&quot;rss_website_url&quot;:null,&quot;email_from_name&quot;:&quot;Thorsten Ball&quot;,&quot;copyright&quot;:&quot;Thorsten Ball&quot;,&quot;founding_plan_name&quot;:null,&quot;community_enabled&quot;:true,&quot;invite_only&quot;:false,&quot;payments_state&quot;:&quot;disabled&quot;,&quot;language&quot;:null,&quot;explicit&quot;:false,&quot;is_personal_mode&quot;:false}}],&quot;twitter_screen_name&quot;:&quot;thorstenball&quot;,&quot;is_guest&quot;:false,&quot;bestseller_tier&quot;:null}],&quot;utm_campaign&quot;:null,&quot;belowTheFold&quot;:true,&quot;type&quot;:&quot;newsletter&quot;,&quot;language&quot;:&quot;en&quot;}" data-component-name="EmbeddedPostToDOM"><a class="embedded-post" href="https://registerspill.thorstenball.com/p/playful-programming?utm_source=substack&amp;utm_campaign=post_embed&amp;utm_medium=web" native="true" rel="nofollow ugc noopener"><div class="embedded-post-header"><img class="embedded-post-publication-logo" loading="lazy" src="https://substackcdn.com/image/fetch/$s_!Rr5r!,w_56,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4f5a67d6-4135-44ed-8f39-8c7554ab5abc_1280x1280.png"/><span class="embedded-post-publication-name">Register Spill</span></div><div class="embedded-post-title-wrapper"><div class="embedded-post-title">Playful Programming</div></div><div class="embedded-post-body">Last weekend I watched this video of Andreas Kling prototyping a JIT compiler for his Ladybird browser…</div><div class="embedded-post-cta-wrapper"><span class="embedded-post-cta">Read more</span></div><div class="embedded-post-meta">2 years ago · 21 likes · 3 comments · Thorsten Ball</div></a></div><p></p><ul><li><p><a href="https://newsletter.techleadmentor.com/p/how-i-read-books-with-limited-time" rel="nofollow ugc noopener">How Raviraj Achar reads books with limited time</a><span>:</span><br/><span>Time is really limited, like everything around you seems to drag into it, the phone most importantly, it feels like a reservoir of knowledge but not wisdom. Taking the time to read is a sign of a level of control over the mind and grit. The process by Raviraj seems a little too complicated or farfetched like Readwise and Notion, those add a lot of friction. I don’t use those tools, I use this newsletter to sift my learnings and tech reading. </span></p><p><br/></p></li></ul></li></ul><h2 class="header-anchor-post">Watched<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§watched"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/152024694/watched" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://youtu.be/VEG2kj87Uxw?si=7iQeKvNPpgqTWh2T" rel="nofollow ugc noopener"><span>Using sort the proper way in Python:</span><br/></a><span>That was clever and opened a few mind doors of thinking stuff clearly about </span><code>keys </code><span>, the way sorted takes in a list or an iterable is interesting and opens it to a wide variety of options to use it to throw into.</span></p><div class="youtube-wrap" data-attrs='{"videoId":"VEG2kj87Uxw","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-VEG2kj87Uxw"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/VEG2kj87Uxw?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div><p></p></li></ul><ul><li><p><a href="https://youtu.be/nqqmwRXSvrw?si=LtLXnr5jPGoQHF6w" rel="nofollow ugc noopener">How to Finish Programming Projects</a><span>? </span><br/><span>This is a interesting and eye opener video, I initially used to create projects by taking it as a learning opportunity, but gradually the path to creating something big or focusing on the features too much caused a friction and lead to whole lot of issues in the way. One is burnout, the other is no progress at all instead of tiny day-by-day progress.</span></p><div class="youtube-wrap" data-attrs='{"videoId":"nqqmwRXSvrw","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-nqqmwRXSvrw"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/nqqmwRXSvrw?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div><p></p></li><li><p><a href="https://youtu.be/A89FMtIkWKc?si=W5G8VblWWvc9VlSd" rel="nofollow ugc noopener">What did you just do, CSS</a><span>? </span><br/><span>Those are some high-value changes in CSS, I am not much into CSS but looking at the added changes, it seems to be a lot and a game changer to some extent. Turing complete :)</span></p><div class="youtube-wrap" data-attrs='{"videoId":"A89FMtIkWKc","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-A89FMtIkWKc"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/A89FMtIkWKc?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div><p></p></li><li><p><a href="https://youtu.be/mgWOMu2yo_U?si=Aq8jJJ4w2-TgwkDo" rel="nofollow ugc noopener">FreeCodeCamp (Quincy Larson) interview with Tech with Tim</a><br/><span>This is a good talk, while growing up as a developer, I watched Tim while learning Python and Django, so he has been a teacher to me in some way or the other, and seeing his raw thoughts behind his life, feels good to listen to.</span></p><div class="youtube-wrap" data-attrs='{"videoId":"mgWOMu2yo_U","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-mgWOMu2yo_U"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/mgWOMu2yo_U?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div><p></p></li><li><p><a href="https://youtu.be/Q2UDHY5as90?si=KCuFpJ03DK6y1XJN" rel="nofollow ugc noopener">Write your own programming Language: Computerphile</a><br/><span>This was an interesting one, the power of the `SPLIT` function in python really should be the title of this video, just kidding. But the approach is what makes me wonder if that’s the way programming languages are created, really. </span><br/><span>That is a bit obnoxious to think in that way, it will become quite a mess after a while (I am not talking about his code but just the approach). I thaught it would be like the theory of computing of state machines right?</span></p><div class="youtube-wrap" data-attrs='{"videoId":"Q2UDHY5as90","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-Q2UDHY5as90"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/Q2UDHY5as90?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div><p></p></li></ul><h2 class="header-anchor-post">Learned<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§learned"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/152024694/learned" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><span>Learned how to install and build golang from source for the latest versions as </span><a href="https://dev.to/mr_destructive/build-golang-from-source-for-v123-4cio" rel="nofollow ugc noopener">described here</a><span>. </span></p></li><li><p><span>The difference between </span><code>setdefault</code><span> and </span><code>defaultdict</code></p><p><span>I learned that </span><code>setdefault</code><span> adds a key with a default value only if explicitly accessed, like this:</span></p><pre><code>my_dict = {'a': 1}  
 
-What a week, had written code through all the days, thought a lot about solving certain issues, integrated reviewed changes, and also wrote and created a video on the weekend.
+my_dict.setdefault('b', 100)  
+# Adds 'b': 100 only if 'b' doesn't exist
 
-This was the week of releasing the thing that I have been building over the span of the past 2 months and really felt good this Thursday to release it. Tested it and worked perfectly, now on to a new set of experiments and building on top of the thing in the upcoming weeks or months even, exciting times ahead.
+print(my_dict)  # {'a': 1, 'b': 100}
+</code></pre><p><span>On the other hand, </span><code>defaultdict</code><span> automatically assigns a default value for missing keys:</span></p><pre><code>from collections import defaultdict  
 
-I completed a 50-day writing routine by publishing three article series: 9, 21, and 17 pieces each. Those are related to mythology (I am revealing it now) but not just yet, let it grow, and will post it here shortly. It felt really good, now thinking of expanding the writing routine to something else or more personal and making reach a wider audience after all I want to see myself as a writer.
+my_dict = defaultdict(int)  
 
-### Stats for the week
+my_dict['a'] += 1  # Initializes 'a' with 0, then increments it  
 
-* Release the code written and experimented over the past 2 months
-    
-* Prototype for the new changes as an enhancement on top of the experiment
-    
-* Fixed 3 bugs
-    
-
-### Plans for the next week
-
-* Streaming for the SSG project
-    
-* Create a video for the Golang `omitzero` tag in 1.24
-    
-
-## Quote of the week
-
-> **"It always seems impossible until it’s done."**
-> 
-> **— Nelson Mandela**
-
-While starting the quarter it seemed the task would be almost impossible or not expected to be going to release, but this week it was released. From experiment to release, it felt like a journey, I enjoyed it, initially, it was a hurdle, but after falling a couple of times, getting up, learning, and diving a little deep, helpful feedback from my mentors and friendly environment, I am here on the other side of the hurdle. It really feels impossible until it’s done, believe in yourself, because if you don’t no one will believe in you.
-
-##   
-Created
-
-* Video: [What’s new in Golang 1.24, SplitSeq and SplitAfterSeq](https://youtu.be/hee9KUhvQsY?si=gwAjbrxtEQfL1NHC):  
-    Last weekend I dived into the golang 1.24, and set up the system to install the latest version of Go that later became a TIL by experimenting and exploring the new change, the video about Split and the new SplitSeq was created.
-    
-    The basic difference is about how we store and iterate the splitter strings, the prior stores it as a slice, the other creates a specific type as an iterator to iterate it on the go.
-    
-
-* Wrote: TIL: Build Golang from Source for v1.23+  
-    My first post on the substack is an awkward TIL, I don’t care if it provides value or not, it is just a thing I learned myself while doing something. So, thought of sharing it here.  
-    This was learned while creating the above-mentioned video, I wanted to explore the features coming to Go in 1.24 which is supposed to be released in February 2025. So, while installing I found a couple of ways to build golang from the source, with a bit of trial and error was able to get the simplest way I can think of here.
-    
-    ![](https://substack-post-media.s3.amazonaws.com/public/images/9786b965-3564-4542-8687-a55727236ab5_325x325.png align="left")
-    
-    [Meet's Substack](https://meetgor.substack.com/p/til-build-golang-from-source-for?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [TIL: Build Golang from Source for v1.23+](https://meetgor.substack.com/p/til-build-golang-from-source-for?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [Introduction…](https://meetgor.substack.com/p/til-build-golang-from-source-for?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [Read more](https://meetgor.substack.com/p/til-build-golang-from-source-for?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [a month ago · Meet](https://meetgor.substack.com/p/til-build-golang-from-source-for?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-
-## Read
-
-* [They all use it](https://registerspill.thorstenball.com/p/they-all-use-it?lli=1), don’t they?  
-    LLMs, Code Completions, and AI Assistants, all are just tools, they might not be fit for all the cases, but they should just be used for something specific. Also, I agree with Thorsten here, if you are not curious then you are falling in keeping up with tech. The curiosity, the spark, the excitement to learn the technology under the hood is really needed to sustain in tech.
-    
-    ![](https://substack-post-media.s3.amazonaws.com/public/images/4f5a67d6-4135-44ed-8f39-8c7554ab5abc_1280x1280.png align="left")
-    
-    [Register Spill](https://registerspill.thorstenball.com/p/they-all-use-it?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [They all use it](https://registerspill.thorstenball.com/p/they-all-use-it?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [Last week, at a conference, I had a random hallway conversation with another engineer. We ended up talking about Zed and he told me he’ll try it, but does it have any AI features? If so, can you turn them off…](https://registerspill.thorstenball.com/p/they-all-use-it?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [Read more](https://registerspill.thorstenball.com/p/they-all-use-it?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [a month ago · 33 likes · 44 comments · Thorsten Ball](https://registerspill.thorstenball.com/p/they-all-use-it?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-* [Lessons learned from 25 years of writing software](https://blog.rpanachi.com/after-25-years-writing-software-here-some-things-learned-so-far?ref=dailydev):  
-    There are so many valuable tips here,
-    
-    * Master at least one programming language/database
-        
-    * Use Linux
-        
-    * Write simple and boring code
-        
-    * Build trust
-        
-    * Don’t be shy from using bare bones or simple tools
-        
-        And many more, really a good post to follow and become a better developer.
-        
-
-* [Playful Programming](https://registerspill.thorstenball.com/p/playful-programming):  
-    I want to watch that video, there is so much explained by Thorsten, should be worth watching then, he is a great deep-diving programmer, can’t ignore his recommendations. Just by reading at the explanations of his observations on the video, it seems there is a lot to learn. Next week will be in the watched section.
-    
-    ![](https://substack-post-media.s3.amazonaws.com/public/images/4f5a67d6-4135-44ed-8f39-8c7554ab5abc_1280x1280.png align="left")
-    
-    [Register Spill](https://registerspill.thorstenball.com/p/playful-programming?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [Playful Programming](https://registerspill.thorstenball.com/p/playful-programming?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [Last weekend I watched this video of Andreas Kling prototyping a JIT compiler for his Ladybird browser…](https://registerspill.thorstenball.com/p/playful-programming?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [Read more](https://registerspill.thorstenball.com/p/playful-programming?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    [a year ago · 21 likes · 3 comments · Thorsten Ball](https://registerspill.thorstenball.com/p/playful-programming?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    * [How Raviraj Achar reads books with limited time](https://newsletter.techleadmentor.com/p/how-i-read-books-with-limited-time):  
-        Time is really limited, like everything around you seems to drag into it, the phone most importantly, it feels like a reservoir of knowledge but not wisdom. Taking the time to read is a sign of a level of control over the mind and grit. The process by Raviraj seems a little too complicated or farfetched like Readwise and Notion, those add a lot of friction. I don’t use those tools, I use this newsletter to sift my learnings and tech reading.
-        
-          
-        
-
-## Watched
-
-* [Using sort the proper way in Python:  
-    ](https://youtu.be/VEG2kj87Uxw?si=7iQeKvNPpgqTWh2T)That was clever and opened a few mind doors of thinking stuff clearly about `keys` , the way sorted takes in a list or an iterable is interesting and opens it to a wide variety of options to use it to throw into.
-    
-
-* [How to Finish Programming Projects](https://youtu.be/nqqmwRXSvrw?si=LtLXnr5jPGoQHF6w)?  
-    This is a interesting and eye opener video, I initially used to create projects by taking it as a learning opportunity, but gradually the path to creating something big or focusing on the features too much caused a friction and lead to whole lot of issues in the way. One is burnout, the other is no progress at all instead of tiny day-by-day progress.
-    
-* [What did you just do, CSS](https://youtu.be/A89FMtIkWKc?si=W5G8VblWWvc9VlSd)?  
-    Those are some high-value changes in CSS, I am not much into CSS but looking at the added changes, it seems to be a lot and a game changer to some extent. Turing complete :)
-    
-* [FreeCodeCamp (Quincy Larson) interview with Tech with Tim](https://youtu.be/mgWOMu2yo_U?si=Aq8jJJ4w2-TgwkDo)  
-    This is a good talk, while growing up as a developer, I watched Tim while learning Python and Django, so he has been a teacher to me in some way or the other, and seeing his raw thoughts behind his life, feels good to listen to.
-    
-* [Write your own programming Language: Computerphile](https://youtu.be/Q2UDHY5as90?si=KCuFpJ03DK6y1XJN)  
-    This was an interesting one, the power of the `SPLIT` function in python really should be the title of this video, just kidding. But the approach is what makes me wonder if that’s the way programming languages are created, really.  
-    That is a bit obnoxious to think in that way, it will become quite a mess after a while (I am not talking about his code but just the approach). I thaught it would be like the theory of computing of state machines right?
-    
-
-## Learned
-
-* Learned how to install and build golang from source for the latest versions as [described here](https://dev.to/mr_destructive/build-golang-from-source-for-v123-4cio).
-    
-* The difference between `setdefault` and `defaultdict`
-    
-    I learned that `setdefault` adds a key with a default value only if explicitly accessed, like this:
-    
-    ```go
-    my_dict = {'a': 1}  
-    my_dict.setdefault('b', 100)
-    Adds 'b': 100 only if 'b' doesn't exist
-    print(my_dict)  # {'a': 1, 'b': 100}
-    ```
-    
-    On the other hand, `defaultdict` automatically assigns a default value for missing keys:
-    
-    ```go
-    from collections import defaultdict
-    my_dict = defaultdict(int)
-    my_dict['a'] += 1  # Initializes 'a' with 0, then increments it
-    print(my_dict)  # {'a': 1}
-    ```
-    
-* Learned about the iterator in Golang
-    
-    The iter package released in Golang 1.23 introduces Seq and Seq2 for custom sequence iteration in Go. Using these, you can define custom iterators that yield values or key-value pairs dynamically
-    
-
-## Tech News
-
-* [Android 16: Developer Preview](https://android-developers.googleblog.com/2024/11/the-first-developer-preview-android16.html)  
-    This is really amazing, the terminal emulator concept really is cool but surely it will be revamped and improved Google supporting this on Android is in itself a big thing in my opinion. It will increase adaptability of terminals and make it really easier for anyone to use and interact with them.
-    
-
-For more news, follow the [Hackernewsletter](https://buttondown.com/hacker-newsletter/archive/hacker-newsletter-723) and for daily developer articles, join [daily.dev](http://daily.dev)
-
-That’s it from this week, hope you did well this week, and have a happy week and weekend ahead!
-
-[Leave a comment](https://techstructively.substack.com/p/techstructive-weekly-17/comments)
-
-Thank you for reading, let’s catch up in the next week.
-
-Happy Coding :)
-
-Thanks for reading Techstructive Weekly! This post is public so feel free to share it.
-
-[Share](https://techstructively.substack.com/p/techstructive-weekly-17?utm_source=substack&utm_medium=email&utm_content=share&action=share)
-
-Thanks for reading Techstructive Weekly! Subscribe for free to receive new posts and support my work.
+print(my_dict)  # {'a': 1}</code></pre></li><li><p>Learned about the iterator in Golang</p><p>The iter package released in Golang 1.23 introduces Seq and Seq2 for custom sequence iteration in Go. Using these, you can define custom iterators that yield values or key-value pairs dynamically</p></li></ul><h2 class="header-anchor-post">Tech News<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§tech-news"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/152024694/tech-news" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://android-developers.googleblog.com/2024/11/the-first-developer-preview-android16.html" rel="nofollow ugc noopener">Android 16: Developer Preview</a><br/><span>This is really amazing, the terminal emulator concept really is cool but surely it will be revamped and improved Google supporting this on Android is in itself a big thing in my opinion. It will increase adaptability of terminals and make it really easier for anyone to use and interact with them.</span></p><p></p></li></ul><p><span>For more news, follow the </span><a href="https://buttondown.com/hacker-newsletter/archive/hacker-newsletter-723" rel="nofollow ugc noopener">Hackernewsletter</a><span>  and for daily developer articles, join </span><a href="https://dly.to/LVQFgrjOUhf" rel="nofollow ugc noopener">daily.dev</a></p><p>That’s it from this week, hope you did well this week, and have a happy week and weekend ahead!</p><p class="button-wrapper" data-attrs='{"url":"https://techstructively.substack.com/p/techstructive-weekly-17/comments","text":"Leave a comment","action":null,"class":null}' data-component-name="ButtonCreateButton"><a class="button primary" href="https://techstructively.substack.com/p/techstructive-weekly-17/comments" rel="nofollow ugc noopener"><span>Leave a comment</span></a></p><p>Thank you for reading, let’s catch up in the next week.</p><p>Happy Coding :)</p><div class="captioned-button-wrap" data-attrs='{"url":"https://techstructively.substack.com/p/techstructive-weekly-17?utm_source=substack&amp;utm_medium=email&amp;utm_content=share&amp;action=share","text":"Share"}' data-component-name="CaptionedButtonToDOM"><div class="preamble"><p class="cta-caption">Thanks for reading Techstructive Weekly! This post is public so feel free to share it.</p></div><p class="button-wrapper" data-attrs='{"url":"https://techstructively.substack.com/p/techstructive-weekly-17?utm_source=substack&amp;utm_medium=email&amp;utm_content=share&amp;action=share","text":"Share"}' data-component-name="ButtonCreateButton"><a class="button primary" href="https://techstructively.substack.com/p/techstructive-weekly-17?utm_source=substack&amp;utm_medium=email&amp;utm_content=share&amp;action=share" rel="nofollow ugc noopener"><span>Share</span></a></p></div></div></div>

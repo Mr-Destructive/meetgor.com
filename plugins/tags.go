@@ -3,10 +3,8 @@ package plugins
 import (
 	"bytes"
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
-	"reflect"
 
 	"github.com/mr-destructive/mr-destructive.github.io/models"
 )
@@ -19,7 +17,19 @@ func (p *TagsPlugin) Name() string {
 	return p.PluginName
 }
 
-func (p *TagsPlugin) Execute(ssg *models.SSG) {
+func (p *TagsPlugin) Phase() Phase {
+	return PhasePostProcess
+}
+
+func (p *TagsPlugin) Requires() []string {
+	return []string{"renderTemplates"}
+}
+
+func (p *TagsPlugin) AdminPolicy() AdminPolicy {
+	return AdminRun
+}
+
+func (p *TagsPlugin) Execute(ssg *models.SSG) error {
 	config := &ssg.Config
 	tagPosts := make(map[string][]models.Post)
 	for _, post := range ssg.Posts {
@@ -54,30 +64,38 @@ func (p *TagsPlugin) Execute(ssg *models.SSG) {
 			Config: models.SSG_CONFIG{
 				Blog: config.Blog,
 			},
+			Years: YearsFromPosts(ssg.Posts),
 		}
 		err := ssg.TemplateFS.ExecuteTemplate(&buffer, templatePath, context)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 		feedPath := filepath.Join(".", config.Blog.OutputDir, "tags", feed.Type)
 		err = os.MkdirAll(feedPath, os.ModePerm)
+		if err != nil {
+			return err
+		}
 		feedPath2 := filepath.Join(".", config.Blog.OutputDir, "tag", feed.Type)
 		err = os.MkdirAll(feedPath2, os.ModePerm)
+		if err != nil {
+			return err
+		}
 		outputFeedPath := fmt.Sprintf("%s/index.html", feedPath)
 		err = os.WriteFile(outputFeedPath, buffer.Bytes(), 0660)
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 		outputFeedPath2 := fmt.Sprintf("%s/index.html", feedPath2)
 		err = os.WriteFile(outputFeedPath2, buffer.Bytes(), 0660)
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 	}
+	return nil
 }
 
 func init() {
-	RegisterPlugin("Tags", reflect.TypeOf(TagsPlugin{
-		PluginName: "Tags",
-	}))
+	RegisterPlugin("Tags", func() Plugin {
+		return &TagsPlugin{PluginName: "Tags"}
+	})
 }

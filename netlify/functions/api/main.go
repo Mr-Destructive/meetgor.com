@@ -63,6 +63,17 @@ func main() {
 	lambda.Start(handler)
 }
 
+var openDB = sql.Open
+var newQueries = libsqlssg.New
+var execDDL = func(ctx context.Context, db *sql.DB) error {
+	_, err := db.ExecContext(ctx, plugins.DDL)
+	return err
+}
+var nowTime = time.Now
+var httpDo = func(req *http.Request) (*http.Response, error) {
+	return http.DefaultClient.Do(req)
+}
+
 func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	ctx := context.Background()
 	dbName := os.Getenv("TURSO_DATABASE_NAME")
@@ -85,15 +96,15 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 
 	var err error
 	dbString := fmt.Sprintf("libsql://%s?authToken=%s", dbName, dbToken)
-	db, err := sql.Open("libsql", dbString)
+	db, err := openDB("libsql", dbString)
 	if err != nil {
 		log.Printf("Error in Connection: %v", err)
 		return ErrorResponse(http.StatusInternalServerError, "Database connection failed"), nil
 	}
 	defer db.Close()
 
-	queries := libsqlssg.New(db)
-	if _, errDb := db.ExecContext(ctx, plugins.DDL); errDb != nil {
+	queries := newQueries(db)
+	if errDb := execDDL(ctx, db); errDb != nil {
 		log.Printf("Error in DDL: %v", errDb)
 		// Not returning error here as table might already exist
 	}
@@ -253,7 +264,7 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 				return ErrorResponse(http.StatusBadRequest, "Missing type in metadata"), nil
 			}
 			if _, ok := metadata["date"]; !ok {
-				metadata["date"] = time.Now().Format("2006-01-02")
+				metadata["date"] = nowTime().Format("2006-01-02")
 			}
 			if _, ok := metadata["tags"]; ok {
 				tags := strings.Split(metadata["tags"].(string), ",")
@@ -341,8 +352,7 @@ func callTriggerBuildFunction(baseURL, triggerSecret string) (*http.Response, er
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Trigger-Secret", triggerSecret)
 
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	resp, err := httpDo(req)
 	if err != nil {
 		log.Printf("Error sending request to trigger function: %v", err)
 		return nil, err

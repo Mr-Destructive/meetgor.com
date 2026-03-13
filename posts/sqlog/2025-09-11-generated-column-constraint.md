@@ -2,9 +2,10 @@
 type: sqlog
 slug: sqlite-generated-column-constraint
 title: 'SQLite SQL: GENERATED column constraint'
-date: "2025-09-11"
+date: 2025-09-11
 tags: ["sqlite", "sql"]
 ---
+
 
 ## The GENERATED column constraint
 

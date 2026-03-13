@@ -1,20 +1,16 @@
-{
-  "type": "posts",
-  "title": "Creating a Chat Application with Django and HTMX",
-  "description": "Building a async, websocket based chat application using django, channels and htmx. With this chat application, the user can create and join rooms and send and recieve messages.",
-  "status": "published",
-  "date": "2023-02-05 17:15:00",
-  "tags": [
-    "django",
-    "htmx",
-    "python"
-  ],
-  "series": [
-    "Django-Series"
-  ],
-  "slug": "django-htmx-chat-app",
-  "image_url": "https://meetgor-cdn.pages.dev/django-htmx-chat-cover.png"
-}
+---
+type: posts
+title: "Creating a Chat Application with Django and HTMX"
+date: 2023-02-05
+slug: "django-htmx-chat-app"
+series: ["Django-Series"]
+tags:
+  - django
+  - htmx
+  - python
+image_url: https://meetgor-cdn.pages.dev/django-htmx-chat-cover.png
+---
+
 
 # Django + HTMX Chat application
 

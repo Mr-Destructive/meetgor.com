@@ -1,17 +1,15 @@
-{
-  "type": "posts",
-  "title": "PGCLI: Postgres from the terminal",
-  "description": "Running SQL queries in a Postgres database with PGCLI. Exploring the python package PGCLI, that can run SQL queries for a postgres database environment from the command line.",
-  "date": "2022-08-07 20:30:00",
-  "status": "published",
-  "slug": "pgcli-pg-from-terminal",
-  "tags": [
-    "postgres",
-    "python",
-    "DBMS"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/python-pkg-pgcli-postgres-from-terminal.png"
-}
+---
+type: posts
+title: "PGCLI: Postgres from the terminal"
+date: 2022-08-07
+slug: "pgcli-pg-from-terminal"
+tags:
+  - postgres
+  - python
+  - DBMS
+image_url: https://meetgor-cdn.pages.dev/python-pkg-pgcli-postgres-from-terminal.png
+---
+
 
 ## Introduction
 

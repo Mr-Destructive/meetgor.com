@@ -18,6 +18,8 @@ func main() {
 	lambda.Start(handler)
 }
 
+var openDB = sql.Open
+
 type QueryBody struct {
 	Query  string `json:"query"`
 	Limit  int    `json:"limit"`
@@ -31,7 +33,7 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 	dbToken := os.Getenv("TURSO_DATABASE_READ_TOKEN")
 	dbString := fmt.Sprintf("%s?authToken=%s", dbName, dbToken)
 
-	db, err := sql.Open("libsql", dbString)
+	db, err := openDB("libsql", dbString)
 	if err != nil {
 		return errorResponse(http.StatusInternalServerError, "Database connection failed"), nil
 	}

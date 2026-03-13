@@ -1,11 +1,12 @@
 ---
-type: "sqlog"
+type: sqlog
 title: "Advent of SQL 2025 Day 8: Product Catalog"
 slug: "advent-of-sql-2025-day-8"
-date: 2025-12-23 15:30 +0530
+date: 2025-12-23
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
 ---
+
 
 ## Advent of SQL - Day 8, Product Catalog
 

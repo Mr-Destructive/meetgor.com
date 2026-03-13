@@ -1,15 +1,14 @@
-{
-  "type": "posts",
-  "title": "Comment/Uncomment Code: Vim for Programmers",
-  "subtitle": "A short guide to comment/uncomment chunks of code effectively in Vim",
-  "date": "2021-10-07 16:45:42 +0530",
-  "status": "published",
-  "tags": [
-    "vim"
-  ],
-  "slug": "vim-un-comment-p1",
-  "image_url": "https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643288865/blogmedia/jbs2hcaiplfvwsgrcfgl.png"
-}
+---
+type: posts
+title: "Comment/Uncomment Code: Vim for Programmers"
+subtitle: "A short guide to comment/uncomment chunks of code effectively in Vim"
+date: 2021-10-07
+slug: "vim-un-comment-p1"
+tags:
+  - vim
+image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643288865/blogmedia/jbs2hcaiplfvwsgrcfgl.png
+---
+
 
 ## Introduction
 

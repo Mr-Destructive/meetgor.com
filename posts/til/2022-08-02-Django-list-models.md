@@ -1,12 +1,12 @@
 ---
-type: til 
+type: til
 title: "Django: Get list of all models and associated fields in a django project"
 description: "Get the list of all the models and associated fields/attributes in a django project or an application"
-date: 2022-08-02 15:30:00
-status: published
+date: 2022-08-02
 slug: django-list-models
 tags: ['django', 'python']
 ---
+
 
 ## Context
 

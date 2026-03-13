@@ -1,15 +1,13 @@
-{
-  "type": "posts",
-  "title": "Vim: Enhancing Movement Speed",
-  "subtitle": "Learning to Fly and Glid in Vim!",
-  "date": "2021-06-26 15:27:05 +0530",
-  "status": "published",
-  "tags": [
-    "vim"
-  ],
-  "slug": "vim-movement-speed",
-  "image_url": "https://meetgor-cdn.pages.dev/vim-enchancing-moment-speed.webp"
-}
+---
+type: posts
+title: "Vim: Enhancing Movement Speed"
+subtitle: "Learning to Fly and Glid in Vim!"
+date: 2021-06-26
+slug: "vim-movement-speed"
+tags:
+  - vim
+image_url: https://meetgor-cdn.pages.dev/vim-enchancing-moment-speed.webp
+---
 
 
 ![]({{ page.image | relative_url }})

@@ -1,8 +1,13 @@
 ---
-type: "sqlog"
+type: sqlog
 title: "SQLite Scalar Function: Random"
-date: 2025-08-23
+tags:
+  - typescript
+  - sql
+  - sqlite
+date:  2025-08-23
 ---
+
 
 The random function in sqlite is quite handy to generate pseudo random numbers.
 

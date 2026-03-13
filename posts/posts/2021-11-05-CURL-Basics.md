@@ -1,17 +1,16 @@
-{
-  "type": "posts",
-  "title": "Basics of curl command",
-  "subtitle": "An short simple introductory guide to the curl command",
-  "date": "2021-11-05 20:50:00 +0530",
-  "status": "published",
-  "tags": [
-    "bash",
-    "linux",
-    "networking"
-  ],
-  "slug": "curl-basics",
-  "image_url": "https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643289075/blogmedia/bqnrrfaeaqfaj7hezxjx.png"
-}
+---
+type: posts
+title: "Basics of curl command"
+subtitle: "An short simple introductory guide to the curl command"
+date: 2021-11-05
+slug: "curl-basics"
+tags:
+  - bash
+  - linux
+  - networking
+image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643289075/blogmedia/bqnrrfaeaqfaj7hezxjx.png
+---
+
 
 ## Introduction
 

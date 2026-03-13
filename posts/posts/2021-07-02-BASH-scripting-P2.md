@@ -1,18 +1,14 @@
-{
-  "type": "posts",
-  "title": "BASH Scripting Guide - PART - 2",
-  "subtitle": "Parsing and Managing data using Bash",
-  "date": "2021-07-02 15:57:34 +0530",
-  "status": "published",
-  "tags": [
-    "bash"
-  ],
-  "slug": "bash-guide-p2",
-  "image_url": "https://meetgor-cdn.pages.dev/bash-scripting-guide-p2.webp",
-  "series": [
-    "BASH Scripting Guide"
-  ]
-}
+---
+type: posts
+title: "BASH Scripting Guide - PART - 2"
+subtitle: "Parsing and Managing data using Bash"
+date: 2021-07-02
+slug: "bash-guide-p2"
+series: ["BASH Scripting Guide"]
+tags:
+  - bash
+image_url: https://meetgor-cdn.pages.dev/bash-scripting-guide-p2.webp
+---
 
 
 # Introduction

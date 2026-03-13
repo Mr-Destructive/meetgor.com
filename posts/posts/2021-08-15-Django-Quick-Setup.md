@@ -1,18 +1,17 @@
-{
-  "type": "posts",
-  "title": "Django Quick Setup Script",
-  "subtitle": "A Quick simple script to set up the Django project.",
-  "date": "2021-08-15 18:50:46 +0530",
-  "status": "published",
-  "tags": [
-    "django",
-    "web-development",
-    "python",
-    "bash"
-  ],
-  "slug": "django-setup-script",
-  "image_url": "https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643286698/blogmedia/dyfjizyq2zmdo8fk4ars.png"
-}
+---
+type: posts
+title: "Django Quick Setup Script"
+subtitle: "A Quick simple script to set up the Django project."
+date: 2021-08-15
+slug: "django-setup-script"
+tags:
+  - django
+  - web-development
+  - python
+  - bash
+image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643286698/blogmedia/dyfjizyq2zmdo8fk4ars.png
+---
+
 
 ## Introduction
 

@@ -1,18 +1,14 @@
-{
-  "type": "posts",
-  "title": "Golang: Anonymous Functions",
-  "description": "Understanding the concept of the Anonymous functions in golang",
-  "date": "2022-07-24 18:15:00",
-  "status": "published",
-  "slug": "golang-anonymous-functions",
-  "tags": [
-    "go"
-  ],
-  "series": [
-    "100-days-of-golang"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/golang-017-anonymous-functions.png"
-}
+---
+type: posts
+title: "Golang: Anonymous Functions"
+date: 2022-07-24
+slug: "golang-anonymous-functions"
+series: ["100-days-of-golang"]
+tags:
+  - go
+image_url: https://meetgor-cdn.pages.dev/golang-017-anonymous-functions.png
+---
+
 
 ## Introduction
 

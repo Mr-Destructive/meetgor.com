@@ -1,207 +1,112 @@
 ---
-type: "newsletter"
-title: "Techstructive Weekly #18"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+type: newsletter
+title: 'Techstructive Weekly #18'
 date: 2024-11-30
-slug: "techstructive-weekly-18"
+slug: techstructive-weekly-18
+tags:
+- ai
+- career
+- database
+- go
+- newsletter
+- python
+- sql
+source_url: 'https://techstructively.substack.com/p/techstructive-weekly-18'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ---
 
-## Week #18
+<div class="available-content"><div class="body markup" dir="auto"><h2 class="header-anchor-post">Week #18<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§week-18"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/152312636/week-18" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><p>It was a  great week, if I could call it a hard-working week, it would be appropriate. I started the week (the weekends) by streaming, creating a video, and planning a few more videos for the next week. Then starting the week with deep intense programming sessions, a couple of flow states during the week made the mind feel accomplished and excited.</p><p>After releasing the code that I had been working on for so long in the past week, this week was about taking a new approach to the initial implementation, and it was smooth, it felt good, I was able to change the code that I had written faster and iterate on it quickly. This gave me the confidence that I can write production-ready and readable code. I am not that bad, there is a lot to improve on but quite a good feeling to live with and continue the work.</p><h3 class="header-anchor-post">Quote of the week<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§quote-of-the-week"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/152312636/quote-of-the-week" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h3><blockquote><p><span>“The only way to do great work is to love what you do”</span><br/><span>— Steve Jobs</span></p></blockquote><p>This week, I did the things that I loved, working with SSGs, and databases, writing code, and teaching what I know. It might not be great, but these are the things that I love, and other is no one forcing me to do this, this comes out of my will.</p><blockquote></blockquote><h2 class="header-anchor-post">Created<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§created"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/152312636/created" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><span>VIDEO: </span><a href="https://www.youtube.com/watch?v=RFUz4_axOZg" rel="nofollow ugc noopener">What’s new in Golang 1.24: Omitzero Tag in Marshalling JSON</a><br/><span>This video was about the specific tag which is being added to the encoding/json package for Marshalling from Golang structs to JSON (serialization.)</span></p></li></ul><div class="youtube-wrap" data-attrs='{"videoId":"RFUz4_axOZg","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-RFUz4_axOZg"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/RFUz4_axOZg?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div><ul><li><p><a href="https://www.meetgor.com/python-chain-assignment-gotcha/" rel="nofollow ugc noopener">TIL: Gotcha with Chained Assignment in Python</a><br/><span>I learned this point while implementing a feature at work, I was in a deep flow state, but this thing bugged me and broke out of the state rightly so, otherwise would have gone in wired directions without doing anything significant.</span><br/><span>Learning python might be simple, but mastering it is a task, there are soo many things to learn about and be aware about. Python is simple but at times could be dangerous if not careful.</span></p></li></ul><div class="embedded-post-wrap" data-attrs="{&quot;id&quot;:152244509,&quot;url&quot;:&quot;https://meetgor.substack.com/p/til-gotcha-with-chained-assignment&quot;,&quot;publication_id&quot;:1675572,&quot;publication_name&quot;:&quot;Meet's Substack&quot;,&quot;publication_logo_url&quot;:&quot;https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F9786b965-3564-4542-8687-a55727236ab5_325x325.png&quot;,&quot;title&quot;:&quot;TIL: Gotcha with Chained Assignment in Python&quot;,&quot;truncated_body_text&quot;:&quot;I was writing some Python code and wanted to initialize a few variables to an empty list. Instead of creating separate lists for each variable, I decided to use chained assignments like this:&quot;,&quot;date&quot;:&quot;2024-11-27T16:50:21.722Z&quot;,&quot;like_count&quot;:0,&quot;comment_count&quot;:0,&quot;bylines&quot;:[{&quot;id&quot;:90157803,&quot;name&quot;:&quot;Meet&quot;,&quot;handle&quot;:&quot;meetgor&quot;,&quot;previous_name&quot;:null,&quot;photo_url&quot;:&quot;https://substack-post-media.s3.amazonaws.com/public/images/00b10c40-508f-48c7-b23c-0fec963564f9_325x325.png&quot;,&quot;bio&quot;:&quot;A developer's mind with a writer's heart. Exploring the intersection of tech and creativity, one line of code and one sentence at a time(trying to). Find me here: meetgor.com&quot;,&quot;profile_set_up_at&quot;:&quot;2023-05-21T15:46:39.325Z&quot;,&quot;publicationUsers&quot;:[{&quot;id&quot;:1652481,&quot;user_id&quot;:90157803,&quot;publication_id&quot;:1675572,&quot;role&quot;:&quot;admin&quot;,&quot;public&quot;:true,&quot;is_primary&quot;:false,&quot;publication&quot;:{&quot;id&quot;:1675572,&quot;name&quot;:&quot;Meet's Substack&quot;,&quot;subdomain&quot;:&quot;meetgor&quot;,&quot;custom_domain&quot;:null,&quot;custom_domain_optional&quot;:false,&quot;hero_text&quot;:&quot;A Tech newsletter about the things I screw up and build&quot;,&quot;logo_url&quot;:&quot;https://substack-post-media.s3.amazonaws.com/public/images/9786b965-3564-4542-8687-a55727236ab5_325x325.png&quot;,&quot;author_id&quot;:90157803,&quot;theme_var_background_pop&quot;:&quot;#8AE1A2&quot;,&quot;created_at&quot;:&quot;2023-05-21T15:48:24.028Z&quot;,&quot;rss_website_url&quot;:null,&quot;email_from_name&quot;:&quot;Meet from Techstructive Blog&quot;,&quot;copyright&quot;:&quot;Meet&quot;,&quot;founding_plan_name&quot;:null,&quot;community_enabled&quot;:true,&quot;invite_only&quot;:false,&quot;payments_state&quot;:&quot;disabled&quot;,&quot;language&quot;:null,&quot;explicit&quot;:false,&quot;is_personal_mode&quot;:false}},{&quot;id&quot;:1857563,&quot;user_id&quot;:90157803,&quot;publication_id&quot;:1870173,&quot;role&quot;:&quot;admin&quot;,&quot;public&quot;:true,&quot;is_primary&quot;:false,&quot;publication&quot;:{&quot;id&quot;:1870173,&quot;name&quot;:&quot;Techstructive Takes&quot;,&quot;subdomain&quot;:&quot;techstructivetakes&quot;,&quot;custom_domain&quot;:null,&quot;custom_domain_optional&quot;:false,&quot;hero_text&quot;:&quot;Personal Opinions from the perspective of a developer/techy.&quot;,&quot;logo_url&quot;:&quot;https://substack-post-media.s3.amazonaws.com/public/images/2e79cdb3-9074-43d5-95c8-1e0950dd873b_500x500.png&quot;,&quot;author_id&quot;:90157803,&quot;theme_var_background_pop&quot;:&quot;#121BFA&quot;,&quot;created_at&quot;:&quot;2023-08-11T15:07:07.579Z&quot;,&quot;rss_website_url&quot;:null,&quot;email_from_name&quot;:null,&quot;copyright&quot;:&quot;Meet&quot;,&quot;founding_plan_name&quot;:null,&quot;community_enabled&quot;:true,&quot;invite_only&quot;:false,&quot;payments_state&quot;:&quot;disabled&quot;,&quot;language&quot;:null,&quot;explicit&quot;:false,&quot;is_personal_mode&quot;:false}},{&quot;id&quot;:2869075,&quot;user_id&quot;:90157803,&quot;publication_id&quot;:2824037,&quot;role&quot;:&quot;admin&quot;,&quot;public&quot;:true,&quot;is_primary&quot;:false,&quot;publication&quot;:{&quot;id&quot;:2824037,&quot;name&quot;:&quot;Techstructive Weekly&quot;,&quot;subdomain&quot;:&quot;techstructively&quot;,&quot;custom_domain&quot;:null,&quot;custom_domain_optional&quot;:false,&quot;hero_text&quot;:&quot;Weekly Summary of the tech things I learnt, read, and listened&quot;,&quot;logo_url&quot;:&quot;https://substack-post-media.s3.amazonaws.com/public/images/8e223692-eb8c-4b4a-9167-e21c23e2af5d_500x500.png&quot;,&quot;author_id&quot;:90157803,&quot;theme_var_background_pop&quot;:&quot;#B599F1&quot;,&quot;created_at&quot;:&quot;2024-07-25T16:55:41.379Z&quot;,&quot;rss_website_url&quot;:null,&quot;email_from_name&quot;:null,&quot;copyright&quot;:&quot;Meet&quot;,&quot;founding_plan_name&quot;:null,&quot;community_enabled&quot;:true,&quot;invite_only&quot;:false,&quot;payments_state&quot;:&quot;disabled&quot;,&quot;language&quot;:null,&quot;explicit&quot;:false,&quot;is_personal_mode&quot;:false}}],&quot;is_guest&quot;:false,&quot;bestseller_tier&quot;:null}],&quot;utm_campaign&quot;:null,&quot;belowTheFold&quot;:true,&quot;type&quot;:&quot;newsletter&quot;,&quot;language&quot;:&quot;en&quot;}" data-component-name="EmbeddedPostToDOM"><a class="embedded-post" href="https://meetgor.substack.com/p/til-gotcha-with-chained-assignment?utm_source=substack&amp;utm_campaign=post_embed&amp;utm_medium=web" native="true" rel="nofollow ugc noopener"><div class="embedded-post-header"><img class="embedded-post-publication-logo" loading="lazy" src="https://substackcdn.com/image/fetch/$s_!Zyre!,w_56,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F9786b965-3564-4542-8687-a55727236ab5_325x325.png"/><span class="embedded-post-publication-name">Meet's Substack</span></div><div class="embedded-post-title-wrapper"><div class="embedded-post-title">TIL: Gotcha with Chained Assignment in Python</div></div><div class="embedded-post-body">I was writing some Python code and wanted to initialize a few variables to an empty list. Instead of creating separate lists for each variable, I decided to use chained assignments like this…</div><div class="embedded-post-cta-wrapper"><span class="embedded-post-cta">Read more</span></div><div class="embedded-post-meta">a year ago · Meet</div></a></div><ul><li><p><span>STREAM: SSG from Scratch in Golang (2 streams)</span><br/><span>I streamed on the weekend and started where I left off by creating static site generator in Golang. This part was about loading the config and posts from the folders and files.</span><br/><span>Then on Sunday, I continued the stream for completing the most basic SSG in golang by adding the rendering of the templates.</span></p><ul><li><p><a href="https://www.youtube.com/watch?v=smWEhhypbK4" rel="nofollow ugc noopener">Loading Config and Posts</a></p></li></ul></li></ul><div class="youtube-wrap" data-attrs='{"videoId":"smWEhhypbK4","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-smWEhhypbK4"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/smWEhhypbK4?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div><ul><li><ul><li><p><a href="https://www.youtube.com/watch?v=p_av6C8Lji0" rel="nofollow ugc noopener">Loading and Rendering Templates</a></p></li></ul></li></ul><div class="youtube-wrap" data-attrs='{"videoId":"p_av6C8Lji0","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-p_av6C8Lji0"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/p_av6C8Lji0?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div><h2 class="header-anchor-post">Read<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§read"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/152312636/read" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://computersciencesimplified.substack.com/p/database-indexing-explained" rel="nofollow ugc noopener">Database Indexing Explained</a><span>: from Computer Science Simplified Substack</span><br/><span>This was a great post, explaining the necessary context and fundamentals required to understand the indexing. The last part was a bit heavy, but overall a good and in-depth article on learning indexing.</span></p></li><li><p><a href="https://newsletter.eng-leadership.com/p/from-laid-off-to-hired-a-software" rel="nofollow ugc noopener">From laid off to hired: Software engineering guide</a><br/><span>This is a good motivational post on getting hired in the era of 2024, this is a new kind of world where you are not only hired based on what you say, but also what your impact says, your brand, your online presence, and actual skills.</span></p></li><li><p><a href="https://kentcdodds.com/blog/how-i-increased-my-visibility" rel="nofollow ugc noopener">How I increased my visibility: Kent C. Dodds</a><br/><span>To increase visibility, you need to put it out there. To be seen by others, you have to show your skills and struggles in public. This is to a point article showing practical experience in his journey.</span></p></li><li><p><a href="https://wafris.org/blog/rearchitecting-for-sqlite" rel="nofollow ugc noopener">Wafris: Rearchitecting Redis to SQLite</a><br/><span>I watched a video on the Database School where a SaaS (Firewall for Web applications) provider moved from Redis to Sqlite. This is such a nice technical post, there are so many things to dive into and how SQLite is the database that just works and not just works but also shines.</span></p></li><li><p><a href="https://stanbright.com/time-spent-programming/" rel="nofollow ugc noopener">Time spent programming is often time well spent</a></p><blockquote><p>Programming is often more fun than the alternative uses of my time.</p></blockquote><p>Programming is really fun, the joy of creating something and the satisfaction of completing or figuring out by yourself hits different and cannot be replaced with anything else.</p></li></ul><h2 class="header-anchor-post">Watched<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§watched"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/152312636/watched" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://www.youtube.com/watch?v=EwDuYId5v8k" rel="nofollow ugc noopener">Moving from Redis to SQLite with Mike Buckbee</a><span>: Aron Francis in the Database School</span><br/><span>As mentioned in the above post, this video was absolutely fun to watch, so much technical stuff in a digestible way. There is so much to learn about networking, the quirks of Redis, SQLite and its adaptability, IP Addresses, and interesting problems to solve. Totally worth the hour.</span></p><div class="youtube-wrap" data-attrs='{"videoId":"EwDuYId5v8k","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-EwDuYId5v8k"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/EwDuYId5v8k?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div><p></p></li><li><p><a href="https://www.youtube.com/watch?v=dy2RJdDEvO0" rel="nofollow ugc noopener">We built an orchestrator from scratch</a><span>: Fly.io</span><br/><span>Why Flyio built their orchestrator, kind of. They use VMs which Kubernetes is not ideal for as it is designed for orchestrating containers, Nomad has a quirk of assigning a minimal number of VMs/machines for the users, which is not secure enough for Fly.io, so reasonable enough that it is worth for them to write and Orchestrator from scratch (well not entirely from scratch)</span></p><div class="youtube-wrap" data-attrs='{"videoId":"dy2RJdDEvO0","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-dy2RJdDEvO0"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/dy2RJdDEvO0?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div></li><li><p><a href="https://www.youtube.com/watch?v=rYR0eJdGBmQ" rel="nofollow ugc noopener">Why would anyone use Functional programming</a><span>: The Coding Gopher</span><br/><span>Functional programming languages are designed to think about the what and not the how. So we just focus on the what things to implement and not care about how. So, there are things like functions, no variables no mutations (get out of here python).</span></p><div class="youtube-wrap" data-attrs='{"videoId":"rYR0eJdGBmQ","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-rYR0eJdGBmQ"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/rYR0eJdGBmQ?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div></li><li><p><a href="https://www.youtube.com/watch?v=8mxubNQC5O8" rel="nofollow ugc noopener">Let’s Prototype a Javascript JIT Compiler</a><span>: Andreas Kling</span><br/><span>To be honest, I didn’t get most of the technical things, however, I get the point, he is using AI wisely, whenever he uses AI, HE IS IN CONTROL and he doesn’t let AI take over. I have not completed this video, I said last week it would be on my watched list, but I got lost in other stuff and lost interest in the livestream.</span></p></li></ul><h2 class="header-anchor-post">Learned<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§learned"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/152312636/learned" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><span>Difference between omit empty and omit zero while marshaling JSON bytes in Golang</span><br/><span>From the documentation</span></p><blockquote><p>The "omitempty" option specifies that the field should be omitted from the encoding if the field has an empty value, defined as false, 0, a nil pointer, a nil interface value, and any empty array, slice, map, or string.</p></blockquote><p><br/><span>The omit empty is wired, it has its definition of what is empty (which I don’t disagree with but it could be confusing at times). With omit zero, we can control what a zero value is for certain specific data types like structs and time values.</span><br/><span>Will write a post on it soon.</span></p></li><li><p><span>How to render templates in Golang</span><br/><span>While doing the live stream and building the static site generator from scratch, I explored the difference of Parse and ParseFS which are two different ways of rendering templates.</span><br/></p><ul><li><p>Template</p><pre><code>// templates/hello.html
 
-It was a great week, if I could call it a hard-working week, it would be appropriate. I started the week (the weekends) by streaming, creating a video, and planning a few more videos for the next week. Then starting the week with deep intense programming sessions, a couple of flow states during the week made the mind feel accomplished and excited.
+&lt;h1&gt;Hello, {{.Name}}&lt;/h1&gt;</code></pre></li><li><p>ParseFS</p><pre><code>package main
 
-After releasing the code that I had been working on for so long in the past week, this week was about taking a new approach to the initial implementation, and it was smooth, it felt good, I was able to change the code that I had written faster and iterate on it quickly. This gave me the confidence that I can write production-ready and readable code. I am not that bad, there is a lot to improve on but quite a good feeling to live with and continue the work.
-
-### Quote of the week
-
-> “The only way to do great work is to love what you do”  
-> — Steve Jobs
-
-This week, I did the things that I loved, working with SSGs, and databases, writing code, and teaching what I know. It might not be great, but these are the things that I love, and other is no one forcing me to do this, this comes out of my will.
-
-## Created
-
-* VIDEO: [What’s new in Golang 1.24: Omitzero Tag in Marshalling JSON](https://www.youtube.com/watch?v=RFUz4_axOZg)  
-    This video was about the specific tag which is being added to the encoding/json package for Marshalling from Golang structs to JSON (serialization.)
-    
-
-* [TIL: Gotcha with Chained Assignment in Python](https://www.meetgor.com/python-chain-assignment-gotcha/)  
-    I learned this point while implementing a feature at work, I was in a deep flow state, but this thing bugged me and broke out of the state rightly so, otherwise would have gone in wired directions without doing anything significant.  
-    Learning python might be simple, but mastering it is a task, there are soo many things to learn about and be aware about. Python is simple but at times could be dangerous if not careful.
-    
-
-![](https://substack-post-media.s3.amazonaws.com/public/images/9786b965-3564-4542-8687-a55727236ab5_325x325.png align="left")
-
-[Meet's Substack](https://meetgor.substack.com/p/til-gotcha-with-chained-assignment?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-
-[TIL: Gotcha with Chained Assignment in Python](https://meetgor.substack.com/p/til-gotcha-with-chained-assignment?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-
-[I was writing some Python code and wanted to initialize a few variables to an empty list. Instead of creating separate lists for each variable, I decided to use chained assignments like this…](https://meetgor.substack.com/p/til-gotcha-with-chained-assignment?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-
-[Read more](https://meetgor.substack.com/p/til-gotcha-with-chained-assignment?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-
-[19 days ago · Meet](https://meetgor.substack.com/p/til-gotcha-with-chained-assignment?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-
-* STREAM: SSG from Scratch in Golang (2 streams)  
-    I streamed on the weekend and started where I left off by creating static site generator in Golang. This part was about loading the config and posts from the folders and files.  
-    Then on Sunday, I continued the stream for completing the most basic SSG in golang by adding the rendering of the templates.
-    
-    * [Loading Config and Posts](https://www.youtube.com/watch?v=smWEhhypbK4)
-        
-
-* * [Loading and Rendering Templates](https://www.youtube.com/watch?v=p_av6C8Lji0)
-        
-
-## Read
-
-* [Database Indexing Explained](https://computersciencesimplified.substack.com/p/database-indexing-explained): from Computer Science Simplified Substack  
-    This was a great post, explaining the necessary context and fundamentals required to understand the indexing. The last part was a bit heavy, but overall a good and in-depth article on learning indexing.
-    
-* [From laid off to hired: Software engineering guide](https://newsletter.eng-leadership.com/p/from-laid-off-to-hired-a-software)  
-    This is a good motivational post on getting hired in the era of 2024, this is a new kind of world where you are not only hired based on what you say, but also what your impact says, your brand, your online presence, and actual skills.
-    
-* [How I increased my visibility: Kent C. Dodds](https://kentcdodds.com/blog/how-i-increased-my-visibility)  
-    To increase visibility, you need to put it out there. To be seen by others, you have to show your skills and struggles in public. This is to a point article showing practical experience in his journey.
-    
-* [Wafris: Rearchitecting Redis to SQLite](https://wafris.org/blog/rearchitecting-for-sqlite)  
-    I watched a video on the Database School where a SaaS (Firewall for Web applications) provider moved from Redis to Sqlite. This is such a nice technical post, there are so many things to dive into and how SQLite is the database that just works and not just works but also shines.
-    
-* [Time spent programming is often time well spent](https://stanbright.com/time-spent-programming/)
-    
-    > Programming is often more fun than the alternative uses of my time.
-    
-    Programming is really fun, the joy of creating something and the satisfaction of completing or figuring out by yourself hits different and cannot be replaced with anything else.
-    
-
-## Watched
-
-* [Moving from Redis to SQLite with Mike Buckbee](https://www.youtube.com/watch?v=EwDuYId5v8k): Aron Francis in the Database School  
-    As mentioned in the above post, this video was absolutely fun to watch, so much technical stuff in a digestible way. There is so much to learn about networking, the quirks of Redis, SQLite and its adaptability, IP Addresses, and interesting problems to solve. Totally worth the hour.
-    
-* [We built an orchestrator from scratch](https://www.youtube.com/watch?v=dy2RJdDEvO0): [Fly.io](http://Fly.io)  
-    Why Flyio built their orchestrator, kind of. They use VMs which Kubernetes is not ideal for as it is designed for orchestrating containers, Nomad has a quirk of assigning a minimal number of VMs/machines for the users, which is not secure enough for [Fly.io](http://Fly.io), so reasonable enough that it is worth for them to write and Orchestrator from scratch (well not entirely from scratch)
-    
-* [Why would anyone use Functional programming](https://www.youtube.com/watch?v=rYR0eJdGBmQ): The Coding Gopher  
-    Functional programming languages are designed to think about the what and not the how. So we just focus on the what things to implement and not care about how. So, there are things like functions, no variables no mutations (get out of here python).
-    
-* [Let’s Prototype a Javascript JIT Compiler](https://www.youtube.com/watch?v=8mxubNQC5O8): Andreas Kling  
-    To be honest, I didn’t get most of the technical things, however, I get the point, he is using AI wisely, whenever he uses AI, HE IS IN CONTROL and he doesn’t let AI take over. I have not completed this video, I said last week it would be on my watched list, but I got lost in other stuff and lost interest in the livestream.
-    
-
-## Learned
-
-* Difference between omit empty and omit zero while marshaling JSON bytes in Golang  
-    From the documentation
-    
-    > The "omitempty" option specifies that the field should be omitted from the encoding if the field has an empty value, defined as false, 0, a nil pointer, a nil interface value, and any empty array, slice, map, or string.
-    
-      
-    The omit empty is wired, it has its definition of what is empty (which I don’t disagree with but it could be confusing at times). With omit zero, we can control what a zero value is for certain specific data types like structs and time values.  
-    Will write a post on it soon.
-    
-* How to render templates in Golang  
-    While doing the live stream and building the static site generator from scratch, I explored the difference of Parse and ParseFS which are two different ways of rendering templates.  
-    
-    * Template
-        
-        ```go
-        // templates/hello.html
-        <h1>Hello, {{.Name}}</h1>
-        ```
-        
-    * ParseFS
-        
-        ```go
-        package main
-        import (
-        "embed"
-        "html/template"
-        "log"
-        "os"
-        )
-        // Embed the templates directory
-        //go:embed templates/*
-        var templatesFS embed.FS
-        func main() {
-        tmpl, _ := template.ParseFS(templatesFS, "templates/hello.html")
-        data := map[string]string{"Name": "Meetgor.com"}
-        _ = tmpl.Execute(os.Stdout, data)
-        }
-        ```
-        
-    * ParseFiles
-        
-
-```go
-package main
 import (
-"html/template"
-"log"
-"os"
+	"embed"
+	"html/template"
+	"log"
+	"os"
 )
+
+// Embed the templates directory
+//go:embed templates/*
+var templatesFS embed.FS
+
 func main() {
-tmpl, _ := template.ParseFiles("templates/hello.html")
-data := map[string]string{"Name": "Meetgor.com"}
-_ = tmpl.Execute(os.Stdout, data)
+	
+	tmpl, _ := template.ParseFS(templatesFS, "templates/hello.html")
+	data := map[string]string{"Name": "Meetgor.com"}
+	_ = tmpl.Execute(os.Stdout, data)
 }
-```
+</code></pre></li><li><p>ParseFiles</p></li></ul></li></ul><pre><code>package main
 
-* `ParseFiles` reads templates from the file system, while `ParseFS` reading templates from an embedded file system.
-    
-* `ParseFiles` requires physical files on disk, whereas `ParseFS` uses files embedded in the Go binary.
-    
-* `ParseFiles` allows template modifications without recompiling, while `ParseFS` requiring recompiling to update templates.
-    
+import (
+	"html/template"
+	"log"
+	"os"
+)
 
-* Chained assignment references the same value to all the assigned variables in Python  
-    Python might be easier to learn as said earlier, but mastering it really hard, I leart that chaining assignment is not ideal when you want to iniitialise individual variables to different values (same values but separate on their own moving ahead in the code)
-    
-    ```go
-    a = b = c = [1,2,3]
-    b.append(4)
-    a = [1,2,3.4]
-    b = [1,2,3,4]
-    c = [1,2,3,4]
-    ```
-    
+func main() {
+	
+	tmpl, _ := template.ParseFiles("templates/hello.html")
+	data := map[string]string{"Name": "Meetgor.com"}
+	_ = tmpl.Execute(os.Stdout, data)
 
-## Tech News
+}
+</code></pre><ul><li><p><code>ParseFiles</code><span> reads templates from the file system, while </span><code>ParseFS</code><span> reading templates from an embedded file system.</span></p></li><li><p><code>ParseFiles</code><span> requires physical files on disk, whereas </span><code>ParseFS</code><span> uses files embedded in the Go binary.</span></p></li><li><p><code>ParseFiles</code><span> allows template modifications without recompiling, while </span><code>ParseFS</code><span> requiring recompiling to update templates.</span></p><p></p></li></ul><p></p><ul><li><p><span>Chained assignment references the same value to all the assigned variables in Python</span><br/><span>Python might be easier to learn as said earlier, but mastering it really hard, I leart that chaining assignment is not ideal when you want to iniitialise individual variables to different values (same values but separate on their own moving ahead in the code)</span></p><pre><code>a = b = c = [1,2,3]
+b.append(4)
 
-* [Alibaba Releases QwQ: An Open Source Model as Competitor to OpenAI’s O1 Reasoning Models](https://techcrunch.com/2024/11/27/alibaba-releases-an-open-challenger-to-openais-o1-reasoning-model/)  
-    Every week, some random thing is happening in the world of AI, someone beats the other buzzing model by little margins. Exciting times in 2025.
-    
-* [Spotify cuts developer access to some developer recommendation APIs](https://techcrunch.com/2024/11/27/spotify-cuts-developer-access-to-several-of-its-recommendation-features/)  
-    This is bad, and looks like the possible issues moving ahead in this AI driven internet.
-    
-* [BlueSky Open API means anyone can scrape your data for AI training](https://techcrunch.com/2024/11/27/blueskys-open-api-means-anyone-can-scrape-your-data-for-ai-training/)  
-    Everything will have side effects, it depends on how the people are actually using it to their own and others’ advantage.
-    
-
-For more news, follow the [Hackernewsletter](https://buttondown.com/hacker-newsletter/archive/hacker-newsletter-723) and for daily developer articles, join [daily.dev](http://daily.dev)
-
-## Conclusion
-
-This week was all about refinement and iteration, and it felt great to see the progress I made. From streaming and content creation to diving into deep coding challenges, I learned a lot about the intricacies of Golang and Python.
-
-It is Advent of Code from next week, so I am planning to stream daily for solving AoC with Golang in the first iteration and OCAML in the second, let’s see how it goes.
-
-If you want to tune in, slide into Twitch or youtube
-
-* [https://www.twitch.tv/meet\_gor](https://www.twitch.tv/meet_gor)
-    
-
-* [https://www.youtube.com/@meet-technically](https://www.youtube.com/@meet-technically)
-    
-
-That’s it from this week, hope you did well this week, and have a happy week and weekend ahead!
-
-[Leave a comment](https://techstructively.substack.com/p/techstructive-weekly-17/comments)
-
-Thank you for reading, let’s catch up in the next week.
-
-Happy Coding :)
-
-Thanks for reading Techstructive Weekly! This post is public so feel free to share it.
-
-[Share](https://techstructively.substack.com/p/techstructive-weekly-17?utm_source=substack&utm_medium=email&utm_content=share&action=share&token=eyJ1c2VyX2lkIjo5MDE1NzgwMywicG9zdF9pZCI6MTUyMDI0Njk0LCJpYXQiOjE3MzI4OTY2NTYsImV4cCI6MTczNTQ4ODY1NiwiaXNzIjoicHViLTI4MjQwMzciLCJzdWIiOiJwb3N0LXJlYWN0aW9uIn0.rtsuau2_H8vZZwASSY9gzTiaAyWxWXK4YrcvET-TcZE)
-
-Thanks for reading Techstructive Weekly! Subscribe for free to receive new posts and support my work.
+# a = [1,2,3.4]
+# b = [1,2,3,4]
+# c = [1,2,3,4]
+</code></pre><p></p></li></ul><h2 class="header-anchor-post">Tech News<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§tech-news"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/152312636/tech-news" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://techcrunch.com/2024/11/27/alibaba-releases-an-open-challenger-to-openais-o1-reasoning-model/" rel="nofollow ugc noopener">Alibaba Releases QwQ: An Open Source Model as Competitor to OpenAI’s O1 Reasoning Models</a><br/><span>Every week, some random thing is happening in the world of AI, someone beats the other buzzing model by little margins. Exciting times in 2025.</span></p></li><li><p><a href="https://techcrunch.com/2024/11/27/spotify-cuts-developer-access-to-several-of-its-recommendation-features/" rel="nofollow ugc noopener">Spotify cuts developer access to some developer recommendation APIs</a><br/><span>This is bad, and looks like the possible issues moving ahead in this AI driven internet.</span></p></li><li><p><a href="https://techcrunch.com/2024/11/27/blueskys-open-api-means-anyone-can-scrape-your-data-for-ai-training/" rel="nofollow ugc noopener">BlueSky Open API means anyone can scrape your data for AI training</a><br/><span>Everything will have side effects, it depends on how the people are actually using it to their own and others’ advantage.</span></p></li></ul><p><span>For more news, follow the </span><a href="https://buttondown.com/hacker-newsletter/archive/hacker-newsletter-723" rel="nofollow ugc noopener">Hackernewsletter</a><span> and for daily developer articles, join </span><a href="https://dly.to/LVQFgrjOUhf" rel="nofollow ugc noopener">daily.dev</a></p><h2 class="header-anchor-post">Conclusion<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§conclusion"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/152312636/conclusion" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><p>This week was all about refinement and iteration, and it felt great to see the progress I made. From streaming and content creation to diving into deep coding challenges, I learned a lot about the intricacies of Golang and Python.</p><p>It is Advent of Code from next week, so I am planning to stream daily for solving AoC with Golang in the first iteration and OCAML in the second, let’s see how it goes.</p><p>If you want to tune in, slide into Twitch or youtube</p><ul><li><p>https://www.twitch.tv/meet_gor</p></li></ul><ul><li><p>https://www.youtube.com/@meet-technically</p></li></ul><p>That’s it from this week, hope you did well this week, and have a happy week and weekend ahead!</p><p class="button-wrapper" data-attrs='{"url":"https://techstructively.substack.com/p/techstructive-weekly-17/comments","text":"Leave a comment","action":null,"class":"button-wrapper"}' data-component-name="ButtonCreateButton"><a class="button primary button-wrapper" href="https://techstructively.substack.com/p/techstructive-weekly-17/comments" rel="nofollow ugc noopener"><span>Leave a comment</span></a></p><p>Thank you for reading, let’s catch up in the next week.</p><p>Happy Coding :)</p><p></p><p>Thanks for reading Techstructive Weekly! This post is public so feel free to share it.</p><p class="button-wrapper" data-attrs='{"url":"https://techstructively.substack.com/p/techstructive-weekly-17?utm_source=substack&amp;utm_medium=email&amp;utm_content=share&amp;action=share&amp;token=eyJ1c2VyX2lkIjo5MDE1NzgwMywicG9zdF9pZCI6MTUyMDI0Njk0LCJpYXQiOjE3MzI4OTY2NTYsImV4cCI6MTczNTQ4ODY1NiwiaXNzIjoicHViLTI4MjQwMzciLCJzdWIiOiJwb3N0LXJlYWN0aW9uIn0.rtsuau2_H8vZZwASSY9gzTiaAyWxWXK4YrcvET-TcZE","text":"Share","action":null,"class":"button-wrapper"}' data-component-name="ButtonCreateButton"><a class="button primary button-wrapper" href="https://techstructively.substack.com/p/techstructive-weekly-17?utm_source=substack&amp;utm_medium=email&amp;utm_content=share&amp;action=share&amp;token=eyJ1c2VyX2lkIjo5MDE1NzgwMywicG9zdF9pZCI6MTUyMDI0Njk0LCJpYXQiOjE3MzI4OTY2NTYsImV4cCI6MTczNTQ4ODY1NiwiaXNzIjoicHViLTI4MjQwMzciLCJzdWIiOiJwb3N0LXJlYWN0aW9uIn0.rtsuau2_H8vZZwASSY9gzTiaAyWxWXK4YrcvET-TcZE" rel="nofollow ugc noopener"><span>Share</span></a></p></div></div>

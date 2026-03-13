@@ -1,21 +1,17 @@
-{
-  "type": "posts",
-  "title": "Django Basics: Creating Models",
-  "subtitle": "Understanding and Structuring a Database Schema with Models in Django",
-  "date": "2022-01-04 22:15:00 +0530",
-  "status": "published",
-  "tags": [
-    "django",
-    "python",
-    "web-development"
-  ],
-  "slug": "django-basics-models",
-  "image_url": "https://res.cloudinary.com/dgpxbrwoz/image/upload/v1641315473/blogmedia/dj-7_ixfkka.png",
-  "series": [
-    "Django-Basics",
-    "Django-Series"
-  ]
-}
+---
+type: posts
+title: "Django Basics: Creating Models"
+subtitle: "Understanding and Structuring a Database Schema with Models in Django"
+date: 2022-01-04
+slug: "django-basics-models"
+series: ["Django-Basics"]
+tags:
+  - django
+  - python
+  - web-development
+image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1641315473/blogmedia/dj-7_ixfkka.png
+---
+
 
 ## Introduction
 

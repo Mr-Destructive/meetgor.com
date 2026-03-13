@@ -1,18 +1,14 @@
-{
-  "type": "posts",
-  "title": "Golang: Error Handling",
-  "description": "Understanding the concept of errors in golang. How to handle errors in funciton calls, create custom error class with interfaces",
-  "date": "2022-09-17 20:15:00",
-  "status": "published",
-  "slug": "golang-error-handling",
-  "tags": [
-    "go"
-  ],
-  "series": [
-    "100-days-of-golang"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/golang-020-error-handling.png"
-}
+---
+type: posts
+title: "Golang: Error Handling"
+date: 2022-09-17
+slug: "golang-error-handling"
+series: ["100-days-of-golang"]
+tags:
+  - go
+image_url: https://meetgor-cdn.pages.dev/golang-020-error-handling.png
+---
+
 
 ## Introduction
 

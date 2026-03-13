@@ -1,12 +1,12 @@
 ---
-type: til 
+type: til
 title: "Django Blog DevLog: Load Frontmatter data into Template/Model Form Fields"
 description: "Rendering frontatter from content field into the Template Form field using HTMX and frontmatter libraries"
-date: 2022-08-01 20:30:00
-status: published
+date: 2022-08-01
 slug: django-form-load-frontmatter
 tags: ['django', 'htmx','python']
 ---
+
 
 ## Introduction
 

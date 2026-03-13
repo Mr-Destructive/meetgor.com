@@ -1,14 +1,14 @@
-{
-    "type": "posts",
-    "title": "Golang Web: DELETE Method",
-    "description": "Exploring the fundamentals of a DELETE method in golang. How to request a resource, parse body, headers, etc. in a HTTP DELETE request.",
-    "date": "2025-01-12 20:30:00",
-    "status": "published",
-    "slug": "golang-web-delete-method",
-    "tags": ["go"],
-    "series": ["100-days-of-golang"],
-    "image_url": "https://meetgor-cdn.pages.dev/100-days-of-golang/golang-037-delete-method.png"
-}
+---
+type: posts
+title: "Golang Web: DELETE Method"
+date: 2025-01-12
+slug: "golang-web-delete-method"
+series: ["100-days-of-golang"]
+tags:
+  - go
+image_url: https://meetgor-cdn.pages.dev/100-days-of-golang/golang-037-delete-method.png
+---
+
 
 ## Introduction
 

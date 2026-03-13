@@ -1,16 +1,15 @@
-{
-  "type": "posts",
-  "title": "Podevcast: A single source for developer podcasts",
-  "subtitle": "Developer podcast from a single place, a podcast player static site generated using Python : Netlify x Hashnode Hackathon",
-  "date": "2022-02-18 22:30:00 +0530",
-  "status": "published",
-  "tags": [
-    "python",
-    "hashnode"
-  ],
-  "slug": "podevcast-project",
-  "image_url": "https://meetgor-cdn.pages.dev/podevcast-python.png"
-}
+---
+type: posts
+title: "Podevcast: A single source for developer podcasts"
+subtitle: "Developer podcast from a single place, a podcast player static site generated using Python : Netlify x Hashnode Hackathon"
+date: 2022-02-18
+slug: "podevcast-project"
+tags:
+  - python
+  - hashnode
+image_url: https://meetgor-cdn.pages.dev/podevcast-python.png
+---
+
 
 ## Introduction
 

@@ -1,8 +1,13 @@
 ---
-type: "sqlog"
+type: sqlog
 title: "SQLite Dot command: Once"
-date: 2025-08-20
+tags:
+  - typescript
+  - sql
+  - sqlite
+date:  2025-08-20
 ---
+
 
 The [once](https://sqlite.org/cli.html#writing_results_to_a_file) dot command is similar to the [output](https://sqlite.org/cli.html#writing_results_to_a_file), however the distinction is that it is limited to the very next SQL query and not all the subsequent queries.
 

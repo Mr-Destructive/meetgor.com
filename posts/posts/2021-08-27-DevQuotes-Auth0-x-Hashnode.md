@@ -1,19 +1,18 @@
-{
-  "type": "posts",
-  "title": "Dev Quotes: A platform for developers to quote and get inspired - Auth0 x Hashnode Hackathon",
-  "subtitle": "A platform created in a Hackathon for developer to get motivated by some fun and inspireing quotes.",
-  "date": "2021-08-27 23:45:00 +0530",
-  "status": "published",
-  "tags": [
-    "hashnode",
-    "auth0",
-    "django",
-    "web-development",
-    "python"
-  ],
-  "slug": "devquotes-platform",
-  "image_url": "https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643286845/blogmedia/bhajgzmqaknzpk1z9qdn.png"
-}
+---
+type: posts
+title: "Dev Quotes: A platform for developers to quote and get inspired - Auth0 x Hashnode Hackathon"
+subtitle: "A platform created in a Hackathon for developer to get motivated by some fun and inspireing quotes."
+date: 2021-08-27
+slug: "devquotes-platform"
+tags:
+  - hashnode
+  - auth0
+  - django
+  - web-development
+  - python
+image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643286845/blogmedia/bhajgzmqaknzpk1z9qdn.png
+---
+
 
 ## Introduction
 

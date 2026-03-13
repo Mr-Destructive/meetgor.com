@@ -1,18 +1,14 @@
-{
-  "type": "posts",
-  "title": "Golang: Operators",
-  "description": "Understanding the basics of operators like arithmetic, logical, bitwise, assignment operators in Golang",
-  "date": "2022-05-07 20:33:38",
-  "status": "published",
-  "slug": "golang-operators",
-  "tags": [
-    "go"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/golang-013-operators.png",
-  "series": [
-    "100-days-of-golang"
-  ]
-}
+---
+type: posts
+title: "Golang: Operators"
+date: 2022-05-07
+slug: "golang-operators"
+series: ["100-days-of-golang"]
+tags:
+  - go
+image_url: https://meetgor-cdn.pages.dev/golang-013-operators.png
+---
+
 
 ## Introduction 
 

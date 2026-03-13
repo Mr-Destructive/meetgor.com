@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"reflect"
 	"sort"
 	"time"
 
@@ -37,7 +36,7 @@ type RSSItem struct {
 	Description string `xml:"description"`
 	PubDate     string `xml:"pubDate"`
 	Content     string `xml:"content"`
-    Type        string `xml:"type"`
+	Type        string `xml:"type"`
 }
 
 // RSSPlugin generates an RSS feed for the blog posts
@@ -45,11 +44,25 @@ type RSSPlugin struct {
 	PluginName string
 }
 
+var rssNow = time.Now
+
 func (p *RSSPlugin) Name() string {
 	return p.PluginName
 }
 
-func (p *RSSPlugin) Execute(ssg *models.SSG) {
+func (p *RSSPlugin) Phase() Phase {
+	return PhasePostProcess
+}
+
+func (p *RSSPlugin) Requires() []string {
+	return []string{"readPosts"}
+}
+
+func (p *RSSPlugin) AdminPolicy() AdminPolicy {
+	return AdminRun
+}
+
+func (p *RSSPlugin) Execute(ssg *models.SSG) error {
 	config := &ssg.Config
 	baseURL := config.Blog.BaseUrl
 	rssFilePath := filepath.Join(config.Blog.OutputDir, "rss.xml")
@@ -86,7 +99,7 @@ func (p *RSSPlugin) Execute(ssg *models.SSG) {
 			Link:        baseURL,
 			Description: config.Blog.Description,
 			Language:    "en-us",
-			PubDate:     time.Now().Format(time.RFC1123),
+			PubDate:     rssNow().Format(time.RFC1123),
 			Items:       rssItems,
 		},
 	}
@@ -94,13 +107,13 @@ func (p *RSSPlugin) Execute(ssg *models.SSG) {
 	// Generate XML
 	xmlBytes, err := xml.MarshalIndent(rssFeed, "", "  ")
 	if err != nil {
-		log.Fatalf("Error generating RSS XML: %v", err)
+		return fmt.Errorf("error generating RSS XML: %w", err)
 	}
 
 	// Write RSS XML to file
 	err = os.WriteFile(rssFilePath, xmlBytes, 0666)
 	if err != nil {
-		log.Fatalf("Error writing RSS file: %v", err)
+		return fmt.Errorf("error writing RSS file: %w", err)
 	}
 
 	fmt.Println("RSS feed generated:", rssFilePath)
@@ -152,13 +165,13 @@ func (p *RSSPlugin) Execute(ssg *models.SSG) {
 				Link:        baseURL,
 				Description: fmt.Sprintf("Posts tagged with %s", tag),
 				Language:    "en-us",
-				PubDate:     time.Now().Format(time.RFC1123),
+				PubDate:     rssNow().Format(time.RFC1123),
 				Items:       items,
 			},
 		}
 		tagRssFilePath := filepath.Join(config.Blog.OutputDir, "tags", tag, "rss.xml")
 		if err := os.MkdirAll(filepath.Dir(tagRssFilePath), 0755); err != nil {
-			log.Fatalf("Error creating tag directory: %v", err)
+			return fmt.Errorf("error creating tag directory: %w", err)
 		}
 		writeRSSFeed(tagFeed, tagRssFilePath)
 		tagFeedLinks = append(tagFeedLinks, FeedLink{URL: fmt.Sprintf("%s/tags/%s/rss.xml", config.Blog.PrefixURL, tag), Title: tag, Count: len(items)})
@@ -176,13 +189,13 @@ func (p *RSSPlugin) Execute(ssg *models.SSG) {
 				Link:        baseURL,
 				Description: fmt.Sprintf("Posts of type %s", postType),
 				Language:    "en-us",
-				PubDate:     time.Now().Format(time.RFC1123),
+				PubDate:     rssNow().Format(time.RFC1123),
 				Items:       items,
 			},
 		}
 		typeRssFilePath := filepath.Join(config.Blog.OutputDir, "type", postType, "rss.xml")
 		if err := os.MkdirAll(filepath.Dir(typeRssFilePath), 0755); err != nil {
-			log.Fatalf("Error creating type directory: %v", err)
+			return fmt.Errorf("error creating type directory: %w", err)
 		}
 		writeRSSFeed(typeFeed, typeRssFilePath)
 		typeFeedLinks = append(typeFeedLinks, FeedLink{URL: fmt.Sprintf("%s/type/%s/rss.xml", config.Blog.PrefixURL, postType), Title: postType, Count: len(items)})
@@ -195,12 +208,12 @@ func (p *RSSPlugin) Execute(ssg *models.SSG) {
 	// Create a page to list all RSS feeds
 	feedsPagePath := filepath.Join(config.Blog.OutputDir, "feeds", "index.html")
 	if err := os.MkdirAll(filepath.Dir(feedsPagePath), 0755); err != nil {
-		log.Fatalf("Error creating feeds directory: %v", err)
+		return fmt.Errorf("error creating feeds directory: %w", err)
 	}
 
 	file, err := os.Create(feedsPagePath)
 	if err != nil {
-		log.Fatalf("Error creating feeds page: %v", err)
+		return fmt.Errorf("error creating feeds page: %w", err)
 	}
 	defer file.Close()
 
@@ -208,18 +221,21 @@ func (p *RSSPlugin) Execute(ssg *models.SSG) {
 		Config        *models.SSG_CONFIG
 		TagFeedLinks  []FeedLink
 		TypeFeedLinks []FeedLink
+		Years         []string
 	}{
 		Config:        config,
 		TagFeedLinks:  tagFeedLinks,
 		TypeFeedLinks: typeFeedLinks,
+		Years:         YearsFromPosts(ssg.Posts),
 	}
 
 	err = ssg.TemplateFS.ExecuteTemplate(file, "feeds_template.html", data)
 	if err != nil {
-		log.Fatalf("Error executing feeds template: %v", err)
+		return fmt.Errorf("error executing feeds template: %w", err)
 	}
 
 	fmt.Println("RSS feeds page generated:", feedsPagePath)
+	return nil
 }
 
 func writeRSSFeed(feed RSSFeed, filePath string) {
@@ -239,7 +255,7 @@ func writeRSSFeed(feed RSSFeed, filePath string) {
 }
 
 func init() {
-	RegisterPlugin("RSS", reflect.TypeOf(RSSPlugin{
-		PluginName: "RSS",
-	}))
+	RegisterPlugin("RSS", func() Plugin {
+		return &RSSPlugin{PluginName: "RSS"}
+	})
 }

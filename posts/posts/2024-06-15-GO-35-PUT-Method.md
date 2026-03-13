@@ -1,18 +1,14 @@
-{
-  "type": "posts",
-  "title": "Golang Web: PUT Method",
-  "description": "Exploring the fundamentals of a PUT method in golang. How to request a resource, parse body, headers, etc. in a HTTP PUT request.",
-  "date": "2024-06-15 18:30:00",
-  "status": "published",
-  "slug": "golang-web-put-method",
-  "tags": [
-    "go"
-  ],
-  "series": [
-    "100-days-of-golang"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/100-days-of-golang/golang-035-put-method.png"
-}
+---
+type: posts
+title: "Golang Web: PUT Method"
+date: 2024-06-15
+slug: "golang-web-put-method"
+series: ["100-days-of-golang"]
+tags:
+  - go
+image_url: https://meetgor-cdn.pages.dev/100-days-of-golang/golang-035-put-method.png
+---
+
 
 ## Introduction
 

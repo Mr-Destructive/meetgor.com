@@ -1,18 +1,13 @@
-{
-  "type": "posts",
-  "title": "Golang Web: PATCH Method",
-  "description": "Exploring the fundamentals of a PATCH method in golang. How to request a resource, parse body, headers, etc. in a HTTP PATCH request.",
-  "date": "2025-01-11 20:30:00",
-  "status": "published",
-  "slug": "golang-web-patch-method",
-  "tags": [
-    "go"
-  ],
-  "series": [
-    "100-days-of-golang"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/100-days-of-golang/golang-036-patch-method.png"
-}
+---
+type: posts
+title: "Golang Web: PATCH Method"
+date: 2025-01-11
+slug: "golang-web-patch-method"
+series: ["100-days-of-golang"]
+tags:
+  - go
+image_url: https://meetgor-cdn.pages.dev/100-days-of-golang/golang-036-patch-method.png
+---
 
 
 ## Introduction

@@ -1,18 +1,14 @@
-{
-  "type": "posts",
-  "title": "Golang: JSON YAML TOML (config) File Reading.",
-  "description": "Reading specific files used generally for configuration and storing data, as well as for web development. Reading file formats like JSON, YAML, TOML, CSV, and XML.",
-  "date": "2022-11-01 23:00:00",
-  "status": "published",
-  "slug": "golang-config-file-read",
-  "tags": [
-    "go"
-  ],
-  "series": [
-    "100-days-of-golang"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/golang-023-config-files.png"
-}
+---
+type: posts
+title: "Golang: JSON YAML TOML (config) File Reading."
+date: 2022-11-01
+slug: "golang-config-file-read"
+series: ["100-days-of-golang"]
+tags:
+  - go
+image_url: https://meetgor-cdn.pages.dev/golang-023-config-files.png
+---
+
 
 ## Reading specific file types (JSON, YAML, TOML)
 
@@ -118,7 +114,7 @@ This should create two files namely `go.mod` and `go.sum` with the dependency of
 
 ```yml
 title: "Golang Blog Series"
-date: "22nd October 2022"
+date: 2022-11-01
 tags: ["go", "files"]
 published: false
 words: 1500

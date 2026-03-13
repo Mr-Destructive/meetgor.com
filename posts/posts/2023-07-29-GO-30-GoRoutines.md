@@ -1,18 +1,14 @@
-{
-  "type": "posts",
-  "title": "Golang: Go Routines and WaitGroups",
-  "description": "Exploring Goroutines and WaitGroups in Go, understanding the fundamentals of Go's concurrency model.",
-  "date": "2023-07-29 15:15:00",
-  "status": "published",
-  "slug": "golang-go-routines",
-  "tags": [
-    "go"
-  ],
-  "series": [
-    "100-days-of-golang"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/golang-030-goroutines.png"
-}
+---
+type: posts
+title: "Golang: Go Routines and WaitGroups"
+date: 2023-07-29
+slug: "golang-go-routines"
+series: ["100-days-of-golang"]
+tags:
+  - go
+image_url: https://meetgor-cdn.pages.dev/golang-030-goroutines.png
+---
+
 
 ## Introduction
 

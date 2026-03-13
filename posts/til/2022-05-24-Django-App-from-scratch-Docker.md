@@ -1,12 +1,12 @@
 ---
-type: til 
+type: til
 title: "Django App from Scratch Using Docker with Debian Base Image"
 description: "Creating a django basic application with configuration for static files, templates and user authentication using docker and debian base image."
-date: 2022-05-24 22:30:00
-status: published
+date: 2022-05-24
 slug: django-app-from-scratch
 tags: ['docker', 'web-development', 'django',]
 ---
+
 
 ## Pull a Fresh Debian Image
 

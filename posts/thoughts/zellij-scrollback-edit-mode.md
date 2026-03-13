@@ -1,4 +1,4 @@
-{"author":"meet","date":"2025-03-20","post_dir":"thoughts","published":"published","title":"Zellij Open Scrollback Edit mode","type":"thoughts"}
+{"author":"meet","date":"2025-03-20","post_dir":"links","published":"published","title":"Zellij Open Scrollback Edit mode","type":"links"}
 
 I was looking at a long list of logs, (debugging of course). 
 

@@ -1,58 +1,66 @@
 ---
-type: "newsletter"
-title: "Techstructive Weekly #29"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+type: newsletter
+title: 'Techstructive Weekly #29'
 date: 2025-02-15
+tags:
+- ai
+- career
+- go
+- newsletter
+- python
+- security
+source_url: 'https://techstructively.substack.com/p/techstructive-weekly-29'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ---
 
-
-## Week #29
-
-It was a fun week. There was a bit of laziness, for sure, but also some work done. I didn’t create a video this week and took a bit of a break. I think it is as important to upskill as it is to maintain streaks of uploading.
-
-### Quote of the week
-
-> *"The illiterate of the 21st century will not be those who cannot read and write, but those who cannot learn, unlearn, and relearn."*   
-> — Alvin Toffler
-
-This hits well. With AI in town, AI will require you to learn the art of debugging, unlearn things like copy-pasting from the Internet, and change your perception of code and technology.
-
-It will be less about learning, and more about re-learning or removing the perceptions about the already existing things while writing code. The technology is moving fast and with AI it will pick up pace like never before, code will be a mess, and codebases will be doomed, but someone with an open mindset, and a person who knows his craft will surely survive.
-
-## Read
-
-- [ASDF has been re-written in Golang from BASH](https://stratus3d.com/blog/2025/02/03/asdf-has-been-rewritten-in-go/?ref=dailydev): This is nice, I also used to write a lot of bash scripts in my initial novice days, like downloading data, virtual environment management, utilities, etc. but over the years I moved from script kiddie to python and golang scripts, as I have more control and it works for a lot more edge cases then figuring out string parsing on bash.
-- [How we replaced our react frontend with Golang and Webassembly](https://dagger.io/blog/replaced-react-with-go):
-  This is the second thing I am heard about Golang this week, moving from X to Golang in some way or the other. The adoption rate of Golang is high and it makes sense, it is a simple language. Simple to read and write, and the one that scales as well.
-- [My writing process, and how I keep it sustainable](https://ntietz.com/blog/my-writing-process-and-how-i-keep-it-sustainable/):   
-  I am inspired by this article, the author claims to write everything in one go (not everything but the meat of the post) that is true for me. I just flush out my thoughts in one sitting too, however, my editing process is haywire, and haphazard. I usually don’t revise, I am not a professional technical writer, but when I do I do editing as they come.
-- [A slow blogging year](https://anarc.at/blog/2025-02-09-one-failed-year/?ref=dailydev): Wow, I also need to do some posts this year, I moved from 41 (2021), 40 (2022), 11 (2023), and 14 (2024). Need to write more, On the initial day, I had too much to express, but as days progressed, the friction reduced but the quality of that increased, first, it was about quantity, the motivation, and then it was consistency about improving.
-
-## Watched
-
-- How (junior) developers are getting screwed:   
-  I agree with this point, AI is a double-edged sword. If used properly it is a weapon, but if used without knowing what it is doing, it would not help in the long run. But for junior developers, it is quite hard to figure out why without AI ,leave it aside with AI, it will be a new skill to add moving ahead in a few years. How to use AI effectively as a developer, previously which was searching, debugger, and documentation, next it will be one more tool in the toolbelt.Double click to interact with video
-
-## Learnt
-
-- Learnt about qute browser
-    - Load and save sessions
-    - Map keybindings from commands
-- Using request.arg.to_dict to get the query parameters as a dictionary of string with the list of values in Flask APIs
-
-## Tech News
-
-- [Golang 1.24 released](https://tip.golang.org/doc/go1.24): I have created 3 videos about splitsequence, json omit tag, and weak package.
-- [OpenAI roadmap](https://community.openai.com/t/openai-roadmap-and-characters/1119160): This is big, the GPT-5 will be the last model for GPT family, i.e. the next models will be thinking-based and not just predicting the next token-like models, I mean those will be token prediction only but the way the final token will come as final will be lot more nuanced and not silly. Instead of us prompting it again (this is wrong, what about this <placeholder> case??) it will think thoroughly and give the result.
-- [GitHub Copilot language server](https://github.blog/changelog/2025-02-10-copilot-language-server-sdk-is-now-available/)
-
-For more news, follow the [Hackernewsletter](https://buttondown.com/hacker-newsletter/archive/hacker-newsletter-733) and for software development/coding articles, join [daily.dev](http://daily.dev/).
-
-[Leave a comment](https://techstructively.substack.com/p/techstructive-weekly-28/comments)
-
-That’s it from this 29th edition of my weekly learning, I hope you enjoyed it, and leave comments on what you think about some of my takes or any feedback.
-
-Thanks for reading Techstructive Weekly! This post is public so feel free to share it.
-
-[Share](%%share_url%%)
-
-Thanks for reading Techstructive Weekly! Subscribe for free to receive new posts and support my work.
+<div class="available-content"><div class="body markup" dir="auto"><h2 class="header-anchor-post">Week #29<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§week-29"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/157148250/week-29" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><p>It was a fun week. There was a bit of laziness, for sure, but also some work done. I didn’t create a video this week and took a bit of a break. I think it is as important to upskill as it is to maintain streaks of uploading. </p><p></p><h3 class="header-anchor-post">Quote of the week<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§quote-of-the-week"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/157148250/quote-of-the-week" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h3><blockquote><p><em>"The illiterate of the 21st century will not be those who cannot read and write, but those who cannot learn, unlearn, and relearn."</em><span> </span><br/><span>— Alvin Toffler</span></p></blockquote><p>This hits well. With AI in town, AI will require you to learn the art of debugging, unlearn things like copy-pasting from the Internet, and change your perception of code and technology.</p><p>It will be less about learning, and more about re-learning or removing the perceptions about the already existing things while writing code. The technology is moving fast and with AI it will pick up pace like never before, code will be a mess, and codebases will be doomed, but someone with an open mindset, and a person who knows his craft will surely survive.</p><h2 class="header-anchor-post">Read<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§read"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/157148250/read" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://stratus3d.com/blog/2025/02/03/asdf-has-been-rewritten-in-go/?ref=dailydev" rel="nofollow ugc noopener">ASDF has been re-written in Golang from BASH</a><span>: This is nice, I also used to write a lot of bash scripts in my initial novice days, like downloading data, virtual environment management, utilities, etc. but over the years I moved from script kiddie to python and golang scripts, as I have more control and it works for a lot more edge cases then figuring out string parsing on bash.</span></p></li><li><p><a href="https://dagger.io/blog/replaced-react-with-go" rel="nofollow ugc noopener">How we replaced our react frontend with Golang and Webassembly</a><span>: </span></p><p>This is the second thing I am heard about Golang this week, moving from X to Golang in some way or the other. The adoption rate of Golang is high and it makes sense, it is a simple language. Simple to read and write, and the one that scales as well.</p></li><li><p><span> </span><a href="https://ntietz.com/blog/my-writing-process-and-how-i-keep-it-sustainable/" rel="nofollow ugc noopener">My writing process, and how I keep it sustainable</a><span>: </span><br/><span>I am inspired by this article, the author claims to write everything in one go (not everything but the meat of the post) that is true for me. I just flush out my thoughts in one sitting too, however, my editing process is haywire, and haphazard. I usually don’t revise, I am not a professional technical writer, but when I do I do editing as they come. </span></p></li><li><p><a href="https://anarc.at/blog/2025-02-09-one-failed-year/?ref=dailydev" rel="nofollow ugc noopener">A slow blogging year</a><span>: Wow, I also need to do some posts this year, I moved from 41 (2021), 40 (2022), 11 (2023), and 14 (2024).  Need to write more, On the initial day, I had too much to express, but as days progressed, the friction reduced but the quality of that increased, first, it was about quantity, the motivation, and then it was consistency about improving. </span></p><p></p><p></p></li></ul><h2 class="header-anchor-post">Watched<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§watched"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/157148250/watched" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><span>How (junior) developers are getting screwed: </span><br/><span>I agree with this point, AI is a double-edged sword. If used properly it is a weapon, but if used without knowing what it is doing, it would not help in the long run. But for junior developers, it is quite hard to figure out why without AI ,leave it aside with AI, it will be a new skill to add moving ahead in a few years. How to use AI effectively as a developer, previously which was searching, debugger, and documentation, next it will be one more tool in the toolbelt. </span></p><div class="youtube-wrap" data-attrs='{"videoId":"biUFnS7r55c","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-biUFnS7r55c"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/biUFnS7r55c?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div></li></ul><p></p><h2 class="header-anchor-post">Learnt<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§learnt"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/157148250/learnt" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p>Learnt about qute browser</p><ul><li><p>Load and save sessions</p></li><li><p>Map keybindings from commands</p></li></ul></li><li><p>Using request.arg.to_dict to get the query parameters as a dictionary of string with the list of values in Flask APIs</p><p></p></li></ul><p></p><h2 class="header-anchor-post">Tech News<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§tech-news"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/157148250/tech-news" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://tip.golang.org/doc/go1.24" rel="nofollow ugc noopener">Golang 1.24 released</a><span>: I have created 3 videos about splitsequence, json omit tag, and weak package.</span></p></li><li><p><a href="https://community.openai.com/t/openai-roadmap-and-characters/1119160" rel="nofollow ugc noopener">OpenAI roadmap</a><span>: This is big, the GPT-5 will be the last model for GPT family, i.e. the next models will be thinking-based and not just predicting the next token-like models, I mean those will be token prediction only but the way the final token will come as final will be lot more nuanced and not silly. Instead of us prompting it again (this is wrong, what about this &lt;placeholder&gt; case??) it will think thoroughly and give the result. </span></p></li><li><p><a href="https://github.blog/changelog/2025-02-10-copilot-language-server-sdk-is-now-available/" rel="nofollow ugc noopener">GitHub Copilot language server</a></p></li></ul><p></p><p><span>For more news, follow the </span><a href="https://buttondown.com/hacker-newsletter/archive/hacker-newsletter-733" rel="nofollow ugc noopener">Hackernewsletter</a><span> and for software development/coding articles, join </span><a href="http://daily.dev/" rel="nofollow ugc noopener">daily.dev</a><span>.</span></p><p class="button-wrapper" data-attrs='{"url":"https://techstructively.substack.com/p/techstructive-weekly-28/comments","text":"Leave a comment","action":null,"class":"button-wrapper"}' data-component-name="ButtonCreateButton"><a class="button primary button-wrapper" href="https://techstructively.substack.com/p/techstructive-weekly-28/comments" rel="nofollow ugc noopener"><span>Leave a comment</span></a></p><p>That’s it from this 29th edition of my weekly learning, I hope you enjoyed it, and leave comments on what you think about some of my takes or any feedback.</p><div class="captioned-button-wrap" data-attrs='{"url":"https://techstructively.substack.com/p/techstructive-weekly-29?utm_source=substack&amp;utm_medium=email&amp;utm_content=share&amp;action=share","text":"Share"}' data-component-name="CaptionedButtonToDOM"><div class="preamble"><p class="cta-caption">Thanks for reading Techstructive Weekly! This post is public so feel free to share it.</p></div><p class="button-wrapper" data-attrs='{"url":"https://techstructively.substack.com/p/techstructive-weekly-29?utm_source=substack&amp;utm_medium=email&amp;utm_content=share&amp;action=share","text":"Share"}' data-component-name="ButtonCreateButton"><a class="button primary" href="https://techstructively.substack.com/p/techstructive-weekly-29?utm_source=substack&amp;utm_medium=email&amp;utm_content=share&amp;action=share" rel="nofollow ugc noopener"><span>Share</span></a></p></div><p></p><p></p><p></p></div></div>

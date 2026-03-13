@@ -11,14 +11,22 @@
     <meta name="author" content="Meet Gor">
     <meta name="keywords" content="{{ range $index, $tag := .Post.Frontmatter.Tags }}{{ if $index }}, {{ end }}{{ $tag }}{{ end }}">
     <meta name="robots" content="index, follow">
+    {{ if index .Post.Frontmatter.Extras "link" }}
+    <link rel="canonical" href="{{ index .Post.Frontmatter.Extras "link" }}">
+    {{ else }}
     <link rel="canonical" href="{{ .Config.Blog.BaseUrl }}/{{ .Post.Frontmatter.Slug }}">
+    {{ end }}
     
     <!-- Open Graph / Social Media Meta Tags -->
     <meta property="og:type" content="article">
+    {{ if index .Post.Frontmatter.Extras "link" }}
+    <meta property="og:url" content="{{ index .Post.Frontmatter.Extras "link" }}">
+    {{ else }}
     <meta property="og:url" content="{{ .Config.Blog.BaseUrl }}/{{ .Post.Frontmatter.Slug }}">
+    {{ end }}
     <meta property="og:title" content="{{ .Post.Frontmatter.Title }}">
     <meta property="og:description" content="{{ .Post.Frontmatter.Description }}">
-    <meta property="og:image" content="{{ if .Post.Frontmatter.ImageUrl }}{{ .Post.Frontmatter.ImageUrl }}{{ else }}{{ .Config.Blog.BaseUrl }}/tbicon.png{{ end }}">
+    <meta property="og:image" content="{{ if .Post.Frontmatter.ImageUrl }}{{ .Post.Frontmatter.ImageUrl }}{{ else }}{{ .Config.Blog.BaseUrl }}/mgicon.png{{ end }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="{{ .Post.Frontmatter.Title }}">
@@ -35,10 +43,14 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@meetgor711">
     <meta name="twitter:creator" content="@meetgor711">
+    {{ if index .Post.Frontmatter.Extras "link" }}
+    <meta name="twitter:url" content="{{ index .Post.Frontmatter.Extras "link" }}">
+    {{ else }}
     <meta name="twitter:url" content="{{ .Config.Blog.BaseUrl }}/{{ .Post.Frontmatter.Slug }}">
+    {{ end }}
     <meta name="twitter:title" content="{{ .Post.Frontmatter.Title }}">
     <meta name="twitter:description" content="{{ .Post.Frontmatter.Description }}">
-    <meta name="twitter:image" content="{{ if .Post.Frontmatter.ImageUrl }}{{ .Post.Frontmatter.ImageUrl }}{{ else }}{{ .Config.Blog.BaseUrl }}/tbicon.png{{ end }}">
+    <meta name="twitter:image" content="{{ if .Post.Frontmatter.ImageUrl }}{{ .Post.Frontmatter.ImageUrl }}{{ else }}{{ .Config.Blog.BaseUrl }}/mgicon.png{{ end }}">
     <meta name="twitter:image:alt" content="{{ .Post.Frontmatter.Title }}">
     
     <!-- Structured Data (JSON-LD) -->
@@ -48,7 +60,7 @@
         "@type": "BlogPosting",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "{{ .Config.Blog.BaseUrl }}/{{ .Post.Frontmatter.Slug }}"
+            "@id": "{{ if index .Post.Frontmatter.Extras "link" }}{{ index .Post.Frontmatter.Extras "link" }}{{ else }}{{ .Config.Blog.BaseUrl }}/{{ .Post.Frontmatter.Slug }}{{ end }}"
         },
         "headline": "{{ .Post.Frontmatter.Title }}",
         "description": "{{ .Post.Frontmatter.Description }}",
@@ -63,7 +75,7 @@
             "name": "{{ .Config.Blog.Name }}",
             "logo": {
                 "@type": "ImageObject",
-                "url": "{{ .Config.Blog.BaseUrl }}/tbicon.png"
+                "url": "{{ .Config.Blog.BaseUrl }}/mgicon.png"
             }
         },
         {{ if .Post.Frontmatter.ImageUrl }}"image": "{{ .Post.Frontmatter.ImageUrl }}",{{ end }}
@@ -76,9 +88,10 @@
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/code-block.css">
     <link rel="stylesheet" href="/post-navigation.css">
+    <link rel="stylesheet" href="/post-preview.css">
     <!-- Favicon -->
-    <link rel="icon" href="/tbicon.png" type="image/png">
-    <link rel="apple-touch-icon" href="/tbicon.png">
+    <link rel="icon" href="/mgicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/mgicon.png">
     
     <!-- Syntax Highlighting -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -176,17 +189,60 @@
     <main class="container">
         <article class="blog-post">
             <h1>{{ .Post.Frontmatter.Title }}</h1>
+
+            {{ $heroImage := .Post.Frontmatter.ImageUrl }}
+            {{ if not $heroImage }}
+                {{ $heroImage = index .Post.Frontmatter.Extras "preview_image" }}
+            {{ end }}
+            {{ $externalLink := index .Post.Frontmatter.Extras "link" }}
+            {{ $showPreview := and $heroImage (or $externalLink (eq .Post.Frontmatter.Type "links")) }}
+            {{ if $showPreview }}
+            <div class="post-hero {{ if $externalLink }}post-hero--external{{ end }}">
+                {{ if $externalLink }}<a class="post-hero__link" href="{{ $externalLink }}" target="_blank" rel="noopener noreferrer">{{ end }}
+                    <img src="{{ $heroImage }}" alt="{{ .Post.Frontmatter.Title }}" class="post-hero__image" loading="lazy" onerror="this.closest('.post-hero').classList.add('post-hero--hidden')">
+                    {{ if $externalLink }}
+                    <div class="post-hero__overlay">
+                        <span>View original article</span>
+                    </div>
+                    {{ end }}
+                {{ if $externalLink }}</a>{{ end }}
+            </div>
+            {{ end }}
+
+            {{ if eq .Post.Frontmatter.Type "work" }}
+            {{ $duration := index .Post.Frontmatter.Extras "duration" }}
+            {{ $skills := index .Post.Frontmatter.Extras "skills" }}
+            {{ if $duration }}
+            <div class="post-meta">
+                Duration: {{ $duration }}
+            </div>
+            {{ end }}
+            {{ if $skills }}
+            <div class="post-meta">
+                Skills:
+                {{ range $index, $skill := $skills }}{{ if $index }} · {{ end }}{{ $skill }}{{ end }}
+            </div>
+            {{ end }}
+            {{ end }}
             
             <div class="post-meta">
-                Published on 📅 <time datetime="{{ .Post.Frontmatter.Date }}">{{ .Post.Frontmatter.Date }}</time>
+                Published on <time datetime="{{ .Post.Frontmatter.Date }}">{{ .Post.Frontmatter.Date }}</time>
             </div>
+
+            {{ if or (eq .Post.Frontmatter.Type "links") (eq .Post.Frontmatter.Type "thoughts") }}
+                {{ if index .Post.Frontmatter.Extras "link" }}
+                <div class="post-meta link-section">
+                    Link: <a href="{{ index .Post.Frontmatter.Extras "link" }}" target="_blank" rel="noopener noreferrer">{{ index .Post.Frontmatter.Extras "link" }}</a>
+                </div>
+                {{ end }}
+            {{ end }}
             
             <div class="post-meta">
                 Type: <a href="/{{ $.Config.Blog.PrefixURL }}{{ .Post.Frontmatter.Type }}">{{ .Post.Frontmatter.Type }}</a>
             </div>
             
             <div class="post-meta tags">
-                <span class="post-series-label">🏷️ Tags:</span>
+                <span class="post-series-label">Tags:</span>
                 {{ range .Post.Frontmatter.Tags }}
                 <a href="/{{ $.Config.Blog.PrefixURL }}tags/{{ . }}">#{{ . }}</a>
                 {{ end }}
@@ -197,7 +253,7 @@
                 <span class="series-label">Part of the
                 <span class="series-list">
                     {{ range index .Post.Frontmatter.Extras "series" }}
-                    <a href="/{{ $.Config.Blog.PrefixURL }}series/{{ . }}" class="series-link">📖 {{ . }}</a>
+                    <a href="/{{ $.Config.Blog.PrefixURL }}series/{{ . }}" class="series-link">{{ . }}</a>
                     {{ end }}
                 </span></span>
                 <span class="series-label">series</span>

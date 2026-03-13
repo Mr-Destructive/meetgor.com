@@ -1,15 +1,14 @@
-{
-  "type": "posts",
-  "title": "What is BASH?",
-  "subtitle": "A guide to performing wizardry in the terminal",
-  "date": "2021-06-18 02:12:07",
-  "status": "published",
-  "tags": [
-    "bash"
-  ],
-  "slug": "bash-intro",
-  "image_url": "https://meetgor-cdn.pages.dev/what-is-bash.webp"
-}
+---
+type: posts
+title: "What is BASH?"
+subtitle: "A guide to performing wizardry in the terminal"
+date: 2021-06-18
+slug: "bash-intro"
+tags:
+  - bash
+image_url: https://meetgor-cdn.pages.dev/what-is-bash.webp
+---
+
 
 ## Introduction
 BASH or Bourne Again Shell is an interface(program) between the user and the Operating System. BASH is just an application just like others, but not an ordinary one. It is quite powerful when used to its potential. It is used in various aspects of computing. No, it's not only for server admins, but it specializes in that field though. We'll see how we can use Bash to perform several tasks quite powerfully. Not just automation, you'll be surprised what Bash is capable of.

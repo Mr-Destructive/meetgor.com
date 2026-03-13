@@ -1,11 +1,12 @@
 ---
-type: "sqlog"
+type: sqlog
 title: "Advent of SQL 2025 Day 4: WinterFest Volunteers"
 slug: "advent-of-sql-2025-day-4"
-date: 2025-12-19 15:30 +0530
+date: 2025-12-19
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
 ---
+
 
 ## Advent of SQL Day 4 WinterFest Volunteers
 

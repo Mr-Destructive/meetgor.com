@@ -1,0 +1,302 @@
+{{ define "search.html" }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search | {{ .Config.Blog.Name }}</title>
+    <meta name="description" content="Search {{ .Config.Blog.Name }}">
+    <link rel="icon" href="/mgicon.png" type="image/png">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+      .search-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        align-items: center;
+        margin-top: 1rem;
+      }
+      .search-full-button {
+        padding: 0.6rem 1rem;
+        border-radius: 999px;
+        border: 1px solid #2c5282;
+        background: transparent;
+        color: #2c5282;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .search-full-button:hover {
+        transform: translateY(-1px);
+        background: rgba(66, 153, 225, 0.1);
+      }
+      .search-full-button.hidden {
+        display: none;
+      }
+      .search-stage-indicator {
+        font-size: 0.85rem;
+        color: #4a5568;
+      }
+      @media (max-width: 600px) {
+        .search-controls {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    {{ template "header.html" . }}
+    <main class="container">
+      <h1>Search</h1>
+      <form class="search-page-form" id="search-form" role="search">
+        <label class="visually-hidden" for="search-input">Search</label>
+        <input id="search-input" name="q" type="search" placeholder="Search posts, tags, and content" autocomplete="off">
+        <button type="submit">Search</button>
+      </form>
+      <div class="search-controls">
+        <p class="search-meta" id="search-meta">Type a query to begin.</p>
+        <button id="search-full-button" type="button" class="search-full-button hidden">Search entire archive</button>
+        <span id="search-stage-indicator" class="search-stage-indicator" aria-live="polite"></span>
+      </div>
+      <ul class="post-list" id="search-results"></ul>
+    </main>
+    {{ template "footer.html" . }}
+
+    <script>
+      // Initialize theme from localStorage on page load
+      document.addEventListener('DOMContentLoaded', () => {
+        const body = document.body;
+        const themeToggle = document.getElementById('theme-toggle');
+        
+        // Apply stored theme preference
+        const currentTheme = localStorage.getItem('theme') || 'default';
+        if (currentTheme === 'secondary') {
+          body.classList.add('secondary-theme');
+          if (themeToggle) themeToggle.checked = true;
+        }
+        
+        // Handle theme toggle changes
+        if (themeToggle) {
+          themeToggle.addEventListener('change', () => {
+            const newTheme = themeToggle.checked ? 'secondary' : 'default';
+            if (themeToggle.checked) {
+              body.classList.add('secondary-theme');
+            } else {
+              body.classList.remove('secondary-theme');
+            }
+            localStorage.setItem('theme', newTheme);
+          });
+        }
+      });
+    </script>
+
+    <script>
+      (function () {
+        const form = document.getElementById('search-form');
+        const input = document.getElementById('search-input');
+        const results = document.getElementById('search-results');
+        const meta = document.getElementById('search-meta');
+        const stageIndicator = document.getElementById('search-stage-indicator');
+        const searchFullButton = document.getElementById('search-full-button');
+
+        const params = new URLSearchParams(window.location.search);
+        const initialQuery = params.get('q') || '';
+        const contextMode = params.get('context') || 'full';
+        if (initialQuery) {
+          input.value = initialQuery;
+        }
+
+        const inlinePosts = collectInlinePosts();
+        let inlineStage = (inlinePosts.length > 0 && contextMode === 'page') ? 'inline' : 'full';
+        let awaitingFullSearch = false;
+        let lastQuery = '';
+        let fullPostsCache = null;
+
+        function collectInlinePosts() {
+          const entries = [];
+          document.querySelectorAll('[data-search-entry]').forEach((node) => {
+            const tags = (node.dataset.searchTags || '').split(',').map(tag => tag.trim()).filter(Boolean);
+            entries.push({
+              title: node.dataset.searchTitle || '',
+              description: node.dataset.searchDescription || '',
+              content: node.dataset.searchContent || '',
+              tags,
+              type: node.dataset.searchType || '',
+              series: node.dataset.searchSeries || '',
+              date: node.dataset.searchDate || '',
+              slug: node.dataset.searchSlug || '',
+            });
+          });
+          return entries;
+        }
+
+        function normalize(value) {
+          return String(value || '').toLowerCase();
+        }
+
+        function filterPosts(posts, query) {
+          const q = normalize(query);
+          return posts.filter(post => {
+            const haystack = [
+              post.title,
+              post.description,
+              post.content,
+              post.tags,
+              post.type,
+              post.series
+            ].join(' ');
+            return normalize(haystack).includes(q);
+          });
+        }
+
+        function renderList(items, query, scopeLabel) {
+          results.innerHTML = '';
+          stageIndicator.textContent = scopeLabel ? `Showing results from ${scopeLabel}.` : '';
+          if (!query) {
+            meta.textContent = 'Type a query to begin.';
+            return;
+          }
+          if (!items.length) {
+            meta.textContent = 'No results found for "' + query + '".';
+            return;
+          }
+          meta.textContent = 'Found ' + items.length + ' result' + (items.length === 1 ? '' : 's') + ' for "' + query + '".';
+          items.forEach(post => {
+            const li = document.createElement('li');
+            li.className = 'post-item';
+            const date = document.createElement('span');
+            date.className = 'date';
+            date.textContent = (post.date || '').slice(0, 10);
+            const title = document.createElement('span');
+            title.className = 'title';
+            const link = document.createElement('a');
+            link.href = '/' + (post.slug || '');
+            link.textContent = post.title || post.slug || 'Untitled';
+            title.appendChild(link);
+            li.appendChild(date);
+            li.appendChild(title);
+            results.appendChild(li);
+          });
+        }
+
+        function resetState() {
+          stageIndicator.textContent = '';
+          awaitingFullSearch = false;
+          inlineStage = inlinePosts.length > 0 ? 'inline' : 'full';
+          searchFullButton.classList.add('hidden');
+        }
+
+        async function fetchFullPosts() {
+          if (fullPostsCache) {
+            return fullPostsCache;
+          }
+          const res = await fetch('/posts.json');
+          if (!res.ok) throw new Error('Network error');
+          const data = await res.json();
+          const posts = data.all_posts || [];
+          fullPostsCache = posts;
+          return posts;
+        }
+
+        async function runFullSearch(query) {
+          meta.textContent = 'Searching the archive…';
+          stageIndicator.textContent = 'Loading archive results…';
+          searchFullButton.disabled = true;
+          try {
+            const posts = await fetchFullPosts();
+            const matches = filterPosts(posts, query);
+            renderList(matches.slice(0, 200), query, 'the entire archive');
+            
+            inlineStage = 'full';
+            awaitingFullSearch = false;
+            searchFullButton.classList.add('hidden');
+          } catch (error) {
+            console.error(error);
+            meta.textContent = 'Unable to load the site-wide index.';
+          } finally {
+            searchFullButton.disabled = false;
+          }
+        }
+
+        function handleSearch(query) {
+          const trimmed = query.trim();
+          if (!trimmed) {
+            renderList([], '');
+            resetState();
+            return;
+          }
+          if (inlineStage === 'inline' && inlinePosts.length > 0 && !awaitingFullSearch) {
+            const matches = filterPosts(inlinePosts, trimmed);
+            renderList(matches, trimmed, 'this page');
+            meta.textContent = matches.length
+              ? 'Press Enter again or the archive button below to search the entire site.'
+              : 'No matches on this page. Press Enter again to search the entire archive.';
+            stageIndicator.textContent = 'Local filter applied.';
+            searchFullButton.classList.remove('hidden');
+            awaitingFullSearch = true;
+            lastQuery = trimmed;
+            return;
+          }
+          if (awaitingFullSearch && trimmed === lastQuery) {
+            runFullSearch(trimmed);
+            return;
+          }
+          runFullSearch(trimmed);
+        }
+
+        const stopSearchEnter = (event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+        };
+
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          const query = input.value || '';
+          const url = new URL(window.location.href);
+          if (query.trim()) {
+            url.searchParams.set('q', query.trim());
+          } else {
+            url.searchParams.delete('q');
+          }
+          window.history.replaceState({}, '', url);
+          handleSearch(query);
+        });
+
+        form.addEventListener('keydown', stopSearchEnter);
+        input.addEventListener('keydown', stopSearchEnter);
+
+        document.addEventListener(
+          'keydown',
+          (event) => {
+            if (
+              event.key === 'Enter' &&
+              document.activeElement &&
+              document.activeElement.closest &&
+              document.activeElement.closest('.site-search')
+            ) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          },
+          true
+        );
+
+        searchFullButton.addEventListener('click', () => {
+          const query = input.value || '';
+          if (query.trim()) {
+            handleSearch(query);
+          }
+        });
+
+        if (initialQuery) {
+          handleSearch(initialQuery);
+        }
+      })();
+    </script>
+  </body>
+</html>
+{{ end }}

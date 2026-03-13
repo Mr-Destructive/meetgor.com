@@ -1,21 +1,16 @@
-{
-  "type": "posts",
-  "title": "Connect LibSQL Database hosted on Turso in a Golang Application",
-  "description": "Exploring how to connect and query a LibSQL database hosted on Turso/Cloud in a Golang Application using libsql-client.",
-  "date": "2024-09-30 23:45:00",
-  "status": "published",
-  "slug": "turso-libsql-db-golang",
-  "tags": [
-    "go",
-    "turso",
-    "libsql"
-  ],
-  "series": [
-    "lets-go-with-turso"
-  ],
-  "series_description": "Exploring Turso's LibSQL database with Golang.",
-  "image_url": "https://meetgor-cdn.pages.dev/connect-turso-libsql-golang.png"
-}
+---
+type: posts
+title: "Connect LibSQL Database hosted on Turso in a Golang Application"
+date: 2024-09-30
+slug: "turso-libsql-db-golang"
+series: ["lets-go-with-turso"]
+tags:
+  - go
+  - turso
+  - libsql
+image_url: https://meetgor-cdn.pages.dev/connect-turso-libsql-golang.png
+---
+
 
 ## Introduction
 

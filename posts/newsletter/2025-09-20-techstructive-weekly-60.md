@@ -1,12 +1,71 @@
-{
-    "author":"meet",
-    "date":"2025-09-20",
-    "post_dir":"newsletter",
-    "status":"published",
-    "title": "Techstructive Weekly #60",
-    "type":"newsletter",
-    "slug": "techstructive-weekly-60"
-}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+type: newsletter
+title: 'Techstructive Weekly #60'
+date: 2025-09-20
+slug: techstructive-weekly-60
+tags:
+- ai
+- database
+- devops
+- javascript
+- newsletter
+- python
+- security
+- sql
+- testing
+source_url: 'https://techstructively.substack.com/p/techstructive-weekly-60'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
 
 ## Weekly #60
 
@@ -145,18 +204,3 @@ Double click to interact with video
 
 That was a heck of a long week. Lot of tech things happening. It will get even more in the next couple of months, as it is October and there are already a lot of developer related things, conferences, hactoberfests, and among other things.
 
----
-
-[Leave a comment](%%half_magic_comments_url%%)
-
-Thanks for reading Techstructive Weekly! This post is public so feel free to share it.
-
-[Share](%%share_url%%)
-
-Thanks for reading Techstructive Weekly! Subscribe for free to receive new posts and support my work.
-
----
-
-Happy Coding :)
-
-For more news, follow the [Hackernewsletter](https://buttondown.com/hacker-newsletter/archive/hacker-newsletter-763) (#763rd edition) , and for software development/coding articles, join [daily.dev](http://daily.dev/).

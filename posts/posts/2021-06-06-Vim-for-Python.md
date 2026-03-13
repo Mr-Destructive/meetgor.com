@@ -1,16 +1,15 @@
-{
-  "type": "posts",
-  "title": "Setting up Vim for Python",
-  "subtitle": "For the python programmers who need speed!",
-  "date": "2021-06-06 11:35:25 +0530",
-  "status": "published",
-  "tags": [
-    "python",
-    "vim"
-  ],
-  "slug": "vim-for-python",
-  "image_url": "https://meetgor-cdn.pages.dev/vim-for-python.webp"
-}
+---
+type: posts
+title: "Setting up Vim for Python"
+subtitle: "For the python programmers who need speed!"
+date: 2021-06-06
+slug: "vim-for-python"
+tags:
+  - python
+  - vim
+image_url: https://meetgor-cdn.pages.dev/vim-for-python.webp
+---
+
 
 ## Introduction
 Vim is quite a powerful text editor which can add performance to the already fast typed language Python. Vim can be highly customizable and efficient to use as it has the power of **adding custom plugins and plugins managers, key mappings**, and the most critical weapon of vim - Access to the terminal straight away.
@@ -81,4 +80,4 @@ nnoremap py :!python %
 
 This is a small map but can save a lot of time and give some motivation to use vim as you run the code blazingly faster than other editors. I have used py, but it can cause some problems as p is already mapped for pasting. So it's better to use other key combinations such as ty, yh, or any other key combination of your choice. Try it out and add your own flavor that's how we all learn.
 
-So, that's the basic set-up for python on vim, you can make more custom mappings, find more plugins and test out which work out the best for your workflow. Happy Coding and Viming ;) 
+So, that's the basic set-up for python on vim, you can make more custom mappings, find more plugins and test out which work out the best for your workflow. Happy Coding and Viming ;)

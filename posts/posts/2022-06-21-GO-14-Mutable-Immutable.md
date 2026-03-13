@@ -1,18 +1,14 @@
-{
-  "type": "posts",
-  "title": "Golang: Mutable and Immutable Data Types",
-  "description": "Understanding and Exploring immutable and mutable data types in Golang. Learning why the variable behaves in golang as they do.",
-  "date": "2022-06-21 21:00:00",
-  "status": "published",
-  "slug": "golang-mutable-immutable",
-  "tags": [
-    "go"
-  ],
-  "series": [
-    "100-days-of-golang"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/golang-014-im-mutables.png"
-}
+---
+type: posts
+title: "Golang: Mutable and Immutable Data Types"
+date: 2022-06-21
+slug: "golang-mutable-immutable"
+series: ["100-days-of-golang"]
+tags:
+  - go
+image_url: https://meetgor-cdn.pages.dev/golang-014-im-mutables.png
+---
+
 
 ## Introduction 
 

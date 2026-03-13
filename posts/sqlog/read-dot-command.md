@@ -1,8 +1,13 @@
 ---
-type: "sqlog"
+type: sqlog
 title: "SQLite dot commands: read file or standard output"
-date: 2025-08-28
+tags:
+  - typescript
+  - sql
+  - sqlite
+date:  2025-08-28
 ---
+
 
 ## Read dot Command 
 

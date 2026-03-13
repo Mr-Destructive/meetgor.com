@@ -1,15 +1,13 @@
-{
-  "type": "posts",
-  "title": "Neovim + Sourcegraph Cody Plugin Integration",
-  "description": "Installing and Setting up Sourcegraph Plugin and Cody into Neovim. Enabling code generations, chat and sourcegraph search feature in Neovim.",
-  "date": "2024-01-06 20:15:00",
-  "status": "published",
-  "slug": "neovim-sourcegraph-cody",
-  "tags": [
-    "vim"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/neovim-sourcegraph-cody.png"
-}
+---
+type: posts
+title: "Neovim + Sourcegraph Cody Plugin Integration"
+date: 2024-01-06
+slug: "neovim-sourcegraph-cody"
+tags:
+  - vim
+image_url: https://meetgor-cdn.pages.dev/neovim-sourcegraph-cody.png
+---
+
 
 ## Introduction
 

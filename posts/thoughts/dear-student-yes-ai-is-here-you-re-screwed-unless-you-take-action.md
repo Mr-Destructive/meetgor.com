@@ -2,9 +2,8 @@
     "date": "2025-03-09",
     "status": "published",
     "title": "youre screwed unless you take action",
-    "type": "thoughts"
+    "type":"links"
 }
-
 
 Interesting read,
 

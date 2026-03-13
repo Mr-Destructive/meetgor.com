@@ -5,8 +5,9 @@ description: "Explorng SQLite CLI with inline CSV import command with custom sep
 status: published
 slug: sqlite-inline-custom-separator
 tags: ["sqlite",]
-date: 2024-03-15 22:30:00
+date: 2024-03-15
 ---
+
 
 explaination about how i learned how to write a command for importing a csv 
 into a sqlite3 db with cusotm Separator with a single command inline

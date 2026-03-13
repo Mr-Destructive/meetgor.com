@@ -166,8 +166,7 @@ func triggerGitHubAction(githubPAT string) error {
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
 	req.Header.Set("Content-Type", "application/json")
 
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	resp, err := httpDo(req)
 	if err != nil {
 		return fmt.Errorf("failed to send request: %w", err)
 	}
@@ -233,13 +232,13 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	dbToken := os.Getenv("TURSO_DATABASE_AUTH_TOKEN")
 	var err error
 	dbString := fmt.Sprintf("libsql://%s?authToken=%s", dbName, dbToken)
-	db, err := sql.Open("libsql", dbString)
+	db, err := openDB("libsql", dbString)
 	if err != nil {
 		log.Printf("Error in Connection: %v", err)
 		return ErrorResponse(http.StatusInternalServerError, "Database connection failed"), nil
 	}
 	defer db.Close()
-	queries := libsqlssg.New(db)
+	queries := newQueries(db)
 	err = json.Unmarshal([]byte(request.Body), &reqBody)
 	if err != nil {
 		log.Printf("Failed to unmarshal request body: %v", err)
@@ -272,7 +271,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		log.Printf("Failed to trigger GitHub Action: %v", err)
 		return createErrorResponse(http.StatusBadGateway, "Failed to trigger content build"), nil
 	}
-	currentTimestamp := time.Now().Format(time.RFC3339)
+	currentTimestamp := nowTime().Format(time.RFC3339)
 
 	return createSuccessResponse("Content update triggered successfully", map[string]interface{}{
 		"last_build_time": currentTimestamp,
@@ -281,4 +280,11 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 func main() {
 	lambda.Start(handler)
+}
+
+var openDB = sql.Open
+var newQueries = libsqlssg.New
+var nowTime = time.Now
+var httpDo = func(req *http.Request) (*http.Response, error) {
+	return http.DefaultClient.Do(req)
 }

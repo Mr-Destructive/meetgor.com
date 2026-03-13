@@ -1,18 +1,14 @@
-{
-  "type": "posts",
-  "title": "Golang: File Reading",
-  "description": "Using system calls to read files in Golang. Reading files using various styles like line by line, word, character, chunk and any other specifc delimiter. Using os, bufio, io, encoding packages for helper funcitons making system calls.",
-  "date": "2022-10-23 23:15:00",
-  "status": "published",
-  "slug": "golang-file-read",
-  "tags": [
-    "go"
-  ],
-  "series": [
-    "100-days-of-golang"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/golang-022-file-read.png"
-}
+---
+type: posts
+title: "Golang: File Reading"
+date: 2022-10-23
+slug: "golang-file-read"
+series: ["100-days-of-golang"]
+tags:
+  - go
+image_url: https://meetgor-cdn.pages.dev/golang-022-file-read.png
+---
+
 
 ## Introduction
 

@@ -1,20 +1,16 @@
-{
-  "type": "posts",
-  "title": "Use Embedded Replicas of LibSQL Database hosted on Turso with a Golang Application",
-  "description": "Understanding and exploring how to create, connect, and query local embedded replicas of LibSQL database hosted on Turso with a Golang application.",
-  "date": "2024-10-31 21:45:00",
-  "status": "published",
-  "slug": "turso-libsql-embedded-replicas-golang",
-  "tags": [
-    "go",
-    "turso",
-    "libsql"
-  ],
-  "series": [
-    "lets-go-with-turso"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/embedded-replicas-libsql-turso-go.png"
-}
+---
+type: posts
+title: "Use Embedded Replicas of LibSQL Database hosted on Turso with a Golang Application"
+date: 2024-10-31
+slug: "turso-libsql-embedded-replicas-golang"
+series: ["lets-go-with-turso"]
+tags:
+  - go
+  - turso
+  - libsql
+image_url: https://meetgor-cdn.pages.dev/embedded-replicas-libsql-turso-go.png
+---
+
 
 ## Introduction
 

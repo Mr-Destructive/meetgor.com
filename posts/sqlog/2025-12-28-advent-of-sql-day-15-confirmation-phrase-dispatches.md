@@ -1,11 +1,12 @@
 ---
-type: "sqlog"
+type: sqlog
 title: "Advent of SQL 2025 Day 15: Confirmation Phrase Dispatches"
 slug: "advent-of-sql-2025-day-15"
-date: 2025-12-28 20:30 +0530
+date: 2025-12-28
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
 ---
+
 
 ## Advent of SQL, Day 15 - Confirmation Phrase Dispatches
 

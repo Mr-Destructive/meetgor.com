@@ -5,8 +5,9 @@ description: "Understanding the fundamentals of the sort package in Golang. Sort
 status: published
 slug: golang-sort-package-basic
 tags: ["go",]
-date: 2024-01-15 22:30:00
+date: 2024-01-15
 ---
+
 
 I have been learning Golang for around 2 years now, and I have never paid attention to the sort package, can you believe that! Where was this package hiding?
 

@@ -3,10 +3,8 @@ package plugins
 import (
 	"bytes"
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
-	"reflect"
 
 	"github.com/mr-destructive/mr-destructive.github.io/models"
 )
@@ -19,7 +17,19 @@ func (p *SeriesPlugin) Name() string {
 	return p.PluginName
 }
 
-func (p *SeriesPlugin) Execute(ssg *models.SSG) {
+func (p *SeriesPlugin) Phase() Phase {
+	return PhasePostProcess
+}
+
+func (p *SeriesPlugin) Requires() []string {
+	return []string{"renderTemplates"}
+}
+
+func (p *SeriesPlugin) AdminPolicy() AdminPolicy {
+	return AdminRun
+}
+
+func (p *SeriesPlugin) Execute(ssg *models.SSG) error {
 	config := &ssg.Config
 	seriesPost := make(map[string][]models.Post)
 	for _, post := range ssg.Posts {
@@ -33,7 +43,7 @@ func (p *SeriesPlugin) Execute(ssg *models.SSG) {
 		if post.Frontmatter.Extras["series"] == nil {
 			continue
 		}
-		
+
 		// Handle both string and slice cases for series
 		var seriesList []interface{}
 		switch v := post.Frontmatter.Extras["series"].(type) {
@@ -45,10 +55,10 @@ func (p *SeriesPlugin) Execute(ssg *models.SSG) {
 			// Skip if it's neither a string nor a slice
 			continue
 		}
-		
+
 		for _, series := range seriesList {
 			series := Slugify(series.(string))
-            fmt.Println("series", series)
+			fmt.Println("series", series)
 			seriesPost[series] = append(seriesPost[series], post)
 		}
 	}
@@ -77,20 +87,28 @@ func (p *SeriesPlugin) Execute(ssg *models.SSG) {
 			Config: models.SSG_CONFIG{
 				Blog: config.Blog,
 			},
+			Years: YearsFromPosts(ssg.Posts),
 		}
 		err := ssg.TemplateFS.ExecuteTemplate(&buffer, templatePath, context)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 		feedPath := filepath.Join(".", config.Blog.OutputDir, "series", feed.Type)
 		err = os.MkdirAll(feedPath, os.ModePerm)
+		if err != nil {
+			return err
+		}
 		outputFeedPath := fmt.Sprintf("%s/index.html", feedPath)
 		err = os.WriteFile(outputFeedPath, buffer.Bytes(), 0660)
+		if err != nil {
+			return err
+		}
 	}
+	return nil
 }
 
 func init() {
-	RegisterPlugin("Series", reflect.TypeOf(SeriesPlugin{
-		PluginName: "Series",
-	}))
+	RegisterPlugin("Series", func() Plugin {
+		return &SeriesPlugin{PluginName: "Series"}
+	})
 }

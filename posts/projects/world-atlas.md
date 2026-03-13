@@ -2,14 +2,14 @@
 type: projects
 title: World Atlas
 description: "A Geographical based word game."
-date: 2021-07-25 16:44:59
-status: deployed
+date: 2021-07-25
 tags: ['django', 'javascript',]
 github_link: https://github.com/Mr-Destructive/world-atlas-dj/
 live_link: https://mr-destructive.github.io/WorldAtlas/webpage/index.html
 cover_image: https://github.com/Mr-Destructive/WorldAtlas/raw/master/webpage/img/W.png
 slug: world-atlas
 ---
+
 
 A simple word game using some django in the backend and javascript for frontend. 
 

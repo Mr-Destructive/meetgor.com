@@ -1,0 +1,65 @@
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+title: 'Techstructive Weekly #70'
+date: 2025-11-29
+type: newsletter
+slug: techstructive-weekly-70
+tags:
+- ai
+- newsletter
+source_url: 'https://techstructively.substack.com/p/techstructive-weekly-70'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+<div class="available-content"><div class="body markup" dir="auto"><p></p><h2 class="header-anchor-post">Week #70<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§week-70"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/180237190/week-70" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><p>As I wrote last week, I would be travelling and out on a break due to weddings at my contry side place, cousins wedding, som heavy travelling no tech access for most of the time. However I had atleast 4 days of work covered so I have few tidbits to share. Weekends, three days of the week and taking leave on evening on wednesday.</p><p>I played around with vllms , new different models for different thins ranging from ad hock coding tasks, proper code editing, and document extraction usecases. Didn’t find time to read or watch much.</p><p>Not adding quote of the week, didn't get a time to read or find quotes or do much to find relevant quotes either.</p><h2 class="header-anchor-post">Read<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§read"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/180237190/read" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ol><li><p><a href="https://code.likeagirl.io/i-overcame-inertia-with-a-weekend-project-bd2ebe84c118" rel="nofollow ugc noopener">How  i overcame inertia with a weekend project</a></p></li></ol><ul><li><p>This is eye opning. You need some inertia to get up and running. Once you are in motion, its hard to stop. You write one word, you think about the next word and it makes a paragraph.</p></li><li><p>This is true that more we think about doing things, the more wemove out from the action. It creates a vicious cycle of overthinking and inaction. </p></li><li><p>Move out of thinking, start doing stuff it will make things moving and create a flow that is hard to stop.</p></li></ul><ol><li><p><a href="https://engineering.atspotify.com/2025/11/shuffle-making-random-feel-more-human?ref=dailydev" rel="nofollow ugc noopener">Shuffle: Making random feel more human</a><span> </span></p><ol><li><p>This is a bit under-technical thing. I didn’t get a good flow of the algorithm. i want to understand with an example.</p></li></ol></li><li><p><a href="https://seated.ro/posts/rabbit-hole-learning.html" rel="nofollow ugc noopener">Rabbit hole learning</a></p><ol><li><p>This is a good idea, but it kind of breaks the cycle kf a rabbit hole to log everything that we did and learnt.</p></li><li><p>It removes the core advantage of learning things by diging deep.</p><p></p></li></ol></li></ol><p></p><p></p><h2 class="header-anchor-post">Watched<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§watched"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/180237190/watched" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://youtu.be/GXJwX3tpMe0" rel="nofollow ugc noopener">How flask started as a joke</a></p><ul><li><p>That is not a joke, but rather a serious problem solved as a side quest and thought of just shipping things. You never know what could work and what won’t.</p></li></ul></li><li><p><a href="https://youtu.be/Ctjiatnd6Xk?si=pznjX7kJd7fkChXx" rel="nofollow ugc noopener">The Godmother of AI</a></p><ul><li><p>This is so cool, </p></li><li><p>What is the difference of AI and AGi. Think about it. AI was to humans, as AGI is to AI both are same things just the level of buzz in some of the terms is just hype.</p></li><li><p>Make humans better, making it answer things possible.</p></li></ul></li><li><p><a href="https://youtu.be/QzEsYFcaAkY?si=4leLEl4LU6XBYCHZ" rel="nofollow ugc noopener">Anthropic with Opus 4.5</a></p><ul><li><p>That’s a minor bump maybe, its different in subtle ways. Still has its pinkish purple vibes.</p></li><li><p>The snitch bench is cool, it looked something cooler, not much out of the wild. But different from the typical mode vibes.</p></li></ul></li><li><p><a href="https://youtu.be/KJfz9ChQ0A0?si=x_9C3AzEQrk0Fy3p" rel="nofollow ugc noopener">You’re all wrong</a></p><ul><li><p>Yeah, been there done that. Twch stack and programming languages are not one fit all shape. It depends. The typical reason in tech.</p></li><li><p></p></li></ul></li></ul><h2 class="header-anchor-post"><div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/180237190/" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><p></p><h2 class="header-anchor-post"><div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/180237190/" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><p></p><p>It was a quick week, I am writing this out in a hurry, I didn’t have much time yesterday to curate things, but randomly scrimped through the history to find te bits I found most interesting.</p><p>Next will also would be slow, I would have to keep up at work and work up the way to get things running again. Its a hustle after a wee worth break.</p><p></p><p></p><div><hr/></div></div></div>

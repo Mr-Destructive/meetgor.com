@@ -1,20 +1,14 @@
-{
-  "type": "posts",
-  "title": "NGINX Basics and Setup",
-  "description": "Exploring NGINX Fundamentals: A Guide for Backend Developers, from the Importance of Learning NGINX to Installation and Server Setup",
-  "date": "2024-01-14 18:15:00",
-  "status": "published",
-  "slug": "nginx-01-basics",
-  "tags": [
-    "nginx",
-    "web-development"
-  ],
-  "series": [
-    "nginx-survival-guide"
-  ],
-  "series_description": "NGINX Survival Guide: A Guide for Backend Developers, understanding the bare minimum fundamentals to get going with NGINX.",
-  "image_url": "https://meetgor-cdn.pages.dev/nginx-survival-guide/nginx-sg-1.png"
-}
+---
+type: posts
+title: "NGINX Basics and Setup"
+date: 2024-01-14
+slug: "nginx-01-basics"
+series: ["nginx-survival-guide"]
+tags:
+  - nginx
+  - web-development
+image_url: https://meetgor-cdn.pages.dev/nginx-survival-guide/nginx-sg-1.png
+---
 
 
 ## Introduction

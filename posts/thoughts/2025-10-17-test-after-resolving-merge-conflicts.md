@@ -1,10 +1,14 @@
 ---
 title: Test after resolving merge conflicts
-type: thoughts
-post_dir: thoughts
+type: links
+post_dir: links
 date: 2025-10-17
-status: published
+tags:
+  - typescript
+  - testing
+status:  published
 ---
+
 
 Its a beautiful sunny Monday, you had prepared changes well tested on Friday. But today, just for today, Bill had to merge their hotfix into your changes as well. Well, they did.
 

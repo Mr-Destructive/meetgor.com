@@ -1,21 +1,16 @@
-{
-  "type": "posts",
-  "title": "Django Project with PostgreSQL Deployment on Railway App",
-  "description": "Creating and Configuring a Django Application for deployment on Railway.app Platform",
-  "date": "2022-05-19 20:30:00",
-  "status": "published",
-  "slug": "django-deploy-railway",
-  "tags": [
-    "django",
-    "python",
-    "web-development"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/django-deploy-railway.png",
-  "series": [
-    "Django-Deployment",
-    "Django-Series"
-  ]
-}
+---
+type: posts
+title: "Django Project with PostgreSQL Deployment on Railway App"
+date: 2022-05-19
+slug: "django-deploy-railway"
+series: ["Django-Deployment"]
+tags:
+  - django
+  - python
+  - web-development
+image_url: https://meetgor-cdn.pages.dev/django-deploy-railway.png
+---
+
 
 ## Introduction
 
@@ -537,4 +532,4 @@ So, this was all about creating and deploying a django application on Railway. H
 
 So, that's how we deploy a Django project on the Railway app. We have seen two of the many ways to create and deploy a Django application on Railway. We also integrated a PostgreSQL service provided by Railway in our Django Project. Using the Railway CLI, we were able to manage and create Projects from the terminal, also interaction of the railway project was achieved along with the production build from CLI.
 
-Hopefully, you liked the above tutorial, if you have any questions. feedback, or queries, you can contact me on the Social handles provided below. Thank you for reading and till the next post Happy Coding :) 
+Hopefully, you liked the above tutorial, if you have any questions. feedback, or queries, you can contact me on the Social handles provided below. Thank you for reading and till the next post Happy Coding :)

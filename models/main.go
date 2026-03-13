@@ -16,7 +16,6 @@ type Author struct {
 type PageConfig struct {
 	TemplatePath     string `json:"template"`
 	FeedTemplatePath string `json:"feed_template"`
-	Emoji            string `json:"emoji"`
 }
 
 type Theme struct {
@@ -102,6 +101,7 @@ type Post struct {
 	Frontmatter FrontMatter
 	Content     template.HTML
 	Markdown    string
+	SourcePath  string
 }
 
 type TOCItem struct {
@@ -147,4 +147,5 @@ type TemplateContext struct {
 	Post      Post
 	FeedPosts []Feed
 	FeedInfo  Feed
+	Years     []string
 }

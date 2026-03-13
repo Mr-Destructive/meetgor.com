@@ -5,8 +5,9 @@ description: "Querying a libsql database hosted on turso with cURL. Using a remo
 status: published
 slug: libsql-query-remote-db
 tags: ["database", "curl", "libsql",]
-date: 2023-11-15 17:30:00
+date: 2023-11-15
 ---
+
 
 If you are using a local [libsql](https://turso.tech/libsql) database, it is quite easy to query the database, but for a remote or a database on a hosted cloud platform like [turso](https://turso.tech/), we can use other clients or the api itself to query the data.
 

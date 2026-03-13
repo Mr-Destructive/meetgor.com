@@ -2,9 +2,10 @@
 type: sqlog
 slug: sqlite-foreign-key-table-constraint
 title: 'SQLite SQL: Foreign KEY table constraint'
-date: "2025-09-15"
+date: 2025-09-15
 tags: ["sqlite", "sql"]
 ---
+
 
 ## The Foreign KEY Table constraint
 

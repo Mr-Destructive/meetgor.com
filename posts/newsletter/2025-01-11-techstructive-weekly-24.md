@@ -1,77 +1,65 @@
 ---
-type: "newsletter"
-title: "Techstructive Weekly #24"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+type: newsletter
+title: 'Techstructive Weekly #24'
 date: 2025-01-11
+tags:
+- ai
+- git
+- go
+- newsletter
+- python
+source_url: 'https://techstructively.substack.com/p/techstructive-weekly-24'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ---
 
-## Week #24
-
-It was an exciting week. I was pretty excited from the end of the past week with a new beginning to my work-life goal. After completing one, I have a new challenge in front of me: diving into the world of cutting-edge LLMs, agents, and Workflow. This can’t be more exciting.
-
-This week, I was researching and exploring the frameworks, libraries and tools to create Agentic Workflows with LLMs, I can’t share much, but I see myself creating content around the things I will learn at my work/day job.
-
-Apart from the hustle, I [streamed again](https://www.youtube.com/live/hr3Xsuw0IDk?si=yjNVYVDyCkX5gBnl) keeping the 2-month streak, moreover, I am excited and have new ideas popping out frequently. I have also been writing a script for a project-based tutorial video, which was the stuff I wanted to create when I was learning to code myself. I will try to complete the video this weekend, it would be a long one, but I would be delighted to create it.
-
-Double click to interact with video
-
-### Quote of the week
-
-> *“The future is not something we wait for, it's something we create." *
-> 
-> — Pierre Teilhard de Chardin
-
-I can’t wait for next week to roll in through the implementation, some proof of concepts, some demonstrations, and some planning, this is the future I am creating. I take the ownership and I build it, and not wait, sit and watch it unfold. I create my future, I am responsible for the misery or the pride I will have at the end.
-
-## Read
-
-- [Simon Wilson Predictions for AI/LLMS for 1/3/6 years](https://simonwillison.net/2025/Jan/10/ai-predictions/): That sounds a bit scary to be honest, but exciting as well. It would be more of the adoption rather than autonomy of the LLMs that in the coming years will dictate the direction.
-- [Living the future by the numbers](https://tailscale.com/blog/living-in-the-future?ref=dailydev): It sounds like enormous growth, the cost is a different thing as mentioned in the post, but yes, the performance is the order of magnitude higher which makes a point for the progress humans have made in computing.
-- [Human writing in the age of AI](https://alvaromontoro.com/blog/68068/human-writing-in-the-age-of-ai): This is a truthful article, we are growing ourselves in the photocopies of photocopies (using ai to summarise content written by ai). At some point, there will come a time, when humans will need human content and that’s when there will be a search for a gold rush, the authentic content rush. It’s time now, to make hay while the sun shines, it might be the last time when humans are valued before they are not and again they are. Be in the dark standing to help others when the darkness seems to take over.
-- [Building Effective Agents (Anthropic Blog)](https://www.anthropic.com/research/building-effective-agents): This is a great overview of LLM Agents, different types of Agents and how is the landscape of AI Agents is changing due to LLM. It’s not changing technically, but how simple concepts from AI are striking again like a revival. I remember learning about it in my bachelor’s degree classes, agents as some program that acts according to the conditions and interaction with the environment, I can relate it so well and sticks to me due to that.
-- [FastAPI Documentation: Concurrency and Async/Await](https://fastapi.tiangolo.com/async/): This was clear and the example provided are indeed helpful and relatable. I read this to understand the architecture these frameworks for creating agentic workflows are using. I had a confusion about async and asyncio, so just read this and got absolutely cleared.
-
-## Wrote
-
-- [Code for dummy json patch API](https://github.com/Mr-Destructive/dummy-json-patch): This is a dummy, a demonstration-only API, will add a documentation page and more to it as I write the Golang HTTP PATCH method article. Hosted on netlify, took some time to understand the patch request and constructed the json-patch endpoint, will also add in a json merge patch endpoint.
-
-## Watched
-
-- [Dennis Ivy: Building with Django and HTMX](https://www.youtube.com/watch?v=rgegMr8ImKo&t=2607s)  
-  I have not touched Django and HTMX as well for quite some months (maybe a year). I need to get back and create some quick projects for the community. I want to keep the guides and tutorials on Django from my article series more versatile and expansive. Talking about the stream, it was a great stream, loved that Dennis is back, learned a lot of stuff with htmx. A lot to learn when done yourself.
-
-Double click to interact with video
-- [Distributed and Async task Queues with Python and celery](https://youtu.be/v-Snbz3WmJU?si=qyiFzrQQrZ5MrrjJ) Pycon US 2024:  
-  This was an in-depth guide to celery, I learned a lot of stuff, celery might confuse you if you have not paid close attention to the details while implementing the queues. I forgot what celery was doing internally, I had used it, and built background workers while I was an intern @ [Arka 360 (The Solar Labs](https://arka360.com/in)). I learned a ton of celery and Django, but it was 2 years back, forgot a few things, and after watching this it clicked everything and now makes sense.Double click to interact with video
-
-## Learnt
-
-- I learned a lot of things about the JSON PATCH method, I will be writing a detailed post about using JSON Patch in the article **100 days of Golang: HTTP PATCH Method, **which should be live after this newsletter.
-    - The HTTP PATCH method is like a PUT request but for updating only specific fields and not the entire resource in that sense, you only send the fields to be updated compared to the PUT request where you have to send the entire resource (including the ones that you don’t want to update).
-    - [JSON PATCH](https://datatracker.ietf.org/doc/html/rfc6902) is a specific type of PATCH method, where the payload is a JSON patch document, which includes
-          - The operation to be performed
-          - The field (path) to be updated
-          - The value of the field/path to update to
-    - [JSON Merge PATCH](https://datatracker.ietf.org/doc/html/rfc7386) is another type of PATCH method where the payload is a JSON body with the fields and values you want to update (like put but only the fields to update)
-- [Replace github with gitingest](https://thoughts.waylonwalker.com/post/517) for getting a single string value for all the file contents, useful for LLM prompting.
-- [Slash pages for specific sections on the blog like](https://thoughts.waylonwalker.com/post/494)
-    - /now
-    - /colophon
-    - /links, etc
-
-I am about to create a thoughts/link blog page for my site. Moving my site out of an SSG is the new year norm I believe, I moved my site from Jekyll to Markata 2 years ago, and now it seems the correct time. I don’t have any problems with Markata, I just want to use Golang for all the things I make, it feels good (not biased).
-
-## Tech News
-
-- [Appwrite Compute Capabilities for Appwrite Functions](https://appwrite.io/blog/post/introducing-new-compute-capabilities-appwrite-functions): Appwrite keeps pushing the bar for what is called an open source backend as a service.
-
-For more news, follow the [Hackernewsletter](https://buttondown.com/hacker-newsletter/archive/hacker-newsletter-728) and for software development/coding articles, join [daily.dev](http://daily.dev/) .
-
-That’s it from this 24th edition of my weekly learning, hope you enjoyed it, and leave comments on what you think about some of my takes or any feedback.
-
-[Leave a comment](%%half_magic_comments_url%%)
-
-Thanks for reading Techstructive Weekly! This post is public so feel free to share it.
-
-[Share](%%share_url%%)
-
-Thanks for reading Techstructive Weekly! Subscribe for free to receive new posts and support my work.
+<div class="available-content"><div class="body markup" dir="auto"><h2 class="header-anchor-post">Week #24<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§week-24"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/154542187/week-24" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><p>It was an exciting week. I was pretty excited from the end of the past week with a new beginning to my work-life goal. After completing one, I have a new challenge in front of me: diving into the world of cutting-edge LLMs, agents, and Workflow. This can’t be more exciting.</p><p>This week, I was researching and exploring the frameworks, libraries and tools to create Agentic Workflows with LLMs, I can’t share much, but I see myself creating content around the things I will learn at my work/day job.</p><p><span>Apart from the hustle, I </span><a href="https://www.youtube.com/live/hr3Xsuw0IDk?si=yjNVYVDyCkX5gBnl" rel="nofollow ugc noopener">streamed again</a><span> keeping the 2-month streak, moreover, I am excited and have new ideas popping out frequently. I have also been writing a script for a project-based tutorial video, which was the stuff I wanted to create when I was learning to code myself. I will try to complete the video this weekend, it would be a long one, but I would be delighted to create it.</span></p><div class="youtube-wrap" data-attrs='{"videoId":"hr3Xsuw0IDk","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-hr3Xsuw0IDk"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/hr3Xsuw0IDk?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div><p></p><h3 class="header-anchor-post">Quote of the week<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§quote-of-the-week"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/154542187/quote-of-the-week" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h3><blockquote><p><em>“The future is not something we wait for, it's something we create." </em></p><p>— Pierre Teilhard de Chardin</p></blockquote><p>I can’t wait for next week to roll in through the implementation, some proof of concepts, some demonstrations, and some planning, this is the future I am creating. I take the ownership and I build it, and not wait, sit and watch it unfold. I create my future, I am responsible for the misery or the pride I will have at the end.</p><p></p><h2 class="header-anchor-post">Read<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§read"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/154542187/read" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://simonwillison.net/2025/Jan/10/ai-predictions/" rel="nofollow ugc noopener">Simon Wilson Predictions for AI/LLMS for 1/3/6 years</a><span>: That sounds a bit scary to be honest, but exciting as well. It would be more of the adoption rather than autonomy of the LLMs that in the coming years will dictate the direction.</span></p></li><li><p><a href="https://tailscale.com/blog/living-in-the-future?ref=dailydev" rel="nofollow ugc noopener">Living the future by the numbers</a><span>: It sounds like enormous growth, the cost is a different thing as mentioned in the post, but yes, the performance is the order of magnitude higher which makes a point for the progress humans have made in computing.</span></p></li><li><p><a href="https://alvaromontoro.com/blog/68068/human-writing-in-the-age-of-ai" rel="nofollow ugc noopener">Human writing in the age of AI</a><span>: This is a truthful article, we are growing ourselves in the photocopies of photocopies (using ai to summarise content written by ai). At some point, there will come a time, when humans will need human content and that’s when there will be a search for a gold rush, the authentic content rush. It’s time now, to make hay while the sun shines, it might be the last time when humans are valued before they are not and again they are. Be in the dark standing to help others when the darkness seems to take over.</span></p></li><li><p><a href="https://www.anthropic.com/research/building-effective-agents" rel="nofollow ugc noopener">Building Effective Agents (Anthropic Blog)</a><span>: This is a great overview of LLM Agents, different types of Agents and how is the landscape of AI Agents is changing due to LLM. It’s not changing technically, but how simple concepts from AI are striking again like a revival. I remember learning about it in my bachelor’s degree classes, agents as some program that acts according to the conditions and interaction with the environment, I can relate it so well and sticks to me due to that.</span></p></li><li><p><a href="https://fastapi.tiangolo.com/async/" rel="nofollow ugc noopener">FastAPI Documentation: Concurrency and Async/Await</a><span>:  This was clear and the example provided are indeed helpful and relatable. I read this to understand the architecture these frameworks for creating agentic workflows are using. I had a confusion about async and asyncio, so just read this and got absolutely cleared.</span></p></li></ul><p></p><h2 class="header-anchor-post">Wrote<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§wrote"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/154542187/wrote" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://github.com/Mr-Destructive/dummy-json-patch" rel="nofollow ugc noopener">Code for dummy json patch API</a><span>: This is a dummy, a demonstration-only API, will add  a documentation page and more to it as I write the Golang HTTP PATCH method article. Hosted on netlify, took some time to understand the patch request and constructed the json-patch endpoint, will also add in a json merge patch endpoint.</span></p><p></p></li></ul><p></p><h2 class="header-anchor-post">Watched<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§watched"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/154542187/watched" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://www.youtube.com/watch?v=rgegMr8ImKo&amp;t=2607s" rel="nofollow ugc noopener">Dennis Ivy: Building with Django and HTMX</a><br/><span>I have not touched Django and HTMX as well for quite some months (maybe a year). I need to get back and create some quick projects for the community. I want to keep the guides and tutorials on Django from my article series more versatile and expansive. Talking about the stream, it was a great stream, loved that Dennis is back, learned a lot of stuff with htmx. A lot to learn when done yourself.</span></p></li></ul><div class="youtube-wrap" data-attrs='{"videoId":"rgegMr8ImKo","startTime":"2607s","endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-rgegMr8ImKo"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/rgegMr8ImKo?start=2607s&amp;rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div><ul><li><p><a href="https://youtu.be/v-Snbz3WmJU?si=qyiFzrQQrZ5MrrjJ" rel="nofollow ugc noopener">Distributed and Async task Queues with Python and celery</a><span> Pycon US 2024:</span><br/><span>This was an in-depth guide to celery, I learned a lot of stuff, celery might confuse you if you have not paid close attention to the details while implementing the queues. I forgot what celery was doing internally, I had used it, and built background workers while I was an intern @ </span><a href="https://arka360.com/in" rel="nofollow ugc noopener">Arka 360 (The Solar Labs</a><span>). I learned a ton of celery and Django, but it was 2 years back, forgot a few things, and after watching this it clicked everything and now makes sense.</span></p><div class="youtube-wrap" data-attrs='{"videoId":"v-Snbz3WmJU","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-v-Snbz3WmJU"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/v-Snbz3WmJU?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div><p> </p></li></ul><p></p><h2 class="header-anchor-post">Learnt<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§learnt"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/154542187/learnt" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><span>I learned a lot of things about the JSON PATCH method, I will be writing a detailed post about using JSON Patch in the article </span><strong>100 days of Golang: HTTP PATCH Method, </strong><span>which should be live after this newsletter. </span></p><ul><li><p>The HTTP PATCH method is like a PUT request but for updating only specific fields and not the entire resource in that sense, you only send the fields to be updated compared to the PUT request where you have to send the entire resource (including the ones that you don’t want to update).</p></li><li><p><a href="https://datatracker.ietf.org/doc/html/rfc6902" rel="nofollow ugc noopener">JSON PATCH</a><span> is a specific type of PATCH method, where the payload is a JSON patch document, which includes</span></p><ul><li><p>The operation to be performed</p></li><li><p>The field (path) to be updated</p></li><li><p>The value of the field/path to update to </p></li></ul></li><li><p><a href="https://datatracker.ietf.org/doc/html/rfc7386" rel="nofollow ugc noopener">JSON Merge PATCH</a><span> is another type of PATCH method where the payload is a JSON body with the fields and values you want to update (like put but only the fields to update)</span></p></li></ul></li><li><p><a href="https://thoughts.waylonwalker.com/post/517" rel="nofollow ugc noopener">Replace github with gitingest</a><span> for getting a single string value for all the file contents, useful for LLM prompting.</span></p></li><li><p><a href="https://thoughts.waylonwalker.com/post/494" rel="nofollow ugc noopener">Slash pages for specific sections on the blog like </a></p><ul><li><p>/now</p></li><li><p>/colophon</p></li><li><p>/links, etc</p></li></ul></li></ul><p>I am about to create a thoughts/link blog page for my site. Moving my site out of an SSG is the new year norm I believe, I moved my site from Jekyll to Markata 2 years ago, and now it seems the correct time. I don’t have any problems with Markata, I just want to use Golang for all the things I make, it feels good (not biased).</p><p></p><h2 class="header-anchor-post">Tech News<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§tech-news"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/154542187/tech-news" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://appwrite.io/blog/post/introducing-new-compute-capabilities-appwrite-functions" rel="nofollow ugc noopener">Appwrite Compute Capabilities for Appwrite Functions</a><span>: Appwrite keeps pushing the bar for what is called an open source backend as a service.</span></p></li></ul><p></p><p><span>For more news, follow the </span><a href="https://buttondown.com/hacker-newsletter/archive/hacker-newsletter-728" rel="nofollow ugc noopener">Hackernewsletter</a><span> and for software development/coding articles, join </span><a href="http://daily.dev/" rel="nofollow ugc noopener">daily.dev</a><span> . </span></p><p>That’s it from this 24th edition of my weekly learning, hope you enjoyed it, and leave comments on what you think about some of my takes or any feedback.</p><p></p><p class="button-wrapper" data-attrs='{"url":"https://techstructively.substack.com/p/techstructive-weekly-24/comments","text":"Leave a comment","action":null,"class":null}' data-component-name="ButtonCreateButton"><a class="button primary" href="https://techstructively.substack.com/p/techstructive-weekly-24/comments" rel="nofollow ugc noopener"><span>Leave a comment</span></a></p><div class="captioned-button-wrap" data-attrs='{"url":"https://techstructively.substack.com/p/techstructive-weekly-24?utm_source=substack&amp;utm_medium=email&amp;utm_content=share&amp;action=share","text":"Share"}' data-component-name="CaptionedButtonToDOM"><div class="preamble"><p class="cta-caption">Thanks for reading Techstructive Weekly! This post is public so feel free to share it.</p></div><p class="button-wrapper" data-attrs='{"url":"https://techstructively.substack.com/p/techstructive-weekly-24?utm_source=substack&amp;utm_medium=email&amp;utm_content=share&amp;action=share","text":"Share"}' data-component-name="ButtonCreateButton"><a class="button primary" href="https://techstructively.substack.com/p/techstructive-weekly-24?utm_source=substack&amp;utm_medium=email&amp;utm_content=share&amp;action=share" rel="nofollow ugc noopener"><span>Share</span></a></p></div><p></p><p></p></div></div>

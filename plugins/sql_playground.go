@@ -3,11 +3,11 @@ package plugins
 import (
 	"fmt"
 
+	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/renderer"
 	"github.com/yuin/goldmark/renderer/html"
 	"github.com/yuin/goldmark/util"
-	"github.com/yuin/goldmark"
 )
 
 // sqlPlaygroundRenderer is a custom renderer for fenced code blocks.

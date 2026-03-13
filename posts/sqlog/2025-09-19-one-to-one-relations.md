@@ -2,9 +2,10 @@
 type: sqlog
 slug: sqlite-one-to-one-relations
 title: "SQLite SQL: One to One Relations"
-date: "2025-09-19"
+date: 2025-09-19
 tags: ["sqlite", "sql"]
 ---
+
 
 ## One to One Relations
 

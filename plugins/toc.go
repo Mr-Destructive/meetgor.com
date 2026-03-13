@@ -84,4 +84,3 @@ func generateID(text string) string {
 	id = idCleaner.ReplaceAllString(id, "")
 	return id
 }
-

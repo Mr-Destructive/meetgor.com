@@ -2,7 +2,6 @@ package plugins
 
 import (
 	"fmt"
-	"reflect"
 	"sort"
 	"strings"
 	"time"
@@ -18,6 +17,18 @@ func (p *BeforeAfterPostsPlugin) Name() string {
 	return p.PluginName
 }
 
+func (p *BeforeAfterPostsPlugin) Phase() Phase {
+	return PhaseTransform
+}
+
+func (p *BeforeAfterPostsPlugin) Requires() []string {
+	return []string{"readPosts"}
+}
+
+func (p *BeforeAfterPostsPlugin) AdminPolicy() AdminPolicy {
+	return AdminRun
+}
+
 // PostNavigation contains previous and next post information
 type PostNavigation struct {
 	Previous *models.Post
@@ -25,7 +36,7 @@ type PostNavigation struct {
 	Related  []models.Post
 }
 
-func (p *BeforeAfterPostsPlugin) Execute(ssg *models.SSG) {
+func (p *BeforeAfterPostsPlugin) Execute(ssg *models.SSG) error {
 	config := &ssg.Config
 
 	// Add navigation data to each post
@@ -58,6 +69,7 @@ func (p *BeforeAfterPostsPlugin) Execute(ssg *models.SSG) {
 	}
 
 	fmt.Println("Before/After Posts plugin executed successfully")
+	return nil
 }
 
 // enrichPostWithSlug constructs the slug for a post since it hasn't been set yet during plugin execution
@@ -296,41 +308,41 @@ func parseDate(dateStr string) (time.Time, error) {
 	if len(dateStr) < 10 {
 		return time.Time{}, fmt.Errorf("invalid date format")
 	}
-	
+
 	// Try parsing with timezone and full time "YYYY-MM-DD HH:MM:SS +0700"
 	if len(dateStr) >= 25 {
 		if t, err := time.Parse("2006-01-02 15:04:05 -0700", dateStr); err == nil {
 			return t, nil
 		}
 	}
-	
+
 	// Try parsing with timezone but no seconds "YYYY-MM-DD HH:MM +0700"
 	if len(dateStr) >= 21 {
 		if t, err := time.Parse("2006-01-02 15:04 -0700", dateStr); err == nil {
 			return t, nil
 		}
 	}
-	
+
 	// Try parsing with time but no timezone "YYYY-MM-DD HH:MM:SS"
 	if len(dateStr) >= 19 {
 		if t, err := time.Parse("2006-01-02 15:04:05", dateStr[:19]); err == nil {
 			return t, nil
 		}
 	}
-	
+
 	// Try parsing with time but no timezone, no seconds "YYYY-MM-DD HH:MM"
 	if len(dateStr) >= 16 {
 		if t, err := time.Parse("2006-01-02 15:04", dateStr[:16]); err == nil {
 			return t, nil
 		}
 	}
-	
+
 	// Fall back to just date
 	return time.Parse("2006-01-02", dateStr[:10])
 }
 
 func init() {
-	RegisterPlugin("BeforeAfterPosts", reflect.TypeOf(BeforeAfterPostsPlugin{
-		PluginName: "BeforeAfterPosts",
-	}))
+	RegisterPlugin("BeforeAfterPosts", func() Plugin {
+		return &BeforeAfterPostsPlugin{PluginName: "BeforeAfterPosts"}
+	})
 }

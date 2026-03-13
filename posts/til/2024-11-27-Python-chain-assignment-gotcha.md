@@ -5,8 +5,9 @@ description: "A lesson learned about Python's chained assignment with mutable ob
 status: published
 slug: python-chain-assignment-gotcha
 tags: ["python",]
-date: 2024-11-27 22:15:00
+date: 2024-11-27
 ---
+
 
 I was writing some Python code and wanted to initialize a few variables to an empty list. Instead of creating separate lists for each variable, I decided to use chained assignments like this:
 

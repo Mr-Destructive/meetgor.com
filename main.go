@@ -11,7 +11,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"reflect"
 	"regexp"
 	"slices"
 	"sort"
@@ -24,6 +23,7 @@ import (
 
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/parser"
+	"github.com/yuin/goldmark/renderer/html"
 )
 
 func WalkAndListFiles(dirPath string) ([]string, error) {
@@ -58,14 +58,15 @@ func ReadFiles(files []string) ([][]byte, error) {
 func ReadPosts(files []string) ([]models.Post, error) {
 	var posts []models.Post
 
-	// Read file contents
-	filesBytes, err := ReadFiles(files)
-	if err != nil {
-		return nil, err
-	}
-
 	// Iterate through files
-	for _, fileBytes := range filesBytes {
+	for _, filePath := range files {
+		if strings.EqualFold(filepath.Base(filePath), "_index.md") {
+			continue
+		}
+		fileBytes, err := os.ReadFile(filePath)
+		if err != nil {
+			return nil, err
+		}
 		var success bool
 		var frontmatterObj models.FrontMatter
 		var contentBytes []byte
@@ -100,41 +101,35 @@ func ReadPosts(files []string) ([]models.Post, error) {
 
 		// Attempt to detect YAML front matter
 		if !success {
-			yamlSeparator := []byte("---\n\n")
-			yamlIndex := strings.Index(string(fileBytes), string(yamlSeparator))
+			frontmatterBytes, content := parseYAMLFrontmatter(fileBytes)
+			if frontmatterBytes == nil {
+				log.Printf("No valid front matter found in file")
+				continue
+			}
+			contentBytes = content
 
-			if yamlIndex != -1 {
-				frontmatterBytes := fileBytes[:yamlIndex]
-				contentBytes = fileBytes[yamlIndex+len(yamlSeparator):]
-
-				// Unmarshal into a temporary map to capture extra fields
-				tempMap := make(map[string]interface{})
-				if err := yaml.Unmarshal(frontmatterBytes, &tempMap); err == nil {
-
-					// Extract known fields into the struct
-					if err := yaml.Unmarshal(frontmatterBytes, &frontmatterObj); err != nil {
-						log.Printf("Error parsing YAML front matter: %v", err)
-						continue
-					}
-
-					// Remove known keys and store the rest in Extras
-					for _, key := range requiredFields {
-						delete(tempMap, key)
-					}
-					frontmatterObj.Extras = tempMap
-				} else {
+			// Unmarshal into a temporary map to capture extra fields
+			tempMap := make(map[string]interface{})
+			if err := yaml.Unmarshal(frontmatterBytes, &tempMap); err == nil {
+				// Extract known fields into the struct
+				if err := yaml.Unmarshal(frontmatterBytes, &frontmatterObj); err != nil {
 					log.Printf("Error parsing YAML front matter: %v", err)
 					continue
 				}
+
+				// Remove known keys and store the rest in Extras
+				for _, key := range requiredFields {
+					delete(tempMap, key)
+				}
+				frontmatterObj.Extras = tempMap
 			} else {
-				log.Printf("No valid front matter found in file", frontmatterObj)
-				log.Println(string(fileBytes))
+				log.Printf("Error parsing YAML front matter: %v", err)
 				continue
 			}
 		}
 		// Convert Markdown to HTML
 		var contentBuffer bytes.Buffer
-		md := goldmark.New(
+		mdOptions := []goldmark.Option{
 			goldmark.WithExtensions(
 				&plugins.SQLPlaygroundExtender{},
 			),
@@ -142,7 +137,11 @@ func ReadPosts(files []string) ([]models.Post, error) {
 				parser.WithAutoHeadingID(),
 				parser.WithAttribute(),
 			),
-		)
+		}
+		if frontmatterObj.Type == "newsletter" {
+			mdOptions = append(mdOptions, goldmark.WithRendererOptions(html.WithUnsafe()))
+		}
+		md := goldmark.New(mdOptions...)
 		// Create a new parser context
 		ctx := parser.NewContext()
 		if err := md.Convert(contentBytes, &contentBuffer, parser.WithContext(ctx)); err != nil {
@@ -154,10 +153,31 @@ func ReadPosts(files []string) ([]models.Post, error) {
 			Frontmatter: frontmatterObj,
 			Content:     template.HTML(contentBuffer.String()),
 			Markdown:    string(contentBytes),
+			SourcePath:  filePath,
 		})
 	}
 
 	return posts, nil
+}
+
+func parseYAMLFrontmatter(fileBytes []byte) ([]byte, []byte) {
+	lines := strings.Split(string(fileBytes), "\n")
+	if len(lines) == 0 || strings.TrimSpace(lines[0]) != "---" {
+		return nil, nil
+	}
+	end := -1
+	for i := 1; i < len(lines); i++ {
+		if strings.TrimSpace(lines[i]) == "---" {
+			end = i
+			break
+		}
+	}
+	if end == -1 {
+		return nil, nil
+	}
+	frontmatterContent := strings.Join(lines[1:end], "\n")
+	content := strings.Join(lines[end+1:], "\n")
+	return []byte(frontmatterContent), []byte(content)
 }
 
 func ReadTemplates(files []string) ([]string, error) {
@@ -178,14 +198,22 @@ func Copy(src string, dst string) error {
 		return err
 	}
 	for _, srcFileName := range srcFiles {
+		relPath, err := filepath.Rel(src, srcFileName)
+		if err != nil {
+			return err
+		}
+
 		srcFile, err := os.Open(srcFileName)
 		if err != nil {
 			return err
 		}
 		defer srcFile.Close()
 
-		srcFileName = filepath.Base(srcFileName)
-		dstPath := filepath.Join(dst, srcFileName)
+		dstPath := filepath.Join(dst, relPath)
+		err = os.MkdirAll(filepath.Dir(dstPath), os.ModePerm)
+		if err != nil {
+			return err
+		}
 		dstFile, err := os.Create(dstPath)
 		if err != nil {
 			return err
@@ -194,13 +222,13 @@ func Copy(src string, dst string) error {
 
 		_, err = io.Copy(dstFile, srcFile)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 	}
 	return nil
 }
 
-func CopyCustom(src string, dst string) error {
+func CopyCustom(src string, dst string, skipDirs []string) error {
 	srcFiles, err := WalkAndListFiles(src)
 	if err != nil {
 		return err
@@ -215,6 +243,19 @@ func CopyCustom(src string, dst string) error {
 
 		// Skip copying anything inside "admin"
 		if strings.HasPrefix(relPath, "admin") {
+			continue
+		}
+		skip := false
+		for _, dir := range skipDirs {
+			if dir == "" {
+				continue
+			}
+			if strings.HasPrefix(relPath, dir+string(os.PathSeparator)) || relPath == dir {
+				skip = true
+				break
+			}
+		}
+		if skip {
 			continue
 		}
 
@@ -238,7 +279,7 @@ func CopyCustom(src string, dst string) error {
 
 		_, err = io.Copy(dstFile, srcFile)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 	}
 
@@ -269,10 +310,10 @@ func GeneratePages(config models.SSG_CONFIG) error {
 		mdFileName := filepath.Base(mdFile)
 		content, err := ReadPosts([]string{string(mdFile)})
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 		if len(content) == 0 {
-			log.Fatal("No content found in file:", mdFile)
+			return fmt.Errorf("no content found in file: %s", mdFile)
 		}
 		post := content[0]
 
@@ -305,18 +346,21 @@ func GeneratePages(config models.SSG_CONFIG) error {
 			},
 		})
 		t, err = t.ParseFS(templateFS, "*.html")
+		if err != nil {
+			return err
+		}
 		err = t.ExecuteTemplate(&buffer, "default_page_template.html", context)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 		//create a folder with mdFileName
 		err = os.MkdirAll(filepath.Join(".", config.Blog.OutputDir, mdFileName), os.ModePerm)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 		err = os.WriteFile(filepath.Join(".", config.Blog.OutputDir, mdFileName, "index.html"), buffer.Bytes(), 0660)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 	}
 	return nil
@@ -330,21 +374,15 @@ func (p *PluginManager) Register(plugin plugins.Plugin) {
 	p.Plugins = append(p.Plugins, plugin)
 }
 
-func (p *PluginManager) ExecuteAll(ssg *models.SSG) {
+func (p *PluginManager) ExecuteAll(ssg *models.SSG) error {
 	fmt.Println("Running plugins")
 	for _, plugin := range p.Plugins {
 		fmt.Println("Running plugin:", plugin.Name())
-		plugin.Execute(ssg)
+		if err := plugin.Execute(ssg); err != nil {
+			return fmt.Errorf("plugin %s: %w", plugin.Name(), err)
+		}
 	}
-}
-
-// Config Plugin
-type ConfigPlugin struct {
-	PluginName string
-}
-
-func (c *ConfigPlugin) Name() string {
-	return c.PluginName
+	return nil
 }
 
 type PostReaderPlugin struct {
@@ -355,26 +393,124 @@ func (c *PostReaderPlugin) Name() string {
 	return c.PluginName
 }
 
-func (c *PostReaderPlugin) Execute(ssg *models.SSG) {
+func (c *PostReaderPlugin) Phase() plugins.Phase {
+	return plugins.PhaseRead
+}
+
+func (c *PostReaderPlugin) Requires() []string {
+	return nil
+}
+
+func (c *PostReaderPlugin) AdminPolicy() plugins.AdminPolicy {
+	return plugins.AdminRun
+}
+
+func (c *PostReaderPlugin) Execute(ssg *models.SSG) error {
 	config := &ssg.Config
 	postFolder := config.Blog.PostsDir
 	var postFiles []string
 	postFiles, err := WalkAndListFiles(postFolder)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	postsList, err := ReadPosts(postFiles)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
-	for _, post := range postsList {
+	for i := range postsList {
+		if postsList[i].Frontmatter.Status == "draft" {
+			continue
+		}
+		plugins.CleanPostFrontmatter(&postsList[i], ssg)
+	}
+
+	ssg.Posts = dedupePosts(postsList, config.Blog.PrefixURL)
+	fmt.Println("Posts:", len(ssg.Posts))
+	return nil
+}
+
+func dedupePosts(posts []models.Post, prefixURL string) []models.Post {
+	byKey := map[string]models.Post{}
+	for _, post := range posts {
 		if post.Frontmatter.Status == "draft" {
 			continue
 		}
-		plugins.CleanPostFrontmatter(&post, ssg)
+		key := normalizeSlugKey(post.Frontmatter.Slug, prefixURL)
+		if key == "" {
+			continue
+		}
+		existing, ok := byKey[key]
+		if !ok || isPreferredPost(post, existing) {
+			byKey[key] = post
+		}
 	}
-	ssg.Posts = postsList
-	fmt.Println("Posts:", len(ssg.Posts))
+
+	deduped := make([]models.Post, 0, len(byKey))
+	for _, post := range byKey {
+		deduped = append(deduped, post)
+	}
+	return deduped
+}
+
+func normalizeSlugKey(slug string, prefixURL string) string {
+	if slug == "" {
+		return ""
+	}
+	if prefixURL != "" {
+		slug = strings.TrimPrefix(slug, prefixURL)
+	}
+	slug = strings.TrimPrefix(slug, "/")
+	return slug
+}
+
+func isPreferredPost(candidate models.Post, existing models.Post) bool {
+	cScore := canonicalScore(candidate)
+	eScore := canonicalScore(existing)
+	if cScore != eScore {
+		return cScore > eScore
+	}
+	cDate, cOk := parseDate(candidate.Frontmatter.Date)
+	eDate, eOk := parseDate(existing.Frontmatter.Date)
+	if cOk && eOk {
+		if cDate.After(eDate) {
+			return true
+		}
+		if eDate.After(cDate) {
+			return false
+		}
+	} else if cOk && !eOk {
+		return true
+	} else if !cOk && eOk {
+		return false
+	}
+	return len(candidate.SourcePath) < len(existing.SourcePath)
+}
+
+func canonicalScore(post models.Post) int {
+	path := filepath.ToSlash(post.SourcePath)
+	postType := post.Frontmatter.Type
+	if postType == "" {
+		postType = "posts"
+	}
+	canonicalDir := "/posts/" + postType + "/"
+	if strings.Contains(path, canonicalDir) {
+		return 2
+	}
+	if strings.Contains(path, "/posts/") {
+		return 1
+	}
+	return 0
+}
+
+func parseDate(dateStr string) (time.Time, bool) {
+	if len(dateStr) < 10 {
+		return time.Time{}, false
+	}
+	parsed, err := time.Parse("2006-01-02", dateStr[:10])
+	if err != nil {
+		return time.Time{}, false
+	}
+	return parsed, true
 }
 
 type RenderTemplatesPlugin struct {
@@ -383,6 +519,18 @@ type RenderTemplatesPlugin struct {
 
 func (c *RenderTemplatesPlugin) Name() string {
 	return c.PluginName
+}
+
+func (c *RenderTemplatesPlugin) Phase() plugins.Phase {
+	return plugins.PhaseRender
+}
+
+func (c *RenderTemplatesPlugin) Requires() []string {
+	return []string{"readPosts"}
+}
+
+func (c *RenderTemplatesPlugin) AdminPolicy() plugins.AdminPolicy {
+	return plugins.AdminRun
 }
 
 func SortPosts(posts []models.Post) []models.Post {
@@ -410,9 +558,14 @@ type oEmbedResponse struct {
 	HTML string `json:"html"`
 }
 
+var twitterOEmbedBaseURL = "https://publish.twitter.com/oembed?url="
+var httpGet = http.Get
+var listenAndServe = http.ListenAndServe
+var fatalf = log.Fatal
+
 func getTwitterEmbed(url string) string {
-	apiURL := "https://publish.twitter.com/oembed?url=" + url
-	resp, err := http.Get(apiURL)
+	apiURL := twitterOEmbedBaseURL + url
+	resp, err := httpGet(apiURL)
 	if err != nil {
 		fmt.Println("Error fetching Twitter embed:", err)
 		return fmt.Sprintf(`<div class="embed-container"><a href="%s" target="_blank">%s</a></div>`, url, url)
@@ -456,11 +609,11 @@ func extractYouTubeID(url string) string {
 	return ""
 }
 
-func (c *RenderTemplatesPlugin) Execute(ssg *models.SSG) {
+func (c *RenderTemplatesPlugin) Execute(ssg *models.SSG) error {
 	config := &ssg.Config
 	templateFS := os.DirFS(config.Blog.TemplatesDir)
 	ssg.FS = templateFS
-	
+
 	// Create template with custom functions first
 	t := template.New("").Funcs(template.FuncMap{
 		"dateOnly": func(dateStr string) string {
@@ -471,12 +624,12 @@ func (c *RenderTemplatesPlugin) Execute(ssg *models.SSG) {
 			return dateStr
 		},
 	})
-	
+
 	t, err := t.ParseFS(templateFS, "*.html")
-	
+
 	ssg.TemplateFS = t
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	var prefixURL string = ""
 	if config.Blog.PrefixURL != "" {
@@ -487,7 +640,7 @@ func (c *RenderTemplatesPlugin) Execute(ssg *models.SSG) {
 	outputPath := filepath.Join(".", config.Blog.OutputDir)
 	err = os.MkdirAll(outputPath, os.ModePerm)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	feedPosts := make(map[string][]models.Post)
 	postsCopy := slices.Clone(ssg.Posts)
@@ -495,7 +648,6 @@ func (c *RenderTemplatesPlugin) Execute(ssg *models.SSG) {
 	ssg.Posts = postsCopy
 
 	for _, post := range ssg.Posts {
-		fmt.Println("Post:", post.Frontmatter.Title, post.Frontmatter.Type)
 		if post.Frontmatter.Status == "draft" {
 			continue
 		}
@@ -515,12 +667,25 @@ func (c *RenderTemplatesPlugin) Execute(ssg *models.SSG) {
 		if postSlug == "" {
 			postSlug = plugins.Slugify(post.Frontmatter.Title)
 		}
+		if strings.Contains(postSlug, "/") {
+			slugPath := postSlug
+			if prefixURL != "" {
+				slugPath = strings.TrimPrefix(slugPath, prefixURL)
+			}
+			slugPath = strings.TrimPrefix(slugPath, "/")
+			typePrefix := postType + "/"
+			if strings.HasPrefix(slugPath, typePrefix) {
+				postSlug = strings.TrimPrefix(slugPath, typePrefix)
+			} else {
+				postSlug = slugPath
+			}
+		}
 		post.Frontmatter.Slug = prefixURL + postType + "/" + postSlug
 		postPath := filepath.Join(outputPath, postType, postSlug)
 		//outputDirPath := filepath.Join(postPath, postSlug)
 		err = os.MkdirAll(postPath, os.ModePerm)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 		outputPostPath := filepath.Join(postPath, "index.html")
 		post.Content = template.HTML(generateEmbed(string(post.Content)))
@@ -534,29 +699,26 @@ func (c *RenderTemplatesPlugin) Execute(ssg *models.SSG) {
 				Blog:      config.Blog,
 				AdminMode: config.AdminMode,
 			},
+			Years: plugins.YearsFromPosts(ssg.Posts),
 		}
 		err := t.ExecuteTemplate(&buffer, templatePath, context)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 		err = os.WriteFile(outputPostPath, buffer.Bytes(), 0660)
+		if err != nil {
+			return err
+		}
 		feedPosts[postType] = append(feedPosts[postType], post)
 	}
-	for postType, posts := range feedPosts {
-		fmt.Println(postType)
-		fmt.Println(len(posts))
-	}
-	for key, value := range feedPosts {
-		fmt.Println(key, len(value))
-	}
+	// we no longer log individual feed counts
 	feedPostLists := []models.Feed{}
 	for postType, posts := range feedPosts {
 		postsCopy = slices.Clone(posts)
 		SortPosts(postsCopy)
 		posts = postsCopy
-		fmt.Println(config.Blog.PagesConfig[postType].Emoji)
 		feed := models.Feed{
-			Title: strings.ToTitle(postType) + " " + config.Blog.PagesConfig[postType].Emoji,
+			Title: strings.ToTitle(postType),
 			Type:  postType,
 			Slug:  prefixURL + postType,
 			Posts: posts,
@@ -565,6 +727,7 @@ func (c *RenderTemplatesPlugin) Execute(ssg *models.SSG) {
 		feedPostLists = append(feedPostLists, feed)
 	}
 	ssg.FeedPosts = feedPostLists
+	return nil
 }
 
 // "createFeeds",
@@ -576,9 +739,21 @@ func (c *CreateFeedsPlugin) Name() string {
 	return c.PluginName
 }
 
-func (c *CreateFeedsPlugin) Execute(ssg *models.SSG) {
+func (c *CreateFeedsPlugin) Phase() plugins.Phase {
+	return plugins.PhaseRender
+}
+
+func (c *CreateFeedsPlugin) Requires() []string {
+	return []string{"renderTemplates"}
+}
+
+func (c *CreateFeedsPlugin) AdminPolicy() plugins.AdminPolicy {
+	return plugins.AdminRun
+}
+
+func (c *CreateFeedsPlugin) Execute(ssg *models.SSG) error {
 	config := &ssg.Config
-	
+
 	// Generate individual feed pages
 	for _, feed := range ssg.FeedPosts {
 		buffer := bytes.Buffer{}
@@ -598,18 +773,25 @@ func (c *CreateFeedsPlugin) Execute(ssg *models.SSG) {
 				Blog:      config.Blog,
 				AdminMode: config.AdminMode,
 			},
+			Years: plugins.YearsFromPosts(ssg.Posts),
 		}
 		fmt.Println("Post:", feed.Title, len(feed.Posts))
 		err := ssg.TemplateFS.ExecuteTemplate(&buffer, templatePath, context)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 		feedPath := filepath.Join(".", config.Blog.OutputDir, feed.Type)
 		err = os.MkdirAll(feedPath, os.ModePerm)
+		if err != nil {
+			return err
+		}
 		outputFeedPath := fmt.Sprintf("%s/index.html", feedPath)
 		err = os.WriteFile(outputFeedPath, buffer.Bytes(), 0660)
+		if err != nil {
+			return err
+		}
 	}
-	
+
 	// Generate all-content feed with all posts
 	allPosts := []models.Post{}
 	for _, feed := range ssg.FeedPosts {
@@ -617,21 +799,21 @@ func (c *CreateFeedsPlugin) Execute(ssg *models.SSG) {
 	}
 	// Sort all posts by date
 	SortPosts(allPosts)
-	
+
 	if len(allPosts) > 0 {
 		allContentFeed := models.Feed{
-			Title: "All Content 📚",
+			Title: "All Content",
 			Type:  "all-content",
 			Slug:  "all-content",
 			Posts: allPosts,
 		}
-		
+
 		buffer := bytes.Buffer{}
 		templatePath := config.Blog.PagesConfig["all-content"].FeedTemplatePath
 		if templatePath == "" {
 			templatePath = config.Blog.DefaultFeedTemplate
 		}
-		
+
 		context := models.TemplateContext{
 			FeedPosts: []models.Feed{allContentFeed},
 			Themes: models.ThemeCombo{
@@ -643,26 +825,27 @@ func (c *CreateFeedsPlugin) Execute(ssg *models.SSG) {
 				Blog:      config.Blog,
 				AdminMode: config.AdminMode,
 			},
+			Years: plugins.YearsFromPosts(ssg.Posts),
 		}
-		
+
 		fmt.Println("Creating all-content feed with", len(allPosts), "posts")
 		err := ssg.TemplateFS.ExecuteTemplate(&buffer, templatePath, context)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
-		
+
 		feedPath := filepath.Join(".", config.Blog.OutputDir, "all-content")
 		err = os.MkdirAll(feedPath, os.ModePerm)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 		outputFeedPath := fmt.Sprintf("%s/index.html", feedPath)
 		err = os.WriteFile(outputFeedPath, buffer.Bytes(), 0660)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 	}
-	
+
 	// create a folder for post if the post type is "post"
 	// as this should be the /posts/<slug> as well as /<slug>
 	for _, post := range ssg.Posts {
@@ -670,7 +853,7 @@ func (c *CreateFeedsPlugin) Execute(ssg *models.SSG) {
 			postPath := filepath.Join(".", config.Blog.OutputDir, post.Frontmatter.Slug)
 			err := os.MkdirAll(postPath, os.ModePerm)
 			if err != nil {
-				log.Fatal(err)
+				return err
 			}
 			buffer := bytes.Buffer{}
 			context := models.TemplateContext{
@@ -683,19 +866,20 @@ func (c *CreateFeedsPlugin) Execute(ssg *models.SSG) {
 					Blog:      config.Blog,
 					AdminMode: config.AdminMode,
 				},
+				Years: plugins.YearsFromPosts(ssg.Posts),
 			}
 			err = ssg.TemplateFS.ExecuteTemplate(&buffer, config.Blog.DefaultPostTemplate, context)
 			if err != nil {
-				log.Fatal(err)
+				return err
 			}
 			outputPostPath := fmt.Sprintf("%s/index.html", postPath)
 			err = os.WriteFile(outputPostPath, buffer.Bytes(), 0660)
 			if err != nil {
-				log.Fatal(err)
+				return err
 			}
 		}
 	}
-
+	return nil
 }
 
 // "createFeeds",
@@ -708,13 +892,29 @@ func (c *CopyStaticFilesPlugin) Name() string {
 	return c.PluginName
 }
 
-func (c *CopyStaticFilesPlugin) Execute(ssg *models.SSG) {
+func (c *CopyStaticFilesPlugin) Phase() plugins.Phase {
+	return plugins.PhasePostProcess
+}
+
+func (c *CopyStaticFilesPlugin) Requires() []string {
+	return nil
+}
+
+func (c *CopyStaticFilesPlugin) AdminPolicy() plugins.AdminPolicy {
+	return plugins.AdminRun
+}
+
+func (c *CopyStaticFilesPlugin) Execute(ssg *models.SSG) error {
 	config := &ssg.Config
 	err := Copy(config.Blog.StaticDir, config.Blog.OutputDir)
+	if err != nil {
+		return err
+	}
 	err = GeneratePages(*config)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+	return nil
 }
 
 type IndexPlugin struct {
@@ -725,14 +925,26 @@ func (c *IndexPlugin) Name() string {
 	return c.PluginName
 }
 
-func (c *IndexPlugin) Execute(ssg *models.SSG) {
+func (c *IndexPlugin) Phase() plugins.Phase {
+	return plugins.PhasePostProcess
+}
+
+func (c *IndexPlugin) Requires() []string {
+	return []string{"renderTemplates"}
+}
+
+func (c *IndexPlugin) AdminPolicy() plugins.AdminPolicy {
+	return plugins.AdminRun
+}
+
+func (c *IndexPlugin) Execute(ssg *models.SSG) error {
 	config := &ssg.Config
 
 	buffer := bytes.Buffer{}
 	templateFS := os.DirFS(config.Blog.StaticDir)
 	t, err := template.ParseFS(templateFS, "index.html")
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	context := models.TemplateContext{
 		Themes: models.ThemeCombo{
@@ -744,15 +956,17 @@ func (c *IndexPlugin) Execute(ssg *models.SSG) {
 			AdminMode: config.AdminMode,
 		},
 		FeedPosts: ssg.FeedPosts,
+		Years:     plugins.YearsFromPosts(ssg.Posts),
 	}
 	err = t.ExecuteTemplate(&buffer, "index.html", context)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	err = os.WriteFile(filepath.Join(".", config.Blog.OutputDir, "index.html"), buffer.Bytes(), 0660)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+	return nil
 }
 
 type CopyDirsPlugin struct {
@@ -763,27 +977,28 @@ func (c *CopyDirsPlugin) Name() string {
 	return c.PluginName
 }
 
-func (c *CopyDirsPlugin) Execute(ssg *models.SSG) {
+func (c *CopyDirsPlugin) Phase() plugins.Phase {
+	return plugins.PhasePostProcess
+}
+
+func (c *CopyDirsPlugin) Requires() []string {
+	return []string{"index"}
+}
+
+func (c *CopyDirsPlugin) AdminPolicy() plugins.AdminPolicy {
+	return plugins.AdminRun
+}
+
+func (c *CopyDirsPlugin) Execute(ssg *models.SSG) error {
 	config := &ssg.Config
 	for _, dest := range config.Blog.DuplicateOutputTo {
 		destPath := filepath.Join(".", config.Blog.OutputDir, dest)
-		err := CopyCustom(config.Blog.OutputDir, destPath)
+		err := CopyCustom(config.Blog.OutputDir, destPath, config.Blog.DuplicateOutputTo)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 	}
-}
-
-// admin
-type AdminPlugin struct {
-	PluginName string
-}
-
-func (c *AdminPlugin) Name() string {
-	return c.PluginName
-}
-
-func (c *AdminPlugin) Execute(ssg *models.SSG) {
+	return nil
 }
 
 // "server"
@@ -795,11 +1010,26 @@ func (c *ServerPlugin) Name() string {
 	return c.PluginName
 }
 
-func (c *ServerPlugin) Execute(ssg *models.SSG) {
+func (c *ServerPlugin) Phase() plugins.Phase {
+	return plugins.PhaseServe
+}
+
+func (c *ServerPlugin) Requires() []string {
+	return nil
+}
+
+func (c *ServerPlugin) AdminPolicy() plugins.AdminPolicy {
+	return plugins.AdminOnly
+}
+
+func (c *ServerPlugin) Execute(ssg *models.SSG) error {
 	config := &ssg.Config
 	http.Handle("/", http.FileServer(http.Dir(config.Blog.OutputDir)))
 	fmt.Println("Listening on port 3030")
-	http.ListenAndServe(":3030", nil)
+	if err := listenAndServe(":3030", nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func main() {
@@ -816,120 +1046,192 @@ func main() {
 	ssg := models.SSG{}
 	configbytes, err := os.ReadFile(models.SSG_CONFIG_FILE_NAME)
 	if err != nil {
-		log.Fatal(err)
+		fatalf(err)
 	}
 	var config models.SSG_CONFIG
 	err = json.Unmarshal(configbytes, &config)
 	if err != nil {
-		log.Fatal(err)
+		fatalf(err)
 	}
 	ssg.Config = config
 	if devEnv {
 		ssg.Config.Blog.PrefixURL = ""
 	}
 
-	// loading in the posts -> post folder
-	// load in the templates
-	// create feeds
-	// load in the static files
-	// pack the html pages and static files in a folder
-	// serve the folder
-	pluginManager := PluginManager{}
-	for _, plugin := range config.Plugins {
-		switch plugin {
-		case "readPosts":
-			pluginManager.Register(&PostReaderPlugin{PluginName: "readPosts"})
-		case "renderTemplates":
-			pluginManager.Register(&RenderTemplatesPlugin{PluginName: "renderTemplates"})
-		case "createFeeds":
-			pluginManager.Register(&CreateFeedsPlugin{PluginName: "createFeeds"})
-		case "copyStaticFiles":
-			pluginManager.Register(&CopyStaticFilesPlugin{PluginName: "copyStaticFiles"})
-		case "index":
-			pluginManager.Register(&IndexPlugin{PluginName: "index"})
-		case "copyDirs":
-			pluginManager.Register(&CopyDirsPlugin{PluginName: "copyDirs"})
-		default:
-
-			//userPlugin := plugins.UserPlugin{PluginName: plugin}
-			//pluginManager.Register(&userPlugin)
-
-			if plugin != "server" {
-				pluginStruct, err := LoadPlugin(plugin)
-				if err != nil {
-					log.Printf("Error loading plugin %s: %v", plugin, err)
-					continue
-				}
-				fmt.Println("Load", plugin, pluginStruct)
-				pluginManager.Register(pluginStruct)
-			} else {
-				continue
-			}
-		}
+	pluginsList, err := buildPlugins(config)
+	if err != nil {
+		fatalf(err)
 	}
-	pluginManager.ExecuteAll(&ssg)
-	pluginManager = PluginManager{}
+
+	normalPlugins := filterPluginsForMode(pluginsList, RunModeNormal)
+	if err := validatePluginOrder(normalPlugins); err != nil {
+		fatalf(err)
+	}
+	if err := (&PluginManager{Plugins: normalPlugins}).ExecuteAll(&ssg); err != nil {
+		fatalf(err)
+	}
+
 	originalOutputDir := ssg.Config.Blog.OutputDir
 	ssg.Config.AdminMode = true
 	ssg.Config.Blog.OutputDir = path.Join(ssg.Config.Blog.OutputDir, ssg.Config.Blog.AdminDir)
-	for _, plugin := range config.Plugins {
-		switch plugin {
-		case "readPosts":
-			pluginManager.Register(&PostReaderPlugin{PluginName: "readPosts"})
-		case "renderTemplates":
-			pluginManager.Register(&RenderTemplatesPlugin{PluginName: "renderTemplates"})
-		case "createFeeds":
-			pluginManager.Register(&CreateFeedsPlugin{PluginName: "createFeeds"})
-		case "copyStaticFiles":
-			pluginManager.Register(&CopyStaticFilesPlugin{PluginName: "copyStaticFiles"})
-		case "index":
-			pluginManager.Register(&IndexPlugin{PluginName: "index"})
-		case "copyDirs":
-			pluginManager.Register(&CopyDirsPlugin{PluginName: "copyDirs"})
-		default:
+	adminPlugins := filterPluginsForMode(pluginsList, RunModeAdmin)
+	if err := validatePluginOrder(adminPlugins); err != nil {
+		fatalf(err)
+	}
+	if err := (&PluginManager{Plugins: adminPlugins}).ExecuteAll(&ssg); err != nil {
+		fatalf(err)
+	}
+	ssg.Config.Blog.OutputDir = originalOutputDir
+	ssg.Config.AdminMode = false
 
-			//userPlugin := plugins.UserPlugin{PluginName: plugin}
-			//pluginManager.Register(&userPlugin)
-
-			if plugin != "server" {
-				pluginStruct, err := LoadPlugin(plugin)
-				if err != nil {
-					log.Printf("Error loading plugin %s: %v", plugin, err)
-					continue
-				}
-				fmt.Println("Load", plugin, pluginStruct)
-				pluginManager.Register(pluginStruct)
-			} else {
-				continue
-			}
+	if devEnv {
+		servePlugins := filterPluginsForMode(pluginsList, RunModeServe)
+		if err := validatePluginOrder(servePlugins); err != nil {
+			fatalf(err)
+		}
+		if err := (&PluginManager{Plugins: servePlugins}).ExecuteAll(&ssg); err != nil {
+			fatalf(err)
 		}
 	}
-	pluginManager.ExecuteAll(&ssg)
-	pluginManager = PluginManager{}
-	pluginManager.Register(&AdminPlugin{PluginName: "admin"})
-	pluginManager.ExecuteAll(&ssg)
-	ssg.Config.Blog.OutputDir = originalOutputDir
-	pluginManager = PluginManager{}
-	if devEnv {
-		pluginManager.Register(&ServerPlugin{PluginName: "server"})
-	}
-	pluginManager.ExecuteAll(&ssg)
 }
 
 func LoadPlugin(pluginName string) (plugins.Plugin, error) {
-	pluginType, exists := plugins.GetPluginType(pluginName)
+	pluginInstance, exists := plugins.NewPlugin(pluginName)
 	if !exists {
 		return nil, fmt.Errorf("plugin %s not found", pluginName)
 	}
-
-	pluginValue := reflect.New(pluginType).Interface()
-	pluginInstance, ok := pluginValue.(plugins.Plugin)
-	if !ok {
-		return nil, fmt.Errorf("type %s does not implement Plugin interface", pluginName)
-	}
-	val := reflect.ValueOf(pluginInstance).Elem()
-	if field := val.FieldByName("PluginName"); field.IsValid() && field.CanSet() {
-		field.SetString(pluginName)
-	}
 	return pluginInstance, nil
+}
+
+var corePluginFactories = map[string]func() plugins.Plugin{
+	"readPosts":       func() plugins.Plugin { return &PostReaderPlugin{PluginName: "readPosts"} },
+	"renderTemplates": func() plugins.Plugin { return &RenderTemplatesPlugin{PluginName: "renderTemplates"} },
+	"createFeeds":     func() plugins.Plugin { return &CreateFeedsPlugin{PluginName: "createFeeds"} },
+	"copyStaticFiles": func() plugins.Plugin { return &CopyStaticFilesPlugin{PluginName: "copyStaticFiles"} },
+	"index":           func() plugins.Plugin { return &IndexPlugin{PluginName: "index"} },
+	"copyDirs":        func() plugins.Plugin { return &CopyDirsPlugin{PluginName: "copyDirs"} },
+	"server":          func() plugins.Plugin { return &ServerPlugin{PluginName: "server"} },
+}
+
+type RunMode int
+
+const (
+	RunModeNormal RunMode = iota
+	RunModeAdmin
+	RunModeServe
+)
+
+func resolvePlugin(name string) (plugins.Plugin, error) {
+	if factory, ok := corePluginFactories[name]; ok {
+		return factory(), nil
+	}
+	return LoadPlugin(name)
+}
+
+func buildPlugins(config models.SSG_CONFIG) ([]plugins.Plugin, error) {
+	pluginsList := make([]plugins.Plugin, 0, len(config.Plugins))
+	for _, name := range config.Plugins {
+		plugin, err := resolvePlugin(name)
+		if err != nil {
+			return nil, err
+		}
+		pluginsList = append(pluginsList, plugin)
+	}
+	return pluginsList, nil
+}
+
+func pluginPhase(plugin plugins.Plugin) plugins.Phase {
+	if meta, ok := plugin.(plugins.PluginMetadata); ok {
+		return meta.Phase()
+	}
+	return plugins.PhaseOther
+}
+
+func pluginRequires(plugin plugins.Plugin) []string {
+	if meta, ok := plugin.(plugins.PluginMetadata); ok {
+		return meta.Requires()
+	}
+	return nil
+}
+
+func pluginAdminPolicy(plugin plugins.Plugin) plugins.AdminPolicy {
+	if meta, ok := plugin.(plugins.PluginMetadata); ok {
+		return meta.AdminPolicy()
+	}
+	return plugins.AdminRun
+}
+
+func filterPluginsForMode(all []plugins.Plugin, mode RunMode) []plugins.Plugin {
+	filtered := make([]plugins.Plugin, 0, len(all))
+	for _, plugin := range all {
+		phase := pluginPhase(plugin)
+		if mode == RunModeServe {
+			if phase != plugins.PhaseServe {
+				continue
+			}
+			filtered = append(filtered, plugin)
+			continue
+		}
+		if phase == plugins.PhaseServe {
+			continue
+		}
+		policy := pluginAdminPolicy(plugin)
+		if mode == RunModeAdmin && policy == plugins.AdminSkip {
+			continue
+		}
+		if mode == RunModeNormal && policy == plugins.AdminOnly {
+			continue
+		}
+		filtered = append(filtered, plugin)
+	}
+	return filtered
+}
+
+func phaseWeight(phase plugins.Phase) int {
+	switch phase {
+	case plugins.PhaseRead:
+		return 10
+	case plugins.PhaseTransform:
+		return 20
+	case plugins.PhaseRender:
+		return 30
+	case plugins.PhasePostProcess:
+		return 40
+	case plugins.PhaseServe:
+		return 50
+	default:
+		return 60
+	}
+}
+
+func validatePluginOrder(pluginsList []plugins.Plugin) error {
+	seen := make(map[string]int, len(pluginsList))
+	lastPhaseWeight := -1
+
+	for i, plugin := range pluginsList {
+		name := plugin.Name()
+		if _, ok := seen[name]; ok {
+			return fmt.Errorf("duplicate plugin name: %s", name)
+		}
+		seen[name] = i
+
+		weight := phaseWeight(pluginPhase(plugin))
+		if weight < lastPhaseWeight {
+			return fmt.Errorf("plugin %s is out of phase order", name)
+		}
+		lastPhaseWeight = weight
+	}
+
+	for i, plugin := range pluginsList {
+		for _, req := range pluginRequires(plugin) {
+			reqIndex, ok := seen[req]
+			if !ok {
+				return fmt.Errorf("plugin %s requires missing plugin %s", plugin.Name(), req)
+			}
+			if reqIndex >= i {
+				return fmt.Errorf("plugin %s requires %s to run before it", plugin.Name(), req)
+			}
+		}
+	}
+	return nil
 }

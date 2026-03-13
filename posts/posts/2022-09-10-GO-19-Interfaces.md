@@ -1,18 +1,14 @@
-{
-  "type": "posts",
-  "title": "Golang: Interfaces",
-  "description": "Understanding the baiscs of interfaces in Golang. Exploring the concept of polymorphism in golang with the help of interfaces and structs.",
-  "date": "2022-09-10 17:30:00",
-  "status": "published",
-  "slug": "golang-interfaces",
-  "tags": [
-    "go"
-  ],
-  "series": [
-    "100-days-of-golang"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/golang-019-interfaces.png"
-}
+---
+type: posts
+title: "Golang: Interfaces"
+date: 2022-09-10
+slug: "golang-interfaces"
+series: ["100-days-of-golang"]
+tags:
+  - go
+image_url: https://meetgor-cdn.pages.dev/golang-019-interfaces.png
+---
+
 
 ## Introduction
 

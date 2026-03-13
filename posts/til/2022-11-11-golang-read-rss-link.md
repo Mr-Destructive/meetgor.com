@@ -5,8 +5,9 @@ description: "Reading Rss Feed with a Rss XML Link/URL in golang using encoding 
 status: published
 slug: golang-read-rss-feed
 tags: ["go", ]
-date: 2022-11-11 22:45:00
+date: 2022-11-11
 ---
+
 
 ## Reding Rss Feed
 

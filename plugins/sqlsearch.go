@@ -3,6 +3,7 @@ package plugins
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -33,7 +34,7 @@ type SQLSearchData struct {
 	Posts      []PostForSQL `json:"posts"`
 	Tils       []PostForSQL `json:"tils"`
 	Newsletter []PostForSQL `json:"newsletter"`
-	Work       []PostForSQL `json:"work"`	
+	Work       []PostForSQL `json:"work"`
 	Projects   []PostForSQL `json:"projects"`
 	AllPosts   []PostForSQL `json:"all_posts"`
 }
@@ -44,6 +45,18 @@ type SQLSearchPlugin struct {
 
 func (p *SQLSearchPlugin) Name() string {
 	return p.PluginName
+}
+
+func (p *SQLSearchPlugin) Phase() Phase {
+	return PhasePostProcess
+}
+
+func (p *SQLSearchPlugin) Requires() []string {
+	return []string{"readPosts"}
+}
+
+func (p *SQLSearchPlugin) AdminPolicy() AdminPolicy {
+	return AdminRun
 }
 
 // stripHTML removes HTML tags and decodes HTML entities from a string.
@@ -143,9 +156,8 @@ func readMarkdownFile(filePath string) (*PostForSQL, error) {
 	}, nil
 }
 
-func (p *SQLSearchPlugin) Execute(ssg *models.SSG) {
+func (p *SQLSearchPlugin) Execute(ssg *models.SSG) error {
 	config := &ssg.Config
-	postsDir := config.Blog.PostsDir // Typically "content/posts"
 
 	sqlData := SQLSearchData{
 		Posts:      []PostForSQL{},
@@ -156,69 +168,80 @@ func (p *SQLSearchPlugin) Execute(ssg *models.SSG) {
 		AllPosts:   []PostForSQL{},
 	}
 
-	err := filepath.Walk(postsDir, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
+	for _, post := range ssg.Posts {
+		if strings.EqualFold(post.Frontmatter.Status, "draft") {
+			continue
 		}
-		if info.IsDir() {
-			return nil // Skip directories
-		}
-		if filepath.Ext(path) != ".md" {
-			return nil // Process only markdown files
+		typed := post.Frontmatter.Type
+		if typed == "" {
+			typed = "posts"
 		}
 
-		post, err := readMarkdownFile(path)
-		if err != nil {
-			log.Printf("Error reading markdown file %s: %v", path, err)
-			return nil // Continue processing other files
-		}
-		if post == nil || post.Status == "draft" {
-			return nil // Skip if no valid front matter or is a draft
+		slug := strings.Trim(post.Frontmatter.Slug, "/")
+		content := stripHTML(string(post.Content))
+		series := ""
+		if post.Frontmatter.Extras != nil {
+			if s, ok := post.Frontmatter.Extras["series"].(string); ok {
+				series = s
+			}
 		}
 
-		// Add to specific type array
-		switch post.Type {
+		tags := append([]string{}, post.Frontmatter.Tags...)
+		if tags == nil {
+			tags = []string{}
+		}
+
+		sqlPost := PostForSQL{
+			Title:       post.Frontmatter.Title,
+			Date:        post.Frontmatter.Date,
+			Tags:        tags,
+			Content:     content,
+			Description: post.Frontmatter.Description,
+			Type:        typed,
+			Series:      series,
+			Status:      post.Frontmatter.Status,
+			Slug:        slug,
+		}
+
+		switch typed {
 		case "posts":
-			sqlData.Posts = append(sqlData.Posts, *post)
+			sqlData.Posts = append(sqlData.Posts, sqlPost)
 		case "til":
-			sqlData.Tils = append(sqlData.Tils, *post)
+			sqlData.Tils = append(sqlData.Tils, sqlPost)
 		case "newsletter":
-			sqlData.Newsletter = append(sqlData.Newsletter, *post)
+			sqlData.Newsletter = append(sqlData.Newsletter, sqlPost)
 		case "work":
-			sqlData.Work = append(sqlData.Work, *post)
-		case "project": // Assuming "project" type maps to "projects" table
-			sqlData.Projects = append(sqlData.Projects, *post)
+			sqlData.Work = append(sqlData.Work, sqlPost)
+		case "project", "projects":
+			sqlData.Projects = append(sqlData.Projects, sqlPost)
 		default:
-			// If type is not explicitly handled, add to general posts or log
-			sqlData.Posts = append(sqlData.Posts, *post)
+			sqlData.Posts = append(sqlData.Posts, sqlPost)
 		}
 
-		// Add to combined all_posts array
-		sqlData.AllPosts = append(sqlData.AllPosts, *post)
-
-		return nil
-	})
-
-	if err != nil {
-		log.Fatalf("Error walking posts directory: %v", err)
+		sqlData.AllPosts = append(sqlData.AllPosts, sqlPost)
 	}
 
 	jsonData, err := json.MarshalIndent(sqlData, "", "  ")
 	if err != nil {
-		log.Fatalf("Error marshalling SQL data to JSON: %v", err)
+		return fmt.Errorf("error marshalling SQL data to JSON: %w", err)
 	}
 
 	outputDir := filepath.Join(".", config.Blog.OutputDir)
-	err = os.MkdirAll(outputDir, os.ModePerm)
-	if err != nil {
-		log.Fatalf("Error creating output directory %s: %v", outputDir, err)
+	if err := os.MkdirAll(outputDir, os.ModePerm); err != nil {
+		return fmt.Errorf("error creating output directory %s: %w", outputDir, err)
 	}
 
 	jsonFilePath := filepath.Join(outputDir, "posts.json")
-	err = ioutil.WriteFile(jsonFilePath, jsonData, 0644)
-	if err != nil {
-		log.Fatalf("Error writing posts.json: %v", err)
+	if err := os.WriteFile(jsonFilePath, jsonData, 0644); err != nil {
+		return fmt.Errorf("error writing posts.json: %w", err)
 	}
 
 	log.Printf("Generated %s with SQL search data.", jsonFilePath)
+	return nil
+}
+
+func init() {
+	RegisterPlugin("SQLSearch", func() Plugin {
+		return &SQLSearchPlugin{PluginName: "SQLSearch"}
+	})
 }

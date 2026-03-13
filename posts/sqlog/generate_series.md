@@ -1,8 +1,13 @@
 ---
-type: "sqlog"
+type: sqlog
 title: "SQLite functions: generate_series"
-date: 2025-08-21
+tags:
+  - typescript
+  - sql
+  - sqlite
+date:  2025-08-21
 ---
+
 
 The [generate_series](https://www.sqlite.org/series.html) is a table valued function in sqlite and is available via the [generate_series](https://sqlite.org/src/artifact?ci=trunk&filename=ext/misc/series.c) extension.
 

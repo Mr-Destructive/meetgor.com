@@ -1,18 +1,14 @@
-{
-  "type": "posts",
-  "title": "Golang: Conditionals and Loops",
-  "description": "Getting familiar with condition statements and loops in golang.",
-  "date": "2022-04-04 09:00:00",
-  "status": "published",
-  "slug": "golang-conditionals-loops",
-  "tags": [
-    "go"
-  ],
-  "image_url": "https://meetgor-cdn.pages.dev/golang-003-conditionals-loops.png",
-  "series": [
-    "100-days-of-golang"
-  ]
-}
+---
+type: posts
+title: "Golang: Conditionals and Loops"
+date: 2022-04-04
+slug: "golang-conditionals-loops"
+series: ["100-days-of-golang"]
+tags:
+  - go
+image_url: https://meetgor-cdn.pages.dev/golang-003-conditionals-loops.png
+---
+
 
 ## Introduction
 

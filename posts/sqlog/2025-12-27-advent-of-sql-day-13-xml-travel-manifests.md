@@ -1,11 +1,12 @@
 ---
-type: "sqlog"
+type: sqlog
 title: "Advent of SQL 2025 Day 13: XML Travel Manifests"
 slug: "advent-of-sql-2025-day-13"
-date: 2025-12-27 20:30 +0530
+date: 2025-12-27
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
 ---
+
 
 ## Advent of SQL - Day 13, XML Travel Manifests
 

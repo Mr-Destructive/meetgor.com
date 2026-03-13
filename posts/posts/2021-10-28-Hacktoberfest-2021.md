@@ -1,16 +1,14 @@
-{
-  "type": "posts",
-  "title": "Hacktoberfest 2021",
-  "subtitle": "Sharing my contribution and experience as a second hacktoberfest",
-  "date": "2021-10-28 20:10:00 +0530",
-  "status": "published",
-  "tags": [
-    "open-source",
-    "hacktoberfest"
-  ],
-  "slug": "hacktoberfest-2021",
-  "image_url": "https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643288673/blogmedia/qy8xrefyqcsslfppdyhp.png"
-}
+---
+type: posts
+title: "Hacktoberfest 2021"
+subtitle: "Sharing my contribution and experience as a second hacktoberfest"
+date: 2021-10-28
+slug: "hacktoberfest-2021"
+tags:
+  - open-source
+  - hacktoberfest
+image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643288673/blogmedia/qy8xrefyqcsslfppdyhp.png
+---
 
 
 ## Introduction
@@ -66,4 +64,4 @@ Don't take my word for it, you'll see it in action soon(probably in 2022) XD. Un
 
 ## Conclusion
 
-So, it's almost Halloween with Diwali around the corner and sadly an end-of-a-month-long celebration of Open source. Though you can anytime contribute to open source this is a month you can do more than just open source. This year for me was an absolute delight and definitely improved from the horrendous previous experiences. The things I spent time learning in lock-down when there was no result/reward for the effort, are finally getting rewarded, and am much confident than I ever was. Hopefully, you have not read the entire article but that's fine unless you have taken time to read it. Thank you for being here. Until then Happy Coding :)  
+So, it's almost Halloween with Diwali around the corner and sadly an end-of-a-month-long celebration of Open source. Though you can anytime contribute to open source this is a month you can do more than just open source. This year for me was an absolute delight and definitely improved from the horrendous previous experiences. The things I spent time learning in lock-down when there was no result/reward for the effort, are finally getting rewarded, and am much confident than I ever was. Hopefully, you have not read the entire article but that's fine unless you have taken time to read it. Thank you for being here. Until then Happy Coding :)

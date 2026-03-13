@@ -1,10 +1,11 @@
 ---
-type: "sqlog"
+type: sqlog
 title: "SQLite SQL: Create Table Bare Bones Table"
 slug: sqlite-create-table-bare-bones-table
 date: 2025-09-05
 tags: ["sqlite", "sql"]
 ---
+
 
 What if you only wanted one column. If you create specify a column name in create table, then there will be actually 2 columns created, one that you specified and the other which is hidden as `rowid`, unless you mentioned rowid as the column.
 

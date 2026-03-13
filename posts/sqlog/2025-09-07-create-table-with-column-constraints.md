@@ -2,9 +2,10 @@
 type: sqlog
 slug: sqlite-create-table-column-constraint
 title: 'SQLite SQL: Create Table with column constraints'
-date: "2025-09-07"
+date: 2025-09-07
 tags: ["sqlite", "sql"]
 ---
+
 
 ## Create Table with column constraints
 

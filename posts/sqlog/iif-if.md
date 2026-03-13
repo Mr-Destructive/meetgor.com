@@ -1,9 +1,14 @@
 ---
-type: "sqlog"
+type: sqlog
 title: "SQLite Scalar function: 3 valued iif and if scalar function"
 slug: sqlite-iff-if-scalar-functions
-date: 2025-08-27
+tags:
+  - typescript
+  - sql
+  - sqlite
+date:  2025-08-27
 ---
+
 
 In the recent SQLite version specifically the 3.48.0, the support for pair of conditions was added to the iif function. And also an alias for iif as if was added for compatibility and ease of use for people coming from other databases.
 

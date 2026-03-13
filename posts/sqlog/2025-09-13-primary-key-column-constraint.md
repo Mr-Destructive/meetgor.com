@@ -2,9 +2,10 @@
 type: sqlog
 slug: sqlite-primary-key-column-constraint
 title: 'SQLite SQL: PRIMARY KEY column constraint'
-date: "2025-09-13"
+date: 2025-09-13
 tags: ["sqlite", "sql"]
 ---
+
 
 ## The PRIMARY KEY column constraint
 

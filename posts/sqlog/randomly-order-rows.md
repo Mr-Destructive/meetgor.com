@@ -1,8 +1,13 @@
 ---
-type: "sqlog"
+type: sqlog
 title: "SQLite: Randomly order rows"
-date: 2025-08-24
+tags:
+  - typescript
+  - sql
+  - sqlite
+date:  2025-08-24
 ---
+
 
 Return rows or records in a table with random order in SQLite
 

@@ -5,8 +5,9 @@ description: "Exploring how to write python dict/key-value pairs and a table-lik
 status: published
 slug: python-dict-to-csv-table
 tags: ["python",]
-date: 2024-03-20 22:30:00
+date: 2024-03-20
 ---
+
 
 ## Populating a Python dict having a table-like structure to a CSV
 

@@ -1,15 +1,14 @@
-{
-  "type": "posts",
-  "title": "Vim: NERDTree",
-  "subtitle": "Customizing the NERDTree plugin in Vim for enhancing file management and navigation.",
-  "date": "2021-08-31 20:45:06 +0530",
-  "status": "published",
-  "tags": [
-    "vim"
-  ],
-  "slug": "vim-nerdtree",
-  "image_url": "https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643286953/blogmedia/pqolzpdehob0xj3sdohr.png"
-}
+---
+type: posts
+title: "Vim: NERDTree"
+subtitle: "Customizing the NERDTree plugin in Vim for enhancing file management and navigation."
+date: 2021-08-31
+slug: "vim-nerdtree"
+tags:
+  - vim
+image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643286953/blogmedia/pqolzpdehob0xj3sdohr.png
+---
+
 
 ## Introduction
 
