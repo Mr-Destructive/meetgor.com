@@ -110,6 +110,10 @@ func (p *TagsPlugin) Execute(ssg *models.SSG) error {
 		return nil
 	}
 
+	if ssg.TemplateFS.Lookup("tags_index.html") == nil {
+		return nil
+	}
+
 	sort.Slice(tagLinks, func(i, j int) bool {
 		if tagLinks[i].Count == tagLinks[j].Count {
 			return tagLinks[i].Title < tagLinks[j].Title
