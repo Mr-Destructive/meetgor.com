@@ -46,6 +46,19 @@ type RSSPlugin struct {
 
 var rssNow = time.Now
 
+func parsePostDate(dateStr string) (time.Time, error) {
+	if dateStr == "" {
+		return time.Time{}, fmt.Errorf("empty date")
+	}
+	if t, err := time.Parse("2006-01-02", dateStr); err == nil {
+		return t, nil
+	}
+	if t, err := time.Parse(time.RFC3339, dateStr); err == nil {
+		return t, nil
+	}
+	return time.Time{}, fmt.Errorf("unsupported date format: %s", dateStr)
+}
+
 func (p *RSSPlugin) Name() string {
 	return p.PluginName
 }
@@ -75,7 +88,7 @@ func (p *RSSPlugin) Execute(ssg *models.SSG) error {
 		}
 
 		if post.Frontmatter.Type == "post" || post.Frontmatter.Type == "posts" {
-			pubDate, err := time.Parse("2006-01-02", post.Frontmatter.Date)
+			pubDate, err := parsePostDate(post.Frontmatter.Date)
 			if err != nil {
 				log.Printf("Error parsing post date: %v", err)
 				continue
@@ -127,7 +140,7 @@ func (p *RSSPlugin) Execute(ssg *models.SSG) error {
 			continue
 		}
 
-		pubDate, err := time.Parse("2006-01-02", post.Frontmatter.Date)
+		pubDate, err := parsePostDate(post.Frontmatter.Date)
 		if err != nil {
 			log.Printf("Error parsing post date: %v", err)
 			continue

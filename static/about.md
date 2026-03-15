@@ -2,15 +2,18 @@
 type: static
 title: About
 slug: about
-description: Learn more about Meet Gor, a backend developer who thrives in the terminal and shares insights on Django, Vim, and Golang.
+description: Learn more about Meet Gor, a backend developer focused on Go, Python, and reliable data pipelines.
 ---
 
-## A Backend developer that lives in the terminal
+## Backend developer, terminal-first
 
-Hi, I’m Meet, also known as Mr. Destructive – a backend developer who thrives in the terminal. Currently an I.T. student based in India, my programming journey began as a self-taught developer with C and JavaScript. Over time, I expanded my skills to Python, C/C++, and Golang, contributing to open-source libraries and projects along the way.
+Hi, I’m Meet (Mr. Destructive on the internet). I’m a backend developer focused on Go and Python, with a bias for simple, composable tooling and data pipelines that are reliable under change.
 
-I have a passion for building side projects, many of which you can explore in my portfolio. I’m also an avid learner and share my insights on my Techstructive Blog, where I write about Django, Vim, Golang, and more. When I’m not coding, I enjoy reading sci-fi, writing stories, and gaming.
+I work at Docsumo on document extraction, table parsing, and fraud analytics for bank statements. Before that, I built backend APIs and database-focused improvements at The Solar Labs. I also write technical pieces at Techstructive, usually around Go, SQL, and the craft of shipping systems.
 
-Currently, I work at Docsumo as a Junior Backend Engineer, focusing on fraud detection and analytics for bank statements, after an internship role in Python development. Prior to this, I worked as a Backend Developer Intern at The Solar Labs, developing REST APIs and backend systems.
+Outside of work, I keep side projects small and sharp, write when I have something worth saying, and reset with sci-fi or games.
 
-If you’re interested in connecting, check out my GitHub or drop me a message!
+## Links
+- GitHub: [github.com/Mr-Destructive](https://github.com/Mr-Destructive)
+- LinkedIn: [linkedin.com/in/meetgor](https://www.linkedin.com/in/meetgor/)
+- Twitter: [twitter.com/MeetGor21](https://twitter.com/MeetGor21)

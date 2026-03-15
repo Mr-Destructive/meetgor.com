@@ -2,7 +2,7 @@
 type: static
 title: Hire Me
 slug: hire-me
-description: A grounded overview of what I build, how I work, and where I fit best.
+description: A grounded overview of what I build, how I work, and where I fit best in backend roles.
 ---
 
 ## What I build
@@ -27,4 +27,8 @@ I am terminal-first and prefer simple, composable tools over heavy abstractions.
 - GeeksForGeeks: technical writing across shell, Linux, and web development topics.
 
 ## Reach out
-If this fits what you are looking for, reach me via the contact page.
+If this fits what you are looking for, reach me via the contact page or connect on LinkedIn.
+
+Links:
+- Contact: [meetgor.com/contact](/contact)
+- LinkedIn: [linkedin.com/in/meetgor](https://www.linkedin.com/in/meetgor/)

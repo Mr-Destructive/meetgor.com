@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ .Config.Blog.Name }}</title>
     <meta name="description" content="{{ .Config.Blog.Description }}">
+    <meta name="author" content="Meet Gor">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ .Config.Blog.BaseUrl }}">
     
     <!-- Open Graph / Social Media Meta Tags -->
     <meta property="og:url" content="{{ .Config.Blog.BaseUrl }}">
@@ -12,6 +15,9 @@
     <meta property="og:title" content="{{ .Config.Blog.Name }}">
     <meta property="og:description" content="{{ .Config.Blog.Description }}">
     <meta property="og:image" content="{{ .Config.Blog.BaseUrl }}/mgicon.png">
+    <meta property="og:site_name" content="{{ .Config.Blog.Name }}">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image:alt" content="{{ .Config.Blog.Name }} logo">
     
     <!-- Twitter Meta Tags -->
     <meta property="twitter:domain" content="{{ .Config.Blog.BaseUrl }}">
@@ -19,6 +25,38 @@
     <meta name="twitter:title" content="{{ .Config.Blog.Name }}">
     <meta name="twitter:description" content="{{ .Config.Blog.Description }}">
     <meta name="twitter:image" content="{{ .Config.Blog.BaseUrl }}/mgicon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@MeetGor21">
+    <meta name="twitter:creator" content="@MeetGor21">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "{{ .Config.Blog.Name }}",
+        "url": "{{ .Config.Blog.BaseUrl }}",
+        "description": "{{ .Config.Blog.Description }}",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "{{ .Config.Blog.BaseUrl }}/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Meet Gor",
+        "url": "{{ .Config.Blog.BaseUrl }}",
+        "sameAs": [
+            "https://github.com/Mr-Destructive",
+            "https://www.linkedin.com/in/meetgor/",
+            "https://twitter.com/MeetGor21"
+        ]
+    }
+    </script>
     
     <!-- Favicon -->
     <link rel="icon" href="/mgicon.png" type="image/png">
@@ -66,28 +104,116 @@
       {{ end }}
     </header>
     
-    <main class="container intro-section">
-        <h2>Welcome</h2>
-        <p>
-            Hi, I'm Meet. I write about building things with programming (mostly go and python), figuring stuff out in public, and staying consistent.
-            Sometimes it's a deep dive. Sometimes it's a single thought.
-        </p>
-        
-        <section class="post-list">
-            <h3>All Feeds</h3>
-            <ul class="unord-list">
+    <main class="container home">
+        <section class="hero">
+            <p class="eyebrow">Backend Engineer • Go / Python • SQLite in production</p>
+            <h1>Meet Gor</h1>
+            <p class="hero-copy">
+                I build backend systems for document extraction, table parsing, and fraud analytics.
+                This site is my logbook for Go, SQL, and shipping reliable systems.
+            </p>
+            <div class="hero-actions">
+                <a class="btn-link" href="/{{ .Config.Blog.PrefixURL }}hire-me">Hire Me</a>
+                <a class="btn-link ghost" href="/{{ .Config.Blog.PrefixURL }}about">About</a>
+                <a class="btn-link ghost" href="/{{ .Config.Blog.PrefixURL }}contact">Contact</a>
+            </div>
+        </section>
+
+        <section class="home-section">
+            <div class="section-header">
+                <h2>Latest SQLOG</h2>
+                <a class="section-link" href="/{{ .Config.Blog.PrefixURL }}sqlog">All SQLOG</a>
+            </div>
+            <ul class="post-list compact">
                 {{ range .FeedPosts }}
-                    <li>
-                        {{ if $.Config.AdminMode }}
-                            <a href="/{{ $.Config.Blog.AdminDir }}/{{ .Slug }}">{{ .Title }}</a>
-                        {{ else }}
-                            <a href="/{{ .Slug }}">{{ .Title }}</a>
+                    {{ if eq .Type "sqlog" }}
+                        {{ range $idx, $post := .Posts }}
+                            {{ if lt $idx 6 }}
+                                <li class="post-item">
+                                    <span class="date">{{ $post.Frontmatter.Date }}</span>
+                                    <span class="title"><a href="/{{ $post.Frontmatter.Slug }}">{{ $post.Frontmatter.Title }}</a></span>
+                                </li>
+                            {{ end }}
                         {{ end }}
-                    </li>
+                    {{ end }}
                 {{ end }}
             </ul>
         </section>
-        <p>Check all the <a href="/{{ .Config.Blog.PrefixURL }}feeds">RSS Feeds</a></p>
+
+        <section class="home-section">
+            <div class="section-header">
+                <h2>Recent Posts</h2>
+                <a class="section-link" href="/{{ .Config.Blog.PrefixURL }}posts">All Posts</a>
+            </div>
+            <ul class="post-list compact">
+                {{ range .FeedPosts }}
+                    {{ if eq .Type "posts" }}
+                        {{ range $idx, $post := .Posts }}
+                            {{ if lt $idx 6 }}
+                                <li class="post-item">
+                                    <span class="date">{{ $post.Frontmatter.Date }}</span>
+                                    <span class="title"><a href="/{{ $post.Frontmatter.Slug }}">{{ $post.Frontmatter.Title }}</a></span>
+                                </li>
+                            {{ end }}
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
+            </ul>
+        </section>
+
+        <section class="home-section">
+            <div class="section-header">
+                <h2>Newsletter</h2>
+                <a class="section-link" href="/{{ .Config.Blog.PrefixURL }}newsletter">Archive</a>
+            </div>
+            <ul class="post-list compact">
+                {{ range .FeedPosts }}
+                    {{ if eq .Type "newsletter" }}
+                        {{ range $idx, $post := .Posts }}
+                            {{ if lt $idx 4 }}
+                                <li class="post-item">
+                                    <span class="date">{{ $post.Frontmatter.Date }}</span>
+                                    <span class="title"><a href="/{{ $post.Frontmatter.Slug }}">{{ $post.Frontmatter.Title }}</a></span>
+                                </li>
+                            {{ end }}
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
+            </ul>
+        </section>
+
+        <section class="home-section">
+            <div class="section-header">
+                <h2>Projects</h2>
+                <a class="section-link" href="/{{ .Config.Blog.PrefixURL }}projects">All Projects</a>
+            </div>
+            <ul class="post-list compact">
+                {{ range .FeedPosts }}
+                    {{ if eq .Type "projects" }}
+                        {{ range $idx, $post := .Posts }}
+                            {{ if lt $idx 4 }}
+                                <li class="post-item">
+                                    <span class="date">{{ $post.Frontmatter.Date }}</span>
+                                    <span class="title"><a href="/{{ $post.Frontmatter.Slug }}">{{ $post.Frontmatter.Title }}</a></span>
+                                </li>
+                            {{ end }}
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
+            </ul>
+        </section>
+
+        <section class="home-section">
+            <div class="section-header">
+                <h2>Explore</h2>
+                <span class="section-muted">Feeds, tags, and search</span>
+            </div>
+            <div class="link-row">
+                <a href="/{{ .Config.Blog.PrefixURL }}feeds">RSS Feeds</a>
+                <a href="/{{ .Config.Blog.PrefixURL }}tags">Tags</a>
+                <a href="/{{ .Config.Blog.PrefixURL }}search">Search</a>
+            </div>
+        </section>
     </main>
     
     <footer class="site-footer">

@@ -55,6 +55,35 @@ func ReadFiles(files []string) ([][]byte, error) {
 	return filesBytes, nil
 }
 
+func deriveDescription(content []byte, limit int) string {
+	if limit <= 0 {
+		limit = 160
+	}
+	text := string(content)
+	replacements := []struct {
+		pattern *regexp.Regexp
+		replace string
+	}{
+		{regexp.MustCompile("(?s)```.*?```+"), " "},
+		{regexp.MustCompile(`(?s)<[^>]+>`), " "},
+		{regexp.MustCompile(`!\[[^\]]*\]\([^)]+\)`), " "},
+		{regexp.MustCompile(`\[[^\]]+\]\([^)]+\)`), " "},
+		{regexp.MustCompile("`{1,3}[^`]+`{1,3}"), " "},
+		{regexp.MustCompile(`(?m)^#{1,6}\s+`), " "},
+		{regexp.MustCompile(`(?m)^>\s?`), " "},
+		{regexp.MustCompile(`(?m)^[-*+]\s+`), " "},
+		{regexp.MustCompile(`(?m)^\d+\.\s+`), " "},
+	}
+	for _, r := range replacements {
+		text = r.pattern.ReplaceAllString(text, r.replace)
+	}
+	text = strings.Join(strings.Fields(text), " ")
+	if len(text) <= limit {
+		return text
+	}
+	return strings.TrimSpace(text[:limit])
+}
+
 func ReadPosts(files []string) ([]models.Post, error) {
 	var posts []models.Post
 
@@ -126,6 +155,9 @@ func ReadPosts(files []string) ([]models.Post, error) {
 				log.Printf("Error parsing YAML front matter: %v", err)
 				continue
 			}
+		}
+		if strings.TrimSpace(frontmatterObj.Description) == "" {
+			frontmatterObj.Description = deriveDescription(contentBytes, 160)
 		}
 		// Convert Markdown to HTML
 		var contentBuffer bytes.Buffer
@@ -559,7 +591,15 @@ type oEmbedResponse struct {
 }
 
 var twitterOEmbedBaseURL = "https://publish.twitter.com/oembed?url="
-var httpGet = http.Get
+var httpClient = &http.Client{Timeout: 5 * time.Second}
+var httpGet = func(url string) (*http.Response, error) {
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("User-Agent", "meetgor-ssg/1.0")
+	return httpClient.Do(req)
+}
 var listenAndServe = http.ListenAndServe
 var fatalf = log.Fatal
 
@@ -571,6 +611,10 @@ func getTwitterEmbed(url string) string {
 		return fmt.Sprintf(`<div class="embed-container"><a href="%s" target="_blank">%s</a></div>`, url, url)
 	}
 	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		fmt.Println("Error fetching Twitter embed:", resp.Status)
+		return fmt.Sprintf(`<div class="embed-container"><a href="%s" target="_blank">%s</a></div>`, url, url)
+	}
 
 	body, _ := io.ReadAll(resp.Body)
 	var oembed oEmbedResponse
