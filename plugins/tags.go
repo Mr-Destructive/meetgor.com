@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 
 	"github.com/mr-destructive/mr-destructive.github.io/models"
 )
@@ -41,6 +42,13 @@ func (p *TagsPlugin) Execute(ssg *models.SSG) error {
 			tagPosts[tag] = append(tagPosts[tag], post)
 		}
 	}
+	type TagLink struct {
+		Title string
+		Slug  string
+		Count int
+	}
+	tagLinks := make([]TagLink, 0, len(tagPosts))
+
 	for tag, posts := range tagPosts {
 		buffer := bytes.Buffer{}
 		templatePath := config.Blog.PagesConfig["tags"].TemplatePath
@@ -90,6 +98,44 @@ func (p *TagsPlugin) Execute(ssg *models.SSG) error {
 		if err != nil {
 			return err
 		}
+
+		tagLinks = append(tagLinks, TagLink{
+			Title: tag,
+			Slug:  tag,
+			Count: len(posts),
+		})
+	}
+
+	if len(tagLinks) == 0 {
+		return nil
+	}
+
+	sort.Slice(tagLinks, func(i, j int) bool {
+		if tagLinks[i].Count == tagLinks[j].Count {
+			return tagLinks[i].Title < tagLinks[j].Title
+		}
+		return tagLinks[i].Count > tagLinks[j].Count
+	})
+
+	indexBuffer := bytes.Buffer{}
+	indexContext := struct {
+		Config        *models.SSG_CONFIG
+		TagFeedLinks  []TagLink
+		Years         []string
+	}{
+		Config:       config,
+		TagFeedLinks: tagLinks,
+		Years:        YearsFromPosts(ssg.Posts),
+	}
+	if err := ssg.TemplateFS.ExecuteTemplate(&indexBuffer, "tags_index.html", indexContext); err != nil {
+		return err
+	}
+	tagsIndexPath := filepath.Join(".", config.Blog.OutputDir, "tags", "index.html")
+	if err := os.MkdirAll(filepath.Dir(tagsIndexPath), os.ModePerm); err != nil {
+		return err
+	}
+	if err := os.WriteFile(tagsIndexPath, indexBuffer.Bytes(), 0660); err != nil {
+		return err
 	}
 	return nil
 }

@@ -92,6 +92,14 @@ func (p *BeforeAfterPostsPlugin) enrichPostWithSlug(post *models.Post, prefixURL
 	if slugName == "" {
 		slugName = Slugify(postCopy.Frontmatter.Title)
 	}
+	if prefixURL != "" {
+		slugName = strings.TrimPrefix(slugName, prefixURL)
+	}
+	slugName = strings.TrimPrefix(slugName, "/")
+	typePrefix := postType + "/"
+	if strings.HasPrefix(slugName, typePrefix) {
+		slugName = strings.TrimPrefix(slugName, typePrefix)
+	}
 
 	// Construct the full slug with type prefix
 	postCopy.Frontmatter.Slug = prefixURL + postType + "/" + slugName

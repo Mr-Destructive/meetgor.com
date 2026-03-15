@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"net/url"
 
 	"github.com/yuin/goldmark"
 	"gopkg.in/yaml.v3"
@@ -201,6 +202,14 @@ func parseTemplates(templateFS fs.FS, patterns ...string) (*template.Template, e
 				return dateStr[:10]
 			}
 			return dateStr
+		},
+		"slugify": func(value string) string {
+			return Slugify(value)
+		},
+		"pathEscape": func(value string) template.URL {
+			escaped := url.PathEscape(value)
+			escaped = strings.ReplaceAll(escaped, "+", "%2B")
+			return template.URL(escaped)
 		},
 	})
 	if len(patterns) == 0 {

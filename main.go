@@ -16,6 +16,7 @@ import (
 	"sort"
 	"strings"
 	"time"
+	"net/url"
 
 	models "github.com/mr-destructive/mr-destructive.github.io/models"
 	"github.com/mr-destructive/mr-destructive.github.io/plugins"
@@ -82,6 +83,193 @@ func deriveDescription(content []byte, limit int) string {
 		return text
 	}
 	return strings.TrimSpace(text[:limit])
+}
+
+func normalizeContentLinks(content string, frontmatter *models.FrontMatter) string {
+	content = normalizeSeriesLinks(content)
+	content = normalizeBareLinks(content)
+	if frontmatter != nil && frontmatter.Type == "links" {
+		if frontmatter.Extras != nil {
+			if rawLink, ok := frontmatter.Extras["link"].(string); ok && rawLink != "" {
+				content = normalizeRootRelativeLinks(content, rawLink)
+			}
+		}
+	}
+	return content
+}
+
+func normalizeSeriesLinks(content string) string {
+	re := regexp.MustCompile(`(/series/)([^)\s"'<>]+)`)
+	return re.ReplaceAllStringFunc(content, func(match string) string {
+		parts := re.FindStringSubmatch(match)
+		if len(parts) < 3 {
+			return match
+		}
+		series := parts[2]
+		if decoded, err := url.PathUnescape(series); err == nil {
+			series = decoded
+		}
+		series = plugins.Slugify(series)
+		return parts[1] + series
+	})
+}
+
+func normalizeBareLinks(content string) string {
+	re := regexp.MustCompile(`\]\(([^)]+)\)`)
+	updated := re.ReplaceAllStringFunc(content, func(match string) string {
+		parts := re.FindStringSubmatch(match)
+		if len(parts) < 2 {
+			return match
+		}
+		urlPart := parts[1]
+		if strings.HasPrefix(urlPart, "/login") || strings.HasPrefix(urlPart, "/logout") {
+			return "](#)"
+		}
+		if strings.HasPrefix(urlPart, "/") || strings.HasPrefix(urlPart, "#") {
+			return match
+		}
+		if strings.Contains(urlPart, "://") {
+			return match
+		}
+		if strings.HasPrefix(urlPart, "@") {
+			return "](" + "https://twitter.com/" + strings.TrimPrefix(urlPart, "@") + ")"
+		}
+		if strings.HasPrefix(urlPart, "www.") || strings.Contains(urlPart, ".") {
+			return "](" + "https://" + urlPart + ")"
+		}
+		return match
+	})
+	updated = normalizeBareHTMLAttrs(updated)
+	return updated
+}
+
+func normalizeBareHTMLAttrs(content string) string {
+	re := regexp.MustCompile(`\b(href|src)=["']([^"']+)["']`)
+	return re.ReplaceAllStringFunc(content, func(match string) string {
+		parts := re.FindStringSubmatch(match)
+		if len(parts) < 3 {
+			return match
+		}
+		attr := parts[1]
+		urlPart := parts[2]
+		if strings.HasPrefix(urlPart, "/login") || strings.HasPrefix(urlPart, "/logout") {
+			return attr + "=\"#\""
+		}
+		if strings.HasPrefix(urlPart, "/") || strings.HasPrefix(urlPart, "#") {
+			return match
+		}
+		if strings.Contains(urlPart, "://") {
+			return match
+		}
+		if strings.Contains(urlPart, "{{") || strings.Contains(urlPart, "{%") {
+			return attr + "=\"#\""
+		}
+		if strings.HasPrefix(urlPart, "@") {
+			return attr + "=\"https://twitter.com/" + strings.TrimPrefix(urlPart, "@") + "\""
+		}
+		if strings.HasPrefix(urlPart, "www.") || strings.Contains(urlPart, ".") {
+			return attr + "=\"https://" + urlPart + "\""
+		}
+		return match
+	})
+}
+
+func normalizeRootRelativeLinks(content string, rawLink string) string {
+	base := rawLink
+	if !strings.HasPrefix(base, "http://") && !strings.HasPrefix(base, "https://") {
+		base = "https://" + base
+	}
+	parsed, err := url.Parse(base)
+	if err != nil || parsed.Scheme == "" || parsed.Host == "" {
+		return content
+	}
+	baseURL := parsed.Scheme + "://" + parsed.Host
+
+	replacements := []struct {
+		re *regexp.Regexp
+	}{
+		{regexp.MustCompile(`\]\((/[^)]+)\)`)},
+		{regexp.MustCompile(`href="/([^"]+)"`)},
+		{regexp.MustCompile(`src="/([^"]+)"`)},
+		{regexp.MustCompile(`\]\(([^)]+)\)`)},
+	}
+	updated := content
+	updated = replacements[0].re.ReplaceAllStringFunc(updated, func(match string) string {
+		parts := replacements[0].re.FindStringSubmatch(match)
+		if len(parts) < 2 {
+			return match
+		}
+		return "](" + baseURL + parts[1] + ")"
+	})
+	updated = replacements[1].re.ReplaceAllStringFunc(updated, func(match string) string {
+		parts := replacements[1].re.FindStringSubmatch(match)
+		if len(parts) < 2 {
+			return match
+		}
+		return `href="` + baseURL + "/" + parts[1] + `"`
+	})
+	updated = replacements[2].re.ReplaceAllStringFunc(updated, func(match string) string {
+		parts := replacements[2].re.FindStringSubmatch(match)
+		if len(parts) < 2 {
+			return match
+		}
+		return `src="` + baseURL + "/" + parts[1] + `"`
+	})
+	updated = replacements[3].re.ReplaceAllStringFunc(updated, func(match string) string {
+		parts := replacements[3].re.FindStringSubmatch(match)
+		if len(parts) < 2 {
+			return match
+		}
+		urlPart := parts[1]
+		if strings.HasPrefix(urlPart, "/") || strings.Contains(urlPart, "://") || strings.HasPrefix(urlPart, "#") {
+			return match
+		}
+		if strings.Contains(urlPart, "{{") || strings.Contains(urlPart, "{%") {
+			return "](" + "#" + ")"
+		}
+		if strings.HasPrefix(urlPart, "www.") || strings.Contains(urlPart, ".") {
+			return "](" + "https://" + urlPart + ")"
+		}
+		return match
+	})
+	return updated
+}
+
+func normalizeFrontmatterImageURL(frontmatter *models.FrontMatter) {
+	if frontmatter == nil || frontmatter.ImageUrl == "" {
+		return
+	}
+	img := strings.TrimSpace(frontmatter.ImageUrl)
+	if strings.HasPrefix(img, "http://") || strings.HasPrefix(img, "https://") {
+		return
+	}
+	link := ""
+	if frontmatter.Extras != nil {
+		if rawLink, ok := frontmatter.Extras["link"].(string); ok {
+			link = rawLink
+		}
+	}
+	if link == "" {
+		return
+	}
+	if !strings.HasPrefix(link, "http://") && !strings.HasPrefix(link, "https://") {
+		link = "https://" + link
+	}
+	parsed, err := url.Parse(link)
+	if err != nil || parsed.Scheme == "" || parsed.Host == "" {
+		return
+	}
+	baseURL := parsed.Scheme + "://" + parsed.Host
+	if strings.HasPrefix(img, "/") {
+		frontmatter.ImageUrl = baseURL + img
+		return
+	}
+	frontmatter.ImageUrl = baseURL + "/" + img
+}
+
+func escapePathSegment(value string) string {
+	escaped := url.PathEscape(value)
+	return strings.ReplaceAll(escaped, "+", "%2B")
 }
 
 func ReadPosts(files []string) ([]models.Post, error) {
@@ -159,6 +347,8 @@ func ReadPosts(files []string) ([]models.Post, error) {
 		if strings.TrimSpace(frontmatterObj.Description) == "" {
 			frontmatterObj.Description = deriveDescription(contentBytes, 160)
 		}
+		normalizeFrontmatterImageURL(&frontmatterObj)
+		contentBytes = []byte(normalizeContentLinks(string(contentBytes), &frontmatterObj))
 		// Convert Markdown to HTML
 		var contentBuffer bytes.Buffer
 		mdOptions := []goldmark.Option{
@@ -369,14 +559,20 @@ func GeneratePages(config models.SSG_CONFIG) error {
 			},
 		}
 		buffer := bytes.Buffer{}
-		t := template.New("").Funcs(template.FuncMap{
-			"dateOnly": func(dateStr string) string {
-				if len(dateStr) >= 10 {
-					return dateStr[:10]
-				}
-				return dateStr
-			},
-		})
+	t := template.New("").Funcs(template.FuncMap{
+		"dateOnly": func(dateStr string) string {
+			if len(dateStr) >= 10 {
+				return dateStr[:10]
+			}
+			return dateStr
+		},
+		"slugify": func(value string) string {
+			return plugins.Slugify(value)
+		},
+		"pathEscape": func(value string) template.URL {
+			return template.URL(escapePathSegment(value))
+		},
+	})
 		t, err = t.ParseFS(templateFS, "*.html")
 		if err != nil {
 			return err
@@ -666,6 +862,12 @@ func (c *RenderTemplatesPlugin) Execute(ssg *models.SSG) error {
 				return dateStr[:10]
 			}
 			return dateStr
+		},
+		"slugify": func(value string) string {
+			return plugins.Slugify(value)
+		},
+		"pathEscape": func(value string) template.URL {
+			return template.URL(escapePathSegment(value))
 		},
 	})
 

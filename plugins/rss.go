@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"sort"
 	"time"
+	"net/url"
+	"strings"
 
 	"github.com/mr-destructive/mr-destructive.github.io/models"
 )
@@ -187,7 +189,13 @@ func (p *RSSPlugin) Execute(ssg *models.SSG) error {
 			return fmt.Errorf("error creating tag directory: %w", err)
 		}
 		writeRSSFeed(tagFeed, tagRssFilePath)
-		tagFeedLinks = append(tagFeedLinks, FeedLink{URL: fmt.Sprintf("%s/tags/%s/rss.xml", config.Blog.PrefixURL, tag), Title: tag, Count: len(items)})
+		escapedTag := url.PathEscape(tag)
+		escapedTag = strings.ReplaceAll(escapedTag, "+", "%2B")
+		tagFeedLinks = append(tagFeedLinks, FeedLink{
+			URL:   fmt.Sprintf("%s/tags/%s/rss.xml", config.Blog.PrefixURL, escapedTag),
+			Title: tag,
+			Count: len(items),
+		})
 	}
 
 	sort.Slice(tagFeedLinks, func(i, j int) bool {
