@@ -105,3 +105,7 @@ func latestPostMain() {
 	out, _ := json.MarshalIndent(post, "", "  ")
 	fmt.Println(string(out))
 }
+
+func main() {
+	latestPostMain()
+}

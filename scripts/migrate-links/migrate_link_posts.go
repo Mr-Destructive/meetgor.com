@@ -185,3 +185,7 @@ func migrationMain() {
 
 	fmt.Printf("\nMigration complete: %d posts updated\n", len(updates))
 }
+
+func main() {
+	migrationMain()
+}

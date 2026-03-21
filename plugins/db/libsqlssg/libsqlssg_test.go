@@ -60,6 +60,8 @@ CREATE TABLE IF NOT EXISTS posts (
 		Slug:     "posts-t",
 		Content:  "b",
 		Metadata: sql.NullString{String: "{}", Valid: true},
+		Tags:     sql.NullString{String: "[]", Valid: true},
+		Status:   sql.NullString{String: "draft", Valid: true},
 	})
 	if err != nil {
 		t.Fatal(err)
