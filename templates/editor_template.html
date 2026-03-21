@@ -250,19 +250,27 @@
             btn.disabled = true;
             btn.querySelector('.btn-text').textContent = '...';
             try {
-                const resp = await fetch(url, { method: 'GET', mode: 'cors' });
-                const html = await resp.text();
-                const doc = new DOMParser().parseFromString(html, 'text/html');
-                const title = doc.querySelector('meta[property="og:title"]')?.content || doc.querySelector('title')?.textContent || '';
-                const desc = doc.querySelector('meta[property="og:description"]')?.content || doc.querySelector('meta[name="description"]')?.content || '-';
-                const img = doc.querySelector('meta[property="og:image"]')?.content || '';
-                if (!document.getElementById('title').value && title) document.getElementById('title').dispatchEvent(new Event('input'));
-                document.getElementById('previewSource').textContent = new URL(url).hostname;
-                document.getElementById('previewDescription').textContent = desc;
-                if (img) {
-                    document.getElementById('previewImage').src = img;
+                const resp = await fetch('/.netlify/functions/metadata', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                if (!resp.ok) throw new Error('Failed to fetch');
+                const data = await resp.json();
+                if (data.error) throw new Error(data.error);
+                if (!document.getElementById('title').value && data.title) {
+                    document.getElementById('title').value = data.title;
+                    document.getElementById('title').dispatchEvent(new Event('input'));
+                }
+                document.getElementById('previewSource').textContent = data.source || '-';
+                document.getElementById('previewDescription').textContent = data.description || '-';
+                if (data.image) {
+                    document.getElementById('previewImage').src = data.image;
                     document.getElementById('previewImage').classList.remove('hidden');
                     document.getElementById('imagePlaceholder').classList.add('hidden');
+                } else {
+                    document.getElementById('previewImage').classList.add('hidden');
+                    document.getElementById('imagePlaceholder').classList.remove('hidden');
                 }
                 document.getElementById('linkPreview').classList.remove('hidden');
                 showToast('Metadata fetched', 'success');
