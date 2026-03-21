@@ -1,14 +1,13 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Post</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Editor | {{ .Config.Blog.Name }}</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.2/purify.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/style.css">
-    <script src="/theme.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -17,223 +16,190 @@
         gtag('config', 'G-EET2ZX4QY1');
     </script>
     <style>
-        :root {
-            --bg-color: {{ .Themes.Default.Bg }};
-            --text-color: {{ .Themes.Default.Text }};
-            --secondary-text-color: {{ .Themes.Default.SecondaryText }};
-            --accent: {{ .Themes.Default.Link.Hover }};
-            --border: {{ .Themes.Default.Link.Normal }};
-        }
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-        }
-        .fade-in { animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .type-card { transition: all 0.2s ease; }
-        .type-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-        .type-card.selected { border-color: var(--accent); background: rgba(59, 130, 246, 0.1); }
-        .dynamic-section { animation: slideDown 0.3s ease-out; }
-        @keyframes slideDown { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 500px; } }
-        .preview-toggle { transition: all 0.2s ease; }
-        .preview-content { min-height: 200px; }
-        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
-        .toast {
-            position: fixed; bottom: 20px; right: 20px; padding: 12px 24px; border-radius: 8px;
-            color: white; font-weight: 500; z-index: 1000; animation: toastIn 0.3s ease;
-        }
-        .toast.success { background: #10b981; }
-        .toast.error { background: #ef4444; }
-        @keyframes toastIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .spinner {
-            width: 16px; height: 16px; border: 2px solid transparent; border-top-color: currentColor;
-            border-radius: 50%; animation: spin 0.6s linear infinite; display: inline-block;
-        }
+        .editor-container { max-width: 700px; margin: 0 auto; }
+        .section { border: 1px solid var(--border-color); padding: 1.5rem; margin-bottom: 1.5rem; background: var(--bg-color); }
+        .section h2 { font-size: 1rem; font-weight: 600; margin: 0 0 1rem; color: var(--text-color); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+        .field { margin-bottom: 1rem; }
+        .field label { display: block; font-size: 0.85rem; color: var(--secondary-text-color); margin-bottom: 0.25rem; }
+        .field input, .field textarea, .field select { width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-family: inherit; font-size: 0.9rem; box-sizing: border-box; }
+        .field input:focus, .field textarea:focus { border-color: var(--link-normal); outline: none; }
+        .field textarea { resize: vertical; min-height: 150px; }
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .type-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 1.5rem; }
+        .type-btn { padding: 0.75rem 0.5rem; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); cursor: pointer; font-size: 0.8rem; transition: all 0.15s; text-align: center; }
+        .type-btn:hover { border-color: var(--link-normal); color: var(--link-normal); }
+        .type-btn.selected { border-color: var(--link-normal); background: var(--link-normal); color: #fff; }
+        .type-btn input { display: none; }
+        .type-label { font-weight: 600; display: block; }
+        .type-desc { font-size: 0.7rem; color: var(--secondary-text-color); margin-top: 0.25rem; }
+        .type-btn.selected .type-desc { color: rgba(255,255,255,0.8); }
+        .hidden { display: none; }
+        .link-fields, .project-fields { margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border-color); }
+        .field-row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+        .preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .preview-toggle { background: none; border: 1px solid var(--border-color); color: var(--link-normal); padding: 0.25rem 0.5rem; cursor: pointer; font-size: 0.75rem; }
+        .preview-toggle:hover { background: var(--border-color); }
+        .preview-box { border: 1px solid var(--border-color); padding: 1rem; min-height: 150px; background: var(--code-bg-color); margin-top: 0.5rem; }
+        .preview-box.hidden { display: none; }
+        .link-preview { border: 1px solid var(--border-color); padding: 1rem; margin-top: 0.5rem; background: var(--code-bg-color); }
+        .link-preview.hidden { display: none; }
+        .link-preview-grid { display: grid; grid-template-columns: 100px 1fr; gap: 1rem; }
+        .link-preview-img { width: 100px; height: 75px; object-fit: cover; border-radius: 4px; }
+        .link-preview-placeholder { width: 100px; height: 75px; background: var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--secondary-text-color); }
+        .link-meta { font-size: 0.8rem; }
+        .link-meta .source { color: var(--link-normal); }
+        .link-meta .desc { color: var(--secondary-text-color); margin-top: 0.25rem; }
+        .btn-row { display: flex; gap: 0.5rem; margin-top: 1rem; }
+        .btn { padding: 0.75rem 1.5rem; border: 1px solid var(--border-color); cursor: pointer; font-size: 0.85rem; font-family: inherit; transition: all 0.15s; }
+        .btn-primary { background: var(--link-normal); color: #fff; border-color: var(--link-normal); }
+        .btn-primary:hover { background: var(--link-hover); border-color: var(--link-hover); }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-secondary { background: var(--bg-color); color: var(--text-color); }
+        .btn-secondary:hover { background: var(--border-color); }
+        .btn-fetch { background: var(--link-normal); color: #fff; border-color: var(--link-normal); padding: 0.5rem 0.75rem; white-space: nowrap; }
+        .btn-fetch:hover { background: var(--link-hover); }
+        .btn-fetch:disabled { opacity: 0.6; }
+        .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid transparent; border-top-color: currentColor; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 0.25rem; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .link-preview { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
-        .link-preview.show { max-height: 300px; }
-        input:disabled, textarea:disabled, select:disabled, button:disabled { opacity: 0.6; cursor: not-allowed; }
-        .btn-loading { position: relative; }
-        .error-border { border-color: #ef4444 !important; }
+        .error-border { border-color: #e53e3e !important; }
+        .toast { position: fixed; bottom: 20px; right: 20px; padding: 0.75rem 1rem; background: var(--text-color); color: var(--bg-color); font-size: 0.85rem; z-index: 1000; animation: toastIn 0.2s ease; }
+        .toast.hidden { display: none; }
+        .toast.error { background: #e53e3e; color: #fff; }
+        .toast.success { background: #38a169; color: #fff; }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } }
+        .slug-preview { font-size: 0.75rem; color: var(--secondary-text-color); margin-top: 0.25rem; }
+        .section-num { display: inline-block; width: 1.5rem; height: 1.5rem; line-height: 1.5rem; text-align: center; border-radius: 50%; background: var(--link-normal); color: #fff; font-size: 0.75rem; margin-right: 0.5rem; }
     </style>
 </head>
-<body class="min-h-screen">
+<body>
     {{ template "header.html" . }}
     
-    <main class="max-w-4xl mx-auto px-4 py-8">
-        <header class="mb-8 text-center">
-            <h1 class="text-3xl font-bold mb-2">Create New Post</h1>
-            <p class="text-sm opacity-70">Choose a post type to get started</p>
-        </header>
+    <main class="editor-container">
+        <h1 style="font-size: 1.5rem; margin-bottom: 1.5rem;">Create Post</h1>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <button type="button" onclick="selectPostType('blog')" class="type-card p-4 border-2 border-gray-200 rounded-xl text-center hover:border-blue-500" data-type="blog">
-                <div class="text-2xl mb-2">📝</div>
-                <div class="font-medium">Blog</div>
-                <div class="text-xs opacity-60">Long-form content</div>
-            </button>
-            <button type="button" onclick="selectPostType('til')" class="type-card p-4 border-2 border-gray-200 rounded-xl text-center hover:border-green-500" data-type="til">
-                <div class="text-2xl mb-2">💡</div>
-                <div class="font-medium">TIL</div>
-                <div class="text-xs opacity-60">Quick tips</div>
-            </button>
-            <button type="button" onclick="selectPostType('links')" class="type-card p-4 border-2 border-gray-200 rounded-xl text-center hover:border-purple-500" data-type="links">
-                <div class="text-2xl mb-2">🔗</div>
-                <div class="font-medium">Links</div>
-                <div class="text-xs opacity-60">External finds</div>
-            </button>
-            <button type="button" onclick="selectPostType('projects')" class="type-card p-4 border-2 border-gray-200 rounded-xl text-center hover:border-orange-500" data-type="projects">
-                <div class="text-2xl mb-2">🚀</div>
-                <div class="font-medium">Projects</div>
-                <div class="text-xs opacity-60">Showcase work</div>
-            </button>
+        <div class="section">
+            <h2><span class="section-num">1</span>Post Type</h2>
+            <div class="type-grid">
+                <label class="type-btn selected" data-type="blog">
+                    <input type="radio" name="postType" value="blog" checked>
+                    <span class="type-label">Blog</span>
+                    <span class="type-desc">Long-form content</span>
+                </label>
+                <label class="type-btn" data-type="til">
+                    <input type="radio" name="postType" value="til">
+                    <span class="type-label">TIL</span>
+                    <span class="type-desc">Quick tips</span>
+                </label>
+                <label class="type-btn" data-type="links">
+                    <input type="radio" name="postType" value="links">
+                    <span class="type-label">Links</span>
+                    <span class="type-desc">External finds</span>
+                </label>
+                <label class="type-btn" data-type="projects">
+                    <input type="radio" name="postType" value="projects">
+                    <span class="type-label">Projects</span>
+                    <span class="type-desc">Showcase work</span>
+                </label>
+            </div>
+
+            <div class="field">
+                <label for="title">Title *</label>
+                <input type="text" id="title" required placeholder="Post title">
+                <div id="slugPreview" class="slug-preview"></div>
+            </div>
+
+            <div id="linkFields" class="link-fields hidden">
+                <div class="field">
+                    <label for="linkUrl">URL *</label>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="url" id="linkUrl" placeholder="https://..." style="flex: 1;">
+                        <button type="button" id="fetchBtn" class="btn-fetch" onclick="fetchMetadata()">
+                            <span class="btn-text">Fetch</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="linkPreview" class="link-preview hidden">
+                    <div class="link-preview-grid">
+                        <div>
+                            <img id="previewImage" class="link-preview-img hidden" alt="">
+                            <div id="imagePlaceholder" class="link-preview-placeholder">--</div>
+                        </div>
+                        <div class="link-meta">
+                            <div class="source" id="previewSource">-</div>
+                            <div class="desc" id="previewDescription">-</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="commentary">Commentary (optional)</label>
+                    <textarea id="commentary" rows="2" placeholder="What did you learn or find interesting?"></textarea>
+                </div>
+            </div>
+
+            <div id="projectFields" class="project-fields hidden">
+                <div class="field-row-3">
+                    <div class="field">
+                        <label for="githubLink">GitHub URL</label>
+                        <input type="url" id="githubLink" placeholder="https://github.com/...">
+                    </div>
+                    <div class="field">
+                        <label for="liveLink">Live Demo</label>
+                        <input type="url" id="liveLink" placeholder="https://...">
+                    </div>
+                    <div class="field">
+                        <label for="docsLink">Docs</label>
+                        <input type="url" id="docsLink" placeholder="https://...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label for="postDate">Date</label>
+                    <input type="date" id="postDate">
+                </div>
+                <div class="field">
+                    <label for="tags">Tags</label>
+                    <input type="text" id="tags" placeholder="golang, tutorial">
+                    <div style="font-size: 0.7rem; color: var(--secondary-text-color); margin-top: 0.25rem;">Comma-separated</div>
+                </div>
+            </div>
         </div>
 
-        <form id="postForm" class="space-y-6">
-            <input type="hidden" name="postType" id="postType" value="blog">
-            
-            <section class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-                <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">1</span>
-                    Basic Info
-                </h2>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Title *</label>
-                        <input type="text" name="title" id="title" required
-                            class="w-full px-4 py-2 border rounded-lg transition-all"
-                            placeholder="Enter a compelling title...">
-                    </div>
-                    
-                    <div id="linkFields" class="hidden space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium mb-1">URL *</label>
-                            <div class="flex gap-2">
-                                <input type="url" name="link" id="linkUrl"
-                                    class="flex-1 px-4 py-2 border rounded-lg"
-                                    placeholder="https://...">
-                                <button type="button" onclick="fetchMetadata()" id="fetchBtn"
-                                    class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center gap-2">
-                                    <span class="spinner hidden"></span>
-                                    <span class="btn-text">Fetch Info</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div id="linkPreview" class="link-preview bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <img id="previewImage" class="w-full h-32 object-cover rounded-lg hidden" alt="Preview">
-                                    <div id="imagePlaceholder" class="w-full h-32 bg-gray-200 dark:bg-gray-600 rounded-lg flex items-center justify-center text-4xl">🖼️</div>
-                                </div>
-                                <div class="space-y-2">
-                                    <div>
-                                        <span class="text-xs opacity-60">Source</span>
-                                        <p id="previewSource" class="font-medium text-sm truncate">-</p>
-                                    </div>
-                                    <div>
-                                        <span class="text-xs opacity-60">Description</span>
-                                        <p id="previewDescription" class="text-sm line-clamp-2">-</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Commentary (optional)</label>
-                            <textarea name="commentary" id="commentary" rows="3"
-                                class="w-full px-4 py-2 border rounded-lg"
-                                placeholder="What did you learn or find interesting about this?"></textarea>
-                        </div>
-                    </div>
+        <div class="section">
+            <h2>
+                <span class="section-num">2</span>Content
+                <button type="button" class="preview-toggle" onclick="togglePreview()" style="float: right; margin-left: auto;">Show Preview</button>
+            </h2>
+            <textarea id="content" rows="12" placeholder="Write your content in Markdown..."></textarea>
+            <div id="markdownPreview" class="preview-box hidden"></div>
+        </div>
 
-                    <div id="projectFields" class="hidden space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium mb-1">GitHub URL</label>
-                                <input type="url" name="github_link" id="githubLink"
-                                    class="w-full px-4 py-2 border rounded-lg"
-                                    placeholder="https://github.com/...">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Live Demo URL</label>
-                                <input type="url" name="live_link" id="liveLink"
-                                    class="w-full px-4 py-2 border rounded-lg"
-                                    placeholder="https://...">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Docs URL</label>
-                                <input type="url" name="docs_link" id="docsLink"
-                                    class="w-full px-4 py-2 border rounded-lg"
-                                    placeholder="https://...">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Date</label>
-                            <input type="date" name="date" id="postDate"
-                                class="w-full px-4 py-2 border rounded-lg">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Tags</label>
-                            <input type="text" name="tags" id="tags"
-                                class="w-full px-4 py-2 border rounded-lg"
-                                placeholder="golang, tutorial, beginner">
-                            <p class="text-xs opacity-60 mt-1">Comma-separated</p>
-                        </div>
-                    </div>
+        <div class="section">
+            <h2><span class="section-num">3</span>Authentication</h2>
+            <div class="field-row">
+                <div class="field">
+                    <label for="username">Username *</label>
+                    <input type="text" id="username" required>
                 </div>
-            </section>
-
-            <section class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-lg font-semibold flex items-center gap-2">
-                        <span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">2</span>
-                        Content
-                    </h2>
-                    <button type="button" onclick="togglePreview()" id="previewToggle"
-                        class="preview-toggle px-3 py-1 text-sm border rounded hover:bg-gray-100 dark:hover:bg-gray-700">
-                        👁️ Show Preview
-                    </button>
+                <div class="field">
+                    <label for="password">Password *</label>
+                    <input type="password" id="password" required>
                 </div>
-                <textarea name="content" id="content" rows="12"
-                    class="w-full px-4 py-2 border rounded-lg font-mono text-sm"
-                    placeholder="Write your content in Markdown..."></textarea>
-                <div id="markdownPreview" class="preview-content hidden mt-4 p-4 border rounded-lg bg-gray-50 dark:bg-gray-700 prose dark:prose-invert max-w-none"></div>
-            </section>
-
-            <section class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-                <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">3</span>
-                    Authentication
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Username</label>
-                        <input type="text" name="username" id="username" required
-                            class="w-full px-4 py-2 border rounded-lg">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Password</label>
-                        <input type="password" name="password" id="password" required
-                            class="w-full px-4 py-2 border rounded-lg">
-                    </div>
-                </div>
-            </section>
-
-            <div class="flex gap-4">
-                <button type="submit" class="flex-1 py-3 bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2">
-                    ✨ Publish Post
-                </button>
-                <button type="button" onclick="saveDraft()" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                    💾 Save Draft
-                </button>
             </div>
-        </form>
+        </div>
+
+        <div class="btn-row">
+            <button type="submit" form="postForm" class="btn btn-primary" id="submitBtn">Publish</button>
+            <button type="button" class="btn btn-secondary" onclick="saveDraft()">Save Draft</button>
+        </div>
+
+        <form id="postForm" style="display: none;"></form>
     </main>
 
     <div id="toast" class="toast hidden"></div>
+
+    {{ template "footer.html" . }}
 
     <script>
         let currentPostType = 'blog';
@@ -241,115 +207,78 @@
 
         document.getElementById('postDate').valueAsDate = new Date();
 
-        function selectPostType(type) {
-            currentPostType = type;
-            document.getElementById('postType').value = type;
-            
-            document.querySelectorAll('.type-card').forEach(card => {
-                card.classList.remove('selected');
-                if (card.dataset.type === type) {
-                    card.classList.add('selected');
-                }
+        document.querySelectorAll('.type-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                currentPostType = btn.dataset.type;
+                document.getElementById('linkFields').classList.toggle('hidden', currentPostType !== 'links');
+                document.getElementById('projectFields').classList.toggle('hidden', currentPostType !== 'projects');
             });
+        });
 
-            document.getElementById('linkFields').classList.add('hidden');
-            document.getElementById('projectFields').classList.add('hidden');
-
-            if (type === 'links') {
-                document.getElementById('linkFields').classList.remove('hidden');
-            } else if (type === 'projects') {
-                document.getElementById('projectFields').classList.remove('hidden');
-            }
-        }
-
-        async function fetchMetadata() {
-            const url = document.getElementById('linkUrl').value;
-            if (!url) {
-                showToast('Please enter a URL first', 'error');
-                return;
-            }
-
-            const btn = document.getElementById('fetchBtn');
-            const spinner = btn.querySelector('.spinner');
-            const btnText = btn.querySelector('.btn-text');
-            
-            btn.disabled = true;
-            spinner.classList.remove('hidden');
-            btnText.textContent = 'Fetching...';
-
-            try {
-                const response = await fetch(url, { method: 'GET', mode: 'cors' });
-                const html = await response.text();
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-
-                const title = doc.querySelector('meta[property="og:title"]')?.content 
-                    || doc.querySelector('title')?.textContent 
-                    || document.getElementById('title').value 
-                    || 'Untitled';
-                
-                const description = doc.querySelector('meta[property="og:description"]')?.content 
-                    || doc.querySelector('meta[name="description"]')?.content 
-                    || '-';
-                
-                const image = doc.querySelector('meta[property="og:image"]')?.content 
-                    || doc.querySelector('meta[name="twitter:image"]')?.content 
-                    || '';
-
-                if (!document.getElementById('title').value) {
-                    document.getElementById('title').value = title;
-                }
-
-                document.getElementById('previewSource').textContent = new URL(url).hostname;
-                document.getElementById('previewDescription').textContent = description;
-
-                if (image) {
-                    document.getElementById('previewImage').src = image;
-                    document.getElementById('previewImage').classList.remove('hidden');
-                    document.getElementById('imagePlaceholder').classList.add('hidden');
-                }
-
-                document.getElementById('linkPreview').classList.add('show');
-                showToast('Metadata fetched successfully!', 'success');
-            } catch (error) {
-                console.error('Fetch error:', error);
-                showToast('Could not fetch metadata. Try entering manually.', 'error');
-            } finally {
-                btn.disabled = false;
-                spinner.classList.add('hidden');
-                btnText.textContent = 'Fetch Info';
-            }
-        }
+        document.getElementById('title').addEventListener('input', function() {
+            const slug = this.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+            document.getElementById('slugPreview').textContent = slug ? '/posts/' + slug : '';
+        });
 
         function togglePreview() {
             previewVisible = !previewVisible;
             const preview = document.getElementById('markdownPreview');
-            const toggle = document.getElementById('previewToggle');
-            
+            const toggle = document.querySelector('.preview-toggle');
             if (previewVisible) {
-                const rawMarkdown = document.getElementById('content').value;
-                preview.innerHTML = DOMPurify.sanitize(marked.parse(rawMarkdown || '*Preview will appear here...*'));
+                const raw = document.getElementById('content').value;
+                preview.innerHTML = DOMPurify.sanitize(marked.parse(raw || '<em>Preview will appear here...</em>'));
                 preview.classList.remove('hidden');
-                toggle.textContent = '🙈 Hide Preview';
+                toggle.textContent = 'Hide Preview';
             } else {
                 preview.classList.add('hidden');
-                toggle.textContent = '👁️ Show Preview';
+                toggle.textContent = 'Show Preview';
             }
         }
 
         document.getElementById('content').addEventListener('input', function() {
             if (previewVisible) {
-                const preview = document.getElementById('markdownPreview');
-                preview.innerHTML = DOMPurify.sanitize(marked.parse(this.value || '*Preview will appear here...*'));
+                document.getElementById('markdownPreview').innerHTML = DOMPurify.sanitize(marked.parse(this.value || '<em>Preview will appear here...</em>'));
             }
         });
 
-        function showToast(message, type) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = `toast ${type}`;
-            toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 3000);
+        async function fetchMetadata() {
+            const url = document.getElementById('linkUrl').value;
+            if (!url) { showToast('Enter a URL first', 'error'); return; }
+            const btn = document.getElementById('fetchBtn');
+            btn.disabled = true;
+            btn.querySelector('.btn-text').textContent = '...';
+            try {
+                const resp = await fetch(url, { method: 'GET', mode: 'cors' });
+                const html = await resp.text();
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+                const title = doc.querySelector('meta[property="og:title"]')?.content || doc.querySelector('title')?.textContent || '';
+                const desc = doc.querySelector('meta[property="og:description"]')?.content || doc.querySelector('meta[name="description"]')?.content || '-';
+                const img = doc.querySelector('meta[property="og:image"]')?.content || '';
+                if (!document.getElementById('title').value && title) document.getElementById('title').dispatchEvent(new Event('input'));
+                document.getElementById('previewSource').textContent = new URL(url).hostname;
+                document.getElementById('previewDescription').textContent = desc;
+                if (img) {
+                    document.getElementById('previewImage').src = img;
+                    document.getElementById('previewImage').classList.remove('hidden');
+                    document.getElementById('imagePlaceholder').classList.add('hidden');
+                }
+                document.getElementById('linkPreview').classList.remove('hidden');
+                showToast('Metadata fetched', 'success');
+            } catch (e) {
+                showToast('Could not fetch metadata', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.querySelector('.btn-text').textContent = 'Fetch';
+            }
+        }
+
+        function showToast(msg, type) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast ' + type;
+            setTimeout(() => t.classList.add('hidden'), 3000);
         }
 
         document.getElementById('postForm').addEventListener('submit', async function(e) {
@@ -357,165 +286,118 @@
             await submitPost();
         });
 
-        function setFormLoading(loading) {
-            const inputs = document.querySelectorAll('#postForm input, #postForm textarea, #postForm select, #postForm button');
-            inputs.forEach(el => el.disabled = loading);
-            
-            const submitBtn = document.querySelector('button[type="submit"]');
-            const draftBtn = document.querySelector('button[onclick="saveDraft()"]');
-            
-            if (submitBtn) {
-                if (loading) {
-                    submitBtn.dataset.originalText = submitBtn.innerHTML;
-                    submitBtn.innerHTML = '<span class="spinner"></span> Publishing...';
-                    submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
-                } else {
-                    submitBtn.innerHTML = submitBtn.dataset.originalText || '✨ Publish Post';
-                    submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
-                }
-            }
-            
-            if (draftBtn) draftBtn.disabled = loading;
-        }
-
-        function clearValidationErrors() {
+        function clearErrors() {
             document.querySelectorAll('.error-border').forEach(el => el.classList.remove('error-border'));
         }
-
-        function showValidationErrors(fields) {
-            clearValidationErrors();
-            fields.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.classList.add('error-border');
-            });
-            const firstEl = document.getElementById(fields[0]);
-            if (firstEl) firstEl.focus();
-        }
-
-        document.querySelectorAll('#postForm input, #postForm textarea').forEach(el => {
+        document.querySelectorAll('#title, #content, #username, #password, #linkUrl').forEach(el => {
             el.addEventListener('input', () => el.classList.remove('error-border'));
         });
 
-        function validateForm() {
+        function setLoading(loading) {
+            document.querySelectorAll('#postForm input, #postForm textarea, .btn-primary, .btn-secondary, .btn-fetch').forEach(el => el.disabled = loading);
+            const btn = document.getElementById('submitBtn');
+            if (loading) {
+                btn.dataset.text = btn.textContent;
+                btn.innerHTML = '<span class="spinner"></span>Publishing...';
+            } else {
+                btn.textContent = btn.dataset.text || 'Publish';
+            }
+        }
+
+        async function submitPost() {
+            clearErrors();
             const errors = [];
-            const requiredFields = [];
             const title = document.getElementById('title').value.trim();
             const content = document.getElementById('content').value.trim();
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
-            
-            if (!title) { errors.push('Title is required'); requiredFields.push('title'); }
-            if (!content) { errors.push('Content is required'); requiredFields.push('content'); }
-            if (!username) { errors.push('Username is required'); requiredFields.push('username'); }
-            if (!password) { errors.push('Password is required'); requiredFields.push('password'); }
-            
+
+            if (!title) { errors.push('Title required'); document.getElementById('title').classList.add('error-border'); }
+            if (!content) { errors.push('Content required'); document.getElementById('content').classList.add('error-border'); }
+            if (!username) { errors.push('Username required'); document.getElementById('username').classList.add('error-border'); }
+            if (!password) { errors.push('Password required'); document.getElementById('password').classList.add('error-border'); }
+            if (currentPostType === 'links' && !document.getElementById('linkUrl').value.trim()) {
+                errors.push('URL required'); document.getElementById('linkUrl').classList.add('error-border');
+            }
+            if (errors.length) { showToast(errors[0], 'error'); return; }
+
+            setLoading(true);
+            const metadata = { type: currentPostType, date: document.getElementById('postDate').value ? new Date(document.getElementById('postDate').value).toISOString() : new Date().toISOString() };
+            const tags = document.getElementById('tags').value;
+            if (tags) metadata.tags = tags.split(',').map(t => t.trim()).filter(t => t);
             if (currentPostType === 'links') {
-                const linkUrl = document.getElementById('linkUrl').value.trim();
-                if (!linkUrl) { errors.push('URL is required for links'); requiredFields.push('linkUrl'); }
+                const u = document.getElementById('linkUrl').value; if (u) metadata.link = u;
+                const img = document.getElementById('previewImage').src; if (img) metadata.image_url = img;
+                const c = document.getElementById('commentary').value; if (c) metadata.commentary = c;
             }
-            
-            if (errors.length > 0) {
-                showValidationErrors(requiredFields);
-            }
-            
-            return errors;
-        }
-
-        async function submitPost() {
-            const errors = validateForm();
-            if (errors.length > 0) {
-                showToast(errors[0], 'error');
-                return;
-            }
-
-            setFormLoading(true);
-
-            const metadata = {};
-            
-            metadata.type = currentPostType;
-            metadata.date = document.getElementById('postDate').value 
-                ? new Date(document.getElementById('postDate').value).toISOString() 
-                : new Date().toISOString();
-            
-            const tagsInput = document.getElementById('tags').value;
-            if (tagsInput) {
-                metadata.tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
-            }
-
-            if (currentPostType === 'links') {
-                const linkUrl = document.getElementById('linkUrl').value;
-                if (linkUrl) metadata.link = linkUrl;
-                const img = document.getElementById('previewImage').src;
-                if (img) metadata.image_url = img;
-                const commentary = document.getElementById('commentary').value;
-                if (commentary) metadata.commentary = commentary;
-            }
-
             if (currentPostType === 'projects') {
-                const gh = document.getElementById('githubLink').value;
-                if (gh) metadata.github_link = gh;
-                const live = document.getElementById('liveLink').value;
-                if (live) metadata.live_link = live;
-                const docs = document.getElementById('docsLink').value;
-                if (docs) metadata.docs_link = docs;
+                const gh = document.getElementById('githubLink').value; if (gh) metadata.github_link = gh;
+                const live = document.getElementById('liveLink').value; if (live) metadata.live_link = live;
+                const docs = document.getElementById('docsLink').value; if (docs) metadata.docs_link = docs;
             }
-
-            const formData = {
-                title: document.getElementById('title').value,
-                body: document.getElementById('content').value,
-                metadata: metadata,
-                username: document.getElementById('username').value,
-                password: document.getElementById('password').value
-            };
 
             try {
-                const response = await fetch("{{ .Config.Blog.CloudFunction.base_url }}/.netlify/functions/posts", {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
+                const resp = await fetch("{{ .Config.Blog.CloudFunction.base_url }}/.netlify/functions/posts", {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, body: content, metadata, username, password })
                 });
-
-                const data = await response.json().catch(() => ({}));
-                
-                if (!response.ok) {
-                    throw new Error(data.error || 'Failed to publish post');
-                }
-                
-                showToast('Post published successfully!', 'success');
+                const data = await resp.json().catch(() => ({}));
+                if (!resp.ok) throw new Error(data.error || 'Failed to publish');
+                showToast('Post published', 'success');
                 localStorage.removeItem('postDraft');
                 setTimeout(() => window.location.reload(), 1500);
-            } catch (error) {
-                showToast(error.message || 'Failed to publish. Please try again.', 'error');
-                setFormLoading(false);
+            } catch (e) {
+                showToast(e.message, 'error');
+                setLoading(false);
             }
         }
 
         function saveDraft() {
-            showToast('Draft saved to local storage!', 'success');
             localStorage.setItem('postDraft', JSON.stringify({
-                type: currentPostType,
-                title: document.getElementById('title').value,
-                content: document.getElementById('content').value,
-                tags: document.getElementById('tags').value,
+                type: currentPostType, title: document.getElementById('title').value,
+                content: document.getElementById('content').value, tags: document.getElementById('tags').value,
                 savedAt: new Date().toISOString()
             }));
+            showToast('Draft saved', 'success');
         }
 
         const draft = localStorage.getItem('postDraft');
         if (draft) {
             try {
-                const data = JSON.parse(draft);
-                if (confirm('Found a draft from ' + new Date(data.savedAt).toLocaleDateString() + '. Load it?')) {
-                    selectPostType(data.type || 'blog');
-                    document.getElementById('title').value = data.title || '';
-                    document.getElementById('content').value = data.content || '';
-                    document.getElementById('tags').value = data.tags || '';
+                const d = JSON.parse(draft);
+                if (confirm('Load draft from ' + new Date(d.savedAt).toLocaleDateString() + '?')) {
+                    document.querySelectorAll('.type-btn').forEach(b => {
+                        b.classList.toggle('selected', b.dataset.type === d.type);
+                    });
+                    currentPostType = d.type || 'blog';
+                    document.getElementById('linkFields').classList.toggle('hidden', currentPostType !== 'links');
+                    document.getElementById('projectFields').classList.toggle('hidden', currentPostType !== 'projects');
+                    document.getElementById('title').value = d.title || '';
+                    document.getElementById('content').value = d.content || '';
+                    document.getElementById('tags').value = d.tags || '';
                 }
             } catch (e) {}
         }
 
-        selectPostType('blog');
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                const saved = localStorage.getItem('theme');
+                if (saved === 'secondary') {
+                    document.body.classList.add('secondary-theme');
+                    themeToggle.checked = true;
+                }
+                themeToggle.addEventListener('change', () => {
+                    if (themeToggle.checked) {
+                        document.body.classList.add('secondary-theme');
+                        localStorage.setItem('theme', 'secondary');
+                    } else {
+                        document.body.classList.remove('secondary-theme');
+                        localStorage.setItem('theme', 'default');
+                    }
+                });
+            }
+        });
     </script>
-    {{ template "footer.html" . }}
 </body>
 </html>
