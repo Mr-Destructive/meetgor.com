@@ -143,12 +143,35 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 		content = payload.Body
 	}
 	
-	log.Printf("[INSERT] preparing post insert: title=%s slug=%s type_id=%s", payload.Title, slug, payload.TypeID)
-	
 	q := libsqlssg.New(db)
+	
+	// Get type_id from payload or metadata
 	typeID := payload.TypeID
 	if typeID == "" {
+		// Try to get from metadata
+		if postType, ok := payload.Metadata["type"].(string); ok && postType != "" {
+			typeID = postType
+		} else {
+			typeID = "post"
+		}
+	}
+	
+	log.Printf("[INSERT] preparing post insert: title=%s slug=%s type_id=%s", payload.Title, slug, typeID)
+	
+	// Ensure post type exists - if not, use 'post' as fallback
+	var typeExists int
+	err = db.QueryRowContext(ctx, "SELECT COUNT(*) FROM post_types WHERE id = ?", typeID).Scan(&typeExists)
+	if err != nil || typeExists == 0 {
+		log.Printf("[WARN] post type %s does not exist, using 'post' instead", typeID)
 		typeID = "post"
+		// Check if 'post' exists, if not create it
+		err = db.QueryRowContext(ctx, "SELECT COUNT(*) FROM post_types WHERE id = ?", "post").Scan(&typeExists)
+		if err != nil || typeExists == 0 {
+			_, err = db.ExecContext(ctx, "INSERT INTO post_types (id, name, slug) VALUES (?, ?, ?)", "post", "Post", "post")
+			if err != nil {
+				log.Printf("[WARN] failed to create default post type: %v", err)
+			}
+		}
 	}
 	status := payload.Status
 	if status == "" {

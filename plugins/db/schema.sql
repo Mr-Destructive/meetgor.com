@@ -6,6 +6,13 @@ CREATE TABLE IF NOT EXISTS authors (
     is_admin BOOLEAN DEFAULT 0
 );
 
+CREATE TABLE IF NOT EXISTS post_types (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE,
+    slug TEXT NOT NULL UNIQUE,
+    description TEXT
+);
+
 CREATE TABLE IF NOT EXISTS posts (
     id TEXT PRIMARY KEY,
     type_id TEXT NOT NULL,
@@ -19,5 +26,6 @@ CREATE TABLE IF NOT EXISTS posts (
     metadata TEXT,
     created_at REAL DEFAULT (strftime('%s')),
     updated_at REAL DEFAULT (strftime('%s')),
-    published_at REAL
+    published_at REAL,
+    CONSTRAINT fk_posts_type_id FOREIGN KEY (type_id) REFERENCES post_types(id)
 );

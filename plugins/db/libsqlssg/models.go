@@ -31,3 +31,10 @@ type Post struct {
 	UpdatedAt   sql.NullFloat64 `json:"updated_at"`
 	PublishedAt sql.NullFloat64 `json:"published_at"`
 }
+
+type PostType struct {
+	ID          string         `json:"id"`
+	Name        string         `json:"name"`
+	Slug        string         `json:"slug"`
+	Description sql.NullString `json:"description"`
+}
