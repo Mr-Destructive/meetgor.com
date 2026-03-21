@@ -7,9 +7,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"regexp"
+	"runtime/debug"
 	"strings"
 	"time"
 
@@ -19,6 +21,10 @@ import (
 	_ "github.com/tursodatabase/libsql-client-go/libsql"
 	"golang.org/x/crypto/bcrypt"
 )
+
+func init() {
+	log.SetOutput(io.Discard)
+}
 
 const (
 	githubUsername   = "mr-destructive"
@@ -45,21 +51,30 @@ type postPayload struct {
 }
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Printf("[PANIC] %v\n%s", r, debug.Stack())
+		}
+	}()
+
+	log.Printf("[REQUEST] method=%s path=%s", request.HTTPMethod, request.Path)
+
 	if request.HTTPMethod == http.MethodOptions {
 		return optionsResponse(), nil
 	}
 
 	path := normalizePath(request.Path)
 	if path == "" {
-		// Only POST can operate without slug
 		if request.HTTPMethod != http.MethodPost {
+			log.Printf("[ERROR] slug required for method=%s", request.HTTPMethod)
 			return jsonError(http.StatusBadRequest, "slug required"), nil
 		}
 	}
 
 	db, err := openDatabase()
 	if err != nil {
-		return jsonError(http.StatusInternalServerError, err.Error()), nil
+		log.Printf("[ERROR] database connection failed")
+		return jsonError(http.StatusInternalServerError, "database connection failed"), nil
 	}
 	defer closeDB(db)
 
@@ -68,6 +83,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	switch request.HTTPMethod {
 	case http.MethodPost:
 		if path != "" {
+			log.Printf("[ERROR] invalid path for POST: %s", path)
 			return jsonError(http.StatusBadRequest, "invalid path for POST"), nil
 		}
 		return handleCreate(ctx, db, request)
@@ -85,26 +101,34 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	payload, err := readPayload(request.Body)
 	if err != nil {
-		return jsonError(http.StatusBadRequest, err.Error()), nil
+		log.Printf("[ERROR] invalid payload: %v", err)
+		return jsonError(http.StatusBadRequest, "invalid payload"), nil
 	}
 
 	if err := validateCreate(payload); err != nil {
+		log.Printf("[ERROR] validation failed: %v", err)
 		return jsonError(http.StatusBadRequest, err.Error()), nil
 	}
 
+	log.Printf("[AUTH] attempting login for user: %s", payload.Username)
 	user, err := authenticate(ctx, db, payload.Username, payload.Password)
 	if err != nil {
+		log.Printf("[ERROR] authentication failed for user: %s", payload.Username)
 		return jsonError(http.StatusUnauthorized, "authentication failed"), nil
 	}
+	log.Printf("[AUTH] user authenticated: %s (id=%d)", user.Name, user.ID)
 
 	slug := pickSlug(payload)
 	if slug == "" {
+		log.Printf("[ERROR] empty slug generated")
 		return jsonError(http.StatusBadRequest, "slug or title required"), nil
 	}
+	log.Printf("[CREATE] slug=%s title=%s type=%v", slug, payload.Title, payload.Metadata["type"])
 
 	payload.Metadata = ensureMetadata(payload.Metadata, slug, payload.Title)
 	meta, err := json.Marshal(payload.Metadata)
 	if err != nil {
+		log.Printf("[ERROR] metadata serialization failed")
 		return jsonError(http.StatusInternalServerError, "failed to serialize metadata"), nil
 	}
 
@@ -117,13 +141,17 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 		AuthorID: user.ID,
 	})
 	if err != nil {
+		log.Printf("[ERROR] database insert failed: %v", err)
 		return jsonError(http.StatusInternalServerError, "failed to insert post"), nil
 	}
 
+	log.Printf("[BUILD] triggering GitHub Action")
 	if err := triggerBuild(); err != nil {
-		return jsonError(http.StatusBadGateway, err.Error()), nil
+		log.Printf("[ERROR] build trigger failed: %v", err)
+		return jsonError(http.StatusBadGateway, "build trigger failed"), nil
 	}
 
+	log.Printf("[SUCCESS] post created: %s", post.Slug)
 	return jsonResponse(http.StatusOK, map[string]interface{}{
 		"slug": post.Slug,
 	}), nil
@@ -425,4 +453,5 @@ func defaultTriggerGitHubAction(token string) error {
 	}
 	return nil
 }
+
 // test rebuild

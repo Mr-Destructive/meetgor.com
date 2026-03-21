@@ -166,7 +166,7 @@
             </div>
         </div>
 
-        <div class="section">
+        <div id="contentSection" class="section">
             <h2>
                 <span class="section-num">2</span>Content
                 <button type="button" class="preview-toggle" onclick="togglePreview()" style="float: right; margin-left: auto;">Show Preview</button>
@@ -214,6 +214,7 @@
                 currentPostType = btn.dataset.type;
                 document.getElementById('linkFields').classList.toggle('hidden', currentPostType !== 'links');
                 document.getElementById('projectFields').classList.toggle('hidden', currentPostType !== 'projects');
+                document.getElementById('contentSection').classList.toggle('hidden', currentPostType === 'links');
             });
         });
 
@@ -321,7 +322,7 @@
             const password = document.getElementById('password').value;
 
             if (!title) { errors.push('Title required'); document.getElementById('title').classList.add('error-border'); }
-            if (!content) { errors.push('Content required'); document.getElementById('content').classList.add('error-border'); }
+            if (currentPostType !== 'links' && !content) { errors.push('Content required'); document.getElementById('content').classList.add('error-border'); }
             if (!username) { errors.push('Username required'); document.getElementById('username').classList.add('error-border'); }
             if (!password) { errors.push('Password required'); document.getElementById('password').classList.add('error-border'); }
             if (currentPostType === 'links' && !document.getElementById('linkUrl').value.trim()) {
@@ -344,10 +345,12 @@
                 const docs = document.getElementById('docsLink').value; if (docs) metadata.docs_link = docs;
             }
 
+            const body = currentPostType === 'links' ? '' : content;
+
             try {
                 const resp = await fetch("{{ .Config.Blog.CloudFunction.base_url }}/.netlify/functions/posts", {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ title, body: content, metadata, username, password })
+                    body: JSON.stringify({ title, body, metadata, username, password })
                 });
                 const data = await resp.json().catch(() => ({}));
                 if (!resp.ok) throw new Error(data.error || 'Failed to publish');
