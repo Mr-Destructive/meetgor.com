@@ -58,7 +58,7 @@ func main() {
 
 	// Get all posts
 	rows, err := db.QueryContext(ctx,
-		`SELECT id, title, slug, type_id, tags, metadata FROM posts LIMIT 20`)
+		`SELECT id, title, slug, type_id, tags, metadata FROM posts ORDER BY created_at DESC`)
 
 	if err != nil {
 		log.Fatalf("Query failed: %v", err)
