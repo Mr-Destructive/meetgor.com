@@ -192,12 +192,16 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 			if len(postsBySlug) > 0 {
 				post := postsBySlug[0] // Assuming first one is the target
 				metadataObj := make(map[string]interface{})
-				err = json.Unmarshal([]byte(post.Metadata), &metadataObj)
+				metadataStr := ""
+				if post.Metadata.Valid {
+					metadataStr = post.Metadata.String
+				}
+				err = json.Unmarshal([]byte(metadataStr), &metadataObj)
 				if err != nil {
 					log.Printf("Error unmarshalling metadata for post %s: %v", post.Title, err)
 					return ErrorResponse(http.StatusInternalServerError, "Invalid metadata in stored post"), nil
 				}
-				markdown := post.Body
+				markdown := post.Content
 				//markdown, errMd := htmltomarkdown.ConvertString(post.Body)
 				//if errMd != nil {
 				//	log.Printf("Error converting HTML to markdown for post %s: %v", post.Title, errMd)

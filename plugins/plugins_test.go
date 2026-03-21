@@ -319,8 +319,8 @@ func TestDBCreatePostPayload(t *testing.T) {
 	if err != nil {
 		t.Fatalf("CreatePostPayload error: %v", err)
 	}
-	if post.Title != "Hello" || post.AuthorID != 1 {
-		t.Fatalf("unexpected post payload")
+	if post.Title != "Hello" || post.TypeID != "posts" {
+		t.Fatalf("unexpected post payload: title=%s type_id=%s", post.Title, post.TypeID)
 	}
 }
 

@@ -2,6 +2,7 @@ package plugins
 
 import (
 	"bytes"
+	"database/sql"
 	_ "embed"
 	"encoding/json"
 	"fmt"
@@ -183,11 +184,12 @@ func CreatePostPayload(payload Payload, authorId int, authorName string) (libsql
 	}
 
 	dbPost := libsqlssg.CreatePostParams{
+		ID:       generatePostID(),
+		TypeID:   metadata["type"].(string),
 		Title:    title,
 		Slug:     slug,
-		Body:     content,
-		Metadata: string(metadataStr),
-		AuthorID: int64(authorId),
+		Content:  content,
+		Metadata: sql.NullString{String: string(metadataStr), Valid: true},
 	}
 	return dbPost, nil
 }
@@ -234,6 +236,10 @@ func CleanPostFrontmatter(post *models.Post, ssg *models.SSG) {
 	if post.Frontmatter.Date == "" {
 		post.Frontmatter.Date = time.Now().Format("2006-01-02")
 	}
+}
+
+func generatePostID() string {
+	return fmt.Sprintf("%d", time.Now().UnixNano())
 }
 
 func init() {

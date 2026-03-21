@@ -23,15 +23,19 @@ CREATE TABLE IF NOT EXISTS authors (
 );
 
 CREATE TABLE IF NOT EXISTS posts (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id TEXT PRIMARY KEY,
+    type_id TEXT NOT NULL,
     title TEXT NOT NULL,
-    slug TEXT NOT NULL,
-    body TEXT NOT NULL,
-    metadata TEXT NOT NULL,
-    deleted BOOLEAN DEFAULT 0,
-    created_at DEFAULT CURRENT_TIMESTAMP,
-    updated_at DEFAULT CURRENT_TIMESTAMP,
-    author_id INTEGER REFERENCES authors(id) NOT NULL
+    slug TEXT NOT NULL UNIQUE,
+    content TEXT NOT NULL,
+    excerpt TEXT,
+    status TEXT DEFAULT 'draft',
+    is_featured REAL DEFAULT 0,
+    tags TEXT,
+    metadata TEXT,
+    created_at REAL,
+    updated_at REAL,
+    published_at REAL
 );
 `
 	if _, err := db.Exec(schema); err != nil {
@@ -50,11 +54,12 @@ CREATE TABLE IF NOT EXISTS posts (
 	}
 
 	_, err = q.CreatePost(ctx, CreatePostParams{
+		ID:       "test-id-1",
+		TypeID:   "post",
 		Title:    "t",
-		Slug:     "posts/t",
-		Body:     "b",
-		Metadata: "{}",
-		AuthorID: authorID,
+		Slug:     "posts-t",
+		Content:  "b",
+		Metadata: sql.NullString{String: "{}", Valid: true},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -65,7 +70,7 @@ CREATE TABLE IF NOT EXISTS posts (
 		t.Fatal("expected posts")
 	}
 
-	bySlug, err := q.GetPostsBySlugType(ctx, "posts/t")
+	bySlug, err := q.GetPostsBySlugType(ctx, "posts-t")
 	if err != nil || len(bySlug) == 0 {
 		t.Fatal("expected posts by slug")
 	}
