@@ -13,7 +13,7 @@ SELECT id, username, name, password, is_admin FROM authors WHERE id = ?;
 
 -- name: CreatePost :one
 INSERT INTO posts (id, type_id, title, slug, content, metadata, tags, status) 
-VALUES (?, ?, ?, ?, ?, ?, ?, 'draft') RETURNING id, type_id, title, slug, content, metadata, tags, status;
+VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, type_id, title, slug, content, metadata, tags, status;
 
 -- name: GetPostsBySlugType :many
 SELECT id, type_id, title, slug, content, metadata, tags, status FROM posts WHERE slug = ? AND status != 'deleted';

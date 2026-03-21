@@ -30,7 +30,7 @@ func (q *Queries) CreateAuthor(ctx context.Context, arg CreateAuthorParams) (int
 
 const createPost = `-- name: CreatePost :one
 INSERT INTO posts (id, type_id, title, slug, content, metadata, tags, status) 
-VALUES (?, ?, ?, ?, ?, ?, ?, 'draft') RETURNING id, type_id, title, slug, content, metadata, tags, status
+VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, type_id, title, slug, content, metadata, tags, status
 `
 
 type CreatePostParams struct {
@@ -41,6 +41,7 @@ type CreatePostParams struct {
 	Content  string         `json:"content"`
 	Metadata sql.NullString `json:"metadata"`
 	Tags     sql.NullString `json:"tags"`
+	Status   sql.NullString `json:"status"`
 }
 
 type CreatePostRow struct {
@@ -63,6 +64,7 @@ func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (CreateP
 		arg.Content,
 		arg.Metadata,
 		arg.Tags,
+		arg.Status,
 	)
 	var i CreatePostRow
 	err := row.Scan(

@@ -232,6 +232,7 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 		Content:  content,
 		Metadata: sql.NullString{String: string(meta), Valid: true},
 		Tags:     tagsJSON,
+		Status:   sql.NullString{String: status, Valid: true},
 	})
 	
 	if err != nil {
