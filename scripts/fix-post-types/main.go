@@ -59,13 +59,13 @@ func main() {
 
 	ctx := context.Background()
 
-	// Fix specific posts that should be links
+	// Fix specific posts that should be link
 	fixes := []struct {
 		slug      string
 		newTypeID string
 	}{
-		{"stitch-design-with-ai", "links"},
-		{"give-django-your-time-and-money-not-your-tokens", "links"},
+		{"stitch-design-with-ai", "link"},
+		{"give-django-your-time-and-money-not-your-tokens", "link"},
 	}
 
 	var updates []struct {

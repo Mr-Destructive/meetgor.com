@@ -64,7 +64,7 @@ func main() {
 		id   string
 		name string
 	}{
-		{"links", "Links"},
+		{"link", "Link"},
 		{"posts", "Posts"},
 		{"projects", "Projects"},
 		{"work", "Work"},
