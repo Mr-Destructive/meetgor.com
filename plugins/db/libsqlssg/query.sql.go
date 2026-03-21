@@ -29,8 +29,8 @@ func (q *Queries) CreateAuthor(ctx context.Context, arg CreateAuthorParams) (int
 }
 
 const createPost = `-- name: CreatePost :one
-INSERT INTO posts (id, type_id, title, slug, content, metadata, status) 
-VALUES (?, ?, ?, ?, ?, ?, 'draft') RETURNING id, type_id, title, slug, content, metadata, status
+INSERT INTO posts (id, type_id, title, slug, content, metadata, tags, status) 
+VALUES (?, ?, ?, ?, ?, ?, ?, 'draft') RETURNING id, type_id, title, slug, content, metadata, tags, status
 `
 
 type CreatePostParams struct {
@@ -40,6 +40,7 @@ type CreatePostParams struct {
 	Slug     string         `json:"slug"`
 	Content  string         `json:"content"`
 	Metadata sql.NullString `json:"metadata"`
+	Tags     sql.NullString `json:"tags"`
 }
 
 type CreatePostRow struct {
@@ -49,6 +50,7 @@ type CreatePostRow struct {
 	Slug     string         `json:"slug"`
 	Content  string         `json:"content"`
 	Metadata sql.NullString `json:"metadata"`
+	Tags     sql.NullString `json:"tags"`
 	Status   sql.NullString `json:"status"`
 }
 
@@ -60,6 +62,7 @@ func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (CreateP
 		arg.Slug,
 		arg.Content,
 		arg.Metadata,
+		arg.Tags,
 	)
 	var i CreatePostRow
 	err := row.Scan(
@@ -69,6 +72,7 @@ func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (CreateP
 		&i.Slug,
 		&i.Content,
 		&i.Metadata,
+		&i.Tags,
 		&i.Status,
 	)
 	return i, err
@@ -84,7 +88,7 @@ func (q *Queries) DeletePost(ctx context.Context, slug string) error {
 }
 
 const getAllPosts = `-- name: GetAllPosts :many
-SELECT id, type_id, title, slug, content, metadata, status, created_at, updated_at FROM posts WHERE status != 'deleted'
+SELECT id, type_id, title, slug, content, metadata, tags, status, created_at, updated_at FROM posts WHERE status != 'deleted'
 `
 
 type GetAllPostsRow struct {
@@ -94,6 +98,7 @@ type GetAllPostsRow struct {
 	Slug      string          `json:"slug"`
 	Content   string          `json:"content"`
 	Metadata  sql.NullString  `json:"metadata"`
+	Tags      sql.NullString  `json:"tags"`
 	Status    sql.NullString  `json:"status"`
 	CreatedAt sql.NullFloat64 `json:"created_at"`
 	UpdatedAt sql.NullFloat64 `json:"updated_at"`
@@ -115,6 +120,7 @@ func (q *Queries) GetAllPosts(ctx context.Context) ([]GetAllPostsRow, error) {
 			&i.Slug,
 			&i.Content,
 			&i.Metadata,
+			&i.Tags,
 			&i.Status,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -150,7 +156,7 @@ func (q *Queries) GetAuthorByID(ctx context.Context, id int64) (Author, error) {
 }
 
 const getPostBySlug = `-- name: GetPostBySlug :one
-SELECT id, type_id, title, slug, content, metadata, status FROM posts WHERE slug = ? AND status != 'deleted'
+SELECT id, type_id, title, slug, content, metadata, tags, status FROM posts WHERE slug = ? AND status != 'deleted'
 `
 
 type GetPostBySlugRow struct {
@@ -160,6 +166,7 @@ type GetPostBySlugRow struct {
 	Slug     string         `json:"slug"`
 	Content  string         `json:"content"`
 	Metadata sql.NullString `json:"metadata"`
+	Tags     sql.NullString `json:"tags"`
 	Status   sql.NullString `json:"status"`
 }
 
@@ -173,13 +180,14 @@ func (q *Queries) GetPostBySlug(ctx context.Context, slug string) (GetPostBySlug
 		&i.Slug,
 		&i.Content,
 		&i.Metadata,
+		&i.Tags,
 		&i.Status,
 	)
 	return i, err
 }
 
 const getPostsBySlugType = `-- name: GetPostsBySlugType :many
-SELECT id, type_id, title, slug, content, metadata, status FROM posts WHERE slug = ? AND status != 'deleted'
+SELECT id, type_id, title, slug, content, metadata, tags, status FROM posts WHERE slug = ? AND status != 'deleted'
 `
 
 type GetPostsBySlugTypeRow struct {
@@ -189,6 +197,7 @@ type GetPostsBySlugTypeRow struct {
 	Slug     string         `json:"slug"`
 	Content  string         `json:"content"`
 	Metadata sql.NullString `json:"metadata"`
+	Tags     sql.NullString `json:"tags"`
 	Status   sql.NullString `json:"status"`
 }
 
@@ -208,6 +217,7 @@ func (q *Queries) GetPostsBySlugType(ctx context.Context, slug string) ([]GetPos
 			&i.Slug,
 			&i.Content,
 			&i.Metadata,
+			&i.Tags,
 			&i.Status,
 		); err != nil {
 			return nil, err
@@ -276,13 +286,14 @@ func (q *Queries) UpdateAuthor(ctx context.Context, arg UpdateAuthorParams) (Aut
 }
 
 const updatePost = `-- name: UpdatePost :exec
-UPDATE posts SET title = ?, content = ?, metadata = ? WHERE slug = ?
+UPDATE posts SET title = ?, content = ?, metadata = ?, tags = ? WHERE slug = ?
 `
 
 type UpdatePostParams struct {
 	Title    string         `json:"title"`
 	Content  string         `json:"content"`
 	Metadata sql.NullString `json:"metadata"`
+	Tags     sql.NullString `json:"tags"`
 	Slug     string         `json:"slug"`
 }
 
@@ -291,6 +302,7 @@ func (q *Queries) UpdatePost(ctx context.Context, arg UpdatePostParams) error {
 		arg.Title,
 		arg.Content,
 		arg.Metadata,
+		arg.Tags,
 		arg.Slug,
 	)
 	return err
