@@ -16,6 +16,7 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 	libsqlssg "github.com/Mr-Destructive/meetgor.com/plugins/db/libsqlssg"
+	_ "github.com/tursodatabase/libsql-client-go/libsql"
 )
 
 // SyncOptions defines the sync configuration
