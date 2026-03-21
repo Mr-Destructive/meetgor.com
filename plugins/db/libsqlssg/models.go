@@ -17,13 +17,17 @@ type Author struct {
 }
 
 type Post struct {
-	ID        int64        `json:"id"`
-	Title     string       `json:"title"`
-	Slug      string       `json:"slug"`
-	Body      string       `json:"body"`
-	Metadata  string       `json:"metadata"`
-	Deleted   sql.NullBool `json:"deleted"`
-	CreatedAt interface{}  `json:"created_at"`
-	UpdatedAt interface{}  `json:"updated_at"`
-	AuthorID  int64        `json:"author_id"`
+	ID          string          `json:"id"`
+	TypeID      string          `json:"type_id"`
+	Title       string          `json:"title"`
+	Slug        string          `json:"slug"`
+	Content     string          `json:"content"`
+	Excerpt     sql.NullString  `json:"excerpt"`
+	Status      sql.NullString  `json:"status"`
+	IsFeatured  sql.NullFloat64 `json:"is_featured"`
+	Tags        sql.NullString  `json:"tags"`
+	Metadata    sql.NullString  `json:"metadata"`
+	CreatedAt   sql.NullFloat64 `json:"created_at"`
+	UpdatedAt   sql.NullFloat64 `json:"updated_at"`
+	PublishedAt sql.NullFloat64 `json:"published_at"`
 }

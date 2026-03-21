@@ -29,64 +29,95 @@ func (q *Queries) CreateAuthor(ctx context.Context, arg CreateAuthorParams) (int
 }
 
 const createPost = `-- name: CreatePost :one
-INSERT INTO posts (title, slug, body, metadata, author_id) 
-VALUES (?, ?, ?, ?, ?) RETURNING id, title, slug, body, metadata, deleted, created_at, updated_at, author_id
+INSERT INTO posts (id, type_id, title, slug, content, metadata, status) 
+VALUES (?, ?, ?, ?, ?, ?, 'draft') RETURNING id, type_id, title, slug, content, metadata, status
 `
 
 type CreatePostParams struct {
-	Title    string `json:"title"`
-	Slug     string `json:"slug"`
-	Body     string `json:"body"`
-	Metadata string `json:"metadata"`
-	AuthorID int64  `json:"author_id"`
+	ID       string         `json:"id"`
+	TypeID   string         `json:"type_id"`
+	Title    string         `json:"title"`
+	Slug     string         `json:"slug"`
+	Content  string         `json:"content"`
+	Metadata sql.NullString `json:"metadata"`
 }
 
-func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (Post, error) {
+type CreatePostRow struct {
+	ID       string         `json:"id"`
+	TypeID   string         `json:"type_id"`
+	Title    string         `json:"title"`
+	Slug     string         `json:"slug"`
+	Content  string         `json:"content"`
+	Metadata sql.NullString `json:"metadata"`
+	Status   sql.NullString `json:"status"`
+}
+
+func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (CreatePostRow, error) {
 	row := q.db.QueryRowContext(ctx, createPost,
+		arg.ID,
+		arg.TypeID,
 		arg.Title,
 		arg.Slug,
-		arg.Body,
+		arg.Content,
 		arg.Metadata,
-		arg.AuthorID,
 	)
-	var i Post
+	var i CreatePostRow
 	err := row.Scan(
 		&i.ID,
+		&i.TypeID,
 		&i.Title,
 		&i.Slug,
-		&i.Body,
+		&i.Content,
 		&i.Metadata,
-		&i.Deleted,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-		&i.AuthorID,
+		&i.Status,
 	)
 	return i, err
 }
 
-const getAllPosts = `-- name: GetAllPosts :many
-SELECT id, title, slug, body, metadata, deleted, created_at, updated_at, author_id FROM posts WHERE deleted = 0
+const deletePost = `-- name: DeletePost :exec
+UPDATE posts SET status = 'deleted' WHERE slug = ?
 `
 
-func (q *Queries) GetAllPosts(ctx context.Context) ([]Post, error) {
+func (q *Queries) DeletePost(ctx context.Context, slug string) error {
+	_, err := q.db.ExecContext(ctx, deletePost, slug)
+	return err
+}
+
+const getAllPosts = `-- name: GetAllPosts :many
+SELECT id, type_id, title, slug, content, metadata, status, created_at, updated_at FROM posts WHERE status != 'deleted'
+`
+
+type GetAllPostsRow struct {
+	ID        string          `json:"id"`
+	TypeID    string          `json:"type_id"`
+	Title     string          `json:"title"`
+	Slug      string          `json:"slug"`
+	Content   string          `json:"content"`
+	Metadata  sql.NullString  `json:"metadata"`
+	Status    sql.NullString  `json:"status"`
+	CreatedAt sql.NullFloat64 `json:"created_at"`
+	UpdatedAt sql.NullFloat64 `json:"updated_at"`
+}
+
+func (q *Queries) GetAllPosts(ctx context.Context) ([]GetAllPostsRow, error) {
 	rows, err := q.db.QueryContext(ctx, getAllPosts)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Post
+	var items []GetAllPostsRow
 	for rows.Next() {
-		var i Post
+		var i GetAllPostsRow
 		if err := rows.Scan(
 			&i.ID,
+			&i.TypeID,
 			&i.Title,
 			&i.Slug,
-			&i.Body,
+			&i.Content,
 			&i.Metadata,
-			&i.Deleted,
+			&i.Status,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.AuthorID,
 		); err != nil {
 			return nil, err
 		}
@@ -118,29 +149,66 @@ func (q *Queries) GetAuthorByID(ctx context.Context, id int64) (Author, error) {
 	return i, err
 }
 
-const getPostsBySlugType = `-- name: GetPostsBySlugType :many
-SELECT id, title, slug, body, metadata, deleted, created_at, updated_at, author_id FROM posts WHERE slug = ? AND deleted = 0
+const getPostBySlug = `-- name: GetPostBySlug :one
+SELECT id, type_id, title, slug, content, metadata, status FROM posts WHERE slug = ? AND status != 'deleted'
 `
 
-func (q *Queries) GetPostsBySlugType(ctx context.Context, slug string) ([]Post, error) {
+type GetPostBySlugRow struct {
+	ID       string         `json:"id"`
+	TypeID   string         `json:"type_id"`
+	Title    string         `json:"title"`
+	Slug     string         `json:"slug"`
+	Content  string         `json:"content"`
+	Metadata sql.NullString `json:"metadata"`
+	Status   sql.NullString `json:"status"`
+}
+
+func (q *Queries) GetPostBySlug(ctx context.Context, slug string) (GetPostBySlugRow, error) {
+	row := q.db.QueryRowContext(ctx, getPostBySlug, slug)
+	var i GetPostBySlugRow
+	err := row.Scan(
+		&i.ID,
+		&i.TypeID,
+		&i.Title,
+		&i.Slug,
+		&i.Content,
+		&i.Metadata,
+		&i.Status,
+	)
+	return i, err
+}
+
+const getPostsBySlugType = `-- name: GetPostsBySlugType :many
+SELECT id, type_id, title, slug, content, metadata, status FROM posts WHERE slug = ? AND status != 'deleted'
+`
+
+type GetPostsBySlugTypeRow struct {
+	ID       string         `json:"id"`
+	TypeID   string         `json:"type_id"`
+	Title    string         `json:"title"`
+	Slug     string         `json:"slug"`
+	Content  string         `json:"content"`
+	Metadata sql.NullString `json:"metadata"`
+	Status   sql.NullString `json:"status"`
+}
+
+func (q *Queries) GetPostsBySlugType(ctx context.Context, slug string) ([]GetPostsBySlugTypeRow, error) {
 	rows, err := q.db.QueryContext(ctx, getPostsBySlugType, slug)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Post
+	var items []GetPostsBySlugTypeRow
 	for rows.Next() {
-		var i Post
+		var i GetPostsBySlugTypeRow
 		if err := rows.Scan(
 			&i.ID,
+			&i.TypeID,
 			&i.Title,
 			&i.Slug,
-			&i.Body,
+			&i.Content,
 			&i.Metadata,
-			&i.Deleted,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-			&i.AuthorID,
+			&i.Status,
 		); err != nil {
 			return nil, err
 		}
@@ -205,4 +273,25 @@ func (q *Queries) UpdateAuthor(ctx context.Context, arg UpdateAuthorParams) (Aut
 		&i.IsAdmin,
 	)
 	return i, err
+}
+
+const updatePost = `-- name: UpdatePost :exec
+UPDATE posts SET title = ?, content = ?, metadata = ? WHERE slug = ?
+`
+
+type UpdatePostParams struct {
+	Title    string         `json:"title"`
+	Content  string         `json:"content"`
+	Metadata sql.NullString `json:"metadata"`
+	Slug     string         `json:"slug"`
+}
+
+func (q *Queries) UpdatePost(ctx context.Context, arg UpdatePostParams) error {
+	_, err := q.db.ExecContext(ctx, updatePost,
+		arg.Title,
+		arg.Content,
+		arg.Metadata,
+		arg.Slug,
+	)
+	return err
 }

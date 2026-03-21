@@ -154,10 +154,14 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 		status = "draft"
 	}
 	
-	_, err = db.ExecContext(ctx,
-		`INSERT INTO posts (id, type_id, title, slug, content, excerpt, tags, status, metadata, created_at, updated_at)
-		 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
-		generateID(), typeID, payload.Title, slug, content, payload.Excerpt, payload.Tags, status, string(meta))
+	_, err = q.CreatePost(ctx, libsqlssg.CreatePostParams{
+		ID:       generateID(),
+		TypeID:   typeID,
+		Title:    payload.Title,
+		Slug:     slug,
+		Content:  content,
+		Metadata: sql.NullString{String: string(meta), Valid: true},
+	})
 	
 	if err != nil {
 		log.Printf("[ERROR] database insert failed: %v", err)
@@ -183,12 +187,8 @@ func handleGet(ctx context.Context, db *sql.DB, slug string) (events.APIGatewayP
 		return jsonError(http.StatusBadRequest, "slug required"), nil
 	}
 
-	var title, content, metadata string
-	var status string
-	err := db.QueryRowContext(ctx,
-		`SELECT title, content, metadata, status FROM posts WHERE slug = ? AND status != 'deleted'`, slug).
-		Scan(&title, &content, &metadata, &status)
-	
+	q := libsqlssg.New(db)
+	post, err := q.GetPostBySlug(ctx, slug)
 	if err == sql.ErrNoRows {
 		return jsonError(http.StatusNotFound, "post not found"), nil
 	}
@@ -197,11 +197,11 @@ func handleGet(ctx context.Context, db *sql.DB, slug string) (events.APIGatewayP
 	}
 
 	return jsonResponse(http.StatusOK, map[string]interface{}{
-		"title":    title,
-		"content":  content,
-		"metadata": metadata,
-		"slug":     slug,
-		"status":   status,
+		"title":    post.Title,
+		"content":  post.Content,
+		"metadata": post.Metadata.String,
+		"slug":     post.Slug,
+		"status":   post.Status.String,
 	}), nil
 }
 
@@ -220,10 +220,8 @@ func handleUpdate(ctx context.Context, db *sql.DB, slug string, request events.A
 		return jsonError(http.StatusUnauthorized, "authentication failed"), nil
 	}
 
-	var title, content, metadata string
-	err = db.QueryRowContext(ctx,
-		`SELECT title, content, metadata FROM posts WHERE slug = ?`, slug).
-		Scan(&title, &content, &metadata)
+	q := libsqlssg.New(db)
+	post, err := q.GetPostBySlug(ctx, slug)
 	if err == sql.ErrNoRows {
 		return jsonError(http.StatusNotFound, "post not found"), nil
 	}
@@ -231,11 +229,11 @@ func handleUpdate(ctx context.Context, db *sql.DB, slug string, request events.A
 		return jsonError(http.StatusInternalServerError, "failed to query post"), nil
 	}
 
-	parsedMeta, _ := parseMetadata(metadata)
+	parsedMeta, _ := parseMetadata(post.Metadata.String)
 	parsedMeta = mergeMetadata(parsedMeta, payload.Metadata, slug, payload.Title)
 
-	newTitle := title
-	newContent := content
+	newTitle := post.Title
+	newContent := post.Content
 	if payload.Title != "" {
 		newTitle = payload.Title
 	}
@@ -253,9 +251,12 @@ func handleUpdate(ctx context.Context, db *sql.DB, slug string, request events.A
 		return jsonError(http.StatusInternalServerError, "failed to serialize metadata"), nil
 	}
 
-	if _, err := db.ExecContext(ctx,
-		"UPDATE posts SET title = ?, content = ?, metadata = ?, updated_at = CURRENT_TIMESTAMP WHERE slug = ?",
-		newTitle, newContent, string(metaBytes), slug); err != nil {
+	if err := q.UpdatePost(ctx, libsqlssg.UpdatePostParams{
+		Title:    newTitle,
+		Content:  newContent,
+		Metadata: sql.NullString{String: string(metaBytes), Valid: true},
+		Slug:     slug,
+	}); err != nil {
 		return jsonError(http.StatusInternalServerError, "failed to update post"), nil
 	}
 
@@ -282,7 +283,8 @@ func handleDelete(ctx context.Context, db *sql.DB, slug string, request events.A
 		return jsonError(http.StatusUnauthorized, "authentication failed"), nil
 	}
 
-	if _, err := db.ExecContext(ctx, "UPDATE posts SET status = 'deleted', updated_at = CURRENT_TIMESTAMP WHERE slug = ?", slug); err != nil {
+	q := libsqlssg.New(db)
+	if err := q.DeletePost(ctx, slug); err != nil {
 		return jsonError(http.StatusInternalServerError, "failed to delete post"), nil
 	}
 

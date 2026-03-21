@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	_ "github.com/mattn/go-sqlite3"
-	libsqlssg "github.com/mr-destructive/mr-destructive.github.io/plugins/db/libsqlssg"
 )
 
 // TestGitHubPushScenario simulates a direct GitHub push to posts/ directory
@@ -65,16 +64,13 @@ This was edited directly on GitHub without using the web editor.
 	}
 
 	// Verify Turso has the post
-	q := libsqlssg.New(db)
-	posts, err := q.GetPostsBySlugType(ctx, "new-post-github")
+	var title string
+	err = db.QueryRowContext(ctx, "SELECT title FROM posts WHERE slug = ?", "new-post-github").Scan(&title)
 	if err != nil {
 		t.Fatalf("query posts: %v", err)
 	}
-	if len(posts) == 0 {
-		t.Fatalf("expected post in Turso, got none")
-	}
-	if posts[0].Title != "New Post from GitHub" {
-		t.Fatalf("title mismatch: got %s", posts[0].Title)
+	if title != "New Post from GitHub" {
+		t.Fatalf("title mismatch: got %s", title)
 	}
 }
 
@@ -117,13 +113,13 @@ Never touched the editor UI.
 	}
 
 	// Verify Turso has it
-	q := libsqlssg.New(db)
-	posts, err := q.GetPostsBySlugType(ctx, "github-only")
+	var count int
+	err = db.QueryRowContext(ctx, "SELECT COUNT(*) FROM posts WHERE slug = ?", "github-only").Scan(&count)
 	if err != nil {
 		t.Fatalf("query: %v", err)
 	}
-	if len(posts) != 1 {
-		t.Fatalf("expected 1 post, got %d", len(posts))
+	if count != 1 {
+		t.Fatalf("expected 1 post, got %d", count)
 	}
 }
 

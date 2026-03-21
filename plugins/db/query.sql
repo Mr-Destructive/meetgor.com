@@ -12,11 +12,20 @@ UPDATE authors SET name = ?, password = ?, is_admin = ? WHERE id = ? RETURNING *
 SELECT id, username, name, password, is_admin FROM authors WHERE id = ?;
 
 -- name: CreatePost :one
-INSERT INTO posts (title, slug, body, metadata, author_id) 
-VALUES (?, ?, ?, ?, ?) RETURNING *;
+INSERT INTO posts (id, type_id, title, slug, content, metadata, status) 
+VALUES (?, ?, ?, ?, ?, ?, 'draft') RETURNING id, type_id, title, slug, content, metadata, status;
 
 -- name: GetPostsBySlugType :many
-SELECT * FROM posts WHERE slug = ? AND deleted = 0;
+SELECT id, type_id, title, slug, content, metadata, status FROM posts WHERE slug = ? AND status != 'deleted';
 
 -- name: GetAllPosts :many
-SELECT * FROM posts WHERE deleted = 0;
+SELECT id, type_id, title, slug, content, metadata, status, created_at, updated_at FROM posts WHERE status != 'deleted';
+
+-- name: UpdatePost :exec
+UPDATE posts SET title = ?, content = ?, metadata = ? WHERE slug = ?;
+
+-- name: GetPostBySlug :one
+SELECT id, type_id, title, slug, content, metadata, status FROM posts WHERE slug = ? AND status != 'deleted';
+
+-- name: DeletePost :exec
+UPDATE posts SET status = 'deleted' WHERE slug = ?;

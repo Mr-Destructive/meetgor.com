@@ -7,13 +7,17 @@ CREATE TABLE IF NOT EXISTS authors (
 );
 
 CREATE TABLE IF NOT EXISTS posts (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id TEXT PRIMARY KEY,
+    type_id TEXT NOT NULL,
     title TEXT NOT NULL,
-    slug TEXT NOT NULL,
-    body TEXT NOT NULL,
-    metadata TEXT NOT NULL,
-    deleted BOOLEAN DEFAULT 0,
-    created_at DEFAULT CURRENT_TIMESTAMP,
-    updated_at DEFAULT CURRENT_TIMESTAMP,
-    author_id INTEGER REFERENCES authors(id) NOT NULL
+    slug TEXT NOT NULL UNIQUE,
+    content TEXT NOT NULL,
+    excerpt TEXT,
+    status TEXT DEFAULT 'draft',
+    is_featured REAL DEFAULT 0,
+    tags TEXT,
+    metadata TEXT,
+    created_at REAL DEFAULT (strftime('%s')),
+    updated_at REAL DEFAULT (strftime('%s')),
+    published_at REAL
 );
