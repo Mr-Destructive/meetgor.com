@@ -188,21 +188,35 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 	metaBytes, _ := json.Marshal(cleanMeta)
 	meta = metaBytes
 	
+	// Extract tags from metadata or payload
+	var tagsJSON sql.NullString
+	if tagsVal, ok := payload.Metadata["tags"]; ok {
+		if tagsStr, ok := tagsVal.(string); ok {
+			// Tags as string (comma-separated)
+			tagsArr := strings.Split(tagsStr, ",")
+			for i := range tagsArr {
+				tagsArr[i] = strings.TrimSpace(tagsArr[i])
+			}
+			tagsBytes, _ := json.Marshal(tagsArr)
+			tagsJSON = sql.NullString{String: string(tagsBytes), Valid: true}
+		} else if tagsArr, ok := tagsVal.([]interface{}); ok {
+			// Tags as array
+			tagsBytes, _ := json.Marshal(tagsArr)
+			tagsJSON = sql.NullString{String: string(tagsBytes), Valid: true}
+		}
+	}
+	
 	log.Printf("[INSERT] preparing post insert: title=%s slug=%s type_id=%s", payload.Title, slug, typeID)
 	
-	// Ensure post type exists - if not, use 'post' as fallback
+	// Ensure post type exists - if not, create it
 	var typeExists int
 	err = db.QueryRowContext(ctx, "SELECT COUNT(*) FROM post_types WHERE id = ?", typeID).Scan(&typeExists)
 	if err != nil || typeExists == 0 {
-		log.Printf("[WARN] post type %s does not exist, using 'post' instead", typeID)
-		typeID = "post"
-		// Check if 'post' exists, if not create it
-		err = db.QueryRowContext(ctx, "SELECT COUNT(*) FROM post_types WHERE id = ?", "post").Scan(&typeExists)
-		if err != nil || typeExists == 0 {
-			_, err = db.ExecContext(ctx, "INSERT INTO post_types (id, name, slug) VALUES (?, ?, ?)", "post", "Post", "post")
-			if err != nil {
-				log.Printf("[WARN] failed to create default post type: %v", err)
-			}
+		// Create the post type if it doesn't exist
+		log.Printf("[INFO] creating post type: %s", typeID)
+		_, err = db.ExecContext(ctx, "INSERT INTO post_types (id, name, slug) VALUES (?, ?, ?)", typeID, strings.Title(typeID), typeID)
+		if err != nil {
+			log.Printf("[WARN] failed to create post type %s: %v", typeID, err)
 		}
 	}
 	status := payload.Status
@@ -217,6 +231,7 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 		Slug:     slug,
 		Content:  content,
 		Metadata: sql.NullString{String: string(meta), Valid: true},
+		Tags:     tagsJSON,
 	})
 	
 	if err != nil {
@@ -307,10 +322,27 @@ func handleUpdate(ctx context.Context, db *sql.DB, slug string, request events.A
 		return jsonError(http.StatusInternalServerError, "failed to serialize metadata"), nil
 	}
 
+	// Extract tags from metadata for update
+	var tagsJSON sql.NullString
+	if tagsVal, ok := parsedMeta["tags"]; ok {
+		if tagsStr, ok := tagsVal.(string); ok {
+			tagsArr := strings.Split(tagsStr, ",")
+			for i := range tagsArr {
+				tagsArr[i] = strings.TrimSpace(tagsArr[i])
+			}
+			tagsBytes, _ := json.Marshal(tagsArr)
+			tagsJSON = sql.NullString{String: string(tagsBytes), Valid: true}
+		} else if tagsArr, ok := tagsVal.([]interface{}); ok {
+			tagsBytes, _ := json.Marshal(tagsArr)
+			tagsJSON = sql.NullString{String: string(tagsBytes), Valid: true}
+		}
+	}
+
 	if err := q.UpdatePost(ctx, libsqlssg.UpdatePostParams{
 		Title:    newTitle,
 		Content:  newContent,
 		Metadata: sql.NullString{String: string(metaBytes), Valid: true},
+		Tags:     tagsJSON,
 		Slug:     slug,
 	}); err != nil {
 		return jsonError(http.StatusInternalServerError, "failed to update post"), nil
