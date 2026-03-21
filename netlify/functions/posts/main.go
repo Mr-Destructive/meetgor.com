@@ -23,7 +23,7 @@ import (
 )
 
 func init() {
-	log.SetOutput(io.Discard)
+	// Logs are enabled for debugging
 }
 
 const (
@@ -133,6 +133,7 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 	}
 
 	q := libsqlssg.New(db)
+	log.Printf("[INSERT] preparing post insert: title=%s slug=%s author_id=%d", payload.Title, slug, user.ID)
 	post, err := q.CreatePost(ctx, libsqlssg.CreatePostParams{
 		Title:    payload.Title,
 		Slug:     slug,
@@ -142,7 +143,9 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 	})
 	if err != nil {
 		log.Printf("[ERROR] database insert failed: %v", err)
-		return jsonError(http.StatusInternalServerError, "failed to insert post"), nil
+		log.Printf("[ERROR] post params: title=%s slug=%s body_len=%d metadata=%s author_id=%d", 
+			payload.Title, slug, len(payload.Body), string(meta), user.ID)
+		return jsonError(http.StatusInternalServerError, fmt.Sprintf("failed to insert post: %v", err)), nil
 	}
 
 	log.Printf("[BUILD] triggering GitHub Action")
