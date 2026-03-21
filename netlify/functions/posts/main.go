@@ -298,7 +298,8 @@ func validateCreate(payload postPayload) error {
 	if payload.Title == "" {
 		return fmt.Errorf("title required")
 	}
-	if payload.Body == "" {
+	postType, _ := payload.Metadata["type"].(string)
+	if postType != "links" && payload.Body == "" {
 		return fmt.Errorf("body required")
 	}
 	return nil
