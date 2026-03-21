@@ -59,8 +59,8 @@ This was edited directly on GitHub without using the web editor.
 		t.Fatalf("read rewritten file: %v", err)
 	}
 	rewrittenContent := string(rewrittenBytes)
-	if !contains(rewrittenContent, "content_hash") {
-		t.Fatalf("expected content_hash in rewritten file")
+	if !contains(rewrittenContent, "hash:") {
+		t.Fatalf("expected hash: in rewritten file")
 	}
 
 	// Verify Turso has the post

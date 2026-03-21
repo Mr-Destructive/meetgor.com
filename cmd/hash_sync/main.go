@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"database/sql"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -109,7 +110,7 @@ func syncMarkdownFiles(ctx context.Context, db *sql.DB, opts SyncOptions) (SyncS
 		// Parse front matter and content
 		meta, body := parseFrontMatter(string(content))
 
-		// Calculate content hash
+		// Calculate content hash based on title+body only (not metadata)
 		hash := calculateHash(meta["title"], body)
 
 		// Check if post exists and hash matches
@@ -124,14 +125,21 @@ func syncMarkdownFiles(ctx context.Context, db *sql.DB, opts SyncOptions) (SyncS
 			return err
 		}
 
-		if len(posts) > 0 && posts[0].Metadata.String == hash {
+		// Extract hash from existing post metadata to compare
+		existingHash := ""
+		if len(posts) > 0 && posts[0].Metadata.Valid {
+			existingMeta := parseMetadata(posts[0].Metadata.String)
+			existingHash = existingMeta["hash"]
+		}
+
+		if existingHash == hash {
 			// Post exists and hash matches - skip
 			stats.Skipped++
 			return nil
 		}
 
-		// Update metadata with hash
-		meta["content_hash"] = hash
+		// Update metadata with hash for comparison on next sync
+		meta["hash"] = hash
 		meta["slug"] = slug
 
 		// Prepare post data
@@ -191,6 +199,26 @@ func syncMarkdownFiles(ctx context.Context, db *sql.DB, opts SyncOptions) (SyncS
 	})
 
 	return stats, err
+}
+
+func parseMetadata(jsonStr string) map[string]string {
+	meta := make(map[string]string)
+	if jsonStr == "" {
+		return meta
+	}
+	
+	// Simple JSON parser for metadata
+	var obj map[string]interface{}
+	if err := json.Unmarshal([]byte(jsonStr), &obj); err != nil {
+		return meta
+	}
+	
+	for k, v := range obj {
+		if str, ok := v.(string); ok {
+			meta[k] = str
+		}
+	}
+	return meta
 }
 
 func parseFrontMatter(content string) (map[string]string, string) {

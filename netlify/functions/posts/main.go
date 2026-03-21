@@ -145,6 +145,7 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 	
 	log.Printf("[INSERT] preparing post insert: title=%s slug=%s type_id=%s", payload.Title, slug, payload.TypeID)
 	
+	q := libsqlssg.New(db)
 	typeID := payload.TypeID
 	if typeID == "" {
 		typeID = "post"
