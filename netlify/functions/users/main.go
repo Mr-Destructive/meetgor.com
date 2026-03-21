@@ -11,8 +11,8 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/mr-destructive/mr-destructive.github.io/plugins"
-	"github.com/mr-destructive/mr-destructive.github.io/plugins/db/libsqlssg"
+	"github.com/Mr-Destructive/meetgor.com/plugins"
+	"github.com/Mr-Destructive/meetgor.com/plugins/db/libsqlssg"
 	_ "github.com/tursodatabase/libsql-client-go/libsql"
 	"golang.org/x/crypto/bcrypt"
 )

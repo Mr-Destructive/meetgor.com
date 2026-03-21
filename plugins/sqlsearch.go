@@ -11,7 +11,7 @@ import (
 	"regexp"
 	"strings"
 
-	models "github.com/mr-destructive/meetgor.com/models"
+	models "github.com/Mr-Destructive/meetgor.com/models"
 	"github.com/yuin/goldmark"
 	"gopkg.in/yaml.v3"
 )

@@ -15,7 +15,7 @@ import (
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
-	libsqlssg "github.com/mr-destructive/mr-destructive.github.io/plugins/db/libsqlssg"
+	libsqlssg "github.com/Mr-Destructive/meetgor.com/plugins/db/libsqlssg"
 )
 
 // SyncOptions defines the sync configuration

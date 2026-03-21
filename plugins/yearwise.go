@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/mr-destructive/meetgor.com/models"
+	"github.com/Mr-Destructive/meetgor.com/models"
 )
 
 type YearPlugin struct {

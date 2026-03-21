@@ -14,7 +14,7 @@ import (
 	"github.com/yuin/goldmark"
 	"gopkg.in/yaml.v3"
 
-	models "github.com/mr-destructive/meetgor.com/models"
+	models "github.com/Mr-Destructive/meetgor.com/models"
 )
 
 type StaticPageRendererPlugin struct {

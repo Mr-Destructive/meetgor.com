@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/mr-destructive/meetgor.com/models"
+	"github.com/Mr-Destructive/meetgor.com/models"
 )
 
 type BeforeAfterPostsPlugin struct {

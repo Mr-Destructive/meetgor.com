@@ -18,8 +18,8 @@ import (
 	"time"
 	"net/url"
 
-	models "github.com/mr-destructive/mr-destructive.github.io/models"
-	"github.com/mr-destructive/mr-destructive.github.io/plugins"
+	models "github.com/Mr-Destructive/meetgor.com/models"
+	"github.com/Mr-Destructive/meetgor.com/plugins"
 	"gopkg.in/yaml.v3"
 
 	"github.com/yuin/goldmark"

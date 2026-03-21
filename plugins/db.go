@@ -13,9 +13,9 @@ import (
 	"strings"
 	"time"
 
-	libsqlssg "github.com/mr-destructive/meetgor.com/plugins/db/libsqlssg"
+	libsqlssg "github.com/Mr-Destructive/meetgor.com/plugins/db/libsqlssg"
 
-	models "github.com/mr-destructive/meetgor.com/models"
+	models "github.com/Mr-Destructive/meetgor.com/models"
 )
 
 type DbPlugin struct {

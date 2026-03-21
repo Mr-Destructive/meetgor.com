@@ -17,7 +17,7 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	libsqlssg "github.com/mr-destructive/meetgor.com/plugins/db/libsqlssg"
+	libsqlssg "github.com/Mr-Destructive/meetgor.com/plugins/db/libsqlssg"
 	_ "github.com/tursodatabase/libsql-client-go/libsql"
 	"golang.org/x/crypto/bcrypt"
 )

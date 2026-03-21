@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"sort"
 
-	"github.com/mr-destructive/meetgor.com/models"
+	"github.com/Mr-Destructive/meetgor.com/models"
 )
 
 type TagsPlugin struct {

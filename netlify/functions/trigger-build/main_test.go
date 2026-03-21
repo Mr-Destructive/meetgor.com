@@ -12,7 +12,7 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/mr-destructive/mr-destructive.github.io/plugins"
+	"github.com/Mr-Destructive/meetgor.com/plugins"
 	"golang.org/x/crypto/bcrypt"
 )
 

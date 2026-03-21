@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/aws/aws-lambda-go/events"
-	"github.com/mr-destructive/mr-destructive.github.io/plugins"
+	"github.com/Mr-Destructive/meetgor.com/plugins"
 	_ "github.com/mattn/go-sqlite3"
 )
 

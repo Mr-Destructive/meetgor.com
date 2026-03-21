@@ -1,6 +1,6 @@
 package plugins
 
-import "github.com/mr-destructive/meetgor.com/models"
+import "github.com/Mr-Destructive/meetgor.com/models"
 
 type Phase string
 

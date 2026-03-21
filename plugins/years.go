@@ -4,7 +4,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/mr-destructive/meetgor.com/models"
+	"github.com/Mr-Destructive/meetgor.com/models"
 )
 
 func YearsFromPosts(posts []models.Post) []string {
