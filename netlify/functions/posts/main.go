@@ -46,6 +46,7 @@ type postPayload struct {
 	Password string                 `json:"password"`
 	Title    string                 `json:"title"`
 	Content  string                 `json:"content"`
+	Body     string                 `json:"body"` // backward compatibility
 	Slug     string                 `json:"slug,omitempty"`
 	TypeID   string                 `json:"type_id,omitempty"`
 	Excerpt  string                 `json:"excerpt,omitempty"`
@@ -136,6 +137,12 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 		return jsonError(http.StatusInternalServerError, "failed to serialize metadata"), nil
 	}
 
+	// Accept either Content or Body field (backward compatibility)
+	content := payload.Content
+	if content == "" {
+		content = payload.Body
+	}
+	
 	log.Printf("[INSERT] preparing post insert: title=%s slug=%s type_id=%s", payload.Title, slug, payload.TypeID)
 	
 	typeID := payload.TypeID
@@ -150,12 +157,12 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 	_, err = db.ExecContext(ctx,
 		`INSERT INTO posts (id, type_id, title, slug, content, excerpt, tags, status, metadata, created_at, updated_at)
 		 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
-		generateID(), typeID, payload.Title, slug, payload.Content, payload.Excerpt, payload.Tags, status, string(meta))
+		generateID(), typeID, payload.Title, slug, content, payload.Excerpt, payload.Tags, status, string(meta))
 	
 	if err != nil {
 		log.Printf("[ERROR] database insert failed: %v", err)
 		log.Printf("[ERROR] post params: title=%s slug=%s content_len=%d type_id=%s", 
-			payload.Title, slug, len(payload.Content), typeID)
+			payload.Title, slug, len(content), typeID)
 		return jsonError(http.StatusInternalServerError, fmt.Sprintf("failed to insert post: %v", err)), nil
 	}
 
@@ -232,8 +239,13 @@ func handleUpdate(ctx context.Context, db *sql.DB, slug string, request events.A
 	if payload.Title != "" {
 		newTitle = payload.Title
 	}
-	if payload.Content != "" {
-		newContent = payload.Content
+	// Accept either Content or Body field
+	updateContent := payload.Content
+	if updateContent == "" {
+		updateContent = payload.Body
+	}
+	if updateContent != "" {
+		newContent = updateContent
 	}
 
 	metaBytes, err := json.Marshal(parsedMeta)
@@ -318,11 +330,15 @@ func validateCreate(payload postPayload) error {
 	if payload.Title == "" {
 		return fmt.Errorf("title required")
 	}
-	if payload.Content == "" {
-		return fmt.Errorf("content required")
+	// Accept either Content or Body field (backward compatibility)
+	content := payload.Content
+	if content == "" {
+		content = payload.Body
 	}
-	if payload.TypeID == "" {
-		return fmt.Errorf("type_id required")
+	// Links type doesn't require content
+	postType, _ := payload.Metadata["type"].(string)
+	if postType != "links" && content == "" {
+		return fmt.Errorf("content required")
 	}
 	return nil
 }
