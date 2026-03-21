@@ -1,0 +1,60 @@
+name: Hash Sync - GitHub to Turso
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'posts/**/*.md'
+  schedule:
+    # Run daily at 2 AM UTC to catch any missed changes
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  hash-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.25.0'
+          cache: true
+
+      - name: Run hash-sync
+        env:
+          TURSO_DATABASE_NAME: ${{ secrets.TURSO_DATABASE_NAME }}
+          TURSO_DATABASE_AUTH_TOKEN: ${{ secrets.TURSO_DATABASE_AUTH_TOKEN }}
+        run: |
+          go run ./cmd/hash_sync/main.go --root posts --author 1
+          
+      - name: Check for changes
+        id: changes
+        run: |
+          if [[ -n $(git status --porcelain posts/) ]]; then
+            echo "changes=true" >> $GITHUB_OUTPUT
+            echo "Files changed:"
+            git status --porcelain posts/
+          else
+            echo "changes=false" >> $GITHUB_OUTPUT
+            echo "No changes detected"
+          fi
+
+      - name: Commit and push changes
+        if: steps.changes.outputs.changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+          git add posts/
+          git commit -m "🔄 sync: hash-sync markdown to turso - $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push
+
+      - name: Summary
+        run: |
+          echo "## Hash Sync Complete" >> $GITHUB_STEP_SUMMARY
+          echo "- **Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Changes:** ${{ steps.changes.outputs.changes }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Timestamp:** $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
