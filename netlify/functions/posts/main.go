@@ -136,7 +136,6 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 		return jsonError(http.StatusInternalServerError, "failed to serialize metadata"), nil
 	}
 
-	q := libsqlssg.New(db)
 	log.Printf("[INSERT] preparing post insert: title=%s slug=%s type_id=%s", payload.Title, slug, payload.TypeID)
 	
 	typeID := payload.TypeID
@@ -148,7 +147,7 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 		status = "draft"
 	}
 	
-	err = db.ExecContext(ctx,
+	_, err = db.ExecContext(ctx,
 		`INSERT INTO posts (id, type_id, title, slug, content, excerpt, tags, status, metadata, created_at, updated_at)
 		 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
 		generateID(), typeID, payload.Title, slug, payload.Content, payload.Excerpt, payload.Tags, status, string(meta))
