@@ -3,378 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Post</title>
+    <title>Create Post</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.2/purify.min.js"></script>
-    <script src="https://unpkg.com/htmx.org@1.9.4"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        :root {
-            --bg-color: {{ .Themes.Default.Bg }};
-            --text-color: {{ .Themes.Default.Text }};
-            --secondary-text-color: {{ .Themes.Default.SecondaryText }};
-            --link-normal: {{ .Themes.Default.Link.Normal }};
-            --link-hover: {{ .Themes.Default.Link.Hover }};
-            --link-active: {{ .Themes.Default.Link.Active }};
-            --quote-color: {{ .Themes.Default.Quotes }};
-            --code-bg-color: {{ .Themes.Default.CodeBlocks.Bg }};
-            --code-border-color: {{ .Themes.Default.CodeBlocks.Border }};
-            --code-text-color: {{ .Themes.Default.Code.Text }};
-            --code-comment-color: {{ .Themes.Default.Code.Comment }};
-            --code-keyword-color: {{ .Themes.Default.Code.Keyword }};
-            --code-string-color: {{ .Themes.Default.Code.String }};
-            --code-number-color: {{ .Themes.Default.Code.Number }};
-            --code-variable-color: {{ .Themes.Default.Code.Variable }};
-            --code-function-color: {{ .Themes.Default.Code.Function }};
-        }
-
-        .secondary-theme{
-            --bg-color: {{ .Themes.Secondary.Bg }};
-            --text-color: {{ .Themes.Secondary.Text }};
-            --secondary-text-color: {{ .Themes.Secondary.SecondaryText }};
-            --link-normal: {{ .Themes.Secondary.Link.Normal }};
-            --link-hover: {{ .Themes.Secondary.Link.Hover }};
-            --link-active: {{ .Themes.Secondary.Link.Active }};
-            --quote-color: {{ .Themes.Secondary.Quotes }};
-            --code-bg-color: {{ .Themes.Secondary.CodeBlocks.Bg }};
-            --code-border-color: {{ .Themes.Secondary.CodeBlocks.Border }};
-            --code-text-color: {{ .Themes.Secondary.Code.Text }};
-            --code-comment-color: {{ .Themes.Secondary.Code.Comment }};
-            --code-keyword-color: {{ .Themes.Secondary.Code.Keyword }};
-            --code-string-color: {{ .Themes.Secondary.Code.String }};
-            --code-number-color: {{ .Themes.Secondary.Code.Number }};
-            --code-variable-color: {{ .Themes.Secondary.Code.Variable }};
-            --code-function-color: {{ .Themes.Secondary.Code.Function }};
-        }
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .container {
-            background-color: var(--bg-color);
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        @media (max-width: 768px) {
-        }
-
-        header {
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-        }
-
-        h1, h2, h3 {
-            color: var(--secondary-text-color);
-        }
-
-        .Site-title {
-            font-size: 1.8rem;
-            margin: 0;
-        }
-
-        .Site-title a {
-            color: var(--accent-color);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .Site-title a:hover {
-            color: var(--hover-color);
-        }
-
-        .Post-meta {
-            color: var(--secondary-text);
-            font-size: 0.9rem;
-            margin: 1rem 0;
-        }
-
-        article {
-            margin: 2rem 0;
-        }
-
-        pre {
-            background-color: var(--code-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 1rem;
-            overflow-x: auto;
-            margin: 1.5rem 0;
-        }
-
-        code {
-            font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-            font-size: 0.9em;
-        }
-
-        p code {
-            background-color: var(--inline-code-bg);
-            padding: 0.2em 0.4em;
-            border-radius: 3px;
-        }
-
-        blockquote {
-            border-left: 3px solid var(--accent-color);
-            margin: 1.5rem 0;
-            padding-left: 1rem;
-            color: var(--secondary-text);
-        }
-
-        a {
-            color: var(--link-normal);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        a:hover {
-            color: var(--hover-color);
-        }
-
-        .Hljs-comment { color: var(--code-comment); } 
-        .Hljs-keyword { color: var(--code-keyword); }
-        .Hljs-string { color: var(--code-string); }
-        .Hljs-number { color: var(--code-number); }
-        .Hljs-function { color: var(--code-function); }
-        .Hljs-variable { color: var(--code-variable); }
-
-        button, .Button {
-            background-color: var(--accent-color);
-            border: none;
-            border-radius: 6px;
-            color: var(--bg-color);
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.9rem;
-            padding: 0.5rem 1rem;
-            transition: background-color 0.2s ease;
-        }
-
-        button:hover, .Button:hover {
-            background-color: var(--hover-color);
-        }
-
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            pre {
-                margin: 1rem -1rem;
-                border-radius: 0;
-            }
-        }
-        #theme-toggle {
-            background-color: var(--link-normal);
-            border: none;
-            border-radius: 6px;
-            color: var(--bg-color);
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 1rem;
-            padding: 0.5rem 1.5rem;
-            transition: background-color 0.2s ease;
-        }
-
-        #theme-toggle:hover {
-            background-color: var(--link-hover);
-        }
-        .markdown-preview {
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-top: 10px;
-            min-height: 200px;
-            background-color: #f9f9f9;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-        }
-
-        input, textarea {
-            background-color: var(--input-bg);
-            color: var(--input-text);
-            border: 1px solid var(--secondary-text-color);
-        }
-        pre {
-            background-color: var(--code-bg-color, #f5f5f5);
-            border: 1px solid var(--code-border-color, #d1d1d1);
-            border-radius: 6px;
-            padding: 1rem;
-            overflow-x: auto;
-            margin: 1.5rem 0;
-        }
-
-        code {
-            font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-            font-size: 0.9em;
-            color: var(--code-text-color, inherit);
-        }
-
-        p code {
-            color: var(--code-text-color, inherit);
-            background-color: var(--code-bg-color, transparent);
-            padding: 0.2em 0.4em;
-            border-radius: 3px;
-        }
-
-        /* Syntax Highlighting */
-        .Hljs-comment { color: var(--code-comment-color, #6a737d); }
-        .Hljs-keyword { color: var(--code-keyword-color, #005cc5); }
-        .Hljs-string { color: var(--code-string-color, #d73a49); }
-        .Hljs-number { color: var(--code-number-color, #e36209); }
-        .Hljs-variable { color: var(--code-variable-color, #6f42c1); }
-        .Hljs-function { color: var(--code-function-color, #005cc5); }
-
-        /* Dark Mode */
-        .secondary-theme pre {
-            background-color: var(--code-bg-color, transparent);
-            border: 1px solid var(--code-border-color, currentColor);
-        }
-
-        .secondary-theme .Hljs-comment { color: var(--code-comment-color, inherit); }
-        .secondary-theme .Hljs-keyword { color: var(--code-keyword-color, inherit); }
-        .secondary-theme .Hljs-string { color: var(--code-string-color, inherit); }
-        .secondary-theme .Hljs-number { color: var(--code-number-color, inherit); }
-        .secondary-theme .Hljs-variable { color: var(--code-variable-color, inherit); }
-        .secondary-theme .Hljs-function { color: var(--code-function-color, inherit); }
-
-        pre {
-            background: var(--code-bg-color, transparent);
-            border: 1px solid var(--code-border-color, currentColor);
-            border-radius: 8px;
-            padding: 1rem;
-            overflow-x: auto;
-            margin: 1.5rem 0;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            position: relative;
-        }
-
-
-        /* Code text colors */
-        code {
-            font-family: 'Fira Code', 'Consolas', monospace;
-            font-size: 0.9em;
-            color: var(--code-text-color, inherit);
-        }
-
-        /* Inline code styling */
-        p code {
-            background-color: var(--code-bg-color, transparent);
-            color: var(--code-text-color, inherit);
-            padding: 0.2em 0.4em;
-            border-radius: 4px;
-        }
-
-        /* Syntax highlighting */
-        .Hljs-comment { color: var(--code-comment-color, #6a737d); font-style: italic; }
-        .Hljs-keyword { color: var(--code-keyword-color, #c678dd); font-weight: bold; }
-        .Hljs-string { color: var(--code-string-color, #98c379); }
-        .Hljs-number { color: var(--code-number-color, #d19a66); }
-        .Hljs-variable { color: var(--code-variable-color, #e06c75); }
-        .Hljs-function { color: var(--code-function-color, #61afef); }
-
-        /* Copy button */
-        .copy-btn {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: #4caf50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .copy-btn:hover {
-            background: #45a049;
-        }
-
-        .copy-btn.copied {
-            background: #ffa500;
-        }
-
-        blockquote {
-            border-left: 4px solid var(--quote-color);
-            background-color: rgba(255, 255, 255, 0.05); /* Light background */
-            padding: 1rem 1.5rem;
-            margin: 1.5rem 0;
-            font-style: italic;
-            color: var(--secondary-text-color);
-            border-radius: 6px;
-            position: relative;
-        }
-
-        blockquote::before {
-            content: "“"; /* Left quotation mark */
-            font-size: 2rem;
-            color: var(--quote-color);
-            position: absolute;
-            top: 0;
-            left: 10px;
-        }
-
-        blockquote::after {
-            content: "”"; /* Right quotation mark */
-            font-size: 2rem;
-            color: var(--quote-color);
-            position: absolute;
-            bottom: 0;
-            right: 10px;
-        }
-
-        /* If the quote contains a citation */
-        blockquote cite {
-            display: block;
-            text-align: right;
-            font-size: 0.9em;
-            margin-top: 0.5rem;
-            color: var(--secondary-text-color);
-            font-style: normal;
-        }
-        #editor {
-            background-color: #4CAF50; /* Green */
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        #editor i {
-            margin-right: 5px;
-        }
-
-        #markdownPreview ul, 
-        #markdownPreview ol {
-            list-style-type: disc;
-        }
-
-        #markdownPreview ol {
-            list-style-type: decimal;
-        }
-        #postForm, .site-title, #theme-toggle {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .site-title {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
-
-    </style>
     <link rel="stylesheet" type="text/css" href="/style.css">
     <script src="/theme.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
@@ -384,107 +16,505 @@
         gtag('js', new Date());
         gtag('config', 'G-EET2ZX4QY1');
     </script>
+    <style>
+        :root {
+            --bg-color: {{ .Themes.Default.Bg }};
+            --text-color: {{ .Themes.Default.Text }};
+            --secondary-text-color: {{ .Themes.Default.SecondaryText }};
+            --accent: {{ .Themes.Default.Link.Hover }};
+            --border: {{ .Themes.Default.Link.Normal }};
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+        }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .type-card { transition: all 0.2s ease; }
+        .type-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        .type-card.selected { border-color: var(--accent); background: rgba(59, 130, 246, 0.1); }
+        .dynamic-section { animation: slideDown 0.3s ease-out; }
+        @keyframes slideDown { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 500px; } }
+        .preview-toggle { transition: all 0.2s ease; }
+        .preview-content { min-height: 200px; }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+        .toast {
+            position: fixed; bottom: 20px; right: 20px; padding: 12px 24px; border-radius: 8px;
+            color: white; font-weight: 500; z-index: 1000; animation: toastIn 0.3s ease;
+        }
+        .toast.success { background: #10b981; }
+        .toast.error { background: #ef4444; }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .spinner {
+            width: 16px; height: 16px; border: 2px solid transparent; border-top-color: currentColor;
+            border-radius: 50%; animation: spin 0.6s linear infinite; display: inline-block;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .link-preview { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .link-preview.show { max-height: 300px; }
+        input:disabled, textarea:disabled, select:disabled, button:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-loading { position: relative; }
+        .error-border { border-color: #ef4444 !important; }
+    </style>
 </head>
-<body>
+<body class="min-h-screen">
     {{ template "header.html" . }}
-    <div class="container">
-        <div class="">
-            <h1 class="text-2xl font-bold text-center">Add Post</h1>
-            <form id="postForm" class="space-y-4">
-                <div>
-                    <label class="block font-medium">Title:</label>
-                    <input type="text" name="title" class="w-full p-2 border rounded-md" required>
-                </div>
-                
-                <div>
-                    <label class="block font-medium">Metadata:</label>
-                    <div id="metadata-container" class="space-y-2"></div>
-                    <button type="button" class="mt-2 px-3 py-1 bg-blue-500 text-white rounded" 
-                        hx-on:click="addMetadataField()">Add Metadata</button>
-                </div>
-                
-                <div>
-                    <label class="block font-medium">Body (Markdown):</label>
-                    <textarea name="content" id="content" rows="6" class="w-full p-2 border rounded-md"></textarea>
-                    <div id="markdownPreview" class="border p-4 mt-2"></div>
-                </div>
-                <div class="mb-4">
-                    <label for="username" class="block text-lg font-medium">Username:</label>
-                    <input type="text" name="username" id="username" class="w-full p-2 border rounded-md shadow-sm" required>
-                </div>
-            
-                <div class="mb-6">
-                    <label for="password" class="block text-lg font-medium">Password:</label>
-                    <input type="password" name="password" id="password" class="w-full p-2 border rounded-md shadow-sm" required>
-                </div>
-                <button type="submit" class="w-full p-2 bg-green-500 text-white rounded">Submit</button>
-            </form>
+    
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl font-bold mb-2">Create New Post</h1>
+            <p class="text-sm opacity-70">Choose a post type to get started</p>
+        </header>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <button type="button" onclick="selectPostType('blog')" class="type-card p-4 border-2 border-gray-200 rounded-xl text-center hover:border-blue-500" data-type="blog">
+                <div class="text-2xl mb-2">📝</div>
+                <div class="font-medium">Blog</div>
+                <div class="text-xs opacity-60">Long-form content</div>
+            </button>
+            <button type="button" onclick="selectPostType('til')" class="type-card p-4 border-2 border-gray-200 rounded-xl text-center hover:border-green-500" data-type="til">
+                <div class="text-2xl mb-2">💡</div>
+                <div class="font-medium">TIL</div>
+                <div class="text-xs opacity-60">Quick tips</div>
+            </button>
+            <button type="button" onclick="selectPostType('links')" class="type-card p-4 border-2 border-gray-200 rounded-xl text-center hover:border-purple-500" data-type="links">
+                <div class="text-2xl mb-2">🔗</div>
+                <div class="font-medium">Links</div>
+                <div class="text-xs opacity-60">External finds</div>
+            </button>
+            <button type="button" onclick="selectPostType('projects')" class="type-card p-4 border-2 border-gray-200 rounded-xl text-center hover:border-orange-500" data-type="projects">
+                <div class="text-2xl mb-2">🚀</div>
+                <div class="font-medium">Projects</div>
+                <div class="text-xs opacity-60">Showcase work</div>
+            </button>
         </div>
-    </div>
+
+        <form id="postForm" class="space-y-6">
+            <input type="hidden" name="postType" id="postType" value="blog">
+            
+            <section class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">1</span>
+                    Basic Info
+                </h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Title *</label>
+                        <input type="text" name="title" id="title" required
+                            class="w-full px-4 py-2 border rounded-lg transition-all"
+                            placeholder="Enter a compelling title...">
+                    </div>
+                    
+                    <div id="linkFields" class="hidden space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">URL *</label>
+                            <div class="flex gap-2">
+                                <input type="url" name="link" id="linkUrl"
+                                    class="flex-1 px-4 py-2 border rounded-lg"
+                                    placeholder="https://...">
+                                <button type="button" onclick="fetchMetadata()" id="fetchBtn"
+                                    class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center gap-2">
+                                    <span class="spinner hidden"></span>
+                                    <span class="btn-text">Fetch Info</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="linkPreview" class="link-preview bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <img id="previewImage" class="w-full h-32 object-cover rounded-lg hidden" alt="Preview">
+                                    <div id="imagePlaceholder" class="w-full h-32 bg-gray-200 dark:bg-gray-600 rounded-lg flex items-center justify-center text-4xl">🖼️</div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div>
+                                        <span class="text-xs opacity-60">Source</span>
+                                        <p id="previewSource" class="font-medium text-sm truncate">-</p>
+                                    </div>
+                                    <div>
+                                        <span class="text-xs opacity-60">Description</span>
+                                        <p id="previewDescription" class="text-sm line-clamp-2">-</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Commentary (optional)</label>
+                            <textarea name="commentary" id="commentary" rows="3"
+                                class="w-full px-4 py-2 border rounded-lg"
+                                placeholder="What did you learn or find interesting about this?"></textarea>
+                        </div>
+                    </div>
+
+                    <div id="projectFields" class="hidden space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">GitHub URL</label>
+                                <input type="url" name="github_link" id="githubLink"
+                                    class="w-full px-4 py-2 border rounded-lg"
+                                    placeholder="https://github.com/...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Live Demo URL</label>
+                                <input type="url" name="live_link" id="liveLink"
+                                    class="w-full px-4 py-2 border rounded-lg"
+                                    placeholder="https://...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Docs URL</label>
+                                <input type="url" name="docs_link" id="docsLink"
+                                    class="w-full px-4 py-2 border rounded-lg"
+                                    placeholder="https://...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Date</label>
+                            <input type="date" name="date" id="postDate"
+                                class="w-full px-4 py-2 border rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Tags</label>
+                            <input type="text" name="tags" id="tags"
+                                class="w-full px-4 py-2 border rounded-lg"
+                                placeholder="golang, tutorial, beginner">
+                            <p class="text-xs opacity-60 mt-1">Comma-separated</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold flex items-center gap-2">
+                        <span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">2</span>
+                        Content
+                    </h2>
+                    <button type="button" onclick="togglePreview()" id="previewToggle"
+                        class="preview-toggle px-3 py-1 text-sm border rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                        👁️ Show Preview
+                    </button>
+                </div>
+                <textarea name="content" id="content" rows="12"
+                    class="w-full px-4 py-2 border rounded-lg font-mono text-sm"
+                    placeholder="Write your content in Markdown..."></textarea>
+                <div id="markdownPreview" class="preview-content hidden mt-4 p-4 border rounded-lg bg-gray-50 dark:bg-gray-700 prose dark:prose-invert max-w-none"></div>
+            </section>
+
+            <section class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">3</span>
+                    Authentication
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Username</label>
+                        <input type="text" name="username" id="username" required
+                            class="w-full px-4 py-2 border rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Password</label>
+                        <input type="password" name="password" id="password" required
+                            class="w-full px-4 py-2 border rounded-lg">
+                    </div>
+                </div>
+            </section>
+
+            <div class="flex gap-4">
+                <button type="submit" class="flex-1 py-3 bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2">
+                    ✨ Publish Post
+                </button>
+                <button type="button" onclick="saveDraft()" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    💾 Save Draft
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <div id="toast" class="toast hidden"></div>
 
     <script>
-        function addMetadataField() {
-            const container = document.getElementById("metadata-container");
-            const field = document.createElement("div");
-            field.classList.add("flex", "space-x-2");
-            field.innerHTML = `
-                <input type="text" placeholder="Key" class="p-2 border rounded w-1/2" required>
-                <input type="text" placeholder="Value" class="p-2 border rounded w-1/2" required>
-                <button type="button" class="text-red-500" onclick="this.parentElement.remove()">&times;</button>
-            `;
-            container.appendChild(field);
+        let currentPostType = 'blog';
+        let previewVisible = false;
+
+        document.getElementById('postDate').valueAsDate = new Date();
+
+        function selectPostType(type) {
+            currentPostType = type;
+            document.getElementById('postType').value = type;
+            
+            document.querySelectorAll('.type-card').forEach(card => {
+                card.classList.remove('selected');
+                if (card.dataset.type === type) {
+                    card.classList.add('selected');
+                }
+            });
+
+            document.getElementById('linkFields').classList.add('hidden');
+            document.getElementById('projectFields').classList.add('hidden');
+
+            if (type === 'links') {
+                document.getElementById('linkFields').classList.remove('hidden');
+            } else if (type === 'projects') {
+                document.getElementById('projectFields').classList.remove('hidden');
+            }
         }
 
-        document.getElementById("postForm").addEventListener("submit", async function (event) {
-            event.preventDefault();
+        async function fetchMetadata() {
+            const url = document.getElementById('linkUrl').value;
+            if (!url) {
+                showToast('Please enter a URL first', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('fetchBtn');
+            const spinner = btn.querySelector('.spinner');
+            const btnText = btn.querySelector('.btn-text');
             
-            let metadata = {};
-            document.querySelectorAll("#metadata-container div").forEach(div => {
-                const key = div.children[0].value.trim();
-                const value = div.children[1].value.trim();
-                if (key) metadata[key] = value;
-            });
-            
-            const formData = {
-                title: this.title.value,
-                metadata: metadata,
-                content: this.content.value,
-                username: this.username.value,
-                password: this.password.value
-            };
-            
-            console.log("Submitting", formData);
-            alert("Form submitted");
-            
+            btn.disabled = true;
+            spinner.classList.remove('hidden');
+            btnText.textContent = 'Fetching...';
+
             try {
-                const response = await fetch("{{ .Config.Blog.CloudFunction.base_url }}/.netlify/functions/api", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Origin": "https://dev.meetgor.com",
-                        "Referer": "https://dev.meetgor.com/"
-                    },
+                const response = await fetch(url, { method: 'GET', mode: 'cors' });
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                const title = doc.querySelector('meta[property="og:title"]')?.content 
+                    || doc.querySelector('title')?.textContent 
+                    || document.getElementById('title').value 
+                    || 'Untitled';
+                
+                const description = doc.querySelector('meta[property="og:description"]')?.content 
+                    || doc.querySelector('meta[name="description"]')?.content 
+                    || '-';
+                
+                const image = doc.querySelector('meta[property="og:image"]')?.content 
+                    || doc.querySelector('meta[name="twitter:image"]')?.content 
+                    || '';
+
+                if (!document.getElementById('title').value) {
+                    document.getElementById('title').value = title;
+                }
+
+                document.getElementById('previewSource').textContent = new URL(url).hostname;
+                document.getElementById('previewDescription').textContent = description;
+
+                if (image) {
+                    document.getElementById('previewImage').src = image;
+                    document.getElementById('previewImage').classList.remove('hidden');
+                    document.getElementById('imagePlaceholder').classList.add('hidden');
+                }
+
+                document.getElementById('linkPreview').classList.add('show');
+                showToast('Metadata fetched successfully!', 'success');
+            } catch (error) {
+                console.error('Fetch error:', error);
+                showToast('Could not fetch metadata. Try entering manually.', 'error');
+            } finally {
+                btn.disabled = false;
+                spinner.classList.add('hidden');
+                btnText.textContent = 'Fetch Info';
+            }
+        }
+
+        function togglePreview() {
+            previewVisible = !previewVisible;
+            const preview = document.getElementById('markdownPreview');
+            const toggle = document.getElementById('previewToggle');
+            
+            if (previewVisible) {
+                const rawMarkdown = document.getElementById('content').value;
+                preview.innerHTML = DOMPurify.sanitize(marked.parse(rawMarkdown || '*Preview will appear here...*'));
+                preview.classList.remove('hidden');
+                toggle.textContent = '🙈 Hide Preview';
+            } else {
+                preview.classList.add('hidden');
+                toggle.textContent = '👁️ Show Preview';
+            }
+        }
+
+        document.getElementById('content').addEventListener('input', function() {
+            if (previewVisible) {
+                const preview = document.getElementById('markdownPreview');
+                preview.innerHTML = DOMPurify.sanitize(marked.parse(this.value || '*Preview will appear here...*'));
+            }
+        });
+
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+
+        document.getElementById('postForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            await submitPost();
+        });
+
+        function setFormLoading(loading) {
+            const inputs = document.querySelectorAll('#postForm input, #postForm textarea, #postForm select, #postForm button');
+            inputs.forEach(el => el.disabled = loading);
+            
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const draftBtn = document.querySelector('button[onclick="saveDraft()"]');
+            
+            if (submitBtn) {
+                if (loading) {
+                    submitBtn.dataset.originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<span class="spinner"></span> Publishing...';
+                    submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+                } else {
+                    submitBtn.innerHTML = submitBtn.dataset.originalText || '✨ Publish Post';
+                    submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+                }
+            }
+            
+            if (draftBtn) draftBtn.disabled = loading;
+        }
+
+        function clearValidationErrors() {
+            document.querySelectorAll('.error-border').forEach(el => el.classList.remove('error-border'));
+        }
+
+        function showValidationErrors(fields) {
+            clearValidationErrors();
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('error-border');
+            });
+            const firstEl = document.getElementById(fields[0]);
+            if (firstEl) firstEl.focus();
+        }
+
+        document.querySelectorAll('#postForm input, #postForm textarea').forEach(el => {
+            el.addEventListener('input', () => el.classList.remove('error-border'));
+        });
+
+        function validateForm() {
+            const errors = [];
+            const requiredFields = [];
+            const title = document.getElementById('title').value.trim();
+            const content = document.getElementById('content').value.trim();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (!title) { errors.push('Title is required'); requiredFields.push('title'); }
+            if (!content) { errors.push('Content is required'); requiredFields.push('content'); }
+            if (!username) { errors.push('Username is required'); requiredFields.push('username'); }
+            if (!password) { errors.push('Password is required'); requiredFields.push('password'); }
+            
+            if (currentPostType === 'links') {
+                const linkUrl = document.getElementById('linkUrl').value.trim();
+                if (!linkUrl) { errors.push('URL is required for links'); requiredFields.push('linkUrl'); }
+            }
+            
+            if (errors.length > 0) {
+                showValidationErrors(requiredFields);
+            }
+            
+            return errors;
+        }
+
+        async function submitPost() {
+            const errors = validateForm();
+            if (errors.length > 0) {
+                showToast(errors[0], 'error');
+                return;
+            }
+
+            setFormLoading(true);
+
+            const metadata = {};
+            
+            metadata.type = currentPostType;
+            metadata.date = document.getElementById('postDate').value 
+                ? new Date(document.getElementById('postDate').value).toISOString() 
+                : new Date().toISOString();
+            
+            const tagsInput = document.getElementById('tags').value;
+            if (tagsInput) {
+                metadata.tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
+            }
+
+            if (currentPostType === 'links') {
+                const linkUrl = document.getElementById('linkUrl').value;
+                if (linkUrl) metadata.link = linkUrl;
+                const img = document.getElementById('previewImage').src;
+                if (img) metadata.image_url = img;
+                const commentary = document.getElementById('commentary').value;
+                if (commentary) metadata.commentary = commentary;
+            }
+
+            if (currentPostType === 'projects') {
+                const gh = document.getElementById('githubLink').value;
+                if (gh) metadata.github_link = gh;
+                const live = document.getElementById('liveLink').value;
+                if (live) metadata.live_link = live;
+                const docs = document.getElementById('docsLink').value;
+                if (docs) metadata.docs_link = docs;
+            }
+
+            const formData = {
+                title: document.getElementById('title').value,
+                body: document.getElementById('content').value,
+                metadata: metadata,
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value
+            };
+
+            try {
+                const response = await fetch("{{ .Config.Blog.CloudFunction.base_url }}/.netlify/functions/posts", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
                 });
 
+                const data = await response.json().catch(() => ({}));
+                
                 if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+                    throw new Error(data.error || 'Failed to publish post');
                 }
-
-                const result = await response.json();
-                console.log("Success:", result);
-                alert("Post submitted successfully!");
+                
+                showToast('Post published successfully!', 'success');
+                localStorage.removeItem('postDraft');
+                setTimeout(() => window.location.reload(), 1500);
             } catch (error) {
-                console.error("Error:", error);
-                alert("Failed to submit post. Check console for details.");
+                showToast(error.message || 'Failed to publish. Please try again.', 'error');
+                setFormLoading(false);
             }
-        });
-        
-        document.getElementById("content").addEventListener("input", function() {
-            const rawMarkdown = this.value;
-            const parsedHtml = marked.parse(rawMarkdown);
-            document.getElementById("markdownPreview").innerHTML = parsedHtml;
-        });
+        }
+
+        function saveDraft() {
+            showToast('Draft saved to local storage!', 'success');
+            localStorage.setItem('postDraft', JSON.stringify({
+                type: currentPostType,
+                title: document.getElementById('title').value,
+                content: document.getElementById('content').value,
+                tags: document.getElementById('tags').value,
+                savedAt: new Date().toISOString()
+            }));
+        }
+
+        const draft = localStorage.getItem('postDraft');
+        if (draft) {
+            try {
+                const data = JSON.parse(draft);
+                if (confirm('Found a draft from ' + new Date(data.savedAt).toLocaleDateString() + '. Load it?')) {
+                    selectPostType(data.type || 'blog');
+                    document.getElementById('title').value = data.title || '';
+                    document.getElementById('content').value = data.content || '';
+                    document.getElementById('tags').value = data.tags || '';
+                }
+            } catch (e) {}
+        }
+
+        selectPostType('blog');
     </script>
     {{ template "footer.html" . }}
 </body>
