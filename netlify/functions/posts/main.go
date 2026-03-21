@@ -17,7 +17,7 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	libsqlssg "github.com/mr-destructive/mr-destructive.github.io/plugins/db/libsqlssg"
+	libsqlssg "github.com/mr-destructive/meetgor.com/plugins/db/libsqlssg"
 	_ "github.com/tursodatabase/libsql-client-go/libsql"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -137,12 +137,6 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 		return jsonError(http.StatusInternalServerError, "failed to serialize metadata"), nil
 	}
 
-	// Accept either Content or Body field (backward compatibility)
-	content := payload.Content
-	if content == "" {
-		content = payload.Body
-	}
-	
 	q := libsqlssg.New(db)
 	
 	// Get type_id from payload or metadata
@@ -155,6 +149,44 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 			typeID = "post"
 		}
 	}
+	
+	// Accept either Content or Body field (backward compatibility)
+	content := payload.Content
+	if content == "" {
+		content = payload.Body
+	}
+	
+	// For "links" type posts with empty content, create content from metadata
+	if typeID == "links" && content == "" {
+		if commentary, ok := payload.Metadata["commentary"].(string); ok && commentary != "" {
+			content = commentary
+		}
+	}
+	
+	// Clean up metadata - for links type, keep only url/link, remove title/commentary/type
+	cleanMeta := make(map[string]interface{})
+	if typeID == "links" {
+		// For links, keep essential fields
+		if link, ok := payload.Metadata["link"]; ok {
+			cleanMeta["url"] = link
+		}
+		if date, ok := payload.Metadata["date"]; ok {
+			cleanMeta["date"] = date
+		}
+		if tags, ok := payload.Metadata["tags"]; ok {
+			cleanMeta["tags"] = tags
+		}
+	} else {
+		// For other types, copy all metadata except type
+		for k, v := range payload.Metadata {
+			if k != "type" {
+				cleanMeta[k] = v
+			}
+		}
+	}
+	
+	metaBytes, _ := json.Marshal(cleanMeta)
+	meta = metaBytes
 	
 	log.Printf("[INSERT] preparing post insert: title=%s slug=%s type_id=%s", payload.Title, slug, typeID)
 	

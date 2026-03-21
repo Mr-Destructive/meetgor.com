@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/mr-destructive/mr-destructive.github.io/models"
+	"github.com/mr-destructive/meetgor.com/models"
 )
 
 type SeriesPlugin struct {

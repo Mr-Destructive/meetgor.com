@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/aws/aws-lambda-go/events"
-	"github.com/mr-destructive/mr-destructive.github.io/plugins"
+	"github.com/mr-destructive/meetgor.com/plugins"
 	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/crypto/bcrypt"
 )

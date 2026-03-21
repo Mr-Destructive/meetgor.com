@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	models "github.com/mr-destructive/mr-destructive.github.io/models"
+	models "github.com/mr-destructive/meetgor.com/models"
 )
 
 // GenerateTOC extracts headings from a Goldmark AST and returns a nested TOC structure.

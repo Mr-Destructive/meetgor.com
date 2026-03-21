@@ -11,7 +11,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/mr-destructive/mr-destructive.github.io/models"
+	"github.com/mr-destructive/meetgor.com/models"
 )
 
 // RSSFeed represents the structure of the RSS feed

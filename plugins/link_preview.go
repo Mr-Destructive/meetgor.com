@@ -13,7 +13,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/mr-destructive/mr-destructive.github.io/models"
+	"github.com/mr-destructive/meetgor.com/models"
 	"gopkg.in/yaml.v3"
 )
 
