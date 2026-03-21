@@ -154,13 +154,21 @@
         const editBtn = document.getElementById('editor-edit');
         if (editBtn) {
             editBtn.addEventListener('click', async function () {
-                const slug = "{{ .Post.Frontmatter.Slug }}";
+                const rawSlug = "{{ .Post.Frontmatter.Slug }}";
                 const type = "{{ .Post.Frontmatter.Type }}";
+                let slug = rawSlug;
+                const typePrefix = type + "/";
+                if (slug.startsWith(typePrefix)) {
+                    slug = slug.slice(typePrefix.length);
+                }
                 console.log("Editing post:", slug, type);
                 const functionBase = (window.location.hostname.endsWith("netlify.app") || window.location.hostname === "localhost")
                     ? ""
                     : "{{ .Config.Blog.CloudFunction.base_url }}";
-                const url = functionBase + "/.netlify/functions/api?slug=" + slug + "&method=edit&type=" + type;
+                const url = functionBase
+                    + "/.netlify/functions/api?slug=" + encodeURIComponent(slug)
+                    + "&method=edit&type=" + encodeURIComponent(type)
+                    + "&prefixURL=" + encodeURIComponent("{{ .Config.Blog.PrefixURL }}");
                 
                 try {
                     const res = await fetch(url);
