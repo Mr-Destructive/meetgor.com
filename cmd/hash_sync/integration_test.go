@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"os"
 	"path/filepath"
 	"testing"
@@ -71,6 +72,46 @@ This was edited directly on GitHub without using the web editor.
 	}
 	if title != "New Post from GitHub" {
 		t.Fatalf("title mismatch: got %s", title)
+	}
+}
+
+// TestHashSyncSetsStatus verifies inserted posts get a non-null status.
+func TestHashSyncSetsStatus(t *testing.T) {
+	db := setupHashDB(t)
+	defer db.Close()
+	ctx := context.Background()
+
+	if _, err := db.ExecContext(ctx, `INSERT INTO authors (username, name, password) VALUES ('author','Author','pwd')`); err != nil {
+		t.Fatalf("insert author: %v", err)
+	}
+
+	tempDir := t.TempDir()
+	post := filepath.Join(tempDir, "status-test.md")
+	content := `---
+title: Status Test
+slug: status-test
+---
+Status should be set.
+`
+	if err := os.WriteFile(post, []byte(content), 0644); err != nil {
+		t.Fatalf("write post: %v", err)
+	}
+
+	_, err := syncMarkdownFiles(ctx, db, SyncOptions{
+		Root:     tempDir,
+		AuthorID: 1,
+		DryRun:   false,
+	})
+	if err != nil {
+		t.Fatalf("sync: %v", err)
+	}
+
+	var status sql.NullString
+	if err := db.QueryRowContext(ctx, "SELECT status FROM posts WHERE slug = ?", "status-test").Scan(&status); err != nil {
+		t.Fatalf("query status: %v", err)
+	}
+	if !status.Valid || status.String == "" {
+		t.Fatalf("expected non-null status, got %#v", status)
 	}
 }
 

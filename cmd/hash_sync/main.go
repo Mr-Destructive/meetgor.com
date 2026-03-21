@@ -151,6 +151,10 @@ func syncMarkdownFiles(ctx context.Context, db *sql.DB, opts SyncOptions) (SyncS
 
 		// Build metadata JSON
 		metadataJSON := buildMetadataJSON(meta)
+		status := strings.TrimSpace(meta["status"])
+		if status == "" {
+			status = "draft"
+		}
 
 		// Only insert/update if not dry-run
 		if !opts.DryRun {
@@ -163,6 +167,8 @@ func syncMarkdownFiles(ctx context.Context, db *sql.DB, opts SyncOptions) (SyncS
 					Slug:     slug,
 					Content:  body,
 					Metadata: sql.NullString{String: metadataJSON, Valid: true},
+					Tags:     sql.NullString{Valid: false},
+					Status:   sql.NullString{String: status, Valid: true},
 				})
 				if err != nil {
 					return err
@@ -326,7 +332,7 @@ func main() {
 		log.Fatalf("TURSO_DATABASE_NAME and TURSO_DATABASE_AUTH_TOKEN environment variables required")
 	}
 
-	connStr := fmt.Sprintf("libsql://%s?authToken=%s", dbURL, dbToken)
+	connStr := buildLibsqlConnStr(dbURL, dbToken)
 	db, err := sql.Open("libsql", connStr)
 	if err != nil {
 		log.Fatalf("open database: %v", err)
@@ -349,4 +355,22 @@ func main() {
 	} else {
 		log.Printf("[SYNC] added=%d updated=%d skipped=%d", stats.Added, stats.Updated, stats.Skipped)
 	}
+}
+
+func buildLibsqlConnStr(dbURL, dbToken string) string {
+	url := strings.TrimSpace(dbURL)
+	if strings.HasPrefix(url, "libsql://") || strings.HasPrefix(url, "https://") {
+		if dbToken == "" {
+			return url
+		}
+		sep := "?"
+		if strings.Contains(url, "?") {
+			sep = "&"
+		}
+		return fmt.Sprintf("%s%sauthToken=%s", url, sep, dbToken)
+	}
+	if dbToken == "" {
+		return fmt.Sprintf("libsql://%s", url)
+	}
+	return fmt.Sprintf("libsql://%s?authToken=%s", url, dbToken)
 }
