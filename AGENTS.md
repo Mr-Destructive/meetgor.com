@@ -95,6 +95,7 @@ DDL in `plugins/db.go` (embedded `db/schema.sql`)
 - **Turso credentials**: Missing secrets → hash_sync + functions fail silently
 - **Hash collisions**: Unlikely but SHA-256 ensures posts don't duplicate on re-runs
 - **Metadata JSON**: Stored in posts.metadata column. Must stay valid JSON for editor sync
+- **SQL usage**: Use `sqlc` only. Avoid raw SQL in app code; add queries to `plugins/db/query.sql` and run `sqlc generate`.
 
 ## Monitoring
 

@@ -115,6 +115,47 @@ Status should be set.
 	}
 }
 
+// TestHashSyncCreatesPostType ensures missing post types are created before insert.
+func TestHashSyncCreatesPostType(t *testing.T) {
+	db := setupHashDB(t)
+	defer db.Close()
+	ctx := context.Background()
+
+	if _, err := db.ExecContext(ctx, `INSERT INTO authors (username, name, password) VALUES ('author','Author','pwd')`); err != nil {
+		t.Fatalf("insert author: %v", err)
+	}
+
+	tempDir := t.TempDir()
+	post := filepath.Join(tempDir, "project.md")
+	content := `---
+title: Project Post
+slug: projects/project-post
+type: projects
+---
+Project content.
+`
+	if err := os.WriteFile(post, []byte(content), 0644); err != nil {
+		t.Fatalf("write post: %v", err)
+	}
+
+	_, err := syncMarkdownFiles(ctx, db, SyncOptions{
+		Root:     tempDir,
+		AuthorID: 1,
+		DryRun:   false,
+	})
+	if err != nil {
+		t.Fatalf("sync: %v", err)
+	}
+
+	var count int
+	if err := db.QueryRowContext(ctx, "SELECT COUNT(*) FROM post_types WHERE id = ?", "projects").Scan(&count); err != nil {
+		t.Fatalf("query post_types: %v", err)
+	}
+	if count != 1 {
+		t.Fatalf("expected post_types entry for 'projects', got %d", count)
+	}
+}
+
 // TestGitHubPushWithoutEditor verifies GitHub-only changes bypass the editor
 func TestGitHubPushWithoutEditor(t *testing.T) {
 	db := setupHashDB(t)

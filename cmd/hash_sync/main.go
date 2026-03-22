@@ -14,8 +14,8 @@ import (
 	"strings"
 	"time"
 
-	_ "github.com/mattn/go-sqlite3"
 	libsqlssg "github.com/Mr-Destructive/meetgor.com/plugins/db/libsqlssg"
+	_ "github.com/mattn/go-sqlite3"
 	_ "github.com/tursodatabase/libsql-client-go/libsql"
 )
 
@@ -158,6 +158,9 @@ func syncMarkdownFiles(ctx context.Context, db *sql.DB, opts SyncOptions) (SyncS
 
 		// Only insert/update if not dry-run
 		if !opts.DryRun {
+			if err := ensurePostTypeExists(ctx, q, postType); err != nil {
+				return err
+			}
 			if len(posts) == 0 {
 				// Insert new post
 				_, err = q.CreatePost(ctx, libsqlssg.CreatePostParams{
@@ -208,18 +211,30 @@ func syncMarkdownFiles(ctx context.Context, db *sql.DB, opts SyncOptions) (SyncS
 	return stats, err
 }
 
+func ensurePostTypeExists(ctx context.Context, q *libsqlssg.Queries, typeID string) error {
+	if strings.TrimSpace(typeID) == "" {
+		return fmt.Errorf("post type is empty")
+	}
+	name := strings.Title(strings.ReplaceAll(typeID, "-", " "))
+	return q.EnsurePostType(ctx, libsqlssg.EnsurePostTypeParams{
+		ID:   typeID,
+		Name: name,
+		Slug: typeID,
+	})
+}
+
 func parseMetadata(jsonStr string) map[string]string {
 	meta := make(map[string]string)
 	if jsonStr == "" {
 		return meta
 	}
-	
+
 	// Simple JSON parser for metadata
 	var obj map[string]interface{}
 	if err := json.Unmarshal([]byte(jsonStr), &obj); err != nil {
 		return meta
 	}
-	
+
 	for k, v := range obj {
 		if str, ok := v.(string); ok {
 			meta[k] = str

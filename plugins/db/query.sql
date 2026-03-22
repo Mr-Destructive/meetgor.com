@@ -29,3 +29,7 @@ SELECT id, type_id, title, slug, content, metadata, tags, status FROM posts WHER
 
 -- name: DeletePost :exec
 UPDATE posts SET status = 'deleted' WHERE slug = ?;
+
+-- name: EnsurePostType :exec
+INSERT OR IGNORE INTO post_types (id, name, slug)
+VALUES (?, ?, ?);

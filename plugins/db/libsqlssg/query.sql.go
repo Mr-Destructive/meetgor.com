@@ -89,6 +89,22 @@ func (q *Queries) DeletePost(ctx context.Context, slug string) error {
 	return err
 }
 
+const ensurePostType = `-- name: EnsurePostType :exec
+INSERT OR IGNORE INTO post_types (id, name, slug)
+VALUES (?, ?, ?)
+`
+
+type EnsurePostTypeParams struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+	Slug string `json:"slug"`
+}
+
+func (q *Queries) EnsurePostType(ctx context.Context, arg EnsurePostTypeParams) error {
+	_, err := q.db.ExecContext(ctx, ensurePostType, arg.ID, arg.Name, arg.Slug)
+	return err
+}
+
 const getAllPosts = `-- name: GetAllPosts :many
 SELECT id, type_id, title, slug, content, metadata, tags, status, created_at, updated_at FROM posts WHERE status != 'deleted'
 `
