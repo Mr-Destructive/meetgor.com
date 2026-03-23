@@ -1,64 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+slug: zellij-open-scrollback-edit-mode
 author: meet
 date: 2025-03-20
-tags:
-  - typescript
+tags: 
 type: links
 title: "Zellij Open Scrollback Edit mode"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 8860d432dee021e1e90e86358c96e70e688104bdd5e1489361886c1300478534
 ---
-
-
 I was looking at a long list of logs, (debugging of course). 
 
 I had a list of transactions

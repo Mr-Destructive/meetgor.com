@@ -1,65 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 52720de0aae838ec3bda9cf8905df990cd9fe11989474f1451a2e75d75c5870f
+slug: sqlite-randomly-order-rows
 type: sqlog
 title: "SQLite: Randomly order rows"
 date: 2025-08-24
-tags:
-  - typescript
-  - sql
-  - sqlite
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: 
 ---
-
-
 Return rows or records in a table with random order in SQLite
 
 Let's take a simple table for this:
@@ -92,4 +38,3 @@ WHERE id BETWEEN 1 and 10 ORDER BY random() limit 5;
 ```
 
 This is cool if you want to get certain subset of samples but in no strict order.
-

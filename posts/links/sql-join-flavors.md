@@ -1,20 +1,17 @@
 ---
-
-type: links
-title: 'SQL Join flavors'
+newsletter: 2025-06-28-techstructive-weekly-48
+hash: 15dd222a83e1c527363e24ba108b340a96ed416b2e4960d4ea0c926400cf1272
 date: 2025-06-28
 slug: sql-join-flavors
-tags:
-  - links
+tags: 
 link: 'https://antonz.org/sql-join/'
 status: published
+type: links
+title: 'SQL Join flavors'
 description: 'SQL Join flavors'
 image_url: 'https://antonz.org/sql-join/cover.png'
 source: newsletter
-newsletter: 2025-06-28-techstructive-weekly-48
 ---
-
-
 ## Commentary
 
 - This was a insightful post, it helped me feed my hunger for learning more about SQL.

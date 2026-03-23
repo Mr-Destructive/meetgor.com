@@ -1,63 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: sqlog
 title: "SQLite dot commands: read file or standard output"
 date: 2025-08-28
-tags:
-  - typescript
-  - sql
-  - sqlite
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: 
+hash: a6736848c0a8e5ce1a3b7d9e1807aa6d0044539f6168debda0046423ae2aadde
+slug: sqlite-dot-commands-read-file-or-standard-output
 ---
-
-
 ## Read dot Command 
 
 The `.read` dot command is a quick handy command to import and run your SQL queries in the current session.
@@ -165,4 +113,3 @@ This is a really great small yet highly important piece of functionality of sqli
 
 Reference:
 - [SQLite CLI: Reading SQL from a File](https://sqlite.org/cli.html#reading_sql_from_a_file)
-

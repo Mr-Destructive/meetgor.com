@@ -1,65 +1,10 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+slug: techstructive-weekly-77
+tags: 
+source_url: 'https://techstructively.substack.com/p/techstructive-weekly-77'
+hash: 5d79f0c288c3a4d352e7e66c6888ebb14325e4134de09136744eb0e97982ddf3
 title: 'Techstructive Weekly #77'
 date: 2026-01-17
 type: newsletter
-slug: techstructive-weekly-77
-tags:
-- ai
-- newsletter
-source_url: 'https://techstructively.substack.com/p/techstructive-weekly-77'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
 <div class="available-content"><div class="body markup" dir="auto"><h2 class="header-anchor-post">Week #77<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§week-77"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/184795267/week-77" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><p>It was a harsh week. Not the roughest yet tiny exhilarating with new hopes. It happens, to get the best of me, things will come towards me with force. I am welcome to those challenges and hurdles.</p><p>I am in awe and inspired to build things, I went off track last week. The previous week I was pumped with two side project in a day, yet slumped then. This week would like to build that momentum back.</p><h3 class="header-anchor-post">Quote of the week<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§quote-of-the-week"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/184795267/quote-of-the-week" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h3><blockquote><p>“You need to control the mind. Thoughts will tempt, but you decide to act or let it go”</p></blockquote><p>I must practise it heavily. Working remotely is tiring in a different way. Sometimes you just have no one to talk to, no one to understand your mindset. I get caught in overthinking and contemplating and procrastination. I need to divert myself to other things, its not like I don’t work. I just cannot resist AI to delegate the work and let me read more articles and watch tutorials and videos. It hard to control the mind, but I think its more important in being aware of it.</p><div><hr/></div><h2 class="header-anchor-post">Read<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§read"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/184795267/read" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://antirez.com/news/158" rel="nofollow ugc noopener">Don’t Fall into the AI hype</a></p><ul><li><p>This is interesting and it comes at the right time</p></li></ul></li></ul><blockquote><p>facts are facts, and AI is going to change programming forever It does not matter if this or the other CEO of some unicorn is telling you something that is off putting, or absurd. Programming changed forever, anyway. What is the social solution, then? Innovation can’t be taken back after all. I believe we should vote for governments that recognize what is happening, and are willing to support those who will remain jobless. And, the more people get fired, the more political pressure there will be to vote for those who will guarantee a certain degree of protection. But I also look forward to the good AI could bring: new progress in science, that could help lower the suffering of the human condition, which is not always happy.</p></blockquote><ul><li><ul><li><p>All points and counterpoints are well addressed here. Innovation can’t be taken back, that just hits hard. Harsh reality even. AI is in the wild, you can’t avoid it, you’ll have to capture and understand them, just like pokemons. Its hard at first, but never say never. I learnt the hard way, kept giving AI things, tried different things, modes and models, and found the mindset shift. I found what I cared the most, but also a part of me felt taken away.</p></li></ul></li><li><p><a href="https://hackerfactor.com/blog/index.php?/archives/1085-A-Typical-PDF.html" rel="nofollow ugc noopener">A typical PDF document</a></p><ul><li><p>This is cool, I’ve read a lot of these and working at docsumo, makes me want to read about them more.</p></li></ul></li><li><p><a href="https://davekiss.com/blog/ideas-are-cheap-execution-is-cheaper/" rel="nofollow ugc noopener">Ideas are cheap, Execution is cheaper</a></p><ul><li><p>Oh, my god. This is a bitter truth. Geez.</p></li><li><p>Never thought about it. Really its kind of true now. It just is a quick change.</p></li><li><p>The mindset shift is critical.</p></li></ul></li><li><p><a href="https://passo.uno/letter-those-who-fired-tech-writers-ai/" rel="nofollow ugc noopener">A Letter for those who fired Tech Writers because of AI</a></p><ul><li><p>True empathy is key Liability, everything becomes liability if outsourced.</p></li><li><p>LLMs don’t have the taste, the care feeling of the users, the developers yet.</p></li></ul></li></ul><p>I read a few other posts, but haven’t gotten a chance to sit on it. Will roll a blog for such link post, vibe coded yes! Ideas are cheaper, executive is cheaper now! Hell yes.</p><h2 class="header-anchor-post">Watch<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§watch"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/184795267/watch" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://youtu.be/MTHGoGUFpvE" rel="nofollow ugc noopener">Kubernetes Zero to Hero Course: Alta3 Research</a></p><ul><li><p>This, is a masterpiece. I learnt everything. Like atleast touched on everything. Loved it.</p></li><li><p>Want to get into it, need to leverage it and play with it.</p></li><li><p>It clicks to me now, the autoscaling, security, the volume bit wow. Everything makes sense after using them and taking them for granted due to cloud run abstraction.</p></li></ul></li><li><p><a href="https://youtu.be/vFcgXdm-0yY" rel="nofollow ugc noopener">2026 Standup Predictions by Teej, Primeagen, Caesy, Trash</a></p><ul><li><p>Pure entertainment. Great insights.</p></li><li><p>AI coded bug yep, that is happening and people won’t notice until a month, bold one.</p></li></ul></li><li><p><a href="https://youtu.be/5vp9ypOUgMw" rel="nofollow ugc noopener">AI Assisted Coding</a></p><ul><li><p>Cool advice. Need to improve on clarity, delegation and orchestration. That is a pillar in system thinking I believe.</p></li></ul></li></ul><h2 class="header-anchor-post">Learnt<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§learnt"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/184795267/learnt" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p>Cursor doesn’t count the tabs,code,diff s if not done via their UI</p><ul><li><p>Kind of frustrating to see myself down the chart for the usage in organisation. I use it heavily. Yet I am looked as AI skeptic.</p></li><li><p>Frustrating to see their own analytics not getting into account. The acceptance is rubbish, you should not measure acceptance just measure the generation bit. No one will let the code be unused right?</p></li></ul></li><li><p>Kubernetes Fundamentals</p><ul><li><p>It has three components, Kube API, scheduler and worker</p></li><li><p>The pods and kubelet and all are confusing yet good explained with hierarchy.</p></li><li><p>The kube api gets the manifest and delegates to the scheduler and other parts to spinup and manage resources.</p></li></ul></li></ul><h2 class="header-anchor-post">Tech News<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§tech-news"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/184795267/tech-news" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://claude.com/blog/cowork-research-preview" rel="nofollow ugc noopener">Anthropic launches Claude Cowork</a></p><ul><li><p>This is like a first step in laying the ground work for unemployment. Yeah really. Look at it. It can do a lot of things. Menial things that got humans paid for.</p></li><li><p>It might create panic in industries. A good product but quite threatening and unbelievable.</p></li><li><p>We saw it coming, but its too soon. We are in the start of 2026 and the wave hasn’t yet subsided.</p></li></ul></li></ul><p><span>For more news, follow the </span><a href="https://buttondown.com/hacker-newsletter/archive/778/" rel="nofollow ugc noopener">Hackernewsletter</a><span> (#778th edition), and for software development/coding articles, join </span><a href="http://daily.dev/" rel="nofollow ugc noopener">daily.dev</a><span>.</span></p><div><hr/></div><p class="button-wrapper" data-attrs='{"url":"https://techstructively.substack.com/p/techstructive-weekly-77/comments","text":"Leave a comment","action":null,"class":null}' data-component-name="ButtonCreateButton"><a class="button primary" href="https://techstructively.substack.com/p/techstructive-weekly-77/comments" rel="nofollow ugc noopener"><span>Leave a comment</span></a></p><p class="button-wrapper" data-attrs='{"url":"https://techstructively.substack.com/?utm_source=substack&amp;utm_medium=email&amp;utm_content=share&amp;action=share","text":"Share Techstructive Weekly","action":null,"class":null}' data-component-name="ButtonCreateButton"><a class="button primary" href="https://techstructively.substack.com/?utm_source=substack&amp;utm_medium=email&amp;utm_content=share&amp;action=share" rel="nofollow ugc noopener"><span>Share Techstructive Weekly</span></a></p><p></p></div></div>

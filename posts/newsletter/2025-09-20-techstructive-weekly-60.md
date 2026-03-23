@@ -1,72 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: newsletter
 title: 'Techstructive Weekly #60'
 date: 2025-09-20
 slug: techstructive-weekly-60
-tags:
-- ai
-- database
-- devops
-- javascript
-- newsletter
-- python
-- security
-- sql
-- testing
+tags: 
 source_url: 'https://techstructively.substack.com/p/techstructive-weekly-60'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: fe9097b24217b7ab53dfee4beede1af80c49de8eb2b50ae5a8a7398398ec1df6
 ---
-
 ## Weekly #60
 
 Another great week, consistently learning SQL, developing another streak for solving problems on FreeCodeCamp with Javascript and Python, reading instead of doomscrolling.
@@ -203,4 +143,3 @@ Double click to interact with video
     - I was awaiting the [Chess feature since May](https://blog.duolingo.com/chess-course/) and it finally launched this week. Can’t wait to up my chess skills
 
 That was a heck of a long week. Lot of tech things happening. It will get even more in the next couple of months, as it is October and there are already a lot of developer related things, conferences, hactoberfests, and among other things.
-

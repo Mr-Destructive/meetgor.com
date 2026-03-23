@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+slug: no-docs-no-bugs
+tags: 
+link: 'https://simonwillison.net/2025/May/22/no-docs-no-bugs/'
+description: 'No docs, no bugs'
+newsletter: 2025-05-24-techstructive-weekly-43
+hash: ca215c03b51d9d14905ad2946155c0a72b5e03b859c405c1d91187705f80c757
 type: links
 title: 'No docs, no bugs'
 date: 2025-05-24
-slug: no-docs-no-bugs
-tags:
-  - links
-link: 'https://simonwillison.net/2025/May/22/no-docs-no-bugs/'
 status: published
-description: 'No docs, no bugs'
 source: newsletter
-newsletter: 2025-05-24-techstructive-weekly-43
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Commentary
 
 - This is silly; the more detail you put, the more detailed your tests have to be

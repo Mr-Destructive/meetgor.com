@@ -1,15 +1,13 @@
 ---
-type: posts
 title: "Vim: Buffers"
-subtitle: "Understanding the basic unit of Vim for working with files."
 date: 2021-08-11
-slug: "vim-buffers"
-tags:
-  - vim
+tags: 
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643286548/blogmedia/khj3xx5mulhotdfw7z1x.png
+type: posts
+subtitle: "Understanding the basic unit of Vim for working with files."
+slug: "vim-buffers"
+hash: c8188cdb504698ee25cf56b8d7f3b13dbcddc9b7ffb0fa8559860d6e4196f608
 ---
-
-
 ## Introduction
 
 

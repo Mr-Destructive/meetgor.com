@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+date: 2025-09-28
+tags: ["sqlite", "sql"]
+hash: 55f0b51dd8b415448eb855df4476dca2532377582a4c56b7f22b01e653c3cdb1
 type: sqlog
 slug: sqlite-create-table-from-select
 title: "SQLite SQL: Create Table with Select"
-date: 2025-09-28
-tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Creating table with Select Query
 
 Sometimes you want to create a new table based on data that already exists,maybe you’re archiving old rows, generating a summary, cloning a table, or transforming data into a new structure. Doing this might require you to write a `CREATE TABLE` statement with all column definitions, then running one or more `INSERT INTO` statements to populate it. That’s a lot of work.
@@ -248,4 +195,3 @@ sqlite>
  As you can see, we need to actually drop the table in order to create a new table form scratch just like any normal table in sqlite.
 
  So, there are a few more gotchas and details of this, than I thought to be, will be taking a closer look at each one by one in the next few posts.
-

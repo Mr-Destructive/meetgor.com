@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: sqlog
 slug: sqlite-primary-key-column-constraint
 title: 'SQLite SQL: PRIMARY KEY column constraint'
 date: 2025-09-13
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: b447018ccffa466152ac1d069452875f02c56d60326a61948006c5d36c5542a6
 ---
-
-
 ## The PRIMARY KEY column constraint
 
 The PRIMARY KEY constraint is not actually a column constraint, it is a table constraint. But in this section, we'll only learn about how to handle single column-level `PRIMARY KEY`.

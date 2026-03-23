@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: links
 title: 'Janvi Kalra'
+source: newsletter
+newsletter: 2025-06-14-techstructive-weekly-46
 date: 2025-06-14
 slug: janvi-kalra
-tags:
-  - links
+tags: 
 link: 'https://open.substack.com/pub/pragmaticengineer'
 status: published
 description: 'Janvi Kalra'
-source: newsletter
-newsletter: 2025-06-14-techstructive-weekly-46
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 78815bb3419e71d8f0dae08b93da6d04524e60d26da56bca33ed9dcb9a8e0b32
 ---
-
-
 ## Commentary
 
 - From Software Engineer to AI Engineer at OpenAI

@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+description: 'The bet on juniors just got better'
+source: newsletter
+status: published
+newsletter: 2026-01-24-techstructive-weekly-78
+hash: 1a5435b7db0a68d7d88c8aed22f7709331beea00dc75cc591d8a1b827aafe035
 type: links
 title: 'The bet on juniors just got better'
 date: 2026-01-24
 slug: the-bet-on-juniors-just-got-better
-tags:
-  - links
+tags: 
 link: 'https://tidyfirst.substack.com/p/the-bet-on-juniors-just-got-better'
-status: published
-description: 'The bet on juniors just got better'
-source: newsletter
-newsletter: 2026-01-24-techstructive-weekly-78
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Commentary
 
 - This is fair. The bet on junior aka me was that I will take the ownership. And this previous year I did. They might have gotten the payback but not quite like AI. The thing that AI might miss is reliability. Not availability.

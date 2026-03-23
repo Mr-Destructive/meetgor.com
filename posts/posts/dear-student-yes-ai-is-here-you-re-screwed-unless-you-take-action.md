@@ -1,38 +1,11 @@
 ---
-type: links
 title: "youre screwed unless you take action"
 date: 2025-03-09
-tags:
-  - typescript
-  - ai
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: 
+hash: 6bde9ff8463dde06606e4f9c37c4699f206a4a3bcbd6f663b89e486750456b47
+slug: youre-screwed-unless-you-take-action
+type: links
 ---
-
-
 Interesting read,
 
 > If you graduated last year and are entering the workforce this year, then it doesn't unless you take action. It's a COVID19 moment in life again.

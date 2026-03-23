@@ -1,19 +1,17 @@
 ---
 date: 2025-10-18T00:00:00Z
 description: 'Claude Haiku 4.5: The best model from Anthropic for cost to intelligence figures'
-image_url: https://i.ytimg.com/vi/iES9r7AZP1s/hqdefault.jpg
 link: https://youtu.be/iES9r7AZP1s
-newsletter: 2025-10-18-techstructive-weekly-64
 slug: claude-haiku-45-the-best-model-from-anthropic-for-cost-to-intelligence-figures
+type: links
+image_url: https://i.ytimg.com/vi/iES9r7AZP1s/hqdefault.jpg
+newsletter: 2025-10-18-techstructive-weekly-64
 source: newsletter
 status: published
-tags:
-    - links
+tags: 
 title: 'Claude Haiku 4.5: The best model from Anthropic for cost to intelligence figures'
-type: links
+hash: 0b9e3d0bfa00c1214967b0cd5b58fd4f2470df307fcf3a82e0af5577d8e54cc8
 ---
-
-
 ## Commentary
 
 - Maybe its a big leap in terms of intelligence to cost ratio. We might get more cheaper models with more intelligence.

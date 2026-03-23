@@ -1,20 +1,17 @@
 ---
-
-type: links
-title: 'The future of software development is software developers'
 date: 2026-01-03
 slug: the-future-of-software-development-is-software-developers
-tags:
-  - links
-link: 'https://codemanship.wordpress.com/2025/11/25/the-future-of-software-development-is-software-developers/'
+tags: 
 status: published
+source: newsletter
+hash: 28cbef1c26a3775055c3d7f9779d8e2080a8fff05b79890d2c5754f150fdf704
+type: links
+title: 'The future of software development is software developers'
+link: 'https://codemanship.wordpress.com/2025/11/25/the-future-of-software-development-is-software-developers/'
 description: 'The future of software development is software developers'
 image_url: 'https://codemanship.wordpress.com/wp-content/uploads/2025/11/image-7.png'
-source: newsletter
 newsletter: 2026-01-03-techstructive-weekly-75
 ---
-
-
 ## Commentary
 
 - technical practices that can dramatically shrink delivery lead times while improving reliability and reducing the cost of change, with or without “AI”

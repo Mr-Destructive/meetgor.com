@@ -1,15 +1,13 @@
 ---
+date: 2021-07-21
+slug: "vim-registers"
+tags: 
+image_url: https://cdn.hashnode.com/res/hashnode/image/upload/v1626940723316/nFGNljJi0.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress
+hash: 77992323c28834755856b309f2955c1625e075cd017ccc3929dacb95646b0a92
 type: posts
 title: "Vim: Registers"
 subtitle: "The guide in understanding Vim registers and where your text gets stored after copying or deleting."
-date: 2021-07-21
-slug: "vim-registers"
-tags:
-  - vim
-image_url: https://cdn.hashnode.com/res/hashnode/image/upload/v1626940723316/nFGNljJi0.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress
 ---
-
-
 ## Introduction
 
 Have you ever found it difficult to manage and operate text in Vim, especially in Cut/Copy/Paste stuff. You cannot figure out how on earth am I supposed to retrieve my un-saved, un-committed changes in Vim. Then this my dear friend is an article for you. You will learn what are Vim registers and where your deletes and copied stuff resides. This won't be a comprehensive guide but enough to let you through in performing the wizardry of registers in Vim.

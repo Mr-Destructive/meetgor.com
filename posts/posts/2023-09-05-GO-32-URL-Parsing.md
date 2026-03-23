@@ -1,15 +1,13 @@
 ---
-type: posts
+tags: 
+image_url: https://meetgor-cdn.pages.dev/100-days-of-golang/golang-032-url-parsing.png
+hash: 59f4af98a976cd165ec26333df708e38a0dde8d25d9eb17586084848214bcf5c
 title: "Golang Web: URL Parsing"
-date: 2023-09-05
 slug: "golang-web-url-parsing"
 series: ["100-days-of-golang"]
-tags:
-  - go
-image_url: https://meetgor-cdn.pages.dev/100-days-of-golang/golang-032-url-parsing.png
+type: posts
+date: 2023-09-05
 ---
-
-
 ## Introduction
 
 We have done around 32 posts on the fundamental concepts in golang, With that basic foundation, I'd like to start with the new section of this series which will be a major one as `web-development`. This section will have nearly 40-50 posts, this will cover the fundamental concepts for web development like APIs, Database integrations, Authentication and Authorizations, Web applications, static sites, etc.

@@ -1,63 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+series: ["advent-of-sql-2025"]
+tags: ["sqlite", "sql", "advent-of-sql"]
+hash: deb9c985e97d8235524c872844100f4ec4d8ba50dc88e60ba306a0ba476b2069
 type: sqlog
 title: "Advent of SQL 2025 Day 10: Misdelivered Presents"
 slug: "advent-of-sql-2025-day-10"
 date: 2025-12-25
-series: ["advent-of-sql-2025"]
-tags: ["sqlite", "sql", "advent-of-sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Advent of SQL, Day 10 - Misdelivered Presents
 
 It's already day 10? We just need 5 more days now! Whoa! that flew by swiftly.

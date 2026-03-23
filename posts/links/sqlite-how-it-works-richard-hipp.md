@@ -1,19 +1,17 @@
 ---
-date: 2025-08-02T00:00:00Z
-description: 'SQLite: How it works: Richard Hipp'
-image_url: https://i.ytimg.com/vi/ZSKLA81tBis/hqdefault.jpg
 link: https://youtu.be/ZSKLA81tBis
 newsletter: 2025-08-02-techstructive-weekly-53
-slug: sqlite-how-it-works-richard-hipp
 source: newsletter
 status: published
-tags:
-    - links
-title: 'SQLite: How it works: Richard Hipp'
+tags: 
 type: links
+image_url: https://i.ytimg.com/vi/ZSKLA81tBis/hqdefault.jpg
+slug: sqlite-how-it-works-richard-hipp
+title: 'SQLite: How it works: Richard Hipp'
+hash: 6a05f7fcb055e48c2f75ffbb8f6fe3973d3c7341bad4ec61445b117b9aa394d2
+date: 2025-08-02T00:00:00Z
+description: 'SQLite: How it works: Richard Hipp'
 ---
-
-
 ## Commentary
 
 - What a banger of a presentation and talk. Explained so much, in depth, in such a short time. It helped me understand what SQLite actually is, it’s a parser + virtual machine to run the core part and basically the fopen function in C to actually perform the operation.

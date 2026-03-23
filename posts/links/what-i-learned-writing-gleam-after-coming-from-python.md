@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: links
 title: 'What I learned writing Gleam, after coming from Python'
+tags: 
+status: published
+newsletter: 2026-01-03-techstructive-weekly-75
 date: 2026-01-03
 slug: what-i-learned-writing-gleam-after-coming-from-python
-tags:
-  - links
 link: 'https://nohzafk.github.io/posts/2025-12-27-what-i-ve-learned-writting-gleam/'
-status: published
 description: 'What I learned writing Gleam, after coming from Python'
 source: newsletter
-newsletter: 2026-01-03-techstructive-weekly-75
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 7409bda9d1c21c7503f3191518379eb3c0a92a9cc473406cf1efd043fd981598
 ---
-
-
 ## Commentary
 
 - Top to down approach. This just shifts from taking the problem and boiling it down to the input and output. Wow! This just made so much sense now.

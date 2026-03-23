@@ -1,19 +1,17 @@
 ---
 date: 2025-12-20T00:00:00Z
-description: 'Mostly Technical: Hearts and Minds'
 image_url: https://i.ytimg.com/vi/P-fKp3eS5CA/hqdefault.jpg
 link: https://youtu.be/P-fKp3eS5CA
+tags: 
+title: 'Mostly Technical: Hearts and Minds'
+type: links
+hash: ea1f19650a3cf2f73dd90689d479edaee820ad45e10e87eead3889eb1879f1f7
+description: 'Mostly Technical: Hearts and Minds'
 newsletter: 2025-12-20-techstructive-weekly-73
 slug: mostly-technical-hearts-and-minds
 source: newsletter
 status: published
-tags:
-    - links
-title: 'Mostly Technical: Hearts and Minds'
-type: links
 ---
-
-
 ## Commentary
 
 - Boy I have some thoughts here.

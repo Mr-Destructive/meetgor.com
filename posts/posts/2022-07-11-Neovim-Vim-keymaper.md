@@ -1,66 +1,13 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: til
-title: "Map Vimscript Keymaps to Lua with a single function"
-description: "Takeout the vimscript keymaps into lua with a single function call in Neovim"
 date: 2022-07-11
 status: published
 slug: vimscript-to-lua-keymapper
 tags: ['vim', 'lua',]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: e827d477d7c674ce0af53c5927a5c54a53c3e99d51750fbfd051870e585ee732
+type: til
+title: "Map Vimscript Keymaps to Lua with a single function"
+description: "Takeout the vimscript keymaps into lua with a single function call in Neovim"
 ---
-
-
 ## Introduction
 
 Are you bored of writing all the keymaps from vimscript to lua? Try the below function to create all your keymaps to lua equivalent maps in Neovim.

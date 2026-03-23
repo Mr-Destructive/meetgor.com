@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
-title: "SQLite dot commands: Output mode separator command"
 slug: sqlite-mode-dot-command-separators
 date: 2025-09-02
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: a663d336a5e8a1a5b232f5c4ba91b33f8eddada859115e3223084ba97cb9218f
+type: sqlog
+title: "SQLite dot commands: Output mode separator command"
 ---
-
-
 ## Using the separator for the ouput
 
 If you wanted to use a specific separator for columns and rows while displaying the result set / table, you can use the `.separator` dot command which can take 2 arguments, first as the separator for the column and the second for the row.

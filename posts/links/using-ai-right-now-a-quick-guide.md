@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+status: published
+hash: 98aae3679f51ebc805364fbffe2a45d5b3473a3d3dca78501b530b21d5503d72
 type: links
 title: 'Using AI right now: A quick guide'
 date: 2025-06-28
 slug: using-ai-right-now-a-quick-guide
-tags:
-  - links
 link: 'https://www.oneusefulthing.org/p/using-ai-right-now-a-quick-guide'
-status: published
 description: 'Using AI right now: A quick guide'
 source: newsletter
 newsletter: 2025-06-28-techstructive-weekly-48
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: 
 ---
-
-
 ## Commentary
 
 - Gemini, ChatGPT and Claude these are the most widely adopted LLMs which are quite general purpose. But they also have nuanced quirks and preferences for certain tasks.

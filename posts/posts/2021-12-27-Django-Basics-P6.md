@@ -1,18 +1,14 @@
 ---
+series: ["Django-Basics"]
+subtitle: "Loading Static Files in a Django project/app"
+tags: 
+image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1640610003/blogmedia/dj-static-6_pjipoj.png
+hash: 8b51dfaf54f47e31262202fd5221894d8565911c2f219f490e30b6c5e0994255
 type: posts
 title: "Django Basics: Static Files"
-subtitle: "Loading Static Files in a Django project/app"
 date: 2021-12-27
 slug: "django-basics-static-files"
-series: ["Django-Basics"]
-tags:
-  - django
-  - python
-  - web-development
-image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1640610003/blogmedia/dj-static-6_pjipoj.png
 ---
-
-
 ## Introduction
 
 After creating templates, it should be rather tempting to add some styles and logic to them. Well yes, we'll see how to add static files in a web application using django. Static files are not only CSS, but also media/images and Javascript files as well. In this part of the series, we'll cover the basics of working with static files in django including the configuration, rendering and storing of the static files. 

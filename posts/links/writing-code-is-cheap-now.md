@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
-title: 'Writing code is cheap now'
 date: 2026-02-28
 slug: writing-code-is-cheap-now
-tags:
-  - links
-link: 'https://simonwillison.net/guides/agentic-engineering-patterns/code-is-cheap/'
 status: published
 description: 'Writing code is cheap now'
 source: newsletter
 newsletter: 2026-02-28-techstructive-weekly-83
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+type: links
+title: 'Writing code is cheap now'
+tags: 
+link: 'https://simonwillison.net/guides/agentic-engineering-patterns/code-is-cheap/'
+hash: 10f3f3269f605d2266be92ea68cab978c8bbf99ca46a7bdc095f4ace2c4f6147
 ---
-
-
 ## Commentary
 
 - “The biggest challenge in adopting agentic engineering practices is getting comfortable with the consequences of the fact that writing code is cheap now.”

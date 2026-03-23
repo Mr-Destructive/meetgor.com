@@ -1,20 +1,17 @@
 ---
-
-type: links
-title: 'One Year with Kagi · Blog · Eli Perkins'
-date: 2026-01-31
-slug: one-year-with-kagi-183-blog-183-eli-perkins
-tags:
-  - links
-link: 'https://blog.eliperkins.com/one-year-with-kagi/'
+tags: 
 status: published
 description: 'One Year with Kagi · Blog · Eli Perkins'
+type: links
+title: 'One Year with Kagi · Blog · Eli Perkins'
+link: 'https://blog.eliperkins.com/one-year-with-kagi/'
 image_url: 'https://blog.eliperkins.com/one-year-with-kagi/opengraph-image?c9188a5a8f37daac'
 source: newsletter
 newsletter: 2026-01-31-techstructive-weekly-79
+hash: edab1b8f5f498f388794d31f780ae110d340dfc19f60f28e7d5aa4584b3a1bf8
+date: 2026-01-31
+slug: one-year-with-kagi-183-blog-183-eli-perkins
 ---
-
-
 ## Commentary
 
 - This is nice, a good insight actually.

@@ -1,19 +1,17 @@
 ---
+title: 'MIT Lecture: LLMs introduction'
+hash: c9502c651b05ca8ae6f2b8da9fbbb6e41e233f23e4b55a43ca48fc5af6d198f0
 date: 2025-05-31T00:00:00Z
-description: 'MIT Lecture: LLMs introduction'
 image_url: https://i.ytimg.com/vi/ZNodOsz94cc/hqdefault.jpg
+slug: mit-lecture-llms-introduction
+status: published
+tags: 
+type: links
+description: 'MIT Lecture: LLMs introduction'
 link: https://youtu.be/ZNodOsz94cc
 newsletter: 2025-05-31-techstructive-weekly-44
-slug: mit-lecture-llms-introduction
 source: newsletter
-status: published
-tags:
-    - links
-title: 'MIT Lecture: LLMs introduction'
-type: links
 ---
-
-
 ## Commentary
 
 - It had me till the part “LLMs can do math”, no please no.

@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: links
 title: 'Lessons learned from 25 years of writing software'
-date: 2024-11-23
-slug: lessons-learned-from-25-years-of-writing-software
-tags:
-  - links
-link: 'https://blog.rpanachi.com/after-25-years-writing-software-here-some-things-learned-so-far?ref=dailydev'
-status: published
 description: 'Lessons learned from 25 years of writing software'
 source: newsletter
 newsletter: 2024-11-23-techstructive-weekly-17
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 2dcd2afd146b22651914814276908e853c06731a4709a7990671e3de180a4b4c
+date: 2024-11-23
+slug: lessons-learned-from-25-years-of-writing-software
+tags: 
+link: 'https://blog.rpanachi.com/after-25-years-writing-software-here-some-things-learned-so-far?ref=dailydev'
+status: published
 ---
-
-
 ## Commentary
 
 - :There are so many valuable tips here,

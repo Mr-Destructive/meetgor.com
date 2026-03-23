@@ -1,20 +1,17 @@
 ---
-
+hash: cd4a7c983cb0f1dbee07a0bef4790099eddb6da3f386e3f129aff9f4b089b223
 type: links
 title: 'Exploring EXIF'
 date: 2025-08-23
-slug: exploring-exif
-tags:
-  - links
-link: 'https://hturan.com/writing/exploring-exif'
 status: published
 description: 'Exploring EXIF'
-image_url: 'https://hturan.com/img/writing/exploring-exif/header.jpg'
 source: newsletter
+slug: exploring-exif
+tags: 
+link: 'https://hturan.com/writing/exploring-exif'
+image_url: 'https://hturan.com/img/writing/exploring-exif/header.jpg'
 newsletter: 2025-08-23-techstructive-weekly-56
 ---
-
-
 ## Commentary
 
 - A great post, diving into a specific tool for a lot of things.

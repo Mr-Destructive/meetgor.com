@@ -1,39 +1,11 @@
 ---
+tags: 
+hash: dfe1522126846bb3588c435030e3cbf27628544f9c4b675fa3363037d4ba4ef4
 type: links
 title: "Kubernetes isn't for you"
 date: 2025-07-27
 slug: "kubernetes-isn-t-for-you"
-tags:
-  - typescript
-  - kubernetes
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 [https://sliplane.io/blog/kubernetes-isnt-for-you](https://sliplane.io/blog/kubernetes-isnt-for-you)
 
 dev.to link: https://dev.to/code42cate/kubernetes-isnt-for-you-2c2m

@@ -1,3 +1,7 @@
+---
+hash: 717b402ce1a4d427e907a1850b20116c012eaaf31fc71d28bcb1974db0352eea
+slug: 
+---
 {
   "title": "Kubernetes isn't for you",
   "post_dir":"links",

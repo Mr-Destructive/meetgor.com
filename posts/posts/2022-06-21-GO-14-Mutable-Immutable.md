@@ -1,15 +1,13 @@
 ---
+hash: 1f5c36c8452c61f59018dbf265946464b254cad36617a0a145b9ff686a099e1a
 type: posts
 title: "Golang: Mutable and Immutable Data Types"
-date: 2022-06-21
 slug: "golang-mutable-immutable"
+date: 2022-06-21
 series: ["100-days-of-golang"]
-tags:
-  - go
+tags: 
 image_url: https://meetgor-cdn.pages.dev/golang-014-im-mutables.png
 ---
-
-
 ## Introduction 
 
 In this 14th Post of the 100 days of GOlang, we will be understanding about the mutable and immutable data types in Golang. Firstly, we will understand the concept of mutability and understand the differences in mutable and immutable data types, further we will explore which data types in Golang are Mutable and Immutable.

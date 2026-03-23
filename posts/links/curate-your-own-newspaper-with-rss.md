@@ -1,20 +1,17 @@
 ---
-
-type: links
-title: 'Curate your own newspaper with RSS'
-date: 2025-08-16
-slug: curate-your-own-newspaper-with-rss
-tags:
-  - links
-link: 'https://www.citationneeded.news/curate-with-rss/'
-status: published
 description: 'Curate your own newspaper with RSS'
 image_url: 'https://www.citationneeded.news/content/images/2025/07/curate-newspaper.png'
 source: newsletter
 newsletter: 2025-08-16-techstructive-weekly-55
+type: links
+title: 'Curate your own newspaper with RSS'
+tags: 
+link: 'https://www.citationneeded.news/curate-with-rss/'
+hash: 0c1fae8ae4d5c8f955a57c8ee724d34a6a9aa8219e6411d46cb94f98124378a6
+date: 2025-08-16
+slug: curate-your-own-newspaper-with-rss
+status: published
 ---
-
-
 ## Commentary
 
 - In this constant hole of doomscrolling which I think I was falling for the last couple of weeks and finally got out by reading books. fiction books. It is important to make these kinds of apps and rss readers, as to be mindful about what we consume and at what rate.

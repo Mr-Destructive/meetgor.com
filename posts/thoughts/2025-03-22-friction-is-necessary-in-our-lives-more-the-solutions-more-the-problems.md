@@ -1,3 +1,7 @@
+---
+hash: 233b1a8f4d31dccae8feaa6d36a8fd8d353df03d021eec682dba97e712c5d270
+slug: 
+---
 {
   "title": "Friction is necessary in our lives, more the solutions, more the problems.",
   "post_dir":"links",

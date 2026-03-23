@@ -1,63 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: sqlog
 title: "Advent of SQL 2025 Day 3: Hotline Messages"
 slug: "advent-of-sql-2025-day-3"
 date: 2025-12-18
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 0c594bbe4b122eff92ae3f360fa681c11f3884822236fc89f7ab6e7add44e47b
 ---
-
-
 ## Advent of SQL Day 3 - Hotline Messages
 
 This is day 3 from the Advent of SQL

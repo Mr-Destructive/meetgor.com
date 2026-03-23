@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: sqlog
 slug: sqlite-default-column-constraint
 title: 'SQLite SQL: DEFAULT column constraint'
 date: 2025-09-10
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 92e9f6dc50505f3e1579f1fdc56e22166d0b87b974829057d8daeedb32c4c97c
 ---
-
-
 ## DEFAULT Constraint
 
 The `DEFAULT` constraint in SQLite is used to specify a default value for a column, if not provided, then the column will be populated with the `NULL` value as the default value. 
@@ -197,4 +144,3 @@ sqlite>
 As you can see, now we can insert multiple rows with default values, and the unique id will keep the records in the `documents` table unique.
 
 That's the basic we can use the `DEFAULT` constraint, you can add any expression as long as it produces a constant value for each of the records.
- 

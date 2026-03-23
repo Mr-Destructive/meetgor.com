@@ -1,20 +1,17 @@
 ---
-
-type: links
-title: 'Shipping at inference speed'
+source: newsletter
 date: 2026-01-03
 slug: shipping-at-inference-speed
-tags:
-  - links
+tags: 
 link: 'https://steipete.me/posts/2025/shipping-at-inference-speed'
-status: published
 description: 'Shipping at inference speed'
-image_url: 'https://steipete.me/posts/2025/shipping-at-inference-speed/index.png'
-source: newsletter
 newsletter: 2026-01-03-techstructive-weekly-75
+hash: 3fdc048c346be7a721a239ec949cddfc05e7fbcd50449801db4c869c974d4a0c
+type: links
+title: 'Shipping at inference speed'
+status: published
+image_url: 'https://steipete.me/posts/2025/shipping-at-inference-speed/index.png'
 ---
-
-
 ## Commentary
 
 - This is a good post to say that we have different ways of using LLMs at this point and nothing is permanent. Every month or weeks, this is changing. Adopting a new workflow is like juggling circus art.

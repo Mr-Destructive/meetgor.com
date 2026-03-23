@@ -1,69 +1,14 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-title: "Techstructive Weekly #82"
-date: 2026-02-21
-slug: techstructive-weekly-82
-status: published
-type: newsletter
 description: "Agentic Coding taking over hand crafted coding, the inevitable seems to be happening, among the other things read, watches and learnt from the week of 15th to 21st February 2026"
-tags: ["substack"]
 source_url: 'https://techstructively.substack.com/p/techstructive-weekly-82'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+date: 2026-02-21
+status: published
+tags: ["substack"]
+hash: c69c1a588066a7b6f5c42c9f0e855879e7aa44a6a4d315e8d0aa139da6ce3780
+title: "Techstructive Weekly #82"
+slug: techstructive-weekly-82
+type: newsletter
 ---
-
-
-
 <h2>Week #82</h2>
 <p>A pretty heavy week. Things getting cooked up for developers. Shift in how to develop features. It feels a bit awkward that management people are teaching developers how to code now. Wired times. The craft is officially dead, long live code writing by hand.</p>
 <p>I am sad, but not that sad. It feels like something valuable is being snatched from my hands, but something more powerful is given back, but I don’t know how to process it. Just like when our parents have mobile phone in their hands for the first time. Or we have rubiks cube in our hands. Its quite a powerful tool, LLMs. For that I don’t have a brainpower to process what it spits out, the steering and orchestrating are the skills that developer like me lack like shit and this is exactly what we are put in.</p>

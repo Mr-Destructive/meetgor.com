@@ -1,65 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
-title: "Advent of SQL 2025 Day 12: Archive Flight Records"
-slug: "advent-of-sql-2025-day-12"
 date: 2025-12-27
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 2ef878a4518fc798821266e7321e2dc89fb362138cae5e70ab9f9d858ab47d3d
+type: sqlog
+title: "Advent of SQL 2025 Day 12: Archive Flight Records"
+slug: "advent-of-sql-2025-day-12"
 ---
-
-
 ## Advent of SQL - Day 12, Archive Flight Records
 
 We are on Day 12! Phew its almost done! Just 3 days more!
@@ -372,5 +319,3 @@ So, that are the approaches I like taking on day 12.
 It was fun! Working with full text search for the first time.
 
 On to day 13!
-
-

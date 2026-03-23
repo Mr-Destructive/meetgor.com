@@ -1,3 +1,7 @@
+---
+hash: d8fe84787471e3a1c262c95c68df4f2728f2a1a540bcdec45e294db86d80b9ff
+slug: 
+---
 {
   "title": "Format JSON in Vim with JQ",
   "post_dir": "til",

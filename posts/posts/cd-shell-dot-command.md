@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
 title: "SQLite dot commands: change directory command"
 slug: sqlite-cd-dot-command
 date: 2025-08-31
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 33f02d8126cc03ea5567cecfc829189b9c1b307efa36ac88c7d17be7733777e0
+type: sqlog
 ---
-
-
 ## Change directory dot command
 
 If you are in a sqlite shell and forgot to change directory or want to navigate to a separate directory, you can do that with the `.cd` dot command.
@@ -74,5 +21,3 @@ The `.cd` command changes the working directory of the SQLite shell itself, so t
 However, `.shell cd <path>` spawns a separate subprocess, and the directory change is discarded as soon as that command finishes. It does not affect SQLite’s own state of the current directory.
 
 So if you plan to read or write multiple files from a different location during your SQLite session, prefer the built-in `.cd` command.
-
-

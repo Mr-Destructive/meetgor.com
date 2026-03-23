@@ -1,15 +1,13 @@
 ---
+image_url: https://meetgor-cdn.pages.dev/100-days-of-golang/golang-037-delete-method.png
 type: posts
 title: "Golang Web: DELETE Method"
-date: 2025-01-12
 slug: "golang-web-delete-method"
 series: ["100-days-of-golang"]
-tags:
-  - go
-image_url: https://meetgor-cdn.pages.dev/100-days-of-golang/golang-037-delete-method.png
+tags: 
+hash: dc043eb4c91e166126447fe3588469d93ebeb00096b083eff6bfaebb2cdf5dff
+date: 2025-01-12
 ---
-
-
 ## Introduction
 
 We have explored GET, POST, PUT, and PATCH methods in our previous entries for this series. It is the final entry for all the HTTP methods which is going to be the `DELETE` method. In this entry of the series, we will take a view on how to construct and request an HTTP DELETE Method to an API Endpoint.

@@ -1,72 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
-title: 'Dialogue between a developer and a kid'
-date: 2026-01-10
-slug: dialogue-between-a-developer-and-a-kid
-tags:
-  - links
-link: 'https://riggraz.dev/dialogue-developer.html'
 status: published
 description: 'Dialogue between a developer and a kid'
 source: newsletter
+hash: 1e029e99f54305d039d3d6097054ea1a930d0c5d6ae2d1891b78744b531edcd1
+title: 'Dialogue between a developer and a kid'
+date: 2026-01-10
+tags: 
 newsletter: 2026-01-10-techstructive-weekly-76
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+type: links
+slug: dialogue-between-a-developer-and-a-kid
+link: 'https://riggraz.dev/dialogue-developer.html'
 ---
-
-
 ## Commentary
 
 - This is hilariously funny.

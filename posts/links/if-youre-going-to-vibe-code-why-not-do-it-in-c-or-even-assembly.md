@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: links
 title: 'If you’re going to vibe code, why not do it in C or even Assembly'
 date: 2025-12-13
 slug: if-youre-going-to-vibe-code-why-not-do-it-in-c-or-even-assembly
-tags:
-  - links
+tags: 
 link: 'https://stephenramsay.net/posts/vibe-coding.html'
 status: published
 description: 'If you’re going to vibe code, why not do it in C or even Assembly'
 source: newsletter
 newsletter: 2025-12-13-techstructive-weekly-72
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: df9dc9400b0641659ecf0aee201d5e2839863bade0bc7ccd7a22655f438d2be3
 ---
-
-
 ## Commentary
 
 - Yeah! This is a valid point, If you are not caring about the code, why bother with the language.

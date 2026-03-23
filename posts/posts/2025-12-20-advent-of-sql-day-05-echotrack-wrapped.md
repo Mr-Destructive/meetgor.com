@@ -1,65 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
-title: "Advent of SQL 2025 Day 5: EchoTrack Wrapped"
-slug: "advent-of-sql-2025-day-5"
 date: 2025-12-20
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 4315aa034f882e1c77fa32696c4f502f66de8ad789eb600b9d527392b9aaf628
+type: sqlog
+title: "Advent of SQL 2025 Day 5: EchoTrack Wrapped"
+slug: "advent-of-sql-2025-day-5"
 ---
-
-
 ## Advent of SQL Day 5 - EchoTrack Wrapped
 
 It is day 5 of advent of SQL.
@@ -544,4 +491,3 @@ ORDER BY user_name, play_count DESC, artist;
 So, that is day 5, ok that is getting a little tricky now!
 
 Off to day 6.
-

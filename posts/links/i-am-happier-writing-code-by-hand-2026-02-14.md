@@ -1,20 +1,17 @@
 ---
-
+description: 'I am happier writing code by hand'
+newsletter: 2026-02-14-techstructive-weekly-81
 type: links
 title: 'I am happier writing code by hand'
-date: 2026-02-14
-slug: i-am-happier-writing-code-by-hand-2026-02-14
-tags:
-  - links
+tags: 
 link: 'https://www.abhinavomprakash.com/posts/i-am-happier-writing-code-by-hand/'
-status: published
-description: 'I am happier writing code by hand'
 image_url: 'https://abhinavomprakash.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E'
 source: newsletter
-newsletter: 2026-02-14-techstructive-weekly-81
+hash: cbdf4ba9572c6ad08786c27ed4cfedb276a950621aca0c8497a17389937c5651
+date: 2026-02-14
+slug: i-am-happier-writing-code-by-hand-2026-02-14
+status: published
 ---
-
-
 ## Commentary
 
 - For the past 6 months, I was, but after a few couple of months, it feels like people are no longer in sympathy with that feeling.

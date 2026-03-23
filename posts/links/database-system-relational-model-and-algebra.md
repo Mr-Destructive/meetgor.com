@@ -1,19 +1,17 @@
 ---
+source: newsletter
+status: published
+title: 'Database System: Relational Model and Algebra'
+type: links
+newsletter: 2025-09-06-techstructive-weekly-58
+slug: database-system-relational-model-and-algebra
+tags: 
+hash: 9625d7dc2fa4dfce4792972368d7a7990c7ba7fa19d433354a4ba856f78b59b2
 date: 2025-09-06T00:00:00Z
 description: 'Database System: Relational Model and Algebra'
 image_url: https://i.ytimg.com/vi/7NPIENPr-zk/hqdefault.jpg
 link: https://youtu.be/7NPIENPr-zk
-newsletter: 2025-09-06-techstructive-weekly-58
-slug: database-system-relational-model-and-algebra
-source: newsletter
-status: published
-tags:
-    - links
-title: 'Database System: Relational Model and Algebra'
-type: links
 ---
-
-
 ## Commentary
 
 - Prepared a detailed notes as I was watching

@@ -1,68 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: newsletter
 title: 'Techstructive Weekly #62'
 date: 2025-10-04
 slug: techstructive-weekly-62
-tags:
-- ai
-- career
-- database
-- newsletter
-- sql
+tags: 
 source_url: 'https://techstructively.substack.com/p/techstructive-weekly-62'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 305b3d7ed28bfb8cee8c1b6ddc4632fd0c1d35dff148abb79c814f585af2e941
 ---
-
 ## Week #62
 
 It was a great week. I didn’t knew I would say that at the start of the week. But hell yes, a promotion, finally. A hope at the end of the tunnel. Hard work pays off in the end. I kept believing and finally able to bring smile on my loved ones.
@@ -166,4 +110,3 @@ Double click to interact with video
 - OpenaAI launches Sora 2
 
 Models are getting launched but not having a significant bumps in their capabilities, which is a good sign for humans. But these labs are just going crazy. They are putting AI in any possible thing they can, social media, if that was not a worse place to be in, developing anxiety, loneliness and pressure, adding AI to it is going to doom the peace from humans.
-

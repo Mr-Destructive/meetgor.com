@@ -1,3 +1,7 @@
+---
+hash: 9409deae18ab57136024fac1950a92156e4afb2720d2e2a63831feea04cedf5a
+slug: 
+---
 {
   "title": "Zellij Open Scrollback Edit mode",
   "post_dir": "til",

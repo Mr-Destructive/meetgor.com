@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
-title: "SQLite dot commands: header command"
 slug: sqlite-dot-command-header
 date: 2025-09-03
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 56363be08173b990249418e26d5f172d5d0e628ea0313920fa9789bcba4d994d
+type: sqlog
+title: "SQLite dot commands: header command"
 ---
-
-
 The `.headers` command is crucial as might effect the way the result set is displayed. The first row would be set to the name of the columns in the output of the relevant commands like `.output`, `.once`, or even your simple standard out queries if it is set on.
 
 ```
@@ -667,4 +614,3 @@ sqlite> select * from books;
 sqlite>
 
 ```
-

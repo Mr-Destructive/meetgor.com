@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
 slug: sqlite-foreign-key-table-constraint
 title: 'SQLite SQL: Foreign KEY table constraint'
 date: 2025-09-15
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 88dab8d19f1642a8ed22d289842eafc2ad18bfcf51a9db4e3708eb0b7ab05b0e
+type: sqlog
 ---
-
-
 ## The Foreign KEY Table constraint
 
 Foreign Keys are the fundamentals of any relational databases, as they are the ones that make the connection or the relations among the tables in our database system.
@@ -914,4 +861,3 @@ sqlite>
 What would happen if there are more than one row in the primary table that references the same id in the foreign table?
 
 That is a question for another post.
-

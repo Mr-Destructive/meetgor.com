@@ -1,69 +1,14 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 title: "Techstructive Weekly #80"
 date: 2026-02-07
 slug: techstructive-weekly-80
-status: published
 type: newsletter
+hash: 5c03bb82b40afe976d2c7d6cbaa06d46fb72160f9a10f15b2f9e214d3ca939c6
+status: published
 description: "Learning agentic tools, ai assisted programming and shipping and generating slop to understand the llm harness, among the other things read, and watched in the week from 1st to 7th February 2026"
 tags: ["substack"]
 source_url: 'https://techstructively.substack.com/p/techstructive-weekly-80'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
-
 <h2>Week #80</h2>
 <p>It was a exciting week. I went to co-working space which felt like ages. Created something meaningful with ai-assisted coding, and it worked charms. It helped get out of a dry slump and make better impact with code. Its me, in my mood, when I have the fire, nothing survives in front of me. Just that the fire is lost in the mundane dance of life, it throws you in valleys you never knew existed or had planned for.</p>
 <p>Back to a grind of coding with LLMs. This week a lock in mode to ship 3 projects. Let’s see and what I can come up with. Maybe I’ll write an article about how my experience has been so far.</p>

@@ -1,63 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
 title: "Advent of SQL 2025 Day 9: Evergreen Market Orders"
 slug: "advent-of-sql-2025-day-9"
 date: 2025-12-24
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 6c632600e0c5e84717a2a73f4c43d185318b01d1505d68c3fcbc5727a9d4da68
+type: sqlog
 ---
-
-
 ## Advent of SQL, Day 9 - Evergreen Market Orders
 
 We are on day 9 of advent of SQL, and I feel good so far.

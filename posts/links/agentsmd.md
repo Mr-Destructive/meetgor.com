@@ -1,18 +1,15 @@
 ---
-
+link: 'http://AGENTS.md'
+hash: 142db7ff219b24428853914b9effb9091a9d4b8ee8cd73a333d8d9b7403a58ae
 type: links
-title: 'AGENTS.md'
 date: 2026-01-31
 slug: agentsmd
-tags:
-  - links
-link: 'http://AGENTS.md'
 status: published
 description: 'AGENTS.md'
 image_url: 'https://agents.md/og.png'
+title: 'AGENTS.md'
+tags: 
 ---
-
-
 ## Commentary
 
 - Passive context (AGENTS.md) currently outperforms active retrieval (skills)

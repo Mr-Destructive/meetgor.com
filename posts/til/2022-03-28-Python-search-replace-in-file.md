@@ -1,3 +1,7 @@
+---
+hash: f3987b2ae8601d8dc579b8d832946c082a0f420b0105251f3b0496a7b6a51458
+slug: 
+---
 {
     "type": "til",
     "title": "Python: Search and Replace in File",

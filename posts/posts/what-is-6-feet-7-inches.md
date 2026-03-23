@@ -1,66 +1,13 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+description: ""
+hash: a472bad2ace3e0cb70f93568a99aad045d41bf88091f9a63b171e853390588fa
 title: "Why we have inflated expectations, 6 feet 7 inches"
-date: 2026-01-08
 slug: what-is-6-feet-7-inches
 status: published
-type: links
-description: ""
 tags: ["inflation"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+date: 2026-01-08
+type: links
 ---
-
-
 This is so true 
 
 > In the 1990s, a “middle-class job” was enough to buy a house. Being “6 feet” was enough to be tall.

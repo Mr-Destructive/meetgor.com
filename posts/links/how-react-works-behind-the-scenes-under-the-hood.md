@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
-title: 'How React works behind the scenes (under the hood)'
-date: 2025-08-16
-slug: how-react-works-behind-the-scenes-under-the-hood
-tags:
-  - links
 link: 'https://www.deepintodev.com/blog/how-react-works-behind-the-scenes?ref=dailydev'
-status: published
 description: 'How React works behind the scenes (under the hood)'
 source: newsletter
 newsletter: 2025-08-16-techstructive-weekly-55
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+type: links
+status: published
+hash: 4685925c360a8a27ae342ea5e3dd08926af03c3b7aa0b588c2e3f4356c0058e6
+title: 'How React works behind the scenes (under the hood)'
+date: 2025-08-16
+slug: how-react-works-behind-the-scenes-under-the-hood
+tags: 
 ---
-
-
 ## Commentary
 
 - Wow! What a post, I can happily say, I know something about React now. There are a lot of moving parts. I thought it was just one step compilation, but man there are layers of compilation happening in various formats/data layers I think.

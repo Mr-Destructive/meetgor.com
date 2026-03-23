@@ -1,17 +1,13 @@
 ---
-type: posts
-title: "Deploying Django Project with Railway Nixpacks"
-date: 2022-07-16
-slug: "django-deploy-railway-nixpacks"
 series: ["Django-Deployment"]
-tags:
-  - django
-  - python
-  - railway
 image_url: https://meetgor-cdn.pages.dev/django-deploy-railway-nixpacks.png
+title: "Deploying Django Project with Railway Nixpacks"
+slug: "django-deploy-railway-nixpacks"
+tags: 
+hash: 847370aa4d547fc3cc7889aecaaf8e9db8ebdd4591d8842495b5b1cf265bc4ae
+type: posts
+date: 2022-07-16
 ---
-
-
 ## Introduction
 
 We have seen how to deploy a Django application on railway app in the [previous article](https://www.meetgor.com/django-deploy-railway/) of the [series](https://www.meetgor.com/series/django-deployment/). We deployed the django project using the Heroku Buildpacks under the hood. The railway app provides a couple of options on how to build your web application. Currently, there are three options, one of which is the [heroku buildpacks](https://devcenter.heroku.com/articles/heroku-20-stack) which is the default one, second, we have the nixpacks which we will see today, and the third is the [Paketo buildpack](https://paketo.io/). 

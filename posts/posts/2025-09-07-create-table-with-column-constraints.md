@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: sqlog
 slug: sqlite-create-table-column-constraint
 title: 'SQLite SQL: Create Table with column constraints'
 date: 2025-09-07
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 9d5460232fa2798e5cf0029f3168e143aec49d5276497c65d16710326ac7c51f
 ---
-
-
 ## Create Table with column constraints
 
 We have seen the table creation with column types, we now need to look into the constraints or limitations that we can add to those columns, in order to make the data-model more robust and add some basic validations before doing any updation/mutation on the data itself.

@@ -1,66 +1,13 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: til
+tags: ['python',]
 title: "Python Pipreqs: Generate requirements file from the imported packages"
 description: "Exploring the pipreqs package that allows to list all the dependencies or packages which are imported in a python project"
 date: 2022-09-14
 status: published
 slug: python-pipreqs
-tags: ['python',]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 907cea662cfdf4c5c9c2591a8f644b8cfe2209849106d2cdca0c8bcc94534951
 ---
-
-
 ## Introduction
 
 [Pipreqs](https://pypi.org/project/pipreqs/) is a python package that allows us to list all the pacakges which are imported in a python project. This is a great package for reducing the amount of redundant packages for a project. 

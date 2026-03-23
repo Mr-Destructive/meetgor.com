@@ -1,68 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
-title: 'Notes on switching to Helix from Vim'
-date: 2025-10-18
 slug: notes-on-switching-to-helix-from-vim
-tags:
-  - links
-link: 'https://jvns.ca/blog/2025/10/10/notes-on-switching-to-helix-from-vim/'
-status: published
+tags: 
 description: 'Notes on switching to Helix from Vim'
 source: newsletter
 newsletter: 2025-10-18-techstructive-weekly-64
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 24dcd5181e081a83522201de2e7b62c405c654fba8b2aedf4422d64532bb76eb
+type: links
+link: 'https://jvns.ca/blog/2025/10/10/notes-on-switching-to-helix-from-vim/'
+status: published
+title: 'Notes on switching to Helix from Vim'
+date: 2025-10-18
 ---
-
-
 ## Commentary
 
 - I like this approach of adapting to tooling. The author had clearly listed the reason, the main crux of why he chose Helix over Vim in the first place.

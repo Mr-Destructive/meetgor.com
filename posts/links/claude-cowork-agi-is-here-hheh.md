@@ -1,19 +1,17 @@
 ---
-date: 2026-01-24T00:00:00Z
+source: newsletter
+tags: 
 description: 'Claude Cowork: AGI is here, hheh?'
 image_url: https://i.ytimg.com/vi/IcQEaopx90g/hqdefault.jpg
 link: https://youtu.be/IcQEaopx90g
-newsletter: 2026-01-24-techstructive-weekly-78
-slug: claude-cowork-agi-is-here-hheh
-source: newsletter
 status: published
-tags:
-    - links
 title: 'Claude Cowork: AGI is here, hheh?'
 type: links
+hash: 0452d6d178ad2acc799be207478d08a7de5f4994f343435bc73685e49f398956
+date: 2026-01-24T00:00:00Z
+newsletter: 2026-01-24-techstructive-weekly-78
+slug: claude-cowork-agi-is-here-hheh
 ---
-
-
 ## Commentary
 
 - I loved the video. It showed the flaws and the possibilities of this tool. I think its a step in the AGI, but good or bad, the people will decide.

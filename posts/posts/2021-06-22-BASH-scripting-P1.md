@@ -1,16 +1,14 @@
 ---
+tags: 
+hash: d15f88b88423c6d3aa2fbd1cf63af7997c2086e0c745d83f41bfbb14913f683c
 type: posts
-title: "BASH Scripting Guide - PART - 1"
 subtitle: "The quick basic guide on foundational concepts of Bash scripting."
+image_url: https://meetgor-cdn.pages.dev/bash-scripting-guide-p1.webp
+title: "BASH Scripting Guide - PART - 1"
 date: 2021-06-22
 slug: "bash-guide-p1"
 series: ["BASH Scripting Guide"]
-tags:
-  - bash
-image_url: https://meetgor-cdn.pages.dev/bash-scripting-guide-p1.webp
 ---
-
-
 ## Introduction
 If you are new to BASH and Linux, don't you worry the community is the driving force here. If someone's stuck somewhere, the platforms, forums, and blogs are ready to help anyone there. BASH is a short term of Bourne-Again Shell, it is a shell interface that has much more capabilities and functions than the simple Bourne shell(sh). It has some quite remarkable features and it is even capable of calling itself a programming language in some sense.
  

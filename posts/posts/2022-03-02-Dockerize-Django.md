@@ -1,66 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: til
 title: "Dockerize a Django project"
 date: 2022-03-02
 slug: "dockerize-django-prj"
-tags:
-  - django
-  - docker
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: 
+hash: ba4935097101bcfbbec550fae9ba7d4a2dd8b490b5f28840659ee73f13e7f394
+type: til
 ---
-
-
 ## Dockerize a Django project
 
 We can run our Django projects in a Docker Container by creating a Docker image for our project. It is really easy and intuitive to create a Dockerfile for any given application as it really is a matter of writing commands in a file and basically running it is a isolated environment. To create a Docker image, we first need a Dockerfile. A Dockerfile is simply a Blueprint to create a image in Docker. In this file we specify the instructions/commands/environment variables to create a image for our app to run. 

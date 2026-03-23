@@ -1,63 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+description: 'Why I stopped trying to be a great engineer'
 type: links
-title: 'Why I stopped trying to be a great engineer'
 date: 2025-11-15
-slug: why-i-stopped-trying-to-be-a-great-engineer
-tags:
-  - links
 link: 'https://supremecodr.medium.com/-56094c225549'
 status: published
-description: 'Why I stopped trying to be a great engineer'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 762b520fed2673d684742580061e6ef7c48819b14428355107b3d25a297c05a4
+title: 'Why I stopped trying to be a great engineer'
+slug: why-i-stopped-trying-to-be-a-great-engineer
+tags: 
 ---
-
-

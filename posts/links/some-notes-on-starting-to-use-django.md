@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
+newsletter: 2026-01-31-techstructive-weekly-79
 title: 'Some notes on starting to use Django'
+tags: 
+link: 'https://jvns.ca/blog/2026/01/27/some-notes-on-starting-to-use-django/'
+description: 'Some notes on starting to use Django'
+hash: d4d0d9df56f8dfb0151c84bffd210bff61520bc21e4c80dbbe2fa71c5bc8d8cd
+type: links
 date: 2026-01-31
 slug: some-notes-on-starting-to-use-django
-tags:
-  - links
-link: 'https://jvns.ca/blog/2026/01/27/some-notes-on-starting-to-use-django/'
 status: published
-description: 'Some notes on starting to use Django'
 source: newsletter
-newsletter: 2026-01-31-techstructive-weekly-79
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Commentary
 
 - I wonder if django is like unintentionally made for LLMs

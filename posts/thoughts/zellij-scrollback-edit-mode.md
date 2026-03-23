@@ -1,3 +1,7 @@
+---
+hash: 6d25921b0e19a252413619a19d40ebfc3185966ba4f2485fc7c33c650350b99e
+slug: 
+---
 {"author":"meet","date":"2025-03-20","post_dir":"links","published":"published","title":"Zellij Open Scrollback Edit mode","type":"links"}
 
 I was looking at a long list of logs, (debugging of course). 

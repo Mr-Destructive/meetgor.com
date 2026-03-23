@@ -1,66 +1,13 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: til
-title: "Golang: Test Output JSON"
 description: "Obtain JSON output of test results in Golang"
 status: published
+hash: 9e569a1cac26964533fb23303b003393811f353db60f37873216dea61a9181d8
+type: til
+title: "Golang: Test Output JSON"
 slug: golang-test-output-json
 tags: ["go",]
 date: 2024-01-01
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 I just discovered that we can generate a JSON output of test results in Golang. I found this [here](https://youtu.be/cf72gMBrsI0?t=80).
 
 Let's take a fresh simple example.
@@ -201,4 +148,3 @@ go test -run TestAdd -json
 As we can see, there is only one test being executed and the output of the test is in JSON format.
 
 These are really good flags and options to have as they make the output more portable. I will be planning to use this to improve my workflow in testing and developing open source projects and personal projects as well. I am really inspired by the Teej's video of executing anything in NeoVim.
-

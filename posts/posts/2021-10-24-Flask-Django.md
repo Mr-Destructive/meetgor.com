@@ -1,18 +1,13 @@
 ---
 type: posts
-title: "Flask and Django - the backend web frameworks"
 subtitle: "Understanding the concept of backend web frameworks like Django and Flask."
-date: 2021-10-24
 slug: "flask-django-frameworks"
-tags:
-  - django
-  - flask
-  - python
-  - web-development
+title: "Flask and Django - the backend web frameworks"
+date: 2021-10-24
+tags: 
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643288439/blogmedia/p8smflzd3rjb6scowhmc.png
+hash: a77e58d8be0dbdfc75b119ac76a2d2dc75dbaf7f4539e179fe3fd0a107d0a10d
 ---
-
-
 ## Introduction
 
 We all have seen the buzz around web frameworks like Django, Flask, Node.js, etc but have you taken time to learn all of them? No, and you shouldn't! Because many web frameworks share the same principle and workflow with a bit of difference. It's just like learning one programming language and applying the same concepts in a different syntax and mechanism. In the world of web frameworks, this is the case as well, but most of them will disagree with it as every web framework is unique in its design and that's true, don't get me wrong.

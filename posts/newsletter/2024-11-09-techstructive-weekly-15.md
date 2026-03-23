@@ -1,68 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 79fe9ee59b6c7d536dca353599403018a3d1e05c2f3bf3480f2718f6b4fb7cbf
 type: newsletter
 title: 'Techstructive Weekly #15'
 date: 2024-11-09
 slug: techstructive-weekly-15
-tags:
-- ai
-- newsletter
-- python
+tags: 
 source_url: 'https://techstructively.substack.com/p/techstructive-weekly-15'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
 <div class="available-content"><div class="body markup" dir="auto"><h2 class="header-anchor-post">Week #15<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§week-15"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/151381659/week-15" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><p>A wonderful week, bringing back the joy of programming, after some slumpy weeks, a refreshing and mind challenging week. The start was drowzy after a long weekend, but as the week progressed, I had to shift gears and complete the things that took some deep concentration and thinking, finally the results were worth the efforts. Everything in its place, the reward for the focus and hard work.</p><p>After a live stream and video creation in the end of week last week, I didn’t do much on Sunday, just took a break and spent the diwali removing the negativity in life. I am not mentioning it enough but I continue the writing routine, 35 days and counting, the writing streak is un-broken, I completed one section of writing of 21 days and now moving on to another section of 17 days, combining a total of (9+21+5(till date)) 35 articles. This is the motivation for me waking up everyday, writing will get me to the places I can dream of.</p><h3 class="header-anchor-post">Stats for the week<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§stats-for-the-week"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/151381659/stats-for-the-week" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h3><ul><li><p>FIxed a ton of bugs</p></li><li><p>Brainstormed on refactoring code</p><p></p></li></ul><h3 class="header-anchor-post">Plans for the next week<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§plans-for-the-next-week"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/151381659/plans-for-the-next-week" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h3><ul><li><p>Create 2 articles </p></li><li><p>Record 1 videos</p></li><li><p>Live Stream at least once</p><p></p></li></ul><h2 class="header-anchor-post">Quote of the week<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§quote-of-the-week"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/151381659/quote-of-the-week" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><blockquote><p>"Strength doesn’t come from what you can do. It comes from overcoming the things you once thought you couldn’t."</p><p>— Rikki Rogers</p></blockquote><p>I once thought before the week, that this week will be the make or break week for the things I have been doing for the past months, and finally in the end was able to break shakles and get into deep programming flow state, it felt good, it felt energetic, removing the guilt and imposter syndrome that has been creeping in.</p><p>Strength is not what you have, it is about learning what you don’t. It is about taking the challenge head on.</p><h2 class="header-anchor-post">Read<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§read"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/151381659/read" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://rmoff.net/2023/07/19/blog-writing-for-developers/" rel="nofollow ugc noopener">Writing for developers</a><span>:</span><br/><span>This is really a good read, writing brings clarity and clarity is what shapes you to pick up correct directions while developing anything. All the time, I start to write an article, I ran off a tangent on one or the other interesting thing that I had no idea about and assumed I knew it.</span></p></li><li><p><a href="https://twitter.com/hnasr/status/1852537428227375482" rel="nofollow ugc noopener">How to become a Good Backend Engineer </a></p><p>This is really well summarised and insightful read for me at least, it gives a birds-eye view and ignites a curiosity to dive deeper into a specific topic or domain, which is essential for any  developer.</p><p></p><p></p></li></ul><h2 class="header-anchor-post">Watched<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§watched"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/151381659/watched" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://youtu.be/kCc8FmEb1nY?si=UV9hrQh2Uw8dc57Z" rel="nofollow ugc noopener">Building ChatGPT like LLM Model on a small scale from scratch</a><span>: </span></p><p>I have not completed it but just understanding the architecture and what the LLM does is vital to work and adapt to the changes in the evolving world.</p><div class="youtube-wrap" data-attrs='{"videoId":"kCc8FmEb1nY","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-kCc8FmEb1nY"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/kCc8FmEb1nY?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div><p></p><p></p></li></ul><h2 class="header-anchor-post">Learned<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§learned"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/151381659/learned" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><span> </span><a href="https://github.com/openai/tiktoken" rel="nofollow ugc noopener">TikToken</a><span> the tokeniser that powers GPT and its family of models: I want to explore this and create a project around it. I learnt that is the model that actually determines the number of tokens passed around the chats while interacting with the LLMs.</span></p></li><li><p><span>Using the </span><code>next</code><span> method in python to get the first non-empty or truth value from a dict or any expression. </span></p><pre><code>row = {
     "name": {
         "value": "123",

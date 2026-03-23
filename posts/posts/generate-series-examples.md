@@ -1,65 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
 title: "SQLite functions: Generate_Series Examples"
 date: 2025-08-22
-tags:
-  - typescript
-  - sql
-  - sqlite
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: 
+hash: 35b4b2a15feca72197d7f6231f4d474300abdfae1bc9c6df9f88717ab4e4603d
+slug: sqlite-functions-generateseries-examples
+type: sqlog
 ---
-
-
 After taking a look at what the Generate Series function does, now let's see some examples that might be handy.
 
 ## Simple sequence
@@ -177,5 +123,3 @@ SELECT * FROM generate_series(1, 5) WHERE value NOT IN (1, 3, 5);
 ```
 
 Here you could imagine the not in list could be another table with the result set only with the ids.
-
-

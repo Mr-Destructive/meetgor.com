@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: links
-title: 'Deliver Code you have proven to work as a software developer'
 date: 2025-12-20
-slug: deliver-code-you-have-proven-to-work-as-a-software-developer
-tags:
-  - links
+tags: 
 link: 'https://simonwillison.net/2025/Dec/18/code-proven-to-work/'
+newsletter: 2025-12-20-techstructive-weekly-73
+title: 'Deliver Code you have proven to work as a software developer'
+slug: deliver-code-you-have-proven-to-work-as-a-software-developer
 status: published
 description: 'Deliver Code you have proven to work as a software developer'
 source: newsletter
-newsletter: 2025-12-20-techstructive-weekly-73
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: ce1cd5e9a2a39666bec8ed3ea9c7823f6d9888d1b2dfb65b12dbcc9c2a7b14d9
 ---
-
-
 ## Commentary
 
 - Right on! So true. merging slop without review, even slightly running against a manual test case can give you a good confidence and make you a good engineer.

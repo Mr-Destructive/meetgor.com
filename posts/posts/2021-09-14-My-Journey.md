@@ -1,15 +1,13 @@
 ---
-type: posts
+image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643287299/blogmedia/dsqgqfz0uk5ldet6dfer.png
+hash: 710f243fb3a7824da07db7cc82f4600dc512f5464636c99c38680f48cb335173
 title: "My Journey as a Technical Writer"
+slug: "technical-writer-journey"
+type: posts
 subtitle: "How and Why I became started writing articles and became a novice technical writer."
 date: 2021-09-14
-slug: "technical-writer-journey"
-tags:
-  - hashnode
-image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643287299/blogmedia/dsqgqfz0uk5ldet6dfer.png
+tags: 
 ---
-
-
 ## Introduction
 
 Hello World! I am Meet Gor, a self-taught web developer, Linux enthusiast, and a newbie technical writer. I am currently studying in an Engineering college pursuing my B. Tech in I.T.  I love to explore new programming languages and technologies, create innovative projects, love to write stories and blogs like this. 

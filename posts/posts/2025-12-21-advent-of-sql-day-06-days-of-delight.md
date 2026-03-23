@@ -1,65 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
-title: "Advent of SQL 2025 Day 6: Days of Delight"
-slug: "advent-of-sql-2025-day-6"
 date: 2025-12-21
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: db8c43b274b9da9373022f11b267cc992760d735597c59e6349af1cad2bd6201
+type: sqlog
+title: "Advent of SQL 2025 Day 6: Days of Delight"
+slug: "advent-of-sql-2025-day-6"
 ---
-
-
 ## Advent of SQL Day 6: Days of Delight
 
 It is day 6 of advent of SQL.
@@ -696,6 +643,3 @@ Simple right?
 That's it from day 6. 
 
 It getting serious out there!
-
-
-

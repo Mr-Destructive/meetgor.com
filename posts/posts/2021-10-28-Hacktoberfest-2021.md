@@ -1,16 +1,13 @@
 ---
-type: posts
 title: "Hacktoberfest 2021"
 subtitle: "Sharing my contribution and experience as a second hacktoberfest"
 date: 2021-10-28
 slug: "hacktoberfest-2021"
-tags:
-  - open-source
-  - hacktoberfest
+hash: 198e22461e279de99b8ced50c2d436e9f801e26e046968a02cee6569b396d8d8
+type: posts
+tags: 
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643288673/blogmedia/qy8xrefyqcsslfppdyhp.png
 ---
-
-
 ## Introduction
 
 This was my second year as a Hacktoberfest participant, First year was very dry and not so exciting as this turned out to be a cracker of an experience. With more than month gone in with only a few contributions, the second half of October was a splendid one for me where I made a lot more than in entire 2 years.  

@@ -1,3 +1,7 @@
+---
+hash: b2221d0b1ffc54c7b7c8f83e96628e9b7ec39f5069286bc3f944ba2600e41ad0
+slug: 
+---
 {
   "title": "Just Fucking use kubernetes",
   "post_dir":"links",

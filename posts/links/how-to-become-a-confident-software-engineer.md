@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
 title: 'How to become a confident software engineer'
 date: 2025-08-09
 slug: how-to-become-a-confident-software-engineer
-tags:
-  - links
+tags: 
+description: 'How to become a confident software engineer'
+newsletter: 2025-08-09-techstructive-weekly-54
+type: links
 link: 'https://newsletter.francofernando.com/p/how-to-become-a-confident-software'
 status: published
-description: 'How to become a confident software engineer'
 source: newsletter
-newsletter: 2025-08-09-techstructive-weekly-54
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: b6a144c3bae4f221066abe98a0e2f44f09b00a272e2d85aa2b502952cdb722d7
 ---
-
-
 ## Commentary
 
 - Valuable advice and practical too

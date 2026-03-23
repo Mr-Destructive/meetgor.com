@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+newsletter: 2025-05-31-techstructive-weekly-44
+link: 'https://deplet.ing/the-copilot-delusion/'
+description: 'The Copilot Dillusion:'
+source: newsletter
+hash: cc75be42d1f94be8c9ebce6d86ca9914168e3f1431d5fb5ba56d3fad17cdbd13
 type: links
 title: 'The Copilot Dillusion:'
 date: 2025-05-31
 slug: the-copilot-dillusion
-tags:
-  - links
-link: 'https://deplet.ing/the-copilot-delusion/'
+tags: 
 status: published
-description: 'The Copilot Dillusion:'
-source: newsletter
-newsletter: 2025-05-31-techstructive-weekly-44
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Commentary
 
 - This was like a word of caution of getting too much reliant on AI for coding

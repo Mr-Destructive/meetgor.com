@@ -1,3 +1,7 @@
+---
+hash: be0fd5baa304647af44686ef2c9ebca088ab1744bf7719611a0fc4e85fc88228
+slug: 
+---
 {
   "title": "Robots Generate, Humans Manifest",
   "post_dir":"links",

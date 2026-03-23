@@ -1,66 +1,13 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 33320c6dbf5cc0360565084153054659672a8f74089cbb339bfeae688179a6f4
 type: til
 title: "Golang: Sort Package Introduction"
-description: "Understanding the fundamentals of the sort package in Golang. Sorting integers, slices, struct values, maps"
 status: published
-slug: golang-sort-package-basic
 tags: ["go",]
 date: 2024-01-15
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+description: "Understanding the fundamentals of the sort package in Golang. Sorting integers, slices, struct values, maps"
+slug: golang-sort-package-basic
 ---
-
-
 I have been learning Golang for around 2 years now, and I have never paid attention to the sort package, can you believe that! Where was this package hiding?
 
 The `sort` package provides convenient methods for sorting slices and user-defined collections in Go. Here's a quick overview of what it can do:

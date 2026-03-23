@@ -1,65 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
 title: "SQLite Dot command: Once"
 date: 2025-08-20
-tags:
-  - typescript
-  - sql
-  - sqlite
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: 
+hash: 7acc93db300539f7609392025b5c86032b3e0e33fa5145182a6fa82c7104e1c6
+slug: sqlite-dot-command-once
+type: sqlog
 ---
-
-
 The [once](https://sqlite.org/cli.html#writing_results_to_a_file) dot command is similar to the [output](https://sqlite.org/cli.html#writing_results_to_a_file), however the distinction is that it is limited to the very next SQL query and not all the subsequent queries.
 
 The primary way to use `once` is either by specifying the specific file name/path or opening the result set in the system editor.
@@ -118,5 +64,3 @@ This option is used to create an excel/csv/xlsx file (compatible with Microsoft 
 .mode csv
 .once --bom filename.xlsx
 ```
-
-

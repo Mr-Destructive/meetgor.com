@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
 slug: sqlite-one-to-many-foreign-key
 title: "SQLite SQL: One to Many Relation with Foreign Key"
 date: 2025-09-16
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 17b04eb27111b9ab79852489d71cabcb93c985e10d740a219c00c130bb434d1e
+type: sqlog
 ---
-
-
 ## One to Many Relation with Foreign Key
 
 Back to the question that we raised in the [previous](https://www.meetgor.com/sqlog/sqlite-foreign-key-table-constraint/) post, "What would happen if there are more than one row in the primary table that references the same id in the foreign table?"
@@ -217,4 +164,3 @@ One is on the side of the parent table (foreign table) and the Many is usually o
 What about multiple foreign keys?
 
 Yes, you can have multiple foreign keys, but those will be different keys, you can't have `author_id_1`, `author_id_2` and then refer the same foreign key as `users.id`, that is possible. However, we need to define separate table for mapping users and posts and that will be called as `many-to-many` relations as will check in the next post.
-

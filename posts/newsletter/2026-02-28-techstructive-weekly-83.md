@@ -1,69 +1,14 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: ["substack"]
+source_url: 'https://techstructively.substack.com/p/techstructive-weekly-83'
+slug: techstructive-weekly-83
+hash: d2c884cb7228bf9a67260827284c42baa86901076f20251c84cd397badfb6409
 title: "Techstructive Weekly #83"
 date: 2026-02-28
-slug: techstructive-weekly-83
 status: published
 type: newsletter
 description: "Completing the harry potter book series, not much tech-reading, existential dread climbing among the other things read, watched, and learnt in the week of 22nd to 28th February 2026"
-tags: ["substack"]
-source_url: 'https://techstructively.substack.com/p/techstructive-weekly-83'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
-
 <h2>Week #83</h2>
 <p>It was a lazy week, I’ll put it straight. I don’t know what I should be doing or not doing. LLMs are crazy. I can get lost in them without realizing how much time has been spend (also cost). Same thing happened with books this week, I almost read 700 pages this week. I don’t know how, I just was lost in the books. I finished the harry potter series. I was struggling with the half blood prince on 25% last week, but I powered through it and completed both the books and here I am.</p>
 <p>This is not a book rating newsletter but I say one thing. Reading books can change your perspective and not restricted to any one field. I think I saw a lot of inspiration for fighting against the dark arts or LLMs. No, not fighting against LLMs but sort of understanding when to let it rip through itself and when to strike. It was like Horcrux and Hallow. Not quite but something. No I am not trying to mash up anything I read to LLMs, it was just natural. I’ll leave it for another article.</p>

@@ -1,18 +1,14 @@
 ---
-type: posts
-title: "Django Basics: Templates"
 subtitle: "Rendering templates/html docs in the Django project/app"
-date: 2021-12-14
 slug: "django-basics-templates"
-series: ["Django-Basics"]
-tags:
-  - django
-  - python
-  - web-development
+tags: 
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1639387566/blogmedia/dj5temp_zukvj7.png
+title: "Django Basics: Templates"
+date: 2021-12-14
+series: ["Django-Basics"]
+hash: 84fc1a2b68ef2947373ed77c3ed6d69084b9bccdbf7831026abdb1421ba1f4c6
+type: posts
 ---
-
-
 ## Introduction
 
 After learning the basics of views and URLs, we can now move on to the next concept i.e. Templates. In Django, Templates are quite an important component for the application as it acts as the `frontend` for the web application. With the help of templates and some features provided by Django, it becomes very intuitive and simple to make dynamic web content.

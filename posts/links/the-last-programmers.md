@@ -1,72 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: e0a5a87c63857dc6d4e5f9e819f46ed855974290640426fa951ff6d3a6e10d45
 type: links
+link: 'https://www.xipu.li/posts/the-last-programmers'
+status: published
+source: newsletter
+newsletter: 2025-09-13-techstructive-weekly-59
 title: 'The last programmers'
 date: 2025-09-13
 slug: the-last-programmers
-tags:
-  - links
-link: 'https://www.xipu.li/posts/the-last-programmers'
-status: published
+tags: 
 description: 'The last programmers'
-source: newsletter
-newsletter: 2025-09-13-techstructive-weekly-59
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Commentary
 
 - There is so much wisdom in this post, I feel like quoting a lot of things, but the ending nails it "The parts that have always mattered, really. Understanding people". There I put it, no fuss, no bait, just facts.

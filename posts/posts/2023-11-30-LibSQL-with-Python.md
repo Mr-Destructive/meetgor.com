@@ -1,15 +1,12 @@
 ---
-type: posts
-title: "Connecting LibSQL database with Python"
 date: 2023-11-30
 slug: "libsql-python"
-tags:
-  - libsql
-  - python
+tags: 
 image_url: https://meetgor-cdn.pages.dev/connect-libsql-with-python.png
+hash: 5d1f3036ab8e57ded344da77a9d8858c969136eb4b3ca4268025cab9dd3dcf6f
+type: posts
+title: "Connecting LibSQL database with Python"
 ---
-
-
 ## Introduction
 
 LibSQL is an **Open Contribution** fork of SQLite. Open Contribution means that it allows suggestions and contributions from the community as opposed to SQLite which is open source but doesn't accept community contributions.

@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
+source: newsletter
+hash: a5fac811de9702e5a16ef1dd7061de4951a92f75088a34b9dcbb447fefc86687
 title: 'Be Kind'
 date: 2025-05-03
 slug: be-kind
-tags:
-  - links
+tags: 
 link: 'https://boz.com/articles/be-kind'
 status: published
 description: 'Be Kind'
-source: newsletter
 newsletter: 2025-05-03-techstructive-weekly-40
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+type: links
 ---
-
-
 ## Commentary
 
 - :

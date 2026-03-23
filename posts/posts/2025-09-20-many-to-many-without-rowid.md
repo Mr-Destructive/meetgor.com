@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
-slug: sqlite-many-to-many-table-without-rowid
 title: "SQLite SQL: Many to Many Table without RowID"
 date: 2025-09-20
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 695ed896868cf7acf59cb08f43ffdbb13abd4a82399b1ab8072afc864ac7b603
+type: sqlog
+slug: sqlite-many-to-many-table-without-rowid
 ---
-
-
 ## Many to Many Relation
 
 We saw the basic example of [Many-To-Many](https://www.meetgor.com/sqlog/sqlite-many-to-many-relations/) Relation in the second last post from this, there we just focused on the concept of the relation and not so much on the structure of the junction table.
@@ -286,5 +233,3 @@ SELECT rowid, _rowid_, * FROM posts;
 ```
 
 Only in the case of `author_post` or any junction table, where the primary key is referenced as a combination of other two foreign keys, we don't need the `rowid` as the junction table doesn't have any unique data in it, it is just the mapping of two existing data points/records in the other two tables in the database.
-
-

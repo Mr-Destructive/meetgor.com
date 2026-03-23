@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: ["sqlite", "sql"]
+hash: ac3ce0b6e94c13471ee3d7e718d502c3bf76edc9b465dc7b4803bd6fca211213
 type: sqlog
 slug: sqlite-generated-column-constraint
 title: 'SQLite SQL: GENERATED column constraint'
 date: 2025-09-11
-tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## The GENERATED column constraint
 
 We saw certain limitations of the `DEFAULT` column constraint clause, that it can't generate dynamic values based on other columns or some other dynamic popularities. For overcomming those kind of constraints, there is one more specific constraint, the [GENERATED](https://sqlite.org/gencol.html) column constraint.

@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
 title: 'How to stop feeling lost in tech'
 date: 2025-08-23
 slug: how-to-stop-feeling-lost-in-tech
-tags:
-  - links
 link: 'https://www.yacinemahdid.com/p/how-to-stop-feeling-lost-in-tech)'
 status: published
 description: 'How to stop feeling lost in tech'
 source: newsletter
+hash: 0ae3419cb1d22982b64ec8ff64c72869757b34c41c549d1f8dd2512a451a28d3
+type: links
+tags: 
 newsletter: 2025-08-23-techstructive-weekly-56
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Commentary
 
 - This is a premium quality post. So much valuable advice for juniors and people who are all over the place and feeling overwhelmed or burned out.

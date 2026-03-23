@@ -1,15 +1,13 @@
 ---
-type: posts
 title: "Golang: Conditionals and Loops"
-date: 2022-04-04
 slug: "golang-conditionals-loops"
-series: ["100-days-of-golang"]
-tags:
-  - go
 image_url: https://meetgor-cdn.pages.dev/golang-003-conditionals-loops.png
+type: posts
+date: 2022-04-04
+series: ["100-days-of-golang"]
+tags: 
+hash: 899dfea5a75a75fe6b0c3cf3f55a7c049ee5b64317486e8d9913b97f72d38058
 ---
-
-
 ## Introduction
 
 Moving to the fourth part, we will be doing conditional statements and loops in golang. We will be seeing the basics of conditional statements like if-else and switch along with loops like for, while, and range-based loops. We won't be covering iterating over arrays in a loop as this requires an understanding of arrays. 

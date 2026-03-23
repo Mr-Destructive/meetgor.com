@@ -2,14 +2,12 @@
 type: posts
 title: "Golang: Functions"
 date: 2022-04-13
-slug: "golang-functions"
 series: ["100-days-of-golang"]
-tags:
-  - go
 image_url: https://meetgor-cdn.pages.dev/golang-008-functions.png
+slug: "golang-functions"
+tags: 
+hash: 7dc79d589315ede32955fd11b6f8ef7d36ba1743912a2e7959c75a6351c33151
 ---
-
-
 ## Introduction
 
 In the eighth part of the series, we will be exploring functions in golang. We will be diving into some basics of functions in golang like declaration, definition and calling. We won't be exploring all the topics of functions as it is quite a large topic to cover in one shot. So, building from the base, we will be starting from the basic declaration to simple return statements. 

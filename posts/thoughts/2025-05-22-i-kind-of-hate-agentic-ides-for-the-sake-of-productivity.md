@@ -1,3 +1,7 @@
+---
+hash: 37bbae7bff2d71802a07f85961b070f814bce2906d8f59b500de31dc776993df
+slug: 
+---
 {
   "title": "I kind of hate Agentic IDEs for the sake of productivity",
   "post_dir":"links",

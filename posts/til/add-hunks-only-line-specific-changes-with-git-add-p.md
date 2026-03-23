@@ -1,3 +1,7 @@
+---
+hash: d363cf003c72f910e3274711cdc59ac809a2fabfe848164c7fb8947176b82645
+slug: 
+---
 {"author":"meet","date":"2025-04-11","post_dir":"til","published":"published","tags":["git"],"title":"Add hunks: only line specific changes with git add -p","type":"til"}
 
 I had made the changes for a future release, next set of changes so to speak in git terms. Then, I encountered a bug while testing the previous changes. Now, I could have 

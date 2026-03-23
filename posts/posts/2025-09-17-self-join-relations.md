@@ -1,62 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 9cd2876ea26176b722875853942d1cda077be846de52a827c3a403d1bf94748b
 type: sqlog
 slug: sqlite-self-join-relations
 title: "SQLite SQL: Self Join Relations"
 date: 2025-09-17
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Self Join Relations
 
 In the last post, we had defined a `one-to-many` relation between the `users` table and the `posts` table.

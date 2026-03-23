@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
-title: 'I miss thinking hard'
 date: 2026-02-07
 slug: i-miss-thinking-hard-2026-02-07
-tags:
-  - links
+tags: 
 link: 'https://www.jernesto.com/articles/thinking_hard'
-status: published
 description: 'I miss thinking hard'
-source: newsletter
 newsletter: 2026-02-07-techstructive-weekly-80
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: cb4d16bd860f8f9f3473362223977e9f129d1a89cece6317dbecd2115154cdf3
+title: 'I miss thinking hard'
+status: published
+source: newsletter
+type: links
 ---
-
-
 ## Commentary
 
 - Boy! That hits like truck. Absolutely relatable. We can share that part of our mind, it lives rent free on my mind. How to balance the builder and the thinker part of my brain.

@@ -1,64 +1,13 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: til
 title: "Django: Get list of all models and associated fields in a django project"
-description: "Get the list of all the models and associated fields/attributes in a django project or an application"
 date: 2022-08-02
+tags: ['django', 'python']
+hash: 69642df15bd36a2a1337cea5ca015ffb70813cf970606f75140f8b28d9f1b54f
+description: "Get the list of all the models and associated fields/attributes in a django project or an application"
 status: published
 slug: django-list-models
-tags: ['django', 'python']
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+type: til
 ---
-
-
 ## Context
 
 Let's say we want the list of all the models and associated attributes in all the applications of a django project, we can do that using the [django.apps](https://docs.djangoproject.com/en/4.0/ref/applications/) with apps method. 

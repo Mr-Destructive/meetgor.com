@@ -1,68 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: links
-title: 'How AI writing supercharged an addictive pattern'
-date: 2025-08-23
 slug: how-ai-writing-supercharged-an-addictive-pattern
-tags:
-  - links
+tags: 
 link: 'https://bowendwelle.substack.com/p/ai-writing-addictive'
 status: published
 description: 'How AI writing supercharged an addictive pattern'
-source: newsletter
 newsletter: 2025-08-23-techstructive-weekly-56
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+title: 'How AI writing supercharged an addictive pattern'
+date: 2025-08-23
+source: newsletter
+hash: 6c1b65146bbed0728d4fb117bd37507174e00d70fdacb6807f089b2d21b58e28
 ---
-
-
 ## Commentary
 
 - We'll have been there and done that. The initial WOW! to the glorious vibe crap that comes after 12 hours of prumpting.

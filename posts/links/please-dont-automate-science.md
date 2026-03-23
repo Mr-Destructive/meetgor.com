@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
 title: 'Please don’t automate science'
+tags: 
+link: 'https://togelius.blogspot.com/2025/12/please-dont-automate-science.html'
+description: 'Please don’t automate science'
+hash: c93e44e81c9fe9cddb5e73bc66d1e03840ed0ce035832089575064d20c53d38f
+type: links
 date: 2025-12-13
 slug: please-dont-automate-science
-tags:
-  - links
-link: 'https://togelius.blogspot.com/2025/12/please-dont-automate-science.html'
 status: published
-description: 'Please don’t automate science'
 source: newsletter
 newsletter: 2025-12-13-techstructive-weekly-72
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Commentary
 
 - Boy, it takes courage to speak this! Well spoken.> They are here because they love research and want to contribute to advancing human knowledge. If you take the human out of the loop, meaning that humans no longer have any role in scientific research, you’re depriving them of the activity they love and a key source of meaning in their lives. And we all want to do something meaningful. Why, I asked, do you want to take the opportunity to contribute to science away from us?

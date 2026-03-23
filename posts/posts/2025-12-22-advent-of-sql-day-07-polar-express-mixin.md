@@ -1,65 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
-title: "Advent of SQL 2025 Day 7: Polar Express Mixin"
-slug: "advent-of-sql-2025-day-7"
 date: 2025-12-22
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 2b95f74288d9c19efc133e72f9727d5439749ed347e12dfabb9b3dacd8cffcc2
+type: sqlog
+title: "Advent of SQL 2025 Day 7: Polar Express Mixin"
+slug: "advent-of-sql-2025-day-7"
 ---
-
-
 ## Advent of SQL, Day 7 - Polar Express
 
 There were a few things, I had to dig up for converting the JSON `ARRAY[]` in the statements into strings for SQLite, we can't really use list of strings in SQLite.

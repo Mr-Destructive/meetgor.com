@@ -1,77 +1,15 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: work
-title: "GeeksForGeeks"
 date: 2021-09-15
-status: published
 description: Technical writing focused on clear, practical programming guides.
 duration: "June 2021 - September 2021"
-skills:
-  - Technical writing
-  - Shell scripting
-  - Linux
-  - Web development
-  - Documentation
-tags:
-  - writing
-  - linux
-  - shell
-  - web-development
-  - documentation
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: 
+title: "GeeksForGeeks"
+status: published
+skills: 
+hash: c5c9fa2ec5a36d4c9fef19c8ead84425096e4bf973e36769ffa0b280f6332971
+slug: geeksforgeeks
 ---
-
-
 ## Technical Content Writer - [GeeksForGeeks](https://www.geeksforgeeks.org/)
 **June 2021 - September 2021**
 

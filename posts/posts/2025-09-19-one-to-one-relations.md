@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: sqlog
 slug: sqlite-one-to-one-relations
 title: "SQLite SQL: One to One Relations"
 date: 2025-09-19
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 5ef972d044feebb6d3a88be8b73a5f6fdbb17eba2b679908cd763c091b728787
 ---
-
-
 ## One to One Relations
 
 I might missed this basic relationship model as I haven't really found it quite commonly used, but its still used in very specific examples.
@@ -257,4 +204,3 @@ sqlite>
 Dead simple, this is how we create `one-to-one` relation.
 
 We define the `primary key` of the child table as the `foreign key` of the parent table.
-

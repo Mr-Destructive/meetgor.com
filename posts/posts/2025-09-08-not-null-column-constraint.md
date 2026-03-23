@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+date: 2025-09-08
+tags: ["sqlite", "sql"]
+hash: c62955fae2987c9a1bfe328904e385ce98bbe5975ca294b00c0dcf60db34cd4c
 type: sqlog
 slug: sqlite-not-null-column-constraint
 title: 'SQLite SQL: NOT NULL column constraint'
-date: 2025-09-08
-tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## NOT NULL Column constraint
 
 The `NOT NULL` constraint is a column-level constraint that will prevent the insertion/updation of a `NULL` value in that column record.
@@ -231,5 +178,3 @@ sqlite> SELECT * FROM users;
 +-------+-----+----------+----------+--------------+-----------------+
 sqlite>
 ```
-
-

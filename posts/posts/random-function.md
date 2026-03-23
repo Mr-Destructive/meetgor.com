@@ -1,63 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: sqlog
 title: "SQLite Scalar Function: Random"
 date: 2025-08-23
-tags:
-  - typescript
-  - sql
-  - sqlite
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: 
+hash: 5483469066eb6f459b66c4f11a59c6d959d07fdba8e133a2bf1f29b2f12d188d
+slug: sqlite-scalar-function-random
 ---
-
-
 The random function in sqlite is quite handy to generate pseudo random numbers.
 
 The random function returns a value between `-9223372036854775807` and `+9223372036854775807`
@@ -99,5 +47,3 @@ SELECT (random() % 10) + 1 AS random_number
 ```
 
 This will generae random numbers between - 10 and 10, 20 such numbers. We'll leverage the generate series function that I learned last day.
-
-

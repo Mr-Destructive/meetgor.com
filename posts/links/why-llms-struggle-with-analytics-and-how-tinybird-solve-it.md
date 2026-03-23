@@ -1,20 +1,17 @@
 ---
-
+newsletter: 2025-07-26-techstructive-weekly-52
+hash: f7bedee513725f203fef0bc8d4a7dffa6f2394c5cf25662c6f541a02c6cee538
 type: links
-title: 'Why LLMs struggle with analytics, and how tinybird solve it'
 date: 2025-07-26
 slug: why-llms-struggle-with-analytics-and-how-tinybird-solve-it
-tags:
-  - links
+tags: 
 link: 'https://www.tinybird.co/blog-posts/why-llms-struggle-with-analytics-and-how-we-fixed-that'
 status: published
+source: newsletter
+title: 'Why LLMs struggle with analytics, and how tinybird solve it'
 description: 'Why LLMs struggle with analytics, and how tinybird solve it'
 image_url: 'https://www.tinybird.co/blog/why-llms-struggle-with-analytics-and-how-we-fixed-that/opengraph-image-1r5u6l?7b739ddef6977d56'
-source: newsletter
-newsletter: 2025-07-26-techstructive-weekly-52
 ---
-
-
 ## Commentary
 
 - It ain’t about generating perfect queries, its about getting insights about data.

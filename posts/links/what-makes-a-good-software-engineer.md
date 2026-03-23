@@ -1,20 +1,17 @@
 ---
-
-type: links
-title: 'What makes a good software engineer'
-date: 2025-08-23
-slug: what-makes-a-good-software-engineer
-tags:
-  - links
-link: 'https://sanitarium.se/blog/2025/08/21/what-makes-a-good-software-engineer'
 status: published
-description: 'What makes a good software engineer'
 image_url: 'https://bjorn.now/img/banners/2025-08-21-what-makes-a-good-software-engineer.png'
 source: newsletter
 newsletter: 2025-08-23-techstructive-weekly-56
+hash: aa96bf07fd5b2e82a041c1a3fa8cc6ca531c4943929d4d8c4f65c1c15615898f
+title: 'What makes a good software engineer'
+tags: 
+link: 'https://sanitarium.se/blog/2025/08/21/what-makes-a-good-software-engineer'
+description: 'What makes a good software engineer'
+type: links
+date: 2025-08-23
+slug: what-makes-a-good-software-engineer
 ---
-
-
 ## Commentary
 
 - Curiosity to build the right thing, and being honest about it.

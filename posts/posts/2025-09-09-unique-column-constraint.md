@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: b13762580c787d8e2172329c50382a3b2bda1e8e0c7d78f5c0723c082cf4395b
 type: sqlog
 slug: sqlite-unique-column-constraint
 title: 'SQLite SQL: UNIQUE column constraint'
 date: 2025-09-09
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Unique Constraint
 
 The `UNIQUE` constraint ensures that a column in a table contains no duplicate values. Like, if you add an `UNIQUE` constraint to a column, then no two rows can have the exact/same value for that column.
@@ -318,4 +265,3 @@ PRIMARY KEY = UNIQUE + NOT NULL
 Primary key is also a shorthand for `UNIQUE` and `NOT NULL`, if you add a `PRIMARY KEY` to a column or combination of columns for a table, you needn't specify `UNIQUE` and `NOT NULL`, it already does that for you.
 
 So, that is the general difference of `UNIQUE` and `PRIMARY KEY`, we'll explore the `PRIMARY KEY` in later posts.
-

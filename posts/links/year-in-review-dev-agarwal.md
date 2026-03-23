@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+description: 'Year in Review: Dev Agarwal'
+newsletter: 2024-12-21-techstructive-weekly-21
+hash: 96eeab8ff057ee17bbfe77aa169af086c51bdda0531d3ca44e1b5cadc3483ee1
 type: links
-title: 'Year in Review: Dev Agarwal'
 date: 2024-12-21
 slug: year-in-review-dev-agarwal
-tags:
-  - links
 link: 'https://devagr.me/blog/senior'
-status: published
-description: 'Year in Review: Dev Agarwal'
 source: newsletter
-newsletter: 2024-12-21-techstructive-weekly-21
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+title: 'Year in Review: Dev Agarwal'
+tags: 
+status: published
 ---
-
-
 ## Commentary
 
 - :

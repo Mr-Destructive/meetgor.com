@@ -1,79 +1,14 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-title: "Docsumo"
-date: 2024-12-15
 type: work
 description: Building backend systems for document extraction, table parsing, and fraud analytics in banking workflows.
+skills: 
+tags: 
+hash: 0823826f2541c538d24b2a573be7e12663efc116719f83b28a89502a816e4263
+title: "Docsumo"
+date: 2024-12-15
 duration: "November 2023 - Present"
-skills:
-  - Go
-  - Python
-  - API design
-  - Document extraction
-  - Table extraction
-  - Fraud detection
-  - Analytics
-tags:
-  - backend
-  - go
-  - python
-  - document-extraction
-  - fraud-detection
-  - analytics
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+slug: docsumo
 ---
-
-
 ## Junior Backend Engineer - [Docsumo](https://support.docsumo.com/docs/usa-bank-statements)
 **June 2024 - Present**
 

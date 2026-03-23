@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: links
 title: 'First User Framework'
 date: 2025-06-07
-slug: first-user-framework
-tags:
-  - links
+tags: 
 link: 'https://vishnubharathi.codes/blog/first-user-framework'
 status: published
-description: 'First User Framework'
 source: newsletter
+slug: first-user-framework
+description: 'First User Framework'
 newsletter: 2025-06-07-techstructive-weekly-45
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 36a6637b662806af4badb4c620a79a5ccbdccb01a8e376af44c7edd5942a43e4
 ---
-
-
 ## Commentary
 
 - If there is no user, that is not a solution; it is a problem you are inventing yourself.

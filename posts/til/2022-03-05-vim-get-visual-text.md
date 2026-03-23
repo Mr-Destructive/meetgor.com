@@ -1,3 +1,7 @@
+---
+hash: 0bc65af3a401c39d70cd030ad339639e556e535a417b35efbe0516e828486b4e
+slug: 
+---
 {
     "type": "til",
     "title": "Vim: Get the Text from Visual Selection",

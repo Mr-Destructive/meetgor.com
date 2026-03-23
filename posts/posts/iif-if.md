@@ -1,66 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: sqlog
 title: "SQLite Scalar function: 3 valued iif and if scalar function"
 slug: sqlite-iff-if-scalar-functions
-tags:
-  - typescript
-  - sql
-  - sqlite
+tags: 
 date: 2025-08-27
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 342bce7b2cd8df13402294f487660956efffcc5196c27ef94d3d19c5ee8cceb4
 ---
-
-
 In the recent SQLite version specifically the 3.48.0, the support for pair of conditions was added to the iif function. And also an alias for iif as if was added for compatibility and ease of use for people coming from other databases.
 
 ## IIF Before 3.48
@@ -209,4 +154,3 @@ Other way to remember is
     - False (it will return the last parameter which is the false condition)
 
 You can use iif or if interchangeably. Both these do the same thing as the CASE WHEN THEN conditions, I think IIF now is really easy to write as now it supports arguments in pairs
-

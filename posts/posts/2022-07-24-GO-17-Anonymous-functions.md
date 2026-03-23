@@ -1,15 +1,13 @@
 ---
+hash: aa734c2053f786517bd7fe38ff816820d5f2ac006dc0d05c52147c7942e8e602
 type: posts
 title: "Golang: Anonymous Functions"
+tags: 
+image_url: https://meetgor-cdn.pages.dev/golang-017-anonymous-functions.png
 date: 2022-07-24
 slug: "golang-anonymous-functions"
 series: ["100-days-of-golang"]
-tags:
-  - go
-image_url: https://meetgor-cdn.pages.dev/golang-017-anonymous-functions.png
 ---
-
-
 ## Introduction
 
 We have looked at the defer keyword in golang in the [previous](https://www.meetgor.com/golang-defer/) part of the series, in this section, we will understand how we can use anonymous functions in golang. We will explore how to declare and use anonymous functions with a few examples.

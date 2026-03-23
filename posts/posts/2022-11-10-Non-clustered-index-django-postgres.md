@@ -1,66 +1,13 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: til
-title: "Create a Non-Clustered Index in Django with Postgres as DB"
-description: "Understanding how to add a non-clustered index in a postgres database in a django project."
-status: published
-slug: django-non-clustered-index-pg
 tags: ["django", "python", "sql", "postgres"]
+hash: a68c0efce60e7f7b445fdcd8ed05cfde07d0d05fefe9fa5474097acecd19a41f
+title: "Create a Non-Clustered Index in Django with Postgres as DB"
+status: published
 date: 2022-11-10
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+type: til
+description: "Understanding how to add a non-clustered index in a postgres database in a django project."
+slug: django-non-clustered-index-pg
 ---
-
-
 ## What is a non-clustered index?
 
 A non-clustered index is a seperate structure than an actual table in the database, it stores the non-clustered index key(the column which we want to sort in the table), and a pointer to the actual values based on the index key. So, non-clustered indexes do not change the physical order of the table records, instead it holds a structure that can provide a easier and distinct way to fetch objects based on a particular column as the primary key in the structure.

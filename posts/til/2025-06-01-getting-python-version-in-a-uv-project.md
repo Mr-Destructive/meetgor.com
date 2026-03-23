@@ -1,3 +1,7 @@
+---
+hash: 671ec18d7a2421ebd997b51692db18a190e4aebfff360b29db51b6da666e1fc7
+slug: 
+---
 {
   "title": "Getting Python version in a UV project",
   "post_dir": "til",

@@ -1,3 +1,7 @@
+---
+hash: a211fec89f635be82dc34b3e3deb310ba22968bd19164801547279bc3fb0ef25
+slug: 
+---
 {
   "title": "OpenAI releases Open Weight models GPT-OSS",
   "post_dir":"links",

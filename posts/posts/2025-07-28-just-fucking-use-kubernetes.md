@@ -1,39 +1,11 @@
 ---
+slug: "just-fucking-use-kubernetes"
+tags: 
+hash: d8983acba2cbca84769d6eaff947d5bad444b0f09f0f0429e12e73085927a89d
 type: links
 title: "Just Fucking use kubernetes"
 date: 2025-07-28
-slug: "just-fucking-use-kubernetes"
-tags:
-  - typescript
-  - kubernetes
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 Just fucking use Kubernetes - [https://waylonwalker.com/just-fucking-use-kubernetes/](https://waylonwalker.com/just-fucking-use-kubernetes/)
 
 

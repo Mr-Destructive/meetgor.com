@@ -1,3 +1,7 @@
+---
+hash: b55567bbb24d1a6089c7beb6c1f710990ae5e6717703628043218c1d28d0aab2
+slug: 
+---
 {
   "title": "https://evolveasdev.com/blogs/guide/learn-go-templates-a-practical-guide-to-layouts-data-binding-and-rendering",
   "post_dir":"links",

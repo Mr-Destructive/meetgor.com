@@ -1,65 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: ["sqlite", "sql", "advent-of-sql"]
+hash: ce883a9a76e879ed33a926f517540e03d0916991f2213042b3c08759be96350c
 type: sqlog
 title: "Advent of SQL 2025 Day 4: WinterFest Volunteers"
 slug: "advent-of-sql-2025-day-4"
 date: 2025-12-19
 series: ["advent-of-sql-2025"]
-tags: ["sqlite", "sql", "advent-of-sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Advent of SQL Day 4 WinterFest Volunteers
 
 It is day 4 of advent of SQL.

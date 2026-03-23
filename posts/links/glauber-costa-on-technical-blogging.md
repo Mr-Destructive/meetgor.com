@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+source: newsletter
+link: 'https://writethatblog.substack.com/p/glauber-costa-on-technical-blogging'
+newsletter: 2025-05-24-techstructive-weekly-43
+hash: ce198357bdee942dfe20841c181ef11026faa1128acf4ef45eb29025a89b9b91
 type: links
 title: 'Glauber Costa on Technical Blogging'
 date: 2025-05-24
 slug: glauber-costa-on-technical-blogging
-tags:
-  - links
-link: 'https://writethatblog.substack.com/p/glauber-costa-on-technical-blogging'
+tags: 
 status: published
 description: 'Glauber Costa on Technical Blogging'
-source: newsletter
-newsletter: 2025-05-24-techstructive-weekly-43
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Commentary
 
 - These are golden points here

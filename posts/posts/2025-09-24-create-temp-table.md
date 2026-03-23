@@ -1,66 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: sqlog
 slug: sqlite-create-temp-table
 title: "SQLite SQL: Create Temporary Table"
 date: 2025-09-24
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: dfb89f3583d4961208ef61a249d481274afb0faf5404181fc887242cc5fd5a7a
 ---
-
-
 ## Temporary Table in SQLite
 
 A Temporary table as the name suggests, is a temporary table. It only resisdes on the database until the current session of the database.

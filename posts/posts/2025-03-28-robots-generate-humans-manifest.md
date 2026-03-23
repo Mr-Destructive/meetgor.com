@@ -1,38 +1,11 @@
 ---
-type: links
-title: "Robots Generate, Humans Manifest"
 date: 2025-03-28
 slug: "robots-generate-humans-manifest"
-tags:
-  - typescript
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: 
+hash: c12e19b2562106d6d0107abba1f6a486a744f4243593b8632f23eb8256db33da
+type: links
+title: "Robots Generate, Humans Manifest"
 ---
-
-
 To,
 New Graduates or Students (or whoever is scared of AI)
 

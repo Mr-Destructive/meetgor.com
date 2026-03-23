@@ -1,19 +1,17 @@
 ---
-date: 2025-08-02T00:00:00Z
-description: 'Anatomy of a Request: A deep dive of a http request processing from the  Backend side'
+hash: 006608150a0992eddd3cab4e5bef3c300cf1d94f7edf6890deedd3cae94bf473
 image_url: https://i.ytimg.com/vi/s0r3Aky9I5g/hqdefault.jpg
 link: https://youtu.be/s0r3Aky9I5g
-newsletter: 2025-08-02-techstructive-weekly-53
-slug: anatomy-of-a-request-a-deep-dive-of-a-http-request-processing-from-the-backend-side
 source: newsletter
 status: published
-tags:
-    - links
 title: 'Anatomy of a Request: A deep dive of a http request processing from the  Backend side'
+date: 2025-08-02T00:00:00Z
+description: 'Anatomy of a Request: A deep dive of a http request processing from the  Backend side'
+newsletter: 2025-08-02-techstructive-weekly-53
+slug: anatomy-of-a-request-a-deep-dive-of-a-http-request-processing-from-the-backend-side
+tags: 
 type: links
 ---
-
-
 ## Commentary
 
 - Woah! That is a ton of computation.

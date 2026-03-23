@@ -1,38 +1,11 @@
 ---
-type: links
 title: "I kind of hate Agentic IDEs for the sake of productivity"
 date: 2025-05-22
 slug: "i-kind-of-hate-agentic-ides-for-the-sake-of-productivity"
-tags:
-  - typescript
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: 
+hash: 89c68bf6b7b4ea97d26d14690cf6d8676f674aea63f2317d9327314331c66881
+type: links
 ---
-
-
 This is May 2025, we are halfway through 2025. And tech world has gone a 180-degree turn in how developers are working. With the rise of Agentic IDEs (yes, that is a deliberate buzzword, I am using) like Windsurf, Cursor, Lovable, Bolt, Claude code, Warp, Amp code, whatever agent in the loop.
 
 I am not saying any of those are good or bad, they have their own quirks and preferences. Just like I love Vim and you hate it, or loving VS Co**. Maybe that war would happen to some extent, but developers, we are in crisis. No time to have text-editor wars. Because the craft is at stake.

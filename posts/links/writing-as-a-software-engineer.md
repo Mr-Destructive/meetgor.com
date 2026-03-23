@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
 title: 'Writing as a software engineer'
-date: 2024-12-14
 slug: writing-as-a-software-engineer
-tags:
-  - links
+tags: 
 link: 'https://newsletter.francofernando.com/p/writing-as-as-software-engineer'
-status: published
 description: 'Writing as a software engineer'
 source: newsletter
 newsletter: 2024-12-14-techstructive-weekly-20
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: f718cf1f323ab8792e24ca5e9755f52a51a5ab32c82a13c9cc64cdb8728b697d
+type: links
+date: 2024-12-14
+status: published
 ---
-
-
 ## Commentary
 
 - :
