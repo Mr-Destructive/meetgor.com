@@ -1,5 +1,5 @@
 ---
-hash: 3ef114da5f7b57f6adb8c3d44ba24a56e8311d5aed0c13103d1023e1a4ad4762
+hash: 42776b91758d3b5022cd2f025be25e54be44711dad89883b706b8a0672e6546b
 slug: 
 ---
 {
@@ -99,4 +99,3 @@ docker rmi -f <image-id>
 ```
 
   So, we now have a image of our Django project, this image can be used by anyone inside a docker environment and thus creating much more easier to test/work on a given project irrespective of the system is being used.
-

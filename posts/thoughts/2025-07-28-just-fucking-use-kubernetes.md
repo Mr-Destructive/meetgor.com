@@ -1,5 +1,5 @@
 ---
-hash: b2221d0b1ffc54c7b7c8f83e96628e9b7ec39f5069286bc3f944ba2600e41ad0
+hash: e126900e047ff9480ec3430dedb4bc95afdffb8a5ac1994b257a85028212fd5c
 slug: 
 ---
 {
@@ -45,5 +45,4 @@ I agree to this post too, correct for pointing out the low ambitions, complainin
 
 Does anyone care if you use simple yet fragile bash scripts or heavy weight Kubernetes cluster for just clicking buttons and creating and updating rows in a database? No! 
 
-You know what, let's fucking use Kubernetes. 
-
+You know what, let's fucking use Kubernetes.

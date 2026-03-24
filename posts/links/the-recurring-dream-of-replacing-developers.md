@@ -1,15 +1,15 @@
 ---
 link: 'https://www.caimito.net/en/blog/2025/12/07/the-recurring-dream-of-replacing-developers.html'
-status: published
 description: 'The recurring dream of replacing developers'
 image_url: 'https://www.caimito.net/img/blog/the-recurring-dream-of-replacing-developers.jpg'
-newsletter: 2026-01-24-techstructive-weekly-78
-title: 'The recurring dream of replacing developers'
 date: 2026-01-24
-source: newsletter
-hash: 292acb79dedc109e991597e5b11de9d438614edf733069c7cf105d341c6517b3
 type: links
 slug: the-recurring-dream-of-replacing-developers
+status: published
+newsletter: 2026-01-24-techstructive-weekly-78
+title: 'The recurring dream of replacing developers'
+source: newsletter
+hash: 292acb79dedc109e991597e5b11de9d438614edf733069c7cf105d341c6517b3
 tags: 
 ---
 ## Commentary

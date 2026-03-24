@@ -1,5 +1,5 @@
 ---
-hash: 671ec18d7a2421ebd997b51692db18a190e4aebfff360b29db51b6da666e1fc7
+hash: 24b02e19e1f6bf2c68afb9478e529e5234bbc36fcf60c379bb207d7a7914de9a
 slug: 
 ---
 {
@@ -16,6 +16,3 @@ I was live streaming, creating a AI Coding Agent from scratch in Python. I was e
 Anyways, the thing is the uv python project has a `. python_version` file that will store the python version.
 
 I thought, it might be used from `pyproject.toml`, or other setup files. But that is really neat from uv.
-
-
-

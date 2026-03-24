@@ -1,5 +1,5 @@
 ---
-hash: f3987b2ae8601d8dc579b8d832946c082a0f420b0105251f3b0496a7b6a51458
+hash: 08ce06a42bf1f01ca2df82f75433247f33fe113357e7d3b8199c6daa335b1c5b
 slug: 
 ---
 {
@@ -34,4 +34,3 @@ with open(file_name, "r+") as fname:
 ```
 
 ![Python Search Replace in File](https://res.cloudinary.com/techstructive-blog/image/upload/v1648479344/blog-media/cstvfdlazyfriwvnilju.png)
-
