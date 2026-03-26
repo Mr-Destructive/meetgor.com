@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #86"
-date: 2026-03-20
+status: published
+canonical_url: https://techstructively.substack.com/p/techstructive-weekly-86
 slug: techstructive-weekly-86
 type: newsletter
-status: published
 source: newsletter
-canonical_url: https://techstructively.substack.com/p/techstructive-weekly-86
 description: "Reading and building with AI, dark week loosing hope, among the other things read, watched, created and learnt from the week of 15th to 21st March 2026"
 tags: ["newsletter", "substack"]
+hash: 4f097364ba1a12759af85c51f19ed14142d27a5122f94ecd571b7a9f03b2ff9b
+title: "Techstructive Weekly #86"
+date: 2026-03-20
 ---
-
 <h2>Week #86</h2><p>It was another heavy week, a dark week. Losing grip of mind. Hopes fading. But not everything is doom and gloom; hope can be found in the darkest of times, if one finds the courage to light a candle. I crave reading books, I want to get back into it and build a writing routine again.</p><p>I am thinking of doing livestreams this weekend. Let&#8217;s see how that unfolds.</p><p></p><h3>Quote of the week</h3><blockquote><p>&#8220;Failure meant a stripping away of the inessential. I stopped pretending to myself that I was anything other than what I was.&#8221;</p><p>&#8213; <a href="https://www.goodreads.com/quotes/7348436-failure-meant-a-stripping-away-of-the-inessential-i-stopped">J.K. Rowling, Very Good Lives: The Fringe Benefits of Failure and the Importance of Imagination</a></p></blockquote><p>Really hitting the quote. When you actually fail or life fails you, you begin the quest to find your true self. There is a path to redemption. The only path carved by ego that leads to good and intended places. The self-identity and self-respect when it gets hurt, it bites the soul to the core, and some energy has to come to the mind to steer it in the right direction, here the energy might be negative, but the intention is always nobel. The only time you use your ego in a good place, rest all places its a waste and a waste of time and energy. </p><p>This is the time I will find myself, I think. It might come with despair and a lot of burning inside, but I can say I might not regret it later.</p><p></p><div><hr></div><p></p><h2>Created</h2><ul><li><p><a href="https://sqlite-static-site-generator.vercel.app/api">S3G API</a> for querying my posts with SQLite hosted on Vercel Cloud function</p><ul><li><p>I wanted to build a pipeline like this </p><div class="highlighted_code_block" data-attrs="{&quot;language&quot;:&quot;bash&quot;,&quot;nodeId&quot;:null}" data-component-name="HighlightedCodeBlockToDOM"><pre class="shiki"><code class="language-bash">curl -s https://sqlite-static-site-generator.vercel.app/api/query \
   -d '{"sql":"SELECT title FROM posts WHERE section = ? LIMIT 5","args":["newsletter"]}' \
   -H 'Content-Type: application/json' \
