@@ -126,7 +126,19 @@ func insertToDB() {
 		os.Exit(1)
 	}
 
-	conn := fmt.Sprintf("libsql://%s?authToken=%s", dbName, dbToken)
+	// Build connection string - handle both formats
+	conn := dbName
+	if !strings.HasPrefix(conn, "libsql://") && !strings.HasPrefix(conn, "https://") {
+		conn = "libsql://" + conn
+	}
+	if dbToken != "" {
+		sep := "?"
+		if strings.Contains(conn, "?") {
+			sep = "&"
+		}
+		conn = fmt.Sprintf("%s%sauthToken=%s", conn, sep, dbToken)
+	}
+
 	db, err := sql.Open("libsql", conn)
 	if err != nil {
 		fmt.Printf("❌ Database connection failed: %v\n", err)
