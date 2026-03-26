@@ -124,7 +124,7 @@ func parseRSSItems(feed *gofeed.Feed) []RSSPost {
 
 		post := RSSPost{
 			Title:       item.Title,
-			Slug:        "newsletter/" + date + "-" + slug,
+			Slug:        date + "-" + slug,
 			Date:        date,
 			Link:        item.Link,
 			Body:        body,
