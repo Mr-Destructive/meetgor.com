@@ -1,6 +1,6 @@
 ---
-slug: 
 hash: 572a9b28ca1565c5b05a14f5952a55b22bf02cd00ae687cf59d7f9daa6ed8048
+slug: 
 ---
 {
   "title": "Friction is necessary in our lives, more the solutions, more the problems.",

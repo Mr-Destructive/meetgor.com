@@ -1,6 +1,6 @@
 ---
-hash: ef13edfaecfa56c77423bc12fbd129e11440e6c806c0f5e0978b13bdd515c183
 slug: 
+hash: ef13edfaecfa56c77423bc12fbd129e11440e6c806c0f5e0978b13bdd515c183
 ---
 {
   "title": "Kubernetes isn't for you",
