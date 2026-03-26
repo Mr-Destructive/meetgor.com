@@ -19,6 +19,7 @@ import (
 	"github.com/mmcdole/gofeed"
 	libsqlssg "github.com/Mr-Destructive/meetgor.com/plugins/db/libsqlssg"
 	_ "github.com/tursodatabase/libsql-client-go/libsql"
+	"gopkg.in/yaml.v2"
 )
 
 func main() {
@@ -196,13 +197,35 @@ func insertToDB() {
 			continue
 		}
 
-		// Parse YAML frontmatter (simple parsing)
+		// Parse frontmatter - try JSON first, then YAML
 		frontmatter := parts[1]
 		body := strings.TrimSpace(parts[2])
 
-		title := extractYAML(frontmatter, "title")
+		// Try to parse as JSON first
+		var metadata map[string]interface{}
+		err = json.Unmarshal([]byte(frontmatter), &metadata)
+		
+		// If JSON fails, try YAML
+		if err != nil {
+			err = yaml.Unmarshal([]byte(frontmatter), &metadata)
+			if err != nil {
+				fmt.Printf("⚠️  Cannot parse metadata (JSON or YAML): %s\n", filePath)
+				continue
+			}
+		}
+
+		title, ok := metadata["title"].(string)
+		if !ok {
+			fmt.Printf("⚠️  Missing title in: %s\n", filePath)
+			continue
+		}
+
 		slug := strings.TrimSuffix(filepath.Base(filePath), ".md")
-		link := extractYAML(frontmatter, "canonical_url")
+		
+		link := ""
+		if canonicalURL, ok := metadata["canonical_url"].(string); ok {
+			link = canonicalURL
+		}
 
 		// Compute content hash
 		contentHash := computeHash(title + body)
