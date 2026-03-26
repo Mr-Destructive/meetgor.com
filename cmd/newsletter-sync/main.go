@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"crypto/sha256"
 	"database/sql"
+	"encoding/hex"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -179,18 +181,27 @@ func insertToDB() {
 		slug := "newsletter/" + strings.TrimSuffix(e.Name(), ".md")
 		link := extractYAML(frontmatter, "canonical_url")
 
+		// Compute content hash
+		contentHash := computeHash(title + body)
+
 		// Check if already exists
 		existing, err := q.GetPostBySlug(ctx, slug)
 		if err == nil && existing.Slug != "" {
-			fmt.Printf("⏭️  Already exists: %s\n", slug)
-			continue
+			// Post exists - check if content changed
+			existingMeta := parseMetadataJSON(existing.Metadata.String)
+			if existingHash, ok := existingMeta["content_hash"].(string); ok && existingHash == contentHash {
+				fmt.Printf("⏭️  Already exists (unchanged): %s\n", slug)
+				continue
+			}
+			fmt.Printf("♻️  Updating existing post: %s\n", slug)
 		}
 
-		// Insert post
+		// Insert or update post
 		metadata := map[string]interface{}{
 			"canonical_url": link,
 			"type":          "newsletter",
 			"source":        "substack",
+			"content_hash":  contentHash,
 		}
 		metaJSON, _ := json.Marshal(metadata)
 
@@ -229,6 +240,20 @@ func extractYAML(yaml, key string) string {
 		}
 	}
 	return ""
+}
+
+func computeHash(content string) string {
+	h := sha256.Sum256([]byte(content))
+	return hex.EncodeToString(h[:])
+}
+
+func parseMetadataJSON(metaStr string) map[string]interface{} {
+	if metaStr == "" {
+		return map[string]interface{}{}
+	}
+	var meta map[string]interface{}
+	json.Unmarshal([]byte(metaStr), &meta)
+	return meta
 }
 
 func fetchFeed(url string) (*gofeed.Feed, error) {
