@@ -1,11 +1,11 @@
 ---
-type: til
-title: "Zellij Open Scrollback Edit mode"
 date: 2025-03-20
 status: published
 slug: zellij-open-scrollback-edit-mode
+hash: 963b56f41383f37b01224409b55007ebcd0b698084bb172dfea0534f6cf2cc3c
+type: til
+title: "Zellij Open Scrollback Edit mode"
 ---
-
 I was looking at a long list of logs, (debugging of course). 
 
 I had a list of transactions

@@ -1,12 +1,11 @@
 ---
-title: "Kubernetes isn't for you"
-date: 2025-07-27
 status: published
 slug: kubernetes-isn-t-for-you
 type: links
-hash: ef13edfaecfa56c77423bc12fbd129e11440e6c806c0f5e0978b13bdd515c183
+hash: dfe1522126846bb3588c435030e3cbf27628544f9c4b675fa3363037d4ba4ef4
+title: "Kubernetes isn't for you"
+date: 2025-07-27
 ---
-
 [https://sliplane.io/blog/kubernetes-isnt-for-you](https://sliplane.io/blog/kubernetes-isnt-for-you)
 
 dev.to link: https://dev.to/code42cate/kubernetes-isnt-for-you-2c2m

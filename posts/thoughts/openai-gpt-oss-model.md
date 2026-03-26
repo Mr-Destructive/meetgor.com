@@ -5,9 +5,8 @@ status: published
 slug: openai-open-weight-oss-model
 type: links
 link: "https://openai.com/index/introducing-gpt-oss/"
-hash: f58e6020450c07ceaae0430895fa04ff466bb5817747a14de2259ceb26bab739
+hash: 77375313ba3a02222bd9cca85aae69b6507a52b46811acf1a015b039960302d6
 ---
-
 # [Introducing gpt-oss](https://openai.com/index/introducing-gpt-oss/)
 
 I ran a few tests on the 20B parameter

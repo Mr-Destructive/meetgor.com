@@ -1,13 +1,11 @@
 ---
-title: "Robots Generate, Humans Manifest"
-date: 2025-03-28
 status: published
 slug: robots-generate-humans-manifest
 type: links
-hash: 23b83d2ce61844d28f2802a97818e94e0db25e8e8f8cc94d7de301380a9dd123
+hash: f401a1697f94c132c3b840e396a701c25b5c4057f3d568cd3b9e68748a7b2bff
+title: "Robots Generate, Humans Manifest"
+date: 2025-03-28
 ---
-
-
 To,
 New Graduates or Students (or whoever is scared of AI)
 
