@@ -190,7 +190,7 @@ func insertToDB() {
 		body := strings.TrimSpace(parts[2])
 
 		title := extractYAML(frontmatter, "title")
-		slug := "newsletter/" + strings.TrimSuffix(e.Name(), ".md")
+		slug := strings.TrimSuffix(filepath.Base(filePath), ".md")
 		link := extractYAML(frontmatter, "canonical_url")
 
 		// Compute content hash
@@ -207,7 +207,6 @@ func insertToDB() {
 		hashExists, err := postWithHashExists(ctx, db, contentHash)
 		if err == nil && hashExists {
 			fmt.Printf("⏭️  Content already exists (same hash): %s\n", slug)
-			foundExisting = true // Stop checking older posts
 			continue
 		}
 
