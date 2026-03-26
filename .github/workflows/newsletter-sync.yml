@@ -19,22 +19,18 @@ jobs:
         run: |
           echo "📰 Calling Netlify newsletter function..."
           
-          RESPONSE=$(curl -X POST \
+          curl -X POST \
             "${NETLIFY_SITE_URL}/.netlify/functions/newsletter" \
             -H "Content-Type: application/json" \
-            -s)
+            -s > /tmp/response.json
           
           echo "✅ Response received"
-          echo "$RESPONSE" | head -c 200
-          echo "response=$RESPONSE" >> $GITHUB_OUTPUT
+          head -c 200 /tmp/response.json
 
       - name: Parse and create markdown files
         id: create
-        env:
-          RESPONSE: ${{ steps.fetch.outputs.response }}
         run: |
           mkdir -p posts/newsletter
-          echo "$RESPONSE" > /tmp/response.json
           
           # Extract each post and create file
           COUNT=$(jq -c '.posts[]' /tmp/response.json | while read -r post; do
