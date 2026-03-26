@@ -153,6 +153,7 @@ func insertToDB() {
 
 	q := libsqlssg.New(db)
 	inserted := 0
+	seenHashes := make(map[string]bool) // Track hashes we've already processed in this run
 
 	for _, e := range entries {
 		if !strings.HasSuffix(e.Name(), ".md") {
@@ -184,9 +185,18 @@ func insertToDB() {
 		// Compute content hash
 		contentHash := computeHash(title + body)
 
-		// Check if already exists
+		// Skip if we've seen this hash in this same run (prevents duplicates within same feed fetch)
+		if seenHashes[contentHash] {
+			fmt.Printf("⏭️  Duplicate content (same hash): %s\n", slug)
+			continue
+		}
+		seenHashes[contentHash] = true
+
+		// Check if already exists in database
 		existing, err := q.GetPostBySlug(ctx, slug)
-		if err == nil && existing.Slug != "" {
+		isNewPost := err != nil || existing.Slug == ""
+
+		if !isNewPost {
 			// Post exists - check if content changed
 			existingMeta := parseMetadataJSON(existing.Metadata.String)
 			if existingHash, ok := existingMeta["content_hash"].(string); ok && existingHash == contentHash {
