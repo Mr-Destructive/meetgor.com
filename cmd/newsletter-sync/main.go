@@ -1,6 +1,10 @@
 package main
 
 import (
+	"context"
+	"database/sql"
+	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"net/http"
@@ -11,9 +15,19 @@ import (
 	"time"
 
 	"github.com/mmcdole/gofeed"
+	libsqlssg "github.com/Mr-Destructive/meetgor.com/plugins/db/libsqlssg"
+	_ "github.com/tursodatabase/libsql-client-go/libsql"
 )
 
 func main() {
+	dbInsert := flag.Bool("db-insert", false, "Insert posts to Turso database instead of creating markdown files")
+	flag.Parse()
+
+	if *dbInsert {
+		insertToDB()
+		return
+	}
+
 	feedURL := os.Getenv("NEWSLETTER_FEED_URL")
 	if feedURL == "" {
 		feedURL = "https://techstructively.substack.com/feed"
@@ -99,6 +113,110 @@ status: published
 
 	fmt.Printf("\n✅ Summary: %d new posts\n", newCount)
 	os.Exit(0)
+}
+
+func insertToDB() {
+	ctx := context.Background()
+
+	// Open database
+	dbName := os.Getenv("TURSO_DATABASE_NAME")
+	dbToken := os.Getenv("TURSO_DATABASE_AUTH_TOKEN")
+	if dbName == "" || dbToken == "" {
+		fmt.Printf("❌ Missing Turso credentials\n")
+		os.Exit(1)
+	}
+
+	conn := fmt.Sprintf("libsql://%s?authToken=%s", dbName, dbToken)
+	db, err := sql.Open("libsql", conn)
+	if err != nil {
+		fmt.Printf("❌ Database connection failed: %v\n", err)
+		os.Exit(1)
+	}
+	defer db.Close()
+
+	postsDir := "posts/newsletter"
+	entries, _ := os.ReadDir(postsDir)
+
+	q := libsqlssg.New(db)
+	inserted := 0
+
+	for _, e := range entries {
+		if !strings.HasSuffix(e.Name(), ".md") {
+			continue
+		}
+
+		// Read markdown file
+		content, err := os.ReadFile(filepath.Join(postsDir, e.Name()))
+		if err != nil {
+			fmt.Printf("⚠️  Error reading %s: %v\n", e.Name(), err)
+			continue
+		}
+
+		// Parse frontmatter and body
+		parts := strings.Split(string(content), "---")
+		if len(parts) < 3 {
+			fmt.Printf("⚠️  Invalid markdown format: %s\n", e.Name())
+			continue
+		}
+
+		// Parse YAML frontmatter (simple parsing)
+		frontmatter := parts[1]
+		body := strings.TrimSpace(parts[2])
+
+		title := extractYAML(frontmatter, "title")
+		slug := "newsletter/" + strings.TrimSuffix(e.Name(), ".md")
+		link := extractYAML(frontmatter, "canonical_url")
+
+		// Check if already exists
+		existing, _ := q.GetPost(ctx, slug)
+		if existing.Slug != "" {
+			fmt.Printf("⏭️  Already exists: %s\n", slug)
+			continue
+		}
+
+		// Insert post
+		metadata := map[string]interface{}{
+			"canonical_url": link,
+			"type":          "newsletter",
+			"source":        "substack",
+		}
+		metaJSON, _ := json.Marshal(metadata)
+
+		tagsJSON, _ := json.Marshal([]string{"newsletter", "substack"})
+
+		_, err = q.CreatePost(ctx, libsqlssg.CreatePostParams{
+			ID:       fmt.Sprintf("%d", time.Now().UnixNano()),
+			TypeID:   "newsletter",
+			Title:    title,
+			Slug:     slug,
+			Content:  body,
+			Metadata: sql.NullString{String: string(metaJSON), Valid: true},
+			Tags:     sql.NullString{String: string(tagsJSON), Valid: true},
+			Status:   sql.NullString{String: "published", Valid: true},
+		})
+
+		if err != nil {
+			fmt.Printf("❌ Error inserting %s: %v\n", slug, err)
+			continue
+		}
+
+		fmt.Printf("📤 Inserted: %s\n", slug)
+		inserted++
+	}
+
+	fmt.Printf("\n✅ Synced %d posts to Turso\n", inserted)
+	os.Exit(0)
+}
+
+func extractYAML(yaml, key string) string {
+	for _, line := range strings.Split(yaml, "\n") {
+		if strings.HasPrefix(line, key+":") {
+			val := strings.TrimSpace(strings.TrimPrefix(line, key+":"))
+			val = strings.Trim(val, `"`)
+			return val
+		}
+	}
+	return ""
 }
 
 func fetchFeed(url string) (*gofeed.Feed, error) {
