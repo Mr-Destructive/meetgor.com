@@ -17,106 +17,19 @@ jobs:
         with:
           go-version: '1.25.0'
 
-      - name: Fetch and sync newsletters
-        run: |
-          cat > sync_newsletter.go << 'EOF'
-          package main
-          import (
-            "fmt"
-            "io"
-            "net/http"
-            "os"
-            "regexp"
-            "strings"
-            "time"
-            "github.com/mmcdole/gofeed"
-          )
-          func main() {
-            client := &http.Client{Timeout: 20 * time.Second}
-            req, _ := http.NewRequest("GET", "https://techstructively.substack.com/feed", nil)
-            req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36")
-            resp, err := client.Do(req)
-            if err != nil {
-              fmt.Printf("Error: %v\n", err)
-              os.Exit(1)
-            }
-            defer resp.Body.Close()
-            
-            body, _ := io.ReadAll(resp.Body)
-            parser := gofeed.NewParser()
-            feed, err := parser.ParseString(string(body))
-            if err != nil {
-              fmt.Printf("Parse error: %v\n", err)
-              os.Exit(1)
-            }
-            
-            fmt.Printf("✅ Feed: %s (%d items)\n", feed.Title, len(feed.Items))
-            
-            existingPosts := make(map[string]bool)
-            entries, _ := os.ReadDir("posts/newsletter")
-            for _, e := range entries {
-              if strings.HasSuffix(e.Name(), ".md") {
-                existingPosts[strings.TrimSuffix(e.Name(), ".md")] = true
-              }
-            }
-            
-            fmt.Printf("📦 Existing: %d\n", len(existingPosts))
-            
-            newCount := 0
-            for _, item := range feed.Items {
-              if item == nil || item.Title == "" {
-                continue
-              }
-              date := ""
-              if item.PublishedParsed != nil {
-                date = item.PublishedParsed.Format("2006-01-02")
-              }
-              slug := date + "-" + slugFromTitle(item.Title)
-              if existingPosts[slug] {
-                continue
-              }
-              
-              body := item.Content
-              if body == "" {
-                body = item.Description
-              }
-              
-              frontmatter := fmt.Sprintf("---\ntype: newsletter\ntitle: \"%s\"\ndate: %s\nslug: newsletter/%s\ntags: [\"newsletter\", \"substack\"]\ncanonical_url: %s\nstatus: published\n---\n\n", escapeQuotes(item.Title), date, slug, item.Link)
-              
-              filename := fmt.Sprintf("posts/newsletter/%s.md", slug)
-              os.WriteFile(filename, []byte(frontmatter+body), 0644)
-              fmt.Printf("✨ Added: %s\n", slug)
-              newCount++
-            }
-            
-            fmt.Printf("\n✅ Summary: %d new posts\n", newCount)
-          }
-          func slugFromTitle(title string) string {
-            re := regexp.MustCompile(`[^a-z0-9]+`)
-            s := strings.ToLower(title)
-            s = re.ReplaceAllString(s, "-")
-            return strings.Trim(s, "-")
-          }
-          func escapeQuotes(s string) string {
-            return strings.ReplaceAll(s, `"`, `\"`)
-          }
-          EOF
-          
-          go run sync_newsletter.go
+      - name: Run newsletter sync
+        run: go run ./cmd/newsletter-sync/main.go
 
       - name: Check for changes
         id: changes
         run: |
           if git status --porcelain | grep -q "posts/newsletter/"; then
             echo "changed=true" >> $GITHUB_OUTPUT
-            echo "📝 New posts found"
-            git status --porcelain posts/newsletter/
           else
             echo "changed=false" >> $GITHUB_OUTPUT
-            echo "✓ No new posts"
           fi
 
-      - name: Commit if changed
+      - name: Commit and push
         if: steps.changes.outputs.changed == 'true'
         run: |
           git config --local user.email "action@github.com"
@@ -129,4 +42,8 @@ jobs:
         run: |
           echo "## Newsletter Sync" >> $GITHUB_STEP_SUMMARY
           echo "- Time: $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
-          echo "- Changed: ${{ steps.changes.outputs.changed }}" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.changes.outputs.changed }}" = "true" ]; then
+            echo "- Result: ✅ New posts synced" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- Result: ✓ No new posts" >> $GITHUB_STEP_SUMMARY
+          fi
