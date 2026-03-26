@@ -1,6 +1,6 @@
 ---
-hash: a1bb193e4e68fc11184f4e0a80232b4e695a5478f1dcbad73210f66d20148465
 slug: 
+hash: a1bb193e4e68fc11184f4e0a80232b4e695a5478f1dcbad73210f66d20148465
 ---
 {
   "title": "I kind of hate Agentic IDEs for the sake of productivity",

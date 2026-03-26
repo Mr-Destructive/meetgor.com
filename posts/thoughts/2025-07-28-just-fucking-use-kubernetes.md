@@ -1,6 +1,6 @@
 ---
-hash: e126900e047ff9480ec3430dedb4bc95afdffb8a5ac1994b257a85028212fd5c
 slug: 
+hash: e126900e047ff9480ec3430dedb4bc95afdffb8a5ac1994b257a85028212fd5c
 ---
 {
   "title": "Just Fucking use kubernetes",
