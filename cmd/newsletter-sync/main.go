@@ -151,13 +151,24 @@ func insertToDB() {
 	postsDir := "posts/newsletter"
 	entries, _ := os.ReadDir(postsDir)
 
+	// Sort entries reverse (newest first)
+	for i, j := 0, len(entries)-1; i < j; i, j = i+1, j-1 {
+		entries[i], entries[j] = entries[j], entries[i]
+	}
+
 	q := libsqlssg.New(db)
 	inserted := 0
 	seenHashes := make(map[string]bool) // Track hashes we've already processed in this run
+	foundExisting := false
 
 	for _, e := range entries {
 		if !strings.HasSuffix(e.Name(), ".md") {
 			continue
+		}
+
+		// Stop if we found an existing post - all older ones are likely already synced
+		if foundExisting {
+			break
 		}
 
 		// Read markdown file
@@ -201,6 +212,7 @@ func insertToDB() {
 			existingMeta := parseMetadataJSON(existing.Metadata.String)
 			if existingHash, ok := existingMeta["content_hash"].(string); ok && existingHash == contentHash {
 				fmt.Printf("⏭️  Already exists (unchanged): %s\n", slug)
+				foundExisting = true // Stop checking older posts
 				continue
 			}
 			fmt.Printf("♻️  Updating existing post: %s\n", slug)
