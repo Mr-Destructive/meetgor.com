@@ -64,6 +64,42 @@ jobs:
             echo "created=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: Sync to database
+        if: steps.create.outputs.created == 'true'
+        env:
+          TURSO_DATABASE_NAME: ${{ secrets.TURSO_DATABASE_NAME }}
+          TURSO_DATABASE_AUTH_TOKEN: ${{ secrets.TURSO_DATABASE_AUTH_TOKEN }}
+        run: |
+          if [ -z "$TURSO_DATABASE_NAME" ] || [ -z "$TURSO_DATABASE_AUTH_TOKEN" ]; then
+            echo "⚠️  Skipping DB sync: missing Turso credentials"
+            exit 0
+          fi
+          
+          jq -c '.posts[]' /tmp/response.json | while read -r post; do
+            TITLE=$(echo "$post" | jq -r '.title')
+            SLUG=$(echo "$post" | jq -r '.slug')
+            BODY=$(echo "$post" | jq -r '.body')
+            LINK=$(echo "$post" | jq -r '.link')
+            
+            curl -s -X POST "https://techstructively.netlify.app/.netlify/functions/posts" \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"username\": \"newsletter\",
+                \"password\": \"${{ secrets.NEWSLETTER_PASSWORD }}\",
+                \"title\": \"$(echo "$TITLE" | sed 's/"/\\"/g')\",
+                \"slug\": \"$SLUG\",
+                \"content\": \"$BODY\",
+                \"type_id\": \"newsletter\",
+                \"status\": \"published\",
+                \"metadata\": {
+                  \"canonical_url\": \"$LINK\",
+                  \"type\": \"newsletter\",
+                  \"source\": \"substack\"
+                }
+              }" > /dev/null
+            echo "📤 Synced: $SLUG"
+          done
+
       - name: Commit if changed
         if: steps.create.outputs.created == 'true'
         run: |
