@@ -1,13 +1,13 @@
 ---
-link: https://calv.info/openai-reflections
-tags: 
-hash: 56929e4a175f9e78770857ef8547d34fa7566ee281cb1e512f353f79e1410299
 status: published
+date: 2026-01-24T00:00:00Z
+type: links
+hash: 56929e4a175f9e78770857ef8547d34fa7566ee281cb1e512f353f79e1410299
 image_url: https://calv.info/api/og?title=Reflections%20on%20OpenAI
 slug: reflections-on-openai
-date: 2026-01-24T00:00:00Z
 title: Reflections on OpenAI
-type: links
+link: https://calv.info/openai-reflections
+tags: 
 ---
 # Reflections on OpenAI
 

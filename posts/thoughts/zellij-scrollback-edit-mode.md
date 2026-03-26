@@ -1,6 +1,6 @@
 ---
-hash: b4e053fcf01501d56ce2e47b2a28e508ff926cc739c9240a1fa28e361dd635c9
 slug: 
+hash: b4e053fcf01501d56ce2e47b2a28e508ff926cc739c9240a1fa28e361dd635c9
 ---
 {"author":"meet","date":"2025-03-20","post_dir":"links","published":"published","title":"Zellij Open Scrollback Edit mode","type":"links"}
 
