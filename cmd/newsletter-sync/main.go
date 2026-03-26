@@ -168,8 +168,8 @@ func insertToDB() {
 		link := extractYAML(frontmatter, "canonical_url")
 
 		// Check if already exists
-		existing, _ := q.GetPost(ctx, slug)
-		if existing.Slug != "" {
+		existing, err := q.GetPostBySlug(ctx, slug)
+		if err == nil && existing.Slug != "" {
 			fmt.Printf("⏭️  Already exists: %s\n", slug)
 			continue
 		}
