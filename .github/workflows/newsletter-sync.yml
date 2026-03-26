@@ -2,243 +2,131 @@ name: Newsletter Sync - Substack RSS to Posts
 
 on:
   schedule:
-    # Run daily at 3 AM UTC (after hash-sync completes at 2 AM)
     - cron: '0 3 * * *'
   workflow_dispatch:
-    inputs:
-      force:
-        description: 'Force sync even without changes'
-        required: false
-        default: 'false'
 
 jobs:
   newsletter-sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
           go-version: '1.25.0'
-          cache: true
 
-      - name: Fetch and sync newsletter from Substack RSS
-        id: fetch
-        env:
-          NEWSLETTER_FEED_URL: ${{ secrets.NEWSLETTER_FEED_URL || 'https://techstructively.substack.com/feed' }}
+      - name: Fetch and sync newsletters
         run: |
-          echo "📰 Fetching newsletter from RSS..."
-          
-          # Build the newsletter sync tool
-          go build -o newsletter_sync ./netlify/functions/newsletter/main.go
-          
-          # Create a wrapper script to fetch RSS and create markdown files
-          cat > sync_newsletter.go << 'EOFGO'
+          cat > sync_newsletter.go << 'EOF'
           package main
-          
           import (
-            "encoding/json"
             "fmt"
             "io"
             "net/http"
             "os"
-            "path/filepath"
             "regexp"
             "strings"
             "time"
             "github.com/mmcdole/gofeed"
           )
-          
           func main() {
-            feedURL := os.Getenv("NEWSLETTER_FEED_URL")
-            if feedURL == "" {
-              feedURL = "https://techstructively.substack.com/feed"
-            }
-            
-            // Fetch RSS feed
             client := &http.Client{Timeout: 20 * time.Second}
-            req, _ := http.NewRequest(http.MethodGet, feedURL, nil)
+            req, _ := http.NewRequest("GET", "https://techstructively.substack.com/feed", nil)
             req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36")
             resp, err := client.Do(req)
             if err != nil {
-              fmt.Printf("❌ Error fetching feed: %v\n", err)
+              fmt.Printf("Error: %v\n", err)
               os.Exit(1)
             }
             defer resp.Body.Close()
-            
-            if resp.StatusCode != 200 {
-              fmt.Printf("❌ Feed returned status %d\n", resp.StatusCode)
-              os.Exit(1)
-            }
             
             body, _ := io.ReadAll(resp.Body)
             parser := gofeed.NewParser()
             feed, err := parser.ParseString(string(body))
             if err != nil {
-              fmt.Printf("❌ Error parsing feed: %v\n", err)
+              fmt.Printf("Parse error: %v\n", err)
               os.Exit(1)
             }
             
-            fmt.Printf("✅ Feed fetched: %s\n", feed.Title)
-            fmt.Printf("📄 Total items in feed: %d\n", len(feed.Items))
-            
-            // Check existing posts
-            postsDir := "posts/newsletter"
-            os.MkdirAll(postsDir, 0o755)
+            fmt.Printf("✅ Feed: %s (%d items)\n", feed.Title, len(feed.Items))
             
             existingPosts := make(map[string]bool)
-            entries, _ := os.ReadDir(postsDir)
-            for _, entry := range entries {
-              if strings.HasSuffix(entry.Name(), ".md") {
-                slug := strings.TrimSuffix(entry.Name(), ".md")
-                existingPosts[slug] = true
+            entries, _ := os.ReadDir("posts/newsletter")
+            for _, e := range entries {
+              if strings.HasSuffix(e.Name(), ".md") {
+                existingPosts[strings.TrimSuffix(e.Name(), ".md")] = true
               }
             }
             
-            fmt.Printf("📦 Existing posts: %d\n", len(existingPosts))
+            fmt.Printf("📦 Existing: %d\n", len(existingPosts))
             
-            // Process feed items
             newCount := 0
             for _, item := range feed.Items {
               if item == nil || item.Title == "" {
                 continue
               }
-              
               date := ""
               if item.PublishedParsed != nil {
                 date = item.PublishedParsed.Format("2006-01-02")
               }
-              
               slug := date + "-" + slugFromTitle(item.Title)
-              
-              // Skip if already exists
               if existingPosts[slug] {
                 continue
               }
               
-              // Create markdown file
               body := item.Content
               if body == "" {
                 body = item.Description
               }
               
-              frontmatter := fmt.Sprintf(`---
-type: newsletter
-title: "%s"
-date: %s
-slug: newsletter/%s
-tags: ["newsletter", "substack"]
-canonical_url: %s
-status: published
----
-
-`, escapeQuotes(item.Title), date, slug, item.Link)
+              frontmatter := fmt.Sprintf("---\ntype: newsletter\ntitle: \"%s\"\ndate: %s\nslug: newsletter/%s\ntags: [\"newsletter\", \"substack\"]\ncanonical_url: %s\nstatus: published\n---\n\n", escapeQuotes(item.Title), date, slug, item.Link)
               
-              filename := filepath.Join(postsDir, slug+".md")
-              content := frontmatter + body
-              
-              if err := os.WriteFile(filename, []byte(content), 0644); err != nil {
-                fmt.Printf("❌ Error writing %s: %v\n", filename, err)
-                continue
-              }
-              
+              filename := fmt.Sprintf("posts/newsletter/%s.md", slug)
+              os.WriteFile(filename, []byte(frontmatter+body), 0644)
               fmt.Printf("✨ Added: %s\n", slug)
               newCount++
             }
             
-            fmt.Printf("\n📊 Summary: %d new posts added\n", newCount)
-            
-            // Output for GitHub Actions
-            fmt.Printf("\nnew_posts=%d\n", newCount)
+            fmt.Printf("\n✅ Summary: %d new posts\n", newCount)
           }
-          
           func slugFromTitle(title string) string {
             re := regexp.MustCompile(`[^a-z0-9]+`)
             s := strings.ToLower(title)
             s = re.ReplaceAllString(s, "-")
-            s = strings.Trim(s, "-")
-            if s == "" {
-              s = "post"
-            }
-            return s
+            return strings.Trim(s, "-")
           }
-          
           func escapeQuotes(s string) string {
             return strings.ReplaceAll(s, `"`, `\"`)
           }
-          EOFGO
+          EOF
           
           go run sync_newsletter.go
-          
-          # Capture new_posts count
-          NEW_POSTS=$(go run sync_newsletter.go 2>&1 | grep "^new_posts=" | cut -d= -f2)
-          echo "new_posts=${NEW_POSTS:-0}" >> $GITHUB_OUTPUT
 
-      - name: Call Netlify newsletter function
-        if: always()
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      - name: Check for changes
+        id: changes
         run: |
-          if [ -z "$NETLIFY_AUTH_TOKEN" ] || [ -z "$NETLIFY_SITE_ID" ]; then
-            echo "⚠️  Skipping live function call (missing credentials)"
-            echo "In production, this would call: https://[site].netlify.app/.netlify/functions/newsletter"
-            exit 0
-          fi
-          
-          echo "📡 Calling newsletter sync function..."
-          curl -X POST https://$NETLIFY_SITE_ID.netlify.app/.netlify/functions/newsletter \
-            -H "Authorization: Bearer $NETLIFY_AUTH_TOKEN" \
-            -H "Content-Type: application/json" \
-            2>/dev/null || true
-
-      - name: Check for new posts
-        id: check
-        run: |
-          NEW_POSTS=${{ steps.fetch.outputs.new_posts }}
-          
-          if [ -z "$NEW_POSTS" ]; then
-            NEW_POSTS=0
-          fi
-          
-          if [ "$NEW_POSTS" -gt 0 ]; then
-            echo "posts_changed=true" >> $GITHUB_OUTPUT
-            echo "📝 $NEW_POSTS new newsletter post(s) added"
-            git status --porcelain posts/newsletter/ || true
+          if git status --porcelain | grep -q "posts/newsletter/"; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "📝 New posts found"
+            git status --porcelain posts/newsletter/
           else
-            echo "posts_changed=false" >> $GITHUB_OUTPUT
-            echo "✓ No new posts to sync"
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "✓ No new posts"
           fi
 
-      - name: Commit new posts
-        if: steps.check.outputs.posts_changed == 'true'
+      - name: Commit if changed
+        if: steps.changes.outputs.changed == 'true'
         run: |
           git config --local user.email "action@github.com"
-          git config --local user.name "Newsletter Sync Bot"
+          git config --local user.name "Newsletter Bot"
           git add posts/newsletter/
-          git commit -m "📰 sync: newsletter posts from Substack RSS - $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git commit -m "📰 sync: newsletter posts from Substack RSS"
           git push
 
-      - name: Trigger hash-sync
-        if: steps.check.outputs.posts_changed == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "🔄 Triggering hash-sync workflow..."
-          gh workflow run hash-sync.yml --ref main
-          echo "Hash-sync triggered to index new posts to Turso"
-
       - name: Summary
-        if: always()
         run: |
-          echo "## Newsletter Sync Summary" >> $GITHUB_STEP_SUMMARY
-          echo "- **Timestamp:** $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
-          echo "- **Feed:** ${{ env.NEWSLETTER_FEED_URL || 'https://techstructively.substack.com/feed' }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Posts Changed:** ${{ steps.check.outputs.posts_changed || 'unknown' }}" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ steps.check.outputs.posts_changed }}" = "true" ]; then
-            echo "- **Action:** Posted synced to repo and hash-sync triggered" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "- **Action:** No new posts to sync" >> $GITHUB_STEP_SUMMARY
-          fi
+          echo "## Newsletter Sync" >> $GITHUB_STEP_SUMMARY
+          echo "- Time: $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "- Changed: ${{ steps.changes.outputs.changed }}" >> $GITHUB_STEP_SUMMARY
