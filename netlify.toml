@@ -5,6 +5,204 @@
 [functions]
   directory = "netlify/functions"
 
+# Cache configuration
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
+
+# Redirect HTTP to HTTPS (Netlify automatic, but explicitly documented)
+# Redirect non-www to www canonical domain
+[[redirects]]
+  from = "http://meetgor.com/*"
+  to = "https://www.meetgor.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://meetgor.com/*"
+  to = "https://www.meetgor.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://meetgor.com/"
+  to = "https://www.meetgor.com/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://meetgor.com/"
+  to = "https://www.meetgor.com/"
+  status = 301
+  force = true
+
+# Standardize trailing slashes - remove them (except root)
+# More specific patterns first to handle edge cases
+[[redirects]]
+  from = "/posts/:slug/"
+  to = "/posts/:slug"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/links/:slug/"
+  to = "/links/:slug"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/til/:slug/"
+  to = "/til/:slug"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/sqlog/:slug/"
+  to = "/sqlog/:slug"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/newsletter/:slug/"
+  to = "/newsletter/:slug"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/work/:slug/"
+  to = "/work/:slug"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/tags/:slug/"
+  to = "/tags/:slug"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/tag/:slug/"
+  to = "/tag/:slug"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/series/:slug/"
+  to = "/series/:slug"
+  status = 301
+  force = true
+
+# Catch-all for any remaining trailing slashes
+[[redirects]]
+  from = "/:path/*/"
+  to = "/:path/:splat"
+  status = 301
+  force = true
+
+# Fix duplicate category paths (e.g., /posts/posts/slug -> /posts/slug)
+[[redirects]]
+  from = "/posts/posts/*"
+  to = "/posts/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/newsletter/newsletter/*"
+  to = "/newsletter/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/sqlog/sqlog/*"
+  to = "/sqlog/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/til/til/*"
+  to = "/til/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/links/links/*"
+  to = "/links/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/work/work/*"
+  to = "/work/:splat"
+  status = 301
+
+# Fix malformed URLs with concatenated domain (e.g., /posts/golang-strings/meetgor.com/posts/golang-strings)
+[[redirects]]
+  from = "/:section/:slug/*"
+  to = "/:section/:slug"
+  status = 301
+
+# Fix old sqlog spelling (logsql -> sqlog)
+[[redirects]]
+  from = "/logsql/*"
+  to = "/sqlog/:splat"
+  status = 301
+
+# Fix malformed Substack newsletter template variables
+[[redirects]]
+  from = "/newsletter/*/%25%25*"
+  to = "/newsletter/:splat"
+  status = 301
+
+# Catch URLs that have domain concatenated in path (e.g., /golang-strings/meetgor.com/...)
+[[redirects]]
+  from = "/*meetgor.com/*"
+  to = "/:splat"
+  status = 301
+
+# Catch URLs that have www.meetgor.com concatenated in path
+[[redirects]]
+  from = "/*www.meetgor.com/*"
+  to = "/:splat"
+  status = 301
+
+# Fix various double-slash patterns
+[[redirects]]
+  from = "/posts/post/*"
+  to = "/posts/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/series/:slug/:slug"
+  to = "/series/:slug"
+  status = 301
+
+[[redirects]]
+  from = "/series/:slug/meetgor.com/*"
+  to = "/series/:slug"
+  status = 301
+
+[[redirects]]
+  from = "/tags/:slug/meetgor.com/*"
+  to = "/tags/:slug"
+  status = 301
+
+[[redirects]]
+  from = "/tags/:slug/:slug"
+  to = "/tags/:slug"
+  status = 301
+
+[[redirects]]
+  from = "/:section/:slug/meetgor.com/*"
+  to = "/:section/:slug"
+  status = 301
+
+# Fix dev subdomain access attempts
+[[redirects]]
+  from = "http://dev.meetgor.com/*"
+  to = "https://www.meetgor.com/:splat"
+  status = 301
+
+[[redirects]]
+  from = "https://dev.meetgor.com/*"
+  to = "https://www.meetgor.com/:splat"
+  status = 301
+
 [[redirects]]
   from = "/cms"
   to = "/.netlify/functions/cms"
@@ -23,6 +221,16 @@
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/api/newsletter"
+  to = "/.netlify/functions/newsletter"
+  status = 200
+
+[[redirects]]
+  from = "/api/newsletter/*"
+  to = "/.netlify/functions/newsletter/:splat"
   status = 200
 
 [[redirects]]
