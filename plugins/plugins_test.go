@@ -51,6 +51,7 @@ func minimalSSG(t *testing.T, outputDir string) *models.SSG {
 	}
 	tmpl := template.New("")
 	tmpl = template.Must(tmpl.Parse(`{{define "feed.html"}}ok{{end}}{{define "editor_template.html"}}ok{{end}}{{define "feeds_template.html"}}ok{{end}}`))
+	tmpl = template.Must(tmpl.Parse(`{{define "tags_index.html"}}TAGS{{end}}`))
 	return &models.SSG{
 		Config:     cfg,
 		Posts:      []models.Post{},
@@ -102,6 +103,9 @@ func TestTagsSeriesYearWise(t *testing.T) {
 	}
 	if _, err := os.Stat(filepath.Join("public", "tags", "go", "index.html")); err != nil {
 		t.Fatalf("tags output missing: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join("public", "tags", "index.html")); err != nil {
+		t.Fatalf("tags index missing: %v", err)
 	}
 
 	if err := (&SeriesPlugin{PluginName: "Series"}).Execute(ssg); err != nil {

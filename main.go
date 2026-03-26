@@ -289,30 +289,33 @@ func ReadPosts(files []string) ([]models.Post, error) {
 		var contentBytes []byte
 		var requiredFields []string = []string{"title", "description", "status", "type", "date", "slug", "tags", "image_url"}
 
-		// Attempt to detect JSON front matter
-		jsonSeparator := []byte("}\n\n")
-		jsonIndex := strings.Index(string(fileBytes), string(jsonSeparator))
+		// Attempt to detect JSON front matter only when the file itself starts
+		// with a JSON object. This avoids misreading markdown bodies that happen
+		// to contain JSON blobs after YAML front matter.
+		if trimmed := bytes.TrimSpace(fileBytes); len(trimmed) > 0 && trimmed[0] == '{' {
+			jsonSeparator := []byte("}\n\n")
+			jsonIndex := strings.Index(string(trimmed), string(jsonSeparator))
+			if jsonIndex != -1 {
+				frontmatterBytes := trimmed[:jsonIndex+1] // Keep closing brace
+				contentBytes = trimmed[jsonIndex+2:]      // Skip the separator
 
-		if jsonIndex != -1 {
-			frontmatterBytes := fileBytes[:jsonIndex+1] // Keep closing brace
-			contentBytes = fileBytes[jsonIndex+2:]      // Skip the separator
+				// Unmarshal into a temporary map to capture extra fields
+				tempMap := make(map[string]interface{})
+				if err := json.Unmarshal(frontmatterBytes, &tempMap); err == nil {
+					success = true
 
-			// Unmarshal into a temporary map to capture extra fields
-			tempMap := make(map[string]interface{})
-			if err := json.Unmarshal(frontmatterBytes, &tempMap); err == nil {
-				success = true
+					// Extract known fields into the struct
+					if err := json.Unmarshal(frontmatterBytes, &frontmatterObj); err != nil {
+						log.Printf("Error parsing JSON front matter: %v", err)
+						continue
+					}
 
-				// Extract known fields into the struct
-				if err := json.Unmarshal(frontmatterBytes, &frontmatterObj); err != nil {
-					log.Printf("Error parsing JSON front matter: %v", err)
-					continue
+					// Remove known keys and store the rest in Extras
+					for _, key := range requiredFields {
+						delete(tempMap, key)
+					}
+					frontmatterObj.Extras = tempMap
 				}
-
-				// Remove known keys and store the rest in Extras
-				for _, key := range requiredFields {
-					delete(tempMap, key)
-				}
-				frontmatterObj.Extras = tempMap
 			}
 		}
 
@@ -344,6 +347,7 @@ func ReadPosts(files []string) ([]models.Post, error) {
 				continue
 			}
 		}
+		contentBytes = stripEmbeddedJSONFrontmatter(contentBytes)
 		if strings.TrimSpace(frontmatterObj.Description) == "" {
 			frontmatterObj.Description = deriveDescription(contentBytes, 160)
 		}
@@ -401,6 +405,31 @@ func parseYAMLFrontmatter(fileBytes []byte) ([]byte, []byte) {
 	frontmatterContent := strings.Join(lines[1:end], "\n")
 	content := strings.Join(lines[end+1:], "\n")
 	return []byte(frontmatterContent), []byte(content)
+}
+
+func stripEmbeddedJSONFrontmatter(content []byte) []byte {
+	trimmed := bytes.TrimLeft(content, "\r\n\t ")
+	if len(trimmed) == 0 || trimmed[0] != '{' {
+		return content
+	}
+	jsonSeparator := []byte("}\n\n")
+	jsonIndex := strings.Index(string(trimmed), string(jsonSeparator))
+	if jsonIndex == -1 {
+		return content
+	}
+	embedded := trimmed[:jsonIndex+1]
+	tempMap := make(map[string]interface{})
+	if err := json.Unmarshal(embedded, &tempMap); err != nil {
+		return content
+	}
+	if _, ok := tempMap["title"]; !ok {
+		return content
+	}
+	if _, ok := tempMap["type"]; !ok {
+		return content
+	}
+	remainder := bytes.TrimLeft(trimmed[jsonIndex+2:], "\r\n")
+	return remainder
 }
 
 func ReadTemplates(files []string) ([]string, error) {

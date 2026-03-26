@@ -50,7 +50,10 @@ func (p *YearPlugin) Execute(ssg *models.SSG) error {
 	}
 	for year, posts := range yearWisePosts {
 		buffer := bytes.Buffer{}
-		templatePath := config.Blog.PagesConfig["tags"].TemplatePath
+		templatePath := config.Blog.PagesConfig["yearwise"].TemplatePath
+		if templatePath == "" {
+			templatePath = config.Blog.PagesConfig["year"].TemplatePath
+		}
 		if templatePath == "" {
 			templatePath = config.Blog.DefaultFeedTemplate
 		}

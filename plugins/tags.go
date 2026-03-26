@@ -106,10 +106,6 @@ func (p *TagsPlugin) Execute(ssg *models.SSG) error {
 		})
 	}
 
-	if len(tagLinks) == 0 {
-		return nil
-	}
-
 	if ssg.TemplateFS.Lookup("tags_index.html") == nil {
 		return nil
 	}
@@ -123,9 +119,9 @@ func (p *TagsPlugin) Execute(ssg *models.SSG) error {
 
 	indexBuffer := bytes.Buffer{}
 	indexContext := struct {
-		Config        *models.SSG_CONFIG
-		TagFeedLinks  []TagLink
-		Years         []string
+		Config       *models.SSG_CONFIG
+		TagFeedLinks []TagLink
+		Years        []string
 	}{
 		Config:       config,
 		TagFeedLinks: tagLinks,
