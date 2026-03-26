@@ -968,6 +968,61 @@ func (c *RenderTemplatesPlugin) Execute(ssg *models.SSG) error {
 		fmt.Println("Feed", feed.Title, feed.Slug)
 		feedPostLists = append(feedPostLists, feed)
 	}
+
+	// Render a dedicated archive page for each feed type.
+	// This keeps /posts, /til, /newsletter, etc. aligned with their type feeds.
+	for _, feed := range feedPostLists {
+		templatePath := config.Blog.PagesConfig[feed.Type].FeedTemplatePath
+		if templatePath == "" {
+			templatePath = config.Blog.DefaultFeedTemplate
+		}
+
+		buffer := bytes.Buffer{}
+		templateFS := os.DirFS(config.Blog.TemplatesDir)
+		t := template.New("").Funcs(template.FuncMap{
+			"dateOnly": func(dateStr string) string {
+				if len(dateStr) >= 10 {
+					return dateStr[:10]
+				}
+				return dateStr
+			},
+			"slugify": func(value string) string {
+				return plugins.Slugify(value)
+			},
+			"pathEscape": func(value string) template.URL {
+				return template.URL(escapePathSegment(value))
+			},
+		})
+		t, err = t.ParseFS(templateFS, "*.html")
+		if err != nil {
+			return err
+		}
+
+		context := models.TemplateContext{
+			FeedPosts: []models.Feed{feed},
+			Themes: models.ThemeCombo{
+				Default:   config.Blog.Themes["default"],
+				Secondary: config.Blog.Themes["secondary"],
+			},
+			FeedInfo: feed,
+			Config: models.SSG_CONFIG{
+				Blog:      config.Blog,
+				AdminMode: config.AdminMode,
+			},
+			Years: plugins.YearsFromPosts(ssg.Posts),
+		}
+		if err := t.ExecuteTemplate(&buffer, templatePath, context); err != nil {
+			return err
+		}
+
+		feedPath := filepath.Join(outputPath, feed.Type)
+		if err := os.MkdirAll(feedPath, os.ModePerm); err != nil {
+			return err
+		}
+		if err := os.WriteFile(filepath.Join(feedPath, "index.html"), buffer.Bytes(), 0660); err != nil {
+			return err
+		}
+	}
 	ssg.FeedPosts = feedPostLists
 	return nil
 }
@@ -1119,6 +1174,61 @@ func (c *CreateFeedsPlugin) Execute(ssg *models.SSG) error {
 			if err != nil {
 				return err
 			}
+		}
+	}
+
+	// Re-render the archive pages after post detail pages so a bad slug cannot
+	// overwrite the type archive path (for example /posts/).
+	for _, feed := range ssg.FeedPosts {
+		templatePath := config.Blog.PagesConfig[feed.Type].FeedTemplatePath
+		if templatePath == "" {
+			templatePath = config.Blog.DefaultFeedTemplate
+		}
+
+		buffer := bytes.Buffer{}
+		templateFS := os.DirFS(config.Blog.TemplatesDir)
+		t := template.New("").Funcs(template.FuncMap{
+			"dateOnly": func(dateStr string) string {
+				if len(dateStr) >= 10 {
+					return dateStr[:10]
+				}
+				return dateStr
+			},
+			"slugify": func(value string) string {
+				return plugins.Slugify(value)
+			},
+			"pathEscape": func(value string) template.URL {
+				return template.URL(escapePathSegment(value))
+			},
+		})
+		t, err := t.ParseFS(templateFS, "*.html")
+		if err != nil {
+			return err
+		}
+
+		context := models.TemplateContext{
+			FeedPosts: []models.Feed{feed},
+			Themes: models.ThemeCombo{
+				Default:   config.Blog.Themes["default"],
+				Secondary: config.Blog.Themes["secondary"],
+			},
+			FeedInfo: feed,
+			Config: models.SSG_CONFIG{
+				Blog:      config.Blog,
+				AdminMode: config.AdminMode,
+			},
+			Years: plugins.YearsFromPosts(ssg.Posts),
+		}
+		if err := t.ExecuteTemplate(&buffer, templatePath, context); err != nil {
+			return err
+		}
+
+		feedPath := filepath.Join(".", config.Blog.OutputDir, feed.Type)
+		if err := os.MkdirAll(feedPath, os.ModePerm); err != nil {
+			return err
+		}
+		if err := os.WriteFile(filepath.Join(feedPath, "index.html"), buffer.Bytes(), 0660); err != nil {
+			return err
 		}
 	}
 	return nil
