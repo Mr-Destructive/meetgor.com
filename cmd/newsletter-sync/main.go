@@ -203,18 +203,19 @@ func insertToDB() {
 		}
 		seenHashes[contentHash] = true
 
-		// Check if already exists in database
+		// Check if this content hash already exists in database
+		hashExists, err := postWithHashExists(ctx, db, contentHash)
+		if err == nil && hashExists {
+			fmt.Printf("⏭️  Content already exists (same hash): %s\n", slug)
+			foundExisting = true // Stop checking older posts
+			continue
+		}
+
+		// Check if slug exists (to decide INSERT vs UPDATE)
 		existing, err := q.GetPostBySlug(ctx, slug)
 		isNewPost := err != nil || existing.Slug == ""
 
 		if !isNewPost {
-			// Post exists - check if content changed
-			existingMeta := parseMetadataJSON(existing.Metadata.String)
-			if existingHash, ok := existingMeta["content_hash"].(string); ok && existingHash == contentHash {
-				fmt.Printf("⏭️  Already exists (unchanged): %s\n", slug)
-				foundExisting = true // Stop checking older posts
-				continue
-			}
 			fmt.Printf("♻️  Updating existing post: %s\n", slug)
 		}
 
@@ -296,6 +297,17 @@ func parseMetadataJSON(metaStr string) map[string]interface{} {
 	var meta map[string]interface{}
 	json.Unmarshal([]byte(metaStr), &meta)
 	return meta
+}
+
+func postWithHashExists(ctx context.Context, db *sql.DB, contentHash string) (bool, error) {
+	// Query posts table where metadata JSON contains the content_hash
+	query := `SELECT COUNT(*) FROM posts WHERE metadata LIKE ?`
+	var count int
+	err := db.QueryRowContext(ctx, query, "%"+contentHash+"%").Scan(&count)
+	if err != nil {
+		return false, err
+	}
+	return count > 0, nil
 }
 
 func fetchFeed(url string) (*gofeed.Feed, error) {
