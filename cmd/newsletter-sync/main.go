@@ -214,10 +214,11 @@ func insertToDB() {
 		}
 		seenHashes[contentHash] = true
 
-		// Check if this content hash already exists in database - ONLY criterion
-		hashExists, err := postWithHashExists(ctx, db, contentHash)
-		if err == nil && hashExists {
-			fmt.Printf("⏭️  Skip: content hash already in DB\n")
+		// Check if title already exists in database - if yes, skip (duplicate)
+		var existingTitle string
+		db.QueryRowContext(ctx, "SELECT title FROM posts WHERE title = ? LIMIT 1", title).Scan(&existingTitle)
+		if existingTitle != "" {
+			fmt.Printf("⏭️  Skip: title already exists\n")
 			continue
 		}
 
