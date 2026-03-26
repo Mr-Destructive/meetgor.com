@@ -130,12 +130,23 @@ func insertToDB() {
 		}
 	}
 
+	// If no workflow files, sync ALL local files
 	if len(createdFiles) == 0 {
-		fmt.Printf("⏭️  No newly created files to sync\n")
+		postsDir := "posts/newsletter"
+		entries, _ := os.ReadDir(postsDir)
+		for _, e := range entries {
+			if strings.HasSuffix(e.Name(), ".md") {
+				createdFiles[filepath.Join(postsDir, e.Name())] = true
+			}
+		}
+	}
+
+	if len(createdFiles) == 0 {
+		fmt.Printf("⏭️  No files to sync\n")
 		os.Exit(0)
 	}
 
-	fmt.Printf("📝 Found %d newly created files to sync\n", len(createdFiles))
+	fmt.Printf("📝 Found %d files to sync\n", len(createdFiles))
 
 	// Open database
 	dbName := os.Getenv("TURSO_DATABASE_NAME")
