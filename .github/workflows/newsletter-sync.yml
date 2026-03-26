@@ -82,6 +82,8 @@ jobs:
 
       - name: Commit if changed
         if: steps.create.outputs.created == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if git status --porcelain | grep -q "posts/newsletter/"; then
             git config --local user.email "action@github.com"
@@ -89,6 +91,9 @@ jobs:
             git add posts/newsletter/
             git commit -m "📰 sync: newsletter posts from Substack (via Netlify)"
             git push
+            
+            # Trigger build workflow
+            gh workflow run deploy.yml
           fi
 
       - name: Summary
