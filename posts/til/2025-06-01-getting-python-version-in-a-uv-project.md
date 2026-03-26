@@ -1,15 +1,10 @@
 ---
-hash: 24b02e19e1f6bf2c68afb9478e529e5234bbc36fcf60c379bb207d7a7914de9a
-slug: 
+type: til
+title: "Getting Python version in a UV project"
+date: 2025-06-01
+status: published
+slug: getting-python-version-in-a-uv-project
 ---
-{
-  "title": "Getting Python version in a UV project",
-  "post_dir": "til",
-  "type": "til",
-  "status": "published",
-  "slug": "getting-python-version-in-a-uv-project",
-  "date": "2025-06-01"
-}
 
 I was live streaming, creating a AI Coding Agent from scratch in Python. I was excited to create the agent. You can watch the [livestream](https://youtube.com/clip/Ugkx2AcRqaYcMgAqZgtA2k48iYb8sJf9VL6F?si=XTtC2zFs2Kloia0L) here. 
 

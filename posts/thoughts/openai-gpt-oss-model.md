@@ -1,16 +1,12 @@
 ---
+title: "OpenAI releases Open Weight models GPT-OSS"
+date: 2025-08-06
+status: published
+slug: openai-open-weight-oss-model
+type: links
+link: "https://openai.com/index/introducing-gpt-oss/"
 hash: f58e6020450c07ceaae0430895fa04ff466bb5817747a14de2259ceb26bab739
-slug: 
 ---
-{
-  "title": "OpenAI releases Open Weight models GPT-OSS",
-  "post_dir":"links",
-  "type":"links",
-  "status": "published",
-  "link": "https://openai.com/index/introducing-gpt-oss/",
-  "slug": "openai-open-weight-oss-model",
-  "date": "2025-08-06"
-}
 
 # [Introducing gpt-oss](https://openai.com/index/introducing-gpt-oss/)
 

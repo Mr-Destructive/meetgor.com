@@ -1,8 +1,12 @@
 ---
-slug: 
+type: til
+title: "Add hunks: only line specific changes with git add -p"
+date: 2025-04-11
+status: published
+slug: add-hunks-only-line-specific-changes-with-git-add-p
+tags: ["git"]
 hash: 8809028071d43ca99a472622ec71a0a71fab60873d12e4b09466e042cebda26b
 ---
-{"author":"meet","date":"2025-04-11","post_dir":"til","published":"published","tags":["git"],"title":"Add hunks: only line specific changes with git add -p","type":"til"}
 
 I had made the changes for a future release, next set of changes so to speak in git terms. Then, I encountered a bug while testing the previous changes. Now, I could have 
 1. Open VS Code and add that little `+` icon in the gutter to fix the bug

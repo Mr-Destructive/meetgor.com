@@ -1,15 +1,11 @@
 ---
-slug: 
+title: "I kind of hate Agentic IDEs for the sake of productivity"
+date: 2025-05-22
+status: published
+slug: i-kind-of-hate-agentic-ides-for-the-sake-of-productivity
+type: links
 hash: a1bb193e4e68fc11184f4e0a80232b4e695a5478f1dcbad73210f66d20148465
 ---
-{
-  "title": "I kind of hate Agentic IDEs for the sake of productivity",
-  "post_dir":"links",
-  "type":"links",
-  "status": "published",
-  "slug": "i-kind-of-hate-agentic-ides-for-the-sake-of-productivity",
-  "date": "2025-05-22"
-}
 
 This is May 2025, we are halfway through 2025. And tech world has gone a 180-degree turn in how developers are working. With the rise of Agentic IDEs (yes, that is a deliberate buzzword, I am using) like Windsurf, Cursor, Lovable, Bolt, Claude code, Warp, Amp code, whatever agent in the loop.
 

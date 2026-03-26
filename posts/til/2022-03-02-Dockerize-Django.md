@@ -1,15 +1,11 @@
 ---
-hash: 42776b91758d3b5022cd2f025be25e54be44711dad89883b706b8a0672e6546b
-slug: 
+type: til
+title: "Dockerize a Django project"
+date: 2022-03-02 19:12:51
+status: published
+slug: dockerize-django-prj
+tags: ["django", "docker"]
 ---
-{
-    "type": "til",
-    "title": "Dockerize a Django project",
-    "date": "2022-03-02 19:12:51",
-    "status": "published",
-    "tags": ["django", "docker"],
-    "slug": "dockerize-django-prj"
-}
 
 ## Dockerize a Django project
 

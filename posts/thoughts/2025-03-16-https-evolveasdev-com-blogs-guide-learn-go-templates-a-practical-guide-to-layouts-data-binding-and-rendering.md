@@ -1,15 +1,11 @@
 ---
+title: "https://evolveasdev.com/blogs/guide/learn-go-templates-a-practical-guide-to-layouts-data-binding-and-rendering"
+date: 2025-03-16
+status: published
+slug: https-evolveasdev-com-blogs-guide-learn-go-templates-a-practical-guide-to-layouts-data-binding-and-rendering
+type: links
 hash: f8338d2211c7e2c29cb65c8acba5a2a1638fae07185628f54cf0c0ab4ff122e2
-slug: 
 ---
-{
-  "title": "https://evolveasdev.com/blogs/guide/learn-go-templates-a-practical-guide-to-layouts-data-binding-and-rendering",
-  "post_dir":"links",
-  "type":"links",
-  "status": "published",
-  "slug": "https-evolveasdev-com-blogs-guide-learn-go-templates-a-practical-guide-to-layouts-data-binding-and-rendering",
-  "date": "2025-03-16"
-}
 
 A well written and concise guide on template parsing with golang.
 I used to get confused with parsing and rendering the template, this makes it really clear by showing bit-sized examples.

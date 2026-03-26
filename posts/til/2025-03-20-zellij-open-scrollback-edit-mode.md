@@ -1,15 +1,10 @@
 ---
-hash: 416b7f4c1db9f60748cfb41412e0891472e644fd719402321b3ed162cb2c2312
-slug: 
+type: til
+title: "Zellij Open Scrollback Edit mode"
+date: 2025-03-20
+status: published
+slug: zellij-open-scrollback-edit-mode
 ---
-{
-  "title": "Zellij Open Scrollback Edit mode",
-  "post_dir": "til",
-  "type": "til",
-  "status": "published",
-  "slug": "zellij-open-scrollback-edit-mode",
-  "date": "2025-03-20"
-}
 
 I was looking at a long list of logs, (debugging of course). 
 

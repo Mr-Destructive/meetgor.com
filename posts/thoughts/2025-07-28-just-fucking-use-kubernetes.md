@@ -1,15 +1,11 @@
 ---
-slug: 
+title: "Just Fucking use kubernetes"
+date: 2025-07-28
+status: published
+slug: just-fucking-use-kubernetes
+type: links
 hash: e126900e047ff9480ec3430dedb4bc95afdffb8a5ac1994b257a85028212fd5c
 ---
-{
-  "title": "Just Fucking use kubernetes",
-  "post_dir":"links",
-  "type":"links",
-  "status": "published",
-  "slug": "just-fucking-use-kubernetes",
-  "date": "2025-07-28"
-}
 
 Just fucking use Kubernetes - [https://waylonwalker.com/just-fucking-use-kubernetes/](https://waylonwalker.com/just-fucking-use-kubernetes/)
 

@@ -1,15 +1,11 @@
 ---
+title: "Friction is necessary in our lives, more the solutions, more the problems."
+date: 2025-03-22
+status: published
+slug: friction-is-necessary-in-our-lives-more-the-solutions-more-the-problems
+type: links
 hash: 572a9b28ca1565c5b05a14f5952a55b22bf02cd00ae687cf59d7f9daa6ed8048
-slug: 
 ---
-{
-  "title": "Friction is necessary in our lives, more the solutions, more the problems.",
-  "post_dir":"links",
-  "type":"links",
-  "status": "published",
-  "slug": "friction-is-necessary-in-our-lives-more-the-solutions-more-the-problems",
-  "date": "2025-03-22"
-}
 
 <p>LINK: <a href="https://cassidoo.co/post/introduce-friction/">https://cassidoo.co/post/introduce-friction</a></p>
 <p>I agree to this post, when I didn't had the phone, I was much creative, much more bored.

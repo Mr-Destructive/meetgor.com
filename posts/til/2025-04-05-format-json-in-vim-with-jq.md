@@ -1,15 +1,10 @@
 ---
-hash: e3586c3aab35e0d0994f389d00c2e682f0dbfad8dc8c62637cee721dd01baade
-slug: 
+type: til
+title: "Format JSON in Vim with JQ"
+date: 2025-04-05T12:33:15Z
+status: published
+slug: format-json-in-vim-with-jq
 ---
-{
-  "title": "Format JSON in Vim with JQ",
-  "post_dir": "til",
-  "type": "til",
-  "status": "published",
-  "slug": "format-json-in-vim-with-jq",
-  "date": "2025-04-05T12:33:15Z"
-}
 
 <p>We can use</p>
 <pre><code>:%!jq .

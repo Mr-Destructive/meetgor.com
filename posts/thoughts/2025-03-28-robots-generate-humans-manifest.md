@@ -1,15 +1,11 @@
 ---
+title: "Robots Generate, Humans Manifest"
+date: 2025-03-28
+status: published
+slug: robots-generate-humans-manifest
+type: links
 hash: 23b83d2ce61844d28f2802a97818e94e0db25e8e8f8cc94d7de301380a9dd123
-slug: 
 ---
-{
-  "title": "Robots Generate, Humans Manifest",
-  "post_dir":"links",
-  "type":"links",
-  "status": "published",
-  "slug": "robots-generate-humans-manifest",
-  "date": "2025-03-28"
-}
 
 
 To,

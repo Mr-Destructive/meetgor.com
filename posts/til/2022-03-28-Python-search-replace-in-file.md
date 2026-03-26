@@ -1,16 +1,12 @@
 ---
-hash: 08ce06a42bf1f01ca2df82f75433247f33fe113357e7d3b8199c6daa335b1c5b
-slug: 
+type: til
+title: "Python: Search and Replace in File"
+description: "Perform search-replace operation in a file using python"
+date: 2022-03-28 18:59:30
+status: published
+slug: python-search-replace-file
+tags: ["python"]
 ---
-{
-    "type": "til",
-    "title": "Python: Search and Replace in File",
-    "description": "Perform search-replace operation in a file using python",
-    "date": "2022-03-28 18:59:30",
-    "status": "published",
-    "slug": "python-search-replace-file",
-    "tags": ["python"]
-}
 
 ## Searching and Replacing the text in a File
 
