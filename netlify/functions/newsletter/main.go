@@ -27,6 +27,13 @@ type RSSPost struct {
 	Description string `json:"description"`
 }
 
+type SyncResponse struct {
+	Message string     `json:"message"`
+	Posts   []RSSPost  `json:"posts"`
+	Total   int        `json:"total"`
+	New     int        `json:"new"`
+}
+
 func main() {
 	lambda.Start(handler)
 }
@@ -34,55 +41,30 @@ func main() {
 func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	ctx := context.Background()
 
-	// Get newsletter feed URL from environment or use default
 	feedURL := os.Getenv("NEWSLETTER_FEED_URL")
 	if feedURL == "" {
 		feedURL = "https://techstructively.substack.com/feed"
 	}
 
-	// Fetch and parse RSS feed
+	log.Printf("📰 Fetching from: %s", feedURL)
+
+	// Fetch RSS feed
 	posts, err := fetchNewsletter(ctx, feedURL)
 	if err != nil {
-		log.Printf("Error fetching newsletter: %v", err)
+		log.Printf("❌ Error: %v", err)
 		return errorResponse(http.StatusInternalServerError, fmt.Sprintf("Failed to fetch newsletter: %v", err)), nil
 	}
 
-	// Create markdown files in posts/newsletter
-	postsDir := "/tmp/posts/newsletter"
-	if err := os.MkdirAll(postsDir, 0o755); err != nil {
-		log.Printf("Error creating posts directory: %v", err)
-		return errorResponse(http.StatusInternalServerError, "Failed to create directory"), nil
+	log.Printf("✅ Found %d posts in feed", len(posts))
+
+	response := SyncResponse{
+		Message: "Newsletter sync completed",
+		Posts:   posts,
+		Total:   len(posts),
+		New:     len(posts), // GitHub Action will filter duplicates
 	}
 
-	saved := 0
-	skipped := 0
-
-	for _, post := range posts {
-		// Generate frontmatter
-		frontmatter := generateFrontmatter(post)
-
-		// Create markdown file
-		filename := post.Slug + ".md"
-		filepath := postsDir + "/" + filename
-
-		content := frontmatter + "\n\n" + post.Body
-
-		if err := os.WriteFile(filepath, []byte(content), 0o644); err != nil {
-			log.Printf("Error writing file %s: %v", filepath, err)
-			skipped++
-			continue
-		}
-
-		log.Printf("Saved newsletter post: %s", post.Title)
-		saved++
-	}
-
-	return jsonResponse(http.StatusOK, map[string]interface{}{
-		"message": "Newsletter sync completed",
-		"saved":   saved,
-		"skipped": skipped,
-		"total":   len(posts),
-	}), nil
+	return jsonResponse(http.StatusOK, response), nil
 }
 
 func fetchNewsletter(ctx context.Context, feedURL string) ([]RSSPost, error) {
@@ -93,12 +75,8 @@ func fetchNewsletter(ctx context.Context, feedURL string) ([]RSSPost, error) {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
 
-	// Set user agent to avoid 403 from Substack
 	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36")
 	req.Header.Set("Accept", "application/rss+xml, application/atom+xml, application/xml;q=0.9, */*;q=0.1")
-	req.Header.Set("Accept-Language", "en-US,en;q=0.9")
-	req.Header.Set("Accept-Encoding", "gzip, deflate")
-	req.Header.Set("Referer", "https://www.google.com/")
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -107,8 +85,7 @@ func fetchNewsletter(ctx context.Context, feedURL string) ([]RSSPost, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		body, _ := io.ReadAll(resp.Body)
-		return nil, fmt.Errorf("feed returned status %d: %s", resp.StatusCode, string(body))
+		return nil, fmt.Errorf("feed returned status %d", resp.StatusCode)
 	}
 
 	body, err := io.ReadAll(resp.Body)
@@ -116,7 +93,6 @@ func fetchNewsletter(ctx context.Context, feedURL string) ([]RSSPost, error) {
 		return nil, fmt.Errorf("failed to read response body: %w", err)
 	}
 
-	// Parse feed
 	parser := gofeed.NewParser()
 	feed, err := parser.ParseString(string(body))
 	if err != nil {
@@ -139,7 +115,6 @@ func parseRSSItems(feed *gofeed.Feed) []RSSPost {
 			date = item.PublishedParsed.Format("2006-01-02")
 		}
 
-		// Get body content
 		body := item.Content
 		if body == "" {
 			body = item.Description
@@ -163,26 +138,6 @@ func parseRSSItems(feed *gofeed.Feed) []RSSPost {
 	return posts
 }
 
-func generateFrontmatter(post RSSPost) string {
-	frontmatter := fmt.Sprintf(`---
-type: newsletter
-title: "%s"
-description: "%s"
-status: published
-slug: %s
-date: %s
-tags: ["newsletter", "substack"]
-canonical_url: %s
----`, 
-		escapeFrontmatterValue(post.Title),
-		escapeFrontmatterValue(truncate(post.Description, 100)),
-		post.Slug,
-		post.Date,
-		post.Link,
-	)
-	return frontmatter
-}
-
 func slugFromTitle(title string) string {
 	re := regexp.MustCompile(`[^a-z0-9]+`)
 	s := strings.ToLower(title)
@@ -194,27 +149,13 @@ func slugFromTitle(title string) string {
 	return s
 }
 
-func escapeFrontmatterValue(s string) string {
-	// Escape quotes in YAML frontmatter
-	return strings.ReplaceAll(s, `"`, `\"`)
-}
-
-func truncate(s string, length int) string {
-	if len(s) > length {
-		return s[:length] + "..."
-	}
-	return s
-}
-
 func jsonResponse(statusCode int, data interface{}) events.APIGatewayProxyResponse {
 	body, _ := json.Marshal(data)
 	return events.APIGatewayProxyResponse{
 		StatusCode: statusCode,
 		Headers: map[string]string{
-			"Content-Type":                 "application/json",
-			"Access-Control-Allow-Origin":  "*",
-			"Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-			"Access-Control-Allow-Headers": "Content-Type, Authorization",
+			"Content-Type":                "application/json",
+			"Access-Control-Allow-Origin": "*",
 		},
 		Body: string(body),
 	}

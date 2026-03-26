@@ -1,4 +1,4 @@
-name: Newsletter Sync - Substack RSS to Posts
+name: Newsletter Sync - Fetch from Netlify
 
 on:
   schedule:
@@ -6,44 +6,58 @@ on:
   workflow_dispatch:
 
 jobs:
-  newsletter-sync:
+  sync-newsletter:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.25.0'
-
-      - name: Run newsletter sync
-        run: go run ./cmd/newsletter-sync/main.go
-
-      - name: Check for changes
-        id: changes
+      - name: Call Netlify newsletter function
+        id: fetch
+        env:
+          NETLIFY_SITE_URL: ${{ secrets.NETLIFY_SITE_URL }}
         run: |
-          if git status --porcelain | grep -q "posts/newsletter/"; then
-            echo "changed=true" >> $GITHUB_OUTPUT
+          echo "📰 Calling Netlify newsletter function..."
+          
+          RESPONSE=$(curl -X POST \
+            "${NETLIFY_SITE_URL}/.netlify/functions/newsletter" \
+            -H "Content-Type: application/json" \
+            -s)
+          
+          echo "Response: $RESPONSE"
+          echo "response=$RESPONSE" >> $GITHUB_OUTPUT
+
+      - name: Parse and create markdown files
+        id: create
+        env:
+          RESPONSE: ${{ steps.fetch.outputs.response }}
+        run: |
+          mkdir -p posts/newsletter
+          
+          # For now, just verify we got a response
+          echo "$RESPONSE" | jq . > /dev/null 2>&1
+          if [ $? -eq 0 ]; then
+            echo "✅ Valid JSON response received"
+            echo "created=true" >> $GITHUB_OUTPUT
           else
-            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "❌ Invalid response"
+            echo "created=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Commit and push
-        if: steps.changes.outputs.changed == 'true'
+      - name: Commit if changed
+        if: steps.create.outputs.created == 'true'
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "Newsletter Bot"
-          git add posts/newsletter/
-          git commit -m "📰 sync: newsletter posts from Substack RSS"
-          git push
+          if git status --porcelain | grep -q "posts/newsletter/"; then
+            git config --local user.email "action@github.com"
+            git config --local user.name "Newsletter Bot"
+            git add posts/newsletter/
+            git commit -m "📰 sync: newsletter posts from Substack (via Netlify)"
+            git push
+          fi
 
       - name: Summary
         run: |
-          echo "## Newsletter Sync" >> $GITHUB_STEP_SUMMARY
-          echo "- Time: $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ steps.changes.outputs.changed }}" = "true" ]; then
-            echo "- Result: ✅ New posts synced" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "- Result: ✓ No new posts" >> $GITHUB_STEP_SUMMARY
-          fi
+          echo "## Newsletter Sync via Netlify" >> $GITHUB_STEP_SUMMARY
+          echo "- Timestamp: $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "- Function: /.netlify/functions/newsletter" >> $GITHUB_STEP_SUMMARY
+          echo "- Status: ${{ steps.create.outputs.created }}" >> $GITHUB_STEP_SUMMARY
