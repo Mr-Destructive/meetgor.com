@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 
@@ -28,10 +29,10 @@ type RSSPost struct {
 }
 
 type SyncResponse struct {
-	Message string     `json:"message"`
-	Posts   []RSSPost  `json:"posts"`
-	Total   int        `json:"total"`
-	New     int        `json:"new"`
+	Message string    `json:"message"`
+	Posts   []RSSPost `json:"posts"`
+	Total   int       `json:"total"`
+	New     int       `json:"new"`
 }
 
 func main() {
@@ -104,8 +105,16 @@ func fetchNewsletter(ctx context.Context, feedURL string) ([]RSSPost, error) {
 
 func parseRSSItems(feed *gofeed.Feed) []RSSPost {
 	posts := []RSSPost{}
+	if feed == nil {
+		return posts
+	}
 
-	for _, item := range feed.Items {
+	items := append([]*gofeed.Item(nil), feed.Items...)
+	sort.SliceStable(items, func(i, j int) bool {
+		return publishTime(items[i]).After(publishTime(items[j]))
+	})
+
+	for _, item := range items {
 		if item == nil || item.Title == "" {
 			continue
 		}
@@ -138,6 +147,19 @@ func parseRSSItems(feed *gofeed.Feed) []RSSPost {
 	return posts
 }
 
+func publishTime(item *gofeed.Item) time.Time {
+	if item == nil {
+		return time.Time{}
+	}
+	if item.PublishedParsed != nil {
+		return *item.PublishedParsed
+	}
+	if item.UpdatedParsed != nil {
+		return *item.UpdatedParsed
+	}
+	return time.Time{}
+}
+
 func slugFromTitle(title string) string {
 	re := regexp.MustCompile(`[^a-z0-9]+`)
 	s := strings.ToLower(title)
@@ -163,4 +185,31 @@ func jsonResponse(statusCode int, data interface{}) events.APIGatewayProxyRespon
 
 func errorResponse(statusCode int, message string) events.APIGatewayProxyResponse {
 	return jsonResponse(statusCode, map[string]string{"error": message})
+}
+
+func escapeFrontmatterValue(value string) string {
+	return strings.ReplaceAll(value, `"`, `\"`)
+}
+
+func truncate(value string, length int) string {
+	if length <= 0 || len(value) <= length {
+		return value
+	}
+	if length <= 3 {
+		return value[:length]
+	}
+	return value[:length] + "..."
+}
+
+func generateFrontmatter(post RSSPost) string {
+	return fmt.Sprintf(`---
+type: newsletter
+title: "%s"
+date: %s
+slug: %s
+canonical_url: %s
+status: published
+tags: ["newsletter", "substack"]
+---
+`, escapeFrontmatterValue(post.Title), post.Date, post.Slug, post.Link)
 }

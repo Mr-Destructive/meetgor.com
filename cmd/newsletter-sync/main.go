@@ -13,18 +13,45 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 
-	"github.com/mmcdole/gofeed"
 	libsqlssg "github.com/Mr-Destructive/meetgor.com/plugins/db/libsqlssg"
+	"github.com/mmcdole/gofeed"
 	_ "github.com/tursodatabase/libsql-client-go/libsql"
 	"gopkg.in/yaml.v2"
 )
 
+type newsletterFeedPost struct {
+	Title       string `json:"title"`
+	Slug        string `json:"slug"`
+	Date        string `json:"date"`
+	Link        string `json:"link"`
+	Body        string `json:"body"`
+	Description string `json:"description"`
+}
+
+type newsletterFeedResponse struct {
+	Posts []newsletterFeedPost `json:"posts"`
+}
+
 func main() {
 	dbInsert := flag.Bool("db-insert", false, "Insert posts to Turso database instead of creating markdown files")
+	materializeJSON := flag.String("materialize-json", "", "Materialize newsletter markdown files from a Netlify response JSON file")
+	materializeOutputDir := flag.String("materialize-output-dir", "posts/newsletter", "Directory for newsletter markdown files")
+	materializeCreatedFiles := flag.String("materialize-created-files", "/tmp/created_files.txt", "File that records newly created newsletter markdown files")
 	flag.Parse()
+
+	if *materializeJSON != "" {
+		count, err := materializeNewsletterResponse(*materializeJSON, *materializeOutputDir, *materializeCreatedFiles)
+		if err != nil {
+			fmt.Printf("❌ Materialize failed: %v\n", err)
+			os.Exit(1)
+		}
+		fmt.Printf("✅ Materialized %d newsletter posts\n", count)
+		return
+	}
 
 	if *dbInsert {
 		insertToDB()
@@ -71,13 +98,12 @@ func main() {
 			continue
 		}
 
-		// Generate slug from date + title
 		date := ""
 		if item.PublishedParsed != nil {
 			date = item.PublishedParsed.Format("2006-01-02")
 		}
 
-		slug := date + "-" + slugFromTitle(item.Title)
+		slug := slugFromTitle(item.Title)
 
 		// Skip if already exists
 		if existing[slug] {
@@ -90,17 +116,7 @@ func main() {
 			body = item.Description
 		}
 
-		frontmatter := fmt.Sprintf(`---
-type: newsletter
-title: "%s"
-date: %s
-slug: newsletter/%s
-tags: ["newsletter", "substack"]
-canonical_url: %s
-status: published
----
-
-`, escapeQuotes(item.Title), date, slug, item.Link)
+		frontmatter := generateFrontmatter(item.Title, slug, date, item.Link, item.Description)
 
 		filename := filepath.Join(postsDir, slug+".md")
 		content := frontmatter + body
@@ -116,6 +132,112 @@ status: published
 
 	fmt.Printf("\n✅ Summary: %d new posts\n", newCount)
 	os.Exit(0)
+}
+
+func materializeNewsletterResponse(responsePath, outputDir, createdFilesPath string) (int, error) {
+	data, err := os.ReadFile(responsePath)
+	if err != nil {
+		return 0, err
+	}
+
+	var response newsletterFeedResponse
+	if err := json.Unmarshal(data, &response); err != nil {
+		return 0, err
+	}
+
+	sortNewsletterFeedPosts(response.Posts)
+
+	existing, err := readExistingNewsletterSlugs(outputDir)
+	if err != nil {
+		return 0, err
+	}
+
+	planned := planNewsletterMaterialization(response.Posts, existing)
+	if err := os.MkdirAll(outputDir, 0o755); err != nil {
+		return 0, err
+	}
+	if err := os.WriteFile(createdFilesPath, []byte(""), 0o644); err != nil {
+		return 0, err
+	}
+
+	created := 0
+	for _, post := range planned {
+		if err := writeNewsletterPost(outputDir, createdFilesPath, post); err != nil {
+			return created, err
+		}
+		created++
+	}
+
+	return created, nil
+}
+
+func sortNewsletterFeedPosts(posts []newsletterFeedPost) {
+	sort.SliceStable(posts, func(i, j int) bool {
+		return newsletterPostSortKey(posts[i]).After(newsletterPostSortKey(posts[j]))
+	})
+}
+
+func planNewsletterMaterialization(posts []newsletterFeedPost, existing map[string]bool) []newsletterFeedPost {
+	planned := make([]newsletterFeedPost, 0, len(posts))
+	for _, post := range posts {
+		if post.Slug == "" {
+			continue
+		}
+		if existing[post.Slug] {
+			break
+		}
+		planned = append(planned, post)
+	}
+	return planned
+}
+
+func readExistingNewsletterSlugs(outputDir string) (map[string]bool, error) {
+	existing := make(map[string]bool)
+	entries, err := os.ReadDir(outputDir)
+	if err != nil && !os.IsNotExist(err) {
+		return nil, err
+	}
+	for _, entry := range entries {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".md") {
+			continue
+		}
+		existing[strings.TrimSuffix(entry.Name(), ".md")] = true
+	}
+	return existing, nil
+}
+
+func writeNewsletterPost(outputDir, createdFilesPath string, post newsletterFeedPost) error {
+	body := post.Body
+	if body == "" {
+		body = post.Description
+	}
+	content := generateFrontmatter(post.Title, post.Slug, post.Date, post.Link, post.Description) + body
+	filePath := filepath.Join(outputDir, post.Slug+".md")
+	if err := os.WriteFile(filePath, []byte(content), 0o644); err != nil {
+		return err
+	}
+
+	file, err := os.OpenFile(createdFilesPath, os.O_APPEND|os.O_WRONLY, 0o644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	if _, err := fmt.Fprintln(file, filePath); err != nil {
+		return err
+	}
+
+	fmt.Printf("✨ Created: %s\n", filePath)
+	return nil
+}
+
+func newsletterPostSortKey(post newsletterFeedPost) time.Time {
+	if post.Date != "" {
+		if parsed, err := time.Parse("2006-01-02", post.Date); err == nil {
+			return parsed
+		}
+	}
+	return time.Time{}
 }
 
 func insertToDB() {
@@ -190,21 +312,16 @@ func insertToDB() {
 			continue
 		}
 
-		// Parse frontmatter and body
-		parts := strings.Split(string(content), "---")
-		if len(parts) < 3 {
+		frontmatter, body, err := splitNewsletterFrontmatter(string(content))
+		if err != nil {
 			fmt.Printf("⚠️  Invalid markdown format: %s\n", filePath)
 			continue
 		}
 
-		// Parse frontmatter - try JSON first, then YAML
-		frontmatter := parts[1]
-		body := strings.TrimSpace(parts[2])
-
 		// Try to parse as JSON first
 		var metadata map[string]interface{}
 		err = json.Unmarshal([]byte(frontmatter), &metadata)
-		
+
 		// If JSON fails, try YAML
 		if err != nil {
 			err = yaml.Unmarshal([]byte(frontmatter), &metadata)
@@ -220,11 +337,15 @@ func insertToDB() {
 			continue
 		}
 
-		slug := strings.TrimSuffix(filepath.Base(filePath), ".md")
-		
-		link := ""
-		if canonicalURL, ok := metadata["canonical_url"].(string); ok {
-			link = canonicalURL
+		slug := extractMetadataString(metadata, "slug")
+		slug = normalizeNewsletterSlug(slug)
+		if slug == "" {
+			slug = strings.TrimSuffix(filepath.Base(filePath), ".md")
+		}
+
+		link := extractMetadataString(metadata, "canonical_url")
+		if link == "" {
+			link = extractMetadataString(metadata, "link")
 		}
 
 		// Compute content hash
@@ -237,22 +358,26 @@ func insertToDB() {
 		}
 		seenHashes[contentHash] = true
 
-		// Check if title already exists in database - if yes, skip (duplicate)
-		var existingTitle string
-		db.QueryRowContext(ctx, "SELECT title FROM posts WHERE title = ? LIMIT 1", title).Scan(&existingTitle)
-		if existingTitle != "" {
-			fmt.Printf("⏭️  Skip: title already exists\n")
+		// Skip if this slug already exists in the database.
+		if _, err := q.GetPostBySlug(ctx, slug); err == nil {
+			fmt.Printf("⏭️  Skip: slug already exists\n")
+			continue
+		}
+
+		// Skip if we already inserted this exact content hash in the past.
+		if exists, err := postWithHashExists(ctx, db, contentHash); err == nil && exists {
+			fmt.Printf("⏭️  Skip: content hash already exists\n")
 			continue
 		}
 
 		// Insert only (hash is unique key)
-		metadata := map[string]interface{}{
+		metaPayload := map[string]interface{}{
 			"canonical_url": link,
 			"type":          "newsletter",
 			"source":        "substack",
 			"content_hash":  contentHash,
 		}
-		metaJSON, _ := json.Marshal(metadata)
+		metaJSON, _ := json.Marshal(metaPayload)
 		tagsJSON, _ := json.Marshal([]string{"newsletter", "substack"})
 
 		_, err = q.CreatePost(ctx, libsqlssg.CreatePostParams{
@@ -279,29 +404,9 @@ func insertToDB() {
 	os.Exit(0)
 }
 
-func extractYAML(yaml, key string) string {
-	for _, line := range strings.Split(yaml, "\n") {
-		if strings.HasPrefix(line, key+":") {
-			val := strings.TrimSpace(strings.TrimPrefix(line, key+":"))
-			val = strings.Trim(val, `"`)
-			return val
-		}
-	}
-	return ""
-}
-
 func computeHash(content string) string {
 	h := sha256.Sum256([]byte(content))
 	return hex.EncodeToString(h[:])
-}
-
-func parseMetadataJSON(metaStr string) map[string]interface{} {
-	if metaStr == "" {
-		return map[string]interface{}{}
-	}
-	var meta map[string]interface{}
-	json.Unmarshal([]byte(metaStr), &meta)
-	return meta
 }
 
 func postWithHashExists(ctx context.Context, db *sql.DB, contentHash string) (bool, error) {
@@ -362,4 +467,77 @@ func slugFromTitle(title string) string {
 
 func escapeQuotes(s string) string {
 	return strings.ReplaceAll(s, `"`, `\"`)
+}
+
+func generateFrontmatter(title, slug, date, link, description string) string {
+	var builder strings.Builder
+	builder.WriteString("---\n")
+	builder.WriteString(fmt.Sprintf("title: \"%s\"\n", escapeQuotes(title)))
+	if date != "" {
+		builder.WriteString(fmt.Sprintf("date: %s\n", date))
+	}
+	builder.WriteString(fmt.Sprintf("slug: %s\n", slug))
+	builder.WriteString("type: newsletter\n")
+	builder.WriteString("status: published\n")
+	builder.WriteString("source: newsletter\n")
+	builder.WriteString(fmt.Sprintf("canonical_url: %s\n", link))
+	if description != "" {
+		builder.WriteString(fmt.Sprintf("description: \"%s\"\n", escapeQuotes(description)))
+	}
+	builder.WriteString("tags: [\"newsletter\", \"substack\"]\n")
+	builder.WriteString("---\n\n")
+	return builder.String()
+}
+
+func splitNewsletterFrontmatter(content string) (string, string, error) {
+	trimmed := strings.TrimSpace(content)
+	if trimmed == "" {
+		return "", "", fmt.Errorf("empty content")
+	}
+
+	if strings.HasPrefix(trimmed, "---") {
+		lines := strings.Split(trimmed, "\n")
+		end := -1
+		for i := 1; i < len(lines); i++ {
+			if strings.TrimSpace(lines[i]) == "---" {
+				end = i
+				break
+			}
+		}
+		if end == -1 {
+			return "", "", fmt.Errorf("missing closing frontmatter delimiter")
+		}
+		frontmatter := strings.Join(lines[1:end], "\n")
+		body := strings.Join(lines[end+1:], "\n")
+		return frontmatter, strings.TrimSpace(body), nil
+	}
+
+	if strings.HasPrefix(trimmed, "{") {
+		if end := strings.Index(trimmed, "\n\n"); end != -1 {
+			frontmatter := strings.TrimSpace(trimmed[:end])
+			body := strings.TrimSpace(trimmed[end+2:])
+			return frontmatter, body, nil
+		}
+	}
+
+	return "", "", fmt.Errorf("unsupported markdown format")
+}
+
+func extractMetadataString(metadata map[string]interface{}, key string) string {
+	if metadata == nil {
+		return ""
+	}
+	if value, ok := metadata[key]; ok {
+		if s, ok := value.(string); ok {
+			return s
+		}
+	}
+	return ""
+}
+
+func normalizeNewsletterSlug(slug string) string {
+	slug = strings.TrimSpace(slug)
+	slug = strings.TrimPrefix(slug, "newsletter/")
+	slug = strings.TrimPrefix(slug, "/")
+	return slug
 }

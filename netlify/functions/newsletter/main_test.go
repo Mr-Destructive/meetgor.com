@@ -2,6 +2,9 @@ package main
 
 import (
 	"testing"
+	"time"
+
+	"github.com/mmcdole/gofeed"
 )
 
 func TestSlugFromTitle(t *testing.T) {
@@ -96,6 +99,62 @@ func TestGenerateFrontmatter(t *testing.T) {
 	if !contains(frontmatter, "tags: [\"newsletter\", \"substack\"]") {
 		t.Error("frontmatter missing tags")
 	}
+}
+
+func TestParseRSSItemsSortsNewestFirst(t *testing.T) {
+	older := time.Date(2025, time.January, 1, 0, 0, 0, 0, time.UTC)
+	newer := time.Date(2025, time.February, 1, 0, 0, 0, 0, time.UTC)
+
+	feed := &feedStub{
+		Items: []*rssItemStub{
+			{
+				Title:           "Older",
+				Link:            "https://example.com/older",
+				Content:         "older body",
+				PublishedParsed: &older,
+			},
+			{
+				Title:           "Newer",
+				Link:            "https://example.com/newer",
+				Content:         "newer body",
+				PublishedParsed: &newer,
+			},
+		},
+	}
+
+	posts := parseRSSItems(feed.toFeed())
+	if len(posts) != 2 {
+		t.Fatalf("expected 2 posts, got %d", len(posts))
+	}
+	if posts[0].Title != "Newer" || posts[1].Title != "Older" {
+		t.Fatalf("unexpected order: %+v", posts)
+	}
+}
+
+type rssItemStub struct {
+	Title           string
+	Link            string
+	Content         string
+	Description     string
+	PublishedParsed *time.Time
+}
+
+type feedStub struct {
+	Items []*rssItemStub
+}
+
+func (f *feedStub) toFeed() *gofeed.Feed {
+	items := make([]*gofeed.Item, 0, len(f.Items))
+	for _, item := range f.Items {
+		items = append(items, &gofeed.Item{
+			Title:           item.Title,
+			Link:            item.Link,
+			Content:         item.Content,
+			Description:     item.Description,
+			PublishedParsed: item.PublishedParsed,
+		})
+	}
+	return &gofeed.Feed{Items: items}
 }
 
 func contains(s, substr string) bool {

@@ -27,53 +27,29 @@ jobs:
           echo "✅ Response received"
           head -c 200 /tmp/response.json
 
-      - name: Parse and create markdown files
-        id: create
-        run: |
-          mkdir -p posts/newsletter
-          touch /tmp/created_files.txt
-          
-          # Extract each post and create file
-          COUNT=$(jq -c '.posts[]' /tmp/response.json | while read -r post; do
-            TITLE=$(echo "$post" | jq -r '.title')
-            SLUG=$(echo "$post" | jq -r '.slug')
-            DATE=$(echo "$post" | jq -r '.date')
-            LINK=$(echo "$post" | jq -r '.link')
-            BODY=$(echo "$post" | jq -r '.body')
-            
-            FILE="posts/${SLUG}.md"
-            {
-              echo "---"
-              echo "hash: "
-              echo "slug: ${SLUG}"
-              echo "---"
-              echo "{"
-              echo "    \"title\": \"${TITLE}\","
-              echo "    \"type\": \"newsletter\","
-              echo "    \"date\": \"${DATE}\","
-              echo "    \"status\": \"published\","
-              echo "    \"tags\": [\"newsletter\", \"substack\"],"
-              echo "    \"canonical_url\": \"${LINK}\""
-              echo "}"
-              echo ""
-              echo "$BODY"
-            } > "$FILE"
-            echo "$FILE" >> /tmp/created_files.txt
-            echo "✨ Created: $FILE"
-            echo "1"
-          done | wc -l)
-          
-          if [ "$COUNT" -gt 0 ]; then
-            echo "created=true" >> $GITHUB_OUTPUT
-          else
-            echo "created=false" >> $GITHUB_OUTPUT
-          fi
-
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
           go-version: '1.25.0'
           cache: true
+
+      - name: Parse and create markdown files
+        id: create
+        run: |
+          set -euo pipefail
+          mkdir -p posts/newsletter
+          : > /tmp/created_files.txt
+
+          go run ./cmd/newsletter-sync \
+            --materialize-json /tmp/response.json \
+            --materialize-output-dir posts/newsletter \
+            --materialize-created-files /tmp/created_files.txt
+
+          if [[ -s /tmp/created_files.txt ]]; then
+            echo "created=true" >> $GITHUB_OUTPUT
+          else
+            echo "created=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Sync to database
         if: steps.create.outputs.created == 'true'
