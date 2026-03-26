@@ -120,6 +120,23 @@ status: published
 func insertToDB() {
 	ctx := context.Background()
 
+	// Read list of newly created files from workflow
+	createdFiles := make(map[string]bool)
+	if data, err := os.ReadFile("/tmp/created_files.txt"); err == nil {
+		for _, line := range strings.Split(string(data), "\n") {
+			if line != "" {
+				createdFiles[strings.TrimSpace(line)] = true
+			}
+		}
+	}
+
+	if len(createdFiles) == 0 {
+		fmt.Printf("⏭️  No newly created files to sync\n")
+		os.Exit(0)
+	}
+
+	fmt.Printf("📝 Found %d newly created files to sync\n", len(createdFiles))
+
 	// Open database
 	dbName := os.Getenv("TURSO_DATABASE_NAME")
 	dbToken := os.Getenv("TURSO_DATABASE_AUTH_TOKEN")
@@ -148,40 +165,23 @@ func insertToDB() {
 	}
 	defer db.Close()
 
-	postsDir := "posts/newsletter"
-	entries, _ := os.ReadDir(postsDir)
-
-	// Sort entries reverse (newest first)
-	for i, j := 0, len(entries)-1; i < j; i, j = i+1, j-1 {
-		entries[i], entries[j] = entries[j], entries[i]
-	}
-
 	q := libsqlssg.New(db)
 	inserted := 0
 	seenHashes := make(map[string]bool) // Track hashes we've already processed in this run
-	foundExisting := false
 
-	for _, e := range entries {
-		if !strings.HasSuffix(e.Name(), ".md") {
-			continue
-		}
-
-		// Stop if we found an existing post - all older ones are likely already synced
-		if foundExisting {
-			break
-		}
-
+	// Process only newly created files
+	for filePath := range createdFiles {
 		// Read markdown file
-		content, err := os.ReadFile(filepath.Join(postsDir, e.Name()))
+		content, err := os.ReadFile(filePath)
 		if err != nil {
-			fmt.Printf("⚠️  Error reading %s: %v\n", e.Name(), err)
+			fmt.Printf("⚠️  Error reading %s: %v\n", filePath, err)
 			continue
 		}
 
 		// Parse frontmatter and body
 		parts := strings.Split(string(content), "---")
 		if len(parts) < 3 {
-			fmt.Printf("⚠️  Invalid markdown format: %s\n", e.Name())
+			fmt.Printf("⚠️  Invalid markdown format: %s\n", filePath)
 			continue
 		}
 
