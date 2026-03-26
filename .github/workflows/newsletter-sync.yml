@@ -35,13 +35,43 @@ jobs:
         run: |
           mkdir -p posts/newsletter
           
-          # For now, just verify we got a response
-          echo "$RESPONSE" | jq . > /dev/null 2>&1
-          if [ $? -eq 0 ]; then
-            echo "✅ Valid JSON response received"
+          # Parse JSON and create markdown files
+          echo "$RESPONSE" | jq -r '.posts[] | 
+            "---\ntype: newsletter\ntitle: \"\(.title)\"\ndate: \(.date)\nslug: \(.slug)\ntags: [\"newsletter\", \"substack\"]\ncanonical_url: \(.link)\nstatus: published\n---\n\n\(.body)" | 
+            while IFS= read -r line; do
+              echo "$line"
+            done' > /tmp/posts_output.txt
+          
+          # Extract each post and create file
+          COUNT=0
+          echo "$RESPONSE" | jq -r '.posts[]' | while read -r post; do
+            TITLE=$(echo "$post" | jq -r '.title')
+            SLUG=$(echo "$post" | jq -r '.slug')
+            DATE=$(echo "$post" | jq -r '.date')
+            LINK=$(echo "$post" | jq -r '.link')
+            BODY=$(echo "$post" | jq -r '.body')
+            
+            FRONTMATTER="---
+type: newsletter
+title: \"${TITLE}\"
+date: ${DATE}
+slug: ${SLUG}
+tags: [\"newsletter\", \"substack\"]
+canonical_url: ${LINK}
+status: published
+---
+
+"
+            
+            FILE="posts/newsletter/${SLUG}.md"
+            echo "${FRONTMATTER}${BODY}" > "$FILE"
+            echo "✨ Created: $FILE"
+            COUNT=$((COUNT + 1))
+          done
+          
+          if [ $COUNT -gt 0 ]; then
             echo "created=true" >> $GITHUB_OUTPUT
           else
-            echo "❌ Invalid response"
             echo "created=false" >> $GITHUB_OUTPUT
           fi
 
