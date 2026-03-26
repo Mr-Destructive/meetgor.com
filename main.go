@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"path"
 	"path/filepath"
@@ -16,7 +17,6 @@ import (
 	"sort"
 	"strings"
 	"time"
-	"net/url"
 
 	models "github.com/Mr-Destructive/meetgor.com/models"
 	"github.com/Mr-Destructive/meetgor.com/plugins"
@@ -370,6 +370,7 @@ func ReadPosts(files []string) ([]models.Post, error) {
 			log.Printf("Error processing Markdown: %v", err)
 			continue
 		}
+		frontmatterObj.Type = plugins.NormalizePostType(frontmatterObj.Type)
 		// Append post
 		posts = append(posts, models.Post{
 			Frontmatter: frontmatterObj,
@@ -559,20 +560,20 @@ func GeneratePages(config models.SSG_CONFIG) error {
 			},
 		}
 		buffer := bytes.Buffer{}
-	t := template.New("").Funcs(template.FuncMap{
-		"dateOnly": func(dateStr string) string {
-			if len(dateStr) >= 10 {
-				return dateStr[:10]
-			}
-			return dateStr
-		},
-		"slugify": func(value string) string {
-			return plugins.Slugify(value)
-		},
-		"pathEscape": func(value string) template.URL {
-			return template.URL(escapePathSegment(value))
-		},
-	})
+		t := template.New("").Funcs(template.FuncMap{
+			"dateOnly": func(dateStr string) string {
+				if len(dateStr) >= 10 {
+					return dateStr[:10]
+				}
+				return dateStr
+			},
+			"slugify": func(value string) string {
+				return plugins.Slugify(value)
+			},
+			"pathEscape": func(value string) template.URL {
+				return template.URL(escapePathSegment(value))
+			},
+		})
 		t, err = t.ParseFS(templateFS, "*.html")
 		if err != nil {
 			return err
@@ -716,10 +717,7 @@ func isPreferredPost(candidate models.Post, existing models.Post) bool {
 
 func canonicalScore(post models.Post) int {
 	path := filepath.ToSlash(post.SourcePath)
-	postType := post.Frontmatter.Type
-	if postType == "" {
-		postType = "posts"
-	}
+	postType := plugins.NormalizePostType(post.Frontmatter.Type)
 	canonicalDir := "/posts/" + postType + "/"
 	if strings.Contains(path, canonicalDir) {
 		return 2
@@ -900,10 +898,7 @@ func (c *RenderTemplatesPlugin) Execute(ssg *models.SSG) error {
 		if post.Frontmatter.Date == "" {
 			continue
 		}
-		postType := post.Frontmatter.Type
-		if postType == "" {
-			postType = "posts"
-		}
+		postType := plugins.NormalizePostType(post.Frontmatter.Type)
 		templatePath := config.Blog.PagesConfig[postType].TemplatePath
 		if templatePath == "" {
 			templatePath = config.Blog.DefaultPostTemplate
@@ -926,6 +921,7 @@ func (c *RenderTemplatesPlugin) Execute(ssg *models.SSG) error {
 				postSlug = slugPath
 			}
 		}
+		post.Frontmatter.Type = postType
 		post.Frontmatter.Slug = prefixURL + postType + "/" + postSlug
 		postPath := filepath.Join(outputPath, postType, postSlug)
 		//outputDirPath := filepath.Join(postPath, postSlug)
@@ -1095,7 +1091,7 @@ func (c *CreateFeedsPlugin) Execute(ssg *models.SSG) error {
 	// create a folder for post if the post type is "post"
 	// as this should be the /posts/<slug> as well as /<slug>
 	for _, post := range ssg.Posts {
-		if post.Frontmatter.Type == "posts" {
+		if plugins.NormalizePostType(post.Frontmatter.Type) == "posts" {
 			postPath := filepath.Join(".", config.Blog.OutputDir, post.Frontmatter.Slug)
 			err := os.MkdirAll(postPath, os.ModePerm)
 			if err != nil {

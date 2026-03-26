@@ -80,9 +80,9 @@
         <div class="section">
             <h2><span class="section-num">1</span>Post Type</h2>
             <div class="type-grid">
-                <label class="type-btn selected" data-type="blog">
-                    <input type="radio" name="postType" value="blog" checked>
-                    <span class="type-label">Blog</span>
+                <label class="type-btn selected" data-type="posts">
+                    <input type="radio" name="postType" value="posts" checked>
+                    <span class="type-label">Posts</span>
                     <span class="type-desc">Long-form content</span>
                 </label>
                 <label class="type-btn" data-type="til">
@@ -202,8 +202,13 @@
     {{ template "footer.html" . }}
 
     <script>
-        let currentPostType = 'blog';
+        let currentPostType = 'posts';
         let previewVisible = false;
+
+        function previewSlugBase(type) {
+            const normalized = type === 'blog' ? 'posts' : type;
+            return '/' + (normalized || 'posts') + '/';
+        }
 
         document.getElementById('postDate').valueAsDate = new Date();
 
@@ -211,16 +216,17 @@
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('selected'));
                 btn.classList.add('selected');
-                currentPostType = btn.dataset.type;
+                currentPostType = btn.dataset.type === 'blog' ? 'posts' : btn.dataset.type;
                 document.getElementById('linkFields').classList.toggle('hidden', currentPostType !== 'links');
                 document.getElementById('projectFields').classList.toggle('hidden', currentPostType !== 'projects');
                 document.getElementById('contentSection').classList.toggle('hidden', currentPostType === 'links');
+                document.getElementById('title').dispatchEvent(new Event('input'));
             });
         });
 
         document.getElementById('title').addEventListener('input', function() {
             const slug = this.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-            document.getElementById('slugPreview').textContent = slug ? '/posts/' + slug : '';
+            document.getElementById('slugPreview').textContent = slug ? previewSlugBase(currentPostType) + slug : '';
         });
 
         function togglePreview() {
@@ -376,16 +382,20 @@
         if (draft) {
             try {
                 const d = JSON.parse(draft);
+                const draftType = d.type === 'blog' ? 'posts' : (d.type || 'posts');
                 if (confirm('Load draft from ' + new Date(d.savedAt).toLocaleDateString() + '?')) {
                     document.querySelectorAll('.type-btn').forEach(b => {
-                        b.classList.toggle('selected', b.dataset.type === d.type);
+                        b.classList.toggle('selected', b.dataset.type === draftType);
                     });
-                    currentPostType = d.type || 'blog';
+                    currentPostType = draftType;
                     document.getElementById('linkFields').classList.toggle('hidden', currentPostType !== 'links');
                     document.getElementById('projectFields').classList.toggle('hidden', currentPostType !== 'projects');
                     document.getElementById('title').value = d.title || '';
                     document.getElementById('content').value = d.content || '';
                     document.getElementById('tags').value = d.tags || '';
+                    document.getElementById('slugPreview').textContent = document.getElementById('title').value
+                        ? previewSlugBase(currentPostType) + document.getElementById('title').value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+                        : '';
                 }
             } catch (e) {}
         }

@@ -142,6 +142,7 @@ func readMarkdownFile(filePath string) (*PostForSQL, error) {
 	if slug == "" {
 		slug = Slugify(frontmatterObj.Title)
 	}
+	frontmatterObj.Type = NormalizePostType(frontmatterObj.Type)
 
 	return &PostForSQL{
 		Title:       frontmatterObj.Title,
@@ -172,10 +173,7 @@ func (p *SQLSearchPlugin) Execute(ssg *models.SSG) error {
 		if strings.EqualFold(post.Frontmatter.Status, "draft") {
 			continue
 		}
-		typed := post.Frontmatter.Type
-		if typed == "" {
-			typed = "posts"
-		}
+		typed := NormalizePostType(post.Frontmatter.Type)
 
 		slug := strings.Trim(post.Frontmatter.Slug, "/")
 		content := stripHTML(string(post.Content))

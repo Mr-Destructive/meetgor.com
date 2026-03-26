@@ -82,10 +82,7 @@ func (p *BeforeAfterPostsPlugin) enrichPostWithSlug(post *models.Post, prefixURL
 	postCopy := *post
 
 	// Determine the post type
-	postType := postCopy.Frontmatter.Type
-	if postType == "" {
-		postType = "posts"
-	}
+	postType := NormalizePostType(postCopy.Frontmatter.Type)
 
 	// Get the slug name (remove any existing path prefixes)
 	slugName := postCopy.Frontmatter.Slug
@@ -229,10 +226,7 @@ func (p *BeforeAfterPostsPlugin) findSameTypeNavigation(currentPost *models.Post
 
 	// Find previous post of same type
 	for i := currentIndex + 1; i < len(sortedPosts); i++ {
-		postType := sortedPosts[i].Frontmatter.Type
-		if postType == "" {
-			postType = "posts"
-		}
+		postType := NormalizePostType(sortedPosts[i].Frontmatter.Type)
 		if postType == currentType {
 			previous = &sortedPosts[i]
 			break
@@ -241,10 +235,7 @@ func (p *BeforeAfterPostsPlugin) findSameTypeNavigation(currentPost *models.Post
 
 	// Find next post of same type
 	for i := currentIndex - 1; i >= 0; i-- {
-		postType := sortedPosts[i].Frontmatter.Type
-		if postType == "" {
-			postType = "posts"
-		}
+		postType := NormalizePostType(sortedPosts[i].Frontmatter.Type)
 		if postType == currentType {
 			next = &sortedPosts[i]
 			break

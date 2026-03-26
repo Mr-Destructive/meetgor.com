@@ -170,6 +170,28 @@ func TestRSSAndSitemap(t *testing.T) {
 	}
 }
 
+func TestRSSNormalizesLegacyBlogType(t *testing.T) {
+	withTempCwd(t)
+	ssg := minimalSSG(t, "public")
+	if err := os.MkdirAll("public", 0755); err != nil {
+		t.Fatal(err)
+	}
+	ssg.Posts = []models.Post{
+		{Frontmatter: models.FrontMatter{Title: "Legacy", Date: "2024-01-01", Status: "published", Type: "blog", Slug: "legacy"}, Markdown: "Body"},
+	}
+	rssNow = func() time.Time { return time.Date(2024, 1, 2, 0, 0, 0, 0, time.UTC) }
+	if err := (&RSSPlugin{PluginName: "RSS"}).Execute(ssg); err != nil {
+		t.Fatalf("rss plugin failed: %v", err)
+	}
+	data, err := os.ReadFile(filepath.Join("public", "rss.xml"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(data), "<title>Legacy</title>") {
+		t.Fatalf("expected legacy blog post in rss output")
+	}
+}
+
 func TestStaticPageRenderer(t *testing.T) {
 	dir := withTempCwd(t)
 	templatesDir := filepath.Join(dir, "templates")
@@ -304,6 +326,34 @@ func TestReadMarkdownFileVariants(t *testing.T) {
 	post, err = readMarkdownFile(path3)
 	if err != nil || post != nil {
 		t.Fatalf("expected nil for missing frontmatter")
+	}
+}
+
+func TestNormalizePostTypeAlias(t *testing.T) {
+	if got := NormalizePostType("blog"); got != "posts" {
+		t.Fatalf("expected blog to normalize to posts, got %q", got)
+	}
+	if got := NormalizePostType("post"); got != "posts" {
+		t.Fatalf("expected post to normalize to posts, got %q", got)
+	}
+	if got := NormalizePostType(" til "); got != "til" {
+		t.Fatalf("expected til to stay til, got %q", got)
+	}
+}
+
+func TestReadMarkdownFileNormalizesLegacyBlogType(t *testing.T) {
+	dir := withTempCwd(t)
+	path := filepath.Join(dir, "legacy.md")
+	content := "---\ntitle: Legacy\ndate: 2024-01-01\ntype: blog\nstatus: published\n---\n\nHello"
+	if err := os.WriteFile(path, []byte(content), 0644); err != nil {
+		t.Fatal(err)
+	}
+	post, err := readMarkdownFile(path)
+	if err != nil || post == nil {
+		t.Fatalf("readMarkdownFile failed: %v", err)
+	}
+	if post.Type != "posts" {
+		t.Fatalf("expected blog to normalize to posts, got %q", post.Type)
 	}
 }
 

@@ -4,12 +4,12 @@ import (
 	"encoding/xml"
 	"fmt"
 	"log"
+	"net/url"
 	"os"
 	"path/filepath"
 	"sort"
-	"time"
-	"net/url"
 	"strings"
+	"time"
 
 	"github.com/Mr-Destructive/meetgor.com/models"
 )
@@ -89,7 +89,8 @@ func (p *RSSPlugin) Execute(ssg *models.SSG) error {
 			continue
 		}
 
-		if post.Frontmatter.Type == "post" || post.Frontmatter.Type == "posts" {
+		postType := NormalizePostType(post.Frontmatter.Type)
+		if postType == "posts" {
 			pubDate, err := parsePostDate(post.Frontmatter.Date)
 			if err != nil {
 				log.Printf("Error parsing post date: %v", err)
@@ -148,19 +149,20 @@ func (p *RSSPlugin) Execute(ssg *models.SSG) error {
 			continue
 		}
 
+		postType := NormalizePostType(post.Frontmatter.Type)
 		rssItem := RSSItem{
 			Title:       post.Frontmatter.Title,
 			Link:        fmt.Sprintf("%s/%s", baseURL, post.Frontmatter.Slug),
 			Description: post.Frontmatter.Description,
 			PubDate:     pubDate.Format(time.RFC1123),
 			Content:     string(post.Markdown),
-			Type:        post.Frontmatter.Type,
+			Type:        postType,
 		}
 
 		for _, tag := range post.Frontmatter.Tags {
 			postsByTag[tag] = append(postsByTag[tag], rssItem)
 		}
-		postsByType[post.Frontmatter.Type] = append(postsByType[post.Frontmatter.Type], rssItem)
+		postsByType[postType] = append(postsByType[postType], rssItem)
 	}
 
 	type FeedLink struct {

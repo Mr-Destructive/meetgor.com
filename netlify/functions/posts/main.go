@@ -15,9 +15,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Mr-Destructive/meetgor.com/plugins"
+	libsqlssg "github.com/Mr-Destructive/meetgor.com/plugins/db/libsqlssg"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	libsqlssg "github.com/Mr-Destructive/meetgor.com/plugins/db/libsqlssg"
 	_ "github.com/tursodatabase/libsql-client-go/libsql"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -130,7 +131,11 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 	}
 	log.Printf("[CREATE] slug=%s title=%s type=%v", slug, payload.Title, payload.Metadata["type"])
 
+	// Get type_id from payload or metadata
+	typeID := resolvePostType(payload)
+
 	payload.Metadata = ensureMetadata(payload.Metadata, slug, payload.Title)
+	payload.Metadata["type"] = typeID
 	meta, err := json.Marshal(payload.Metadata)
 	if err != nil {
 		log.Printf("[ERROR] metadata serialization failed")
@@ -138,31 +143,20 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 	}
 
 	q := libsqlssg.New(db)
-	
-	// Get type_id from payload or metadata
-	typeID := payload.TypeID
-	if typeID == "" {
-		// Try to get from metadata
-		if postType, ok := payload.Metadata["type"].(string); ok && postType != "" {
-			typeID = postType
-		} else {
-			typeID = "post"
-		}
-	}
-	
+
 	// Accept either Content or Body field (backward compatibility)
 	content := payload.Content
 	if content == "" {
 		content = payload.Body
 	}
-	
+
 	// For "links" type posts with empty content, create content from metadata
 	if typeID == "links" && content == "" {
 		if commentary, ok := payload.Metadata["commentary"].(string); ok && commentary != "" {
 			content = commentary
 		}
 	}
-	
+
 	// Clean up metadata - for links type, keep only url/link, remove title/commentary/type
 	cleanMeta := make(map[string]interface{})
 	if typeID == "links" {
@@ -184,10 +178,10 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 			}
 		}
 	}
-	
+
 	metaBytes, _ := json.Marshal(cleanMeta)
 	meta = metaBytes
-	
+
 	// Extract tags from metadata or payload
 	var tagsJSON sql.NullString
 	if tagsVal, ok := payload.Metadata["tags"]; ok {
@@ -205,9 +199,9 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 			tagsJSON = sql.NullString{String: string(tagsBytes), Valid: true}
 		}
 	}
-	
+
 	log.Printf("[INSERT] preparing post insert: title=%s slug=%s type_id=%s", payload.Title, slug, typeID)
-	
+
 	// Ensure post type exists - if not, create it
 	var typeExists int
 	err = db.QueryRowContext(ctx, "SELECT COUNT(*) FROM post_types WHERE id = ?", typeID).Scan(&typeExists)
@@ -223,7 +217,7 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 	if status == "" {
 		status = "draft"
 	}
-	
+
 	_, err = q.CreatePost(ctx, libsqlssg.CreatePostParams{
 		ID:       generateID(),
 		TypeID:   typeID,
@@ -234,10 +228,10 @@ func handleCreate(ctx context.Context, db *sql.DB, request events.APIGatewayProx
 		Tags:     tagsJSON,
 		Status:   sql.NullString{String: status, Valid: true},
 	})
-	
+
 	if err != nil {
 		log.Printf("[ERROR] database insert failed: %v", err)
-		log.Printf("[ERROR] post params: title=%s slug=%s content_len=%d type_id=%s", 
+		log.Printf("[ERROR] post params: title=%s slug=%s content_len=%d type_id=%s",
 			payload.Title, slug, len(content), typeID)
 		return jsonError(http.StatusInternalServerError, fmt.Sprintf("failed to insert post: %v", err)), nil
 	}
@@ -303,6 +297,10 @@ func handleUpdate(ctx context.Context, db *sql.DB, slug string, request events.A
 
 	parsedMeta, _ := parseMetadata(post.Metadata.String)
 	parsedMeta = mergeMetadata(parsedMeta, payload.Metadata, slug, payload.Title)
+	parsedMeta["type"] = resolvePostType(postPayload{
+		TypeID:   fmt.Sprint(parsedMeta["type"]),
+		Metadata: parsedMeta,
+	})
 
 	newTitle := post.Title
 	newContent := post.Content
@@ -427,11 +425,25 @@ func validateCreate(payload postPayload) error {
 		content = payload.Body
 	}
 	// Links type doesn't require content
-	postType, _ := payload.Metadata["type"].(string)
+	postType := resolvePostType(payload)
 	if postType != "links" && content == "" {
 		return fmt.Errorf("content required")
 	}
 	return nil
+}
+
+func resolvePostType(payload postPayload) string {
+	typeID := strings.TrimSpace(payload.TypeID)
+	if typeID == "" {
+		if postType, ok := payload.Metadata["type"].(string); ok && postType != "" {
+			typeID = postType
+		}
+	}
+	typeID = plugins.NormalizePostType(typeID)
+	if typeID == "" {
+		typeID = "posts"
+	}
+	return typeID
 }
 
 func pickSlug(payload postPayload) string {
