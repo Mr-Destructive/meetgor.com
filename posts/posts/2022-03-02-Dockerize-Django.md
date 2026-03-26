@@ -2,7 +2,7 @@
 title: "Dockerize a Django project"
 date: 2022-03-02
 slug: "dockerize-django-prj"
-tags: 
+tags: ["docker", "django"]
 hash: ba4935097101bcfbbec550fae9ba7d4a2dd8b490b5f28840659ee73f13e7f394
 type: til
 ---

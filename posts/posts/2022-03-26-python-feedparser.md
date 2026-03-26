@@ -1,5 +1,5 @@
 ---
-tags: 
+tags: ["python", "rss"]
 image_url: https://meetgor-cdn.pages.dev/python-pkg-feedparser.png
 hash: 353890c6b613fde714b7ae7145f3185516ebc8e4bf20ccb1d8b46d538d9622ce
 type: posts

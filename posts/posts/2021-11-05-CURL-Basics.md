@@ -4,7 +4,7 @@ hash: 97fad165e7e5e8ea89f0bfd9c0ebe178b9d794d06a28f3713becf094e392aed6
 type: posts
 title: "Basics of curl command"
 date: 2021-11-05
-tags: 
+tags: ["curl"]
 subtitle: "An short simple introductory guide to the curl command"
 slug: "curl-basics"
 ---

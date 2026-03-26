@@ -2,7 +2,7 @@
 type: posts
 date: 2024-09-30
 slug: "turso-libsql-db-golang"
-tags: 
+tags: ["go", "sqlite", "turso"]
 title: "Connect LibSQL Database hosted on Turso in a Golang Application"
 series: ["lets-go-with-turso"]
 image_url: https://meetgor-cdn.pages.dev/connect-turso-libsql-golang.png

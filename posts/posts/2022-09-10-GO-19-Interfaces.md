@@ -1,6 +1,6 @@
 ---
 series: ["100-days-of-golang"]
-tags: 
+tags: ["go"]
 image_url: https://meetgor-cdn.pages.dev/golang-019-interfaces.png
 hash: 865683dd76fac90ae69f67eaec5121dd3146de753349dd29fe3a17e697a059d9
 type: posts
