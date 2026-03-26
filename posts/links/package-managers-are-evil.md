@@ -1,68 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: links
 title: 'Package Managers are evil'
 date: 2025-09-13
 slug: package-managers-are-evil
-tags:
-  - links
-link: 'https://www.gingerbill.org/article/2025/09/08/package-managers-are-evil/'
+tags: 
 status: published
-description: 'Package Managers are evil'
 source: newsletter
 newsletter: 2025-09-13-techstructive-weekly-59
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+link: 'https://www.gingerbill.org/article/2025/09/08/package-managers-are-evil/'
+description: 'Package Managers are evil'
+hash: 38081059b1bc12b1c747b7b771101813d82bdbfdac445e99a2fdf26fd777f93f
 ---
-
-
 ## Commentary
 
 - This is a fair take. Absolitely, the left pad example from Theo is one such thing. People just keep on adding packages/libraries without thinking much, in pre-AI days that was the problem.

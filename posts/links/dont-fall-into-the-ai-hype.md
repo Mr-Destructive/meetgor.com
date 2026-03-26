@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
+hash: 892c3aba779f537a17c3c3ba6deb0944bfe055b8ddf532d024e3f433ed47a271
 title: 'Don’t Fall into the AI hype'
 date: 2026-01-17
 slug: dont-fall-into-the-ai-hype
-tags:
-  - links
 link: 'https://antirez.com/news/158'
 status: published
-description: 'Don’t Fall into the AI hype'
 source: newsletter
 newsletter: 2026-01-17-techstructive-weekly-77
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+type: links
+tags: 
+description: 'Don’t Fall into the AI hype'
 ---
-
-
 ## Commentary
 
 - This is interesting and it comes at the right time

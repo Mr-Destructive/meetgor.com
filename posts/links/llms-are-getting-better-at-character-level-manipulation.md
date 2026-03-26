@@ -1,20 +1,17 @@
 ---
-
-type: links
-title: 'LLMs are getting better at character-level manipulation'
-date: 2025-10-18
-slug: llms-are-getting-better-at-character-level-manipulation
-tags:
-  - links
-link: 'https://blog.burkert.me/posts/llm_evolution_character_manipulation/'
-status: published
-description: 'LLMs are getting better at character-level manipulation'
-image_url: 'https://blog.burkert.me/llm-character-text-manipulation.jpg'
-source: newsletter
 newsletter: 2025-10-18-techstructive-weekly-64
+hash: e0304777ec06dcc575fd6fc70b43f174314699cc4eb1a50bb1dc308dc6a7d61e
+type: links
+date: 2025-10-18
+link: 'https://blog.burkert.me/posts/llm_evolution_character_manipulation/'
+description: 'LLMs are getting better at character-level manipulation'
+source: newsletter
+title: 'LLMs are getting better at character-level manipulation'
+slug: llms-are-getting-better-at-character-level-manipulation
+tags: 
+status: published
+image_url: 'https://blog.burkert.me/llm-character-text-manipulation.jpg'
 ---
-
-
 ## Commentary
 
 - Its evident from the test that newer and larger models are better at generalizing Base64 encoding and decoding. So that implies they will get better at character-level manipulation and analysis.

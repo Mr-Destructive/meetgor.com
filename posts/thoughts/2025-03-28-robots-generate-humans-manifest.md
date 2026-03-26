@@ -1,3 +1,7 @@
+---
+hash: 23b83d2ce61844d28f2802a97818e94e0db25e8e8f8cc94d7de301380a9dd123
+slug: 
+---
 {
   "title": "Robots Generate, Humans Manifest",
   "post_dir":"links",
@@ -69,4 +73,4 @@ Meet
 
 Thanks for reading,
 
-This looks like a ramble, but please don't judge me, I am just a junior software developer trying to navigate life, and based on what I observe and know, it feels this way. 
+This looks like a ramble, but please don't judge me, I am just a junior software developer trying to navigate life, and based on what I observe and know, it feels this way.

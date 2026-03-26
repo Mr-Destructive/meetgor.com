@@ -1,68 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: links
 title: 'AI Slop in Open Source Contributions'
+tags: 
+hash: 7024002f08c9a01de816e5ab643cb61b4863cdae6f086a3e8ac44e98f66c7bdb
 date: 2025-08-30
 slug: ai-slop-in-open-source-contributions
-tags:
-  - links
 link: 'https://blog.stuartspence.ca/2025-08-declining-ai-slop-mr.html'
 status: published
 description: 'AI Slop in Open Source Contributions'
 source: newsletter
 newsletter: 2025-08-30-techstructive-weekly-57
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Commentary
 
 - I agree to this post, its quite obvious that if the author of the MR/PR has just submitted a vibe contribution (without even looking or testing) he/she doesn’t even care about the project, its a red flag.

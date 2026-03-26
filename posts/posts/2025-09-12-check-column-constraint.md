@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: sqlog
 slug: sqlite-check-column-constraint
 title: 'SQLite SQL: CHECK column constraint'
 date: 2025-09-12
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 5537b896fcc8bf65746a3993743ee2d68a2d4d76a2d7d7c542b9d756d33f8c79
 ---
-
-
 ## The CHECK column constraint
 
 The [CHECK](https://sqlite.org/lang_createtable.html#check_constraints) clause is a column constraint that allows us to define certain conditions that we want to evaluate before inserting the column for the row and populate it accordingly. In this post, we will check, what this check is and when it is performed.
@@ -397,4 +344,3 @@ Some TLDRs:
 3. The `CHECK` constraint is evaluated before the row is inserted/updated.
 4. The value of the conditions is evaluated as a `NUMERIC` value so any value is `TRUE` if it is not `0`, even `NULL` is true, and `FALSE` if it is `0`.
 5. The `CHECK` constraint can be disabled using the `PRAGMA` command `PRAGMA ignore_check_constraints = TRUE;` or `PRAGMA ignore_check_constraints = ON;` `ON`, `TRUE`, either works.
- 

@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+description: 'What even is Vibe coding'
 type: links
+tags: 
+link: 'https://ashley.dev/posts/what-even-is-vibe-coding/'
+source: newsletter
+newsletter: 2025-05-10-techstructive-weekly-41
+hash: 4c840e53d8d5b81f4daef097287bd8d1fbbd02c62e86b8af20ed4d973a683fce
 title: 'What even is Vibe coding'
 date: 2025-05-10
 slug: what-even-is-vibe-coding
-tags:
-  - links
-link: 'https://ashley.dev/posts/what-even-is-vibe-coding/'
 status: published
-description: 'What even is Vibe coding'
-source: newsletter
-newsletter: 2025-05-10-techstructive-weekly-41
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Commentary
 
 - I completely agree with the entire post, this is the best take on vibe coding. I have experienced this and also mentioned it in my post. AI can handle the boring part, so that the developer can focus on the important, the heart of the craft. Whatever AI creates before this needs to be seen with a grain of salt, i.e., needs testing and review, it’s not a real person writing code after all.

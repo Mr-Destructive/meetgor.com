@@ -1,20 +1,17 @@
 ---
-
-type: links
-title: 'A programmers guide to stress'
-date: 2025-09-06
-slug: a-programmers-guide-to-stress
-tags:
-  - links
-link: 'https://tkouleris.eu/blog/a-programmers-guide-to-stress'
-status: published
-description: 'A programmers guide to stress'
-image_url: 'https://tkouleris.eu/img/blog/a-programmers-guide-to-stress/a-programmers-guide-to-stress.jpg'
 source: newsletter
 newsletter: 2025-09-06-techstructive-weekly-58
+date: 2025-09-06
+slug: a-programmers-guide-to-stress
+tags: 
+status: published
+hash: b211239c6471a5d38c26c3215733b22e9fbbcc742155699cae7bf8d42a8f0655
+type: links
+title: 'A programmers guide to stress'
+link: 'https://tkouleris.eu/blog/a-programmers-guide-to-stress'
+description: 'A programmers guide to stress'
+image_url: 'https://tkouleris.eu/img/blog/a-programmers-guide-to-stress/a-programmers-guide-to-stress.jpg'
 ---
-
-
 ## Commentary
 
 - Wow! What a banger of a post, what gold pieces of adivce

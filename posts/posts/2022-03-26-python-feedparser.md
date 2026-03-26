@@ -1,14 +1,12 @@
 ---
+tags: 
+image_url: https://meetgor-cdn.pages.dev/python-pkg-feedparser.png
+hash: 353890c6b613fde714b7ae7145f3185516ebc8e4bf20ccb1d8b46d538d9622ce
 type: posts
 title: "Feedparser: Python package for reading RSS feeds"
 date: 2022-03-26
 slug: "python-feedparser"
-tags:
-  - python
-image_url: https://meetgor-cdn.pages.dev/python-pkg-feedparser.png
 ---
-
-
 ## Introduction
 
 [Feedparser](https://pypi.org/project/feedparser/) is a simple but powerful python package that can be used to extract information about a specific webpage or a publication with its RSS feed(not only RSS). By providing the RSS feed link, we can get structured information in the form of python lists and dictionaries. It can be basically used in a pythonic way to read RSS feeds, it is really simple to use and it even normalizes different types of feeds.

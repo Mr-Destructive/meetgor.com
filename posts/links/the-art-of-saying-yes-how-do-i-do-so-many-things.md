@@ -1,20 +1,17 @@
 ---
-
+hash: d1e5a43a83327bee793039a3f0a0d5f9cf4fa49a97a34b11165cef89ad2c8b96
 type: links
-title: 'The art of saying yes: How do I do so many things'
 date: 2025-08-09
 slug: the-art-of-saying-yes-how-do-i-do-so-many-things
-tags:
-  - links
 link: 'https://brittanyellich.com/say-yes-do-all-the-things/'
+image_url: 'https://brittanyellich.com/_astro/juggling.B5eNNRI5_1fvfry.jpg'
+title: 'The art of saying yes: How do I do so many things'
+tags: 
 status: published
 description: 'The art of saying yes: How do I do so many things'
-image_url: 'https://brittanyellich.com/_astro/juggling.B5eNNRI5_1fvfry.jpg'
 source: newsletter
 newsletter: 2025-08-09-techstructive-weekly-54
 ---
-
-
 ## Commentary
 
 - Totally relatable post, I do a lot of things, because I am curious and excited to learn about it.

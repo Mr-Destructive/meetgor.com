@@ -1,20 +1,17 @@
 ---
-
+hash: 396d8c6f86f400c9a5a860e886f060910f771afa088bb6183b9606772f287960
 type: links
 title: 'AI coding agents for enterprises | Mistral AI'
-date: 2026-01-31
 slug: ai-coding-agents-for-enterprises-mistral-ai
-tags:
-  - links
 link: 'https://mistral.ai/products/vibe'
 status: published
 description: 'AI coding agents for enterprises | Mistral AI'
+date: 2026-01-31
+tags: 
 image_url: 'https://mistral.ai/en/products/vibe/opengraph-image-1xudow.png?opengraph-image.b4c11104.png'
 source: newsletter
 newsletter: 2026-01-31-techstructive-weekly-79
 ---
-
-
 ## Commentary
 
 - This is finally something I have been waiting for.

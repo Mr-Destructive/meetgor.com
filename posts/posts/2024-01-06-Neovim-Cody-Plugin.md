@@ -3,12 +3,10 @@ type: posts
 title: "Neovim + Sourcegraph Cody Plugin Integration"
 date: 2024-01-06
 slug: "neovim-sourcegraph-cody"
-tags:
-  - vim
+tags: 
 image_url: https://meetgor-cdn.pages.dev/neovim-sourcegraph-cody.png
+hash: 038fa986335f944955bd94fc412f5d78f0c2d5920686649c3122aca667a66abf
 ---
-
-
 ## Introduction
 
 Have you ever used Sourcegraph's Cody? It is a great tool for developers, it is not just another LLM, it is tailored specifically for developers. Cody has some good features that allow parsing of context for the prompt in a smarter way.

@@ -1,15 +1,13 @@
 ---
+date: 2021-06-14
+slug: "vim-keymaps"
+tags: 
+image_url: https://meetgor-cdn.pages.dev/vim-keymapping-guide.webp
+hash: bca43af8d25752974bf6a3b7b3c234a214ec31b7c0d42683c63ab68b41a1e72e
 type: posts
 title: "Vim: Keymapping Guide"
 subtitle: "A comprehensive guide for getting started with key bindings in Vim"
-date: 2021-06-14
-slug: "vim-keymaps"
-tags:
-  - vim
-image_url: https://meetgor-cdn.pages.dev/vim-keymapping-guide.webp
 ---
-
-
 ## Introduction
 
 Keymapping or Key binding is a process in which a user or a system can assign certain keys or commands to perform a particular task or commands. This can be quite useful in Vim as well as in other text editors to avoid some repetitive tasks and save time. In Vim this can be a great power to have for programmers as it can be really very flexible to set up for any programming language and it's 

@@ -1,65 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
 title: "SQLite dot commands: html tables with output and once"
 date: 2025-08-25
-tags:
-  - typescript
-  - sql
-  - sqlite
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: 
+hash: 88e80b3cf5cae956105fa26dae67e4e8a540517b6b604aa476d48823ce53f10a
+slug: sqlite-dot-commands-html-tables-with-output-and-once
+type: sqlog
 ---
-
-
 The `.once -w` or `.www` was released in [SQLite 3.47](https://www.sqlite.org/releaselog/3_47_0.html) release last year.
 
 I was trying this command
@@ -96,5 +42,3 @@ SELECT abs(random()%10)+1 as "some numbers", 'number' from generate_series(1,10)
 This will store the html document in the result.html with proper tags and semantics not just the table element
 
 Phew! That might not be a lot, but that is the thing, the .mode html will only get you the table element but it wont render properly, browsers won’t be able to read the raw html elemetnts without the html doctype tags.
-
-

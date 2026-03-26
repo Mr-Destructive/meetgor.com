@@ -1,20 +1,17 @@
 ---
-
 type: links
 title: 'SQLite Internals: Pages and B-Trees'
 date: 2025-07-26
-slug: sqlite-internals-pages-and-b-trees
-tags:
-  - links
+tags: 
 link: 'https://fly.io/blog/sqlite-internals-btree/'
 status: published
-description: 'SQLite Internals: Pages and B-Trees'
 image_url: 'https://fly.io/blog/sqlite-internals-btree/assets/sqlite-cover.webp'
 source: newsletter
+slug: sqlite-internals-pages-and-b-trees
+description: 'SQLite Internals: Pages and B-Trees'
 newsletter: 2025-07-26-techstructive-weekly-52
+hash: 2788b1e573b4a9e5274f16f1cf997703075f6a4255afee975bddfe9075e024c1
 ---
-
-
 ## Commentary
 
 - This is quite interesting and helpful in making things clear

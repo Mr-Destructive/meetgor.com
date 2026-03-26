@@ -1,16 +1,13 @@
 ---
+image_url: https://meetgor-cdn.pages.dev/nginx-survival-guide/nginx-sg-2.png
+hash: 490e25b6731de148bbe98ec182da2c8eac8598eb65c40dce61be75d347b35ac5
 type: posts
 title: "NGINX Survival Guide: Serving Web Applications"
 date: 2024-07-21
 slug: "nginx-02-web-servers"
 series: ["nginx-survival-guide"]
-tags:
-  - nginx
-  - web-development
-image_url: https://meetgor-cdn.pages.dev/nginx-survival-guide/nginx-sg-2.png
+tags: 
 ---
-
-
 ## Introduction
 
 In the second part of our NGINX Survival Guide, we dive into the practical aspects of using NGINX to serve web applications. This section will guide you through the essential tasks of setting up a basic HTTP server, configuring NGINX to serve content from custom directories, and using it as a reverse proxy to forward requests to backend servers.

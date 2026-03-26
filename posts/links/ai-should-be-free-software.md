@@ -1,68 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
-title: 'AI should be free software'
 date: 2026-01-10
 slug: ai-should-be-free-software
-tags:
-  - links
 link: 'https://substack.com/inbox/post/183934559'
 status: published
-description: 'AI should be free software'
 source: newsletter
 newsletter: 2026-01-10-techstructive-weekly-76
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+type: links
+title: 'AI should be free software'
+tags: 
+description: 'AI should be free software'
+hash: 3ad81c22b6552f5ce5746661c871de041d5791b4a123c9fc7fe8ca49b17a97c9
 ---
-
-
 ## Commentary
 
 - Yikes, this looks like a good take on LLMs being free and open weight.

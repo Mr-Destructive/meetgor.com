@@ -1,68 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
+tags: 
+status: published
+source: newsletter
 title: 'OCR is Legacy tech'
 date: 2025-08-30
 slug: ocr-is-legacy-tech
-tags:
-  - links
 link: 'https://www.cloudsquid.io/blog/ocr-is-legacy-tech'
-status: published
 description: 'OCR is Legacy tech'
-source: newsletter
 newsletter: 2025-08-30-techstructive-weekly-57
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: a040243c46319f1620cba5204271da1460c14e1074aec2eaa4385482af6189ad
+type: links
 ---
-
-
 ## Commentary
 
 - Maybe it is, but not completely. There will be need of low cost easy document extractions. Yes, if the cost factor goes down, OCR would be obsolete.

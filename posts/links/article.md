@@ -1,20 +1,17 @@
 ---
-
+hash: d92c0438001b45fc4c2774012dea4a3bdf2f5dad9ff8886f2579208e48e28c2f
 type: links
-title: 'Article'
 date: 2024-08-03
 slug: article
-tags:
-  - links
+tags: 
 link: 'https://deno.com/blog/http-imports'
-status: published
 description: 'Article'
+newsletter: 2024-08-03-techstructive-weekly-1
+title: 'Article'
+status: published
 image_url: 'https://deno.com/blog/http-imports/og.webp'
 source: newsletter
-newsletter: 2024-08-03-techstructive-weekly-1
 ---
-
-
 ## Commentary
 
 - Deno and HTTP imports:

@@ -1,16 +1,13 @@
 ---
-type: posts
+series: ["nginx-survival-guide"]
+hash: 196124dbe7f1f8e22b1fbc9b7ddf717d00f2981bc0723f099938f149f82be0e2
 title: "NGINX Basics and Setup"
+tags: 
+image_url: https://meetgor-cdn.pages.dev/nginx-survival-guide/nginx-sg-1.png
+type: posts
 date: 2024-01-14
 slug: "nginx-01-basics"
-series: ["nginx-survival-guide"]
-tags:
-  - nginx
-  - web-development
-image_url: https://meetgor-cdn.pages.dev/nginx-survival-guide/nginx-sg-1.png
 ---
-
-
 ## Introduction
 
 NGINX is a tool that can be used as a web server, reverse proxy, load balancer, streaming media files, application gateway, content caching, and so much more. It can be said to be a Swiss army knife for optimizing and securing your web application deployment.

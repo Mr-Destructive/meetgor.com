@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: sqlog
 title: "SQLite dot commands: run system shell commands"
 slug: sqlite-shell-dot-command
 date: 2025-08-30
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 54bb4d2089b4c9fa07ed8d88a8a0bfb7f78067cd5ed7581d1e0a4ddec6c4b245
 ---
-
-
 ## Shell dot command
 
 If you are in middle of a sqlite shell session, and you don't want to quit the shell to run arbitrary shell command, you can simply use the `.shell <command>` to execute any shell commands right from within the sqlite shell. How handy is this!
@@ -81,7 +28,3 @@ Its helpful if you want to do something but you don't want to quit the shell to 
 - populate database and then reopen the db shell
 
 This is are the things that I have stumbled upon, so far. Need more experience to see if there are more.
-
-
-
-

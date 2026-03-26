@@ -1,66 +1,13 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 0a27b5f3df792b9c64b40c324f4b494b64196b9a86550bdf9af90fa2b6a467aa
 title: "Don't Fall into the ANTI AI HYPE"
 date: 2026-01-12
+type: links
+tags: ["ai","ai assisted programming"]
 slug: dont-fall-into-the-ANTI-ai-hype
 status: published
-type: links
 description: ""
-tags: ["ai","ai assisted programming"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 This is interesting and it comes at the right time
 
 > facts are facts, and AI is going to change programming forever

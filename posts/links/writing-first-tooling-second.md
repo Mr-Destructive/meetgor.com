@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
-title: 'Writing first tooling second'
-date: 2026-01-24
-slug: writing-first-tooling-second
-tags:
-  - links
-link: 'https://susam.net/writing-first-tooling-second.html'
-status: published
-description: 'Writing first tooling second'
-source: newsletter
 newsletter: 2026-01-24-techstructive-weekly-78
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 85d61285ee24c4f5c04c724d8642b67a2b4a660da9b6d0e8e478b6df18990596
+title: 'Writing first tooling second'
+slug: writing-first-tooling-second
+tags: 
+link: 'https://susam.net/writing-first-tooling-second.html'
+description: 'Writing first tooling second'
+type: links
+date: 2026-01-24
+status: published
+source: newsletter
 ---
-
-
 ## Commentary
 
 - True, gold. This is to the point and another way of saying, “Show, don’t tell”, so “Write, don’t setup”

@@ -1,15 +1,13 @@
 ---
-type: posts
 title: "What's in Techstructive Blog"
 subtitle: "Explaining my blog's scope and finding my niche as a technical writer."
-date: 2021-09-19
 slug: "techstructive-blog-init"
-tags:
-  - hashnode
+type: posts
+date: 2021-09-19
+tags: 
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643287813/blogmedia/zgblatyqpwdh5oe7817g.png
+hash: 06ac9eca0990fc1dc9d1c4a0f8c5320b6c76e1deed1a91582e62bd835fc66663
 ---
-
-
 ## Introduction
 
 **Hello World!** This is an article in which I'll introduce why Techstructive Blog exists and what it covers in brief. This is just a casual introduction to my blogging niche. P.S. It's not any technical blog but has challenged me enough to write and complete it.  

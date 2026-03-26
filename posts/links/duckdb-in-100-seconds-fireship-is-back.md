@@ -1,19 +1,17 @@
 ---
-date: 2025-08-16T00:00:00Z
+link: https://youtu.be/uHm6FEb2Re4
+slug: duckdb-in-100-seconds-fireship-is-back
+title: 'DuckDB in 100 seconds: Fireship is back?'
+hash: 6aa3b4a6d49519a0c653d2a0b1d91b879b069095cc6a01fe919532e613912347
 description: 'DuckDB in 100 seconds: Fireship is back?'
 image_url: https://i.ytimg.com/vi/uHm6FEb2Re4/hqdefault.jpg
-link: https://youtu.be/uHm6FEb2Re4
 newsletter: 2025-08-16-techstructive-weekly-55
-slug: duckdb-in-100-seconds-fireship-is-back
 source: newsletter
 status: published
-tags:
-    - links
-title: 'DuckDB in 100 seconds: Fireship is back?'
+tags: 
 type: links
+date: 2025-08-16T00:00:00Z
 ---
-
-
 ## Commentary
 
 - In 2025, we haven’t seen any 100 seconds video from Fireship, is this some sort of a cope to AI slop or really we think he was in crisis.

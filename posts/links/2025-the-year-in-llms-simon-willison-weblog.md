@@ -1,20 +1,17 @@
 ---
-
+newsletter: 2026-01-03-techstructive-weekly-75
+hash: 9ca026242bb432afaa1d9cc4f443724b1dfe846aef2878989a7bd1c2cc2923f3
 type: links
-title: '2025, The year in LLMs: Simon Willison Weblog'
 date: 2026-01-03
-slug: 2025-the-year-in-llms-simon-willison-weblog
-tags:
-  - links
-link: 'https://simonwillison.net/2025/Dec/31/the-year-in-llms/'
+tags: 
 status: published
 description: '2025, The year in LLMs: Simon Willison Weblog'
+title: '2025, The year in LLMs: Simon Willison Weblog'
+slug: 2025-the-year-in-llms-simon-willison-weblog
+link: 'https://simonwillison.net/2025/Dec/31/the-year-in-llms/'
 image_url: 'https://static.simonwillison.net/static/2025/metr-long-task-2025.jpg'
 source: newsletter
-newsletter: 2026-01-03-techstructive-weekly-75
 ---
-
-
 ## Commentary
 
 - Boy! That is a lot! I have been saying “overwhelming” word was not sufficient to describe this tend of LLMs in 2025. This explains the reason

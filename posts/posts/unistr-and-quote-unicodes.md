@@ -1,65 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: sqlog
 title: "SQLite functions: unistr and unistr_quote"
 date: 2025-08-26
-tags:
-  - typescript
-  - sql
-  - sqlite
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: 
+hash: 76f05ca9bcac13edd5c83aa5a0d5a564f8511a82e0512c0112d5f8bf3af226ab
+slug: sqlite-functions-unistr-and-unistrquote
 ---
-
-
 SQLite [3.50](https://www.sqlite.org/releaselog/3_50_0.html) introduced [unistr](https://www.sqlite.org/lang_corefunc.html#unistr) and [unistr_quote](https://www.sqlite.org/lang_corefunc.html#unistr_quote) functions
 
 These are for taking in escape sequences and returning the actual unicode string like emoji or other non-english characters outside the ascii convention forming the utf-8 character set

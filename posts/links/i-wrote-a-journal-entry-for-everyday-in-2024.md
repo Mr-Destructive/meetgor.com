@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: links
-title: 'I wrote a journal entry for everyday in 2024'
 date: 2025-09-13
-slug: i-wrote-a-journal-entry-for-everyday-in-2024
-tags:
-  - links
 link: 'https://www.njbrown.com/blog/67/'
 status: published
 description: 'I wrote a journal entry for everyday in 2024'
 source: newsletter
 newsletter: 2025-09-13-techstructive-weekly-59
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+title: 'I wrote a journal entry for everyday in 2024'
+slug: i-wrote-a-journal-entry-for-everyday-in-2024
+tags: 
+hash: 67dcefebfff2bee4f8765a2e8790a8960509049674d87eaff81a63966edba8b2
 ---
-
-
 ## Commentary
 
 - I had journaled for 1 year in paper, 2 years on my phone, and the last couple of years, have lost that habit. Life gets in the way, your habits change, but this I think I have to keep, it used to give me clarity and feeling of accomplishment.

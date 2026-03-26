@@ -4,15 +4,11 @@ title: "Django Basics: Folder Structure"
 subtitle: "Understanding the folder structure of Django Projects and Applications"
 date: 2021-11-24
 slug: "django-basics-folder-struct"
-series: ["Django-Basics"]
-tags:
-  - django
-  - python
-  - web-development
 image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1637745125/blogmedia/4_gnddxj.png
+hash: 885be5de1f1de729c1d6f09d49ffd61c883432900c7e7d027df894ed435ea009
+series: ["Django-Basics"]
+tags: 
 ---
-
-
 ### Introduction
 
 After setting up the development for the Django framework, we will explore the project structure. In this part, we understand the structure along with the various components in the Project as well as individual apps. We will understand the objective of each file and folder in a brief and hopefully by the end of this part, you'll be aware of how the Django project is structured and get a good overview of the flow of development in the Django project.

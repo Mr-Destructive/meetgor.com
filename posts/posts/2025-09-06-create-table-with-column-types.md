@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: ["sqlite", "sql"]
+hash: 3dd44ea242c85899633bda702820ebf4fbac3f7914dfb113fc995583adccf059
 type: sqlog
 title: "SQLite SQL: Create Table with column types"
 slug: sqlite-create-table-column-types
 date: 2025-09-06
-tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Creating a table with column types
 
 If you want to store values in a column with a specific type, you need to specify one of the following types in order to store that value in relatively type specific data.

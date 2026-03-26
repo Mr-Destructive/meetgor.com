@@ -1,3 +1,7 @@
+---
+hash: ef13edfaecfa56c77423bc12fbd129e11440e6c806c0f5e0978b13bdd515c183
+slug: 
+---
 {
   "title": "Kubernetes isn't for you",
   "post_dir":"links",
@@ -44,4 +48,4 @@ If you want to use it for the purpose of learning it, please do use it.
 
 Kubernetes as usual is a tool like others, you can't use one tool everywhere. Where bash scripts work, they just work, where they don't they fall apart too, kubernetes works like a charm. 
 
-Use your grug brains a little and choose wisely! In the end, who the hell cares if you use kubernetes or bash scripts to scale if your users are happy? 
+Use your grug brains a little and choose wisely! In the end, who the hell cares if you use kubernetes or bash scripts to scale if your users are happy?

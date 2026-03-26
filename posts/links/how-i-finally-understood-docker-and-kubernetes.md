@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
-title: 'How I finally understood Docker and Kubernetes'
 date: 2025-06-14
-slug: how-i-finally-understood-docker-and-kubernetes
-tags:
-  - links
 link: 'https://medium.com/javarevisited/how-i-finally-understood-docker-and-kubernetes-5debb13cacfe'
 status: published
-description: 'How I finally understood Docker and Kubernetes'
 source: newsletter
 newsletter: 2025-06-14-techstructive-weekly-46
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 9e6692727719bcc85eb45dd016700b6f2222af5530e78113f5c04313484d0bd1
+title: 'How I finally understood Docker and Kubernetes'
+slug: how-i-finally-understood-docker-and-kubernetes
+tags: 
+description: 'How I finally understood Docker and Kubernetes'
+type: links
 ---
-
-
 ## Commentary
 
 - This was my pick of the week. I understood the reason why Kubernetes exists

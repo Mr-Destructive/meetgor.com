@@ -1,16 +1,14 @@
 ---
-type: posts
 title: "BASH Scripting Guide - PART - 3"
+image_url: https://meetgor-cdn.pages.dev/bash-scripting-guide-p3.webp
+hash: 43e357e009f7b4d8e1d63365113d4e33c726e2824d436b81317d88fde11d59db
 subtitle: "Exploring some advance features, underrated tools and utilities in BASH."
 date: 2021-07-12
 slug: "bash-guide-p3"
 series: ["BASH Scripting Guide"]
-tags:
-  - bash
-image_url: https://meetgor-cdn.pages.dev/bash-scripting-guide-p3.webp
+tags: 
+type: posts
 ---
-
-
 Bash or shell won't be much popular and powerful if they didn't have some tools and utilities baked in. But even further they are supported natively in Bash, which just makes every task and challenge quite hassle-free to deal with. In this part of the series, I'll try to cover an overview of some quite powerful and robust tools and utilities in Bash(shell in general) and also some of the advanced topics like dictionaries and positional parameters. Enough talk let's dive in.
 
 The topics to be covered in this part include the following:

@@ -1,65 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: de121dc042fbd382dfa93cd839868e2a7c72f28439afb6631d94ddebf2a47fd1
 type: sqlog
 title: "Advent of SQL 2025 Day 14: Ski Resort Paths"
 slug: "advent-of-sql-2025-day-14"
 date: 2025-12-28
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Advent of SQL, Day 14 - Ski Resort Paths
 
 Ok, almost to the penultimate day in the series. It is day 14 of Advent of SQL.

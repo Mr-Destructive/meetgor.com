@@ -1,68 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
 title: 'My AI adoption journey by Mitchel Hashimoto'
 date: 2026-02-07
 slug: my-ai-adoption-journey-by-mitchel-hashimoto-2026-02-07
-tags:
-  - links
-link: 'https://mitchellh.com/writing/my-ai-adoption-journey'
 status: published
-description: 'My AI adoption journey by Mitchel Hashimoto'
 source: newsletter
+hash: 1f1a287cbbb9061d2ad2e3b1797398cd164fcc66ed4f96f60b63fa115042c749
+tags: 
+link: 'https://mitchellh.com/writing/my-ai-adoption-journey'
+description: 'My AI adoption journey by Mitchel Hashimoto'
 newsletter: 2026-02-07-techstructive-weekly-80
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+type: links
 ---
-
-
 ## Commentary
 
 - That was a banger of a post. True and Honest.

@@ -1,17 +1,13 @@
 ---
+series: ["Django-Series"]
+image_url: https://meetgor-cdn.pages.dev/django-htmx-chat-cover.png
 type: posts
 title: "Creating a Chat Application with Django and HTMX"
 date: 2023-02-05
 slug: "django-htmx-chat-app"
-series: ["Django-Series"]
-tags:
-  - django
-  - htmx
-  - python
-image_url: https://meetgor-cdn.pages.dev/django-htmx-chat-cover.png
+tags: 
+hash: b84a5782e449802fe4520b4a073ce9cf0092c2863e7b0d851a8aa19cdc94d66c
 ---
-
-
 # Django + HTMX Chat application
 
 ## Introduction

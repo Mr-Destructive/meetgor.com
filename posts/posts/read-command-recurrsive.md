@@ -1,66 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: sqlog
 title: "SQLite dot commands: read command is recursive?"
 slug: sqlite-read-dot-command-is-recursive
-tags:
-  - typescript
-  - sql
-  - sqlite
+tags: 
 date: 2025-08-29
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 88a72462370b7e316637a818c854bf9d733470c0f04630f002fdcf823e1dcd72
 ---
-
-
 Yesterday, while exploring the `.read` command I discovered a little hack.
 
 We know you can read arbitrary sqlite shell commands from the `.read | ` operator, even the dot commands.
@@ -127,4 +72,3 @@ sqlite>
 Well, SQLite developers are smarter to handle the edge case I think. :)
 
 This is a little fun, but it's kind of a quirk, an not-so easter egg but interesting thing to know.
-

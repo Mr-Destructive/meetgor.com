@@ -1,20 +1,17 @@
 ---
-
-type: links
-title: 'My AI Skeptic friends are all nuts'
 date: 2025-06-07
-slug: my-ai-skeptic-friends-are-all-nuts
-tags:
-  - links
+tags: 
 link: 'https://fly.io/blog/youre-all-nuts/'
 status: published
+newsletter: 2025-06-07-techstructive-weekly-45
+type: links
+title: 'My AI Skeptic friends are all nuts'
+slug: my-ai-skeptic-friends-are-all-nuts
 description: 'My AI Skeptic friends are all nuts'
 image_url: 'https://fly.io/blog/youre-all-nuts/assets/whoah.png'
 source: newsletter
-newsletter: 2025-06-07-techstructive-weekly-45
+hash: 01dbd179d6e1d6d448a86f8b909ec5fca13a1b373cadfc4c30aed6ededf28cd7
 ---
-
-
 ## Commentary
 
 - This was a hot post on Hacker News for a week, rightly so, it is partial and follows an experienced developer talking about how LLMs are useful as a tool and not a job replacer.

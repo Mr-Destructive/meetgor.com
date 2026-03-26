@@ -1,19 +1,13 @@
 ---
+subtitle: "A platform created in a Hackathon for developer to get motivated by some fun and inspireing quotes."
+image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643286845/blogmedia/bhajgzmqaknzpk1z9qdn.png
+hash: 9f3eeaaac3c5407dcccf2f5b6fa39b2b81c47273d51a158c107e2ee4dda63b39
 type: posts
 title: "Dev Quotes: A platform for developers to quote and get inspired - Auth0 x Hashnode Hackathon"
-subtitle: "A platform created in a Hackathon for developer to get motivated by some fun and inspireing quotes."
 date: 2021-08-27
 slug: "devquotes-platform"
-tags:
-  - hashnode
-  - auth0
-  - django
-  - web-development
-  - python
-image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643286845/blogmedia/bhajgzmqaknzpk1z9qdn.png
+tags: 
 ---
-
-
 ## Introduction
 
 > No one can understand the joy in finishing a personal project, except the dreamer 

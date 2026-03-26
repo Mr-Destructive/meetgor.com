@@ -1,39 +1,11 @@
 ---
+tags: 
+hash: 77375313ba3a02222bd9cca85aae69b6507a52b46811acf1a015b039960302d6
 type: links
 title: "OpenAI releases Open Weight models GPT-OSS"
 date: 2025-08-06
 slug: "openai-open-weight-oss-model"
-tags:
-  - typescript
-  - ai
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 # [Introducing gpt-oss](https://openai.com/index/introducing-gpt-oss/)
 
 I ran a few tests on the 20B parameter

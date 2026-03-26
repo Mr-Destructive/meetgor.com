@@ -1,65 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: b323f6fe61700f7ba6978ca2e30eaeaf41ade75bbbc64b674368b7cc6607235e
 type: sqlog
 title: "Advent of SQL 2025 Day 11: Behavior Score"
 slug: "advent-of-sql-2025-day-11"
 date: 2025-12-26
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Advent of SQL - Day 11, Behavior Score
 
 All right, this is day 11 from Advent of SQL.
@@ -595,4 +542,3 @@ That should be it for the Day 11!
 Some cool CTE, Window function and pratical use case for computing rolling averages, loved it!
 
 On to the day 12!
-

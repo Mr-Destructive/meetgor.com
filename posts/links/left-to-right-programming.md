@@ -1,20 +1,17 @@
 ---
-
-type: links
-title: 'Left to Right Programming'
-date: 2025-08-23
-slug: left-to-right-programming
-tags:
-  - links
 link: 'https://graic.net/p/left-to-right-programming'
 status: published
 description: 'Left to Right Programming'
-image_url: 'https://graic.net/favicon.png'
 source: newsletter
 newsletter: 2025-08-23-techstructive-weekly-56
+type: links
+title: 'Left to Right Programming'
+image_url: 'https://graic.net/favicon.png'
+hash: 667474a8f961632cc0bf47a8c102d7675017b7a77d034ac8bb267cfa6edad164
+date: 2025-08-23
+slug: left-to-right-programming
+tags: 
 ---
-
-
 ## Commentary
 
 - If python looks odd, how about SQL? That is left to right but evaluated mostly from the right to left right? mostly I asking loosely here, though aggregates might be exceptions and other things I am not aware of.

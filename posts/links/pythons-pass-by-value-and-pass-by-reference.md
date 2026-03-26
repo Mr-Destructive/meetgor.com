@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+link: 'https://www.thepythoncodingstack.com/p/python-pass-by-value-reference-assignment'
+status: published
+description: 'Python’s pass by value and pass by reference'
+hash: 451d0528a9ac56ab59b2c5e20188b5665d6bde8169d6050460a3733883812174
 type: links
 title: 'Python’s pass by value and pass by reference'
 date: 2025-08-09
 slug: pythons-pass-by-value-and-pass-by-reference
-tags:
-  - links
-link: 'https://www.thepythoncodingstack.com/p/python-pass-by-value-reference-assignment'
-status: published
-description: 'Python’s pass by value and pass by reference'
 source: newsletter
 newsletter: 2025-08-09-techstructive-weekly-54
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: 
 ---
-
-
 ## Commentary
 
 - This is one hell of a reason, Python gets a little more confusing and less friendly.

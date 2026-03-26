@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
 slug: sqlite-create-table-if-not-exists
 title: "SQLite SQL: Create Table If Not Exists"
 date: 2025-09-26
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 7774cc407b55cd135199ef5c211110e40bdb161c1eaba578a9b767e3d734c0d2
+type: sqlog
 ---
-
-
 ## Creating table if not already exists
 
 The `CREATE TABLE` has one clause that we can add to create table if it doesn't exist already. So this comes handy if you already have created a table and instead of throwing an error it simply gracefully handles the query and doesn't re-create the table. 
@@ -164,4 +111,3 @@ sqlite>
 
 - Accidental cases: Avoiding creating a table that already exists.
 - Code Generation tools: If you are using schema-based code generation tools like [sqlc](https://github.com/sqlc-dev/sqlc), you might keep on re-running the generation code again and again, to avoid the error statements, you can use this to stop table from re-creating or erroing queries.
-

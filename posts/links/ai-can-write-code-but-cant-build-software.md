@@ -1,20 +1,17 @@
 ---
-
-type: links
-title: 'AI can write code, but can’t build software'
 date: 2025-11-01
 slug: ai-can-write-code-but-cant-build-software
-tags:
-  - links
+tags: 
 link: 'https://bytesauna.com/post/coding-vs-software-engineering'
 status: published
+newsletter: 2025-11-01-techstructive-weekly-66
+hash: 5a07f60f5336b05de6e57dc8d0b5416244993da4a294982f35b35f36baa5d6fc
+title: 'AI can write code, but can’t build software'
 description: 'AI can write code, but can’t build software'
 image_url: 'https://bytesauna.com/logo.png'
 source: newsletter
-newsletter: 2025-11-01-techstructive-weekly-66
+type: links
 ---
-
-
 ## Commentary
 
 - They just don’t write code, they vomit and throw code at you. To review.

@@ -1,17 +1,13 @@
 ---
-type: posts
-title: "Use Embedded Replicas of LibSQL Database hosted on Turso with a Golang Application"
 date: 2024-10-31
 slug: "turso-libsql-embedded-replicas-golang"
+tags: 
+type: posts
+title: "Use Embedded Replicas of LibSQL Database hosted on Turso with a Golang Application"
 series: ["lets-go-with-turso"]
-tags:
-  - go
-  - turso
-  - libsql
 image_url: https://meetgor-cdn.pages.dev/embedded-replicas-libsql-turso-go.png
+hash: 2c91626a83b1f40a79973473f5a43c6a663a81ad68aca089b064b0349147bc02
 ---
-
-
 ## Introduction
 
 Welcome to the Let's Go with Turso series. In this series, we will learn how to interact with LibSQL databases with Golang. In the past article of the series, we explored how to connect remote/local LibSQL database in golang.

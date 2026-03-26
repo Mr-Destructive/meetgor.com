@@ -1,15 +1,13 @@
 ---
-type: posts
 title: "Learning BASH by making a Number game"
 subtitle: "Understaning BASH concepts by making a number game"
+tags: 
+image_url: https://meetgor-cdn.pages.dev/bash-script-game.webp
 date: 2021-07-08
 slug: "bash-game-numberjack"
-tags:
-  - bash
-image_url: https://meetgor-cdn.pages.dev/bash-script-game.webp
+hash: 0b3b8993847306fb56a214e52d2013fbd287ae9a59bfaa50b09b9093f31acd3c
+type: posts
 ---
-
-
 ## Introduction
 
 OK! Learning BASH can be quite confusing without a proper goal in hand. So this will be a pretty good idea to start learning BASH and have a ton of fun. In this little time, we'll make a Number game which I have designed myself last year in C++, which took about 3 months due to lazy research and wasting time. But I was surprised that I made this game within two hours in BASH. You can refer to the game instructions in this  [repository at Github](https://github.com/Mr-Destructive/NumberJack).

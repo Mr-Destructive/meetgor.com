@@ -1,69 +1,14 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 title: "Techstructive Weekly #81"
-date: 2026-02-14
-slug: techstructive-weekly-81
 status: published
 type: newsletter
+source_url: 'https://techstructively.substack.com/p/techstructive-weekly-81'
+date: 2026-02-14
+slug: techstructive-weekly-81
 description: "Learning agentic tools, ai assisted programming and shipping and generating slop to understand the llm harness, among the other things read, and watched in the week from 8th to 14th February 2026"
 tags: ["substack"]
-source_url: 'https://techstructively.substack.com/p/techstructive-weekly-81'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 303f98a6af8ddf610d5f0af076d66114b24856720e6d45e750919ad6640eed32
 ---
-
-
-
 <p></p>
 <h2>Week #81</h2>
 <p>Its kind of a wired position to be a developer. People are talking about replacing or atleast questioning developers now. I am in awe, how a field that was the most harder to work in, suddenly gets bambolzed with little ghosts with token predicition machines. Just think about it, the industry that spent millions and billions in humans to solve problems is getting wiped out in months, if not weeks. I am scared!</p>

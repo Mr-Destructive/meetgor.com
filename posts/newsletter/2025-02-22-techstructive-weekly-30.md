@@ -1,65 +1,10 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: 
+source_url: 'https://techstructively.substack.com/p/techstructive-weekly-30'
+hash: bb665a2cb5300ad0e052397c885c6b8625d0b88eebc054fc872e2497eeeb8b04
+slug: techstructive-weekly-30
 type: newsletter
 title: 'Techstructive Weekly #30'
 date: 2025-02-22
-tags:
-- ai
-- newsletter
-- python
-source_url: 'https://techstructively.substack.com/p/techstructive-weekly-30'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
 <div class="available-content"><div class="body markup" dir="auto"><h2 class="header-anchor-post">Week #30<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§week-30"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/157618379/week-30" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><p>What a week captain! Realized this on Wednesday truly. A bit of exhausting yet exciting week, it was a wild ride, true but learnt a lot. A lot of mistakes popping up at once.</p><p>I had to scamper and get things done, not just do it, but do it correct, not only do it correct , but also do it more, that was exaggerated, but yes, it was a bit taxing at some point, but the reward? I don’t care, I did my best (to some extent) and I am leaving the result to nature, really can’t control  that now.  A lot of intense debugging sessions, pair programming, side scripting, a lot of fun conversations and moments, it was worth it.</p><p>I again didn’t stream and upload any videos or articles this week, and probably won’t do this weekend either. A tough month February 2025.</p><h3 class="header-anchor-post">Quote of the week<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§quote-of-the-week"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/157618379/quote-of-the-week" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h3><blockquote><p><strong>"It’s not whether you get knocked down, it’s whether you get up."</strong><span> </span></p><p>— Vince Lombardi</p></blockquote><p>Yes, this is how I feel right now. Knock me down, you’ll see me again standing up, struggling, yes, quiting, nope, never. I mean I am not saying I don’t give up, but I know when to give up and when to press on. I know which battles to fight and which to leave, it’s not worth it sometimes.</p><p></p><h2 class="header-anchor-post">Read<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§read"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/157618379/read" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://news.ycombinator.com/item?id=42992159#:~:text=Why%20blog%20if%20nobody%20reads,Hacker%20News&amp;text=Writing%20on%20a%20blog%20is,ve%20written%20in%20the%20past." rel="nofollow ugc noopener">Why Blog if nobody reads it</a><span>?</span></p><p>This is a good post, why write articles when no one reads them. According to spirituality or philosophically, do work without caring for the result. But is writing articles is work? or hobby? Either of them, just do it because you have or need to or just so. Really there is no answer, will this universe be affected if you write or not write that post? Probably not, will it impact you, probably yes in a good way, will drain some time but I can guarantee after 3 years of blogging, you will have a better understanding (at least something) from what you had before writing. Just write it.</p><p> </p></li></ul><p></p><h2 class="header-anchor-post">Watched<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§watched"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/157618379/watched" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p>Nothing</p></li></ul><p>A bit of hectic week as said, not much time for </p><h2 class="header-anchor-post">Learnt<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§learnt"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/157618379/learnt" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p>If you want to send a pure json response from API, and if for some reason, you code deals with numpy or dataframe in that case, then you might get into problems if not handled correctly. If you don’t convert or cast the lower level values (int64, char, etc used by numpy low level C) into python data types then you might get errors while decoding back to json. So make sure you cast back to higher level types. Had to debug for 3 hours to figure out where the heck the issue is coming from.</p></li><li><p>What is the better approach to find a sub-string match with a list of keywords.</p><p>So, let’s say I have a string </p><p><code>this is a large language model</code><span> </span></p><p>and a sub-string to be found</p><p><code>language model</code></p><p>If language model is present then it is good, but let’s say the string is truncated to</p><p><code>this is a large language mod</code></p><p><span>In this case </span><code>language mod </code><span>is partially in </span><code>language model</code><span> it should still be allowed, however it’s a bit tricky and have tons of edge cases covering various strings.</span></p></li></ul><p></p><h2 class="header-anchor-post">Tech News<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§tech-news"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/157618379/tech-news" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://techcrunch.com/2025/02/18/meta-announces-llamacon-its-first-generative-ai-dev-conference/" rel="nofollow ugc noopener">LlamaCon</a><span>: Meta has announced the first tech conference for AI/LLM. </span></p></li><li><p><a href="https://techcrunch.com/2025/02/17/elon-musks-ai-company-xai-releases-its-latest-flagship-ai-grok-3/" rel="nofollow ugc noopener">Grok 3 Released</a><span>: Elon Musk’s AI company, xAI, late on Monday released its latest flagship AI model, Grok 3, and unveiled new capabilities for the Grok iOS and web apps. This comes in twitter / X as a chat access. LLM is now like a search button everywhere.</span></p></li></ul><p></p><p><span>For more news, follow the </span><a href="https://buttondown.com/hacker-newsletter/archive/hacker-newsletter-734" rel="nofollow ugc noopener">Hackernewsletter</a><span> and for software development/coding articles, join </span><a href="http://daily.dev/" rel="nofollow ugc noopener">daily.dev</a><span>.</span></p><p></p></div></div>

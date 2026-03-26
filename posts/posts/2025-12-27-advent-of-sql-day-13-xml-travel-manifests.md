@@ -1,65 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
 title: "Advent of SQL 2025 Day 13: XML Travel Manifests"
 slug: "advent-of-sql-2025-day-13"
 date: 2025-12-27
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 1e4c4349567474d62659795e7cf71bccdc308b89f9a6641caee8ecebf3bfc41c
+type: sqlog
 ---
-
-
 ## Advent of SQL - Day 13, XML Travel Manifests
 
 Its day 13 of Advent of SQL, we have some xml to parse, which I don't think SQL can handle, but string manipulation to the rescue.
@@ -352,4 +299,3 @@ That's it from day 13 of Advent of SQL.
 There are other ways, but its the same parsing, We can use JOINs and stuff, but hey that was not the point of this.
 
 Anyways! See you tomorrow for day 14!
-

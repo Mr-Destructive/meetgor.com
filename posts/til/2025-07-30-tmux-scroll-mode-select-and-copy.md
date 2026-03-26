@@ -1,3 +1,7 @@
+---
+hash: 93145c1aa8d63026f19a3a1beeb62b205b3f02447bd39bed238e4aa9b5268081
+slug: 
+---
 {
   "title": "Tmux scroll mode select and copy",
   "post_dir": "til",

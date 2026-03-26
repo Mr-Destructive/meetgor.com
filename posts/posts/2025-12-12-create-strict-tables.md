@@ -1,66 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
-title: "SQLITE SQL: Create Table with STRICT Option"
 slug: "sqlite-create-strict-table"
 date: 2025-12-12
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 3f4251c7b84b7382adeb1bc8660c85777d93570cc50293e2b888e158bf933066
+type: sqlog
+title: "SQLITE SQL: Create Table with STRICT Option"
 ---
-
-
 We have seen how to create `TABLE` loosely Not adhering to the types. Because if we create a table with column name of type text, and insert a integer, it will happily store it as text. It is very flexible as we saw. So, in such `CREATE TABLE` statement in SQLite, without the `STRICT` constraint, the types don't matter.
 
 

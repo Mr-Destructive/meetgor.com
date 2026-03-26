@@ -1,69 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+slug: techstructive-weekly-41
+tags: 
+source_url: 'https://techstructively.substack.com/p/techstructive-weekly-41'
+hash: 01f0ce04b578244ace99d40be4660baeb31cf17dd7660be9de41538489c8c7ea
 type: newsletter
 title: 'Techstructive Weekly #41'
 date: 2025-05-10
-slug: techstructive-weekly-41
-tags:
-- ai
-- database
-- newsletter
-- sql
-source_url: 'https://techstructively.substack.com/p/techstructive-weekly-41'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
 <div class="available-content"><div class="body markup" dir="auto"><h2 class="header-anchor-post">Week #41<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§week-41"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/163215784/week-41" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><p>A slow-moving week overall. I had some spiritual realizations, not major, but enough to clear mental clutter and ease the overthinking through action, without worrying about results</p><p>The past weekend was too boring; I was not able to do anything fancy. Didn’t live stream, nor create a video. I think videos are not my thing for the moment, It takes too much energy to edit and polish my voice, and I don’t see enough return on that investment right now.</p><p>That gives me some time to crunch some articles and blog posts. Will be focusing on that and see if I can get more value than videos, that’s my theory for my skills, but I need to experiment.</p><h3 class="header-anchor-post">AI Slop<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§ai-slop"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/163215784/ai-slop" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h3><p>Ok, we cannot spend any week without rambling about AI and LLMs, can we? This week, I read a few articles about vibe coding and the jazz people have created that it is going to replace developers. To that, I say: hell no. Yes, it can write code, well-documented even, but can it solve the whole problem? Nope. Not yet! It’s way far from that, however, if you give it all the pieces, and you think the solution and give it nudges in certain directions, then? Yes, to some extent. </p><p>We are on a cliff right now, we as developers need to learn to use LLMs to our advantage, but on the other side of the cliff is the part which is almost LLM writing the code, which looking at the speed of accuracy of code being written by different models, its not far but not quite there yet. It is at the stage where only a developer can steer the wheel; once a layman can steer the wheel, developers are doomed, but till then, till the laymen realize that developers are doomed, we are going to rule, take out their money for sure.</p><p></p><h3 class="header-anchor-post">Quote of the week<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§quote-of-the-week"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/163215784/quote-of-the-week" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h3><blockquote><p>“It is never the tool that decides. It's the hands-and the heart-of the one who wields it.”</p><p>― Kevin Sands</p></blockquote><p></p><p>AI right now feels like that tool, if you give it to a layman, normal person, they will call it shit for coding, but if you give it to a good developer, he/she will say that I want that in my tool belt always. Creating software is a craft, an art, and it is suited for those learning and caring about the craft and tools, not those looking for expensive or shiny tools. Try, fail, learn, improve, that is LLM at the moment for coding:</p><ul><li><p>Don’t blindly accept suggestions, take time to reflect, it has already saved you a bunch of minutes by writing, may as well read it and understand and think</p></li><li><p>If you don’t know a thing that it added, search and start a chat with LLM with search documentation tool</p></li><li><p>If it fails, retry, but think why is it failing, read the error message, if you are experienced, you can fix it quickly than an LLM, don’t waste time and tokens, do it yourself.</p></li></ul><p>In essence, having a general common sense of using LLM tools is vital in today’s software development ecosystem. Might not be relevant to software, but I am not sure.</p><p></p><h2 class="header-anchor-post">Read<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§read"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/163215784/read" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p><a href="https://ashley.dev/posts/what-even-is-vibe-coding/" rel="nofollow ugc noopener">What even is Vibe coding</a></p><ul><li><p><span>I completely agree with the entire post, this is the best take on vibe coding. I have experienced this and also mentioned it in my </span><a href="https://meetgor.bearblog.dev/developers-side-project-graveyard-with-llms/" rel="nofollow ugc noopener">post</a><span>. AI can handle the boring part, so that the developer can focus on the important, the heart of the craft. Whatever AI creates before this needs to be seen with a grain of salt, i.e., needs testing and review, it’s not a real person writing code after all. </span></p></li><li><p>It’s more of a tool than a replacement. LLMs are not there yet, it’s far from reality and close to boilerplate or already solved problems, not innovation.</p></li><li><p>If AI is giving you the entire code, then it is likely that the idea that you have for the software is already kind of there, not entirely, but vaguely there. For real innovations in the software, you still would need a developer.</p></li></ul></li><li><p>I read the book The War of Art, Why?</p><ul><li><p>I asked Chat GPT, based on my conversation and everything you know about me, to give me a book recommendation. And it gave the war of art</p></li><li><p>And Oh my god! I loved the book, it was a quick one. I don’t usually read non-fiction, self-help books because I already have too many technical things in my work and side projects that I can’t bear reading those in my spare time.</p></li><li><p>But that book was a huge shift in mindset. We are all battling resistance. The bigger the resistance, the bigger the calling (the good task or intuition). We have to defeat that enemy, and it’s not easy, but with a war, it can be defeated. And it’s not an enemy once you defeat it, it’s done; rather, it’s a daily war, it will come in the places you are comfortable.</p></li><li><p>This prompt was a pretty good use of LLMs, to be honest. If you can tune it to your needs, LLMs are a blessing; if you try using it for your replacement, you are destined to suffer.</p></li></ul></li></ul><h2 class="header-anchor-post">Watched<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§watched"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/163215784/watched" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p>A case against SQL</p><ul><li><p>I agree to the points that SQL is a bad abstraction of programs, we can use strings to query the database</p></li><li><p>We should use the actual interface to access the database to query or mutate.</p></li><li><p>But on the scale of complexity and ease of use, SQL outweighs the former</p></li><li><p>We can think of SQL as Python and the native way as C; both are viable, but one is easier to write, and the latter is like shooting in the foot.</p></li></ul></li></ul><div class="youtube-wrap" data-attrs='{"videoId":"AtQY7HeKvBw","startTime":null,"endTime":null}' data-component-name="Youtube2ToDOM" id="youtube2-AtQY7HeKvBw"><div class="youtube-inner"><iframe allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" frameborder="0" gesture="media" height="409" loading="lazy" src="https://www.youtube-nocookie.com/embed/AtQY7HeKvBw?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" width="728"></iframe></div></div><p></p><p></p><h2 class="header-anchor-post">Learnt<div class="pencraft pc-display-flex pc-alignItems-center pc-position-absolute pc-reset header-anchor-parent"><div class="pencraft pc-display-contents pc-reset pubTheme-yiXxQA"><div class="pencraft pc-reset header-anchor offset-top" id="§learnt"></div><button aria-label="Link" class="pencraft pc-reset pencraft iconButton-mq_Et5 iconButtonBase-dJGHgN buttonBase-GK1x3M buttonStyle-r7yGCK size_sm-G3LciD priority_secondary-S63h9o" data-href="https://techstructively.substack.com/i/163215784/learnt" tabindex="0" type="button"><svg class="lucide lucide-link" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button></div></div></h2><ul><li><p>Removing duplicates from a list of dictionaries</p><pre><code>def remove_duplicate_dicts(dict_list):
     seen = set()
     unique_dicts = []

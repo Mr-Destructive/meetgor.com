@@ -1,66 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: til
 title: "Tmux scroll mode select and copy"
 date: 2025-07-30
-tags:
-  - tmux
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: 
+hash: 31358dbe4fdd3414a57c40c0b59ac88b8445e544487ae2129d9f4b0657106270
+slug: tmux-scroll-mode-select-and-copy
 ---
-
-
 I have found scrolling in tmux is a bit unconventional. Maybe its just me, but sometimes, the terminal interfaces are different, sometimes they are a bit wired, I use Ghostty right now, so selection without tmux works a charm, but the moment I am in tmux, ahmm, it kind of breaks.
 
 The selection of text doesn't work with the mouse atleast, so I thought, I need a keyboard centric selection and copying mechanism, and dug in this rabit hole. Turns out, tmux is way better in selection then zellij, the multiplexer I had been using due to scroll and selection issues in terminal interfaces.

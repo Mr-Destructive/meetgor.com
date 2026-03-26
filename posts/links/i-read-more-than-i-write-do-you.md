@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
-title: 'I read more than I write, do you?'
-date: 2025-12-13
-slug: i-read-more-than-i-write-do-you
-tags:
-  - links
 link: 'https://enombic.com/read-more-than-write'
 status: published
 description: 'I read more than I write, do you?'
 source: newsletter
+hash: cc05554985a22ad4872ff61892277ac23e24e3aaa12987188d383ef6fa3eaafe
+type: links
+date: 2025-12-13
 newsletter: 2025-12-13-techstructive-weekly-72
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+title: 'I read more than I write, do you?'
+slug: i-read-more-than-i-write-do-you
+tags: 
 ---
-
-
 ## Commentary
 
 - Yes, this is true for me too. Reading needs to be more or rather at certain point, balanced from writing.

@@ -1,15 +1,13 @@
 ---
-type: posts
+series: ["100-days-of-golang"]
+image_url: https://meetgor-cdn.pages.dev/golang-024-file-write.png
 title: "Golang: File Write"
 date: 2022-12-18
 slug: "golang-file-write"
-series: ["100-days-of-golang"]
-tags:
-  - go
-image_url: https://meetgor-cdn.pages.dev/golang-024-file-write.png
+tags: 
+hash: 712f329529da783a87fff6a7f592cdd09cc6b43615e77f3c19d75f5bf86fde0f
+type: posts
 ---
-
-
 ## Introduction
 
 In the 24th post of the series, we will be taking a look at how we can perform write operations to a file using golang. We will be using the `os` package in most operations along with `bufio` text manipulations. We will be performing write operations like appending, deleting, and replacing a file using golang. We will be heavily leveraging standard library packages like `os`, `bufio`, `bytes` and `fmt`. We will also be looking into overwriting and string formatting to a file.

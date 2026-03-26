@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
 title: '6’7’‘ is not Random'
 date: 2026-01-10
 slug: 67-is-not-random
-tags:
-  - links
+tags: 
 link: 'https://substack.com/home/post/p-183890370'
 status: published
-description: '6’7’‘ is not Random'
 source: newsletter
 newsletter: 2026-01-10-techstructive-weekly-76
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+type: links
+description: '6’7’‘ is not Random'
+hash: 1d22694ad3d093dab4f800a0a8090b4de6ddff0f0bcfd80e684b516f865f4549
 ---
-
-
 ## Commentary
 
 - This is so true

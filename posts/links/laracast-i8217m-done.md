@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
-title: 'Laracast: I’m Done'
-date: 2026-01-31
-slug: laracast-i8217m-done
-tags:
-  - links
-link: 'https://laracasts.com/series/the-laracasts-snippet/episodes/10'
-status: published
-description: 'Laracast: I’m Done'
 source: newsletter
 newsletter: 2026-01-31-techstructive-weekly-79
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 3ba2e80552af36dfe57240de301bc0854e58b88d62a2d49c03de7de5eae8546f
+title: 'Laracast: I’m Done'
+date: 2026-01-31
+tags: 
+link: 'https://laracasts.com/series/the-laracasts-snippet/episodes/10'
+status: published
+type: links
+slug: laracast-i8217m-done
+description: 'Laracast: I’m Done'
 ---
-
-
 ## Commentary
 
 - Laracast cut off 40% of the workforce, sad again AI in the hunt, after tailwind this is sad.

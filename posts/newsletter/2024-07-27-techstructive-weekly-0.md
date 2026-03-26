@@ -1,71 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 937181c84581f80d626fe786b4f869306dc691a54502a0116c64b8893d8083e1
 title: 'Techstructive Weekly #0'
 date: 2024-07-27
 type: newsletter
 slug: techstructive-weekly-0
-tags:
-- ai
-- devops
-- git
-- newsletter
-- python
-- sql
+tags: 
 source_url: 'https://techstructively.substack.com/p/techstructive-weekly-0'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
 ## Week #0
 
 This week was about writing one of the much-procrastinated blog posts, starting a YouTube channel, and going through some heavy debugging sessions with my colleagues at work.

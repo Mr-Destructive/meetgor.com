@@ -1,20 +1,17 @@
 ---
-
-type: links
 title: 'The modern job hunt: Part 1'
 date: 2025-09-06
-slug: the-modern-job-hunt-part-1
-tags:
-  - links
 link: 'https://thedailywtf.com/articles/the-modern-job-hunt-part-1'
 status: published
 description: 'The modern job hunt: Part 1'
+type: links
+slug: the-modern-job-hunt-part-1
+tags: 
 image_url: 'https://ellismorning.com/img/ellis2.jpeg'
 source: newsletter
 newsletter: 2025-09-06-techstructive-weekly-58
+hash: c19d65c192dea6cbd5b4f80fec6d6ae74c021908b53f3a0a887cbaa4a4f88ace
 ---
-
-
 ## Commentary
 
 - This was a heart warming and hope-giving post. For a person struggling with jobs, finding a new hope is something that this post absolutely gave in abundance.

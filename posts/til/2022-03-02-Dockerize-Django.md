@@ -1,3 +1,7 @@
+---
+hash: 42776b91758d3b5022cd2f025be25e54be44711dad89883b706b8a0672e6546b
+slug: 
+---
 {
     "type": "til",
     "title": "Dockerize a Django project",
@@ -95,4 +99,3 @@ docker rmi -f <image-id>
 ```
 
   So, we now have a image of our Django project, this image can be used by anyone inside a docker environment and thus creating much more easier to test/work on a given project irrespective of the system is being used.
-

@@ -1,65 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
-title: "Advent of SQL 2025 Day 8: Product Catalog"
-slug: "advent-of-sql-2025-day-8"
 date: 2025-12-23
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: c55da1a5b9b8bb8eafb03439d7bbdfb86579b201b7136ebcdee8d87bdcd62c5c
+type: sqlog
+title: "Advent of SQL 2025 Day 8: Product Catalog"
+slug: "advent-of-sql-2025-day-8"
 ---
-
-
 ## Advent of SQL - Day 8, Product Catalog
 
 Whopsies! This is day 8.
@@ -1057,7 +1004,3 @@ Getting data behind certain data is quite relatable and challenging enough to ex
 That's it from day 8.
 
 See you tomorrow for day 9!
-
-
-
-

@@ -1,68 +1,13 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: til
-title: "Gotcha with Chained Assignment in Python"
-description: "A lesson learned about Python's chained assignment with mutable objects, where all variables store references to the same object, leading to unexpected behaviour when one is modified."
-status: published
 slug: python-chain-assignment-gotcha
 tags: ["python",]
 date: 2024-11-27
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+type: til
+description: "A lesson learned about Python's chained assignment with mutable objects, where all variables store references to the same object, leading to unexpected behaviour when one is modified."
+status: published
+hash: 979ac7bbfade95b0dbc6aa4bf7f622e495ed28451c25cdcc0c8049c2d0f4fc25
+title: "Gotcha with Chained Assignment in Python"
 ---
-
-
 I was writing some Python code and wanted to initialize a few variables to an empty list. Instead of creating separate lists for each variable, I decided to use chained assignments like this:
 
 ```python

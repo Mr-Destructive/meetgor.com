@@ -1,19 +1,17 @@
 ---
-date: 2025-09-13T00:00:00Z
-description: 'Python: The documentary'
 image_url: https://i.ytimg.com/vi/GfH4QL4VqJ0/hqdefault.jpg
 link: https://youtu.be/GfH4QL4VqJ0
 newsletter: 2025-09-13-techstructive-weekly-59
 slug: python-the-documentary
+hash: b0a2d5c013bc7e6d2c7daf2684e73b217d8caefa353a43941f6343087f1bea8b
 source: newsletter
 status: published
-tags:
-    - links
+tags: 
 title: 'Python: The documentary'
 type: links
+date: 2025-09-13T00:00:00Z
+description: 'Python: The documentary'
 ---
-
-
 ## Commentary
 
 - Wow! Just wow! From abstracting the language for making it friendly to running the world. It went from 0 to 3 pretty quick. Its the language spoken by LLMs

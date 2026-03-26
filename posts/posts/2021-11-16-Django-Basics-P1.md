@@ -1,18 +1,14 @@
 ---
+date: 2021-11-16
+series: ["Django-Basics"]
+tags: 
+image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643289206/blogmedia/gbq3rlfat3erbxocn7yn.png
 type: posts
+slug: "django-basics-intro"
+hash: a4c7e888468472da934685150a15ac1436f7414018e98a86389fe4ec5cc1f2c9
 title: "Django Basics: What is it?"
 subtitle: "Understanding what and why of the Django framework"
-date: 2021-11-16
-slug: "django-basics-intro"
-series: ["Django-Basics"]
-tags:
-  - django
-  - python
-  - web-development
-image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643289206/blogmedia/gbq3rlfat3erbxocn7yn.png
 ---
-
-
 ## Introduction
 
 Welcome to Django Basics series, in this series we'll explore the basics of the Django web framework. In this part, we'll understand what this web framework provides and what actually the back-end development consists of. We'll discuss where Django is used and why it is a great choice for beginners as well as experienced developers. 

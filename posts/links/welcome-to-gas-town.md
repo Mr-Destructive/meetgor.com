@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
-title: 'Welcome to Gas Town'
-date: 2026-01-24
-slug: welcome-to-gas-town
-tags:
-  - links
-link: 'https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04'
+tags: 
 status: published
 description: 'Welcome to Gas Town'
 source: newsletter
+hash: b4e60bd1afebe48ea6a1d370fad10c20a18ff218d6b5be4ecd52872a3039f8ce
+title: 'Welcome to Gas Town'
+link: 'https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04'
 newsletter: 2026-01-24-techstructive-weekly-78
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+type: links
+date: 2026-01-24
+slug: welcome-to-gas-town
 ---
-
-
 ## Commentary
 
 - Agents as code generation orchestrators. This is quite a ambitious thing. I haven’t read the full post. But I can see where it goes.

@@ -1,20 +1,17 @@
 ---
-
+source: newsletter
+hash: 1fa85e075eab9570c42757aafb835c1b5c1cd1c52d0f1eb65db39bff10b682f9
 type: links
+tags: 
+link: 'https://www.pearprogramming.blog/programming/opinions/2025/11/11/why-rails-just-stayed-with-me/'
+image_url: 'https://www.pearprogramming.blog/images/card-image-large.png'
+newsletter: 2025-12-13-techstructive-weekly-72
 title: 'Growing Software'
 date: 2025-12-13
 slug: growing-software
-tags:
-  - links
-link: 'https://www.pearprogramming.blog/programming/opinions/2025/11/11/why-rails-just-stayed-with-me/'
 status: published
 description: 'Growing Software'
-image_url: 'https://www.pearprogramming.blog/images/card-image-large.png'
-source: newsletter
-newsletter: 2025-12-13-techstructive-weekly-72
 ---
-
-
 ## Commentary
 
 - What a great analogy. Software is not architect a building but its growing a garden. You don’t have a layout already built, some parts are clear not all. Software is ever changing. You need to build something, observe and change constantly just like a gardener. Gardener doesn’t plant a bunch of plants and forgets, but rather it nurtures them, observes and then takes care of them.

@@ -1,15 +1,13 @@
 ---
+series: ["100-days-of-golang"]
+tags: 
+image_url: https://meetgor-cdn.pages.dev/golang-019-interfaces.png
+hash: 865683dd76fac90ae69f67eaec5121dd3146de753349dd29fe3a17e697a059d9
 type: posts
 title: "Golang: Interfaces"
 date: 2022-09-10
 slug: "golang-interfaces"
-series: ["100-days-of-golang"]
-tags:
-  - go
-image_url: https://meetgor-cdn.pages.dev/golang-019-interfaces.png
 ---
-
-
 ## Introduction
 
 In the 19th post of the series, we will be taking a look into interfaces in golang. Interfaces allow us to create function signatures common to different structs or types. So, we can allow multiple structs to have a common interface(method) that can have different implementations.

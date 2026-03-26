@@ -1,15 +1,13 @@
 ---
-type: posts
-title: "Golang Web: PATCH Method"
 date: 2025-01-11
 slug: "golang-web-patch-method"
 series: ["100-days-of-golang"]
-tags:
-  - go
 image_url: https://meetgor-cdn.pages.dev/100-days-of-golang/golang-036-patch-method.png
+hash: 0025e68a1e9f92b89a24fb4d4fb88d7f0d3f6ecb28cc3556a9ece8bdd46214ae
+type: posts
+title: "Golang Web: PATCH Method"
+tags: 
 ---
-
-
 ## Introduction
 
 In previous sections of this series, we've covered the GET, POST, and PUT methods. Now, we will explore the PATCH method, which differs from the others in several key ways. The PATCH method is somewhat more flexible and depends on how the server or API you're working with is designed.

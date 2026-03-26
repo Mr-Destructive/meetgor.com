@@ -1,68 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
 title: 'Why I am not worried about AI job loss'
 date: 2026-02-21
 slug: why-i-am-not-worried-about-ai-job-loss
-tags:
-  - links
 link: 'https://davidoks.blog/p/why-im-not-worried-about-ai-job-loss'
 status: published
+type: links
+tags: 
 description: 'Why I am not worried about AI job loss'
 source: newsletter
 newsletter: 2026-02-21-techstructive-weekly-82
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 70f3c18da20990c944cb0759c87f86950faf2ad869907a8c22f5677d75ac6d03
 ---
-
-
 ## Commentary
 
 - Humans will still be the bottleneck. I kind of agree to that. Because in the end it is humans who will perceive the tasks, they can’t have super-intelligence if none of the people who work with it are even intelligent.

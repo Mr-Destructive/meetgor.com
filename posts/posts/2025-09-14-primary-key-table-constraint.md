@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
-slug: sqlite-primary-key-table-constraint
 title: 'SQLite SQL: PRIMARY KEY table constraint'
 date: 2025-09-14
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: da3fc7cb83ae1857a1e4d90ea777ffc92ba65a0f9e8eab6552d0cb4ebc4e4592
+type: sqlog
+slug: sqlite-primary-key-table-constraint
 ---
-
-
 ## The PRIMARY KEY Table constraint
 
 The PRIMARY KEY constraint is not actually a column constraint, it is a table constraint. In the previous section we learnt about how to handle single column-level `PRIMARY KEY`. In this section we'll understand how to use `PRIMARY KEY` as table constraint, with that we can use multiple columns to combine the key.
@@ -188,4 +135,3 @@ sqlite>
 
 
 I think that is all we need about `PRIMARY KEY` for the moment, if you need any specific example, we will be exploring `AUTOINCREMENT`, `NOT NULL` cases for `PRIMARY KEY`s and other schema design principles in separate sections.
-

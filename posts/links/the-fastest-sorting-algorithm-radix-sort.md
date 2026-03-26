@@ -1,19 +1,17 @@
 ---
-date: 2025-09-13T00:00:00Z
-description: 'The fastest sorting algorithm: Radix Sort'
 image_url: https://i.ytimg.com/vi/Y95a-8oNqps/hqdefault.jpg
 link: https://youtu.be/Y95a-8oNqps
-newsletter: 2025-09-13-techstructive-weekly-59
-slug: the-fastest-sorting-algorithm-radix-sort
 source: newsletter
 status: published
-tags:
-    - links
+hash: 778c941341ae8438c179d1e79cf2ba557a29a03b8ba43376f91a20082cda9199
+description: 'The fastest sorting algorithm: Radix Sort'
+newsletter: 2025-09-13-techstructive-weekly-59
+slug: the-fastest-sorting-algorithm-radix-sort
+tags: 
 title: 'The fastest sorting algorithm: Radix Sort'
 type: links
+date: 2025-09-13T00:00:00Z
 ---
-
-
 ## Commentary
 
 - Simply, we take the bases or digits in the number and sort them in buckets, the memory might be high, so that’s why its done per digit to avoid billions of buckets being created for each number.

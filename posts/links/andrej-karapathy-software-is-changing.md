@@ -1,19 +1,17 @@
 ---
+slug: andrej-karapathy-software-is-changing
+tags: 
+type: links
+hash: f42b5030a63a972a60bbf385430d3aef0f29fbac6582f5b22ef5cbf8678ba278
 date: 2025-06-21T00:00:00Z
 description: 'Andrej Karapathy: Software is Changing'
 image_url: https://i.ytimg.com/vi/LCEmiRjPEtQ/hqdefault.jpg
 link: https://www.youtube.com/watch?v=LCEmiRjPEtQ
-newsletter: 2025-06-21-techstructive-weekly-47
-slug: andrej-karapathy-software-is-changing
 source: newsletter
 status: published
-tags:
-    - links
 title: 'Andrej Karapathy: Software is Changing'
-type: links
+newsletter: 2025-06-21-techstructive-weekly-47
 ---
-
-
 ## Commentary
 
 - We are in Software 3.0 Era

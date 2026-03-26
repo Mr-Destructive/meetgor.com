@@ -1,20 +1,17 @@
 ---
-
-type: links
-title: 'Radicle'
+description: 'Radicle'
+hash: 606556e832a272ddd83d5e8047f3f85164185669013f29e66e1d9a2f1e4e4e3a
 date: 2025-05-31
 slug: radicle
-tags:
-  - links
-link: 'https://radicle.xyz/'
 status: published
-description: 'Radicle'
 image_url: 'https://radicle.xyz/assets/images/og-card.png'
 source: newsletter
 newsletter: 2025-05-31-techstructive-weekly-44
+type: links
+title: 'Radicle'
+tags: 
+link: 'https://radicle.xyz/'
 ---
-
-
 ## Commentary
 
 - : The GitHub alternative

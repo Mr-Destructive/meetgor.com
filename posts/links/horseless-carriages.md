@@ -1,68 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: links
+slug: horseless-carriages
+tags: 
+description: 'Horseless Carriages'
+newsletter: 2025-05-03-techstructive-weekly-40
+hash: f5d819250c4ee5b0bf485e27a33c9a39e478254ca2401e8bf7eae2a10bdc5ed0
 title: 'Horseless Carriages'
 date: 2025-05-03
-slug: horseless-carriages
-tags:
-  - links
 link: 'https://koomen.dev/essays/horseless-carriages/'
 status: published
-description: 'Horseless Carriages'
 source: newsletter
-newsletter: 2025-05-03-techstructive-weekly-40
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Commentary
 
 - :

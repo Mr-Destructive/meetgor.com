@@ -1,20 +1,17 @@
 ---
-
-type: links
+tags: 
+description: 'The strange case of engineers who dismiss AI'
+source: newsletter
 title: 'The strange case of engineers who dismiss AI'
-date: 2025-12-20
 slug: the-strange-case-of-engineers-who-dismiss-ai
-tags:
-  - links
 link: 'https://terriblesoftware.org/2025/12/19/the-strange-case-of-engineers-who-dismiss-ai/'
 status: published
-description: 'The strange case of engineers who dismiss AI'
 image_url: 'https://i0.wp.com/terriblesoftware.org/wp-content/uploads/2025/12/cznmcy1wcml2yxrll3jhd3bpegvsx2ltywdlcy93zwjzaxrlx2nvbnrlbnqvbhivchgxmzyynzawlwltywdllwt3dnh4owljlmpwzw.webp?fit=1024%2C724&#038;ssl=1'
-source: newsletter
 newsletter: 2025-12-20-techstructive-weekly-73
+hash: 03f80ebbe17eefb733b688e6920fca44d8577f95a66b5832a8f27b02e878cbef
+type: links
+date: 2025-12-20
 ---
-
-
 ## Commentary
 
 - Programming is a task; software engineering is a role

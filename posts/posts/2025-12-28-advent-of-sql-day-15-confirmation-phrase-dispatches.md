@@ -1,65 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
-title: "Advent of SQL 2025 Day 15: Confirmation Phrase Dispatches"
 slug: "advent-of-sql-2025-day-15"
 date: 2025-12-28
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 7f629bf1b18b4c74e5394ab22e3271ef00abd52fc676add1f4b16157e2048ba3
+type: sqlog
+title: "Advent of SQL 2025 Day 15: Confirmation Phrase Dispatches"
 ---
-
-
 ## Advent of SQL, Day 15 - Confirmation Phrase Dispatches
 
 We are on the final day of Advent of SQL!

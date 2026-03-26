@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: sqlog
 title: "SQLite SQL: Create Table Basic"
 slug: sqlite-create-table
 date: 2025-09-04
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 1b83934cf7c323ba738dfad2f4feaa7739058477aefa9282bd0116adf8f98f19
 ---
-
-
 We have explored enough sqlite dot commands, now I want to explore the actual nuts and bolts of SQL in SQLite, what better place then to create tables.
 
 ## CREATE TABLE Statement
@@ -98,4 +45,3 @@ SELECT * FROM users;
 Simple right?
 
 Note that you can insert anything in the id column, not just numbers, but you can't insert anything in the name column, since that is a mandatory column. That is wired but that's what sqlite has a duct typing if not opted out of it.
-

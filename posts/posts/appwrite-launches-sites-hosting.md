@@ -1,38 +1,13 @@
 ---
+description: "Appwrite just launched hosting of static sites (ssr, ssg, spa). This puts appwrite in a great position for being a fullstack solution. End to End developer stack for building applications."
+hash: d6f3af95d6dfe39cd2932c3e7c4c6d23e9cf87e1b8fe5d1d2ec3ab5a829cc355
+slug: appwrite-is-now-full-stack-as-a-service-with-sites
 type: links
 date: 2025-05-19
-tags:
-  - typescript
+tags: 
 status: published
 title: "Appwrite is now Full-Stack-as-a-Service with Sites"
-description: "Appwrite just launched hosting of static sites (ssr, ssg, spa). This puts appwrite in a great position for being a fullstack solution. End to End developer stack for building applications."
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## What is (was) Appwrite
 
 Appwrite started out as a Backend-as-a-Service (BaaS) and in many ways, it still is. It offered things like databases, authentication, file storage, and cloud functions, basically the complexity of backend for an application. One of its biggest strengths? It’s fully open source and self-hostable!

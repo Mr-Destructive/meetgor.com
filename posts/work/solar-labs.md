@@ -1,80 +1,15 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: work
 title: "Solar Labs"
-date: 2023-05-26
 status: published
+tags: 
+hash: 0dd121ef27b29abb6759a92a090efba79080959ab43c3315e873f3707090d47f
+slug: solar-labs
+date: 2023-05-26
 description: Backend internship building REST APIs and improving reliability for solar design platform
 duration: "July 2022 - April 2023"
-skills:
-  - Python
-  - Django
-  - Django REST Framework
-  - REST APIs
-  - Database optimization
-  - Azure Pipelines
-  - CI/CD
-tags:
-  - backend
-  - python
-  - django
-  - rest
-  - api
-  - ci-cd
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+skills: 
 ---
-
-
 ## Backend Developer Intern - [The Solar Labs](https://www.arka360.com/)
 **July 2022 - April 2023**
 

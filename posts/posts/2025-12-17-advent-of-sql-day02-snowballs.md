@@ -1,65 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
-title: "Advent of SQL 2025 Day 2: Snowballs"
 slug: "advent-of-sql-2025-day-2"
 date: 2025-12-17
 series: ["advent-of-sql-2025"]
 tags: ["sqlite", "sql", "advent-of-sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 14b3a60fd1fb0a87aeddbc7d17bcb01923f4ee57f74315342848720f39e588f1
+type: sqlog
+title: "Advent of SQL 2025 Day 2: Snowballs"
 ---
-
-
 ## SQLog: Advent of SQL Day 2
 
 Here we are on the day 2 of Advent of SQL

@@ -1,20 +1,17 @@
 ---
-
-type: links
-title: 'Don’t become the machine'
 date: 2025-12-27
 slug: dont-become-the-machine
-tags:
-  - links
-link: 'https://armeet.bearblog.dev/becoming-the-machine/'
 status: published
 description: 'Don’t become the machine'
 image_url: '/static/og-image.png'
 source: newsletter
 newsletter: 2025-12-27-techstructive-weekly-74
+hash: c89c8d550fc1ab928811bdc2c20929fca39c13f63dc0486b7b818f48b0917d5a
+type: links
+title: 'Don’t become the machine'
+tags: 
+link: 'https://armeet.bearblog.dev/becoming-the-machine/'
 ---
-
-
 ## Commentary
 
 - This is well put.

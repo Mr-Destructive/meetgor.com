@@ -1,68 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
-title: 'HTTP VS Websockets: The breakthrough moment that clicked'
-date: 2025-08-02
-slug: http-vs-websockets-the-breakthrough-moment-that-clicked
-tags:
-  - links
+tags: 
 link: 'https://tobennaoduah.substack.com/p/websockets-vs-http-the-breakthrough'
 status: published
+hash: a42d9149521a9e8e58c247056b94c247ccef831ddf15b7136fd69d9732b90f63
+type: links
+title: 'HTTP VS Websockets: The breakthrough moment that clicked'
+slug: http-vs-websockets-the-breakthrough-moment-that-clicked
 description: 'HTTP VS Websockets: The breakthrough moment that clicked'
 source: newsletter
 newsletter: 2025-08-02-techstructive-weekly-53
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+date: 2025-08-02
 ---
-
-
 ## Commentary
 
 - Such a honest, humble and insightful post. HTTP as a delivery truck, Websockets as a telephone! Such a relatable example, this shows the author got it right and is able to connect it well.

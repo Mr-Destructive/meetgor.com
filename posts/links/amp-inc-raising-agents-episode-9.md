@@ -1,19 +1,17 @@
 ---
-date: 2026-01-24T00:00:00Z
-description: 'Amp Inc. Raising Agents: Episode 9'
+title: 'Amp Inc. Raising Agents: Episode 9'
+hash: 9f2ed81486d0803ada8bd3fd72cbbd0dc26d0e7c7d0dbfb8c9e4990b1b1a8dc0
 image_url: https://i.ytimg.com/vi/2wjnV6F2arc/hqdefault.jpg
 link: https://www.youtube.com/watch?v=2wjnV6F2arc
 newsletter: 2026-01-24-techstructive-weekly-78
+tags: 
+type: links
+date: 2026-01-24T00:00:00Z
+description: 'Amp Inc. Raising Agents: Episode 9'
 slug: amp-inc-raising-agents-episode-9
 source: newsletter
 status: published
-tags:
-    - links
-title: 'Amp Inc. Raising Agents: Episode 9'
-type: links
 ---
-
-
 ## Commentary
 
 - Writing code by hand is over?

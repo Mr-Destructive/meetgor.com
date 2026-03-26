@@ -1,73 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: newsletter
 title: 'Techstructive Weekly #61'
 date: 2025-09-27
 slug: techstructive-weekly-61
-tags:
-- ai
-- career
-- database
-- git
-- javascript
-- newsletter
-- security
-- sql
+tags: 
 source_url: 'https://techstructively.substack.com/p/techstructive-weekly-61'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 0116ccdc9a0053077d041cc028a1da27d6e809870bcc780e5ce226638b96dc9f
 ---
-
 ## Week #61
 
 A bit of slow and disappointing week on a personal note. I tried my best to be a backend developer but was not worthy of being one, I was stranded as a product developer. I am not saying I hate being a product developer, it just gets too menial and boring once you know the limitations and the quirks of a product.
@@ -181,4 +120,3 @@ Double click to interact with video
     - It also has a different and quite novel approach for a coding model
 
 That’s it from this week. It has been a harsher week. We are finally into the last quarter of 2025. Ah! That ended pretty quickly. LLMs have just consumed me.
-

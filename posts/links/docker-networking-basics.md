@@ -1,20 +1,17 @@
 ---
-
-type: links
+newsletter: 2025-01-04-techstructive-weekly-23
+hash: 76fa57b234be58d4e74d46e63c01d116472c594cad74a71ea18c29591b161c25
 title: 'Docker Networking Basics'
 date: 2025-01-04
-slug: docker-networking-basics
-tags:
-  - links
 link: 'https://adventofdocker.com/posts/day-10-docker-networking/'
 status: published
 description: 'Docker Networking Basics'
-image_url: 'https://adventofdocker.com/posts/day-10-docker-networking-basics.png'
 source: newsletter
-newsletter: 2025-01-04-techstructive-weekly-23
+type: links
+slug: docker-networking-basics
+tags: 
+image_url: 'https://adventofdocker.com/posts/day-10-docker-networking-basics.png'
 ---
-
-
 ## Commentary
 
 - :Learning about docker is never enough, I learned about the -P which will forward all ports from the container to the host machine at random. That is wired but a good quirk to know, you never know when that might be handy.

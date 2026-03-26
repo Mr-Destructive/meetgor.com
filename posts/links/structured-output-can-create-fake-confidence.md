@@ -1,20 +1,17 @@
 ---
-
-type: links
-title: 'Structured output can create fake confidence'
-date: 2025-12-27
-slug: structured-output-can-create-fake-confidence
-tags:
-  - links
-link: 'https://boundaryml.com/blog/structured-outputs-create-false-confidence'
 status: published
 description: 'Structured output can create fake confidence'
 image_url: 'https://boundaryml.com/api/og?slug=structured-outputs-create-false-confidence'
+hash: 3672952304990912e3c8a869621a5ca5869c40835fed50c74ab86fdbb2a9a82c
+type: links
+title: 'Structured output can create fake confidence'
+slug: structured-output-can-create-fake-confidence
 source: newsletter
 newsletter: 2025-12-27-techstructive-weekly-74
+date: 2025-12-27
+tags: 
+link: 'https://boundaryml.com/blog/structured-outputs-create-false-confidence'
 ---
-
-
 ## Commentary
 
 - Spicy take and true! Somewhat true

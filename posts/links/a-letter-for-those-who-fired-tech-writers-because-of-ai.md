@@ -1,20 +1,17 @@
 ---
-
 type: links
 title: 'A Letter for those who fired Tech Writers because of AI'
-date: 2026-01-17
 slug: a-letter-for-those-who-fired-tech-writers-because-of-ai
-tags:
-  - links
 link: 'https://passo.uno/letter-those-who-fired-tech-writers-ai/'
-status: published
 description: 'A Letter for those who fired Tech Writers because of AI'
-image_url: 'https://passo.uno/uploads/preview-to-those-who-fired-or-didn-t-hire-tech-writers-because-of-ai.jpg'
 source: newsletter
+date: 2026-01-17
+tags: 
+status: published
+image_url: 'https://passo.uno/uploads/preview-to-those-who-fired-or-didn-t-hire-tech-writers-because-of-ai.jpg'
 newsletter: 2026-01-17-techstructive-weekly-77
+hash: d7e889727460fb40cae410edf78c811e383730fe06a19f77e68b8d59c63da45a
 ---
-
-
 ## Commentary
 
 - True empathy is key Liability, everything becomes liability if outsourced.

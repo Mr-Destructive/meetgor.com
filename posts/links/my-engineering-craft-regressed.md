@@ -1,68 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
+description: 'My Engineering Craft regressed'
+newsletter: 2025-06-07-techstructive-weekly-45
+hash: 3849112d36bfef0e4727eb20610098195762d37fcb5c2826aad8e4c4aa5c826b
 title: 'My Engineering Craft regressed'
-date: 2025-06-07
 slug: my-engineering-craft-regressed
-tags:
-  - links
+source: newsletter
+type: links
+date: 2025-06-07
+tags: 
 link: 'https://lemmy.ml/post/30100312?ref=dailydev'
 status: published
-description: 'My Engineering Craft regressed'
-source: newsletter
-newsletter: 2025-06-07-techstructive-weekly-45
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Commentary
 
 - This is literally me. I can completely get the words of the person. Its exciting to work on side projects and contribute to open source projects, but really no one cares, but I have done it so far for personal pleasure.

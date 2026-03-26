@@ -1,20 +1,17 @@
 ---
-
+slug: programming-with-agents-sketchdev
+tags: 
+image_url: 'https://sketch.dev/sketch.dev.png'
+source: newsletter
 type: links
 title: 'Programming with Agents: Sketch.dev'
-date: 2025-06-14
-slug: programming-with-agents-sketchdev
-tags:
-  - links
 link: 'https://sketch.dev/blog/programming-with-agents'
 status: published
 description: 'Programming with Agents: Sketch.dev'
-image_url: 'https://sketch.dev/sketch.dev.png'
-source: newsletter
 newsletter: 2025-06-14-techstructive-weekly-46
+hash: a41842adfc4003bef7a51e8552a1c40e733a2bd5925ec83d36d150997999a840
+date: 2025-06-14
 ---
-
-
 ## Commentary
 
 - Great post on agents, good and expected take on agent definition

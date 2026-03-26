@@ -1,63 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: sqlog
 title: "SQLite functions: generate_series"
 date: 2025-08-21
-tags:
-  - typescript
-  - sql
-  - sqlite
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: 
+hash: 534bdb6967a3185880184dafd97ab94f5a6e36eba33a694192a950517fc0ff33
+slug: sqlite-functions-generateseries
 ---
-
-
 The [generate_series](https://www.sqlite.org/series.html) is a table valued function in sqlite and is available via the [generate_series](https://sqlite.org/src/artifact?ci=trunk&filename=ext/misc/series.c) extension.
 
 > The valued function is something that returns a table but is virtual (doesn't really have data or schema in it). It has hidden columns which are used as parameters to the function to constrain the output and generate the data according to those parameters to the function.
@@ -223,5 +171,3 @@ Interestingly the start, stop, and step are the parameters to the function, so y
 SELECT * FROM generate_series() WHERE start = 10 AND stop = 20 AND step = 5;
 ```
 This will give 10,15,20 since the start is 10, increment by 5 until 20. The step is optional, note that stop is optional too, but never forget to provide it, it might cause a forever loop and keep on incrementing by 1 and never give the result back until your computer crashes.
-
-

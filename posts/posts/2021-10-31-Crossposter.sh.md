@@ -1,15 +1,13 @@
 ---
+image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643288989/blogmedia/trssl38erkdbcqlnjdvp.png
+hash: bd7fc6e4e797130594860eb46dccca47a87ad5076ec805bc28db73ec0a39212a
+subtitle: "Crosspost on dev.to, medium.com and hashnode.com with a single click"
 type: posts
 title: "Crossposting with a single script: Crossposter.sh"
-subtitle: "Crosspost on dev.to, medium.com and hashnode.com with a single click"
 date: 2021-10-31
-tags:
-  - bash
+tags: 
 slug: crossposter-shellscript
-image_url: https://res.cloudinary.com/dgpxbrwoz/image/upload/v1643288989/blogmedia/trssl38erkdbcqlnjdvp.png
 ---
-
-
 ## Introduction
 
 If you have been writing articles you know the pain to get some attention, if you have already been cross-posting your articles it usually takes some time to do that. This task can be automated with a shellscript. If you have been cross-posting articles on `medium.com`, `dev.to` and at `hashnode.com`, then I have a treat for you. 
@@ -164,4 +162,4 @@ OK, I won't bore anyone with more BASH but that were some of the quite important
 
 ## Conclusion
 
-So, we can see `crosspost.sh` is a BASH script that cross-posts markdown articles with a bit of inputs to 3 different platforms within a couple of minutes. This article was basically to demonstrate the project and its capabilities also highlighting the issues present. I hope you liked the project, please do try it and comment the feedback please. Thank you for reading, Until next time, Happy Coding :) 
+So, we can see `crosspost.sh` is a BASH script that cross-posts markdown articles with a bit of inputs to 3 different platforms within a couple of minutes. This article was basically to demonstrate the project and its capabilities also highlighting the issues present. I hope you liked the project, please do try it and comment the feedback please. Thank you for reading, Until next time, Happy Coding :)

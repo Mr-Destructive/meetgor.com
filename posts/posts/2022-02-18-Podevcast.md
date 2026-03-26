@@ -1,16 +1,13 @@
 ---
+slug: "podevcast-project"
+image_url: https://meetgor-cdn.pages.dev/podevcast-python.png
 type: posts
 title: "Podevcast: A single source for developer podcasts"
 subtitle: "Developer podcast from a single place, a podcast player static site generated using Python : Netlify x Hashnode Hackathon"
 date: 2022-02-18
-slug: "podevcast-project"
-tags:
-  - python
-  - hashnode
-image_url: https://meetgor-cdn.pages.dev/podevcast-python.png
+tags: 
+hash: 9179e93715f33bfbcd2aabb8a2203dca92abcac805fbb8a90c3eede271f73f0c
 ---
-
-
 ## Introduction
 
 Hello Developers! Want to listen to programming podcasts from a single place? Podevcast is the place you should be searching for. 

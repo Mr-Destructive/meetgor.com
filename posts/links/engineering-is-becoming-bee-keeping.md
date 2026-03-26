@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
-title: 'Engineering is becoming bee-keeping'
 date: 2026-01-03
 slug: engineering-is-becoming-bee-keeping
-tags:
-  - links
+tags: 
 link: 'https://bits.logic.inc/p/engineering-is-becoming-beekeeping'
-status: published
-description: 'Engineering is becoming bee-keeping'
 source: newsletter
 newsletter: 2026-01-03-techstructive-weekly-75
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+type: links
+title: 'Engineering is becoming bee-keeping'
+status: published
+description: 'Engineering is becoming bee-keeping'
+hash: ee36a22062705ac8dd3bb6bf6b165e42bcc381757dac5aba04a37607fe60e378
 ---
-
-
 ## Commentary
 
 - I like this comparison quite a lot. Swarming agents is what its happening. And the realisation that code was the thing that doesn’t matter, the thing that matters is did we solve the problem

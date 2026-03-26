@@ -1,16 +1,12 @@
 ---
+hash: 911a8162f53b7aece8b863078ca53958847a3c3bc2342ce8a79d1fcd473c58aa
 type: posts
 title: "PGCLI: Postgres from the terminal"
 date: 2022-08-07
 slug: "pgcli-pg-from-terminal"
-tags:
-  - postgres
-  - python
-  - DBMS
+tags: 
 image_url: https://meetgor-cdn.pages.dev/python-pkg-pgcli-postgres-from-terminal.png
 ---
-
-
 ## Introduction
 
 Have you ever used the Postgres database and did you know you don't have to launch PGAdmin every time you want to write SQL queries, you can write down those queries even inside a terminal with a python package. It's PGCLI, that can act as an editor window for writing SQL queries for Postgres Databases. We can simply execute SQL queries in a PSQL-like shell with additional features like autocompletion, text-editing modes, file input/output options, etc.

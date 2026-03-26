@@ -1,20 +1,17 @@
 ---
-
-type: links
-title: 'Vibe Coding is broring'
 date: 2025-12-27
 slug: vibe-coding-is-broring
-tags:
-  - links
-link: 'https://cassidoo.co/post/vibe-coding-yawn/'
 status: published
 description: 'Vibe Coding is broring'
-image_url: 'https://cassidoo.co/og-image/vibe-coding-yawn.png'
 source: newsletter
+hash: d328b0fa8573b1986d7cf3aa5ce0c9ade1709fa3007eea7b62ccf27b4f900552
+type: links
+title: 'Vibe Coding is broring'
+tags: 
+link: 'https://cassidoo.co/post/vibe-coding-yawn/'
+image_url: 'https://cassidoo.co/og-image/vibe-coding-yawn.png'
 newsletter: 2025-12-27-techstructive-weekly-74
 ---
-
-
 ## Commentary
 
 - It is pathetic, really. Watching it clog some code and done. Sigh what is left out then, to read code? Who loves it.

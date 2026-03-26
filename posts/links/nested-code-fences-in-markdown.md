@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
 title: 'Nested code fences in Markdown'
 date: 2026-01-24
-slug: nested-code-fences-in-markdown
-tags:
-  - links
+tags: 
 link: 'https://susam.net/nested-code-fences.html'
 status: published
+newsletter: 2026-01-24-techstructive-weekly-78
+type: links
+slug: nested-code-fences-in-markdown
 description: 'Nested code fences in Markdown'
 source: newsletter
-newsletter: 2026-01-24-techstructive-weekly-78
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: bb80f2350e3197e07a567f2ae4f853571a901b3dda71ebc0f517f4cb7da8152d
 ---
-
-
 ## Commentary
 
 - This is clever. Never knew this.

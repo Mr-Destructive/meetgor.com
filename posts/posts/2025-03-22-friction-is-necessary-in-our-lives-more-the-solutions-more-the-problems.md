@@ -3,36 +3,9 @@ type: links
 title: "Friction is necessary in our lives, more the solutions, more the problems."
 date: 2025-03-22
 slug: "friction-is-necessary-in-our-lives-more-the-solutions-more-the-problems"
-tags:
-  - typescript
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: 
+hash: b2c03cfc822cb4af7d0323590a1a34a1d248d63966e5a754acf0c1c2714e621a
 ---
-
-
 <p>LINK: <a href="https://cassidoo.co/post/introduce-friction/">https://cassidoo.co/post/introduce-friction</a></p>
 <p>I agree to this post, when I didn't had the phone, I was much creative, much more bored.
 I don't know if it was just that or it feels life was filled with much more satisfaction and bonding.</p>

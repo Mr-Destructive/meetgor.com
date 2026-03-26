@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
 title: 'Read out the thing you have written'
 date: 2025-05-31
 slug: read-out-the-thing-you-have-written
-tags:
-  - links
+tags: 
 link: 'https://martinfowler.com/bliki/SayYourWriting.html'
 status: published
 description: 'Read out the thing you have written'
-source: newsletter
 newsletter: 2025-05-31-techstructive-weekly-44
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+type: links
+source: newsletter
+hash: 77b6d9e1b43c60f572837cfb60ccc8c53d7be6d0e01ecf856864f35ac319265b
 ---
-
-
 ## Commentary
 
 - :

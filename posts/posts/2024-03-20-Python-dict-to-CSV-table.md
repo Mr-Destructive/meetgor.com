@@ -1,66 +1,13 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: ["python",]
+date: 2024-03-20
 type: til
-title: "Turn Python dictionary into a neat CSV table"
 description: "Exploring how to write python dict/key-value pairs and a table-like structure to a CSV file."
 status: published
 slug: python-dict-to-csv-table
-tags: ["python",]
-date: 2024-03-20
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 48d6f5ad8cc7d85da0736b9575ce3e62efdb7f31270ddebd65bf634e131b9bc9
+title: "Turn Python dictionary into a neat CSV table"
 ---
-
-
 ## Populating a Python dict having a table-like structure to a CSV
 
 Today, I want to share with you a neat trick I recently discovered for populating a CSV file with data in a table-like structure using Python.

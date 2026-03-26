@@ -1,15 +1,13 @@
 ---
 type: posts
+slug: "bash-crypto-scrapper"
+tags: 
+image_url: https://cdn.hashnode.com/res/hashnode/image/upload/v1626331633083/zTSpHCFOu.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress
 title: "Cryptocurrency Price Scrapping using BASH and Coingecko API"
 subtitle: "Know the price of your favorite cryptocurrency coin/token in your national currency from your terminal using bash shell and Coingecko crypto API."
 date: 2021-07-15
-slug: "bash-crypto-scrapper"
-tags:
-  - bash
-image_url: https://cdn.hashnode.com/res/hashnode/image/upload/v1626331633083/zTSpHCFOu.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress
+hash: 60e9b58374cfcac1b2a31243c60f1fe427043e601312e4d422a00b89df060c09
 ---
-
-
 ## Introduction
 Cryptocurrency is in such a hype that it is attracting even nerds and terminal fanboys, it is quite comfortable for such people to view the price inside of their terminal, also for normal people to learn about how to interact with an API from the local machine. We are gonna make a script about 20 lines in BASH to extract data from the  [coingecko cryptocurrency API](https://www.coingecko.com/en/api#explore-api) and some tools such as grep and sed. That being said let's start scripting.
 

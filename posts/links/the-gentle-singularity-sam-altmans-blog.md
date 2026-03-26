@@ -1,72 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: links
-title: 'The Gentle Singularity: Sam Altman’s Blog'
-date: 2025-06-14
 slug: the-gentle-singularity-sam-altmans-blog
-tags:
-  - links
 link: 'https://blog.samaltman.com/the-gentle-singularity'
-status: published
 description: 'The Gentle Singularity: Sam Altman’s Blog'
 source: newsletter
 newsletter: 2025-06-14-techstructive-weekly-46
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: fa9931d5d09381a2e5482ec0cd5309967661f2a6584a0fe32fede07f6f0a05ca
+title: 'The Gentle Singularity: Sam Altman’s Blog'
+date: 2025-06-14
+tags: 
+status: published
 ---
-
-
 ## Commentary
 
 - Sam thinks that GPTs are powerful than any human lived on earth, is that really accurate? Maybe, in terms of knowledge, but that’s not truly knowledge. It does have billions of weights that somewhat represent the knowledge, but can it make sense of it? No, not yet. With tools and reasoning, maybe, but not quite without proper instructions.

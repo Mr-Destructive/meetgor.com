@@ -1,68 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+slug: the-software-engineering-identity-crisis
+tags: 
+status: published
+description: 'The Software Engineering Identity Crisis'
+newsletter: 2025-06-14-techstructive-weekly-46
 type: links
 title: 'The Software Engineering Identity Crisis'
 date: 2025-06-14
-slug: the-software-engineering-identity-crisis
-tags:
-  - links
 link: 'https://annievella.com/posts/the-software-engineering-identity-crisis/'
-status: published
-description: 'The Software Engineering Identity Crisis'
 source: newsletter
-newsletter: 2025-06-14-techstructive-weekly-46
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 0163fbcee79959690506b075e8bf605fefea8278d3e1a0a9262e4be46a40d5f0
 ---
-
-
 ## Commentary
 
 - The quote that sums this well is this:

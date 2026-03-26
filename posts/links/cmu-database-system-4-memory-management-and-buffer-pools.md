@@ -5,15 +5,13 @@ image_url: https://i.ytimg.com/vi/8-2yv4z0VZc/hqdefault.jpg
 link: https://www.youtube.com/watch?v=8-2yv4z0VZc
 newsletter: 2026-01-03-techstructive-weekly-75
 slug: cmu-database-system-4-memory-management-and-buffer-pools
+hash: c80bc1c91838818655c2c9fdec9a9e7afbcd2b16b8698f4b03ef975b14fd3f16
 source: newsletter
 status: published
-tags:
-    - links
+tags: 
 title: 'CMU Database System #4 Memory Management and Buffer pools'
 type: links
 ---
-
-
 ## Commentary
 
 - Ok OS is not our friend, we need to manage our memory ourselves. This went wild, I thought managing memory was like shooting yourselves on the foot, but not for DBs.

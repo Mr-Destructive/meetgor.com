@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type: links
 title: 'When the Job search becomes impossible'
 date: 2025-09-13
-slug: when-the-job-search-becomes-impossible
-tags:
-  - links
+tags: 
 link: 'https://www.jeffwofford.com/wp/?p=2240'
 status: published
 description: 'When the Job search becomes impossible'
+hash: 6ab965732708135ff04b2a5c3924094e71ff57210a42e776dbece2ca55dde827
+slug: when-the-job-search-becomes-impossible
 source: newsletter
 newsletter: 2025-09-13-techstructive-weekly-59
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Commentary
 
 - This is gold. It might not look as relatable to everyone or even every time for those who relate to it now. But for me, who had spent 4 months finding a internships, 87 applications to land an interview, I can surely say there is a hope at the end of tunnel.

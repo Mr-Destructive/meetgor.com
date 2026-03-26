@@ -1,20 +1,17 @@
 ---
-
-type: links
 title: 'Tools: Code is all you need'
 date: 2025-07-12
-slug: tools-code-is-all-you-need
-tags:
-  - links
-link: 'https://lucumr.pocoo.org/2025/7/3/tools/'
+tags: 
 status: published
-description: 'Tools: Code is all you need'
 image_url: 'https://lucumr.pocoo.org/social/2025-07-03-tools-social.png'
 source: newsletter
 newsletter: 2025-07-12-techstructive-weekly-50
+type: links
+slug: tools-code-is-all-you-need
+link: 'https://lucumr.pocoo.org/2025/7/3/tools/'
+description: 'Tools: Code is all you need'
+hash: 965dfe390c8a4e627947a7582eb5e3d889b31f8f1684328e7af737ad5696e865
 ---
-
-
 ## Commentary
 
 - MCP is not worth the context I think, and this proves it. I have no experience but just from the understanding it would make sense, since a lot of things need to be made clear before using them right?

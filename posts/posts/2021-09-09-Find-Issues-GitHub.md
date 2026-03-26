@@ -1,16 +1,13 @@
 ---
+hash: be291b8920b30d4bbc23e560eab0d86d07961e7a9982ea99f267bfe36993e939
 type: posts
+date: 2021-09-09
+tags: 
 title: "Filter and Find an Issue on GitHub"
 subtitle: "A quick guide to filter and sort issues as per your interest/skills on GitHub"
-date: 2021-09-09
 slug: "find-filter-github-issues"
-tags:
-  - github
-  - open-source
 image_url: https://meetgor-cdn.pages.dev/github-filter-issues.png
 ---
-
-
 ## Introduction
 
 Are you stuck in finding an open-source project to contribute to? 

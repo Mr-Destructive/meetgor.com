@@ -1,19 +1,17 @@
 ---
+title: 'Understanding B Trees: The data structure behind databases'
+type: links
 date: 2025-07-05T00:00:00Z
 description: 'Understanding B Trees: The data structure behind databases'
 image_url: https://i.ytimg.com/vi/K1a2Bk8NrYQ/hqdefault.jpg
-link: https://www.youtube.com/watch?v=K1a2Bk8NrYQ
 newsletter: 2025-07-05-techstructive-weekly-49
-slug: understanding-b-trees-the-data-structure-behind-databases
 source: newsletter
 status: published
-tags:
-    - links
-title: 'Understanding B Trees: The data structure behind databases'
-type: links
+tags: 
+hash: cd3a021df8018b695a16559c85c1bc1915fd1867f7ac029dcf47be03d27f7801
+link: https://www.youtube.com/watch?v=K1a2Bk8NrYQ
+slug: understanding-b-trees-the-data-structure-behind-databases
 ---
-
-
 ## Commentary
 
 - This was super cool, the way it was visualized and taught.

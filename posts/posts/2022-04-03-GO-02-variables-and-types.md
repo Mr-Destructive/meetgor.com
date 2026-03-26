@@ -1,15 +1,13 @@
 ---
+date: 2022-04-03
+series: ["100-days-of-golang"]
+tags: 
+image_url: https://meetgor-cdn.pages.dev/golang-002-variables-types.png
+hash: 111b1650bf5e70f36da66f52bd0b47c135faa3293f25ec1684306ab4e4438f11
 type: posts
 title: "Golang: Variables and Types"
-date: 2022-04-03
 slug: "golang-variables"
-series: ["100-days-of-golang"]
-tags:
-  - go
-image_url: https://meetgor-cdn.pages.dev/golang-002-variables-types.png
 ---
-
-
 ## Introduction
 
 In the third part of the series, we will be covering the fundamentals for learning any programming language i.e. variables and data types. We will be covering from data types to variable declaration. We won't be seeing each and every detail related to the data types as some of them require a knowledge of loops and other topics, so that can be left for the different part.

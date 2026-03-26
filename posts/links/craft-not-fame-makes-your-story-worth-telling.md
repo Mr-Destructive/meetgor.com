@@ -1,70 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+date: 2025-10-18
+tags: 
+description: 'Craft, not fame, makes your story worth telling'
+hash: 9042787bce8c48094a6a968c8339ffe42acb5bbf34a7208c6105218b2f6b8948
 type: links
 title: 'Craft, not fame, makes your story worth telling'
-date: 2025-10-18
 slug: craft-not-fame-makes-your-story-worth-telling
-tags:
-  - links
 link: 'https://herbertlui.net/craft-not-fame-makes-your-story-worth-telling/'
 status: published
-description: 'Craft, not fame, makes your story worth telling'
 source: newsletter
 newsletter: 2025-10-18-techstructive-weekly-64
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Commentary
 
 - This is not a technical read, but worth mentioning here.

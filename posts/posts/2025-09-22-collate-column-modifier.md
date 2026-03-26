@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: sqlog
 slug: sqlite-collate-column-modifier
 title: "SQLite SQL: Collate Column Modifier"
 date: 2025-09-22
 tags: ["sqlite", "sql"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: e6eb9b9efdb2b215fba360f76fef8fd817b07586880fd6a8a0f24996e95af04a
+type: sqlog
 ---
-
-
 ## Collate Column Modifier
 
 Collate is a modifier in SQL that specifies the column how to arrange and compare the values that would be populated in the rows.
@@ -270,5 +217,3 @@ sqlite>
 ```
 
 That is the basic idea of how the `RTRIM` collation works.
-
-

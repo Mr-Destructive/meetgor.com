@@ -1,67 +1,12 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-author: meet
 date: 2025-04-11
 type: til
-tags:
-  - git
+tags: 
 title: "Add hunks: only line specific changes with git add -p"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hash: 46be025fa59c11cc0737d2f0b0ee96323a89f0a1bfdd850451c8d0ce01be8320
+slug: add-hunks-only-line-specific-changes-with-git-add--p
+author: meet
 ---
-
-
 I had made the changes for a future release, next set of changes so to speak in git terms. Then, I encountered a bug while testing the previous changes. Now, I could have 
 1. Open VS Code and add that little `+` icon in the gutter to fix the bug
 2. Create a separate branch with stashed changes for this new feature

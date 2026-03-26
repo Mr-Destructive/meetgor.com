@@ -1,20 +1,17 @@
 ---
-
-type: links
+hash: 2e65ec13c33a6f9dcb9af7e08cf66e2556ebb1f08609d20222627906901d95a3
 title: 'Git Integrations is ten years away'
 date: 2026-01-03
 slug: git-integrations-is-ten-years-away
-tags:
-  - links
-link: 'https://blog.ploeh.dk/2025/12/29/git-integration-is-ten-years-away/'
+tags: 
 status: published
-description: 'Git Integrations is ten years away'
 image_url: 'https://blog.ploeh.dk/assets/themes/ploeh/images/favicons/favicon.png'
+type: links
+link: 'https://blog.ploeh.dk/2025/12/29/git-integration-is-ten-years-away/'
+description: 'Git Integrations is ten years away'
 source: newsletter
 newsletter: 2026-01-03-techstructive-weekly-75
 ---
-
-
 ## Commentary
 
 - This is hillariously funny. I can’t imagine VS Code team coping up with git integrations in 2025

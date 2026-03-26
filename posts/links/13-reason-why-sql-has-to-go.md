@@ -1,20 +1,17 @@
 ---
-
-type: links
-title: '13 Reason why SQL has to GO'
-date: 2025-09-13
-slug: 13-reason-why-sql-has-to-go
-tags:
-  - links
-link: 'https://www.infoworld.com/article/2335455/13-reasons-sql-has-got-to-go.html'
 status: published
 description: '13 Reason why SQL has to GO'
 image_url: 'https://www.infoworld.com/wp-content/uploads/2025/10/2335455-0-35066100-1761083248-177548310-100249487-orig.jpg?quality=50&amp;strip=all&amp;w=1024'
-source: newsletter
 newsletter: 2025-09-13-techstructive-weekly-59
+date: 2025-09-13
+slug: 13-reason-why-sql-has-to-go
+tags: 
+source: newsletter
+hash: adf231661868909e161ffe5b03981c1204d580f736f99e13115c1930b56b5b79
+type: links
+title: '13 Reason why SQL has to GO'
+link: 'https://www.infoworld.com/article/2335455/13-reasons-sql-has-got-to-go.html'
 ---
-
-
 ## Commentary
 
 - https://www.infoworld.com/article/2335455/13-reasons-sql-has-got-to-go.html

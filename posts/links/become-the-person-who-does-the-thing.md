@@ -1,20 +1,17 @@
 ---
-
-type: links
-title: 'Become the person who does the thing'
-date: 2025-09-13
-slug: become-the-person-who-does-the-thing
-tags:
-  - links
 link: 'https://www.fredrivett.com/2025/09/10/becoming-the-person-who-does-the-thing/'
 status: published
 description: 'Become the person who does the thing'
+newsletter: 2025-09-13-techstructive-weekly-59
+type: links
+date: 2025-09-13
 image_url: 'https://fredrivett.com/api/og?title=Becoming%20the%20person%20who%20does%20the%20thing&amp;date=2025-09-10'
 source: newsletter
-newsletter: 2025-09-13-techstructive-weekly-59
+hash: 7f13fd0b1fff02aa2c42f5249d1a01750216ed170c92d2e45a5a28bffdf3566e
+title: 'Become the person who does the thing'
+slug: become-the-person-who-does-the-thing
+tags: 
 ---
-
-
 ## Commentary
 
 - https://www.fredrivett.com/2025/09/10/becoming-the-person-who-does-the-thing/

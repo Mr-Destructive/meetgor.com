@@ -1,68 +1,16 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-type: links
+hash: d600ef4179f517aad590c551ba092113f561e59c590654109a66ac365c2704ee
 title: 'I still care about the code'
-date: 2025-07-12
 slug: i-still-care-about-the-code
-tags:
-  - links
 link: 'https://martinfowler.com/articles/exploring-gen-ai/i-still-care-about-the-code.html'
 status: published
 description: 'I still care about the code'
 source: newsletter
+type: links
+date: 2025-07-12
+tags: 
 newsletter: 2025-07-12-techstructive-weekly-50
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Commentary
 
 - This is so well put, LLMs are not compilers or interpreters, they still are unreliable. I mean software is unreliable, untested software is unreliable but LLM generated code is on the extreme end of black holes.

@@ -1,64 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+slug: "format-json-in-vim-with-jq"
+tags: 
+hash: d2e63e67b1aad76eede0055cad8e57fbdba01f33658dd7a2a02c24394ff5b716
 type: til
 title: "Format JSON in Vim with JQ"
 date: 2025-04-05
-slug: "format-json-in-vim-with-jq"
-tags:
-  - javascript
-  - typescript
-  - vim
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 <p>We can use</p>
 <pre><code>:%!jq .
 </code></pre>

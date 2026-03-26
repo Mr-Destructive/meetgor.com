@@ -1,3 +1,7 @@
+---
+hash: 850f3994d3905a78a4428fa160a8f74e98c9a065c18d642a11adde38a5c5882d
+slug: 
+---
 {
   "title": "A draft post",
   "post_dir":"links",

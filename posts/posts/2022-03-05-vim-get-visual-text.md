@@ -1,63 +1,11 @@
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tags: 
+hash: c42bbe668194b404be5636b5d81ff10367fc80262dc5fce9ce83bc559b63d6c0
 type: til
 title: "Vim: Get the Text from Visual Selection"
 date: 2022-03-05
 slug: "vim-get-visual-text"
-tags:
-  - vim
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
-
-
 ## Using Registers 
 
 We can get the selected text in a variable in Vim Script using registers. 

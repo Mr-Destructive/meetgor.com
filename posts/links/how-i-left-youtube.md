@@ -1,20 +1,17 @@
 ---
-
 type: links
-title: 'How I left youtube'
-date: 2025-12-27
-slug: how-i-left-youtube
-tags:
-  - links
 link: 'https://zhach.news/how-i-left-youtube/'
 status: published
 description: 'How I left youtube'
 image_url: 'https://zhach.news/content/images/size/w1200/2025/11/48-1.jpeg'
 source: newsletter
+hash: a3ca436ffcf43627337dfab2f70745dba9daf177c26242d1e54c2e78d23a960d
+title: 'How I left youtube'
+date: 2025-12-27
+slug: how-i-left-youtube
+tags: 
 newsletter: 2025-12-27-techstructive-weekly-74
 ---
-
-
 ## Commentary
 
 - Man that was a good read!
