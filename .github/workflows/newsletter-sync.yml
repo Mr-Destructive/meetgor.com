@@ -24,69 +24,157 @@ jobs:
           go-version: '1.25.0'
           cache: true
 
-      - name: Fetch newsletter from Substack RSS
+      - name: Fetch and sync newsletter from Substack RSS
         id: fetch
         env:
           NEWSLETTER_FEED_URL: ${{ secrets.NEWSLETTER_FEED_URL || 'https://techstructively.substack.com/feed' }}
         run: |
-          # Test the newsletter sync function locally
-          # This would normally be called via the Netlify function
-          echo "📰 Testing newsletter RSS fetch..."
-          echo "Feed URL: $NEWSLETTER_FEED_URL"
+          echo "📰 Fetching newsletter from RSS..."
           
-          # Create a test script to fetch the feed
-          cat > test_feed.go << 'EOF'
+          # Build the newsletter sync tool
+          go build -o newsletter_sync ./netlify/functions/newsletter/main.go
+          
+          # Create a wrapper script to fetch RSS and create markdown files
+          cat > sync_newsletter.go << 'EOFGO'
           package main
+          
           import (
-            "context"
+            "encoding/json"
             "fmt"
             "io"
             "net/http"
+            "os"
+            "path/filepath"
+            "regexp"
+            "strings"
             "time"
             "github.com/mmcdole/gofeed"
           )
+          
           func main() {
             feedURL := os.Getenv("NEWSLETTER_FEED_URL")
             if feedURL == "" {
               feedURL = "https://techstructively.substack.com/feed"
             }
+            
+            // Fetch RSS feed
             client := &http.Client{Timeout: 20 * time.Second}
             req, _ := http.NewRequest(http.MethodGet, feedURL, nil)
             req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36")
             resp, err := client.Do(req)
             if err != nil {
-              fmt.Printf("Error fetching feed: %v\n", err)
-              return
+              fmt.Printf("❌ Error fetching feed: %v\n", err)
+              os.Exit(1)
             }
             defer resp.Body.Close()
+            
             if resp.StatusCode != 200 {
-              body, _ := io.ReadAll(resp.Body)
-              fmt.Printf("Feed returned status %d\n", resp.StatusCode)
-              return
+              fmt.Printf("❌ Feed returned status %d\n", resp.StatusCode)
+              os.Exit(1)
             }
+            
             body, _ := io.ReadAll(resp.Body)
             parser := gofeed.NewParser()
             feed, err := parser.ParseString(string(body))
             if err != nil {
-              fmt.Printf("Error parsing feed: %v\n", err)
-              return
+              fmt.Printf("❌ Error parsing feed: %v\n", err)
+              os.Exit(1)
             }
-            fmt.Printf("✓ Feed fetched successfully\n")
-            fmt.Printf("  Title: %s\n", feed.Title)
-            fmt.Printf("  Items: %d\n", len(feed.Items))
-            if len(feed.Items) > 0 {
-              fmt.Printf("  Latest: %s\n", feed.Items[0].Title)
+            
+            fmt.Printf("✅ Feed fetched: %s\n", feed.Title)
+            fmt.Printf("📄 Total items in feed: %d\n", len(feed.Items))
+            
+            // Check existing posts
+            postsDir := "posts/newsletter"
+            os.MkdirAll(postsDir, 0755)
+            
+            existingPosts := make(map[string]bool)
+            entries, _ := os.ReadDir(postsDir)
+            for _, entry := range entries {
+              if strings.HasSuffix(entry.Name(), ".md") {
+                slug := strings.TrimSuffix(entry.Name(), ".md")
+                existingPosts[slug] = true
+              }
             }
+            
+            fmt.Printf("📦 Existing posts: %d\n", len(existingPosts))
+            
+            // Process feed items
+            newCount := 0
+            for _, item := range feed.Items {
+              if item == nil || item.Title == "" {
+                continue
+              }
+              
+              date := ""
+              if item.PublishedParsed != nil {
+                date = item.PublishedParsed.Format("2006-01-02")
+              }
+              
+              slug := date + "-" + slugFromTitle(item.Title)
+              
+              // Skip if already exists
+              if existingPosts[slug] {
+                continue
+              }
+              
+              // Create markdown file
+              body := item.Content
+              if body == "" {
+                body = item.Description
+              }
+              
+              frontmatter := fmt.Sprintf(`---
+type: newsletter
+title: "%s"
+date: %s
+slug: newsletter/%s
+tags: ["newsletter", "substack"]
+canonical_url: %s
+status: published
+---
+
+`, escapeQuotes(item.Title), date, slug, item.Link)
+              
+              filename := filepath.Join(postsDir, slug+".md")
+              content := frontmatter + body
+              
+              if err := os.WriteFile(filename, []byte(content), 0644); err != nil {
+                fmt.Printf("❌ Error writing %s: %v\n", filename, err)
+                continue
+              }
+              
+              fmt.Printf("✨ Added: %s\n", slug)
+              newCount++
+            }
+            
+            fmt.Printf("\n📊 Summary: %d new posts added\n", newCount)
+            
+            // Output for GitHub Actions
+            fmt.Printf("\nnew_posts=%d\n", newCount)
           }
-          EOF
           
-          # Just verify dependencies are available
-          go list github.com/mmcdole/gofeed > /dev/null 2>&1
-          if [ $? -eq 0 ]; then
-            echo "newsletter_available=true" >> $GITHUB_OUTPUT
-          else
-            echo "newsletter_available=false" >> $GITHUB_OUTPUT
-          fi
+          func slugFromTitle(title string) string {
+            re := regexp.MustCompile(`[^a-z0-9]+`)
+            s := strings.ToLower(title)
+            s = re.ReplaceAllString(s, "-")
+            s = strings.Trim(s, "-")
+            if s == "" {
+              s = "post"
+            }
+            return s
+          }
+          
+          func escapeQuotes(s string) string {
+            return strings.ReplaceAll(s, `"`, `\"`)
+          }
+          EOFGO
+          
+          go run sync_newsletter.go
+          
+          # Capture new_posts count
+          NEW_POSTS=$(go run sync_newsletter.go 2>&1 | grep "^new_posts=" | cut -d= -f2)
+          echo "new_posts=${NEW_POSTS:-0}" >> $GITHUB_OUTPUT
 
       - name: Call Netlify newsletter function
         if: always()
@@ -109,13 +197,19 @@ jobs:
       - name: Check for new posts
         id: check
         run: |
-          if git status --porcelain | grep -q "posts/newsletter/"; then
+          NEW_POSTS=${{ steps.fetch.outputs.new_posts }}
+          
+          if [ -z "$NEW_POSTS" ]; then
+            NEW_POSTS=0
+          fi
+          
+          if [ "$NEW_POSTS" -gt 0 ]; then
             echo "posts_changed=true" >> $GITHUB_OUTPUT
-            echo "📝 New newsletter posts detected"
-            git diff --name-only | grep "posts/newsletter/" || true
+            echo "📝 $NEW_POSTS new newsletter post(s) added"
+            git status --porcelain posts/newsletter/ || true
           else
             echo "posts_changed=false" >> $GITHUB_OUTPUT
-            echo "✓ No new posts (or posts already in repo)"
+            echo "✓ No new posts to sync"
           fi
 
       - name: Commit new posts
