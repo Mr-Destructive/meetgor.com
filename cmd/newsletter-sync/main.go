@@ -203,22 +203,14 @@ func insertToDB() {
 		}
 		seenHashes[contentHash] = true
 
-		// Check if this content hash already exists in database
+		// Check if this content hash already exists in database - ONLY criterion
 		hashExists, err := postWithHashExists(ctx, db, contentHash)
 		if err == nil && hashExists {
-			fmt.Printf("⏭️  Content already exists (same hash): %s\n", slug)
+			fmt.Printf("⏭️  Skip: content hash already in DB\n")
 			continue
 		}
 
-		// Check if slug exists (to decide INSERT vs UPDATE)
-		existing, err := q.GetPostBySlug(ctx, slug)
-		isNewPost := err != nil || existing.Slug == ""
-
-		if !isNewPost {
-			fmt.Printf("♻️  Updating existing post: %s\n", slug)
-		}
-
-		// Insert or update post
+		// Insert only (hash is unique key)
 		metadata := map[string]interface{}{
 			"canonical_url": link,
 			"type":          "newsletter",
@@ -226,46 +218,25 @@ func insertToDB() {
 			"content_hash":  contentHash,
 		}
 		metaJSON, _ := json.Marshal(metadata)
-
 		tagsJSON, _ := json.Marshal([]string{"newsletter", "substack"})
 
-		if isNewPost {
-			// Insert new post
-			_, err = q.CreatePost(ctx, libsqlssg.CreatePostParams{
-				ID:       fmt.Sprintf("%d", time.Now().UnixNano()),
-				TypeID:   "newsletter",
-				Title:    title,
-				Slug:     slug,
-				Content:  body,
-				Metadata: sql.NullString{String: string(metaJSON), Valid: true},
-				Tags:     sql.NullString{String: string(tagsJSON), Valid: true},
-				Status:   sql.NullString{String: "published", Valid: true},
-			})
+		_, err = q.CreatePost(ctx, libsqlssg.CreatePostParams{
+			ID:       fmt.Sprintf("%d", time.Now().UnixNano()),
+			TypeID:   "newsletter",
+			Title:    title,
+			Slug:     slug,
+			Content:  body,
+			Metadata: sql.NullString{String: string(metaJSON), Valid: true},
+			Tags:     sql.NullString{String: string(tagsJSON), Valid: true},
+			Status:   sql.NullString{String: "published", Valid: true},
+		})
 
-			if err != nil {
-				fmt.Printf("❌ Error inserting %s: %v\n", slug, err)
-				continue
-			}
-
-			fmt.Printf("📤 Inserted: %s\n", slug)
-		} else {
-			// Update existing post
-			err = q.UpdatePost(ctx, libsqlssg.UpdatePostParams{
-				Slug:     slug,
-				Title:    title,
-				Content:  body,
-				Metadata: sql.NullString{String: string(metaJSON), Valid: true},
-				Tags:     sql.NullString{String: string(tagsJSON), Valid: true},
-			})
-
-			if err != nil {
-				fmt.Printf("❌ Error updating %s: %v\n", slug, err)
-				continue
-			}
-
-			fmt.Printf("📝 Updated: %s\n", slug)
+		if err != nil {
+			fmt.Printf("❌ Error: %v\n", err)
+			continue
 		}
 
+		fmt.Printf("📤 Inserted: %s\n", title)
 		inserted++
 	}
 
