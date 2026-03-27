@@ -82,7 +82,7 @@ func (p *RSSPlugin) Execute(ssg *models.SSG) error {
 	baseURL := config.Blog.BaseUrl
 	rssFilePath := filepath.Join(config.Blog.OutputDir, "rss.xml")
 
-	// Collect all published posts
+	// Collect all published posts (posts type only)
 	var rssItems []RSSItem
 	for _, post := range ssg.Posts {
 		if post.Frontmatter.Status == "draft" {
@@ -133,6 +133,63 @@ func (p *RSSPlugin) Execute(ssg *models.SSG) error {
 	}
 
 	fmt.Println("RSS feed generated:", rssFilePath)
+
+	// Create all-content RSS feed (all content types)
+	var allContentItems []RSSItem
+	for _, post := range ssg.Posts {
+		if post.Frontmatter.Status == "draft" {
+			continue
+		}
+
+		pubDate, err := parsePostDate(post.Frontmatter.Date)
+		if err != nil {
+			log.Printf("Error parsing post date: %v", err)
+			continue
+		}
+
+		allContentItems = append(allContentItems, RSSItem{
+			Title:       post.Frontmatter.Title,
+			Link:        fmt.Sprintf("%s/%s", baseURL, post.Frontmatter.Slug),
+			Description: post.Frontmatter.Description,
+			PubDate:     pubDate.Format(time.RFC1123),
+			Content:     string(post.Markdown),
+		})
+	}
+
+	// Sort by date descending for all-content feed
+	sort.Slice(allContentItems, func(i, j int) bool {
+		ti, _ := time.Parse(time.RFC1123, allContentItems[i].PubDate)
+		tj, _ := time.Parse(time.RFC1123, allContentItems[j].PubDate)
+		return ti.After(tj)
+	})
+
+	allContentFeed := RSSFeed{
+		Version: "2.0",
+		Channel: RSSChannel{
+			Title:       config.Blog.Name + " - All Content",
+			Link:        baseURL,
+			Description: "All content including posts, articles, links, and more",
+			Language:    "en-us",
+			PubDate:     rssNow().Format(time.RFC1123),
+			Items:       allContentItems,
+		},
+	}
+
+	allContentRssPath := filepath.Join(config.Blog.OutputDir, "all-content", "rss.xml")
+	if err := os.MkdirAll(filepath.Dir(allContentRssPath), 0755); err != nil {
+		return fmt.Errorf("error creating all-content directory: %w", err)
+	}
+	xmlBytes, err = xml.MarshalIndent(allContentFeed, "", "  ")
+	if err != nil {
+		return fmt.Errorf("error generating all-content RSS XML: %w", err)
+	}
+
+	err = os.WriteFile(allContentRssPath, xmlBytes, 0666)
+	if err != nil {
+		return fmt.Errorf("error writing all-content RSS file: %w", err)
+	}
+
+	fmt.Println("All-content RSS feed generated:", allContentRssPath)
 
 	// Create separate RSS feeds for each tag and type
 	postsByTag := make(map[string][]RSSItem)
