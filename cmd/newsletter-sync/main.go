@@ -168,7 +168,12 @@ func materializeNewsletterResponse(responsePath, outputDir, createdFilesPath str
 		created++
 	}
 
-	return created, nil
+	linkCreated, err := materializeLinkPosts(outputDir, createdFilesPath, planned)
+	if err != nil {
+		return created, err
+	}
+
+	return created + linkCreated, nil
 }
 
 func sortNewsletterFeedPosts(posts []newsletterFeedPost) {
@@ -343,6 +348,11 @@ func insertToDB() {
 			slug = strings.TrimSuffix(filepath.Base(filePath), ".md")
 		}
 
+		typeID := normalizeMetadataType(extractMetadataString(metadata, "type"))
+		if typeID == "" {
+			typeID = "newsletter"
+		}
+
 		link := extractMetadataString(metadata, "canonical_url")
 		if link == "" {
 			link = extractMetadataString(metadata, "link")
@@ -370,24 +380,27 @@ func insertToDB() {
 			continue
 		}
 
-		// Insert only (hash is unique key)
-		metaPayload := map[string]interface{}{
-			"canonical_url": link,
-			"type":          "newsletter",
-			"source":        "substack",
-			"content_hash":  contentHash,
+		if err := ensurePostTypeExists(ctx, db, typeID); err != nil {
+			fmt.Printf("⚠️  Unable to ensure post type %s: %v\n", typeID, err)
 		}
+
+		// Insert only (hash is unique key)
+		metaPayload := buildMetadataPayload(typeID, metadata, link, contentHash)
 		metaJSON, _ := json.Marshal(metaPayload)
-		tagsJSON, _ := json.Marshal([]string{"newsletter", "substack"})
+		tagsBytes := buildTagsJSON(metadata, typeID)
+		var tagsJSON sql.NullString
+		if len(tagsBytes) > 0 {
+			tagsJSON = sql.NullString{String: string(tagsBytes), Valid: true}
+		}
 
 		_, err = q.CreatePost(ctx, libsqlssg.CreatePostParams{
 			ID:       fmt.Sprintf("%d", time.Now().UnixNano()),
-			TypeID:   "newsletter",
+			TypeID:   typeID,
 			Title:    title,
 			Slug:     slug,
 			Content:  body,
 			Metadata: sql.NullString{String: string(metaJSON), Valid: true},
-			Tags:     sql.NullString{String: string(tagsJSON), Valid: true},
+			Tags:     tagsJSON,
 			Status:   sql.NullString{String: "published", Valid: true},
 		})
 
@@ -533,6 +546,105 @@ func extractMetadataString(metadata map[string]interface{}, key string) string {
 		}
 	}
 	return ""
+}
+
+func normalizeMetadataType(typeValue string) string {
+	switch strings.ToLower(strings.TrimSpace(typeValue)) {
+	case "links", "link":
+		return "links"
+	case "newsletter", "newsletters":
+		return "newsletter"
+	default:
+		return strings.TrimSpace(typeValue)
+	}
+}
+
+func buildMetadataPayload(typeID string, metadata map[string]interface{}, link, contentHash string) map[string]interface{} {
+	payload := map[string]interface{}{
+		"type":         typeID,
+		"content_hash": contentHash,
+	}
+
+	switch typeID {
+	case "links":
+		if link != "" {
+			payload["link"] = link
+			payload["canonical_url"] = link
+		}
+		if date := extractMetadataString(metadata, "date"); date != "" {
+			payload["date"] = date
+		}
+		if newsletter := extractMetadataString(metadata, "newsletter"); newsletter != "" {
+			payload["newsletter"] = newsletter
+		}
+		if source := extractMetadataString(metadata, "source"); source != "" {
+			payload["source"] = source
+		} else {
+			payload["source"] = "newsletter"
+		}
+		if description := extractMetadataString(metadata, "description"); description != "" {
+			payload["description"] = description
+		}
+		if imageURL := extractMetadataString(metadata, "image_url"); imageURL != "" {
+			payload["image_url"] = imageURL
+		}
+	default:
+		if link != "" {
+			payload["canonical_url"] = link
+		}
+		if source := extractMetadataString(metadata, "source"); source != "" {
+			payload["source"] = source
+		} else {
+			payload["source"] = "substack"
+		}
+		if description := extractMetadataString(metadata, "description"); description != "" {
+			payload["description"] = description
+		}
+	}
+
+	return payload
+}
+
+func buildTagsJSON(metadata map[string]interface{}, typeID string) []byte {
+	if metadata != nil {
+		if tagsVal, ok := metadata["tags"]; ok {
+			switch tags := tagsVal.(type) {
+			case string:
+				tagsArr := strings.Split(tags, ",")
+				for i := range tagsArr {
+					tagsArr[i] = strings.TrimSpace(tagsArr[i])
+				}
+				tagsBytes, _ := json.Marshal(tagsArr)
+				return tagsBytes
+			case []interface{}:
+				tagsBytes, _ := json.Marshal(tags)
+				return tagsBytes
+			}
+		}
+	}
+
+	if typeID == "links" {
+		return nil
+	}
+
+	defaultTags := []string{typeID}
+	if typeID == "newsletter" {
+		defaultTags = []string{"newsletter", "substack"}
+	}
+	tagsBytes, _ := json.Marshal(defaultTags)
+	return tagsBytes
+}
+
+func ensurePostTypeExists(ctx context.Context, db *sql.DB, typeID string) error {
+	var typeExists int
+	if err := db.QueryRowContext(ctx, "SELECT COUNT(*) FROM post_types WHERE id = ?", typeID).Scan(&typeExists); err != nil {
+		return err
+	}
+	if typeExists > 0 {
+		return nil
+	}
+	_, err := db.ExecContext(ctx, "INSERT INTO post_types (id, name, slug) VALUES (?, ?, ?)", typeID, strings.Title(typeID), typeID)
+	return err
 }
 
 func normalizeNewsletterSlug(slug string) string {
