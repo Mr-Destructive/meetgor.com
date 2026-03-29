@@ -162,7 +162,7 @@ func TestMaterializeNewsletterResponseCreatesLinkPostsFromReadAndWatchedSections
 	}
 
 	linkDir := filepath.Join(dir, "posts", "links")
-	articleFile := filepath.Join(linkDir, "example-article-one.md")
+	articleFile := filepath.Join(linkDir, "article-one.md")
 	videoFile := filepath.Join(linkDir, "video-one.md")
 	if _, err := os.Stat(articleFile); err != nil {
 		t.Fatalf("expected article link file to exist: %v", err)
@@ -176,8 +176,8 @@ func TestMaterializeNewsletterResponseCreatesLinkPostsFromReadAndWatchedSections
 		t.Fatalf("read article link file: %v", err)
 	}
 	articleText := string(articleContent)
-	if !strings.Contains(articleText, "title: \"Thoughts: Example Article One\"") {
-		t.Fatalf("missing prefixed title in article link file: %s", articleText)
+	if !strings.Contains(articleText, "title: \"Article One\"") {
+		t.Fatalf("missing title in article link file: %s", articleText)
 	}
 	if !strings.Contains(articleText, "newsletter: techstructive-weekly-99") {
 		t.Fatalf("missing newsletter source in article link file: %s", articleText)
@@ -187,6 +187,9 @@ func TestMaterializeNewsletterResponseCreatesLinkPostsFromReadAndWatchedSections
 	}
 	if !strings.Contains(articleText, "image_url: \"https://example.com/article-one.png\"") {
 		t.Fatalf("missing image url in article link file: %s", articleText)
+	}
+	if !strings.Contains(articleText, "My thoughts on [Article One](https://example.com/article-one): Article One") {
+		t.Fatalf("missing intro line in article link file: %s", articleText)
 	}
 
 	videoContent, err := os.ReadFile(videoFile)
@@ -221,19 +224,15 @@ func TestMaterializeLinkPostsSkipsExistingContentHash(t *testing.T) {
 		t.Fatalf("mkdir links: %v", err)
 	}
 
-	commentary := buildCommentaryBody([]string{"First thought", "Second thought"})
-	hash := computeLinkHash("Thoughts: Example Article One", commentary, "https://example.com/article-one")
+	commentary := buildLinkBody("Article One", "https://example.com/article-one", []string{"First thought", "Second thought"})
+	hash := computeLinkHash("Article One", commentary, "https://example.com/article-one")
 	existing := `---
-title: "Legacy Copy"
-slug: legacy-copy
+title: "Article One"
+slug: article-one
 type: links
 hash: ` + hash + `
 ---
-## Commentary
-
-- First thought
-- Second thought
-`
+` + commentary
 	if err := os.WriteFile(filepath.Join(linkDir, "legacy-copy.md"), []byte(existing), 0o644); err != nil {
 		t.Fatalf("write existing link file: %v", err)
 	}
@@ -263,7 +262,7 @@ hash: ` + hash + `
 		t.Fatalf("expected only newsletter file to be created, got %d", count)
 	}
 
-	if _, err := os.Stat(filepath.Join(linkDir, "example-article-one.md")); !os.IsNotExist(err) {
+	if _, err := os.Stat(filepath.Join(linkDir, "article-one.md")); !os.IsNotExist(err) {
 		t.Fatalf("expected duplicate link post to be skipped, err=%v", err)
 	}
 }
@@ -291,12 +290,14 @@ func TestMaterializeLinkPostsSkipsExistingLinkURL(t *testing.T) {
 	}
 
 	existing := `---
-title: "Thoughts: Example Article One"
+title: "Example Article One"
 slug: example-article-one
 type: links
 link: "https://example.com/article-one"
 hash: deadbeef
 ---
+My thoughts on [Example Article One](https://example.com/article-one): Example Article One
+
 ## Commentary
 
 - Existing comment
@@ -332,6 +333,22 @@ hash: deadbeef
 
 	if _, err := os.Stat(filepath.Join(linkDir, "updated-example-article-one.md")); !os.IsNotExist(err) {
 		t.Fatalf("expected duplicate link URL to be skipped, err=%v", err)
+	}
+}
+
+func TestNormalizeNewsletterBodyConvertsHTMLToMarkdown(t *testing.T) {
+	html := `<h2>Read</h2><p>Hello <strong>world</strong></p><ul><li>One</li><li>Two</li></ul>`
+
+	markdown := normalizeNewsletterBody(html)
+
+	if strings.Contains(markdown, "<h2>") || strings.Contains(markdown, "<p>") {
+		t.Fatalf("expected html to be converted to markdown, got: %s", markdown)
+	}
+	if !strings.Contains(markdown, "## Read") {
+		t.Fatalf("expected heading in markdown, got: %s", markdown)
+	}
+	if !strings.Contains(markdown, "Hello **world**") {
+		t.Fatalf("expected formatted paragraph in markdown, got: %s", markdown)
 	}
 }
 

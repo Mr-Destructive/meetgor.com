@@ -17,6 +17,7 @@ import (
 	"strings"
 	"time"
 
+	htmltomarkdown "github.com/JohannesKaufmann/html-to-markdown/v2"
 	libsqlssg "github.com/Mr-Destructive/meetgor.com/plugins/db/libsqlssg"
 	"github.com/mmcdole/gofeed"
 	_ "github.com/tursodatabase/libsql-client-go/libsql"
@@ -216,6 +217,7 @@ func writeNewsletterPost(outputDir, createdFilesPath string, post newsletterFeed
 	if body == "" {
 		body = post.Description
 	}
+	body = normalizeNewsletterBody(body)
 	content := generateFrontmatter(post.Title, post.Slug, post.Date, post.Link, post.Description) + body
 	filePath := filepath.Join(outputDir, post.Slug+".md")
 	if err := os.WriteFile(filePath, []byte(content), 0o644); err != nil {
@@ -652,4 +654,37 @@ func normalizeNewsletterSlug(slug string) string {
 	slug = strings.TrimPrefix(slug, "newsletter/")
 	slug = strings.TrimPrefix(slug, "/")
 	return slug
+}
+
+func normalizeNewsletterBody(body string) string {
+	trimmed := strings.TrimSpace(body)
+	if trimmed == "" {
+		return ""
+	}
+
+	if looksLikeHTMLNewsletterBody(trimmed) {
+		if converted, err := htmltomarkdown.ConvertString(trimmed); err == nil {
+			converted = strings.TrimSpace(converted)
+			if converted != "" {
+				return converted + "\n"
+			}
+		}
+	}
+
+	return trimmed + "\n"
+}
+
+func looksLikeHTMLNewsletterBody(body string) bool {
+	lower := strings.ToLower(body)
+	return strings.Contains(lower, "<p") ||
+		strings.Contains(lower, "<div") ||
+		strings.Contains(lower, "<h1") ||
+		strings.Contains(lower, "<h2") ||
+		strings.Contains(lower, "<h3") ||
+		strings.Contains(lower, "<ul") ||
+		strings.Contains(lower, "<ol") ||
+		strings.Contains(lower, "<blockquote") ||
+		strings.Contains(lower, "<iframe") ||
+		strings.Contains(lower, "<img") ||
+		strings.Contains(lower, "</")
 }

@@ -207,25 +207,24 @@ func buildLinkDraftFromListItem(li *goquery.Selection, newsletter newsletterFeed
 		metadata = linkMetadata{}
 	}
 
-	baseTitle := firstNonEmpty(metadata.Title, rawTitle)
+	baseTitle := firstNonEmpty(rawTitle, metadata.Title)
 	if baseTitle == "" {
 		baseTitle = rawLink
 	}
-	title := prefixThoughtsTitle(baseTitle)
 
 	commentary := extractCommentaryFromListItem(li)
 	if len(commentary) == 0 {
 		commentary = []string{"Mentioned in the newsletter."}
 	}
 
-	body := buildCommentaryBody(commentary)
+	body := buildLinkBody(baseTitle, rawLink, commentary)
 	imageURL := firstNonEmpty(metadata.ImageURL, youtubeThumbnailURL(rawLink))
 	description := firstNonEmpty(metadata.Description, rawTitle)
 	slug := slugFromTitle(baseTitle)
-	hash := computeLinkHash(title, body, rawLink)
+	hash := computeLinkHash(baseTitle, body, rawLink)
 
 	return linkPostDraft{
-		Title:       title,
+		Title:       baseTitle,
 		Slug:        slug,
 		Date:        newsletter.Date,
 		Link:        rawLink,
@@ -257,8 +256,17 @@ func extractCommentaryFromListItem(li *goquery.Selection) []string {
 	return commentary
 }
 
-func buildCommentaryBody(lines []string) string {
+func buildLinkBody(title, rawLink string, lines []string) string {
 	var buf strings.Builder
+	if strings.TrimSpace(title) != "" && strings.TrimSpace(rawLink) != "" {
+		buf.WriteString("My thoughts on [")
+		buf.WriteString(strings.TrimSpace(title))
+		buf.WriteString("](")
+		buf.WriteString(strings.TrimSpace(rawLink))
+		buf.WriteString("): ")
+		buf.WriteString(strings.TrimSpace(title))
+		buf.WriteString("\n\n")
+	}
 	buf.WriteString("## Commentary\n\n")
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
@@ -290,9 +298,7 @@ func fetchLinkMetadata(rawURL string) (linkMetadata, error) {
 	}
 
 	if thumb := youtubeThumbnailURL(rawURL); thumb != "" {
-		if ytTitle := strings.TrimSpace(extractYouTubeTitle(rawURL)); ytTitle != "" {
-			return linkMetadata{Title: ytTitle, ImageURL: thumb}, nil
-		}
+		return linkMetadata{ImageURL: thumb}, nil
 	}
 
 	client := &http.Client{Timeout: 15 * time.Second}
@@ -475,17 +481,6 @@ hash: %s
 		escapeFrontmatterValue(draft.Description),
 		draft.Hash,
 	)
-}
-
-func prefixThoughtsTitle(title string) string {
-	title = strings.TrimSpace(title)
-	if title == "" {
-		return "Thoughts:"
-	}
-	if strings.HasPrefix(strings.ToLower(title), "thoughts:") {
-		return title
-	}
-	return "Thoughts: " + title
 }
 
 func escapeFrontmatterValue(value string) string {
