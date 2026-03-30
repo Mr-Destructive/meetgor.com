@@ -1,16 +1,16 @@
 ---
-title: "Somethings just take time"
 date: 2026-03-27
 link: "https://lucumr.pocoo.org/2026/3/20/some-things-just-take-time/"
 status: published
 image_url: "https://lucumr.pocoo.org/social/2026-03-20-some-things-just-take-time-social.png"
-source: newsletter
 newsletter: techstructive-weekly-87
 type: links
 slug: somethings-just-take-time
-tags:
+source: newsletter
+tags: 
 description: "On friction, patience, and planting trees."
-hash: ce3b40128d81c1b81db78c5275054e0d0ad6b5bd097ec349f4dafcc79fcce691
+hash: cf1d6ebd54eac6f9e713b2d5780e85cb3bb76e572d6a484c0b12a78483d0361c
+title: "Somethings just take time"
 ---
 My thoughts on [Somethings just take time](https://lucumr.pocoo.org/2026/3/20/some-things-just-take-time/): Somethings just take time
 

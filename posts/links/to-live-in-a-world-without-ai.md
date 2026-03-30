@@ -1,4 +1,7 @@
 ---
+slug: to-live-in-a-world-without-ai
+tags: 
+description: "I'm finding lately that I wish we could go back to pre-ChatGPT... A world
 title: "To live in a world without AI"
 date: 2026-03-27
 link: "https://pype.dev/to-live-in-a-world-without-ai/"
@@ -6,12 +9,8 @@ status: published
 image_url: "https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png"
 source: newsletter
 newsletter: techstructive-weekly-87
+hash: 1ccba0e3436bb647548c3d2fc7c9e4dfa693f3fccd0a9be87a61cee708b75fec
 type: links
-slug: to-live-in-a-world-without-ai
-tags:
-description: "I'm finding lately that I wish we could go back to pre-ChatGPT... A world
-without a code-gen easy button, where \"easy\" was LSP autocomplete, wher"
-hash: dc2984e55f7f56aec7dc1336dbdbf66b5edfc6c99e15db8bb988ed28bd6cee69
 ---
 My thoughts on [To live in a world without AI](https://pype.dev/to-live-in-a-world-without-ai/): To live in a world without AI
 

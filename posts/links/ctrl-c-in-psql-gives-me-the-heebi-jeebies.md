@@ -1,16 +1,16 @@
 ---
-title: "Ctrl + C in psql gives me the heebi-jeebies"
 date: 2026-03-27
+source: newsletter
+description: "There are a few different reasons to hit the brakes on a Postgres query. Maybe it’s taking too long to finish. Maybe you realised you forgot to create an index that will make it orders of magnitude quicker. Maybe there’s some reason the results are no longer needed. Or maybe you, or your LLM buddy, […]"
+hash: 8ce3400273ebd790454e7b95aa79f96808abfb2f94f810a9a78ac2d99f731095
 link: "https://neon.com/blog/ctrl-c-in-psql-gives-me-the-heebie-jeebies"
 status: published
 image_url: "https://neondatabase.wpenginepowered.com/wp-content/uploads/2026/03/neon-ctrl-c.jpg"
-source: newsletter
 newsletter: techstructive-weekly-87
 type: links
 slug: ctrl-c-in-psql-gives-me-the-heebi-jeebies
-tags:
-description: "There are a few different reasons to hit the brakes on a Postgres query. Maybe it’s taking too long to finish. Maybe you realised you forgot to create an index that will make it orders of magnitude quicker. Maybe there’s some reason the results are no longer needed. Or maybe you, or your LLM buddy, […]"
-hash: 463a6babd95663433d821e8b2f76608489a383539c217b216483ba9fd85fa773
+tags: 
+title: "Ctrl + C in psql gives me the heebi-jeebies"
 ---
 My thoughts on [Ctrl + C in psql gives me the heebi-jeebies](https://neon.com/blog/ctrl-c-in-psql-gives-me-the-heebie-jeebies): Ctrl + C in psql gives me the heebi-jeebies
 

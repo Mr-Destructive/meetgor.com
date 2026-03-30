@@ -1,16 +1,16 @@
 ---
+tags: 
+description: "Practical AI R&D"
 title: "So where are all the ai apps?"
-date: 2026-03-27
-link: "https://www.answer.ai/posts/2026-03-12-so-where-are-all-the-ai-apps.html"
 status: published
 image_url: "https://www.answer.ai/posts/so-where-are-all-the-ai-apps/chart_04_releases_2x2.png"
+slug: so-where-are-all-the-ai-apps
+hash: 19076bcc0319c7c9258da7e20bea7c8da511ae9b9d91c53db9c7217bb3077a75
+date: 2026-03-27
+link: "https://www.answer.ai/posts/2026-03-12-so-where-are-all-the-ai-apps.html"
 source: newsletter
 newsletter: techstructive-weekly-87
 type: links
-slug: so-where-are-all-the-ai-apps
-tags:
-description: "Practical AI R&D"
-hash: 63c16c7b97c3b74cb95e343837d3b0ca465a1efbb3406539de3efb773fd0bf26
 ---
 My thoughts on [So where are all the ai apps?](https://www.answer.ai/posts/2026-03-12-so-where-are-all-the-ai-apps.html): So where are all the ai apps?
 

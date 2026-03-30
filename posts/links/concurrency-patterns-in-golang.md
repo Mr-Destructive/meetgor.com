@@ -2,15 +2,15 @@
 title: "Concurrency Patterns in Golang"
 date: 2026-03-27
 link: "https://youtu.be/rDRa23k70CU"
-status: published
 image_url: "https://i.ytimg.com/vi/rDRa23k70CU/hqdefault.jpg"
+tags: 
+description: "Concurrency Patterns in Golang"
+status: published
 source: newsletter
 newsletter: techstructive-weekly-87
 type: links
 slug: concurrency-patterns-in-golang
-tags:
-description: "Concurrency Patterns in Golang"
-hash: 0617f87fec8159ceb310dcb519835f7fcca0e9110c2fad6145bed02a42bbbd12
+hash: c7ee5fe87c6d82937119e34920d154e0e9e39ef2951f19e2799a43e2195ff8f9
 ---
 My thoughts on [Concurrency Patterns in Golang](https://youtu.be/rDRa23k70CU): Concurrency Patterns in Golang
 

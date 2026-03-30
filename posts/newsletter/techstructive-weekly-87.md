@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #87"
+tags: ["newsletter", "substack"]
 date: 2026-03-27
+canonical_url: https://techstructively.substack.com/p/techstructive-weekly-87
+description: "Building Flight Observatory, crunching data, learning SQL, reading about LLMs among the other things read, watched, learnt and created in the week from 22nd to 28th March 2026"
+hash: 9975021bbe703263a03b66ed4f742d5ee90949867627e65afcde730d9534a287
+title: "Techstructive Weekly #87"
 slug: techstructive-weekly-87
 type: newsletter
 status: published
 source: newsletter
-canonical_url: https://techstructively.substack.com/p/techstructive-weekly-87
-description: "Building Flight Observatory, crunching data, learning SQL, reading about LLMs among the other things read, watched, learnt and created in the week from 22nd to 28th March 2026"
-tags: ["newsletter", "substack"]
 ---
-
 ## Week #87
 
 It was an active week. Did quite a lot of stuff. Most of which might be wasted, but lessons learnt. Pulling datasets in GBs from the internet is not a easy task, especially if its in chunks of JSON.

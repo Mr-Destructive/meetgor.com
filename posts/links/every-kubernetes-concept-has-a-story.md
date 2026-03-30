@@ -1,16 +1,16 @@
 ---
-title: "Every Kubernetes concept has a story"
 date: 2026-03-27
 link: "https://x.com/livingdevops/status/2037430761150984475"
-status: published
 image_url: ""
-source: newsletter
 newsletter: techstructive-weekly-87
 type: links
 slug: every-kubernetes-concept-has-a-story
-tags:
+tags: 
 description: "Every Kubernetes concept has a story"
-hash: 736fd2e8a7c0f39bccb9fdb68227f9aeec78142212ca7569309b3ae8c5d8a586
+title: "Every Kubernetes concept has a story"
+status: published
+source: newsletter
+hash: 756f1975dcefbe592c2600a499505ca8f68cde547047c63aad324ceb14f1cc32
 ---
 My thoughts on [Every Kubernetes concept has a story](https://x.com/livingdevops/status/2037430761150984475): Every Kubernetes concept has a story
 

@@ -2,15 +2,15 @@
 title: "A bad day to use python"
 date: 2026-03-27
 link: "https://youtu.be/mx3g7XoPVNQ"
-status: published
-image_url: "https://i.ytimg.com/vi/mx3g7XoPVNQ/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-87
 type: links
 slug: a-bad-day-to-use-python
-tags:
 description: "A bad day to use python"
-hash: e8bb4c521648c3e11801b6c14c8866291173a5adad46a2a98b82dbcb273ba63e
+status: published
+image_url: "https://i.ytimg.com/vi/mx3g7XoPVNQ/hqdefault.jpg"
+source: newsletter
+tags: 
+hash: 8f9e9350ead7793d62652e468eda3721c77b0c9077305fdc35d033f7740b64bd
 ---
 My thoughts on [A bad day to use python](https://youtu.be/mx3g7XoPVNQ): A bad day to use python
 

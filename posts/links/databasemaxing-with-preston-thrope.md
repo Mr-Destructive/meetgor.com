@@ -1,16 +1,16 @@
 ---
+tags: 
+description: "DatabaseMaxing with Preston Thrope"
+hash: 161818e4b39ef53cb3fa4afa8dddd56883808a99043c6f2b333ad3beecb47665
 title: "DatabaseMaxing with Preston Thrope"
 date: 2026-03-27
 link: "https://pthorpe92.dev/databasemaxxing/"
 status: published
-image_url: ""
 source: newsletter
 newsletter: techstructive-weekly-87
 type: links
 slug: databasemaxing-with-preston-thrope
-tags:
-description: "DatabaseMaxing with Preston Thrope"
-hash: b0d02edacaefaecbfb2ad3f278fdf9295f6ef9ea5a99ef5d56b740852805a618
+image_url: ""
 ---
 My thoughts on [DatabaseMaxing with Preston Thrope](https://pthorpe92.dev/databasemaxxing/): DatabaseMaxing with Preston Thrope
 

@@ -1,16 +1,16 @@
 ---
+description: "You are not your job"
+hash: 7ba775ef10a853f76537706a44cc677ad32be2139adcd803a8ea596c140f376d
+link: "https://jry.io/writing/you-are-not-your-job/"
+image_url: ""
+newsletter: techstructive-weekly-87
+slug: you-are-not-your-job
+tags: 
 title: "You are not your job"
 date: 2026-03-27
-link: "https://jry.io/writing/you-are-not-your-job/"
 status: published
-image_url: ""
 source: newsletter
-newsletter: techstructive-weekly-87
 type: links
-slug: you-are-not-your-job
-tags:
-description: "You are not your job"
-hash: dc5793943172fbb19d79344dccfecef3c7d94a8452761dd6356590fc3b5b993c
 ---
 My thoughts on [You are not your job](https://jry.io/writing/you-are-not-your-job/): You are not your job
 

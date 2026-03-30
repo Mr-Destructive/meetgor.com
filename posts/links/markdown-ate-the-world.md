@@ -1,16 +1,16 @@
 ---
-title: "Markdown ate the world"
-date: 2026-03-27
-link: "https://matduggan.com/markdown-ate-the-world/"
-status: published
 image_url: "https://matduggan.com/content/images/2024/01/favicon.ico"
-source: newsletter
-newsletter: techstructive-weekly-87
 type: links
 slug: markdown-ate-the-world
-tags:
+tags: 
 description: "It's JSON all the way down"
-hash: 2eeef916c0c32fbe6c48d13138bdafb3cbaeac0c94bf96e833b71a2d4267af8d
+hash: d6555b5d21caa3b017ed8f6c391903130f4410c28960e40ed93ecccdf2c35f97
+title: "Markdown ate the world"
+link: "https://matduggan.com/markdown-ate-the-world/"
+source: newsletter
+newsletter: techstructive-weekly-87
+date: 2026-03-27
+status: published
 ---
 My thoughts on [Markdown ate the world](https://matduggan.com/markdown-ate-the-world/): Markdown ate the world
 

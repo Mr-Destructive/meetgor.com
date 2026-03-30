@@ -1,16 +1,16 @@
 ---
+newsletter: techstructive-weekly-87
+slug: a-eulogy-for-vim
+source: newsletter
+type: links
+tags: 
+description: "A eulogy for Vim"
+hash: df5ce8de1b7a66671211d65e11ced41fc76cf8b0b06b591ae69b9fc0125f42ce
 title: "A eulogy for Vim"
 date: 2026-03-27
 link: "https://drewdevault.com/2026/03/25/2026-03-25-Forking-vim.html"
 status: published
 image_url: ""
-source: newsletter
-newsletter: techstructive-weekly-87
-type: links
-slug: a-eulogy-for-vim
-tags:
-description: "A eulogy for Vim"
-hash: bea66bf4ffa70b09e51c1ded7c0318d09c94ed05e60d1ffca07c5acad3e2022b
 ---
 My thoughts on [A eulogy for Vim](https://drewdevault.com/2026/03/25/2026-03-25-Forking-vim.html): A eulogy for Vim
 

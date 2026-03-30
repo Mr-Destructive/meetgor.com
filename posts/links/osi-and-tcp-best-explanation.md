@@ -1,16 +1,16 @@
 ---
-title: "OSI and TCP Best Explanation"
-date: 2026-03-27
-link: "https://youtu.be/3b_TAYtzuho"
 status: published
 image_url: "https://i.ytimg.com/vi/3b_TAYtzuho/hqdefault.jpg"
+type: links
+description: "OSI and TCP Best Explanation"
+date: 2026-03-27
+link: "https://youtu.be/3b_TAYtzuho"
 source: newsletter
 newsletter: techstructive-weekly-87
-type: links
 slug: osi-and-tcp-best-explanation
-tags:
-description: "OSI and TCP Best Explanation"
-hash: c2f7c10ae29372a2fdbb7c49671df697ffdd69eb759424d24b32757566e5e1fa
+tags: 
+hash: 82353e9bd9e6b7d9e05f637b1227ff683724d60e8da474d4466856b6217cf1fb
+title: "OSI and TCP Best Explanation"
 ---
 My thoughts on [OSI and TCP Best Explanation](https://youtu.be/3b_TAYtzuho): OSI and TCP Best Explanation
 

@@ -1,16 +1,16 @@
 ---
-title: "The diminished art of coding"
-date: 2026-03-27
-link: "https://nolanlawson.com/2026/03/22/the-diminished-art-of-coding/"
-status: published
-image_url: "https://nolanlawson.com/wp-content/uploads/2025/01/favicon.png?w=32"
 source: newsletter
 newsletter: techstructive-weekly-87
+tags: 
+description: "Programming is an art. It’s less like fine art or music and closer to architecture or carpentry – combining form and function – but it is an art. If you don’t believe me, consider code …"
+hash: 6313121afbacac52f3d6fea7d307abf437bbd4534407a6fc824d3f665b390ea6
+title: "The diminished art of coding"
+date: 2026-03-27
+status: published
+image_url: "https://nolanlawson.com/wp-content/uploads/2025/01/favicon.png?w=32"
 type: links
 slug: the-diminished-art-of-coding
-tags:
-description: "Programming is an art. It’s less like fine art or music and closer to architecture or carpentry – combining form and function – but it is an art. If you don’t believe me, consider code …"
-hash: 834fa469ce09a7ff29151bbced6089c9f092aeba25011b1a722b2de2910ed522
+link: "https://nolanlawson.com/2026/03/22/the-diminished-art-of-coding/"
 ---
 My thoughts on [The diminished art of coding](https://nolanlawson.com/2026/03/22/the-diminished-art-of-coding/): The diminished art of coding
 

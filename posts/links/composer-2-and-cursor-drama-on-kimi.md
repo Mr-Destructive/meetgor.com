@@ -1,16 +1,16 @@
 ---
+image_url: "https://i.ytimg.com/vi/QGnKTRtEH50/hqdefault.jpg"
+newsletter: techstructive-weekly-87
+tags: 
+description: "Composer 2 and Cursor Drama on Kimi"
+hash: db2bacef2a2be80728afab807914fd99056ca1bb3aa664a374758d24d12e60b1
 title: "Composer 2 and Cursor Drama on Kimi"
 date: 2026-03-27
-link: "https://youtu.be/QGnKTRtEH50"
 status: published
-image_url: "https://i.ytimg.com/vi/QGnKTRtEH50/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-87
 type: links
 slug: composer-2-and-cursor-drama-on-kimi
-tags:
-description: "Composer 2 and Cursor Drama on Kimi"
-hash: b9fb6807a7e414c7000339a58bf4d5578bfe1d4d9914dfb3ee0de214fd7da10f
+link: "https://youtu.be/QGnKTRtEH50"
 ---
 My thoughts on [Composer 2 and Cursor Drama on Kimi](https://youtu.be/QGnKTRtEH50): Composer 2 and Cursor Drama on Kimi
 

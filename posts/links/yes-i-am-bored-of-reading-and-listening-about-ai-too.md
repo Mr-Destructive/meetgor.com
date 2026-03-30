@@ -1,16 +1,16 @@
 ---
-title: "Yes, I am bored of reading and listening about AI too"
-date: 2026-03-27
-link: "https://blog.jakesaunders.dev/is-anybody-else-bored-of-talking-about-ai/"
 status: published
 image_url: "https://blog.jakesaunders.dev/is-anybody-else-bored-of-talking-about-ai/img.png"
 source: newsletter
 newsletter: techstructive-weekly-87
 type: links
-slug: yes-i-am-bored-of-reading-and-listening-about-ai-too
-tags:
 description: "Is anybody else bored of talking about AI?"
-hash: b51e70ae1bd7f49e08b432785bf4a2d9aaa4674c3a6321cc9ccbdb458f5cf363
+date: 2026-03-27
+link: "https://blog.jakesaunders.dev/is-anybody-else-bored-of-talking-about-ai/"
+slug: yes-i-am-bored-of-reading-and-listening-about-ai-too
+tags: 
+hash: d7a6b06d195cdec7b074631c53f22e8fba8444811f0c777544fba578d69786e8
+title: "Yes, I am bored of reading and listening about AI too"
 ---
 My thoughts on [Yes, I am bored of reading and listening about AI too](https://blog.jakesaunders.dev/is-anybody-else-bored-of-talking-about-ai/): Yes, I am bored of reading and listening about AI too
 
