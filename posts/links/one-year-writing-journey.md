@@ -1,10 +1,10 @@
 ---
-slug: one-year-writing-journey
 title: 'One-Year Writing Journey'
 source: newsletter
 hash: ff624d486cded5972eae67461c90f62d8020ba785806009efa364ca7329d6b26
 status: published
 type: links
+slug: one-year-writing-journey
 tags: 
 date: 2024-09-14
 description: 'One-Year Writing Journey'
