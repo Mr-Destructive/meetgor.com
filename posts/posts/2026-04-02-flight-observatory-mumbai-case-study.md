@@ -501,7 +501,7 @@ To answer that, I look at the airport events in time order and take each landing
 
 In this sample, that gap is very short most of the time. The median is 1.5 minutes, and the average is about 2.1 minutes, across 5,297 landing-to-takeoff  intervals. Most of the bars are packed into the first few minutes, which tells me the airport is turning movements over very quickly. The long tail is there too, but it is small. So the real story is not "there are a few huge delays" it is that the typical landing is followed by a takeoff almost immediately.
 
-![Landing-to-Takeoff Turnaround Gap](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/turnaround_gap_refresh_clean_horizontal.svg.png)
+![Landing-to-Takeoff Turnaround Gap](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/turnaround_gap_refresh_clean_horizontal.svg)
 
 And another question with intuition validated with data.
 
