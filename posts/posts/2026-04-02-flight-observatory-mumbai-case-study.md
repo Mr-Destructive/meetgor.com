@@ -1,11 +1,11 @@
 ---
-slug: "flight-observatory-mumbai-airspace-case-study"
-tags: ["adsb", "sql", "duckdb", "sqlite", "python", "golang", "data-science"]
-hash: 733367e3c42ee1607b16ea2050c5de4bd1bc7d6e2f2d10ad4722c2d113179997
-type: posts
 title: "Flight Observatory Mumbai Airspace Case Study"
 description: "A closer analysis on the airspace around Mumbai's BOM/VABB (CSMIA) Airport. Questioning the intuitions from memories and answering and reasoning through the data."
 date: 2026-04-02
+slug: "flight-observatory-mumbai-airspace-case-study"
+tags: ["adsb", "sql", "duckdb", "sqlite", "python", "golang", "data-science"]
+hash: 6ee8eff9343c16508db9eaf557e7e146298434c41e5c709f81a3b07d5a5ac552
+type: posts
 ---
 ## Introduction
 
