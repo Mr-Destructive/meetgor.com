@@ -334,7 +334,7 @@ Some other notable ones down the order are `SIA` for Singapore Airlines, `DLH` a
 └──────────────┴───────────┘
 ```
 
-![Airline Breakdown](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/airline_routine.svg)
+![Airline Breakdown](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/airline_routine.png)
 
 A good validation query! It seems the data was correctly analysed.
 
@@ -365,7 +365,7 @@ This was something I didn't have much idea about. I was not well versed with fli
 └────────────────────────────────────────────────┴───────────┘
 ```
 
-![Aircraft type breakdown](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/aircraft_types.svg)
+![Aircraft type breakdown](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/aircraft_types.png)
 
 
 ### Where Landings Start
@@ -408,7 +408,7 @@ The patterns for a sharp dip is observed near the airport only, but overall, the
 ...
 
 ```
-![Landing Density](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/descent_density_east_bw.svg)
+![Landing Density](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/descent_density_east_bw.png)
 
 A clear strip can be seen with the aircrafts descending into the runway strip. Also the dip is more pronounced in the Navi Mumbai / Airoli / Ghansoli / Thane-side approach corridor.
 
@@ -465,7 +465,7 @@ The sharp climb starts very close to the airport itself, and that is what the ta
 ...
 ...
 ```
-![Takeoff Density](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/takeoff_density_west_bw.svg)
+![Takeoff Density](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/takeoff_density_west_bw.png)
 
 There is no major analysis here, since it has plain ocean in front of it, we can't really track the location thereafter. We can just use the direction that we'll check separately.
 
@@ -500,7 +500,7 @@ To answer that, I look at the airport events in time order and take each landing
 
 In this sample, that gap is very short most of the time. The median is 1.5 minutes, and the average is about 2.1 minutes, across 5,297 landing-to-takeoff  intervals. Most of the bars are packed into the first few minutes, which tells me the airport is turning movements over very quickly. The long tail is there too, but it is small. So the real story is not "there are a few huge delays" it is that the typical landing is followed by a takeoff almost immediately.
 
-![Landing-to-Takeoff Turnaround Gap](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/turnaround_gap_refresh_clean_horizontal.svg)
+![Landing-to-Takeoff Turnaround Gap](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/turnaround_gap_refresh_clean_horizontal.png)
 
 And another question with intuition validated with data.
 
@@ -563,14 +563,14 @@ To get this, we can:
 For landings, it uses the heading at the end of the run.
 For takeoffs, it uses the heading at the start. 
 
-![Landing Direction Map](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/landing_direction_map.svg)
+![Landing Direction Map](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/landing_direction_map.png)
 
-![Takeoff Direction Map](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/takeoff_direction_map.svg)
+![Takeoff Direction Map](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/takeoff_direction_map.png)
 
 Those headings are then grouped into direction sectors and counted, which is what produces the direction chart.
 
-![Landing Heading Histogram](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/landing_heading_hist_vertical.svg)
-![Takeoff Heading Histogram](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/takeoff_heading_hist_vertical.svg)
+![Landing Heading Histogram](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/landing_heading_hist_vertical.png)
+![Takeoff Heading Histogram](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/takeoff_heading_hist_vertical.png)
 
 The result is very strong and very repetitive. Most landings cluster around 270°, with a smaller 90° cluster, and takeoffs are also dominated by 270°. In the heading data, the top landing sector is 270° with 14,316 points, and the top takeoff sector is also 270° with 10,848 points. That tells me the airport is not behaving like a random cloud of movement. It is using the same directional axis again and again, which is exactly why the hotspot map looks like a corridor instead of a scatterplot.
 
@@ -580,7 +580,7 @@ The question here is are the aircrafts just passing through, or do they stay aro
 
 One thing I wanted to know was how long aircraft actually stay around Mumbai once they enter the airport flow.
 
-![Time in Airspace](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/special_time_in_airspace.svg)
+![Time in Airspace](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/special_time_in_airspace.png)
 
 So I looked at the duration of each inferred run and compared landings, takeoffs, and the full set together. The pattern is pretty clear: landings stay in the airspace longer than takeoffs. The median landing run is 34.5 minutes, while the median takeoff run is 25.1 minutes. Across all airport events, the median is 27.3 minutes. That tells me the traffic is not just passing through fast. A lot of it is lingering long enough for the airspace to feel full, especially on the landing side.
 
@@ -599,7 +599,7 @@ This is a good question, because it gives a deeper look at the activity on the a
 
 So I matched each landing with the next takeoff for the same aircraft on the same day. That gives a proper aircraft-level ground-time measure, instead of a flight-level handoff.
 
-![Aircraft Turnaround Time](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/special_same_aircraft_ground_gap.svg)
+![Aircraft Turnaround Time](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/special_same_aircraft_ground_gap.png)
 
 What I observed:
 The turnaround time is steady, but not extremely fast. The median ground time is 96.5 minutes, which is about 1 hour 37 minutes. The middle half of the aircraft stays between 77.5 and 130.5 minutes, and the 90th percentile goes up to 185.3 minutes. Most of the pairs sit in the 60-180 minute range, which suggests a working fleet that is being reused at a regular pace rather than left idle for long stretches.
@@ -621,7 +621,7 @@ I also wanted to see how much of Mumbai's traffic is Indian-registered versus fo
 └────────────────────────┴───────────┘
 ```
 
-![Domestic vs International Flight Aircraft Carrier Split](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/special_domestic_international_proxy.svg)
+![Domestic vs International Flight Aircraft Carrier Split](https://meetgor-cdn.pages.dev/flight-observatory-mumbai/special_domestic_international_proxy.png)
 
 The result is clear: about `72.9%` of movements are Indian-registered, while `24.8%` are foreign-registered. 
 So the airport is still dominated by Indian traffic by count, but foreign aircraft are not a side note, or even a minority. They are a substantial and regular part of the flow.
