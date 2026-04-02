@@ -1,13 +1,12 @@
 ---
+slug: "flight-observatory-mumbai-airspace-case-study"
+tags: ["adsb", "sql", "duckdb", "sqlite", "python", "golang", "data-science"]
+hash: 733367e3c42ee1607b16ea2050c5de4bd1bc7d6e2f2d10ad4722c2d113179997
 type: posts
 title: "Flight Observatory Mumbai Airspace Case Study"
 description: "A closer analysis on the airspace around Mumbai's BOM/VABB (CSMIA) Airport. Questioning the intuitions from memories and answering and reasoning through the data."
 date: 2026-04-02
-slug: "flight-observatory-mumbai-airspace-case-study"
-tags: ["adsb", "sql", "duckdb", "sqlite", "python", "golang", "data-science"]
 ---
-
-
 ## Introduction
 
 I do write blogs, newsletters, but this is something wild I had written in a while. I was always curious and interested in knowing about the flights flowing over Mumbai, I do always look up and see the Airline when it appears above my head in front or on the side. But I never actually read or discovered anything true or factual about it. As a software developer, that is very unsettling, I have some ideas and observations but never tested them. I can excuse myself that I am busy and that is a toy little project to get off my hands. But now, we have LLMs and no excuses. I don't need a second invitation to explore my curiosity, off I went.
@@ -648,4 +647,3 @@ But that is just part 1 buddy! Haven't nerded about the complications of ADS-B d
 
 
 Check out the full case study here -> [Flight Observatory - Mumbai Airspace Case Study](https://dev.meetgor.com/flight-observatory/case-study/mumbai-airport/)
-
