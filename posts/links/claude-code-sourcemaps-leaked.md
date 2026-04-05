@@ -1,16 +1,16 @@
 ---
 title: "Claude Code sourcemaps leaked"
+image_url: "https://i.ytimg.com/vi/Wvj1mTqyzsQ/hqdefault.jpg"
+newsletter: techstructive-weekly-88
+description: "Claude Code sourcemaps leaked"
+hash: b283cc2c609aa869edc11f71b9da5b9f4d30d272562a82ba055836bb457d901c
 date: 2026-04-03
 link: "https://youtu.be/Wvj1mTqyzsQ"
 status: published
-image_url: "https://i.ytimg.com/vi/Wvj1mTqyzsQ/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-88
 type: links
 slug: claude-code-sourcemaps-leaked
-tags:
-description: "Claude Code sourcemaps leaked"
-hash: 9f41ef85a0f197688861bc0c62112a0500fcb4164bad9bd54494248ec948569e
+tags: 
 ---
 My thoughts on [Claude Code sourcemaps leaked](https://youtu.be/Wvj1mTqyzsQ): Claude Code sourcemaps leaked
 

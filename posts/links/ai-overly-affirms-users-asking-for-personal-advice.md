@@ -1,16 +1,16 @@
 ---
+description: "AI overly affirms users asking for personal advice"
+link: "https://news.stanford.edu/stories/2026/03/ai-advice-sycophantic-models-research"
+image_url: ""
+slug: ai-overly-affirms-users-asking-for-personal-advice
+hash: 90e63d2b18c0803d6fd1a2642f1a7902656e7e9b4b66b43f1bd11189424b404b
 title: "AI overly affirms users asking for personal advice"
 date: 2026-04-03
-link: "https://news.stanford.edu/stories/2026/03/ai-advice-sycophantic-models-research"
 status: published
-image_url: ""
 source: newsletter
 newsletter: techstructive-weekly-88
 type: links
-slug: ai-overly-affirms-users-asking-for-personal-advice
-tags:
-description: "AI overly affirms users asking for personal advice"
-hash: 81f41fdde1cde3ee8d707c52a625b286ba64832d4f82ab1e18d2f610908ee8b5
+tags: 
 ---
 My thoughts on [AI overly affirms users asking for personal advice](https://news.stanford.edu/stories/2026/03/ai-advice-sycophantic-models-research): AI overly affirms users asking for personal advice
 

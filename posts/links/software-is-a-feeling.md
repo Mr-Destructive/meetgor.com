@@ -1,16 +1,16 @@
 ---
+hash: b0f4433be991cc649b59a3b7b06b7048ed98870736642f0580e74ab449106a80
 title: "Software is a feeling"
 date: 2026-04-03
 link: "https://robinrendle.com/notes/software-is-a-feeling/"
 status: published
+newsletter: techstructive-weekly-88
+slug: software-is-a-feeling
+tags: 
+description: "Software is a feeling"
 image_url: ""
 source: newsletter
-newsletter: techstructive-weekly-88
 type: links
-slug: software-is-a-feeling
-tags:
-description: "Software is a feeling"
-hash: 6f009681dea526181987f9b7d2da4beceb44592ec28dac6157be8edb46c0dc63
 ---
 My thoughts on [Software is a feeling](https://robinrendle.com/notes/software-is-a-feeling/): Software is a feeling
 

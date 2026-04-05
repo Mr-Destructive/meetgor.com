@@ -1,16 +1,16 @@
 ---
-title: "Resilience in the age of AI"
-date: 2026-04-03
-link: "https://halfanhour.blogspot.com/2026/04/resilience-in-age-of-ai.html"
 status: published
 image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgV_p96aVKmuTLPF1_JCmZ8qDp_XJOnCl8YKn8G48we4LWgM5bPZOTRIZtIsBnLBxEzARgMgLSI2bzdYkf7LQD33rfbBD0pVOvYUl03j_MKdLsn3kgchEMzMFYRE2jH17aqb2tHRhHjC7-CHS1zIwFisCf9lc2A_H__KWHp-7tGuqqy40lTOevb/w1200-h630-p-k-no-nu/Human%20Resilience%20for%20the%20AI%20Age.png"
 source: newsletter
-newsletter: techstructive-weekly-88
 type: links
 slug: resilience-in-the-age-of-ai
-tags:
+newsletter: techstructive-weekly-88
+tags: 
 description: "This is the edited version of my contribution to  Building a Human  Resilience Infrastructure for the Age of AI: Experts Call for Radical  C..."
-hash: 6e940b444fe042a2b2b80187641be398fbe1905a28d1faa40fda2056b57669d9
+hash: 6c8c0d4e88c4085b71856470f21206a792d2f15a3ad20449ec5fa47c42340b11
+title: "Resilience in the age of AI"
+date: 2026-04-03
+link: "https://halfanhour.blogspot.com/2026/04/resilience-in-age-of-ai.html"
 ---
 My thoughts on [Resilience in the age of AI](https://halfanhour.blogspot.com/2026/04/resilience-in-age-of-ai.html): Resilience in the age of AI
 

@@ -1,16 +1,16 @@
 ---
+description: "Product updates, company announcements, and posts from the team building your favorite save-for-later app."
+hash: 8aeabc6750d28a0f6e6e8cec88a64271c58408982778432229c34668de5b94c7
 title: "Relaunching the instapaper API"
 date: 2026-04-03
 link: "https://blog.instapaper.com/blog/2026/03/31/relaunching-the-instaparser-api/"
 status: published
 image_url: "/img/instaparser.svg"
-source: newsletter
 newsletter: techstructive-weekly-88
 type: links
 slug: relaunching-the-instapaper-api
-tags:
-description: "Product updates, company announcements, and posts from the team building your favorite save-for-later app."
-hash: a016b59341e3be9124de3cdbfca17a8f7c464c5476489a2ebae6de1d8ebe9640
+source: newsletter
+tags: 
 ---
 My thoughts on [Relaunching the instapaper API](https://blog.instapaper.com/blog/2026/03/31/relaunching-the-instaparser-api/): Relaunching the instapaper API
 

@@ -1,16 +1,16 @@
 ---
-title: "I am definitely missing the pre-AI writing era"
 date: 2026-04-03
 link: "https://www.lesswrong.com/posts/BJ4pnropWdnzzgeJc/i-am-definitely-missing-the-pre-ai-writing-era"
+source: newsletter
+hash: 1b80305a73732d1e90e3e03a85ff48ca9812a89c3f60f915539c3422ffcdb9be
+title: "I am definitely missing the pre-AI writing era"
 status: published
 image_url: "https://res.cloudinary.com/lesswrong-2-0/image/upload/c_fill,ar_1.91,g_auto/SocialPreview/kbuutzaogk2zluuyfh3t"
-source: newsletter
 newsletter: techstructive-weekly-88
 type: links
 slug: i-am-definitely-missing-the-pre-ai-writing-era
-tags:
+tags: 
 description: "Yesterday, I wrote my first technical draft on what I was working on with the goal to share it publicly on here (well using an account dedicated to t…"
-hash: bca27a7d8b7a43eff145a7d3187cdfd58271c0ba62afeb9efbdadfb35d77eaec
 ---
 My thoughts on [I am definitely missing the pre-AI writing era](https://www.lesswrong.com/posts/BJ4pnropWdnzzgeJc/i-am-definitely-missing-the-pre-ai-writing-era): I am definitely missing the pre-AI writing era
 

@@ -1,16 +1,16 @@
 ---
 title: "Don’t let AI write for you"
-date: 2026-04-03
 link: "https://alexhwoods.com/dont-let-ai-write-for-you/"
-status: published
-image_url: ""
 source: newsletter
 newsletter: techstructive-weekly-88
+tags: 
+description: "Don’t let AI write for you"
+hash: da3a7cfb70b6407feb19fbb7b46d0b56e4b3e7520dda8311b9e0878a2e730707
+date: 2026-04-03
+status: published
+image_url: ""
 type: links
 slug: don-t-let-ai-write-for-you
-tags:
-description: "Don’t let AI write for you"
-hash: 90afc1e7ecc331782e1e37217085912019a236580257f45fefb99491253e5b66
 ---
 My thoughts on [Don’t let AI write for you](https://alexhwoods.com/dont-let-ai-write-for-you/): Don’t let AI write for you
 

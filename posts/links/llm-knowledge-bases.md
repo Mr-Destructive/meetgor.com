@@ -1,16 +1,16 @@
 ---
-title: "LLM Knowledge Bases"
-date: 2026-04-03
-link: "https://x.com/karpathy/status/2039805659525644595"
-status: published
-image_url: ""
-source: newsletter
 newsletter: techstructive-weekly-88
 type: links
 slug: llm-knowledge-bases
-tags:
 description: "LLM Knowledge Bases"
-hash: 49c8fd1e46bae8d0dd18074601cb4382e1cb9007055527071aa11df920f9fcd2
+hash: c2040f2b3b821f927e7b2e11924f5e8cdc174ea17f7c4dcea7ea181d88a6141c
+date: 2026-04-03
+link: "https://x.com/karpathy/status/2039805659525644595"
+status: published
+tags: 
+title: "LLM Knowledge Bases"
+image_url: ""
+source: newsletter
 ---
 My thoughts on [LLM Knowledge Bases](https://x.com/karpathy/status/2039805659525644595): LLM Knowledge Bases
 

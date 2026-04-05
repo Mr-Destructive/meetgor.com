@@ -1,16 +1,16 @@
 ---
 title: "Sapling"
-date: 2026-04-03
-link: "https://youtu.be/7Wak2MVTsfw"
-status: published
 image_url: "https://i.ytimg.com/vi/7Wak2MVTsfw/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-88
 type: links
 slug: sapling
-tags:
+date: 2026-04-03
+link: "https://youtu.be/7Wak2MVTsfw"
+status: published
+tags: 
 description: "Sapling"
-hash: 8c0fb09824843115a3273d94ecfaa3931827a701dc274848fe6e991f98cc1336
+hash: 8a57e891b1d657e9b99a0e89fbc9ab2d077e5e98f4c15e0d1a16ce5e5d420515
 ---
 My thoughts on [Sapling](https://youtu.be/7Wak2MVTsfw): Sapling
 

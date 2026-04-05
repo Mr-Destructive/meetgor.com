@@ -1,16 +1,16 @@
 ---
-title: "I used AI, It worked, but I hated it by Taggart"
+hash: e1b691134f44f1ddfe005b751dc65d06e49e5a8875330bc0a8ac3345a6dd4443
 date: 2026-04-03
+image_url: "https://taggart-tech.com/simpsons-mob-small.png"
+slug: i-used-ai-it-worked-but-i-hated-it-by-taggart
+tags: 
+description: "I used Claude Code to build a tool I needed. It worked great, but I was miserable. I need to reckon with what it means."
+title: "I used AI, It worked, but I hated it by Taggart"
 link: "https://taggart-tech.com/reckoning/"
 status: published
-image_url: "https://taggart-tech.com/simpsons-mob-small.png"
 source: newsletter
 newsletter: techstructive-weekly-88
 type: links
-slug: i-used-ai-it-worked-but-i-hated-it-by-taggart
-tags:
-description: "I used Claude Code to build a tool I needed. It worked great, but I was miserable. I need to reckon with what it means."
-hash: 47f7985f8f9d087c6662ec9a6a38a163da3659e85128980635f9b688b8874fa6
 ---
 My thoughts on [I used AI, It worked, but I hated it by Taggart](https://taggart-tech.com/reckoning/): I used AI, It worked, but I hated it by Taggart
 

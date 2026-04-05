@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #88"
+description: "Building Flight Observatory and writing case study on Mumbai Airspace, reading about AI adoption in tech and AI-disruption, among the other things read, watched in the week 29 March to 4th April 2026"
 date: 2026-04-03
 slug: techstructive-weekly-88
+canonical_url: https://techstructively.substack.com/p/techstructive-weekly-88
+tags: ["newsletter", "substack"]
+hash: 25f09e6b2f16a7c39da2b230d9e7f6be59218cb4c10341a89fbf64a4a329fecb
+title: "Techstructive Weekly #88"
 type: newsletter
 status: published
 source: newsletter
-canonical_url: https://techstructively.substack.com/p/techstructive-weekly-88
-description: "Building Flight Observatory and writing case study on Mumbai Airspace, reading about AI adoption in tech and AI-disruption, among the other things read, watched in the week 29 March to 4th April 2026"
-tags: ["newsletter", "substack"]
 ---
-
 ## Weekly #88
 
 It was a high-action-packed week. I wrote a case study, polished a web app for that, and connected with people for regular catch up. Since job security is not a thing, as we can see with Oracle. Negativity aside.

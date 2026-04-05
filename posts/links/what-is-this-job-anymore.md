@@ -1,16 +1,16 @@
 ---
 title: "What is this job anymore"
-date: 2026-04-03
 link: "https://waylonwalker.com/ping-46/"
-status: published
-image_url: "https://shots.waylonwalker.com/shot/?url=https://waylonwalker.com/ping-46/og/&height=600&width=1200&scaled_width=1200&scaled_height=600&format=jpg"
 source: newsletter
-newsletter: techstructive-weekly-88
 type: links
 slug: what-is-this-job-anymore
-tags:
+tags: 
 description: "The job of writing code is dying, models are getting better, the average person will have their average features implemented in average ways with no effort by…"
-hash: ac9bfed97b81d7ce32e90a7c743133286b8b99263a53d207da2e4c92c11d2671
+hash: 0ad5df9009c96a9ab65d8836ed6a9bc129eede12ec4afad825bd700cee15dce6
+date: 2026-04-03
+status: published
+image_url: "https://shots.waylonwalker.com/shot/?url=https://waylonwalker.com/ping-46/og/&height=600&width=1200&scaled_width=1200&scaled_height=600&format=jpg"
+newsletter: techstructive-weekly-88
 ---
 My thoughts on [What is this job anymore](https://waylonwalker.com/ping-46/): What is this job anymore
 
