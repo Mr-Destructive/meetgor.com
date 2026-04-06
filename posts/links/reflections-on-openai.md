@@ -1,15 +1,15 @@
 ---
-newsletter: 2025-07-19-techstructive-weekly-51
-link: 'https://calv.info/openai-reflections'
 title: 'Reflections on OpenAI'
 image_url: 'https://calv.info/api/og?title=Reflections%20on%20OpenAI'
 tags: 
-date: 2025-07-19
 description: 'Reflections on OpenAI'
-source: newsletter
 type: links
-status: published
 hash: 204869c28c6a93a94dae24977f3079bcc1a540248e71a22d137d85e1a5cfcd4f
+newsletter: 2025-07-19-techstructive-weekly-51
+link: 'https://calv.info/openai-reflections'
+date: 2025-07-19
+source: newsletter
+status: published
 slug: reflections-on-openai
 ---
 ## Commentary
