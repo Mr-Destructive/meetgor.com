@@ -1,16 +1,16 @@
 ---
-title: "Strategy"
 date: 2026-04-10
 link: "https://youtu.be/v9ejT8FO-7I"
 status: published
 image_url: "https://i.ytimg.com/vi/v9ejT8FO-7I/hqdefault.jpg"
-source: newsletter
-newsletter: techstructive-weekly-89
 type: links
 slug: strategy
-tags:
+tags: 
+source: newsletter
+newsletter: techstructive-weekly-89
 description: "Strategy"
-hash: f01a27463521c9345626284430c3b1dbc3fcd2750ad93e1a31f00f9ce78265c5
+hash: ed02d5b3e1e479d4cf7069f0c555ee0eb008f1e98c46077e32762f66ec6c6965
+title: "Strategy"
 ---
 My thoughts on [Strategy](https://youtu.be/v9ejT8FO-7I): Strategy
 

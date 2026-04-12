@@ -1,16 +1,16 @@
 ---
+tags: 
 title: "Building Zepto LLD, System Design"
+image_url: "https://i.ytimg.com/vi/FcbsppIX0bg/hqdefault.jpg"
+type: links
+description: "Building Zepto LLD, System Design"
+hash: 9004700cb019002c4dcb971d2f9843a6b3bc57e042fd682348fd2eedd37c9fac
 date: 2026-04-10
 link: "https://youtu.be/FcbsppIX0bg"
 status: published
-image_url: "https://i.ytimg.com/vi/FcbsppIX0bg/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-89
-type: links
 slug: building-zepto-lld-system-design
-tags:
-description: "Building Zepto LLD, System Design"
-hash: 5ae9a43db98c9ff9a3b54159fbfc9e8f3e0aa03916d7fdbfcc12bbb41ca3e1dd
 ---
 My thoughts on [Building Zepto LLD, System Design](https://youtu.be/FcbsppIX0bg): Building Zepto LLD, System Design
 

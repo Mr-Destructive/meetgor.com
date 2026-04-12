@@ -1,16 +1,16 @@
 ---
+description: "A blog about making culture. Since 1999."
+hash: f7004355d49768adc943292bd4b681f34a42db718613508941c2de8fd1f1f02c
 title: "People love to work hard"
+status: published
+newsletter: techstructive-weekly-89
+tags: 
 date: 2026-04-10
 link: "https://www.anildash.com/2026/04/06/people-love-to-work-hard/"
-status: published
 image_url: "/images/IMG_1063.jpeg"
 source: newsletter
-newsletter: techstructive-weekly-89
 type: links
 slug: people-love-to-work-hard
-tags:
-description: "A blog about making culture. Since 1999."
-hash: 7900d951e676fdae115c46ca497229f803b831fa58a0bb4f5d7a5b53ef417cb3
 ---
 My thoughts on [People love to work hard](https://www.anildash.com/2026/04/06/people-love-to-work-hard/): People love to work hard
 

@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #89"
-date: 2026-04-10
+tags: ["newsletter", "substack"]
+hash: 88539bae2631a55ccd4c59df553018e8da9a926867b301ad54bc8182caa3dfb9
 slug: techstructive-weekly-89
 type: newsletter
+title: "Techstructive Weekly #89"
+date: 2026-04-10
 status: published
 source: newsletter
 canonical_url: https://techstructively.substack.com/p/techstructive-weekly-89
 description: "Learning design patterns, reading about AI and people, building the intuition for chess board, among the other things read, created, watched, and learnt in the week from 5th to 11th April 2026"
-tags: ["newsletter", "substack"]
 ---
-
 ## Week #89
 
 I did a few things this week. I made a little app, wrote a half-baked draft for part 2 of the flight observatory, and learned design principles.

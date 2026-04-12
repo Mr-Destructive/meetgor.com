@@ -1,16 +1,16 @@
 ---
-title: "Simon Wilison on Lenny’s Podcast"
-date: 2026-04-10
-link: "https://youtu.be/wc8FBhQtdsA"
-status: published
 image_url: "https://i.ytimg.com/vi/wc8FBhQtdsA/hqdefault.jpg"
 source: newsletter
+slug: simon-wilison-on-lenny-s-podcast
+tags: 
+description: "Simon Wilison on Lenny’s Podcast"
+hash: d74caf96e734e9afd9c742d876ed77859a704e34482cf5fa69f49e43858d13a6
+date: 2026-04-10
+link: "https://youtu.be/wc8FBhQtdsA"
 newsletter: techstructive-weekly-89
 type: links
-slug: simon-wilison-on-lenny-s-podcast
-tags:
-description: "Simon Wilison on Lenny’s Podcast"
-hash: f2c9540bb4538b5d6c804ebad6e124ec3f5a81ecdffd44a5eb0755e83b3b9922
+title: "Simon Wilison on Lenny’s Podcast"
+status: published
 ---
 My thoughts on [Simon Wilison on Lenny’s Podcast](https://youtu.be/wc8FBhQtdsA): Simon Wilison on Lenny’s Podcast
 

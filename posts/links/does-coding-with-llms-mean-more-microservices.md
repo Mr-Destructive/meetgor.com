@@ -1,16 +1,16 @@
 ---
-title: "Does coding with LLMs mean more microservices"
 date: 2026-04-10
 link: "https://ben.page/microservices"
-status: published
-image_url: "https://ben.page/og?path=/posts/microservices/cover_image.png"
 source: newsletter
 newsletter: techstructive-weekly-89
 type: links
-slug: does-coding-with-llms-mean-more-microservices
-tags:
 description: "Does coding with LLMs mean more microservices"
-hash: 05d91b1c90157e87b26e540a5ab812e8d190d1104e4370617a59689809a36900
+hash: 793b3ed71f72fceedabfb337804938471b349505fad19dac24bb419eb67d7437
+title: "Does coding with LLMs mean more microservices"
+status: published
+image_url: "https://ben.page/og?path=/posts/microservices/cover_image.png"
+slug: does-coding-with-llms-mean-more-microservices
+tags: 
 ---
 My thoughts on [Does coding with LLMs mean more microservices](https://ben.page/microservices): Does coding with LLMs mean more microservices
 

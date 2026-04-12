@@ -1,16 +1,16 @@
 ---
-title: "AI and Remote work is a disaster for software engineers"
 date: 2026-04-10
-link: "https://medium.com/@lukas_kosinski/ai-and-remote-work-is-a-disaster-for-junior-software-engineers-a377b1d8ed20"
 status: published
-image_url: ""
-source: newsletter
 newsletter: techstructive-weekly-89
 type: links
-slug: ai-and-remote-work-is-a-disaster-for-software-engineers
-tags:
+tags: 
 description: "AI and Remote work is a disaster for software engineers"
-hash: 1759f7044af86ae2ab3c38ef3e6eb5dbaaf032383fb8c1382af504c0ae1675ea
+hash: fabce531a06e42ab1bfa3d6f9b75751d09553835782a8889466ab6cf69adac1f
+title: "AI and Remote work is a disaster for software engineers"
+link: "https://medium.com/@lukas_kosinski/ai-and-remote-work-is-a-disaster-for-junior-software-engineers-a377b1d8ed20"
+image_url: ""
+source: newsletter
+slug: ai-and-remote-work-is-a-disaster-for-software-engineers
 ---
 My thoughts on [AI and Remote work is a disaster for software engineers](https://medium.com/@lukas_kosinski/ai-and-remote-work-is-a-disaster-for-junior-software-engineers-a377b1d8ed20): AI and Remote work is a disaster for software engineers
 

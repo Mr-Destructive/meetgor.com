@@ -1,16 +1,16 @@
 ---
+image_url: "https://i.ytimg.com/vi/fqySz1Me2pI/hqdefault.jpg"
+type: links
+slug: how-upi-payments-work
+tags: 
+description: "How UPI Payments work"
+status: published
+source: newsletter
+newsletter: techstructive-weekly-89
+hash: 462ef370a6c4171bc653eff7dc8d5e0d806b1d04549a73d0ab4c8cd5910b5615
 title: "How UPI Payments work"
 date: 2026-04-10
 link: "https://youtu.be/fqySz1Me2pI"
-status: published
-image_url: "https://i.ytimg.com/vi/fqySz1Me2pI/hqdefault.jpg"
-source: newsletter
-newsletter: techstructive-weekly-89
-type: links
-slug: how-upi-payments-work
-tags:
-description: "How UPI Payments work"
-hash: e062f9fd7739791b7ef279340c7405e82bad7638790f1dce17da6f81ed20e5da
 ---
 My thoughts on [How UPI Payments work](https://youtu.be/fqySz1Me2pI): How UPI Payments work
 
