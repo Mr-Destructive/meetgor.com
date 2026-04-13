@@ -3,8 +3,8 @@ tags: ["pdf","document","forensics","security"]
 hash: 94634ffcf77cb4d3621d8fa8e43f463f35997f407dd30a0e18f7da089345730a
 description: ""
 title: "Typical PDF document"
-type: links
 slug: a-typical-pdf-document
+type: links
 date: 2026-01-12
 status: published
 ---
