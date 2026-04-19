@@ -1,16 +1,16 @@
 ---
+source: newsletter
+type: links
+description: "What the PNR locator on your boarding pass actually contains, and why the fare calculation line on your e-ticket is written in a currency that does not exist."
 title: "Six Characters: Decoding PNR Number and e-ticket system (Ajitem)"
 date: 2026-04-17
-link: "https://ajitem.com/blog/iron-core-part-2-six-characters/"
 status: published
 image_url: "https://ajitem.com/optimized/images/blog/iron-core-part-2-six-characters-hero.webp"
-source: newsletter
 newsletter: techstructive-weekly-90
-type: links
 slug: six-characters-decoding-pnr-number-and-e-ticket-system-ajitem
-tags:
-description: "What the PNR locator on your boarding pass actually contains, and why the fare calculation line on your e-ticket is written in a currency that does not exist."
-hash: 0a2ca610515da002f181bc29985d7482bbddf6dcf102f9b081dbe0769e2076ec
+tags: 
+hash: 93c7c3de950a703edf16ad51d78e6aaf6c9ce8b100b044d547b8704b5d03860e
+link: "https://ajitem.com/blog/iron-core-part-2-six-characters/"
 ---
 My thoughts on [Six Characters: Decoding PNR Number and e-ticket system (Ajitem)](https://ajitem.com/blog/iron-core-part-2-six-characters/): Six Characters: Decoding PNR Number and e-ticket system (Ajitem)
 

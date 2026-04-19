@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #90"
+hash: 2a11091b3cc426e432c518062816909734dabe063dd2662d86011ba161f32c2f
 date: 2026-04-17
 slug: techstructive-weekly-90
-type: newsletter
 status: published
 source: newsletter
 canonical_url: https://techstructively.substack.com/p/techstructive-weekly-90
 description: "Learning Java, yes? Coping with AI against hand coded mastery, keeping code review skills in check among the other interesting tech-things read, watched,learnt in the week from 12th to 18th April 2026"
 tags: ["newsletter", "substack"]
+title: "Techstructive Weekly #90"
+type: newsletter
 ---
-
 ## Week #90
 
 Another rough slog of a week. But fighting nonetheless. Hopes are the glasses we have strapped in, darkness cannot blind us.

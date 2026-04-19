@@ -1,16 +1,16 @@
 ---
-title: "Anthropic Dunking and PI pilling"
 date: 2026-04-17
-link: "https://youtu.be/3DNkDIVKtK8"
-status: published
-image_url: "https://i.ytimg.com/vi/3DNkDIVKtK8/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-90
 type: links
 slug: anthropic-dunking-and-pi-pilling
-tags:
 description: "Anthropic Dunking and PI pilling"
-hash: 4fa13df87443c34f52caf77b372dc3b9593be496899561e430c8d6bbd4a99242
+title: "Anthropic Dunking and PI pilling"
+link: "https://youtu.be/3DNkDIVKtK8"
+status: published
+image_url: "https://i.ytimg.com/vi/3DNkDIVKtK8/hqdefault.jpg"
+tags: 
+hash: a0b37efb465cfae31670afcb1085e2af5cefc4e20c2fa7f227bd88719f3923a6
 ---
 My thoughts on [Anthropic Dunking and PI pilling](https://youtu.be/3DNkDIVKtK8): Anthropic Dunking and PI pilling
 

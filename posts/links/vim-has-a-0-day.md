@@ -1,16 +1,16 @@
 ---
-title: "Vim has a 0 day?"
-date: 2026-04-17
-link: "https://youtu.be/zMpn9ICagdE"
 status: published
-image_url: "https://i.ytimg.com/vi/zMpn9ICagdE/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-90
 type: links
-slug: vim-has-a-0-day
-tags:
+tags: 
 description: "Vim has a 0 day?"
-hash: 648994bccbeae942caec89261fa3aec21f4198ec6b37af0a651ba1cbdcf361b0
+link: "https://youtu.be/zMpn9ICagdE"
+image_url: "https://i.ytimg.com/vi/zMpn9ICagdE/hqdefault.jpg"
+slug: vim-has-a-0-day
+hash: 7b62af098fb5dea6e71ac8527c65c8605a5ebd8baf9d782427e72dbb4deaedce
+title: "Vim has a 0 day?"
+date: 2026-04-17
 ---
 My thoughts on [Vim has a 0 day?](https://youtu.be/zMpn9ICagdE): Vim has a 0 day?
 

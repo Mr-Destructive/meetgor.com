@@ -1,16 +1,16 @@
 ---
+hash: a77bb732fe4cea0cef41a0e7f5b1c14dd9829251672f9db76d2f161d1c9d2697
 title: "Frustration Driven Development"
 date: 2026-04-17
 link: "https://swizec.com/blog/frustration-driven-development/"
-status: published
 image_url: "https://swizec.com/social-cards/frustration-driven-development.png"
 source: newsletter
 newsletter: techstructive-weekly-90
 type: links
 slug: frustration-driven-development
-tags:
+status: published
+tags: 
 description: "Frustration is your greatest engineering asset. What do you do the 5th time someone asks for the same damn thing yet again?"
-hash: 9ef05e16c90605d5ec5f9c5e2fc4c3d0455859ffbcf7173b9b58130def463926
 ---
 My thoughts on [Frustration Driven Development](https://swizec.com/blog/frustration-driven-development/): Frustration Driven Development
 

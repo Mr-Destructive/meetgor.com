@@ -5,12 +5,12 @@ link: "https://theengineeringmanager.substack.com/p/who-will-be-the-senior-engin
 status: published
 image_url: ""
 source: newsletter
+slug: who-will-be-the-senior-engineer-in-2035
+description: "Who will be the senior engineer in 2035?"
 newsletter: techstructive-weekly-90
 type: links
-slug: who-will-be-the-senior-engineer-in-2035
-tags:
-description: "Who will be the senior engineer in 2035?"
-hash: ed87aa50d9d6583a61790cdbd16b45aede7d453affe7f80e022ec77adc68d478
+tags: 
+hash: fc352a7bf08b421809e5db9b26a221ecf1fd7a85d286f745e18e5732d2a3f2aa
 ---
 My thoughts on [Who will be the senior engineer in 2035?](https://theengineeringmanager.substack.com/p/who-will-be-the-senior-engineers): Who will be the senior engineer in 2035?
 

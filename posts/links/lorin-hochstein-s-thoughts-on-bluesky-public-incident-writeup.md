@@ -1,16 +1,16 @@
 ---
+description: "Back on April 4, the social media site Bluesky suffered a pretty big outage. I was delighted to discover that one of their engineers, Jim Calabro, published a public writeup about it: April 2026 Ou…"
+hash: 47588d795606b5de695e38b953c52b5319e33443e2f7a6c30ff487b83443c1ba
 title: "Lorin Hochstein’s thoughts on BlueSky public Incident writeup"
-date: 2026-04-17
 link: "https://surfingcomplexity.blog/2026/04/12/thoughts-on-the-bluesky-public-incident-write-up/"
+source: newsletter
+type: links
+tags: 
+date: 2026-04-17
 status: published
 image_url: "https://surfingcomplexity.blog/wp-content/uploads/2026/04/image.png"
-source: newsletter
 newsletter: techstructive-weekly-90
-type: links
 slug: lorin-hochstein-s-thoughts-on-bluesky-public-incident-writeup
-tags:
-description: "Back on April 4, the social media site Bluesky suffered a pretty big outage. I was delighted to discover that one of their engineers, Jim Calabro, published a public writeup about it: April 2026 Ou…"
-hash: 3566d89402f759c5fc0efdde836439b333eb5985165bf2facf7f9924cdd3cfca
 ---
 My thoughts on [Lorin Hochstein’s thoughts on BlueSky public Incident writeup](https://surfingcomplexity.blog/2026/04/12/thoughts-on-the-bluesky-public-incident-write-up/): Lorin Hochstein’s thoughts on BlueSky public Incident writeup
 

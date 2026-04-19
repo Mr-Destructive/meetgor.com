@@ -1,16 +1,16 @@
 ---
-title: "You are still better at editing documents than AI"
-date: 2026-04-17
 link: "https://youtu.be/FqB_4QY6x6g"
 status: published
 image_url: "https://i.ytimg.com/vi/FqB_4QY6x6g/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-90
 type: links
 slug: you-are-still-better-at-editing-documents-than-ai
-tags:
+tags: 
 description: "You are still better at editing documents than AI"
-hash: bdae0625a52abb976183df77a2399b888b9fb97818c73edf81fa891d77b1bb66
+title: "You are still better at editing documents than AI"
+date: 2026-04-17
+source: newsletter
+hash: 86a3a33607951a6de3e61a0f6ce76a265dc78ea66b2c447152db56ab8c5d8b53
 ---
 My thoughts on [You are still better at editing documents than AI](https://youtu.be/FqB_4QY6x6g): You are still better at editing documents than AI
 

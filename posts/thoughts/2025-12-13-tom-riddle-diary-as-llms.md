@@ -1,13 +1,13 @@
 ---
-type: links
-link: "https://www.goodreads.com/quotes/718814-never-trust-anything-that-can-think-for-itself-if-you"
 slug: is-tom-riddles-diary-like-an-llm
 date: 2025-12-13
-title: "Is Tom Riddle's Diary like an LLM?"
 tags: 
-post_dir: links
 status: published
 hash: b2530ff96aba13625bab18e9f058b560ab23cb76144aac321a3f0e9d874cb4b8
+type: links
+link: "https://www.goodreads.com/quotes/718814-never-trust-anything-that-can-think-for-itself-if-you"
+title: "Is Tom Riddle's Diary like an LLM?"
+post_dir: links
 ---
 I was reading Harry Potter, the chambers of secret, the book for the first time and I came across this quote.
 

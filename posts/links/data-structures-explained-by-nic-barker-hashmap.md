@@ -1,16 +1,16 @@
 ---
-title: "Data Structures Explained by Nic Barker: HashMap"
+description: "Data Structures Explained by Nic Barker: HashMap"
 date: 2026-04-17
 link: "https://youtu.be/y11XNXi9dgs"
 status: published
-image_url: "https://i.ytimg.com/vi/y11XNXi9dgs/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-90
 type: links
+hash: a79b14194fa36fa195b175eee11365073ec4e914cda4c0ab44cd2c766b4656b3
+title: "Data Structures Explained by Nic Barker: HashMap"
+image_url: "https://i.ytimg.com/vi/y11XNXi9dgs/hqdefault.jpg"
+newsletter: techstructive-weekly-90
 slug: data-structures-explained-by-nic-barker-hashmap
-tags:
-description: "Data Structures Explained by Nic Barker: HashMap"
-hash: e9fe7a06828183ddc34d17d2cb3a704c938aad988010e077e3ece5f65a12e841
+tags: 
 ---
 My thoughts on [Data Structures Explained by Nic Barker: HashMap](https://youtu.be/y11XNXi9dgs): Data Structures Explained by Nic Barker: HashMap
 
