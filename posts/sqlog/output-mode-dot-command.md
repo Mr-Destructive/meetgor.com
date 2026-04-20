@@ -1,10 +1,10 @@
 ---
-title: "SQLite dot commands: Output mode"
 slug: sqlite-mode-dot-command
 date: 2025-09-01
 tags: ["sqlite", "sql"]
 hash: a3f4d0993527f5d0027ce354357ba5fcc005b5d3bee8c676a0dc818c6fad19e9
 type: sqlog
+title: "SQLite dot commands: Output mode"
 ---
 ## Output mode dot command
 
