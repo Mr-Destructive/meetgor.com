@@ -1,16 +1,16 @@
 ---
 title: "We need to talk about GStack"
 date: 2026-04-24
+type: links
+tags: 
 link: "https://www.youtube.com/watch?v=Rzi7oFTzjac"
 status: published
 image_url: "https://i.ytimg.com/vi/Rzi7oFTzjac/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-91
-type: links
 slug: we-need-to-talk-about-gstack
-tags:
 description: "We need to talk about GStack"
-hash: 0274dd29bdfbc217e3b10eceb558d3de2835150497a4d9b2b448cda6b104e9d6
+hash: 300ab5e71956783617532e651d633bfc0a42d679caa0630839aa58e0675ef9f6
 ---
 My thoughts on [We need to talk about GStack](https://www.youtube.com/watch?v=Rzi7oFTzjac): We need to talk about GStack
 

@@ -3,14 +3,14 @@ title: "Should you be a carpenter? Wading through AI - Part 1"
 date: 2026-04-24
 link: "https://www.youtube.com/watch?v=RJyPVLMyyuA"
 status: published
-image_url: "https://i.ytimg.com/vi/RJyPVLMyyuA/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-91
+description: "Should you be a carpenter? Wading through AI - Part 1"
+image_url: "https://i.ytimg.com/vi/RJyPVLMyyuA/hqdefault.jpg"
 type: links
 slug: should-you-be-a-carpenter-wading-through-ai-part-1
-tags:
-description: "Should you be a carpenter? Wading through AI - Part 1"
-hash: 07afd1ccd10b84fec8dc591af8c6db41cd0a2cbecf0aec51e80cc8fe87e1b4c3
+tags: 
+hash: b59b10a24c8664e1e927252959361b30ea2c7b8fadc4784f15120cacb5bbe22d
 ---
 My thoughts on [Should you be a carpenter? Wading through AI - Part 1](https://www.youtube.com/watch?v=RJyPVLMyyuA): Should you be a carpenter? Wading through AI - Part 1
 

@@ -1,16 +1,16 @@
 ---
-title: "Lights-Out Codebases and the End of the IC role"
-date: 2026-04-24
-link: "https://vascoduarte.substack.com/p/ai-assisted-coding-why-a-distinguished"
-status: published
 image_url: ""
+type: links
+hash: 99d65d5a7030b95a2d2b8885298c9f2e68b5ba715bd5a03ab722e836d435039a
+link: "https://vascoduarte.substack.com/p/ai-assisted-coding-why-a-distinguished"
 source: newsletter
 newsletter: techstructive-weekly-91
-type: links
 slug: lights-out-codebases-and-the-end-of-the-ic-role
-tags:
+tags: 
 description: "Lights-Out Codebases and the End of the IC role"
-hash: 6f191c8d660af1a09e20feb46fcae8a966488cdad2c2d79255fa4c189d4ddd3b
+title: "Lights-Out Codebases and the End of the IC role"
+date: 2026-04-24
+status: published
 ---
 My thoughts on [Lights-Out Codebases and the End of the IC role](https://vascoduarte.substack.com/p/ai-assisted-coding-why-a-distinguished): Lights-Out Codebases and the End of the IC role
 

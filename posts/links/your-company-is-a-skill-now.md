@@ -1,16 +1,16 @@
 ---
-title: "Your company is a skill now"
+newsletter: techstructive-weekly-91
+type: links
+tags: 
+description: "Your company is a skill now"
 date: 2026-04-24
 link: "https://arlo.substack.com/p/your-company-is-a-skill-now"
 status: published
 image_url: ""
-source: newsletter
-newsletter: techstructive-weekly-91
-type: links
 slug: your-company-is-a-skill-now
-tags:
-description: "Your company is a skill now"
-hash: 7785b546fe381c702f7359f0d8a4f0998c0b64829ee528e983207e33c9bd680a
+hash: 924d1a4acee33dff39b691a4dc86fa9b58e4f0bb942ffbdaeefc4f4c20aab228
+title: "Your company is a skill now"
+source: newsletter
 ---
 My thoughts on [Your company is a skill now](https://arlo.substack.com/p/your-company-is-a-skill-now): Your company is a skill now
 

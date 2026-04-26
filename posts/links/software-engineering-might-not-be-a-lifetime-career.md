@@ -1,16 +1,16 @@
 ---
-title: "Software Engineering might not be a lifetime career"
 date: 2026-04-24
 link: "https://www.seangoedecke.com/software-engineering-may-no-longer-be-a-lifetime-career/"
 status: published
+newsletter: techstructive-weekly-91
+slug: software-engineering-might-not-be-a-lifetime-career
+description: "Software Engineering might not be a lifetime career"
+title: "Software Engineering might not be a lifetime career"
 image_url: "https://www.seangoedecke.com/og-image.jpg"
 source: newsletter
-newsletter: techstructive-weekly-91
 type: links
-slug: software-engineering-might-not-be-a-lifetime-career
-tags:
-description: "Software Engineering might not be a lifetime career"
-hash: 5bfe37a5608cfccaaf0b1b6739e589ee17fca498137e2ad1df46d211fb34f61b
+tags: 
+hash: 2d6ca7edd025a1d15c4660df7e71f1c156d7a5acfa6da082db5eae54bae4b426
 ---
 My thoughts on [Software Engineering might not be a lifetime career](https://www.seangoedecke.com/software-engineering-may-no-longer-be-a-lifetime-career/): Software Engineering might not be a lifetime career
 

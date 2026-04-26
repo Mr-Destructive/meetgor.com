@@ -1,15 +1,15 @@
 ---
 title: "Techstructive Weekly #91"
-date: 2026-04-24
 slug: techstructive-weekly-91
-type: newsletter
 status: published
-source: newsletter
-canonical_url: https://techstructively.substack.com/p/techstructive-weekly-91
 description: "Learning Java, React internals, AI doomsday for programmers, model drop week, among the other things read, watched, learnt in the week from 19th to 25th April 2026"
 tags: ["newsletter", "substack"]
+hash: 20bc96bb8a8bb865b4e70b4e28a29ad888367a788302ec91f8c1a5b94b621259
+date: 2026-04-24
+type: newsletter
+source: newsletter
+canonical_url: https://techstructively.substack.com/p/techstructive-weekly-91
 ---
-
 ## Week #91
 
 It was a comeback sort of week. I still kept learning Java and fundamentals. I drilled down on dependency injection, object internals, some react too in the mix. I found LLMs are good at summarizing things, some are good, some are hallucinating, some are just give up. Yes, and I have opinions in this edition about that.

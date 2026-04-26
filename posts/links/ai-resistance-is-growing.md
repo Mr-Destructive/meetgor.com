@@ -1,16 +1,16 @@
 ---
 title: "AI Resistance is growing"
 date: 2026-04-24
-link: "https://stephvee.ca/blog/artificial%20intelligence/ai-resistance-is-growing/"
 status: published
 image_url: ""
-source: newsletter
 newsletter: techstructive-weekly-91
-type: links
 slug: ai-resistance-is-growing
-tags:
+hash: 513d371de9be45b79eb5300b0a955345fcff7c420ccfcf9433bd7bb3d19c84f3
+link: "https://stephvee.ca/blog/artificial%20intelligence/ai-resistance-is-growing/"
+source: newsletter
+type: links
+tags: 
 description: "AI Resistance is growing"
-hash: a90d2db4adacf4cf84a0a07f78218bffde5ddaab799fcb3bf3921cb4aa91f58a
 ---
 My thoughts on [AI Resistance is growing](https://stephvee.ca/blog/artificial%20intelligence/ai-resistance-is-growing/): AI Resistance is growing
 

@@ -1,16 +1,16 @@
 ---
-title: "My dear friend you just built kubernetes"
+description: "Mac's Tech Blog"
+hash: 074d48d92df3be99987822858efa265d641375a433710197086d72bfa73d9d8d
 date: 2026-04-24
-link: "https://www.macchaffee.com/blog/2024/you-have-built-a-kubernetes/"
-status: published
 image_url: "https://www.macchaffee.com/static/favicon.png"
 source: newsletter
 newsletter: techstructive-weekly-91
-type: links
 slug: my-dear-friend-you-just-built-kubernetes
-tags:
-description: "Mac's Tech Blog"
-hash: 79cb3f375f5162668c708a2f2a45cd04b272902aaa1ac4ad6e3c8401bbed849a
+title: "My dear friend you just built kubernetes"
+link: "https://www.macchaffee.com/blog/2024/you-have-built-a-kubernetes/"
+status: published
+type: links
+tags: 
 ---
 My thoughts on [My dear friend you just built kubernetes](https://www.macchaffee.com/blog/2024/you-have-built-a-kubernetes/): My dear friend you just built kubernetes
 

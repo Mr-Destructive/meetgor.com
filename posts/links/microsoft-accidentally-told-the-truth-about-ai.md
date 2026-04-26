@@ -1,16 +1,16 @@
 ---
+source: newsletter
+tags: 
+description: "Microsoft accidentally told the truth about AI"
 title: "Microsoft accidentally told the truth about AI"
+newsletter: techstructive-weekly-91
+type: links
+slug: microsoft-accidentally-told-the-truth-about-ai
+hash: ccd62dc4728381df0fc5eb4d55693706d8519e699a6d17d0de1a34c5402956cc
 date: 2026-04-24
 link: "https://www.youtube.com/watch?v=4CIlTOnc6I8"
 status: published
 image_url: "https://i.ytimg.com/vi/4CIlTOnc6I8/hqdefault.jpg"
-source: newsletter
-newsletter: techstructive-weekly-91
-type: links
-slug: microsoft-accidentally-told-the-truth-about-ai
-tags:
-description: "Microsoft accidentally told the truth about AI"
-hash: 072ec22ce542d778cfdd64a55ec59ad0a9d71c801351f07f0c5e10f84598fcf6
 ---
 My thoughts on [Microsoft accidentally told the truth about AI](https://www.youtube.com/watch?v=4CIlTOnc6I8): Microsoft accidentally told the truth about AI
 
