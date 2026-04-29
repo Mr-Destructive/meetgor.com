@@ -1,15 +1,15 @@
 ---
+source: newsletter
+link: 'https://eric-sandosham.medium.com/my-one-year-writing-journey-9dc4104676b4'
 hash: ff624d486cded5972eae67461c90f62d8020ba785806009efa364ca7329d6b26
 tags: 
-status: published
 newsletter: 2024-09-14-techstructive-weekly-7
 date: 2024-09-14
-slug: one-year-writing-journey
 type: links
 description: 'One-Year Writing Journey'
 title: 'One-Year Writing Journey'
-source: newsletter
-link: 'https://eric-sandosham.medium.com/my-one-year-writing-journey-9dc4104676b4'
+status: published
+slug: one-year-writing-journey
 ---
 ## Commentary
 
