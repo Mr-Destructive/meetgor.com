@@ -1,5 +1,4 @@
 ---
-date: 2026-01-24T00:00:00Z
 tags: 
 link: https://charity.wtf/2025/07/09/thoughts-on-motivation-and-my-40-year-career/
 image_url: https://i0.wp.com/charity.wtf/wp-content/uploads/2025/06/headshots-11.jpeg?fit=900%2C1200&#038;ssl=1
@@ -8,6 +7,7 @@ type: links
 slug: thoughts-on-motivation-and-my-40-year-old-career
 title: Thoughts on motivation and my 40 year-old career
 status: published
+date: 2026-01-24T00:00:00Z
 ---
 # Thoughts on motivation and my 40 year-old career
 
