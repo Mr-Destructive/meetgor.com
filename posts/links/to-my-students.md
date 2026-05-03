@@ -1,16 +1,16 @@
 ---
+tags: 
 title: "To my students"
-date: 2026-05-01
 link: "http://ozark.hendrix.edu/~yorgey/forest/00FD/index.xml"
 status: published
 image_url: ""
 source: newsletter
 newsletter: techstructive-weekly-92
+description: "To my students"
+hash: d10873008faa8e996ba44b9bcfa969507c216f42ba2db5d5b0b49bf85d62aa3e
+date: 2026-05-01
 type: links
 slug: to-my-students
-tags:
-description: "To my students"
-hash: e83edd20e1f645949882ab337a0b52ff5660e69df30921fefaa40b72bd599bca
 ---
 My thoughts on [To my students](http://ozark.hendrix.edu/~yorgey/forest/00FD/index.xml): To my students
 

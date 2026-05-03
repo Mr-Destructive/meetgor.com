@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #92"
-date: 2026-05-01
-slug: techstructive-weekly-92
-type: newsletter
 status: published
 source: newsletter
-canonical_url: https://techstructively.substack.com/p/techstructive-weekly-92
 description: "Back to work week, reading ai discourse, watching the end of subsidized token era, among the other things read, watched and learnt in the week from 26th April to 2nd May 2026"
 tags: ["newsletter", "substack"]
+slug: techstructive-weekly-92
+type: newsletter
+canonical_url: https://techstructively.substack.com/p/techstructive-weekly-92
+hash: dc2d64767b80b370c5bfbd7f63b6958d3eccd11338bcc485e536e5fc2e9fb1ee
+title: "Techstructive Weekly #92"
+date: 2026-05-01
 ---
-
 ## Week #92
 
 I enjoyed working this week, I am surprised I am saying that. The same thing a month back was dreading me, and now its making me wake up each morning. AI is kind of a progression and also a setback in some sense. I don’t know, but the usage will steer where the world moves with it. There will be a divide, of course, and if I am correct, it will create the biggest divide the world has ever seen.

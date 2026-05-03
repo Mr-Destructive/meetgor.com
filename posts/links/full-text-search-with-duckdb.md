@@ -1,16 +1,16 @@
 ---
-title: "Full Text search with DuckDB"
-date: 2026-05-01
-link: "https://peterdohertys.website/blog-posts/full-text-search-w-duckdb.html"
-status: published
-image_url: ""
-source: newsletter
-newsletter: techstructive-weekly-92
 type: links
 slug: full-text-search-with-duckdb
-tags:
+tags: 
+date: 2026-05-01
+status: published
+newsletter: techstructive-weekly-92
 description: "Pete Doherty is a NYC based software developer"
-hash: f7f43543832adc28e01f98d523bd15191311a558d8bef5e5beb8d3ec80da6f58
+hash: f2e79185f6e0e5d0b98b48b5ea797608b1028f3ccb3c4a1451767c3fd6b1bec5
+title: "Full Text search with DuckDB"
+link: "https://peterdohertys.website/blog-posts/full-text-search-w-duckdb.html"
+image_url: ""
+source: newsletter
 ---
 My thoughts on [Full Text search with DuckDB](https://peterdohertys.website/blog-posts/full-text-search-w-duckdb.html): Full Text search with DuckDB
 

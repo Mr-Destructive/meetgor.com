@@ -1,16 +1,16 @@
 ---
+newsletter: techstructive-weekly-92
+type: links
+slug: agentic-coding-fatigue
+description: "Agentic Coding Fatigue"
+hash: 27eb4b8ff2bad53ddc2ddb634c41f20c073468ab693eb42377084ed73a72bca2
 title: "Agentic Coding Fatigue"
 date: 2026-05-01
 link: "https://www.0xsid.com/blog/agentic-coding-fatigue"
 status: published
+tags: 
 image_url: ""
 source: newsletter
-newsletter: techstructive-weekly-92
-type: links
-slug: agentic-coding-fatigue
-tags:
-description: "Agentic Coding Fatigue"
-hash: c5f56f55f30d9395e9b33bc1f3aa956dcf7a0b814bea35e5a55cb1ba720044f4
 ---
 My thoughts on [Agentic Coding Fatigue](https://www.0xsid.com/blog/agentic-coding-fatigue): Agentic Coding Fatigue
 

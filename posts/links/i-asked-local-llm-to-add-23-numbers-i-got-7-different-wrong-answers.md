@@ -1,16 +1,16 @@
 ---
-title: "I asked Local LLM to add 23 numbers, I got 7 different wrong answers."
-date: 2026-05-01
+description: "Seven attempts, seven different wrong answers — lessons from setting up a local LLM."
 link: "https://viggy28.dev/article/local-llm-seven-wrong-answers/"
 status: published
-image_url: ""
-source: newsletter
 newsletter: techstructive-weekly-92
 type: links
+tags: 
+hash: 71dc7a89a7561f2da2576a4481ad791b37db90a6a2b5925c5a9bf70b4ec2c722
+title: "I asked Local LLM to add 23 numbers, I got 7 different wrong answers."
+date: 2026-05-01
+image_url: ""
+source: newsletter
 slug: i-asked-local-llm-to-add-23-numbers-i-got-7-different-wrong-answers
-tags:
-description: "Seven attempts, seven different wrong answers — lessons from setting up a local LLM."
-hash: f1d2e555ecf18846d176eff1a616b161b18ca9ed4fc763707ab67334a1fb74fe
 ---
 My thoughts on [I asked Local LLM to add 23 numbers, I got 7 different wrong answers.](https://viggy28.dev/article/local-llm-seven-wrong-answers/): I asked Local LLM to add 23 numbers, I got 7 different wrong answers.
 

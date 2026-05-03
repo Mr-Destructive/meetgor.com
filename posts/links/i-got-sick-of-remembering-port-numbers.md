@@ -1,16 +1,16 @@
 ---
-title: "I got sick of remembering port numbers"
-date: 2026-05-01
+type: links
+slug: i-got-sick-of-remembering-port-numbers
+hash: 5f21fc3682d005ab211bde9789ef9e469bf66fb80bf11cc9556c47bce08a4119
 link: "https://gregraiz.com/blog/local-vibe/"
-status: published
 image_url: ""
 source: newsletter
 newsletter: techstructive-weekly-92
-type: links
-slug: i-got-sick-of-remembering-port-numbers
-tags:
+tags: 
 description: "So I built local.vibe — a friendly dashboard and local .vibe hostname for every local web app on your Mac. No more localhost:3000 vs localhost:5173 roulette."
-hash: 8da7930dadafd1089d2e9ed692ea427af8bdd9744d9ec0e04fc7fa48304677b3
+title: "I got sick of remembering port numbers"
+date: 2026-05-01
+status: published
 ---
 My thoughts on [I got sick of remembering port numbers](https://gregraiz.com/blog/local-vibe/): I got sick of remembering port numbers
 

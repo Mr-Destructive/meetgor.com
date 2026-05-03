@@ -1,16 +1,16 @@
 ---
-title: "Ghostty is leaving GitHub"
-date: 2026-05-01
-link: "https://mitchellh.com/writing/ghostty-leaving-github"
 status: published
+newsletter: techstructive-weekly-92
+slug: ghostty-is-leaving-github
+tags: 
+hash: ed51850ac1549ed23a4b4c32fa2fff3643cae3ea8d4263d76688d3b69487d278
+link: "https://mitchellh.com/writing/ghostty-leaving-github"
 image_url: ""
 source: newsletter
-newsletter: techstructive-weekly-92
 type: links
-slug: ghostty-is-leaving-github
-tags:
 description: "Ghostty is leaving GitHub"
-hash: 66f2edee933f34d916df51ae9230fdbd57d925fdc8f4b0240ada152ccc99a4d4
+title: "Ghostty is leaving GitHub"
+date: 2026-05-01
 ---
 My thoughts on [Ghostty is leaving GitHub](https://mitchellh.com/writing/ghostty-leaving-github): Ghostty is leaving GitHub
 

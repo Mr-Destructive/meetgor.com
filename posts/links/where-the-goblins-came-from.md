@@ -2,15 +2,15 @@
 title: "Where the goblins came from"
 date: 2026-05-01
 link: "https://openai.com/index/where-the-goblins-came-from/"
-status: published
-image_url: ""
 source: newsletter
 newsletter: techstructive-weekly-92
-type: links
 slug: where-the-goblins-came-from
-tags:
+tags: 
+hash: 9d18a3a9082602a8e38b49e49ea3a6b4896801c3b0c39161f53c771b278fe340
+status: published
+image_url: ""
+type: links
 description: "Where the goblins came from"
-hash: c96903c5f6a0061786582cc09938cd4876490ef65b6f42db6981903725b7dde3
 ---
 My thoughts on [Where the goblins came from](https://openai.com/index/where-the-goblins-came-from/): Where the goblins came from
 

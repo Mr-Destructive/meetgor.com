@@ -1,16 +1,16 @@
 ---
+slug: making-sense-of-the-ai-hype
+hash: b3e03f62e40b67cfa779302579a97e00ce3cca59fe65f3b205b01821d2d8e51b
 title: "Making Sense of the AI hype"
-date: 2026-05-01
 link: "https://youtu.be/HgNKa9UlRF8"
+tags: 
+description: "Making Sense of the AI hype"
+date: 2026-05-01
 status: published
 image_url: "https://i.ytimg.com/vi/HgNKa9UlRF8/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-92
 type: links
-slug: making-sense-of-the-ai-hype
-tags:
-description: "Making Sense of the AI hype"
-hash: 14db615920fcc13985081b10b6a03aafba0d2cde3c12e2e5dec3b8c1957d4765
 ---
 My thoughts on [Making Sense of the AI hype](https://youtu.be/HgNKa9UlRF8): Making Sense of the AI hype
 

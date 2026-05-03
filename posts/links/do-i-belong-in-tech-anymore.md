@@ -1,16 +1,16 @@
 ---
-title: "Do I belong in Tech Anymore?"
 date: 2026-05-01
 link: "https://ky.fyi/posts/ai-burnout"
 status: published
-image_url: "/_astro/broken-phone.C77rr-ie.png"
 source: newsletter
-newsletter: techstructive-weekly-92
 type: links
-slug: do-i-belong-in-tech-anymore
-tags:
 description: "On quitting, the spread of AI, and the loss of an ideal."
-hash: 364cc413adc404a952137e5953640fad41e542617b83a34a1d2983b78462d8a1
+image_url: "/_astro/broken-phone.C77rr-ie.png"
+newsletter: techstructive-weekly-92
+slug: do-i-belong-in-tech-anymore
+tags: 
+hash: 1e90889c1b9617dd00aee205ef7f8592a301fb4431322ec1cf7f746a3ab81e4e
+title: "Do I belong in Tech Anymore?"
 ---
 My thoughts on [Do I belong in Tech Anymore?](https://ky.fyi/posts/ai-burnout): Do I belong in Tech Anymore?
 

@@ -1,16 +1,16 @@
 ---
-title: "AI isn’t taking jobs its worse"
+source: newsletter
+newsletter: techstructive-weekly-92
+tags: 
+description: "AI isn’t taking jobs its worse"
 date: 2026-05-01
+type: links
+slug: ai-isn-t-taking-jobs-its-worse
+hash: 80322fcb75c2473acdb0179bb8e31b6dbfde2c919aec9f8c089de36b11c11231
+title: "AI isn’t taking jobs its worse"
 link: "https://youtu.be/NZa5lApeFic"
 status: published
 image_url: "https://i.ytimg.com/vi/NZa5lApeFic/hqdefault.jpg"
-source: newsletter
-newsletter: techstructive-weekly-92
-type: links
-slug: ai-isn-t-taking-jobs-its-worse
-tags:
-description: "AI isn’t taking jobs its worse"
-hash: 15a0f5bb8561de0bce52c64573a875121406f4cdab0436d72347a7bbcaf5abca
 ---
 My thoughts on [AI isn’t taking jobs its worse](https://youtu.be/NZa5lApeFic): AI isn’t taking jobs its worse
 

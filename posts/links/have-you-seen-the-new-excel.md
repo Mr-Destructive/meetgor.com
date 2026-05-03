@@ -1,18 +1,16 @@
 ---
-title: "Have you seen the new Excel?"
-date: 2026-05-01
-link: "https://idiallo.com/blog/have-you-seen-the-new-xl-ai-parody"
-status: published
 image_url: "https://cdn.idiallo.com/images/assets/650/thumb.jpg"
 source: newsletter
 newsletter: techstructive-weekly-92
+title: "Have you seen the new Excel?"
+date: 2026-05-01
 type: links
 slug: have-you-seen-the-new-excel
-tags:
-description: "Stop coding. Stop hiring. Stop building. 
-
-While the tech world obsesses over large language models and neural networks, I discovered the real disruptor that has been hiding in plain sight. Mine was o"
-hash: 5ba62311fcc7a66d2fe2b70925fb647ce31cb52701b186c3eb85d97a91590e5b
+tags: 
+description: "Stop coding. Stop hiring. Stop building.
+hash: 7a5e4dcd800fa567c9881479d4280c459e92e5bd6300eb1dc28a0f528a94becf
+link: "https://idiallo.com/blog/have-you-seen-the-new-xl-ai-parody"
+status: published
 ---
 My thoughts on [Have you seen the new Excel?](https://idiallo.com/blog/have-you-seen-the-new-xl-ai-parody): Have you seen the new Excel?
 
