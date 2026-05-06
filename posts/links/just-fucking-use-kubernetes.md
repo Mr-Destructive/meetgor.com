@@ -1,16 +1,16 @@
 ---
-link: 'https://waylonwalker.com/just-fucking-use-kubernetes/'
 title: 'Just fucking use Kubernetes'
 type: links
 source: newsletter
-status: published
-slug: just-fucking-use-kubernetes
 tags: 
 date: 2025-07-05
-newsletter: 2025-07-05-techstructive-weekly-49
 image_url: 'https://shots.waylonwalker.com/shot/?url=https://waylonwalker.com/just-fucking-use-kubernetes/og/&height=600&width=1200&scaled_width=1200&scaled_height=600&format=jpg'
-description: 'Just fucking use Kubernetes'
 hash: df541f3607fdfc897060ef8988d8a768b2eb5be7249fad0c092baa043369bdb1
+link: 'https://waylonwalker.com/just-fucking-use-kubernetes/'
+status: published
+slug: just-fucking-use-kubernetes
+newsletter: 2025-07-05-techstructive-weekly-49
+description: 'Just fucking use Kubernetes'
 ---
 ## Commentary
 
