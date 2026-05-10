@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #93"
-date: 2026-05-08
 slug: techstructive-weekly-93
 type: newsletter
 status: published
 source: newsletter
-canonical_url: https://techstructively.substack.com/p/techstructive-weekly-93
 description: "Reading less tech, more fiction, cozy books, watching and hearing about tech situation and learning to work with clankers, among the other things learnt,read and consumed in the week of 3rd to 9th May"
 tags: ["newsletter", "substack"]
+canonical_url: https://techstructively.substack.com/p/techstructive-weekly-93
+hash: 77ab41b693a578cdfb10a03427cc30d22d121524f88f23fdf8ac8eb6c0871104
+title: "Techstructive Weekly #93"
+date: 2026-05-08
 ---
-
 ## Week #93
 
 It was a work heavy and cozy week, had a long weekend. AI is here, going nowhere, so trying to learn it as much as I can. Its a bit of a tricky phase of world, nobody is sure what is the right way and what is a tumbling down hill. It is usually is like that in life, but this is extreme, people are questioning their existence and stating that AI is conscious, as we even don’t know what conscious means.

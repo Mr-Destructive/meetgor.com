@@ -1,16 +1,16 @@
 ---
+newsletter: techstructive-weekly-93
+type: links
+tags: 
+description: "DHH’s new way of writing code"
+image_url: "https://i.ytimg.com/vi/JiWgKRgdgpI/hqdefault.jpg"
+source: newsletter
+slug: dhh-s-new-way-of-writing-code
+hash: 6f635160cb680560bc4c696e10768cc210ebcdc6bc5c4decd70e143a5de90192
 title: "DHH’s new way of writing code"
 date: 2026-05-08
 link: "https://youtu.be/JiWgKRgdgpI"
 status: published
-image_url: "https://i.ytimg.com/vi/JiWgKRgdgpI/hqdefault.jpg"
-source: newsletter
-newsletter: techstructive-weekly-93
-type: links
-slug: dhh-s-new-way-of-writing-code
-tags:
-description: "DHH’s new way of writing code"
-hash: 622571d61aa16b5b6e167ff5b7c088164b7633d35aa7ed84a32052149a04caa8
 ---
 My thoughts on [DHH’s new way of writing code](https://youtu.be/JiWgKRgdgpI): DHH’s new way of writing code
 

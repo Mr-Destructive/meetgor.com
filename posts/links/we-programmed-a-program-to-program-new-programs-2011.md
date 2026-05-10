@@ -1,16 +1,16 @@
 ---
+type: links
+slug: we-programmed-a-program-to-program-new-programs-2011
+tags: 
 title: "We programmed a program to program new programs (2011)"
 date: 2026-05-08
 link: "https://smbc-comics.com/comic/2011-09-08"
+source: newsletter
+description: "Saturday Morning Breakfast Cereal - 2011-09-08"
+hash: e1ee7ba49ab5b24d105d1d1fb341f619113d229320e8fbab6543dadf2b92d1b2
 status: published
 image_url: "https://www.smbc-comics.com/comics/20110908.gif"
-source: newsletter
 newsletter: techstructive-weekly-93
-type: links
-slug: we-programmed-a-program-to-program-new-programs-2011
-tags:
-description: "Saturday Morning Breakfast Cereal - 2011-09-08"
-hash: d5be9f704604fff2d81242434625d35b427280711bbf4e4784ba6271d7035a22
 ---
 My thoughts on [We programmed a program to program new programs (2011)](https://smbc-comics.com/comic/2011-09-08): We programmed a program to program new programs (2011)
 

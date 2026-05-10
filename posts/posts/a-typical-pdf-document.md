@@ -4,8 +4,8 @@ type: links
 title: "Typical PDF document"
 slug: a-typical-pdf-document
 tags: ["pdf","document","forensics","security"]
-date: 2026-01-12
 status: published
 description: ""
+date: 2026-01-12
 ---
 This is cool, i've read a lot of these and working at docsumo, makes me want to read about them more.

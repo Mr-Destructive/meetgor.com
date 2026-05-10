@@ -1,16 +1,16 @@
 ---
-title: "Andrej Karapathy: From Vibe Coding to Agentic Engineering"
-date: 2026-05-08
-link: "https://youtu.be/96jN2OCOfLs"
-status: published
-image_url: "https://i.ytimg.com/vi/96jN2OCOfLs/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-93
 type: links
-slug: andrej-karapathy-from-vibe-coding-to-agentic-engineering
-tags:
+tags: 
 description: "Andrej Karapathy: From Vibe Coding to Agentic Engineering"
-hash: 5b8fc5a9c04d1adaae24a0a6b7020e54a1d8b95ce29e4bc36a3318435ec0f368
+link: "https://youtu.be/96jN2OCOfLs"
+image_url: "https://i.ytimg.com/vi/96jN2OCOfLs/hqdefault.jpg"
+slug: andrej-karapathy-from-vibe-coding-to-agentic-engineering
+hash: 71a58474d9d8ba92aee182cfbeaf0c8b94ce3377cf9b11a8ad997596023c19a4
+title: "Andrej Karapathy: From Vibe Coding to Agentic Engineering"
+date: 2026-05-08
+status: published
+source: newsletter
 ---
 My thoughts on [Andrej Karapathy: From Vibe Coding to Agentic Engineering](https://youtu.be/96jN2OCOfLs): Andrej Karapathy: From Vibe Coding to Agentic Engineering
 

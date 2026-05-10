@@ -1,16 +1,16 @@
 ---
-title: "What’s Next for Software Tracking and Git?"
-date: 2026-05-08
 link: "https://youtu.be/HuE7OvOckfE"
 status: published
-image_url: "https://i.ytimg.com/vi/HuE7OvOckfE/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-93
 type: links
+tags: 
+hash: 9e664447496a6bc68e9047dcf778436ec396db7dc0d6017ef32ffa29b533fd29
+title: "What’s Next for Software Tracking and Git?"
+date: 2026-05-08
+image_url: "https://i.ytimg.com/vi/HuE7OvOckfE/hqdefault.jpg"
+newsletter: techstructive-weekly-93
 slug: what-s-next-for-software-tracking-and-git
-tags:
 description: "What’s Next for Software Tracking and Git?"
-hash: 51f8d08d78bdcb14f3cb6ddd7dfcb0142cd1cc2d4721dcc0256e8bbbcf673542
 ---
 My thoughts on [What’s Next for Software Tracking and Git?](https://youtu.be/HuE7OvOckfE): What’s Next for Software Tracking and Git?
 

@@ -1,16 +1,16 @@
 ---
+type: links
+slug: volatile-keyword-in-java
+tags: 
+description: "Volatile keyword in Java"
+hash: f196713b6a6c79710b5c748c25de4ebfcd2b4134b8b619762ed761bc142c0e46
 title: "Volatile keyword in Java"
 date: 2026-05-08
+source: newsletter
+newsletter: techstructive-weekly-93
 link: "https://youtu.be/yg_UPwSD3-U"
 status: published
 image_url: "https://i.ytimg.com/vi/yg_UPwSD3-U/hqdefault.jpg"
-source: newsletter
-newsletter: techstructive-weekly-93
-type: links
-slug: volatile-keyword-in-java
-tags:
-description: "Volatile keyword in Java"
-hash: f8578836b111999467ce1a72c54c1bd7eb317202a790f066effd5e0f78e0eba4
 ---
 My thoughts on [Volatile keyword in Java](https://youtu.be/yg_UPwSD3-U): Volatile keyword in Java
 

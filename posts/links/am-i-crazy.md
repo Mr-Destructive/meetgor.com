@@ -1,16 +1,16 @@
 ---
 title: "Am I Crazy?"
+status: published
+slug: am-i-crazy
+tags: 
+description: "Am I Crazy?"
+hash: 39b37e56167f25f5fde9c6c21a40949275d955ffadf684044e1747b611ac16d3
 date: 2026-05-08
 link: "https://youtu.be/Sp1EmFRDquA"
-status: published
 image_url: "https://i.ytimg.com/vi/Sp1EmFRDquA/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-93
 type: links
-slug: am-i-crazy
-tags:
-description: "Am I Crazy?"
-hash: 3c26f84b0e45161d195d2aa2fd2cd33843c445ab6e3850ce213b752745d1066d
 ---
 My thoughts on [Am I Crazy?](https://youtu.be/Sp1EmFRDquA): Am I Crazy?
 

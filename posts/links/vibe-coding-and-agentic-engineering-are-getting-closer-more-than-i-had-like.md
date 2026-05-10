@@ -1,16 +1,16 @@
 ---
-title: "Vibe coding and agentic engineering are getting closer more than I  had like"
-date: 2026-05-08
-link: "https://simonwillison.net/2026/May/6/vibe-coding-and-agentic-engineering/"
-status: published
-image_url: ""
 source: newsletter
 newsletter: techstructive-weekly-93
 type: links
 slug: vibe-coding-and-agentic-engineering-are-getting-closer-more-than-i-had-like
-tags:
+status: published
+tags: 
 description: "I recently talked with Joseph Ruscio about AI coding tools for Heavybit’s High Leverage podcast: Ep. #9, The AI Coding Paradigm Shift with Simon Willison. Here are some of my …"
-hash: d0817e7414635835597737f49e68949b3f8724847a5659772aacf5031b8a9dd5
+hash: e10b5122f8eaa3808cbdd118ce8a70c0ee450dddbc970fa8c48d817ce334dc3f
+title: "Vibe coding and agentic engineering are getting closer more than I  had like"
+date: 2026-05-08
+link: "https://simonwillison.net/2026/May/6/vibe-coding-and-agentic-engineering/"
+image_url: ""
 ---
 My thoughts on [Vibe coding and agentic engineering are getting closer more than I  had like](https://simonwillison.net/2026/May/6/vibe-coding-and-agentic-engineering/): Vibe coding and agentic engineering are getting closer more than I  had like
 
