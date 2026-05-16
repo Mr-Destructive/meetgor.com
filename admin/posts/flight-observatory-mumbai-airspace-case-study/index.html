@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    
+    <title>Flight Observatory Mumbai Airspace Case Study | Meet Gor</title>
+    <meta name="title" content="Flight Observatory Mumbai Airspace Case Study | Meet Gor">
+    <meta name="description" content="A closer analysis on the airspace around Mumbai&#39;s BOM/VABB (CSMIA) Airport. Questioning the intuitions from memories and answering and reasoning through the data.">
+    <meta name="author" content="Meet Gor">
+    <meta name="keywords" content="adsb, sql, duckdb, sqlite, python, golang, data-science">
+    <meta name="robots" content="index, follow">
+    
+    <link rel="canonical" href="https://www.meetgor.com/posts/flight-observatory-mumbai-airspace-case-study">
+    
+    
+    
+    <meta property="og:type" content="article">
+    
+    <meta property="og:url" content="https://www.meetgor.com/posts/flight-observatory-mumbai-airspace-case-study">
+    
+    <meta property="og:title" content="Flight Observatory Mumbai Airspace Case Study">
+    <meta property="og:description" content="A closer analysis on the airspace around Mumbai&#39;s BOM/VABB (CSMIA) Airport. Questioning the intuitions from memories and answering and reasoning through the data.">
+    <meta property="og:image" content="https://www.meetgor.com/mgicon.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Flight Observatory Mumbai Airspace Case Study">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Meet Gor">
+    <meta property="article:published_time" content="2026-04-02">
+    <meta property="article:modified_time" content="2026-04-02">
+    <meta property="article:author" content="Meet Gor">
+    
+    <meta property="article:tag" content="adsb">
+    
+    <meta property="article:tag" content="sql">
+    
+    <meta property="article:tag" content="duckdb">
+    
+    <meta property="article:tag" content="sqlite">
+    
+    <meta property="article:tag" content="python">
+    
+    <meta property="article:tag" content="golang">
+    
+    <meta property="article:tag" content="data-science">
+    
+    
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@meetgor711">
+    <meta name="twitter:creator" content="@meetgor711">
+    
+    <meta name="twitter:url" content="https://www.meetgor.com/posts/flight-observatory-mumbai-airspace-case-study">
+    
+    <meta name="twitter:title" content="Flight Observatory Mumbai Airspace Case Study">
+    <meta name="twitter:description" content="A closer analysis on the airspace around Mumbai&#39;s BOM/VABB (CSMIA) Airport. Questioning the intuitions from memories and answering and reasoning through the data.">
+    <meta name="twitter:image" content="https://www.meetgor.com/mgicon.png">
+    <meta name="twitter:image:alt" content="Flight Observatory Mumbai Airspace Case Study">
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.meetgor.com/posts\/flight-observatory-mumbai-airspace-case-study"
+        },
+        "headline": "Flight Observatory Mumbai Airspace Case Study",
+        "description": "A closer analysis on the airspace around Mumbai\u0027s BOM\/VABB (CSMIA) Airport. Questioning the intuitions from memories and answering and reasoning through the data.",
+        "datePublished": "2026-04-02",
+        "dateModified": "2026-04-02",
+        "author": {
+            "@type": "Person",
+            "name": "Meet Gor"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Meet Gor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/www.meetgor.com/mgicon.png"
+            }
+        },
+        
+        "keywords": "adsb, sql, duckdb, sqlite, python, golang, data-science",
+        "articleBody": "\u0026lt;h2 id=\u0026#34;introduction\u0026#34;\u0026gt;Introduction\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;I do write blogs, newsletters, but this is something wild I had written in a while. I was always curious and interested in knowing about the flights flowing over Mumbai, I do always look up and see the Airline when it appears above my head in front or on the side. But I never actually read or discovered anything true or factual about it. As a software developer, that is very unsettling, I have some ideas and observations but never tested them. I can excuse myself that I am busy and that is a toy little project to get off my hands. But now, we have LLMs and no excuses. I don\u0026#39;t need a second invitation to explore my curiosity, off I went.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;And came back with around a week or 2 of digging in data, downloading the ADS-B stream of airspace and crunching the numbers for the BOM (VABB) Mumbai\u0026#39;s Chatrapati Shivaji International Airport (CSMIA) and its vicinity. The numbers I must tell you were staggering and I couldn\u0026#39;t stop starring at them, I felt relieved and felt my childhood was worth while.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;I am writing this blog post to explain to myself, how I got here. It was a chaos in start, total misery of data. But after a few attempts of successfully accumulating the data only for BOM airport\u0026#39;s vicinity of 300 kilometers, I was able to finally make sense of the pile of data (since at one point it looked like a goble of mess).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This will be a two part blog. This one being non-technical (that is no grilling from peer developers) which will explain the why and what of the case study of the Mumbai Airport. The next part (out in a couple of days from now) will be a treat for developers (or curse words for myself, ok it won\u0026#39;t be that bad), which will explain the how.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This part is about my intuitions and the memories I had since growing up near the vicinity of Mumbai Airport. I explain what dataset I used (it was not a simple available dataset in the public, mind you that), how I structured it, what questions I asked, how I formed the queries (not in terms of SQL but human logical terms), and how I reason through the results. And trust me everything made sense.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, if you have been in Mumbai, and wondered how many planes flew above your head in a day, you are in for a treat! Buckle up! Because Mumbai Airport never stands still.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Check out the full case study here -\u0026amp;gt; \u0026lt;a href=\u0026#34;https:\/\/dev.meetgor.com\/flight-observatory\/case-study\/mumbai-airport\/\u0026#34;\u0026gt;Flight Observatory - Mumbai Airspace Case Study\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;flashback-of-mumbai-from-2010-2018\u0026#34;\u0026gt;Flashback of Mumbai from 2010-2018\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;I have spent my life in Mumbai, the two decades that I have lived here, I often feel nostalgic lookin back at the memories. The one that stands out even today is the plane spotting. Since childhood, I have seen, heard, observed planes flying above me, beyond the buildings, buzzing and slashing the concrete jungles and flat blue slums. I distinctly remember the days from my school, the 7th A classroom, located on the top of the school, the highest room on the school. I remember the days I shared sighting planes through the periods with my friends.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;It was a nostalgic experience to see\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;the regular \u0026amp;quot;Air India\u0026amp;quot; on time,\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026amp;quot;Lufthansa\u0026amp;quot; with its guzzling sound,\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;occasional \u0026amp;quot;UPS\u0026amp;quot; with the jumbo cargo,\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;and the millions of \u0026amp;quot;Jet Air\u0026amp;quot; and \u0026amp;quot;Spicejet\u0026amp;quot; among them.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;There was a different joy of just seeing and observing them, admiring the beauty of Boeing 787, 777 and 747s, Airbus A330 and occasional very rare Airbus A380 the king.\nThose are fresh in my mind. I was lucky to be honest to have an airplane enthusiastic friends with me. One of them was notoriously a die-hard fan of British Airways though. The 11:45 British Airways was a treat to him, with me cursing words at British people, hoping the plane to crash (just teasing him of course).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;We almost had a anticipation on the next plane to come and over the year we had a schedule that which one will come next depending on the period at the day.\nWe had formulated that the BOM Airport\u0026#39;s frequency was 2:30 minutes (that\u0026#39;s 24 flights in an hour, 576 in a day). That is a lot of flights landing over our head, I used to brag that BOM was (is?) the single runway busiest airport. And take a strange pride in defaming British Airways. Those were the times :)\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;And now, I don\u0026#39;t have that luxury to sit with that friend and gaze at the sky (if I will, I might get existential crisis I think). I wanted to get those moments back, I don\u0026#39;t have the luxury to sit with that friend though, but I realize I have another friend a tool of sorts. LLMs.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;I realize I am a programmer now, whatever I want to do, I can. Its just a wish away.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;the-idea\u0026#34;\u0026gt;The Idea\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;And I began making this project. To observe the sky. Not by my eyes. By tracking, analyzing and crunching data from APIs.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Nothing comes for free. Constraints start developing, but there is no engineer who has no constraints. For me I didn\u0026#39;t want to setup a cloud infrastructure(not that I can\u0026#39;t I just don\u0026#39;t have the budget for it) and do bunch of credit card swipes, I didn\u0026#39;t have the luxury for that, and for buying heavy 200$ subscription of those AI-tools either. So what?\u0026lt;\/p\u0026gt;\n\u0026lt;blockquote\u0026gt;\n\u0026lt;p\u0026gt;Engineers aren\u0026#39;t made from freedom. They\u0026#39;re shaped by constraints.\u0026lt;\/p\u0026gt;\n\u0026lt;\/blockquote\u0026gt;\n\u0026lt;p\u0026gt;I explored every API out there to see what I can use the best. And lo and behold I found some. Not everything was great, there were samples, just a day for a month, limited data, but I kept digging and digging. I found what I needed, data points for Mumbai (or any airport for that matter) across a decade. I thought I might get full-day, full-year data, a decade worth of data. But what I got was a decade worth of data, for all months, but only for the first day of the month. Sigh!\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;But I kept moving. I don\u0026#39;t care how little the data is. It is real. It is 12 days of the year for 8 years. That is not a lot, but enough to find patterns. And I can surely say, Mumbai airport hasn\u0026#39;t changed drastically over the decade.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;I thought that was not enough! I wanted more, I wanted live data. Can I get live? I though I could, I did but sort of. Its not the most accurate representation of flights. But a good guess, a practical one at least.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, I built \u0026lt;a href=\u0026#34;https:\/\/dev.meetgor.com\/flight-observatory\u0026#34;\u0026gt;Flight Observatory\u0026lt;\/a\u0026gt;. A live and historical data analysis tool or a webapp of sorts for viewing flights captured by the ADS-Bs around the world. I kept storing the live data and gobbled them into a historical section. From the other dataset and some live observations(which turned out to be a disappointment) I also made a case study for Mumbai Airport.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This will be not quite nerdy and technical, even if you are not a technical person, strap on. Its going to be a fun read.\nThe next part will be a treat for the technical people reading this, so put on your glazing glasses and bickering comments for that post later.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;what-i-found-tldr\u0026#34;\u0026gt;What I found (TLDR)\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Mumbai Airspace is very consistent. It is busy in a very Mumbai way: a lot of movement, but with a clear pattern. The traffic pattern is strongest in the early morning and evening.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The daily activity spreads across the early morning, the workday, and the evening. In the airport-proximate analysis:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;The strongest hourly movement shows up around 07:00 IST\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Other heavy hours around 06:00, 11:00, 17:00, 20:00, 21:00, and 22:00.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;On the sampled days, the data produced:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;code\u0026gt;21,923\u0026lt;\/code\u0026gt; airport-proximate events\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Split into:\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;code\u0026gt;12,723\u0026lt;\/code\u0026gt; landings\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;code\u0026gt;9,200\u0026lt;\/code\u0026gt; takeoffs\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;With a median landing-to-next-takeoff gap of \u0026lt;code\u0026gt;1.5\u0026lt;\/code\u0026gt; minutes.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;That last number matters. It is the airport\u0026#39;s strength and the health checkup number. It says the airport is turning movements over very quickly, which matches the reputation Mumbai has for being tightly packed.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The airspace itself is occupied for a while:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Median landing run: \u0026lt;code\u0026gt;34.5 minutes\u0026lt;\/code\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Median takeoff run: \u0026lt;code\u0026gt;25.1 minutes\u0026lt;\/code\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;So landings stay visible longer than takeoffs. That makes sense operationally, arrivals spend more time in descent and approach, while departures clear out faster once they lift off.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The same aircraft also comes back around fairly quickly:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;median same-aircraft ground time: \u0026lt;code\u0026gt;96.5 minutes\u0026lt;\/code\u0026gt;\nThat means the aircraft are not sitting idle for long. The fleet is being reused in a steady loop, which fits a high-frequency airport like Mumbai.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;And the shape of the traffic is not random:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Saturday is the busiest weekday in the sample\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;the landing and takeoff corridors split cleanly across the airport area\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;the dominant heading clusters show the same directional axis being used again and again\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;Across the full analysis set, I ended up with about\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;~17 million observations (that looks like a gigantic lot, but it isn\u0026#39;t)\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;~151,000 inferred flight runs\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Spread across ~4,900 aircraft hexes\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;~4,800 registrations\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;~140 aircraft types.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;That feels right for Mumbai. It is a city that never really stops moving (it actually sleeps, but internationally awake), and the airspace behaves the same way. The airport-proximate movement counts are also not tiny, it is structured, dense, and repetitive. The airport works like a tight system, not a loose one.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;notes-and-clarifications\u0026#34;\u0026gt;Notes and Clarifications\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;The data itself was not clean in the neat, airline-report sense. It is raw observation data: points every few seconds, over and over again, with altitude,\nspeed, heading, position, and callsign changing as aircraft move across the sky every 5 seconds or 30 seconds(depending on the year). I had to group those observations into inferred flight runs before it became useful. Once I did that, the picture got much clearer.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Most of the useful traffic is post-covid traffic too. The analysis is heavily weighted toward 2022 to 2025.\u0026lt;\/p\u0026gt;\n\u0026lt;blockquote\u0026gt;\n\u0026lt;p\u0026gt;The ADS-B for the BOM (VABB) actually started the tracking of airports around late 2017, early 2018, and that too was per minute. So it was very sparse and not necessarily capturing the full spectrum.\nThis data is from 2018 to 2026, not the full day of each month. It is sampled to be the first full day of each month (i.e. 1st April 2024, 1st of May 2024, and so on). Also the data points from 2018 to mid-2020 is snapshot of 60 seconds and moving from late 2020 through 2026 (till march) is snapshot of 5 seconds.\nThe data is only for ~78 days(not continuous, its the 1st day of month). 2022-2025 full years (12 days), there are only 3 days in 2018, since ADS-B was active after mid-2018, and the dip in 2020-21 due to COVID, so little or no traffic observations.\u0026lt;\/p\u0026gt;\n\u0026lt;\/blockquote\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;----------------------------\n|  Year  |  Number of days |\n---------------------------|\n|  2018  |      3          |\n|  2019  |      11         |\n|  2020  |      5          |\n|  2021  |      9          |\n|  2022  |      12         |\n|  2023  |      12         |\n|  2024  |      12         |\n|  2025  |      12         |\n|  2026  |      3          |\n----------------------------\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;blockquote\u0026gt;\n\u0026lt;p\u0026gt;The numbers are real, but they are still a proxy. They are not ATC logs. They are not airport ops records. They are ADS-B-derived movement patterns around Mumbai. That means the data is powerful for showing pattern, density, clustering, and dominance, but it should not be mistaken for official runway statistics. This data doesn\u0026#39;t infer the activity the airport is doing exactly as in an official ATC sense, but it does tell you something real about how packed and continuous the traffic feels once you look at it through ADS-B data.\u0026lt;\/p\u0026gt;\n\u0026lt;\/blockquote\u0026gt;\n\u0026lt;blockquote\u0026gt;\n\u0026lt;p\u0026gt;ADS-B short for Automatic Dependent Surveillance Broadcast that allows the aircraft to capture its own position and other details like (altitude, GPS based location, direction, speed, hex code i.e. unique aircraft code) and broadcasts (sends in the open as a radio signal), this gets captured by listening Air Traffic Controllers(ATC), Airports, satellites, networks, etc which then track and use it for internal purposes. That could be then used for tracking on the Airport, communnicating, averting accidents, etc.\u0026lt;\/p\u0026gt;\n\u0026lt;\/blockquote\u0026gt;\n\u0026lt;h2 id=\u0026#34;initial-questions-and-exploration\u0026#34;\u0026gt;Initial Questions and Exploration\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;I was looking for a historical dataset that could show me flight activity over Mumbai. I did not expect it to be perfect, but I did expect it to be workable. The first thing to understand is that this is not a clean flight log. It is a stream of observations. Each aircraft keeps broadcasting its position, altitude, speed, heading, and identity over time. That means the raw data is not \u0026lt;code\u0026gt;one row per flight\u0026lt;\/code\u0026gt;. It is more like \u0026lt;code\u0026gt;one row per movement in time for a given aircraft\u0026lt;\/code\u0026gt;. To make it useful, I had to turn those repeated observations into inferred flight runs. That is what makes the analysis readable. Instead of staring at thousands of raw position points, I can ask more human questions:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;When is Mumbai busiest?\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Which airlines show up the most?\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Which aircraft dominate?\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Where do planes start descending?\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Where do they take off from?\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;How long is the gap between one landing and the next takeoff?\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;That shift from raw observations to inferred runs is what made the rest of the project possible.\nI landed on the ADS-B Exchange historical data because it looked promising. At first glance, it seemed like I had found a long historical archive. But there was a catch I did not fully appreciate at the beginning: much of the data was sampled by month, and a lot of it was only the first day of each month. That was smaller than I hoped, but still useful enough to extract patterns from.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That was the point where I stopped thinking about the data as a raw archive and started thinking about it as something I could actually analyze.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;making-sense-of-the-data\u0026#34;\u0026gt;Making \u0026amp;quot;sense\u0026amp;quot; of the data\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;So, I had millions of observations. Because a single minute has 12 snapshots and if you do the math (not asking you to do it, but if you are curious), we end up with around 17,280 snapshot for a single day (12 snapshots per minute * 60 minutes * 24 hours). If you stack it up for around 12 months, that really grows big.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, what exactly were these snapshots? Could I directly use them in querying the database?\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;No, not quite. It actually depends on what questions we might need answering.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;what-is-a-snapshot-here\u0026#34;\u0026gt;What is a Snapshot here\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;A snapshot is basically a list of observations (or set of status) for the aircrafts currently in the airspace. The initial snapshot that I download from \u0026lt;a href=\u0026#34;https:\/\/samples.adsbexchange.com\/index.html#readsb-hist\u0026#34;\u0026gt;ADS-B Exchange\u0026lt;\/a\u0026gt; has a full world air-traffic and I never want that full data, I just want the tiny airspace around the Mumbai one. So we filter the latitude and longitude position around Mumbai. So, each snapshot finally becomes the aircrafts flying around the radius (30km to give a number) at that time. So we take those kind of snapshots at 5 second interval.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So let\u0026#39;s suppose there are 2 flights around Mumbai currently one landing and one taking off:\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;These will be a snapshot.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;json\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code class=\u0026#34;language-json\u0026#34;\u0026gt;[\n    {\n        \u0026#34;icao24\u0026#34;: \u0026#34;123456\u0026#34;,\n        \u0026#34;latitude\u0026#34;: \u0026#34;19.123\u0026#34;,\n        \u0026#34;longitude\u0026#34;: \u0026#34;73.123\u0026#34;,\n        \u0026#34;altitude\u0026#34;: 500,\n        \u0026#34;velocity\u0026#34;: -100,\n        \u0026#34;heading\u0026#34;: 90,\n        \u0026#34;timestamp\u0026#34;: \u0026#34;2022-01-01T00:00:00Z\u0026#34;\n    },\n    {\n        \u0026#34;icao24\u0026#34;: \u0026#34;8901\u0026#34;,\n        \u0026#34;latitude\u0026#34;: \u0026#34;19.083\u0026#34;,\n        \u0026#34;longitude\u0026#34;: \u0026#34;72.123\u0026#34;,\n        \u0026#34;altitude\u0026#34;: 1000,\n        \u0026#34;velocity\u0026#34;: 300,\n        \u0026#34;heading\u0026#34;: 90,\n        \u0026#34;timestamp\u0026#34;: \u0026#34;2022-01-01T00:00:00Z\u0026#34;\n    }\n]\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;After 5 seconds you might see a change in the latitude and longitude (positions), the speed, and the altitude (also the timestamp). So we get another snapshot which shows the status of those aircraft currently in the radius of Mumbai, maybe in the next snapshot another aircraft is about to land, so it appears in the snapshot too. So on, you get the point right? If the aircraft stays within the radius of Mumbai for more than a minute (which everyone might, often more than a minute even 10-20 minutes?) then we might have 12 observations for that aircraft across those snapshots. We basically have a record or a progression of the aircraft over time. That is, in essence, a time series data. We are measuring a change of an entity over a period of time.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, this is what I get from the downloaded snapshots which are in millions.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;How do I make sense of them?\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Well, let\u0026#39;s ask a question, then the scope can be reduced or we can move in specific direction.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;questions-on-the-data\u0026#34;\u0026gt;Questions on the data\u0026lt;\/h2\u0026gt;\n\u0026lt;blockquote\u0026gt;\n\u0026lt;p\u0026gt;What are the total number of flights over Mumbai in 2026 so far?\u0026lt;\/p\u0026gt;\n\u0026lt;\/blockquote\u0026gt;\n\u0026lt;p\u0026gt;Well, now you can see, we are talking about flights or distinct aircraft over a time. That is a distinct thing from the observations we have, we have to first lock in the time, but the deeper question is how do we group these observations to get flights?\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That is why the question need to change a little before it can be answered properly. I am asking how many distinct flight runs exist in the data, how long they last, when they start, when they end, and whether they are landing, taking off, or just passing through the Mumbai airspace. Once I do that, the raw snapshots stop being noise and start becoming something I can actually reason about.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, what constitutes a flight run? That is a question that we need to answer before proceeding.\u0026lt;\/p\u0026gt;\n\u0026lt;h4 id=\u0026#34;what-is-a-flight-run\u0026#34;\u0026gt;What is a Flight Run\u0026lt;\/h4\u0026gt;\n\u0026lt;p\u0026gt;A flight run is my way of saying: this group of observations belongs to the same aircraft movement. It is not one row, and it is not one timestamp. It is the whole stretch of time where the same aircraft keeps showing up in the snapshots and its position, altitude, speed, and heading keep changing in a way that looks like one continuous movement.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Now, how do we distinguish an aircraft?\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;A unique aircraft means one distinct plane in the dataset, usually identified by its unique aircraft code, like hex or registration.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;This matters because the same aircraft can appear in many snapshots while it is in Mumbai\u0026#39;s airspace. If I only counted rows, I would be counting the same aircraft again and again. But if I group those rows into a single run, then I can treat it more like one flight-shaped event. That gives me something much closer to what I actually want to study.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;observations-to-flight-runs\u0026#34;\u0026gt;Observations to Flight Runs\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;So, I loaded the raw snapshots\/observations into the dataset after compressing from json to csv to parquet files (dont worry about the details), into a duck database session.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;I had table schema like:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;code\u0026gt;observations\u0026lt;\/code\u0026gt; is just all the monthly Parquet files unioned together.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;code\u0026gt;observations_clean\u0026lt;\/code\u0026gt; cleans the fields and turns text like altitude, speed, lat\/lon, etc. into usable numeric columns.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;code\u0026gt;observations_enriched\u0026lt;\/code\u0026gt; adds convenience fields like registration, aircraft type, airline_code, is_indian_registration, etc.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;From this we need to group into a flight run that could track each flight. So, I went and created a view that will do that:\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;As we know we have \u0026lt;code\u0026gt;hex\u0026lt;\/code\u0026gt; in the data for each observations, that can be used to identify unique aircrafts in the airspace, however there is a catch.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Each aircraft in ADS-B data is identified by a unique hex code, which represents the physical plane. But planes don\u0026#39;t operate just one journey, they fly multiple routes throughout the day. This is where the callsign becomes important. A callsign represents the flight the aircraft is currently operating (for example, AI101 or 6E203).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So, we need a combination of \u0026lt;code\u0026gt;hex\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;callsign\u0026lt;\/code\u0026gt; to identify a flight run.\nI sorted the observations by aircraft and time, and then compared each row with the one just before it. If the same aircraft disappeared for too long, I treated that as a break. If the flight code changed, I treated that as a new run too. That gave me a cleaner way to read the data. The same aircraft could still appear many times, but those repeated sightings would stay inside one continuous stretch instead of being counted as separate things. In other words, I was no longer looking at a pile of random snapshots. I was looking at movement. Once that rule was in place, the rest of the questions started making sense. I could count runs instead of rows, compare landings and takeoffs, look at how long an aircraft stayed in the airspace, and see when the traffic was building up or dropping off. That was the point where the data stopped feeling messy and started feeling usable.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That is the first step to answer the question, how many flights are there in Mumbai over 2026?\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;how-many-flights-are-there-in-mumbai-over-2026\u0026#34;\u0026gt;How many flights are there in Mumbai over 2026?\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Once I started grouping those repeated sightings into flight runs, the question became much clearer. Instead of asking how many rows exist, I could ask how many distinct aircraft movements exist from 1st of January, February and March of 2026. That is the number I actually care about. It tells me how much traffic was visible, when it showed up, and how those movements were spread across the day.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;There are approximately \u0026lt;code\u0026gt;7,237\u0026lt;\/code\u0026gt; inferred flight runs for the 3 full days of the 2026.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;For the 12 full days of 2024, there were approximately \u0026lt;code\u0026gt;51,441\u0026lt;\/code\u0026gt; inferred flight runs, and for 2025 there were approximately \u0026lt;code\u0026gt;43,324\u0026lt;\/code\u0026gt;. For 2026, it is just the first quarter (3 days compared to 12 days of those earlier years, so a good balance).\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Now we can move into interesting questions\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;when-is-mumbai-most-busy\u0026#34;\u0026gt;When is Mumbai most busy?\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Once I had the raw snapshots grouped into flight runs and filtered down to the airport-proximate ones, the first thing I wanted to see was simple: when does Mumbai actually get busy?\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;For a \u0026amp;quot;24 hour day\u0026amp;quot; chart, I used:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;one row per hour\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;count movements for each sampled day \u002b hour\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;then average those hourly counts across sampled days\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;That gives us a number representing on a typical sampled day, how many movements happen at 07:00, 08:00, etc.?\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/flight-observatory-mumbai\/landing_takeoff_hourly.png\u0026#34; alt=\u0026#34;Landing Takeoff Hourly\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The answer is pretty clear. In this sample, the busiest hour is 07:00 IST, with 1,086 movements. Right behind it are 20:00 (1,074), 17:00 (1,073), 18:00 (1,069), 21:00 (1,044), 11:00 (1,043), 19:00 (1,038), and 22:00 (1,032). The quietest hour is 03:00, with just 246 movements. So the traffic is not flat at all. It has a shape, and that shape is very visible once you count the flights as runs instead of raw rows.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;However if we take the average across all the sampled days, we get the same picture.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;For construcing the query for getting this, we want to know when the airport is most active during the day, so we can:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Keeps only airport-proximate events (lat and lon)\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Labels each event as landing or takeoff (based on speed and altitude)\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Converts the time to IST\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Groups by hour of day\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Counts movements in each hour bucket\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/flight-observatory-mumbai\/hourly_avg.png\u0026#34; alt=\u0026#34;Movement Hourly Average\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;If we take the median instead, then the busiest hours are 17:00 IST, with 30.46 movements, 18:00 IST with 30.54 movements and 07:00 IST with 30.17 movements that makes it very consistent to the average. The quietest hour is still 03:00 with just 7.69 movements.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That gives us a good answer and the difference is honestly not that big. The busiest hour is 07:00 and 17:00 with summed average and median respectively, and quietest is 03:00.\nThe summed view and the averaged view tell the same story, but from two slightly different angles. In the total sample, 07:00 is the busiest hour, followed closely by 20:00 and 17:00. In the average-per-day view, the evening shifts slightly ahead, with 17:00 and 18:00 taking the top two spots and 07:00 still staying near the top. The quietest hour is the same in both views: 03:00. So the exact peak changes a little, but the shape does not. Mumbai is still busiest in the morning and evening, and quietest in the late night.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;which-airlines-show-up-most\u0026#34;\u0026gt;Which Airlines Show Up Most\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;I want to know which airlines dominate the traffic.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Once the rows were grouped into flight runs, I could stop looking at raw sightings and just count which airline codes kept appearing. I used the first part of the flight code as a rough airline label and counted the runs for each one. That makes the dominant carriers obvious instead of buried inside repeated observations.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;What I did was with a query:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Takes the grouped flight runs\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Pulls the airline prefix from the flight code\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Counts how many runs each prefix appears in\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;What we get:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;A dominance chart\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;It shows which carriers keep repeating in the sample\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;IndiGo and Air India should stand out immediately\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;This was quite evident, as I have observed Mumbai\u0026#39;s sky for a long. Indigo and Air India are firmly dominant across the board. However, there are some other interesting observations like Vistara Air, Akasa and Emirates. In earlier pre-covid era, it used to be Jet Airways, but now Indigo has taken the lead.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The difference in the first 3 is quite a big one, and I think its right! Since Indigo and Air-India, not only in Mumbai, they are preferred over other domestic airlines.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Some other notable ones down the order are \u0026lt;code\u0026gt;SIA\u0026lt;\/code\u0026gt; for Singapore Airlines, \u0026lt;code\u0026gt;DLH\u0026lt;\/code\u0026gt; as Lufthansa, and \u0026lt;code\u0026gt;BAW\u0026lt;\/code\u0026gt; as British Airways. They are not as heavily appearing as domestic ones, they are regulars on a routine, each day every day.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;┌──────────────┬───────────┐\n│ airline_code │ movements │\n│   varchar    │   int64   │\n├──────────────┼───────────┤\n│ IGO          │     55050 │\n│ AIC          │     20892 │\n│ VTI          │      9789 │\n│ AKJ          │      6923 │\n│ UAE          │      5057 │\n│ SEJ          │      4869 │\n│ AXB          │      4514 │\n│ QTR          │      3728 │\n│ GOW          │      2191 │\n│ ETD          │      2186 │\n│ IAD          │      2151 │\n│ @@@          │      1708 │\n│ SVA          │      1660 │\n│ ABY          │      1542 │\n│ ETH          │      1504 │\n│ OMA          │      1479 │\n│ SDG          │      1448 │\n│ GFA          │      1214 │\n│ SIA          │       979 │\n│ KAC          │       825 │\n│ DLH          │       771 │\n│ THY          │       754 │\n│ MAS          │       745 │\n│ BAW          │       721 │\n│ FDB          │       705 │\n└──────────────┴───────────┘\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/flight-observatory-mumbai\/airline_routine.png\u0026#34; alt=\u0026#34;Airline Breakdown\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;A good validation query! It seems the data was correctly analysed.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;which-aircraft-type-dominates\u0026#34;\u0026gt;Which Aircraft Type Dominates\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;This was something I didn\u0026#39;t have much idea about. I was not well versed with flight models and their names. So I let it shape what we can find.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;┌────────────────────────────────────────────────┬───────────┐ \n│ aircraft_type                                  │ movements │     \n│    varchar                                     │   int64   │\n├────────────────────────────────────────────────┼───────────┤\n│ A20N (Airbus A320neo)                          │     49269 │\n│ A21N (Airbus A321neo)                          │     27739 │\n│ B38M (Boeing 737 MAX 8)                        │     13138 │\n│ A320 (Airbus A320)                             │     12587 │\n│ B77W (Boeing 777-300ER)                        │      7543 │\n│ B738 (Boeing 737-800)                          │      5643 │\n│ B789 (Boeing 787-9 Dreamliner)                 │      3162 │\n│ A321 (Airbus A321)                             │      2761 │\n│ B788 (Boeing 787-8 Dreamliner)                 │      2482 │\n│ B77L (Boeing 777-200LR \/ 777 freighter family) │      2428 │\n│ A359 (Airbus A350-900)                         │      2385 │\n│ A333 (Airbus A333)                             │      2067 │\n│ AT76 (A319)                                    │      1862 │\n│ A319 (Airbus A319)                             │      1736 │\n│ A388 (Airbus A388)                             │      1648 │\n└────────────────────────────────────────────────┴───────────┘\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/flight-observatory-mumbai\/aircraft_types.png\u0026#34; alt=\u0026#34;Aircraft type breakdown\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;where-landings-start\u0026#34;\u0026gt;Where Landings Start\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;The question here is not where the aircrafts lands on the runway. It is where the aircrafts start coming down. That is a different thing. If I want to find the landing corridor, I should not look for the final stop point. I should look for the first clear movement in each run when the altitude starts dropping in a way that looks like descent. That gives me the start of the landing path, which is what matters for the map.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Once I have those descent-start points, the next step is simple: group them by location and altitude. If the same area keeps showing up, that means aircrafts are repeatedly beginning their descent there. That is how the east-side corridor and the Ghatkopar-area low altitudes start making sense. The map is not showing a single landing dot. It is showing the place where arrival begins to feel like arrival.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The patterns for a sharp dip is observed near the airport only, but overall, the gradual dip is seen on the Navi Mumbai side which is very true. The aircrafts gradually lowering their speeds and altitude descending into the runway strip.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;19.09,73.02 is east of the airport, out toward the eastern Mumbai \/ Thane creek \/ Navi Mumbai corridor.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;19.09,73.08 and 19.09,73.10 are farther east, so they sit deeper into the Navi Mumbai \/ Airoli \/ Ghansoli \/ Thane-side approach corridor.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;┌────────────┬────────────┬────────────────┬────────────────────┬───────────────┐\n│ lat_bucket │ lon_bucket │ descent_points │     avg_alt_ft     │ median_alt_ft │\n│   double   │   double   │     int64      │       double       │    double     │\n├────────────┼────────────┼────────────────┼────────────────────┼───────────────┤\n│      19.09 │      73.08 │            142 │ 3405.6338028169016 │        3400.0 │\n│      19.09 │       73.1 │            135 │  3652.962962962963 │        3600.0 │\n│      19.09 │      72.86 │            133 │   36.2406015037594 │           0.0 │\n│      19.09 │      73.02 │            123 │  2638.008130081301 │        2625.0 │\n│      18.58 │      73.94 │            122 │ 2115.1639344262294 │        2175.0 │\n│      19.09 │      73.01 │            119 │  2439.285714285714 │        2425.0 │\n│      19.09 │      73.11 │            118 │ 3747.4576271186443 │        3750.0 │\n│      19.09 │      73.09 │            116 │ 3565.0862068965516 │        3525.0 │\n│      19.09 │      72.94 │            113 │ 1342.9203539823009 │        1350.0 │\n│      19.09 │      73.12 │            113 │ 3951.7699115044247 │        3925.0 │\n│      19.09 │      73.23 │            108 │ 5678.7037037037035 │        5675.0 │\n│      19.09 │      73.24 │            102 │  5867.156862745098 │        5850.0 │\n│      19.09 │      73.13 │            101 │  4157.425742574257 │        4175.0 │\n│      19.09 │      73.07 │             99 │ 3325.5050505050503 │        3325.0 │\n│      19.09 │      73.18 │             97 │  4990.721649484536 │        5025.0 │\n│      19.09 │       73.2 │             97 │  5232.216494845361 │        5175.0 │\n│      19.09 │      73.14 │             96 │  4284.635416666667 │        4275.0 │\n│      19.09 │      72.91 │             94 │  819.4148936170212 │         862.5 │\n│      18.58 │      74.01 │             92 │ 3408.4239130434785 │        3400.0 │\n│      19.09 │       73.0 │             92 │  2288.586956521739 │        2300.0 │\n...\n...\n\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/flight-observatory-mumbai\/descent_density_east_bw.png\u0026#34; alt=\u0026#34;Landing Density\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;A clear strip can be seen with the aircrafts descending into the runway strip. Also the dip is more pronounced in the Navi Mumbai \/ Airoli \/ Ghansoli \/ Thane-side approach corridor.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;I also looked for a query on the Ghatkopar region, and it was amazing to see that it was so near. Around \u0026lt;code\u0026gt;19.08, 72.94\u0026lt;\/code\u0026gt; is Ghatkopar, and aircrafts have an approximate average of 800 feets. 90% of them are below 1,100 feet, that is crazy low. And that clearly explains why the strip straight to the East-West of the airport line (which some part of Ghatkopar falls into) doesn\u0026#39;t have any tall towers.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;┌────────────────┬───────────────────┬───────────────┬────────────┬────────────────────┐\n│ descent_points │    avg_alt_ft     │ median_alt_ft │ p90_alt_ft │     p95_alt_ft     │\n│     int64      │      double       │    double     │   double   │       double       │\n├────────────────┼───────────────────┼───────────────┼────────────┼────────────────────┤\n│            395 │ 859.7544303797469 │         775.0 │     1175.0 │ 1332.4999999999989 │\n└────────────────┴───────────────────┴───────────────┴────────────┴────────────────────┘\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;Another good metric to verify the dataset is proving right.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;where-takeoffs-start\u0026#34;\u0026gt;Where Takeoffs Start\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;Takeoffs are the same idea in reverse. The question is not where the plane ends up in the sky. The question is where it starts climbing away from the airport. So instead of looking for a finished takeoff, I look for the first point in each run where altitude clearly begins to rise. That gives me the start\nof the departure path.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Then I group those start points by location. If the same area keeps lighting up, that tells me where departures are really getting going. That is why the  takeoff map is tighter and closer to the airport than the landing map. It is not trying to show the whole flight. It is only trying to show the first step out of the airport, which is the part that makes the pattern visible.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The sharp climb starts very close to the airport itself, and that is what the takeoff pattern shows clearly. The aircrafts begin to gain altitude almost immediately after leaving the runway, so the takeoff strip stays tight around the airport side instead of spreading out far into the city.\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;code\u0026gt;19.09,72.81\u0026lt;\/code\u0026gt; and \u0026lt;code\u0026gt;19.09,72.82\u0026lt;\/code\u0026gt; sit just west of the airport and catch the early climb corridor right after liftoff. This is the sea side, beyond the Juhu aerodrome, perfect. \u0026lt;code\u0026gt;19.09,72.78\u0026lt;\/code\u0026gt; to \u0026lt;code\u0026gt;19.09,72.80\u0026lt;\/code\u0026gt; are a little farther out, but they still belong to the same western departure corridor, showing that the climb pattern stays compact near the field.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;code\u0026gt;19.09,72.84\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;19.09,72.85\u0026lt;\/code\u0026gt;, \u0026lt;code\u0026gt;19.09,72.86\u0026lt;\/code\u0026gt;, and 19.09,72.87 are even closer to the airport edge, so they sit in the immediate departure strip where the climb becomes visible first.\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;┌────────────────────┬───────────────────┬────────────────┬────────────────────┬───────────────┐\n│     lat_bucket     │    lon_bucket     │ takeoff_points │     avg_alt_ft     │ median_alt_ft │\n│       double       │      double       │     int64      │       double       │    double     │\n├────────────────────┼───────────────────┼────────────────┼────────────────────┼───────────────┤\n│              19.09 │             72.81 │           1473 │ 2092.6171079429737 │        2050.0 │\n│              19.09 │ 72.82000000000001 │           1446 │ 1889.3672199170123 │        1825.0 │\n│              19.09 │             72.84 │           1374 │ 1094.5778748180494 │        1075.0 │\n│              19.09 │ 72.85000000000001 │           1329 │  764.8796087283672 │         725.0 │\n│              19.09 │             72.83 │           1208 │ 1518.4395695364237 │        1450.0 │\n│              19.09 │             72.87 │           1079 │  465.8016682113068 │         200.0 │\n│              19.09 │              72.8 │            994 │ 2233.6770623742455 │        2150.0 │\n│              19.09 │             72.86 │            848 │  698.1816037735849 │         400.0 │\n│              19.09 │             72.79 │            538 │  2579.460966542751 │        2525.0 │\n│              19.09 │             72.78 │            486 │  2790.792181069959 │        2750.0 │\n│              19.09 │             72.77 │            418 │ 3224.5215311004786 │        3000.0 │\n│              19.09 │             72.76 │            331 │ 3665.7099697885196 │        3475.0 │\n│              19.09 │             72.75 │            234 │ 3924.5726495726494 │        3662.5 │\n│              19.09 │             72.88 │            206 │  976.2135922330098 │         200.0 │\n│              19.09 │             72.74 │            137 │  4216.605839416058 │        3875.0 │\n│              19.09 │             72.73 │            129 │  4780.232558139535 │        4925.0 │\n│              19.09 │             72.72 │             68 │  4781.985294117647 │        4837.5 │\n│              19.18 │             72.74 │             62 │  7492.741935483871 │        7325.0 │\n│              19.19 │             72.75 │             62 │  7558.870967741936 │        7525.0 │\n│ 19.080000000000002 │             72.73 │             54 │  5360.185185185185 │        5162.5 │\n...\n...\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/flight-observatory-mumbai\/takeoff_density_west_bw.png\u0026#34; alt=\u0026#34;Takeoff Density\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;There is no major analysis here, since it has plain ocean in front of it, we can\u0026#39;t really track the location thereafter. We can just use the direction that we\u0026#39;ll check separately.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;frequency-of-landings-and-takeoffs\u0026#34;\u0026gt;Frequency of landings and takeoffs\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;I wanted the spacing between landings on their own, and takeoffs on their own. So I grouped the airport events by type, sorted them in time order, and measured the gap between one landing and the next landing, and one takeoff and the next takeoff. The median is the number to trust most here, because a few long gaps pull the average up.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The process was simple:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Classify events as landing or takeoff\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Sort by time inside each sampled day\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Compare each event to the next event of the same type\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Measure the minutes between them\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/flight-observatory-mumbai\/landing_takeoff_frequency.png\u0026#34; alt=\u0026#34;Landing and Takeoff Frequency\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In this sample, landings are spaced about 2.58 minutes apart at the median, and takeoffs about 3.0 minutes apart.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;What can we observe from this?\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Landings are spaced a bit more tightly than takeoffs\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Takeoffs have a slightly longer pause between consecutive events\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;The median is the number to trust most here, because a few long gaps pull the average up\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;This is the answer I have been chasing all along and it truly feels great to see it that close. As children we had observed the landing frequency as around 2 minute 30 seconds, and it couldn\u0026#39;t be more accurate than this. But the great thing about the BOM\/VABB Airport is that it still holds true even after a decade. It truly is the single runway busiest airport.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;landing-to-takeoff-gaps\u0026#34;\u0026gt;Landing-to-Takeoff Gaps\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;I want to measure the time between a flight landed and another took-off (not the same aircraft), any flight, like just after a flight landed, how much time it took for another to takeoff. I think it has to be in the range of 1-2 minutes. That\u0026#39;s the status BOM\/VABB Airport has to be the busiest single run way airport. Let\u0026#39;s check and validate it with data.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;To answer that, I look at the airport events in time order and take each landing as a starting point. Then I find the next takeoff that follows it and\nmeasure the time gap between the two. If that gap is small, it means the airport is keeping the movement going very quickly. If it is large, it means there was a longer pause before the next departure. The interesting part is not the average alone, but the shape of the gaps across the sample.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;In this sample, that gap is very short most of the time. The median is 1.5 minutes, and the average is about 2.1 minutes, across 5,297 landing-to-takeoff  intervals. Most of the bars are packed into the first few minutes, which tells me the airport is turning movements over very quickly. The long tail is there too, but it is small. So the real story is not \u0026amp;quot;there are a few huge delays\u0026amp;quot; it is that the typical landing is followed by a takeoff almost immediately.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/flight-observatory-mumbai\/turnaround_gap_refresh_clean_horizontal.png\u0026#34; alt=\u0026#34;Landing-to-Takeoff Turnaround Gap\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;And another question with intuition validated with data.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;If you think about it for a while, the median is 1.5 minutes, if you do the math (60\/1.5 = 40 movements \/ hour). That alligns well with the hourly average. And it even validates the historical peak of Mumbai of 51 movements with 1,036 daily movements, that number is not far.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;It is that the airport\u0026#39;s fame comes from how little space there is between operations. The chart makes that visible: most of the time, the next takeoff follows a landing almost immediately, and that is exactly the kind of traffic that built BOM\u0026#39;s reputation.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;weekday-pattern\u0026#34;\u0026gt;Weekday Pattern\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;This is a bit interesting question, since I honestly had no clue about the answer. I thought every day would have the same pattern. I was wrong.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;To get this, it was straight forward.\nI took the airport events I had already classified as landings and takeoffs, grouped them by weekday in Mumbai time, and counted how many movements landed in each bucket. That gives a simple answer to a simple question: which day of the week gets the most airport activity? This question is asking about the breakdown of the flights based on days of the week.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;┌─────────────┬──────────────┬──────────┬──────────┬───────────┐\n│ weekday_num │ weekday_name │ landings │ takeoffs │ movements │\n│    int64    │   varchar    │  int128  │  int128  │   int64   │\n├─────────────┼──────────────┼──────────┼──────────┼───────────┤\n│           0 │ Sunday       │     1444 │     1239 │      2683 │\n│           1 │ Monday       │     1383 │      942 │      2325 │\n│           2 │ Tuesday      │     1695 │     1337 │      3032 │\n│           3 │ Wednesday    │     1748 │     1053 │      2801 │\n│           4 │ Thursday     │     1805 │     1236 │      3041 │\n│           5 │ Friday       │     1859 │     1323 │      3182 │\n│           6 │ Saturday     │     2789 │     2070 │      4859 │\n└─────────────┴──────────────┴──────────┴──────────┴───────────┘\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/flight-observatory-mumbai\/weekday_breakdown.png\u0026#34; alt=\u0026#34;Weekday Takeoff-Landing Flights Breakdown\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The result is pretty clear in the sample. Saturday stands out as the busiest day by a wide margin, with 4,859 movements, followed by Friday at 3,182 and Thursday at 3,041. Monday is the quietest at 2,325.\u0026lt;\/p\u0026gt;\n\u0026lt;blockquote\u0026gt;\n\u0026lt;p\u0026gt;Landings are higher than takeoffs on every weekday, but the weekend spike is the real signal here. So the sample does not look evenly spread across the week, it has a strong Saturday peak and a weaker Monday trough.\u0026lt;\/p\u0026gt;\n\u0026lt;\/blockquote\u0026gt;\n\u0026lt;p\u0026gt;I then looked into the dataset and tried to find the count of each day in the sample, since i had around ~70 days of data (1 day * 12 months * 6 years)\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;Saturday 12\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Sunday 11\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Wednesday 11\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Friday 11\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Tuesday 10\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Thursday 10\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;Monday 8\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;And that can explain why Saturday is the busiest day. The sample is not evenly distributed, but it is more or less evenly distributed across the calendar.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;hotspots--direction\u0026#34;\u0026gt;Hotspots \/ Direction\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;The question here is when the aircrafts starts landing or taking off, what direction are they actually pointing? That\u0026#39;s quite obvious right? But I want to identify a deeper pattern here, from where are they coming from and where are they heading towards.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That matters because it tells you whether Mumbai\u0026#39;s traffic is spread randomly across the compass or funneled through one stable corridor. If the airport is using the same flow again and again, the headings should cluster into a small set of directions instead of being evenly scattered.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;To get this, we can:\u0026lt;\/p\u0026gt;\n\u0026lt;ul\u0026gt;\n\u0026lt;li\u0026gt;take each inferred flight run\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;classify as a landing or takeoff\u0026lt;\/li\u0026gt;\n\u0026lt;li\u0026gt;capture the heading at the relevant point in the run.\u0026lt;\/li\u0026gt;\n\u0026lt;\/ul\u0026gt;\n\u0026lt;p\u0026gt;For landings, it uses the heading at the end of the run.\nFor takeoffs, it uses the heading at the start.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/flight-observatory-mumbai\/landing_direction_map.png\u0026#34; alt=\u0026#34;Landing Direction Map\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/flight-observatory-mumbai\/takeoff_direction_map.png\u0026#34; alt=\u0026#34;Takeoff Direction Map\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Those headings are then grouped into direction sectors and counted, which is what produces the direction chart.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/flight-observatory-mumbai\/landing_heading_hist_vertical.png\u0026#34; alt=\u0026#34;Landing Heading Histogram\u0026#34;\u0026gt;\n\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/flight-observatory-mumbai\/takeoff_heading_hist_vertical.png\u0026#34; alt=\u0026#34;Takeoff Heading Histogram\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The result is very strong and very repetitive. Most landings cluster around 270°, with a smaller 90° cluster, and takeoffs are also dominated by 270°. In the heading data, the top landing sector is 270° with 14,316 points, and the top takeoff sector is also 270° with 10,848 points. That tells me the airport is not behaving like a random cloud of movement. It is using the same directional axis again and again, which is exactly why the hotspot map looks like a corridor instead of a scatterplot.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;time-in-airspace\u0026#34;\u0026gt;Time in Airspace\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;The question here is are the aircrafts just passing through, or do they stay around Mumbai for a while? The idea is simple, if landings take longer than takeoffs, that usually means approach and descent are keeping the aircraft in the airspace longer.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;One thing I wanted to know was how long aircraft actually stay around Mumbai once they enter the airport flow.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/flight-observatory-mumbai\/special_time_in_airspace.png\u0026#34; alt=\u0026#34;Time in Airspace\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So I looked at the duration of each inferred run and compared landings, takeoffs, and the full set together. The pattern is pretty clear: landings stay in the airspace longer than takeoffs. The median landing run is 34.5 minutes, while the median takeoff run is 25.1 minutes. Across all airport events, the median is 27.3 minutes. That tells me the traffic is not just passing through fast. A lot of it is lingering long enough for the airspace to feel full, especially on the landing side.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The interesting part here is not just that landings last longer than takeoffs. It is what that tells me about the way Mumbai moves aircraft through its airspace. A landing is not a single movement. It is a long descent, even slower, and then the final stretch into the runway, so it naturally stays visible in the data for longer. Takeoffs are different. Once an aircraft leaves the runway and starts climbing out, it clears the airport zone much faster.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That is why the landing median is 34.5 minutes, while takeoffs sit closer to 25.1 minutes. This does not mean the aircraft is simply flying slower in the sky. It means the arrival side of the airport keeps aircraft in the flow for longer, which is exactly what you would expect at a busy airport like Mumbai. It also hints at sequencing and approach management: arrivals are being held in the pattern of the airport longer than departures, which is the kind of  behavior that makes the airspace feel crowded even before you count the total number of flights.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So the real takeaway is this: Arrivals spend more time inside the airport\u0026#39;s operating envelope, while departures clear out faster. That difference is part of the airport\u0026#39;s style, and it helps explain why the airspace feels full even when the hourly flow looks ordinary on paper.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;aircraft-turnaround-time\u0026#34;\u0026gt;Aircraft Turnaround Time\u0026lt;\/h3\u0026gt;\n\u0026lt;blockquote\u0026gt;\n\u0026lt;p\u0026gt;After this aircraft lands, how long does it stay on the ground before it takes off again?\u0026lt;\/p\u0026gt;\n\u0026lt;\/blockquote\u0026gt;\n\u0026lt;p\u0026gt;This is a good question, because it gives a deeper look at the activity on the airport. It doesn\u0026#39;t necessarily give much but still a valid metric to observe.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;So I matched each landing with the next takeoff for the same aircraft on the same day. That gives a proper aircraft-level ground-time measure, instead of a flight-level handoff.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/flight-observatory-mumbai\/special_same_aircraft_ground_gap.png\u0026#34; alt=\u0026#34;Aircraft Turnaround Time\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;What I observed:\nThe turnaround time is steady, but not extremely fast. The median ground time is 96.5 minutes, which is about 1 hour 37 minutes. The middle half of the aircraft stays between 77.5 and 130.5 minutes, and the 90th percentile goes up to 185.3 minutes. Most of the pairs sit in the 60-180 minute range, which suggests a working fleet that is being reused at a regular pace rather than left idle for long stretches.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;That also hints at the kind of airport Mumbai is. This looks much more like a high-frequency rotation airport than a place where aircraft disappear for half a day between uses. A lot of the traffic is probably made up of domestic and short-to-medium-haul operations, where the same aircraft can land, sit for a bit, and then go back out again within a couple of hours. So the takeaway is not just \u0026amp;quot;there is a gap\u0026amp;quot; It is that Mumbai keeps the aircraft moving in a fairly tight loop, which fits the airport\u0026#39;s reputation for being heavily used and constantly in motion.\u0026lt;\/p\u0026gt;\n\u0026lt;h3 id=\u0026#34;international-vs-domestic-flights\u0026#34;\u0026gt;International vs Domestic Flights\u0026lt;\/h3\u0026gt;\n\u0026lt;p\u0026gt;I also wanted to see how much of Mumbai\u0026#39;s traffic is Indian-registered versus foreign-registered. I could not see the route directly in the ADS-B feed, so I used aircraft registration as a proxy: \u0026lt;code\u0026gt;VT-\u0026lt;\/code\u0026gt; for Indian-registered aircraft and everything else as foreign-registered. That is not the same thing as domestic vs international routes, but it gives a useful high-level split.\u0026lt;\/p\u0026gt;\n\u0026lt;div class=\u0026#34;code-block\u0026#34;\u0026gt;\u0026lt;div class=\u0026#34;code-header\u0026#34;\u0026gt;\u0026lt;span class=\u0026#34;language-name\u0026#34;\u0026gt;\u0026lt;\/span\u0026gt;\u0026lt;button class=\u0026#34;copy-button\u0026#34;\u0026gt;\u0026lt;svg xmlns=\u0026#34;http:\/\/www.w3.org\/2000\/svg\u0026#34; width=\u0026#34;24\u0026#34; height=\u0026#34;24\u0026#34; viewBox=\u0026#34;0 0 24 24\u0026#34; fill=\u0026#34;none\u0026#34; stroke=\u0026#34;currentColor\u0026#34; stroke-width=\u0026#34;2\u0026#34; stroke-linecap=\u0026#34;round\u0026#34; stroke-linejoin=\u0026#34;round\u0026#34; class=\u0026#34;feather feather-copy\u0026#34;\u0026gt;\u0026lt;rect x=\u0026#34;9\u0026#34; y=\u0026#34;9\u0026#34; width=\u0026#34;13\u0026#34; height=\u0026#34;13\u0026#34; rx=\u0026#34;2\u0026#34; ry=\u0026#34;2\u0026#34;\u0026gt;\u0026lt;\/rect\u0026gt;\u0026lt;path d=\u0026#34;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\u0026#34;\u0026gt;\u0026lt;\/path\u0026gt;\u0026lt;\/svg\u0026gt;\u0026lt;\/button\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;pre\u0026gt;\u0026lt;code\u0026gt;┌────────────────────────┬───────────┐\n│         bucket         │ movements │\n│        varchar         │   int64   │\n├────────────────────────┼───────────┤\n│ Unknown                │      3399 │\n│ Indian-registered (VT) │    110492 │\n│ Foreign-registered     │     37589 │\n└────────────────────────┴───────────┘\n\u0026lt;\/code\u0026gt;\u0026lt;\/pre\u0026gt;\u0026lt;\/div\u0026gt;\u0026lt;p\u0026gt;\u0026lt;img src=\u0026#34;https:\/\/meetgor-cdn.pages.dev\/flight-observatory-mumbai\/special_domestic_international_proxy.png\u0026#34; alt=\u0026#34;Domestic vs International Flight Aircraft Carrier Split\u0026#34;\u0026gt;\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The result is clear: about \u0026lt;code\u0026gt;72.9%\u0026lt;\/code\u0026gt; of movements are Indian-registered, while \u0026lt;code\u0026gt;24.8%\u0026lt;\/code\u0026gt; are foreign-registered.\nSo the airport is still dominated by Indian traffic by count, but foreign aircraft are not a side note, or even a minority. They are a substantial and regular part of the flow.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;what-surprised-me\u0026#34;\u0026gt;What Surprised Me\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;What surprised me most was not that Mumbai is busy. I already expected that. What surprised me was how tight and consistent the whole system is. The airport does not just have a lot of movement, it has a deadly consistency to it. A landing is followed by a takeoff almost immediately, the same aircraft comes back into service in about an hour and a half, and the busiest hours are not random bursts but repeatable peaks that keep showing up in the same parts of the day.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;The other thing that stood out was how directional the traffic is. Once I started looking at landings and takeoffs on the map, the pattern stopped looking like scattered noise and started looking like a corridor. The airport is not using the full sky evenly. It keeps leaning on the same approach and departure axis, which makes the movement feel much more concentrated than a simple flight count would suggest. I mean that is no brainer, since it can disrupt the residential living, the noise and the unpredictable zoning of planes is not airports should be doing. And Mumbai does it very neatly.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;I also did not expect the weekday pattern to be so uneven. I assumed the traffic would be roughly similar across the week, but Saturday clearly pulled ahead in the sample. That was a good reminder that airports are not just shaped by the clock, they are also shaped by the calendar. Even with a dataset this limited, the weekly pattern still shows through.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;There is the big myth which gets debunked here, that is \u0026amp;quot;Mumbai Airport is busiest in the late night\u0026amp;quot;. Opposite is true here. The airport is busiest in the morning and evening, and quietest in the late night. The airport is not empty for long. Though there might be international flights in the late night but they don\u0026#39;t land and takeoff with the frequency as close as Indigo does, so that Mumbaikars can sleep finally.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Another small but satisfying surprise was that the numbers matched the memory. As a child, I had the feeling that Mumbai\u0026#39;s sky was never empty for long. The data backed that up. It felt satisfying to see the numbers in front of me for the frequency of landing, the takeoff to landing gaps, the dominance of airline, and mapping them to intuition and memories. The frequency is consistent like crazy, the turnaround period really tight, people do have a favorite preference of Indigo, everything just feels calm but its really quick and consistent. The airport really does stand up to its name \u0026amp;quot;Single Runway Busiest Airport\u0026amp;quot;.\u0026lt;\/p\u0026gt;\n\u0026lt;h2 id=\u0026#34;conclusion\u0026#34;\u0026gt;Conclusion\u0026lt;\/h2\u0026gt;\n\u0026lt;p\u0026gt;Well! That was a lot I admit. But it was fun. Atleast to me (I had said, it was a post for me!). I hope you got a little smile out of it if not just felt good reading about how Mumbai\u0026#39;s Airport Operate.\nThis is still ADS-B data, so it is a proxy, not an official operational log. But for the question I started with, it is enough. The feeling I had as a kid was real, Mumbai\u0026#39;s sky was never empty for long. The frequency of landing is truly at 2 minute 30 second roughly speaking, which just makes me feel joyous, the airport turnaround time is quite a sharp and tight one, making it really a Mumbai-like busy runway.\nBut that is just part 1 buddy! Haven\u0026#39;t nerded about the complications of ADS-B data and my struggles of it, fighting with the limited disk space to compress the data and juggernauting queries to get results. That is the next part.\u0026lt;\/p\u0026gt;\n\u0026lt;p\u0026gt;Check out the full case study here -\u0026amp;gt; \u0026lt;a href=\u0026#34;https:\/\/dev.meetgor.com\/flight-observatory\/case-study\/mumbai-airport\/\u0026#34;\u0026gt;Flight Observatory - Mumbai Airspace Case Study\u0026lt;\/a\u0026gt;\u0026lt;\/p\u0026gt;\n"
+    }
+    </script>
+    
+    
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <link rel="stylesheet" href="/post-navigation.css">
+    <link rel="stylesheet" href="/post-preview.css">
+    
+    <link rel="icon" href="/mgicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/mgicon.png">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link id="syntax-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.13.0/sql-wasm.js"></script>
+    <link rel="stylesheet" href="/sql-playground.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js"></script>
+    <script src="/sql-playground.js"></script>
+    
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const stylesheet = document.getElementById("syntax-theme");
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function setSyntaxTheme(theme) {
+            if (theme === "secondary") {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css";
+            } else {
+                stylesheet.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css";
+            }
+        }
+
+        
+        document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+        });
+
+        
+        const currentTheme = localStorage.getItem("theme") || "default";
+        if (currentTheme === "secondary") {
+            body.classList.add("secondary-theme");
+            if (themeToggle) themeToggle.checked = true;
+        }
+        setSyntaxTheme(currentTheme);
+
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'secondary' : 'default';
+                if (themeToggle.checked) {
+                    body.classList.add('secondary-theme');
+                } else {
+                    body.classList.remove('secondary-theme');
+                }
+                localStorage.setItem('theme', newTheme);
+                setSyntaxTheme(newTheme);
+            });
+        }
+        
+        
+        const editBtn = document.getElementById('editor-edit');
+        if (editBtn) {
+            editBtn.addEventListener('click', async function () {
+                const rawSlug = "posts\/flight-observatory-mumbai-airspace-case-study";
+                const type = "posts";
+                let slug = rawSlug;
+                const typePrefix = type + "/";
+                if (slug.startsWith(typePrefix)) {
+                    slug = slug.slice(typePrefix.length);
+                }
+                console.log("Editing post:", slug, type);
+                const functionBase = (window.location.hostname.endsWith("netlify.app") || window.location.hostname === "localhost")
+                    ? ""
+                    : "https:\/\/devmeetgor.netlify.app";
+                const url = functionBase
+                    + "/.netlify/functions/api?slug=" + encodeURIComponent(slug)
+                    + "&method=edit&type=" + encodeURIComponent(type)
+                    + "&prefixURL=" + encodeURIComponent("");
+                
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("Failed to fetch edit content");
+                    const html = await res.text();
+                    document.querySelector('.post-content').innerHTML = html;
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading editor content");
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    <script src="/seasonal-effects.js" defer></script>
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav class="site-nav">
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/now" aria-label="Now">Now</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <form class="site-search" action="/search" method="get" role="search" onsubmit="addPageContextToSearch(event)">
+    <label class="visually-hidden" for="site-search-input">Search</label>
+    <input id="site-search-input" name="q" type="search" placeholder="Search..." autocomplete="off">
+    <input type="hidden" id="has-posts-input" name="context" value="">
+  </form>
+  <script>
+    function addPageContextToSearch(event) {
+      
+      const hasPostsOnPage = document.querySelectorAll('[data-search-entry]').length > 0;
+      const contextInput = document.getElementById('has-posts-input');
+      contextInput.value = hasPostsOnPage ? 'page' : 'full';
+    }
+  </script>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+    <button id="editor" onclick="location.href='/editor'" aria-label="Editor">
+      Editor
+    </button>
+  
+</header>
+
+    
+    <main class="container">
+        <article class="blog-post">
+            <h1>Flight Observatory Mumbai Airspace Case Study</h1>
+
+            
+            
+                
+            
+            
+            
+            
+
+            
+            
+            <div class="post-meta">
+                Published on <time datetime="2026-04-02">2026-04-02</time>
+            </div>
+
+            
+            
+            <div class="post-meta">
+                Type: <a href="/posts">posts</a>
+            </div>
+            
+            <div class="post-meta tags">
+                <span class="post-series-label">Tags:</span>
+                
+                <a href="/tags/adsb">#adsb</a>
+                
+                <a href="/tags/sql">#sql</a>
+                
+                <a href="/tags/duckdb">#duckdb</a>
+                
+                <a href="/tags/sqlite">#sqlite</a>
+                
+                <a href="/tags/python">#python</a>
+                
+                <a href="/tags/golang">#golang</a>
+                
+                <a href="/tags/data-science">#data-science</a>
+                
+            </div>
+
+            
+            
+            
+            
+            
+            
+            
+            
+            <div class="post-meta admin-controls">
+                <button id="editor-edit">Edit</button>
+                <button id="editor-delete" 
+                        onclick="location.href='/editor/?slug=posts\/flight-observatory-mumbai-airspace-case-study&method=delete'">
+                    Delete
+                </button>
+            </div>
+            
+            
+            <hr>
+            
+            <div class="post-content">
+                <style>
+                    .post-content img {
+                        display: block;
+                        width: 100%;
+                        max-width: 100%;
+                        height: auto;
+                    }
+                </style>
+                <h2 id="introduction">Introduction</h2>
+<p>I do write blogs, newsletters, but this is something wild I had written in a while. I was always curious and interested in knowing about the flights flowing over Mumbai, I do always look up and see the Airline when it appears above my head in front or on the side. But I never actually read or discovered anything true or factual about it. As a software developer, that is very unsettling, I have some ideas and observations but never tested them. I can excuse myself that I am busy and that is a toy little project to get off my hands. But now, we have LLMs and no excuses. I don't need a second invitation to explore my curiosity, off I went.</p>
+<p>And came back with around a week or 2 of digging in data, downloading the ADS-B stream of airspace and crunching the numbers for the BOM (VABB) Mumbai's Chatrapati Shivaji International Airport (CSMIA) and its vicinity. The numbers I must tell you were staggering and I couldn't stop starring at them, I felt relieved and felt my childhood was worth while.</p>
+<p>I am writing this blog post to explain to myself, how I got here. It was a chaos in start, total misery of data. But after a few attempts of successfully accumulating the data only for BOM airport's vicinity of 300 kilometers, I was able to finally make sense of the pile of data (since at one point it looked like a goble of mess).</p>
+<p>This will be a two part blog. This one being non-technical (that is no grilling from peer developers) which will explain the why and what of the case study of the Mumbai Airport. The next part (out in a couple of days from now) will be a treat for developers (or curse words for myself, ok it won't be that bad), which will explain the how.</p>
+<p>This part is about my intuitions and the memories I had since growing up near the vicinity of Mumbai Airport. I explain what dataset I used (it was not a simple available dataset in the public, mind you that), how I structured it, what questions I asked, how I formed the queries (not in terms of SQL but human logical terms), and how I reason through the results. And trust me everything made sense.</p>
+<p>So, if you have been in Mumbai, and wondered how many planes flew above your head in a day, you are in for a treat! Buckle up! Because Mumbai Airport never stands still.</p>
+<p>Check out the full case study here -&gt; <a href="https://dev.meetgor.com/flight-observatory/case-study/mumbai-airport/">Flight Observatory - Mumbai Airspace Case Study</a></p>
+<h2 id="flashback-of-mumbai-from-2010-2018">Flashback of Mumbai from 2010-2018</h2>
+<p>I have spent my life in Mumbai, the two decades that I have lived here, I often feel nostalgic lookin back at the memories. The one that stands out even today is the plane spotting. Since childhood, I have seen, heard, observed planes flying above me, beyond the buildings, buzzing and slashing the concrete jungles and flat blue slums. I distinctly remember the days from my school, the 7th A classroom, located on the top of the school, the highest room on the school. I remember the days I shared sighting planes through the periods with my friends.</p>
+<p>It was a nostalgic experience to see</p>
+<ul>
+<li>the regular &quot;Air India&quot; on time,</li>
+<li>&quot;Lufthansa&quot; with its guzzling sound,</li>
+<li>occasional &quot;UPS&quot; with the jumbo cargo,</li>
+<li>and the millions of &quot;Jet Air&quot; and &quot;Spicejet&quot; among them.</li>
+</ul>
+<p>There was a different joy of just seeing and observing them, admiring the beauty of Boeing 787, 777 and 747s, Airbus A330 and occasional very rare Airbus A380 the king.
+Those are fresh in my mind. I was lucky to be honest to have an airplane enthusiastic friends with me. One of them was notoriously a die-hard fan of British Airways though. The 11:45 British Airways was a treat to him, with me cursing words at British people, hoping the plane to crash (just teasing him of course).</p>
+<p>We almost had a anticipation on the next plane to come and over the year we had a schedule that which one will come next depending on the period at the day.
+We had formulated that the BOM Airport's frequency was 2:30 minutes (that's 24 flights in an hour, 576 in a day). That is a lot of flights landing over our head, I used to brag that BOM was (is?) the single runway busiest airport. And take a strange pride in defaming British Airways. Those were the times :)</p>
+<p>And now, I don't have that luxury to sit with that friend and gaze at the sky (if I will, I might get existential crisis I think). I wanted to get those moments back, I don't have the luxury to sit with that friend though, but I realize I have another friend a tool of sorts. LLMs.</p>
+<p>I realize I am a programmer now, whatever I want to do, I can. Its just a wish away.</p>
+<h2 id="the-idea">The Idea</h2>
+<p>And I began making this project. To observe the sky. Not by my eyes. By tracking, analyzing and crunching data from APIs.</p>
+<p>Nothing comes for free. Constraints start developing, but there is no engineer who has no constraints. For me I didn't want to setup a cloud infrastructure(not that I can't I just don't have the budget for it) and do bunch of credit card swipes, I didn't have the luxury for that, and for buying heavy 200$ subscription of those AI-tools either. So what?</p>
+<blockquote>
+<p>Engineers aren't made from freedom. They're shaped by constraints.</p>
+</blockquote>
+<p>I explored every API out there to see what I can use the best. And lo and behold I found some. Not everything was great, there were samples, just a day for a month, limited data, but I kept digging and digging. I found what I needed, data points for Mumbai (or any airport for that matter) across a decade. I thought I might get full-day, full-year data, a decade worth of data. But what I got was a decade worth of data, for all months, but only for the first day of the month. Sigh!</p>
+<p>But I kept moving. I don't care how little the data is. It is real. It is 12 days of the year for 8 years. That is not a lot, but enough to find patterns. And I can surely say, Mumbai airport hasn't changed drastically over the decade.</p>
+<p>I thought that was not enough! I wanted more, I wanted live data. Can I get live? I though I could, I did but sort of. Its not the most accurate representation of flights. But a good guess, a practical one at least.</p>
+<p>So, I built <a href="https://dev.meetgor.com/flight-observatory">Flight Observatory</a>. A live and historical data analysis tool or a webapp of sorts for viewing flights captured by the ADS-Bs around the world. I kept storing the live data and gobbled them into a historical section. From the other dataset and some live observations(which turned out to be a disappointment) I also made a case study for Mumbai Airport.</p>
+<p>This will be not quite nerdy and technical, even if you are not a technical person, strap on. Its going to be a fun read.
+The next part will be a treat for the technical people reading this, so put on your glazing glasses and bickering comments for that post later.</p>
+<h2 id="what-i-found-tldr">What I found (TLDR)</h2>
+<p>Mumbai Airspace is very consistent. It is busy in a very Mumbai way: a lot of movement, but with a clear pattern. The traffic pattern is strongest in the early morning and evening.</p>
+<p>The daily activity spreads across the early morning, the workday, and the evening. In the airport-proximate analysis:</p>
+<ul>
+<li>The strongest hourly movement shows up around 07:00 IST</li>
+<li>Other heavy hours around 06:00, 11:00, 17:00, 20:00, 21:00, and 22:00.</li>
+</ul>
+<p>On the sampled days, the data produced:</p>
+<ul>
+<li><code>21,923</code> airport-proximate events</li>
+<li>Split into:
+<ul>
+<li><code>12,723</code> landings</li>
+<li><code>9,200</code> takeoffs</li>
+</ul>
+</li>
+<li>With a median landing-to-next-takeoff gap of <code>1.5</code> minutes.</li>
+</ul>
+<p>That last number matters. It is the airport's strength and the health checkup number. It says the airport is turning movements over very quickly, which matches the reputation Mumbai has for being tightly packed.</p>
+<p>The airspace itself is occupied for a while:</p>
+<ul>
+<li>Median landing run: <code>34.5 minutes</code></li>
+<li>Median takeoff run: <code>25.1 minutes</code></li>
+</ul>
+<p>So landings stay visible longer than takeoffs. That makes sense operationally, arrivals spend more time in descent and approach, while departures clear out faster once they lift off.</p>
+<p>The same aircraft also comes back around fairly quickly:</p>
+<ul>
+<li>median same-aircraft ground time: <code>96.5 minutes</code>
+That means the aircraft are not sitting idle for long. The fleet is being reused in a steady loop, which fits a high-frequency airport like Mumbai.</li>
+</ul>
+<p>And the shape of the traffic is not random:</p>
+<ul>
+<li>Saturday is the busiest weekday in the sample</li>
+<li>the landing and takeoff corridors split cleanly across the airport area</li>
+<li>the dominant heading clusters show the same directional axis being used again and again</li>
+</ul>
+<p>Across the full analysis set, I ended up with about</p>
+<ul>
+<li>~17 million observations (that looks like a gigantic lot, but it isn't)</li>
+<li>~151,000 inferred flight runs</li>
+<li>Spread across ~4,900 aircraft hexes</li>
+<li>~4,800 registrations</li>
+<li>~140 aircraft types.</li>
+</ul>
+<p>That feels right for Mumbai. It is a city that never really stops moving (it actually sleeps, but internationally awake), and the airspace behaves the same way. The airport-proximate movement counts are also not tiny, it is structured, dense, and repetitive. The airport works like a tight system, not a loose one.</p>
+<h2 id="notes-and-clarifications">Notes and Clarifications</h2>
+<p>The data itself was not clean in the neat, airline-report sense. It is raw observation data: points every few seconds, over and over again, with altitude,
+speed, heading, position, and callsign changing as aircraft move across the sky every 5 seconds or 30 seconds(depending on the year). I had to group those observations into inferred flight runs before it became useful. Once I did that, the picture got much clearer.</p>
+<p>Most of the useful traffic is post-covid traffic too. The analysis is heavily weighted toward 2022 to 2025.</p>
+<blockquote>
+<p>The ADS-B for the BOM (VABB) actually started the tracking of airports around late 2017, early 2018, and that too was per minute. So it was very sparse and not necessarily capturing the full spectrum.
+This data is from 2018 to 2026, not the full day of each month. It is sampled to be the first full day of each month (i.e. 1st April 2024, 1st of May 2024, and so on). Also the data points from 2018 to mid-2020 is snapshot of 60 seconds and moving from late 2020 through 2026 (till march) is snapshot of 5 seconds.
+The data is only for ~78 days(not continuous, its the 1st day of month). 2022-2025 full years (12 days), there are only 3 days in 2018, since ADS-B was active after mid-2018, and the dip in 2020-21 due to COVID, so little or no traffic observations.</p>
+</blockquote>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>----------------------------
+|  Year  |  Number of days |
+---------------------------|
+|  2018  |      3          |
+|  2019  |      11         |
+|  2020  |      5          |
+|  2021  |      9          |
+|  2022  |      12         |
+|  2023  |      12         |
+|  2024  |      12         |
+|  2025  |      12         |
+|  2026  |      3          |
+----------------------------
+</code></pre></div><blockquote>
+<p>The numbers are real, but they are still a proxy. They are not ATC logs. They are not airport ops records. They are ADS-B-derived movement patterns around Mumbai. That means the data is powerful for showing pattern, density, clustering, and dominance, but it should not be mistaken for official runway statistics. This data doesn't infer the activity the airport is doing exactly as in an official ATC sense, but it does tell you something real about how packed and continuous the traffic feels once you look at it through ADS-B data.</p>
+</blockquote>
+<blockquote>
+<p>ADS-B short for Automatic Dependent Surveillance Broadcast that allows the aircraft to capture its own position and other details like (altitude, GPS based location, direction, speed, hex code i.e. unique aircraft code) and broadcasts (sends in the open as a radio signal), this gets captured by listening Air Traffic Controllers(ATC), Airports, satellites, networks, etc which then track and use it for internal purposes. That could be then used for tracking on the Airport, communnicating, averting accidents, etc.</p>
+</blockquote>
+<h2 id="initial-questions-and-exploration">Initial Questions and Exploration</h2>
+<p>I was looking for a historical dataset that could show me flight activity over Mumbai. I did not expect it to be perfect, but I did expect it to be workable. The first thing to understand is that this is not a clean flight log. It is a stream of observations. Each aircraft keeps broadcasting its position, altitude, speed, heading, and identity over time. That means the raw data is not <code>one row per flight</code>. It is more like <code>one row per movement in time for a given aircraft</code>. To make it useful, I had to turn those repeated observations into inferred flight runs. That is what makes the analysis readable. Instead of staring at thousands of raw position points, I can ask more human questions:</p>
+<ul>
+<li>When is Mumbai busiest?</li>
+<li>Which airlines show up the most?</li>
+<li>Which aircraft dominate?</li>
+<li>Where do planes start descending?</li>
+<li>Where do they take off from?</li>
+<li>How long is the gap between one landing and the next takeoff?</li>
+</ul>
+<p>That shift from raw observations to inferred runs is what made the rest of the project possible.
+I landed on the ADS-B Exchange historical data because it looked promising. At first glance, it seemed like I had found a long historical archive. But there was a catch I did not fully appreciate at the beginning: much of the data was sampled by month, and a lot of it was only the first day of each month. That was smaller than I hoped, but still useful enough to extract patterns from.</p>
+<p>That was the point where I stopped thinking about the data as a raw archive and started thinking about it as something I could actually analyze.</p>
+<h2 id="making-sense-of-the-data">Making &quot;sense&quot; of the data</h2>
+<p>So, I had millions of observations. Because a single minute has 12 snapshots and if you do the math (not asking you to do it, but if you are curious), we end up with around 17,280 snapshot for a single day (12 snapshots per minute * 60 minutes * 24 hours). If you stack it up for around 12 months, that really grows big.</p>
+<p>So, what exactly were these snapshots? Could I directly use them in querying the database?</p>
+<p>No, not quite. It actually depends on what questions we might need answering.</p>
+<h3 id="what-is-a-snapshot-here">What is a Snapshot here</h3>
+<p>A snapshot is basically a list of observations (or set of status) for the aircrafts currently in the airspace. The initial snapshot that I download from <a href="https://samples.adsbexchange.com/index.html#readsb-hist">ADS-B Exchange</a> has a full world air-traffic and I never want that full data, I just want the tiny airspace around the Mumbai one. So we filter the latitude and longitude position around Mumbai. So, each snapshot finally becomes the aircrafts flying around the radius (30km to give a number) at that time. So we take those kind of snapshots at 5 second interval.</p>
+<p>So let's suppose there are 2 flights around Mumbai currently one landing and one taking off:</p>
+<p>These will be a snapshot.</p>
+<div class="code-block"><div class="code-header"><span class="language-name">json</span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code class="language-json">[
+    {
+        "icao24": "123456",
+        "latitude": "19.123",
+        "longitude": "73.123",
+        "altitude": 500,
+        "velocity": -100,
+        "heading": 90,
+        "timestamp": "2022-01-01T00:00:00Z"
+    },
+    {
+        "icao24": "8901",
+        "latitude": "19.083",
+        "longitude": "72.123",
+        "altitude": 1000,
+        "velocity": 300,
+        "heading": 90,
+        "timestamp": "2022-01-01T00:00:00Z"
+    }
+]
+</code></pre></div><p>After 5 seconds you might see a change in the latitude and longitude (positions), the speed, and the altitude (also the timestamp). So we get another snapshot which shows the status of those aircraft currently in the radius of Mumbai, maybe in the next snapshot another aircraft is about to land, so it appears in the snapshot too. So on, you get the point right? If the aircraft stays within the radius of Mumbai for more than a minute (which everyone might, often more than a minute even 10-20 minutes?) then we might have 12 observations for that aircraft across those snapshots. We basically have a record or a progression of the aircraft over time. That is, in essence, a time series data. We are measuring a change of an entity over a period of time.</p>
+<p>So, this is what I get from the downloaded snapshots which are in millions.</p>
+<p>How do I make sense of them?</p>
+<p>Well, let's ask a question, then the scope can be reduced or we can move in specific direction.</p>
+<h2 id="questions-on-the-data">Questions on the data</h2>
+<blockquote>
+<p>What are the total number of flights over Mumbai in 2026 so far?</p>
+</blockquote>
+<p>Well, now you can see, we are talking about flights or distinct aircraft over a time. That is a distinct thing from the observations we have, we have to first lock in the time, but the deeper question is how do we group these observations to get flights?</p>
+<p>That is why the question need to change a little before it can be answered properly. I am asking how many distinct flight runs exist in the data, how long they last, when they start, when they end, and whether they are landing, taking off, or just passing through the Mumbai airspace. Once I do that, the raw snapshots stop being noise and start becoming something I can actually reason about.</p>
+<p>So, what constitutes a flight run? That is a question that we need to answer before proceeding.</p>
+<h4 id="what-is-a-flight-run">What is a Flight Run</h4>
+<p>A flight run is my way of saying: this group of observations belongs to the same aircraft movement. It is not one row, and it is not one timestamp. It is the whole stretch of time where the same aircraft keeps showing up in the snapshots and its position, altitude, speed, and heading keep changing in a way that looks like one continuous movement.</p>
+<p>Now, how do we distinguish an aircraft?</p>
+<p>A unique aircraft means one distinct plane in the dataset, usually identified by its unique aircraft code, like hex or registration.</p>
+<p>This matters because the same aircraft can appear in many snapshots while it is in Mumbai's airspace. If I only counted rows, I would be counting the same aircraft again and again. But if I group those rows into a single run, then I can treat it more like one flight-shaped event. That gives me something much closer to what I actually want to study.</p>
+<h3 id="observations-to-flight-runs">Observations to Flight Runs</h3>
+<p>So, I loaded the raw snapshots/observations into the dataset after compressing from json to csv to parquet files (dont worry about the details), into a duck database session.</p>
+<p>I had table schema like:</p>
+<ul>
+<li><code>observations</code> is just all the monthly Parquet files unioned together.</li>
+<li><code>observations_clean</code> cleans the fields and turns text like altitude, speed, lat/lon, etc. into usable numeric columns.</li>
+<li><code>observations_enriched</code> adds convenience fields like registration, aircraft type, airline_code, is_indian_registration, etc.</li>
+</ul>
+<p>From this we need to group into a flight run that could track each flight. So, I went and created a view that will do that:</p>
+<p>As we know we have <code>hex</code> in the data for each observations, that can be used to identify unique aircrafts in the airspace, however there is a catch.</p>
+<p>Each aircraft in ADS-B data is identified by a unique hex code, which represents the physical plane. But planes don't operate just one journey, they fly multiple routes throughout the day. This is where the callsign becomes important. A callsign represents the flight the aircraft is currently operating (for example, AI101 or 6E203).</p>
+<p>So, we need a combination of <code>hex</code> and <code>callsign</code> to identify a flight run.
+I sorted the observations by aircraft and time, and then compared each row with the one just before it. If the same aircraft disappeared for too long, I treated that as a break. If the flight code changed, I treated that as a new run too. That gave me a cleaner way to read the data. The same aircraft could still appear many times, but those repeated sightings would stay inside one continuous stretch instead of being counted as separate things. In other words, I was no longer looking at a pile of random snapshots. I was looking at movement. Once that rule was in place, the rest of the questions started making sense. I could count runs instead of rows, compare landings and takeoffs, look at how long an aircraft stayed in the airspace, and see when the traffic was building up or dropping off. That was the point where the data stopped feeling messy and started feeling usable.</p>
+<p>That is the first step to answer the question, how many flights are there in Mumbai over 2026?</p>
+<h3 id="how-many-flights-are-there-in-mumbai-over-2026">How many flights are there in Mumbai over 2026?</h3>
+<p>Once I started grouping those repeated sightings into flight runs, the question became much clearer. Instead of asking how many rows exist, I could ask how many distinct aircraft movements exist from 1st of January, February and March of 2026. That is the number I actually care about. It tells me how much traffic was visible, when it showed up, and how those movements were spread across the day.</p>
+<p>There are approximately <code>7,237</code> inferred flight runs for the 3 full days of the 2026.</p>
+<p>For the 12 full days of 2024, there were approximately <code>51,441</code> inferred flight runs, and for 2025 there were approximately <code>43,324</code>. For 2026, it is just the first quarter (3 days compared to 12 days of those earlier years, so a good balance).</p>
+<p>Now we can move into interesting questions</p>
+<h3 id="when-is-mumbai-most-busy">When is Mumbai most busy?</h3>
+<p>Once I had the raw snapshots grouped into flight runs and filtered down to the airport-proximate ones, the first thing I wanted to see was simple: when does Mumbai actually get busy?</p>
+<p>For a &quot;24 hour day&quot; chart, I used:</p>
+<ul>
+<li>one row per hour</li>
+<li>count movements for each sampled day + hour</li>
+<li>then average those hourly counts across sampled days</li>
+</ul>
+<p>That gives us a number representing on a typical sampled day, how many movements happen at 07:00, 08:00, etc.?</p>
+<p><img src="https://meetgor-cdn.pages.dev/flight-observatory-mumbai/landing_takeoff_hourly.png" alt="Landing Takeoff Hourly"></p>
+<p>The answer is pretty clear. In this sample, the busiest hour is 07:00 IST, with 1,086 movements. Right behind it are 20:00 (1,074), 17:00 (1,073), 18:00 (1,069), 21:00 (1,044), 11:00 (1,043), 19:00 (1,038), and 22:00 (1,032). The quietest hour is 03:00, with just 246 movements. So the traffic is not flat at all. It has a shape, and that shape is very visible once you count the flights as runs instead of raw rows.</p>
+<p>However if we take the average across all the sampled days, we get the same picture.</p>
+<p>For construcing the query for getting this, we want to know when the airport is most active during the day, so we can:</p>
+<ul>
+<li>Keeps only airport-proximate events (lat and lon)</li>
+<li>Labels each event as landing or takeoff (based on speed and altitude)</li>
+<li>Converts the time to IST</li>
+<li>Groups by hour of day</li>
+<li>Counts movements in each hour bucket</li>
+</ul>
+<p><img src="https://meetgor-cdn.pages.dev/flight-observatory-mumbai/hourly_avg.png" alt="Movement Hourly Average"></p>
+<p>If we take the median instead, then the busiest hours are 17:00 IST, with 30.46 movements, 18:00 IST with 30.54 movements and 07:00 IST with 30.17 movements that makes it very consistent to the average. The quietest hour is still 03:00 with just 7.69 movements.</p>
+<p>That gives us a good answer and the difference is honestly not that big. The busiest hour is 07:00 and 17:00 with summed average and median respectively, and quietest is 03:00.
+The summed view and the averaged view tell the same story, but from two slightly different angles. In the total sample, 07:00 is the busiest hour, followed closely by 20:00 and 17:00. In the average-per-day view, the evening shifts slightly ahead, with 17:00 and 18:00 taking the top two spots and 07:00 still staying near the top. The quietest hour is the same in both views: 03:00. So the exact peak changes a little, but the shape does not. Mumbai is still busiest in the morning and evening, and quietest in the late night.</p>
+<h3 id="which-airlines-show-up-most">Which Airlines Show Up Most</h3>
+<p>I want to know which airlines dominate the traffic.</p>
+<p>Once the rows were grouped into flight runs, I could stop looking at raw sightings and just count which airline codes kept appearing. I used the first part of the flight code as a rough airline label and counted the runs for each one. That makes the dominant carriers obvious instead of buried inside repeated observations.</p>
+<p>What I did was with a query:</p>
+<ul>
+<li>Takes the grouped flight runs</li>
+<li>Pulls the airline prefix from the flight code</li>
+<li>Counts how many runs each prefix appears in</li>
+</ul>
+<p>What we get:</p>
+<ul>
+<li>A dominance chart</li>
+<li>It shows which carriers keep repeating in the sample</li>
+<li>IndiGo and Air India should stand out immediately</li>
+</ul>
+<p>This was quite evident, as I have observed Mumbai's sky for a long. Indigo and Air India are firmly dominant across the board. However, there are some other interesting observations like Vistara Air, Akasa and Emirates. In earlier pre-covid era, it used to be Jet Airways, but now Indigo has taken the lead.</p>
+<p>The difference in the first 3 is quite a big one, and I think its right! Since Indigo and Air-India, not only in Mumbai, they are preferred over other domestic airlines.</p>
+<p>Some other notable ones down the order are <code>SIA</code> for Singapore Airlines, <code>DLH</code> as Lufthansa, and <code>BAW</code> as British Airways. They are not as heavily appearing as domestic ones, they are regulars on a routine, each day every day.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>┌──────────────┬───────────┐
+│ airline_code │ movements │
+│   varchar    │   int64   │
+├──────────────┼───────────┤
+│ IGO          │     55050 │
+│ AIC          │     20892 │
+│ VTI          │      9789 │
+│ AKJ          │      6923 │
+│ UAE          │      5057 │
+│ SEJ          │      4869 │
+│ AXB          │      4514 │
+│ QTR          │      3728 │
+│ GOW          │      2191 │
+│ ETD          │      2186 │
+│ IAD          │      2151 │
+│ @@@          │      1708 │
+│ SVA          │      1660 │
+│ ABY          │      1542 │
+│ ETH          │      1504 │
+│ OMA          │      1479 │
+│ SDG          │      1448 │
+│ GFA          │      1214 │
+│ SIA          │       979 │
+│ KAC          │       825 │
+│ DLH          │       771 │
+│ THY          │       754 │
+│ MAS          │       745 │
+│ BAW          │       721 │
+│ FDB          │       705 │
+└──────────────┴───────────┘
+</code></pre></div><p><img src="https://meetgor-cdn.pages.dev/flight-observatory-mumbai/airline_routine.png" alt="Airline Breakdown"></p>
+<p>A good validation query! It seems the data was correctly analysed.</p>
+<h3 id="which-aircraft-type-dominates">Which Aircraft Type Dominates</h3>
+<p>This was something I didn't have much idea about. I was not well versed with flight models and their names. So I let it shape what we can find.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>┌────────────────────────────────────────────────┬───────────┐ 
+│ aircraft_type                                  │ movements │     
+│    varchar                                     │   int64   │
+├────────────────────────────────────────────────┼───────────┤
+│ A20N (Airbus A320neo)                          │     49269 │
+│ A21N (Airbus A321neo)                          │     27739 │
+│ B38M (Boeing 737 MAX 8)                        │     13138 │
+│ A320 (Airbus A320)                             │     12587 │
+│ B77W (Boeing 777-300ER)                        │      7543 │
+│ B738 (Boeing 737-800)                          │      5643 │
+│ B789 (Boeing 787-9 Dreamliner)                 │      3162 │
+│ A321 (Airbus A321)                             │      2761 │
+│ B788 (Boeing 787-8 Dreamliner)                 │      2482 │
+│ B77L (Boeing 777-200LR / 777 freighter family) │      2428 │
+│ A359 (Airbus A350-900)                         │      2385 │
+│ A333 (Airbus A333)                             │      2067 │
+│ AT76 (A319)                                    │      1862 │
+│ A319 (Airbus A319)                             │      1736 │
+│ A388 (Airbus A388)                             │      1648 │
+└────────────────────────────────────────────────┴───────────┘
+</code></pre></div><p><img src="https://meetgor-cdn.pages.dev/flight-observatory-mumbai/aircraft_types.png" alt="Aircraft type breakdown"></p>
+<h3 id="where-landings-start">Where Landings Start</h3>
+<p>The question here is not where the aircrafts lands on the runway. It is where the aircrafts start coming down. That is a different thing. If I want to find the landing corridor, I should not look for the final stop point. I should look for the first clear movement in each run when the altitude starts dropping in a way that looks like descent. That gives me the start of the landing path, which is what matters for the map.</p>
+<p>Once I have those descent-start points, the next step is simple: group them by location and altitude. If the same area keeps showing up, that means aircrafts are repeatedly beginning their descent there. That is how the east-side corridor and the Ghatkopar-area low altitudes start making sense. The map is not showing a single landing dot. It is showing the place where arrival begins to feel like arrival.</p>
+<p>The patterns for a sharp dip is observed near the airport only, but overall, the gradual dip is seen on the Navi Mumbai side which is very true. The aircrafts gradually lowering their speeds and altitude descending into the runway strip.</p>
+<ul>
+<li>19.09,73.02 is east of the airport, out toward the eastern Mumbai / Thane creek / Navi Mumbai corridor.</li>
+<li>19.09,73.08 and 19.09,73.10 are farther east, so they sit deeper into the Navi Mumbai / Airoli / Ghansoli / Thane-side approach corridor.</li>
+</ul>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>┌────────────┬────────────┬────────────────┬────────────────────┬───────────────┐
+│ lat_bucket │ lon_bucket │ descent_points │     avg_alt_ft     │ median_alt_ft │
+│   double   │   double   │     int64      │       double       │    double     │
+├────────────┼────────────┼────────────────┼────────────────────┼───────────────┤
+│      19.09 │      73.08 │            142 │ 3405.6338028169016 │        3400.0 │
+│      19.09 │       73.1 │            135 │  3652.962962962963 │        3600.0 │
+│      19.09 │      72.86 │            133 │   36.2406015037594 │           0.0 │
+│      19.09 │      73.02 │            123 │  2638.008130081301 │        2625.0 │
+│      18.58 │      73.94 │            122 │ 2115.1639344262294 │        2175.0 │
+│      19.09 │      73.01 │            119 │  2439.285714285714 │        2425.0 │
+│      19.09 │      73.11 │            118 │ 3747.4576271186443 │        3750.0 │
+│      19.09 │      73.09 │            116 │ 3565.0862068965516 │        3525.0 │
+│      19.09 │      72.94 │            113 │ 1342.9203539823009 │        1350.0 │
+│      19.09 │      73.12 │            113 │ 3951.7699115044247 │        3925.0 │
+│      19.09 │      73.23 │            108 │ 5678.7037037037035 │        5675.0 │
+│      19.09 │      73.24 │            102 │  5867.156862745098 │        5850.0 │
+│      19.09 │      73.13 │            101 │  4157.425742574257 │        4175.0 │
+│      19.09 │      73.07 │             99 │ 3325.5050505050503 │        3325.0 │
+│      19.09 │      73.18 │             97 │  4990.721649484536 │        5025.0 │
+│      19.09 │       73.2 │             97 │  5232.216494845361 │        5175.0 │
+│      19.09 │      73.14 │             96 │  4284.635416666667 │        4275.0 │
+│      19.09 │      72.91 │             94 │  819.4148936170212 │         862.5 │
+│      18.58 │      74.01 │             92 │ 3408.4239130434785 │        3400.0 │
+│      19.09 │       73.0 │             92 │  2288.586956521739 │        2300.0 │
+...
+...
+
+</code></pre></div><p><img src="https://meetgor-cdn.pages.dev/flight-observatory-mumbai/descent_density_east_bw.png" alt="Landing Density"></p>
+<p>A clear strip can be seen with the aircrafts descending into the runway strip. Also the dip is more pronounced in the Navi Mumbai / Airoli / Ghansoli / Thane-side approach corridor.</p>
+<p>I also looked for a query on the Ghatkopar region, and it was amazing to see that it was so near. Around <code>19.08, 72.94</code> is Ghatkopar, and aircrafts have an approximate average of 800 feets. 90% of them are below 1,100 feet, that is crazy low. And that clearly explains why the strip straight to the East-West of the airport line (which some part of Ghatkopar falls into) doesn't have any tall towers.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>┌────────────────┬───────────────────┬───────────────┬────────────┬────────────────────┐
+│ descent_points │    avg_alt_ft     │ median_alt_ft │ p90_alt_ft │     p95_alt_ft     │
+│     int64      │      double       │    double     │   double   │       double       │
+├────────────────┼───────────────────┼───────────────┼────────────┼────────────────────┤
+│            395 │ 859.7544303797469 │         775.0 │     1175.0 │ 1332.4999999999989 │
+└────────────────┴───────────────────┴───────────────┴────────────┴────────────────────┘
+</code></pre></div><p>Another good metric to verify the dataset is proving right.</p>
+<h3 id="where-takeoffs-start">Where Takeoffs Start</h3>
+<p>Takeoffs are the same idea in reverse. The question is not where the plane ends up in the sky. The question is where it starts climbing away from the airport. So instead of looking for a finished takeoff, I look for the first point in each run where altitude clearly begins to rise. That gives me the start
+of the departure path.</p>
+<p>Then I group those start points by location. If the same area keeps lighting up, that tells me where departures are really getting going. That is why the  takeoff map is tighter and closer to the airport than the landing map. It is not trying to show the whole flight. It is only trying to show the first step out of the airport, which is the part that makes the pattern visible.</p>
+<p>The sharp climb starts very close to the airport itself, and that is what the takeoff pattern shows clearly. The aircrafts begin to gain altitude almost immediately after leaving the runway, so the takeoff strip stays tight around the airport side instead of spreading out far into the city.</p>
+<ul>
+<li><code>19.09,72.81</code> and <code>19.09,72.82</code> sit just west of the airport and catch the early climb corridor right after liftoff. This is the sea side, beyond the Juhu aerodrome, perfect. <code>19.09,72.78</code> to <code>19.09,72.80</code> are a little farther out, but they still belong to the same western departure corridor, showing that the climb pattern stays compact near the field.</li>
+<li><code>19.09,72.84</code>, <code>19.09,72.85</code>, <code>19.09,72.86</code>, and 19.09,72.87 are even closer to the airport edge, so they sit in the immediate departure strip where the climb becomes visible first.</li>
+<li></li>
+</ul>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>┌────────────────────┬───────────────────┬────────────────┬────────────────────┬───────────────┐
+│     lat_bucket     │    lon_bucket     │ takeoff_points │     avg_alt_ft     │ median_alt_ft │
+│       double       │      double       │     int64      │       double       │    double     │
+├────────────────────┼───────────────────┼────────────────┼────────────────────┼───────────────┤
+│              19.09 │             72.81 │           1473 │ 2092.6171079429737 │        2050.0 │
+│              19.09 │ 72.82000000000001 │           1446 │ 1889.3672199170123 │        1825.0 │
+│              19.09 │             72.84 │           1374 │ 1094.5778748180494 │        1075.0 │
+│              19.09 │ 72.85000000000001 │           1329 │  764.8796087283672 │         725.0 │
+│              19.09 │             72.83 │           1208 │ 1518.4395695364237 │        1450.0 │
+│              19.09 │             72.87 │           1079 │  465.8016682113068 │         200.0 │
+│              19.09 │              72.8 │            994 │ 2233.6770623742455 │        2150.0 │
+│              19.09 │             72.86 │            848 │  698.1816037735849 │         400.0 │
+│              19.09 │             72.79 │            538 │  2579.460966542751 │        2525.0 │
+│              19.09 │             72.78 │            486 │  2790.792181069959 │        2750.0 │
+│              19.09 │             72.77 │            418 │ 3224.5215311004786 │        3000.0 │
+│              19.09 │             72.76 │            331 │ 3665.7099697885196 │        3475.0 │
+│              19.09 │             72.75 │            234 │ 3924.5726495726494 │        3662.5 │
+│              19.09 │             72.88 │            206 │  976.2135922330098 │         200.0 │
+│              19.09 │             72.74 │            137 │  4216.605839416058 │        3875.0 │
+│              19.09 │             72.73 │            129 │  4780.232558139535 │        4925.0 │
+│              19.09 │             72.72 │             68 │  4781.985294117647 │        4837.5 │
+│              19.18 │             72.74 │             62 │  7492.741935483871 │        7325.0 │
+│              19.19 │             72.75 │             62 │  7558.870967741936 │        7525.0 │
+│ 19.080000000000002 │             72.73 │             54 │  5360.185185185185 │        5162.5 │
+...
+...
+</code></pre></div><p><img src="https://meetgor-cdn.pages.dev/flight-observatory-mumbai/takeoff_density_west_bw.png" alt="Takeoff Density"></p>
+<p>There is no major analysis here, since it has plain ocean in front of it, we can't really track the location thereafter. We can just use the direction that we'll check separately.</p>
+<h3 id="frequency-of-landings-and-takeoffs">Frequency of landings and takeoffs</h3>
+<p>I wanted the spacing between landings on their own, and takeoffs on their own. So I grouped the airport events by type, sorted them in time order, and measured the gap between one landing and the next landing, and one takeoff and the next takeoff. The median is the number to trust most here, because a few long gaps pull the average up.</p>
+<p>The process was simple:</p>
+<ul>
+<li>Classify events as landing or takeoff</li>
+<li>Sort by time inside each sampled day</li>
+<li>Compare each event to the next event of the same type</li>
+<li>Measure the minutes between them</li>
+</ul>
+<p><img src="https://meetgor-cdn.pages.dev/flight-observatory-mumbai/landing_takeoff_frequency.png" alt="Landing and Takeoff Frequency"></p>
+<p>In this sample, landings are spaced about 2.58 minutes apart at the median, and takeoffs about 3.0 minutes apart.</p>
+<p>What can we observe from this?</p>
+<ul>
+<li>Landings are spaced a bit more tightly than takeoffs</li>
+<li>Takeoffs have a slightly longer pause between consecutive events</li>
+<li>The median is the number to trust most here, because a few long gaps pull the average up</li>
+</ul>
+<p>This is the answer I have been chasing all along and it truly feels great to see it that close. As children we had observed the landing frequency as around 2 minute 30 seconds, and it couldn't be more accurate than this. But the great thing about the BOM/VABB Airport is that it still holds true even after a decade. It truly is the single runway busiest airport.</p>
+<h3 id="landing-to-takeoff-gaps">Landing-to-Takeoff Gaps</h3>
+<p>I want to measure the time between a flight landed and another took-off (not the same aircraft), any flight, like just after a flight landed, how much time it took for another to takeoff. I think it has to be in the range of 1-2 minutes. That's the status BOM/VABB Airport has to be the busiest single run way airport. Let's check and validate it with data.</p>
+<p>To answer that, I look at the airport events in time order and take each landing as a starting point. Then I find the next takeoff that follows it and
+measure the time gap between the two. If that gap is small, it means the airport is keeping the movement going very quickly. If it is large, it means there was a longer pause before the next departure. The interesting part is not the average alone, but the shape of the gaps across the sample.</p>
+<p>In this sample, that gap is very short most of the time. The median is 1.5 minutes, and the average is about 2.1 minutes, across 5,297 landing-to-takeoff  intervals. Most of the bars are packed into the first few minutes, which tells me the airport is turning movements over very quickly. The long tail is there too, but it is small. So the real story is not &quot;there are a few huge delays&quot; it is that the typical landing is followed by a takeoff almost immediately.</p>
+<p><img src="https://meetgor-cdn.pages.dev/flight-observatory-mumbai/turnaround_gap_refresh_clean_horizontal.png" alt="Landing-to-Takeoff Turnaround Gap"></p>
+<p>And another question with intuition validated with data.</p>
+<p>If you think about it for a while, the median is 1.5 minutes, if you do the math (60/1.5 = 40 movements / hour). That alligns well with the hourly average. And it even validates the historical peak of Mumbai of 51 movements with 1,036 daily movements, that number is not far.</p>
+<p>It is that the airport's fame comes from how little space there is between operations. The chart makes that visible: most of the time, the next takeoff follows a landing almost immediately, and that is exactly the kind of traffic that built BOM's reputation.</p>
+<h3 id="weekday-pattern">Weekday Pattern</h3>
+<p>This is a bit interesting question, since I honestly had no clue about the answer. I thought every day would have the same pattern. I was wrong.</p>
+<p>To get this, it was straight forward.
+I took the airport events I had already classified as landings and takeoffs, grouped them by weekday in Mumbai time, and counted how many movements landed in each bucket. That gives a simple answer to a simple question: which day of the week gets the most airport activity? This question is asking about the breakdown of the flights based on days of the week.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>┌─────────────┬──────────────┬──────────┬──────────┬───────────┐
+│ weekday_num │ weekday_name │ landings │ takeoffs │ movements │
+│    int64    │   varchar    │  int128  │  int128  │   int64   │
+├─────────────┼──────────────┼──────────┼──────────┼───────────┤
+│           0 │ Sunday       │     1444 │     1239 │      2683 │
+│           1 │ Monday       │     1383 │      942 │      2325 │
+│           2 │ Tuesday      │     1695 │     1337 │      3032 │
+│           3 │ Wednesday    │     1748 │     1053 │      2801 │
+│           4 │ Thursday     │     1805 │     1236 │      3041 │
+│           5 │ Friday       │     1859 │     1323 │      3182 │
+│           6 │ Saturday     │     2789 │     2070 │      4859 │
+└─────────────┴──────────────┴──────────┴──────────┴───────────┘
+</code></pre></div><p><img src="https://meetgor-cdn.pages.dev/flight-observatory-mumbai/weekday_breakdown.png" alt="Weekday Takeoff-Landing Flights Breakdown"></p>
+<p>The result is pretty clear in the sample. Saturday stands out as the busiest day by a wide margin, with 4,859 movements, followed by Friday at 3,182 and Thursday at 3,041. Monday is the quietest at 2,325.</p>
+<blockquote>
+<p>Landings are higher than takeoffs on every weekday, but the weekend spike is the real signal here. So the sample does not look evenly spread across the week, it has a strong Saturday peak and a weaker Monday trough.</p>
+</blockquote>
+<p>I then looked into the dataset and tried to find the count of each day in the sample, since i had around ~70 days of data (1 day * 12 months * 6 years)</p>
+<ul>
+<li>Saturday 12</li>
+<li>Sunday 11</li>
+<li>Wednesday 11</li>
+<li>Friday 11</li>
+<li>Tuesday 10</li>
+<li>Thursday 10</li>
+<li>Monday 8</li>
+</ul>
+<p>And that can explain why Saturday is the busiest day. The sample is not evenly distributed, but it is more or less evenly distributed across the calendar.</p>
+<h3 id="hotspots--direction">Hotspots / Direction</h3>
+<p>The question here is when the aircrafts starts landing or taking off, what direction are they actually pointing? That's quite obvious right? But I want to identify a deeper pattern here, from where are they coming from and where are they heading towards.</p>
+<p>That matters because it tells you whether Mumbai's traffic is spread randomly across the compass or funneled through one stable corridor. If the airport is using the same flow again and again, the headings should cluster into a small set of directions instead of being evenly scattered.</p>
+<p>To get this, we can:</p>
+<ul>
+<li>take each inferred flight run</li>
+<li>classify as a landing or takeoff</li>
+<li>capture the heading at the relevant point in the run.</li>
+</ul>
+<p>For landings, it uses the heading at the end of the run.
+For takeoffs, it uses the heading at the start.</p>
+<p><img src="https://meetgor-cdn.pages.dev/flight-observatory-mumbai/landing_direction_map.png" alt="Landing Direction Map"></p>
+<p><img src="https://meetgor-cdn.pages.dev/flight-observatory-mumbai/takeoff_direction_map.png" alt="Takeoff Direction Map"></p>
+<p>Those headings are then grouped into direction sectors and counted, which is what produces the direction chart.</p>
+<p><img src="https://meetgor-cdn.pages.dev/flight-observatory-mumbai/landing_heading_hist_vertical.png" alt="Landing Heading Histogram">
+<img src="https://meetgor-cdn.pages.dev/flight-observatory-mumbai/takeoff_heading_hist_vertical.png" alt="Takeoff Heading Histogram"></p>
+<p>The result is very strong and very repetitive. Most landings cluster around 270°, with a smaller 90° cluster, and takeoffs are also dominated by 270°. In the heading data, the top landing sector is 270° with 14,316 points, and the top takeoff sector is also 270° with 10,848 points. That tells me the airport is not behaving like a random cloud of movement. It is using the same directional axis again and again, which is exactly why the hotspot map looks like a corridor instead of a scatterplot.</p>
+<h3 id="time-in-airspace">Time in Airspace</h3>
+<p>The question here is are the aircrafts just passing through, or do they stay around Mumbai for a while? The idea is simple, if landings take longer than takeoffs, that usually means approach and descent are keeping the aircraft in the airspace longer.</p>
+<p>One thing I wanted to know was how long aircraft actually stay around Mumbai once they enter the airport flow.</p>
+<p><img src="https://meetgor-cdn.pages.dev/flight-observatory-mumbai/special_time_in_airspace.png" alt="Time in Airspace"></p>
+<p>So I looked at the duration of each inferred run and compared landings, takeoffs, and the full set together. The pattern is pretty clear: landings stay in the airspace longer than takeoffs. The median landing run is 34.5 minutes, while the median takeoff run is 25.1 minutes. Across all airport events, the median is 27.3 minutes. That tells me the traffic is not just passing through fast. A lot of it is lingering long enough for the airspace to feel full, especially on the landing side.</p>
+<p>The interesting part here is not just that landings last longer than takeoffs. It is what that tells me about the way Mumbai moves aircraft through its airspace. A landing is not a single movement. It is a long descent, even slower, and then the final stretch into the runway, so it naturally stays visible in the data for longer. Takeoffs are different. Once an aircraft leaves the runway and starts climbing out, it clears the airport zone much faster.</p>
+<p>That is why the landing median is 34.5 minutes, while takeoffs sit closer to 25.1 minutes. This does not mean the aircraft is simply flying slower in the sky. It means the arrival side of the airport keeps aircraft in the flow for longer, which is exactly what you would expect at a busy airport like Mumbai. It also hints at sequencing and approach management: arrivals are being held in the pattern of the airport longer than departures, which is the kind of  behavior that makes the airspace feel crowded even before you count the total number of flights.</p>
+<p>So the real takeaway is this: Arrivals spend more time inside the airport's operating envelope, while departures clear out faster. That difference is part of the airport's style, and it helps explain why the airspace feels full even when the hourly flow looks ordinary on paper.</p>
+<h3 id="aircraft-turnaround-time">Aircraft Turnaround Time</h3>
+<blockquote>
+<p>After this aircraft lands, how long does it stay on the ground before it takes off again?</p>
+</blockquote>
+<p>This is a good question, because it gives a deeper look at the activity on the airport. It doesn't necessarily give much but still a valid metric to observe.</p>
+<p>So I matched each landing with the next takeoff for the same aircraft on the same day. That gives a proper aircraft-level ground-time measure, instead of a flight-level handoff.</p>
+<p><img src="https://meetgor-cdn.pages.dev/flight-observatory-mumbai/special_same_aircraft_ground_gap.png" alt="Aircraft Turnaround Time"></p>
+<p>What I observed:
+The turnaround time is steady, but not extremely fast. The median ground time is 96.5 minutes, which is about 1 hour 37 minutes. The middle half of the aircraft stays between 77.5 and 130.5 minutes, and the 90th percentile goes up to 185.3 minutes. Most of the pairs sit in the 60-180 minute range, which suggests a working fleet that is being reused at a regular pace rather than left idle for long stretches.</p>
+<p>That also hints at the kind of airport Mumbai is. This looks much more like a high-frequency rotation airport than a place where aircraft disappear for half a day between uses. A lot of the traffic is probably made up of domestic and short-to-medium-haul operations, where the same aircraft can land, sit for a bit, and then go back out again within a couple of hours. So the takeaway is not just &quot;there is a gap&quot; It is that Mumbai keeps the aircraft moving in a fairly tight loop, which fits the airport's reputation for being heavily used and constantly in motion.</p>
+<h3 id="international-vs-domestic-flights">International vs Domestic Flights</h3>
+<p>I also wanted to see how much of Mumbai's traffic is Indian-registered versus foreign-registered. I could not see the route directly in the ADS-B feed, so I used aircraft registration as a proxy: <code>VT-</code> for Indian-registered aircraft and everything else as foreign-registered. That is not the same thing as domestic vs international routes, but it gives a useful high-level split.</p>
+<div class="code-block"><div class="code-header"><span class="language-name"></span><button class="copy-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div><pre><code>┌────────────────────────┬───────────┐
+│         bucket         │ movements │
+│        varchar         │   int64   │
+├────────────────────────┼───────────┤
+│ Unknown                │      3399 │
+│ Indian-registered (VT) │    110492 │
+│ Foreign-registered     │     37589 │
+└────────────────────────┴───────────┘
+</code></pre></div><p><img src="https://meetgor-cdn.pages.dev/flight-observatory-mumbai/special_domestic_international_proxy.png" alt="Domestic vs International Flight Aircraft Carrier Split"></p>
+<p>The result is clear: about <code>72.9%</code> of movements are Indian-registered, while <code>24.8%</code> are foreign-registered.
+So the airport is still dominated by Indian traffic by count, but foreign aircraft are not a side note, or even a minority. They are a substantial and regular part of the flow.</p>
+<h2 id="what-surprised-me">What Surprised Me</h2>
+<p>What surprised me most was not that Mumbai is busy. I already expected that. What surprised me was how tight and consistent the whole system is. The airport does not just have a lot of movement, it has a deadly consistency to it. A landing is followed by a takeoff almost immediately, the same aircraft comes back into service in about an hour and a half, and the busiest hours are not random bursts but repeatable peaks that keep showing up in the same parts of the day.</p>
+<p>The other thing that stood out was how directional the traffic is. Once I started looking at landings and takeoffs on the map, the pattern stopped looking like scattered noise and started looking like a corridor. The airport is not using the full sky evenly. It keeps leaning on the same approach and departure axis, which makes the movement feel much more concentrated than a simple flight count would suggest. I mean that is no brainer, since it can disrupt the residential living, the noise and the unpredictable zoning of planes is not airports should be doing. And Mumbai does it very neatly.</p>
+<p>I also did not expect the weekday pattern to be so uneven. I assumed the traffic would be roughly similar across the week, but Saturday clearly pulled ahead in the sample. That was a good reminder that airports are not just shaped by the clock, they are also shaped by the calendar. Even with a dataset this limited, the weekly pattern still shows through.</p>
+<p>There is the big myth which gets debunked here, that is &quot;Mumbai Airport is busiest in the late night&quot;. Opposite is true here. The airport is busiest in the morning and evening, and quietest in the late night. The airport is not empty for long. Though there might be international flights in the late night but they don't land and takeoff with the frequency as close as Indigo does, so that Mumbaikars can sleep finally.</p>
+<p>Another small but satisfying surprise was that the numbers matched the memory. As a child, I had the feeling that Mumbai's sky was never empty for long. The data backed that up. It felt satisfying to see the numbers in front of me for the frequency of landing, the takeoff to landing gaps, the dominance of airline, and mapping them to intuition and memories. The frequency is consistent like crazy, the turnaround period really tight, people do have a favorite preference of Indigo, everything just feels calm but its really quick and consistent. The airport really does stand up to its name &quot;Single Runway Busiest Airport&quot;.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Well! That was a lot I admit. But it was fun. Atleast to me (I had said, it was a post for me!). I hope you got a little smile out of it if not just felt good reading about how Mumbai's Airport Operate.
+This is still ADS-B data, so it is a proxy, not an official operational log. But for the question I started with, it is enough. The feeling I had as a kid was real, Mumbai's sky was never empty for long. The frequency of landing is truly at 2 minute 30 second roughly speaking, which just makes me feel joyous, the airport turnaround time is quite a sharp and tight one, making it really a Mumbai-like busy runway.
+But that is just part 1 buddy! Haven't nerded about the complications of ADS-B data and my struggles of it, fighting with the limited disk space to compress the data and juggernauting queries to get results. That is the next part.</p>
+<p>Check out the full case study here -&gt; <a href="https://dev.meetgor.com/flight-observatory/case-study/mumbai-airport/">Flight Observatory - Mumbai Airspace Case Study</a></p>
+
+            </div>
+        </article>
+        
+        
+        
+
+<nav class="post-navigation" aria-label="Post Navigation">
+    <div class="nav-container">
+        
+        
+        <a href="/posts/2025-review" class="nav-link nav-prev" title="Previous Post">
+            <span class="nav-arrow">←</span>
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">2025: Year Review</span>
+        </a>
+        
+
+        
+        <div class="nav-link nav-next nav-empty"></div>
+        
+    </div>
+</nav>
+
+
+        
+        
+        
+
+
+<aside class="related-reading" aria-labelledby="related-reading-title">
+    <h3 id="related-reading-title" class="related-title">Related Reading</h3>
+    <ul class="related-list">
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-15" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 15: Confirmation Phrase Dispatches</span>
+                <span class="related-post-date">2025-12-28</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-14" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 14: Ski Resort Paths</span>
+                <span class="related-post-date">2025-12-28</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-13" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 13: XML Travel Manifests</span>
+                <span class="related-post-date">2025-12-27</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-12" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 12: Archive Flight Records</span>
+                <span class="related-post-date">2025-12-27</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="related-item">
+            <a href="/sqlog/advent-of-sql-2025-day-11" class="related-link">
+                <span class="related-post-title">Advent of SQL 2025 Day 11: Behavior Score</span>
+                <span class="related-post-date">2025-12-26</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</aside>
+
+
+    </main>
+    
+    <div id="comments">
+        <script src="https://giscus.app/client.js"
+            data-repo="Mr-Destructive/meetgor.com"
+            data-repo-id="R_kgDOHZ6V_g"
+            data-category="Q&A"
+            data-category-id="DIC_kwDOHZ6V_s4CRfn4"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="dark_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+    
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <div class="footer-top">
+      <p>&copy; Meet Gor. All rights reserved.</p>
+      <div class="social-links">
+        <a href="/contact" aria-label="Connect with me">Connect with me</a>
+      </div>
+    </div>
+    
+    <div class="footer-archive">
+      <span class="footer-label">Archive</span>
+      <div class="year-links">
+        
+          <a href="/2026">2026</a>
+        
+          <a href="/2025">2025</a>
+        
+          <a href="/2024">2024</a>
+        
+          <a href="/2023">2023</a>
+        
+          <a href="/2022">2022</a>
+        
+          <a href="/2021">2021</a>
+        
+      </div>
+    </div>
+    
+  </div>
+</footer>
+<script src="/theme.js"></script>
+
+    
+</body>
+</html>
