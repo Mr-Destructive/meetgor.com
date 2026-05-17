@@ -1,15 +1,15 @@
 ---
+tags: ["newsletter", "substack"]
+hash: 242e904d18cf49727655432ed4a1cfad87ec72500e92f8e5a5f06c8d6a980ede
 title: "Techstructive Weekly #94"
-date: 2026-05-15
-slug: techstructive-weekly-94
 type: newsletter
 status: published
 source: newsletter
 canonical_url: https://techstructively.substack.com/p/techstructive-weekly-94
+date: 2026-05-15
+slug: techstructive-weekly-94
 description: "Working out, working up, on the calls with users among the other things read, watched, learnt from the week of 10th to 16th May 2026"
-tags: ["newsletter", "substack"]
 ---
-
 ## Week #94
 
 It was a hectic week. Didn't even get time to do almost anything outside work for more than 2 hours.

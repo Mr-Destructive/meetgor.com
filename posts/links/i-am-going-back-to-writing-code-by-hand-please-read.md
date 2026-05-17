@@ -1,16 +1,16 @@
 ---
-title: "I am going back to writing code by hand, please read"
 date: 2026-05-15
-link: "https://blog.k10s.dev/im-going-back-to-writing-code-by-hand/"
 status: published
+type: links
+link: "https://blog.k10s.dev/im-going-back-to-writing-code-by-hand/"
 image_url: "/static/og-image.png"
 source: newsletter
 newsletter: techstructive-weekly-94
-type: links
 slug: i-am-going-back-to-writing-code-by-hand-please-read
-tags:
+tags: 
 description: "I vibe-coded a GPU-aware Kubernetes TUI for 7 months, archived it, and started over. Here's what AI gets wrong when projects grow complex."
-hash: f69e78256f31a6e848e4b728e97782ab0722fd0407e6e3c0ed659ba88d4e54ab
+hash: 6e71ce440ae3325df514521474310259837ef4807b1a0e4d063e0e55d026426b
+title: "I am going back to writing code by hand, please read"
 ---
 My thoughts on [I am going back to writing code by hand, please read](https://blog.k10s.dev/im-going-back-to-writing-code-by-hand/): I am going back to writing code by hand, please read
 

@@ -1,6 +1,5 @@
 ---
 title: "We all fell for agentic coding"
-date: 2026-05-15
 link: "https://youtu.be/lNVa33qUzZ8?si=WoXtnbzcCJjoYue5"
 status: published
 image_url: "https://i.ytimg.com/vi/lNVa33qUzZ8/hqdefault.jpg"
@@ -8,9 +7,10 @@ source: newsletter
 newsletter: techstructive-weekly-94
 type: links
 slug: we-all-fell-for-agentic-coding
-tags:
+date: 2026-05-15
+tags: 
 description: "We all fell for agentic coding"
-hash: 9f234d9613d52a9b5d7957caf516f3454b21a862613d39684da67218e6b2ee37
+hash: e97c908726fb3179ae8142c8a51b0451736e8afb492de02f66426a07097618d2
 ---
 My thoughts on [We all fell for agentic coding](https://youtu.be/lNVa33qUzZ8?si=WoXtnbzcCJjoYue5): We all fell for agentic coding
 

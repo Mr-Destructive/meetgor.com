@@ -1,18 +1,16 @@
 ---
-title: "God, AI is making me dumb"
 date: 2026-05-15
-link: "https://jpain.io/god-damn-ai-is-making-me-dumb/"
 status: published
+newsletter: techstructive-weekly-94
+slug: god-ai-is-making-me-dumb
+hash: 4851cbee71eff5230bf7c45c47140edbd3a84519d97543035f5760437bea0ac1
+title: "God, AI is making me dumb"
+link: "https://jpain.io/god-damn-ai-is-making-me-dumb/"
 image_url: "/static/og-image.png"
 source: newsletter
-newsletter: techstructive-weekly-94
 type: links
-slug: god-ai-is-making-me-dumb
-tags:
+tags: 
 description: "It's so god damn tempting to use AI to write. Whether it is articles, code, or documents. I feel like using AI is diminishing my ability to write myself.
-
-..."
-hash: f24294d5953ad250cc925d0003332fbb6468b6227377a301307d656485f2ccc9
 ---
 My thoughts on [God, AI is making me dumb](https://jpain.io/god-damn-ai-is-making-me-dumb/): God, AI is making me dumb
 

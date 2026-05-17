@@ -1,16 +1,16 @@
 ---
+slug: react-from-scratch
+tags: 
+hash: 2593c7979a74337f7d9222112036d9d00339fd8f4923f6b94ab76b241964b359
 title: "React from scratch"
 date: 2026-05-15
 link: "https://youtu.be/s0cxhde2zvY?si=5A-zIZjUk9HoMNeC"
 status: published
-image_url: "https://i.ytimg.com/vi/s0cxhde2zvY/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-94
 type: links
-slug: react-from-scratch
-tags:
 description: "React from scratch"
-hash: 7723ac564cc9755940bf1ca40bf9c2e84f30722853d91676448195a410014055
+image_url: "https://i.ytimg.com/vi/s0cxhde2zvY/hqdefault.jpg"
+source: newsletter
 ---
 My thoughts on [React from scratch](https://youtu.be/s0cxhde2zvY?si=5A-zIZjUk9HoMNeC): React from scratch
 

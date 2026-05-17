@@ -1,16 +1,16 @@
 ---
-title: "Creator of SQLite on AI, Turso and 26 years of code"
-date: 2026-05-15
-link: "https://youtu.be/x8_ZZhRL3YU?si=dDC3Gmrg0hv4ORkY"
 status: published
-image_url: "https://i.ytimg.com/vi/x8_ZZhRL3YU/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-94
 type: links
 slug: creator-of-sqlite-on-ai-turso-and-26-years-of-code
-tags:
+link: "https://youtu.be/x8_ZZhRL3YU?si=dDC3Gmrg0hv4ORkY"
+image_url: "https://i.ytimg.com/vi/x8_ZZhRL3YU/hqdefault.jpg"
+source: newsletter
+tags: 
 description: "Creator of SQLite on AI, Turso and 26 years of code"
-hash: da504237ae022069b66bd27372507b1148ef4cbb9a17d4e6276572d2e388cd22
+hash: d93200a5a009d451cca7f4ccc0db808abcd50c6c6e13a96c44bac41d132ddd81
+title: "Creator of SQLite on AI, Turso and 26 years of code"
+date: 2026-05-15
 ---
 My thoughts on [Creator of SQLite on AI, Turso and 26 years of code](https://youtu.be/x8_ZZhRL3YU?si=dDC3Gmrg0hv4ORkY): Creator of SQLite on AI, Turso and 26 years of code
 

@@ -1,16 +1,16 @@
 ---
 title: "From today software engineering is dead"
 date: 2026-05-15
-link: "https://building138.com/from-today-software-engineering-is-dead"
 status: published
+slug: from-today-software-engineering-is-dead
+tags: 
+link: "https://building138.com/from-today-software-engineering-is-dead"
 image_url: "https://building138.com/assets/img/posts/4/main.jpg"
 source: newsletter
 newsletter: techstructive-weekly-94
 type: links
-slug: from-today-software-engineering-is-dead
-tags:
 description: "When cameras were first introduced, French painter Paul Delaroche reportedly opined “From today, painting is dead.” That was nearly two hundred years ago, and painting is doing just fine. But the nature of painting changed. Photography took over the work of faithful reproduction, and painting became something else: more expressive, more conceptual, more human. I think something similar is happening with code."
-hash: 92d711480025966b0f14551802907b5238388c2cf789d1291c96cf2b29c6ce08
+hash: 09bc47c12259f704cdd59b8a807700774f8d147a47cf8a7ed2add2ca473b5195
 ---
 My thoughts on [From today software engineering is dead](https://building138.com/from-today-software-engineering-is-dead): From today software engineering is dead
 
