@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #95"
-date: 2026-05-22
-slug: techstructive-weekly-95
 type: newsletter
-status: published
-source: newsletter
 canonical_url: https://techstructively.substack.com/p/techstructive-weekly-95
 description: "Watching a bit of AI psychosis and thinking how to deal with AI, reading, not learning among the other things observed in the week of 17th to 23rd May 2026"
+slug: techstructive-weekly-95
+status: published
+source: newsletter
 tags: ["newsletter", "substack"]
+hash: 5146b3eb1ac911b17662291beab8ccd3c7237a1b24102f54bd496e008fd529ad
+title: "Techstructive Weekly #95"
+date: 2026-05-22
 ---
-
 ## Week #95
 
 A continued week of heavy client call-patch work and some inspiration to learn again. I think I have stopped learning. I need to get into it as soon as possible, but one thing that holds me back is “why”, like people are just racing with tokens and not bothered to understand the structuring of software. I am not sure, if writing code by hand again is worthwhile, its not, but how to make decisions when LLM hallucinates or we want to go a bit deeper from what it understands.

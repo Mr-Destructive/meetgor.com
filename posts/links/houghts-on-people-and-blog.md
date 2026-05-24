@@ -1,16 +1,16 @@
 ---
 title: "houghts on people and blog"
-date: 2026-05-22
 link: "https://afranca.com.br/thoughts-on-people-and-blogs/"
 status: published
 image_url: "https://images.unsplash.com/photo-1461088945293-0c17689e48ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDIzfHxwZW9wbGV8ZW58MHx8fHwxNzY4ODMxMzQ4fDA&ixlib=rb-4.1.0&q=80&w=2000"
+slug: houghts-on-people-and-blog
+tags: 
+description: "Independent projects only survive if we make them happen. Responding to Manu Moreale’s honest reflection on the struggle of \"People & Blogs\"."
+hash: 18d44249dac9a54c8611324aa539670fb830aa98015e1cdcd57efb9131c9663b
+date: 2026-05-22
 source: newsletter
 newsletter: techstructive-weekly-95
 type: links
-slug: houghts-on-people-and-blog
-tags:
-description: "Independent projects only survive if we make them happen. Responding to Manu Moreale’s honest reflection on the struggle of \"People & Blogs\"."
-hash: 90d450c0879669f2eb881160a4ee8d880d18ede8b42c25c718988cb1dc642eae
 ---
 My thoughts on [houghts on people and blog](https://afranca.com.br/thoughts-on-people-and-blogs/): houghts on people and blog
 

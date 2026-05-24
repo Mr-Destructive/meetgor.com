@@ -1,16 +1,16 @@
 ---
-title: "What rebuilding Alpha Go teaches us about AI andR RL"
 date: 2026-05-22
 link: "https://youtu.be/X_ZVSPcZhtw"
 status: published
-image_url: "https://i.ytimg.com/vi/X_ZVSPcZhtw/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-95
 type: links
 slug: what-rebuilding-alpha-go-teaches-us-about-ai-andr-rl
-tags:
 description: "What rebuilding Alpha Go teaches us about AI andR RL"
-hash: b040ec5a8713d9d48e5c811c58a779457f6eb0ac1d348a1a010a2c78b03ff316
+image_url: "https://i.ytimg.com/vi/X_ZVSPcZhtw/hqdefault.jpg"
+newsletter: techstructive-weekly-95
+tags: 
+hash: 0602fce846787a8820962760363f7e2ddb94d36654d7b1743848f55b7d1c777a
+title: "What rebuilding Alpha Go teaches us about AI andR RL"
 ---
 My thoughts on [What rebuilding Alpha Go teaches us about AI andR RL](https://youtu.be/X_ZVSPcZhtw): What rebuilding Alpha Go teaches us about AI andR RL
 

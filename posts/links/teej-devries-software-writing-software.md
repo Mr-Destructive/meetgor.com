@@ -1,16 +1,16 @@
 ---
-title: "Teej devries: Software writing Software"
+newsletter: techstructive-weekly-95
+tags: 
+description: "Teej devries: Software writing Software"
 date: 2026-05-22
 link: "https://youtu.be/HOO_yaidVWk"
 status: published
 image_url: "https://i.ytimg.com/vi/HOO_yaidVWk/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-95
 type: links
 slug: teej-devries-software-writing-software
-tags:
-description: "Teej devries: Software writing Software"
-hash: 918bb36038e8ae0f345c283e4899283af58ff94d1d7b0077b1b0701a280c249d
+hash: ae4d28298b620d88c3b336fbd21758c3f9df68f1d158dca7a4e86d01cff512ba
+title: "Teej devries: Software writing Software"
 ---
 My thoughts on [Teej devries: Software writing Software](https://youtu.be/HOO_yaidVWk): Teej devries: Software writing Software
 

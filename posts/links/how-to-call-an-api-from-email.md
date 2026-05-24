@@ -1,16 +1,16 @@
 ---
-title: "how to call an API from Email"
-date: 2026-05-22
 link: "https://redo.com/eng-blog/how-to-call-an-api-from-an-email/"
 status: published
 image_url: ""
-source: newsletter
 newsletter: techstructive-weekly-95
 type: links
 slug: how-to-call-an-api-from-email
-tags:
 description: "Emails can’t run JavaScript, but by selling your soul to the CSS devil you can get pretty close."
-hash: 9fc1b183e105a81d7a03fee5125d23f3e8ce76e1dca61562d68299b777896147
+title: "how to call an API from Email"
+date: 2026-05-22
+source: newsletter
+tags: 
+hash: 637714615bc887bdb7a128da1123eceea94713c60b9bdb8f977c45e874c023ce
 ---
 My thoughts on [how to call an API from Email](https://redo.com/eng-blog/how-to-call-an-api-from-an-email/): how to call an API from Email
 

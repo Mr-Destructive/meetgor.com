@@ -1,16 +1,16 @@
 ---
+slug: kevin-kelly-substack-your-most-improbable-life
+tags: 
+hash: 03fdc74252d2811606b6d43b4a993e3c2070bb58c39423bb1fa2e7367aa5a9cc
+link: "https://kevinkelly.substack.com/p/your-most-improbable-life"
+newsletter: techstructive-weekly-95
+type: links
+description: "Kevin Kelly Substack: Your most improbable life"
 title: "Kevin Kelly Substack: Your most improbable life"
 date: 2026-05-22
-link: "https://kevinkelly.substack.com/p/your-most-improbable-life"
 status: published
 image_url: ""
 source: newsletter
-newsletter: techstructive-weekly-95
-type: links
-slug: kevin-kelly-substack-your-most-improbable-life
-tags:
-description: "Kevin Kelly Substack: Your most improbable life"
-hash: e9189ccd53836752960830d82f2ac7c8737bf193da87eeaa3470e3ca9991ada5
 ---
 My thoughts on [Kevin Kelly Substack: Your most improbable life](https://kevinkelly.substack.com/p/your-most-improbable-life): Kevin Kelly Substack: Your most improbable life
 

@@ -1,16 +1,16 @@
 ---
-title: "Vasilios Syrakis was laid off by Atlassian"
+type: links
+slug: vasilios-syrakis-was-laid-off-by-atlassian
+hash: 028477fdf9125edd42eb6a0ac1b689f67c83dc676a885538be097775b8f2077e
 date: 2026-05-22
 link: "https://youtu.be/55pTFVoclvE"
 status: published
-image_url: "https://i.ytimg.com/vi/55pTFVoclvE/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-95
-type: links
-slug: vasilios-syrakis-was-laid-off-by-atlassian
-tags:
+tags: 
 description: "Vasilios Syrakis was laid off by Atlassian"
-hash: ad7319cdf582c2f005c89194a6a953284a29243e1cbc030cad1ccc585a2f470d
+title: "Vasilios Syrakis was laid off by Atlassian"
+image_url: "https://i.ytimg.com/vi/55pTFVoclvE/hqdefault.jpg"
+newsletter: techstructive-weekly-95
 ---
 My thoughts on [Vasilios Syrakis was laid off by Atlassian](https://youtu.be/55pTFVoclvE): Vasilios Syrakis was laid off by Atlassian
 

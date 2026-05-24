@@ -1,16 +1,16 @@
 ---
-title: "Philip Choi: If you are ambitious but inconsistent in tech, watch this"
-date: 2026-05-22
-link: "https://youtu.be/HTt_k-vdL4c"
-status: published
-image_url: "https://i.ytimg.com/vi/HTt_k-vdL4c/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-95
-type: links
 slug: philip-choi-if-you-are-ambitious-but-inconsistent-in-tech-watch-this
-tags:
+link: "https://youtu.be/HTt_k-vdL4c"
+image_url: "https://i.ytimg.com/vi/HTt_k-vdL4c/hqdefault.jpg"
+type: links
+tags: 
 description: "Philip Choi: If you are ambitious but inconsistent in tech, watch this"
-hash: b9fe34d62f34f0353716b1b524301ee565b1d7434a19c173cc0039bcbdce6c6c
+hash: a8c47ddf6465de831e8f9ef01c097c6ef9dd973cc411e57523cfb94d77ebd083
+title: "Philip Choi: If you are ambitious but inconsistent in tech, watch this"
+date: 2026-05-22
+status: published
 ---
 My thoughts on [Philip Choi: If you are ambitious but inconsistent in tech, watch this](https://youtu.be/HTt_k-vdL4c): Philip Choi: If you are ambitious but inconsistent in tech, watch this
 

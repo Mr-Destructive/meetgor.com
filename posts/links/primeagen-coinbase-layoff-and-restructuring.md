@@ -1,16 +1,16 @@
 ---
-title: "Primeagen: Coinbase layoff and restructuring"
+image_url: "https://i.ytimg.com/vi/HXSfr5cGGtk/hqdefault.jpg"
+source: newsletter
+slug: primeagen-coinbase-layoff-and-restructuring
 date: 2026-05-22
 link: "https://youtu.be/HXSfr5cGGtk"
 status: published
-image_url: "https://i.ytimg.com/vi/HXSfr5cGGtk/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-95
 type: links
-slug: primeagen-coinbase-layoff-and-restructuring
-tags:
+tags: 
 description: "Primeagen: Coinbase layoff and restructuring"
-hash: b4020a6d2ee35c3edf9264588489c67defd161b467c8b8689853f2edc3be5cb7
+hash: e838794c2e1b5a683c320e9db33e54ae2d8c5531258d696d2d2c38a665a401f8
+title: "Primeagen: Coinbase layoff and restructuring"
 ---
 My thoughts on [Primeagen: Coinbase layoff and restructuring](https://youtu.be/HXSfr5cGGtk): Primeagen: Coinbase layoff and restructuring
 
