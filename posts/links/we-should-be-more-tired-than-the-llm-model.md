@@ -1,16 +1,16 @@
 ---
-title: "We should be more tired than the LLM Model"
-date: 2026-05-29
-link: "https://vickiboykis.com/2026/05/28/we-should-be-more-tired-than-the-model/"
 status: published
 image_url: "https://vickiboykis.com/images/logo.png"
+hash: 57933921dfb38b01ca2addd2b0d5c3e6cf39dcd1949e481f342937dca0bfe002
+title: "We should be more tired than the LLM Model"
 source: newsletter
 newsletter: techstructive-weekly-96
 type: links
 slug: we-should-be-more-tired-than-the-llm-model
-tags:
+tags: 
 description: "Adding deliberate friction back into development"
-hash: 55f5d0949dfcb9d3a916250182cfa620943d39576309667fed7acd1141b9835d
+date: 2026-05-29
+link: "https://vickiboykis.com/2026/05/28/we-should-be-more-tired-than-the-model/"
 ---
 My thoughts on [We should be more tired than the LLM Model](https://vickiboykis.com/2026/05/28/we-should-be-more-tired-than-the-model/): We should be more tired than the LLM Model
 

@@ -3,9 +3,9 @@ link: https://www.goodreads.com/quotes/718814-never-trust-anything-that-can-thin
 image_url: https://images.gr-assets.com/authors/1596216614p8/1077326.jpg
 hash: e0e3075c049d99f0070cad6a2f588c196b977e75b6f63ff4d53b45e4a18b9da8
 tags: 
-date: 2025-12-13T00:00:00Z
 slug: is-tom-riddles-diary-like-an-llm
 type: links
+date: 2025-12-13T00:00:00Z
 post_dir: links
 title: Is Tom Riddle's Diary like an LLM?
 status: published

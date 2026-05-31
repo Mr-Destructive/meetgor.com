@@ -1,16 +1,16 @@
 ---
+status: published
+image_url: "https://i.ytimg.com/vi/WAKGhlzpYgs/hqdefault.jpg"
+newsletter: techstructive-weekly-96
+type: links
+tags: 
+description: "Aaron Francis: Agent orchestration shouldn’t be that hard"
+hash: 989cf75c8a4ab1f770e07533643526013ceab2cdedf6f742634cc6d5942fb56c
 title: "Aaron Francis: Agent orchestration shouldn’t be that hard"
 date: 2026-05-29
 link: "https://youtu.be/WAKGhlzpYgs"
-status: published
-image_url: "https://i.ytimg.com/vi/WAKGhlzpYgs/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-96
-type: links
 slug: aaron-francis-agent-orchestration-shouldn-t-be-that-hard
-tags:
-description: "Aaron Francis: Agent orchestration shouldn’t be that hard"
-hash: 1deb4cd360c7bf693893b98027ebe9538b12c650e4d0d2ed2b31d4ad75cb239d
 ---
 My thoughts on [Aaron Francis: Agent orchestration shouldn’t be that hard](https://youtu.be/WAKGhlzpYgs): Aaron Francis: Agent orchestration shouldn’t be that hard
 

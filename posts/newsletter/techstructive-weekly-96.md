@@ -1,15 +1,15 @@
 ---
+type: newsletter
+status: published
+description: "Reading and writing some stuff, feeling a it burned out after productive maxing with AI agents, among the other things observed and watched in the week from 24th to 30th May 2026"
+tags: ["newsletter", "substack"]
+hash: 95a75fa7dbaefbaf912bcc600a2d0cc42e7448752c723c768d92f2cdc216bb2f
+source: newsletter
+canonical_url: https://techstructively.substack.com/p/techstructive-weekly-96
 title: "Techstructive Weekly #96"
 date: 2026-05-29
 slug: techstructive-weekly-96
-type: newsletter
-status: published
-source: newsletter
-canonical_url: https://techstructively.substack.com/p/techstructive-weekly-96
-description: "Reading and writing some stuff, feeling a it burned out after productive maxing with AI agents, among the other things observed and watched in the week from 24th to 30th May 2026"
-tags: ["newsletter", "substack"]
 ---
-
 ## Week #96
 
 It was a work heavy week. Trying to build a better habit and sticked to it the entire week. Feeling great again, a bit stress and ai psychosis maybe but coping with it, thanks to the good habits. I started writing an page on paper, not my thoughts, a story, maybe childish memories and essays, but it helped me feel better, just 1 page a day. I also started reading consistently 10-20 pages a day. I finishes two books over the weekend and started another 500 page book after a 3 month gap. I read books around 150-200 page range. Its great so far, will update next week how it went.

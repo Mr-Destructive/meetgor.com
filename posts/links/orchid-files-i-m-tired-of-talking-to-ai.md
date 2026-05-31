@@ -1,16 +1,16 @@
 ---
+hash: bef36da349fced1188190edff95441c3198cc14b9ce414a366ede4b3641b4fdc
 title: "Orchid Files: I’m tired of talking to AI"
 date: 2026-05-29
 link: "https://orchidfiles.com/im-tired-of-ai-generated-answers/"
 status: published
 image_url: ""
-source: newsletter
 newsletter: techstructive-weekly-96
 type: links
-slug: orchid-files-i-m-tired-of-talking-to-ai
-tags:
 description: "I found GitHub repositories that were spreading malware. I asked AI what to do about it, but it gave me nothing useful. So I opened a discussion on GitHub. Someone replied. It was the exact same text the AI had given me. I called it out and the comment was"
-hash: b6f3b1af9dd1f1ba0447b20f73222d7bb0a000d93e16ce8f7cca56ce6f6e59ab
+source: newsletter
+slug: orchid-files-i-m-tired-of-talking-to-ai
+tags: 
 ---
 My thoughts on [Orchid Files: I’m tired of talking to AI](https://orchidfiles.com/im-tired-of-ai-generated-answers/): Orchid Files: I’m tired of talking to AI
 

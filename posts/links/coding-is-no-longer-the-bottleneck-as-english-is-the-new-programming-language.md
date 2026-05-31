@@ -1,16 +1,16 @@
 ---
-title: "Coding is no longer the bottleneck as English is the new programming language"
 date: 2026-05-29
+source: newsletter
+type: links
+slug: coding-is-no-longer-the-bottleneck-as-english-is-the-new-programming-language
+tags: 
+description: "Coding is no longer the bottleneck as English is the new programming language"
+hash: b22e117c8a81bc661444824d945c6c9d9cceff1f5c7c922f388fdde61d87a904
+title: "Coding is no longer the bottleneck as English is the new programming language"
 link: "https://youtu.be/WxQ-1_BIiBo"
 status: published
 image_url: "https://i.ytimg.com/vi/WxQ-1_BIiBo/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-96
-type: links
-slug: coding-is-no-longer-the-bottleneck-as-english-is-the-new-programming-language
-tags:
-description: "Coding is no longer the bottleneck as English is the new programming language"
-hash: c4d8a6aede9449518e00cedf7707240a054c357f27772d7da8ea333dd031bcc5
 ---
 My thoughts on [Coding is no longer the bottleneck as English is the new programming language](https://youtu.be/WxQ-1_BIiBo): Coding is no longer the bottleneck as English is the new programming language
 

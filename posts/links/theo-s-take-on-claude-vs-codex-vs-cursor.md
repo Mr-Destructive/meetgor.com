@@ -1,16 +1,16 @@
 ---
+description: "Theo’s take on “Claude vs Codex vs Cursor”"
 title: "Theo’s take on “Claude vs Codex vs Cursor”"
-date: 2026-05-29
 link: "https://youtu.be/JMYspR42HFM"
+type: links
+hash: e0e074c287794d9639d939f1f58ae093f4cf8e832873de96f38efa4db92e2520
+date: 2026-05-29
 status: published
 image_url: "https://i.ytimg.com/vi/JMYspR42HFM/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-96
-type: links
 slug: theo-s-take-on-claude-vs-codex-vs-cursor
-tags:
-description: "Theo’s take on “Claude vs Codex vs Cursor”"
-hash: 197454f6f8f4ceb136717c715bbeeaaf0ab98a9a5cfaf7eb4a99f44727255111
+tags: 
 ---
 My thoughts on [Theo’s take on “Claude vs Codex vs Cursor”](https://youtu.be/JMYspR42HFM): Theo’s take on “Claude vs Codex vs Cursor”
 

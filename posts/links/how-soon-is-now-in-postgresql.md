@@ -1,16 +1,16 @@
 ---
 title: "How soon is now in PostgreSQL?"
-date: 2026-05-29
 link: "https://www.architecture-weekly.com/p/how-soon-is-now-in-postgresql"
-status: published
-image_url: "https://substackcdn.com/image/fetch/$s_!4LmN!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Feabeb60e-b28d-46a8-b1bd-c88c5c811cb8_800x436.png"
 source: newsletter
 newsletter: techstructive-weekly-96
+date: 2026-05-29
+status: published
+image_url: "https://substackcdn.com/image/fetch/$s_!4LmN!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Feabeb60e-b28d-46a8-b1bd-c88c5c811cb8_800x436.png"
 type: links
 slug: how-soon-is-now-in-postgresql
-tags:
+tags: 
 description: "On troubleshooting nasty bug in PostgreSQL and on good tests vs proper tests"
-hash: 3381587c7e01607bc8686a62abafddcae1e6f879c8f7036d0c1ea32c9b4924c3
+hash: cf7e617191b4df61d93d718d68b25b22f1816a1b63338857417953e1eb4abcab
 ---
 My thoughts on [How soon is now in PostgreSQL?](https://www.architecture-weekly.com/p/how-soon-is-now-in-postgresql): How soon is now in PostgreSQL?
 

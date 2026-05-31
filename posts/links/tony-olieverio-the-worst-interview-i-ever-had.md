@@ -1,16 +1,16 @@
 ---
-title: "Tony Olieverio: The worst interview I ever had"
 date: 2026-05-29
-link: "https://www.oliverio.dev/blog/the-worst-job-interview-i-had"
 status: published
+newsletter: techstructive-weekly-96
+tags: 
+hash: c9cb81582ea97b13e8a54072969405661bd6f44e29b8832b4b8b065320a479f5
+title: "Tony Olieverio: The worst interview I ever had"
+link: "https://www.oliverio.dev/blog/the-worst-job-interview-i-had"
 image_url: "https://oliverio.dev/og?title=The%20worst%20job%20interview%20I%20ever%20had"
 source: newsletter
-newsletter: techstructive-weekly-96
 type: links
 slug: tony-olieverio-the-worst-interview-i-ever-had
-tags:
 description: "Or how not to do a culture fit interview"
-hash: c6979d0bb9f126fa1549c67f92e9c23fc9948ec4899857fda8d214f4f33cfbee
 ---
 My thoughts on [Tony Olieverio: The worst interview I ever had](https://www.oliverio.dev/blog/the-worst-job-interview-i-had): Tony Olieverio: The worst interview I ever had
 

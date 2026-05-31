@@ -1,16 +1,16 @@
 ---
 title: "The Standup: Adam from Open Code and recovering from AI Psychosis"
+newsletter: techstructive-weekly-96
+tags: 
+description: "The Standup: Adam from Open Code and recovering from AI Psychosis"
+hash: 4a919de7193193476a121fa724022d5487dc0ffd1a1d1472440cfb22698cc499
 date: 2026-05-29
 link: "https://youtu.be/cVUVfn8OF5k"
 status: published
 image_url: "https://i.ytimg.com/vi/cVUVfn8OF5k/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-96
 type: links
 slug: the-standup-adam-from-open-code-and-recovering-from-ai-psychosis
-tags:
-description: "The Standup: Adam from Open Code and recovering from AI Psychosis"
-hash: a816b57cb7c3519e0d1f1b9a6bfe1cf625b4786a1fc85abd0ffd0c2978e1906e
 ---
 My thoughts on [The Standup: Adam from Open Code and recovering from AI Psychosis](https://youtu.be/cVUVfn8OF5k): The Standup: Adam from Open Code and recovering from AI Psychosis
 

@@ -1,19 +1,16 @@
 ---
+description: "Looks like this ended up on the HN front-page: HN Thread
 title: "Various LLM Smells"
 date: 2026-05-29
 link: "https://shvbsle.in/various-llm-smells/"
+newsletter: techstructive-weekly-96
+type: links
+hash: ccf6f164cf4c3de781c5e27f3f431bc706e03d607f5a558d9c55cd45730d9d6b
 status: published
 image_url: "https://bear-images.sfo2.cdn.digitaloceanspaces.com/shiv-1652679517.jpg"
 source: newsletter
-newsletter: techstructive-weekly-96
-type: links
 slug: various-llm-smells
-tags:
-description: "Looks like this ended up on the HN front-page: HN Thread
-
-
-Late last year I started writing a math blog and decided to use LLMs to polish/enhance my writin..."
-hash: 0ba1a11b52ac7ca58634ccac7574c0ea2f31a7988b0a8ad704b5ad4fbddc7bc7
+tags: 
 ---
 My thoughts on [Various LLM Smells](https://shvbsle.in/various-llm-smells/): Various LLM Smells
 

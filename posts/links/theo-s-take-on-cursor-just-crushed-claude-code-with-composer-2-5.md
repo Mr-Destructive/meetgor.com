@@ -1,16 +1,16 @@
 ---
-title: "Theo’s take on “Cursor just crushed Claude Code with Composer 2.5”"
+description: "Theo’s take on “Cursor just crushed Claude Code with Composer 2.5”"
 date: 2026-05-29
 link: "https://youtu.be/UvUzpSlXKtg"
+source: newsletter
+hash: ee1e410dcce6620f622a3ad26e768b37f613c59b57fca2b0025890fd544e3fd4
+title: "Theo’s take on “Cursor just crushed Claude Code with Composer 2.5”"
 status: published
 image_url: "https://i.ytimg.com/vi/UvUzpSlXKtg/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-96
 type: links
 slug: theo-s-take-on-cursor-just-crushed-claude-code-with-composer-2-5
-tags:
-description: "Theo’s take on “Cursor just crushed Claude Code with Composer 2.5”"
-hash: b2531dba0bb2ec7f04d6166e688a08d11a3461e6fbe30ed513c8a54b7e6e2f96
+tags: 
 ---
 My thoughts on [Theo’s take on “Cursor just crushed Claude Code with Composer 2.5”](https://youtu.be/UvUzpSlXKtg): Theo’s take on “Cursor just crushed Claude Code with Composer 2.5”
 
