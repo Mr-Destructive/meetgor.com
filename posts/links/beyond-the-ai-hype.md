@@ -1,4 +1,8 @@
 ---
+slug: beyond-the-ai-hype
+tags: 
+description: "Beyond the AI Hype"
+hash: 97eec1bcf46b8852103b02559764c5c7afddfaa9a425bd6bc22d9eee6894a24b
 title: "Beyond the AI Hype"
 date: 2026-06-05
 link: "https://youtu.be/-kQRBkBuwHg"
@@ -7,10 +11,6 @@ image_url: "https://i.ytimg.com/vi/-kQRBkBuwHg/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-97
 type: links
-slug: beyond-the-ai-hype
-tags:
-description: "Beyond the AI Hype"
-hash: 3aafd2ef51e13d754def1db9fde05a1f9b405bb89951602dc0772e52637dd092
 ---
 My thoughts on [Beyond the AI Hype](https://youtu.be/-kQRBkBuwHg): Beyond the AI Hype
 

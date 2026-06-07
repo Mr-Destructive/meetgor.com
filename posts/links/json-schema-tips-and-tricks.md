@@ -1,16 +1,16 @@
 ---
-title: "JSON Schema Tips and Tricks"
+tags: 
 date: 2026-06-05
+newsletter: techstructive-weekly-97
+description: "Enjoy the videos and music you love, upload original content, and share it all with friends, family, and the world on YouTube."
+hash: 4f9cfe0d12aaa6059479957047c3b03b102df8255e8d63fbb9cd0855cd07c12e
+title: "JSON Schema Tips and Tricks"
 link: "https://www.youtube.com/live/QiAXxaLrt7E"
 status: published
 image_url: ""
 source: newsletter
-newsletter: techstructive-weekly-97
 type: links
 slug: json-schema-tips-and-tricks
-tags:
-description: "Enjoy the videos and music you love, upload original content, and share it all with friends, family, and the world on YouTube."
-hash: 6f936b4fd564111f2802416e67faeac191a1e028b7b9b20d29ff25793c5a4524
 ---
 My thoughts on [JSON Schema Tips and Tricks](https://www.youtube.com/live/QiAXxaLrt7E): JSON Schema Tips and Tricks
 

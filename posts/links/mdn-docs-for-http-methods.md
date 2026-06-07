@@ -1,18 +1,16 @@
 ---
+source: newsletter
+newsletter: techstructive-weekly-97
+type: links
+slug: mdn-docs-for-http-methods
+description: "HTTP defines a set of request methods to indicate the purpose of the request and what is expected if the request is successful.
+hash: 345d563800dbf5cbdc6feabbb5dde6f365851d7aa42749ae8e7666aeeeb0666f
 title: "MDN Docs for HTTP Methods"
 date: 2026-06-05
 link: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods"
 status: published
 image_url: ""
-source: newsletter
-newsletter: techstructive-weekly-97
-type: links
-slug: mdn-docs-for-http-methods
-tags:
-description: "HTTP defines a set of request methods to indicate the purpose of the request and what is expected if the request is successful.
-Although they can also be nouns, these request methods are sometimes referred to as HTTP verbs.
-Each request method has its own semantics, but some characteristics are shared across multiple methods, specifically request methods can be safe, idempotent, or cacheable."
-hash: a318e1e32fdd385237ff11f09f9f7eca0f55f7ac3c10d082e74721a849cf6b7e
+tags: 
 ---
 My thoughts on [MDN Docs for HTTP Methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods): MDN Docs for HTTP Methods
 

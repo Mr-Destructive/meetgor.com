@@ -4,13 +4,13 @@ date: 2026-06-05
 link: "https://youtu.be/IvRmwiYdA_A"
 status: published
 image_url: "https://i.ytimg.com/vi/IvRmwiYdA_A/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-97
 type: links
+tags: 
+source: newsletter
 slug: api-evangelist-conversation-with-lorna-and-kin-lane
-tags:
 description: "API Evangelist Conversation with Lorna and Kin Lane"
-hash: 91f02cfd4bf5af6a17c346648f5b0107b291881860c19fb86fcbac125d14d1b7
+hash: 7674891e045a1726636297d51ba4052c467c2112c0fa67f6700a274b8fef1667
 ---
 My thoughts on [API Evangelist Conversation with Lorna and Kin Lane](https://youtu.be/IvRmwiYdA_A): API Evangelist Conversation with Lorna and Kin Lane
 

@@ -1,16 +1,16 @@
 ---
-title: "Lorna Jane’s Blog:"
+tags: 
+description: "Lorna Jane’s Blog:"
 date: 2026-06-05
 link: "https://lornajane.net/"
 status: published
+type: links
+slug: lorna-jane-s-blog
+hash: 31afb3a40f51d3bc95279b67a277648023f10facdd94bfd4314c62c1c383cb65
+title: "Lorna Jane’s Blog:"
 image_url: "https://beta.lornajane.net/wp-content/uploads/2023/11/LornaJane-OG1.png"
 source: newsletter
 newsletter: techstructive-weekly-97
-type: links
-slug: lorna-jane-s-blog
-tags:
-description: "Lorna Jane’s Blog:"
-hash: be4a9fd01cc6ec4c9a566d3e22ff650f806bca4ad5ce14450eff886596cdfeec
 ---
 My thoughts on [Lorna Jane’s Blog:](https://lornajane.net/): Lorna Jane’s Blog:
 

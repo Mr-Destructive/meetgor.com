@@ -1,16 +1,16 @@
 ---
+newsletter: techstructive-weekly-97
+tags: 
 title: "Hands on with Splotlights’ Spectral: API Linting for better Specs and Governance"
 date: 2026-06-05
 link: "https://youtu.be/Il5btHG_D74"
+type: links
+slug: hands-on-with-splotlights-spectral-api-linting-for-better-specs-and-governance
+description: "Hands on with Splotlights’ Spectral: API Linting for better Specs and Governance"
+hash: 26433b99107603558565fb6038a982d81aa74a6f555924c19d2bc8b08f96c992
 status: published
 image_url: "https://i.ytimg.com/vi/Il5btHG_D74/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-97
-type: links
-slug: hands-on-with-splotlights-spectral-api-linting-for-better-specs-and-governance
-tags:
-description: "Hands on with Splotlights’ Spectral: API Linting for better Specs and Governance"
-hash: 06da30fd09ca6f9df0bd15721b732ccfc836affa600b83266461c73a4f268392
 ---
 My thoughts on [Hands on with Splotlights’ Spectral: API Linting for better Specs and Governance](https://youtu.be/Il5btHG_D74): Hands on with Splotlights’ Spectral: API Linting for better Specs and Governance
 

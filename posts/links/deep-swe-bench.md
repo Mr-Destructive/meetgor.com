@@ -1,16 +1,16 @@
 ---
-title: "Deep SWE Bench"
 date: 2026-06-05
 link: "https://youtu.be/JpSHyEIZ_bo"
-status: published
 image_url: "https://i.ytimg.com/vi/JpSHyEIZ_bo/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-97
 type: links
 slug: deep-swe-bench
-tags:
 description: "Deep SWE Bench"
-hash: 86738524c2e0ede63fe177f9a3e9549b43a235e45ba54619ebb0d095b97c088a
+title: "Deep SWE Bench"
+status: published
+tags: 
+hash: a6e85e3ec76ae3806f42e8264ecd5ab6bd78c93529caec2832c1aab52c6206ae
 ---
 My thoughts on [Deep SWE Bench](https://youtu.be/JpSHyEIZ_bo): Deep SWE Bench
 

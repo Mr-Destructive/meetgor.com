@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #97"
-date: 2026-06-05
 slug: techstructive-weekly-97
 type: newsletter
 status: published
-source: newsletter
-canonical_url: https://techstructively.substack.com/p/techstructive-weekly-97
 description: "Read about OpenAPI specifications, watched a few livestreams on understanding API designing, among the other things learnt, explored from the week of 31st May to 6th June 2026"
 tags: ["newsletter", "substack"]
+source: newsletter
+canonical_url: https://techstructively.substack.com/p/techstructive-weekly-97
+hash: 59a29637381f51bdc10d7837f4920a6c94b9ff56935762a34db95169210fee64
+title: "Techstructive Weekly #97"
+date: 2026-06-05
 ---
-
 ## Week #97
 
 It was a great week. A hope kindled out of random or maybe out of pity. I appreciate it with both hands, and don’t want to throw it away. Maybe I was unlucky for the past couple of months, but when it strikes, I have to be ready with both hands, when a opportunity comes, the preparation is what makes your luck work.

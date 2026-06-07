@@ -1,16 +1,16 @@
 ---
 title: "Sean Goedecke: Wired Projects I shipped with AI"
-date: 2026-06-05
-link: "https://www.seangoedecke.com/weird-projects-i-shipped-with-ai/"
 status: published
 image_url: "https://www.seangoedecke.com/og-image.jpg"
-source: newsletter
-newsletter: techstructive-weekly-97
 type: links
 slug: sean-goedecke-wired-projects-i-shipped-with-ai
-tags:
+tags: 
+hash: c5f80c967fe2d651e21fd4fa2df212eebc87d9f33167390f4b6c54198fb1904e
+date: 2026-06-05
+link: "https://www.seangoedecke.com/weird-projects-i-shipped-with-ai/"
+source: newsletter
+newsletter: techstructive-weekly-97
 description: "Sean Goedecke: Wired Projects I shipped with AI"
-hash: e57b3b9642b777197bf5deb757c7108542313a6dba56742efcf03c6c02841601
 ---
 My thoughts on [Sean Goedecke: Wired Projects I shipped with AI](https://www.seangoedecke.com/weird-projects-i-shipped-with-ai/): Sean Goedecke: Wired Projects I shipped with AI
 

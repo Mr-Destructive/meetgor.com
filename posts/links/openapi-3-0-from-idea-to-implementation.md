@@ -3,14 +3,14 @@ title: "OpenAPI 3.0 from idea to implementation"
 date: 2026-06-05
 link: "https://www.youtube.com/live/JEBd78U9aBo?"
 status: published
-image_url: ""
 source: newsletter
-newsletter: techstructive-weekly-97
 type: links
 slug: openapi-3-0-from-idea-to-implementation
-tags:
+tags: 
+image_url: ""
+newsletter: techstructive-weekly-97
 description: "Enjoy the videos and music you love, upload original content, and share it all with friends, family, and the world on YouTube."
-hash: 106934c02dd4c041f55d5bc3824d2d50785154f763ebbc56a9b8b724cabddd37
+hash: 0d1c17ffe14b11ccf16a235d7006b3d77354441b3548e1aeab843d972289eb83
 ---
 My thoughts on [OpenAPI 3.0 from idea to implementation](https://www.youtube.com/live/JEBd78U9aBo?): OpenAPI 3.0 from idea to implementation
 
