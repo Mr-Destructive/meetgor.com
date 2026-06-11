@@ -1,4 +1,5 @@
 ---
+image_url: 'https://shots.waylonwalker.com/shot/?url=https://waylonwalker.com/just-fucking-use-kubernetes/og/&height=600&width=1200&scaled_width=1200&scaled_height=600&format=jpg'
 source: newsletter
 slug: just-fucking-use-kubernetes
 type: links
@@ -10,7 +11,6 @@ title: 'Just fucking use Kubernetes'
 link: 'https://waylonwalker.com/just-fucking-use-kubernetes/'
 newsletter: 2025-07-05-techstructive-weekly-49
 status: published
-image_url: 'https://shots.waylonwalker.com/shot/?url=https://waylonwalker.com/just-fucking-use-kubernetes/og/&height=600&width=1200&scaled_width=1200&scaled_height=600&format=jpg'
 ---
 ## Commentary
 

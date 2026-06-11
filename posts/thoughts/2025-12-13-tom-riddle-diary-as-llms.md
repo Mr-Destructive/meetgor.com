@@ -1,8 +1,8 @@
 ---
 slug: is-tom-riddles-diary-like-an-llm
 tags: 
-type: links
 link: "https://www.goodreads.com/quotes/718814-never-trust-anything-that-can-think-for-itself-if-you"
+type: links
 status: published
 post_dir: links
 date: 2025-12-13
