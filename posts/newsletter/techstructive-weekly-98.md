@@ -1,15 +1,15 @@
 ---
+source: newsletter
+hash: 788086cf435c2c65ef579d65544dcc374b5677e90d9a80903a19feb9cb73a73a
 title: "Techstructive Weekly #98"
 date: 2026-06-12
-slug: techstructive-weekly-98
-type: newsletter
 status: published
-source: newsletter
 canonical_url: https://techstructively.substack.com/p/techstructive-weekly-98
 description: "Reading and having conversations about life and me, challenging week with rejections, navigating AI fatigue in day job among the other things watched, learnt in the week from 7th to 13th May 2026"
 tags: ["newsletter", "substack"]
+slug: techstructive-weekly-98
+type: newsletter
 ---
-
 ## Week #98
 
 It was a high-low week. The Monday gave a tearful morning, somehow scampered on the evening with a good fresh mood. The next day was chaos, I was totally burnt out and the week continued to take the toll. Agent clanking in the background, understanding the problems, addressing them on the calls. It was a week where I didn’t get time to read. I read all 5-6 articles on a friday evening to be honest, which has almost never happened, I usually read something during a week, a afternoon break, or a morning chill 5 minute break.

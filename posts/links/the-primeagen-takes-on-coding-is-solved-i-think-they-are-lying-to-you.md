@@ -1,16 +1,16 @@
 ---
+type: links
+slug: the-primeagen-takes-on-coding-is-solved-i-think-they-are-lying-to-you
+hash: b380ac35158a8a77649e95e7eadc7f5e016148807bf947fcd9d5746060aa73e9
 title: "The Primeagen takes on “Coding is solved”: I  think they are lying to you"
 date: 2026-06-12
 link: "https://youtu.be/zfYsSFY4l18"
 status: published
 image_url: "https://i.ytimg.com/vi/zfYsSFY4l18/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-98
-type: links
-slug: the-primeagen-takes-on-coding-is-solved-i-think-they-are-lying-to-you
-tags:
+tags: 
 description: "The Primeagen takes on “Coding is solved”: I  think they are lying to you"
-hash: de1ef78bbc9e20314f3b27abbb6c524c30776f172127ebcded8c5f85a9389db8
+source: newsletter
 ---
 My thoughts on [The Primeagen takes on “Coding is solved”: I  think they are lying to you](https://youtu.be/zfYsSFY4l18): The Primeagen takes on “Coding is solved”: I  think they are lying to you
 

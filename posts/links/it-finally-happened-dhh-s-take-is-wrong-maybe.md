@@ -1,16 +1,16 @@
 ---
-title: "It finally happened, DHH’s take is wrong maybe"
 date: 2026-06-12
 link: "https://youtu.be/pkndFYSTr0Y"
-status: published
 image_url: "https://i.ytimg.com/vi/pkndFYSTr0Y/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-98
 type: links
 slug: it-finally-happened-dhh-s-take-is-wrong-maybe
-tags:
+tags: 
+title: "It finally happened, DHH’s take is wrong maybe"
+status: published
 description: "It finally happened, DHH’s take is wrong maybe"
-hash: 7ff15dfffd18df8d27c58a08efdf99c007fcbd0b5c3e019d49e409037e25ecd9
+hash: 44df78f783f54b8afce27e41f41c876da9b68c7c8dcf6b262488ba0b1c15e934
 ---
 My thoughts on [It finally happened, DHH’s take is wrong maybe](https://youtu.be/pkndFYSTr0Y): It finally happened, DHH’s take is wrong maybe
 

@@ -1,16 +1,16 @@
 ---
-title: "Zed Blog: Software is made between commits"
-date: 2026-06-12
 link: "https://zed.dev/blog/introducing-deltadb"
 status: published
+type: links
+description: "From the Zed Blog: Agents turned the conversation into the real source of our software. DeltaDB is the version control built for it."
+hash: cd097744cdb21345c6d08512ca0eb4e13067c3acef285173387874a32578fd15
+title: "Zed Blog: Software is made between commits"
+date: 2026-06-12
 image_url: "https://images.zed.dev/blog/deltadb-early-access/thumbnail.webp"
 source: newsletter
 newsletter: techstructive-weekly-98
-type: links
 slug: zed-blog-software-is-made-between-commits
-tags:
-description: "From the Zed Blog: Agents turned the conversation into the real source of our software. DeltaDB is the version control built for it."
-hash: 3a9fffe095b0034be88534296943b842e1373f305392c2f384bd21e0e2d147ba
+tags: 
 ---
 My thoughts on [Zed Blog: Software is made between commits](https://zed.dev/blog/introducing-deltadb): Zed Blog: Software is made between commits
 

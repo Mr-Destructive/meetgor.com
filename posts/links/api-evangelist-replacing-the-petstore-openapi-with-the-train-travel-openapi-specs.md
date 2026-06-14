@@ -1,16 +1,16 @@
 ---
-title: "API Evangelist: Replacing the Petstore OpenAPI with the Train Travel OpenAPI Specs"
-date: 2026-06-12
-link: "https://apievangelist.com/2024/07/01/replacing-the-petstore-with-the-train-travel-openapi/"
+tags: 
 status: published
 image_url: "https://kinlane-productions2.s3.amazonaws.com/algorotoscope-master/bf-skinner-high-speed-train-station-france.jpg"
 source: newsletter
 newsletter: techstructive-weekly-98
 type: links
-slug: api-evangelist-replacing-the-petstore-openapi-with-the-train-travel-openapi-specs
-tags:
 description: "While writing the story on Bump.sh’s adoption of APIs.json I stumbled across their story on replacing the ubiquitous PetStore OpenAPI that comes default with..."
-hash: 92f987561ef2de179bc2644a33ea9da552a4e8aeed4dd78c8750dd8f619fc3c5
+hash: d089f8a49ad69de2791d523730a44ac46ed2a8466ed46cfbf335f1f7c4f30e01
+title: "API Evangelist: Replacing the Petstore OpenAPI with the Train Travel OpenAPI Specs"
+date: 2026-06-12
+link: "https://apievangelist.com/2024/07/01/replacing-the-petstore-with-the-train-travel-openapi/"
+slug: api-evangelist-replacing-the-petstore-openapi-with-the-train-travel-openapi-specs
 ---
 My thoughts on [API Evangelist: Replacing the Petstore OpenAPI with the Train Travel OpenAPI Specs](https://apievangelist.com/2024/07/01/replacing-the-petstore-with-the-train-travel-openapi/): API Evangelist: Replacing the Petstore OpenAPI with the Train Travel OpenAPI Specs
 

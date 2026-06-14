@@ -1,16 +1,16 @@
 ---
+hash: 13982e6ab10527b661c14cedc0a6d62b2aeb6c6a9c17fc923cf7134af39f0785
 title: "Doing nothing at work"
-date: 2026-06-12
 link: "https://www.seangoedecke.com/doing-nothing-at-work/"
-status: published
-image_url: "https://www.seangoedecke.com/og-image.jpg"
 source: newsletter
 newsletter: techstructive-weekly-98
 type: links
 slug: doing-nothing-at-work
-tags:
+tags: 
 description: "Doing nothing at work"
-hash: 5c6ea8e185d0b81f382d74a25493b6c93531a1abebb9c21b041925dca4bde6ef
+date: 2026-06-12
+status: published
+image_url: "https://www.seangoedecke.com/og-image.jpg"
 ---
 My thoughts on [Doing nothing at work](https://www.seangoedecke.com/doing-nothing-at-work/): Doing nothing at work
 

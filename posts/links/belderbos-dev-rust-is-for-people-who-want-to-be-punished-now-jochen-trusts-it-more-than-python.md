@@ -1,16 +1,16 @@
 ---
+newsletter: techstructive-weekly-98
+slug: belderbos-dev-rust-is-for-people-who-want-to-be-punished-now-jochen-trusts-it-more-than-python
+tags: 
+description: "Jochen thought Rust was self-punishment for the pros. Three months later, his hand-rolled JSON parser ran up to 3.5x faster than CPython."
+hash: 247b986f8c1baa8f51d6e0142c0951da6f7fcfa9776648ba5d326c58d3a6d8d1
 title: "belderbos.dev: “Rust Is for People Who Want to Be Punished.” Now Jochen Trusts It More Than Python"
 date: 2026-06-12
 link: "https://belderbos.dev/blog/jochen-rust-cohort-beat-cpython/"
-status: published
 image_url: "https://belderbos.dev/images/og/jochen-rust-cohort-beat-cpython.png"
-source: newsletter
-newsletter: techstructive-weekly-98
 type: links
-slug: belderbos-dev-rust-is-for-people-who-want-to-be-punished-now-jochen-trusts-it-more-than-python
-tags:
-description: "Jochen thought Rust was self-punishment for the pros. Three months later, his hand-rolled JSON parser ran up to 3.5x faster than CPython."
-hash: 57a00275856fcd1207207a396ca960ccc47433d2c49d7f5f7b2566ecac5cc6c9
+status: published
+source: newsletter
 ---
 My thoughts on [belderbos.dev: “Rust Is for People Who Want to Be Punished.” Now Jochen Trusts It More Than Python](https://belderbos.dev/blog/jochen-rust-cohort-beat-cpython/): belderbos.dev: “Rust Is for People Who Want to Be Punished.” Now Jochen Trusts It More Than Python
 

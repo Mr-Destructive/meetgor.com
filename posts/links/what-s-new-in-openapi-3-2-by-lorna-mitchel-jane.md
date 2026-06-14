@@ -1,16 +1,16 @@
 ---
-title: "What’s new in OpenAPI 3.2 by Lorna Mitchel Jane"
 date: 2026-06-12
 link: "https://youtu.be/0jAGXY6zjss"
 status: published
+type: links
+slug: what-s-new-in-openapi-3-2-by-lorna-mitchel-jane
+description: "What’s new in OpenAPI 3.2 by Lorna Mitchel Jane"
+title: "What’s new in OpenAPI 3.2 by Lorna Mitchel Jane"
 image_url: "https://i.ytimg.com/vi/0jAGXY6zjss/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-98
-type: links
-slug: what-s-new-in-openapi-3-2-by-lorna-mitchel-jane
-tags:
-description: "What’s new in OpenAPI 3.2 by Lorna Mitchel Jane"
-hash: e2dcbe977a3cdc64353fb7e24f7568622e58a1c70f08fef2d356e940632c3a02
+tags: 
+hash: 16e7c858f5b58fc8751b993b633e40bae51824258724bb32f5865cfb5336c1d1
 ---
 My thoughts on [What’s new in OpenAPI 3.2 by Lorna Mitchel Jane](https://youtu.be/0jAGXY6zjss): What’s new in OpenAPI 3.2 by Lorna Mitchel Jane
 
