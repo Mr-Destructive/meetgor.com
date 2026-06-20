@@ -1,0 +1,22 @@
+---
+title: "Introducing the pkg.go dev API"
+date: 2026-06-19
+link: "https://go.dev/blog/pkgsite-api"
+status: published
+image_url: "https://go.dev/doc/gopher/runningsquare.jpg"
+source: newsletter
+newsletter: techstructive-weekly-99
+type: links
+slug: introducing-the-pkg-go-dev-api
+tags:
+description: "Introducing the new programmatic API for pkg.go.dev, allowing developers to fetch package and module data directly."
+hash: e7e36b5682ae9ec03e826d1a405830630940e8c6f1dd62d89b1c646f7b7f2b2a
+---
+My thoughts on [Introducing the pkg.go dev API](https://go.dev/blog/pkgsite-api): Introducing the pkg.go dev API
+
+## Commentary
+
+- Introducing the pkg.go dev API
+- This is a good entry into the ecosystem. Go team knows there is a need to expose the packages in a ai-agent-friendly way. And this seems to be a right move.
+- By exposing this over api, an ai agent can know what the package’s structure or core features are without needing to download it. its debatable how well it is documented. But if it is then its a powerful way to use it for agents.
+- I would like to explore this with the open api specification. Right now that looks very bare bones.
