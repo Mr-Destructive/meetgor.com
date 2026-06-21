@@ -1,16 +1,16 @@
 ---
+description: "The Twin Prime conjecture"
+hash: aaba1fbc2528428cf05ce5dbc858290013d4ae61ba888bd8772ccf24d14c8a68
 title: "The Twin Prime conjecture"
+status: published
+source: newsletter
+type: links
+tags: 
 date: 2026-06-19
 link: "https://youtu.be/8HBDE-msUjw"
-status: published
 image_url: "https://i.ytimg.com/vi/8HBDE-msUjw/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-99
-type: links
 slug: the-twin-prime-conjecture
-tags:
-description: "The Twin Prime conjecture"
-hash: f7b8b22a8f0abbf1fbb4aad96efab73ab2acd4ad4c1e1340396500ac7a69c283
 ---
 My thoughts on [The Twin Prime conjecture](https://youtu.be/8HBDE-msUjw): The Twin Prime conjecture
 

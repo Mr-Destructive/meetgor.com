@@ -1,16 +1,16 @@
 ---
-title: "What job interviews thought me about Kubernetes"
-date: 2026-06-19
-link: "https://notnotp.com/notes/what-job-interviews-taught-me-about-kubernetes/"
 status: published
 image_url: ""
+tags: 
+date: 2026-06-19
 source: newsletter
 newsletter: techstructive-weekly-99
 type: links
 slug: what-job-interviews-thought-me-about-kubernetes
-tags:
 description: "So I've been job hunting lately. Reading job postings, doing interviews, talking to engineering teams at like a dozen companies. And I noticed..."
-hash: 564b9d8e1c5e91edc72120ce82a883b696cec2fc4ceb53567a8096d1695f8bc5
+hash: cb84975b917c3e29d567fb5b6985b7a3a22fcf96943ac5fbbe759c8d33bb5bdd
+title: "What job interviews thought me about Kubernetes"
+link: "https://notnotp.com/notes/what-job-interviews-taught-me-about-kubernetes/"
 ---
 My thoughts on [What job interviews thought me about Kubernetes](https://notnotp.com/notes/what-job-interviews-taught-me-about-kubernetes/): What job interviews thought me about Kubernetes
 

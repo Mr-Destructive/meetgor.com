@@ -1,6 +1,5 @@
 ---
 title: "The Primeagen: I am done with Golang"
-date: 2026-06-19
 link: "https://youtu.be/WqSWZuGS9pc"
 status: published
 image_url: "https://i.ytimg.com/vi/WqSWZuGS9pc/hqdefault.jpg"
@@ -8,9 +7,10 @@ source: newsletter
 newsletter: techstructive-weekly-99
 type: links
 slug: the-primeagen-i-am-done-with-golang
-tags:
+date: 2026-06-19
+tags: 
 description: "The Primeagen: I am done with Golang"
-hash: 3eec13706903e8f1ca801d761445cdc92f976dafbeea76bb53a05c44fd8d052f
+hash: 0d254d1b739f6179da007d4855a9ac8be773814a67bc38b19818b81d445c5791
 ---
 My thoughts on [The Primeagen: I am done with Golang](https://youtu.be/WqSWZuGS9pc): The Primeagen: I am done with Golang
 

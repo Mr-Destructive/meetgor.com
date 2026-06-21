@@ -1,5 +1,7 @@
 ---
 title: "Techstructive Weekly #99"
+tags: ["newsletter", "substack"]
+hash: aa488f2a8756c0f55fb2804ca032fbfe72433980befab10ed177b3dc03491d47
 date: 2026-06-19
 slug: techstructive-weekly-99
 type: newsletter
@@ -7,9 +9,7 @@ status: published
 source: newsletter
 canonical_url: https://techstructively.substack.com/p/techstructive-weekly-99
 description: "Reading slowly, trying to find the learning rhythm back, understanding systems and interacting with users among the other things watched and learnt in the week of 14th to 20th June 2026"
-tags: ["newsletter", "substack"]
 ---
-
 ## Week #99
 
 What a week. It was a great week not gonna lie. Finally seeing the light of the day after 1 month of grind. Being able to see the satisfaction of a user is a different ball game. Speed is something I couldn’t deal with, it becomes overwhelming to manage. But sometimes its good to push yourselves to get something. Maybe nobody will appreciate or notice at that time, but you will know what worked for you, how can you adapt next time and learn the lessons.

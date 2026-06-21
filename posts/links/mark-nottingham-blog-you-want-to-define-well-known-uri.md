@@ -1,16 +1,16 @@
 ---
-title: "Mark Nottingham Blog: You want to define well-known URI"
-date: 2026-06-19
 link: "https://mnot.net/blog/2026/well_known_uris"
 status: published
-image_url: "https://mnot.net/blog/image/sign.jpeg"
 source: newsletter
 newsletter: techstructive-weekly-99
+tags: 
+hash: 9dcad26397ecb3e81d0dd77f2e8d7b143c77563eda9e40c9d753b84f0abc61ef
+title: "Mark Nottingham Blog: You want to define well-known URI"
+date: 2026-06-19
+image_url: "https://mnot.net/blog/image/sign.jpeg"
 type: links
 slug: mark-nottingham-blog-you-want-to-define-well-known-uri
-tags:
 description: "When to reach for a well-known URI — and the traps that catch most protocol designers."
-hash: 8e66a5290abfafbdfac11980464c7619e6cb3d1202bde62c32b7386d5c400a69
 ---
 My thoughts on [Mark Nottingham Blog: You want to define well-known URI](https://mnot.net/blog/2026/well_known_uris): Mark Nottingham Blog: You want to define well-known URI
 

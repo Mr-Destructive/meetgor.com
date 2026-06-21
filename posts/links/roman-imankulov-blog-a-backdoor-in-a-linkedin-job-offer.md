@@ -1,16 +1,16 @@
 ---
-title: "Roman Imankulov Blog: A backdoor in a Linkedin Job offer"
+newsletter: techstructive-weekly-99
+type: links
+hash: 1293757d3b843a51ce288987f02a863be642cb0b2ed80c1320f6f3fd0c0339e5
 date: 2026-06-19
+source: newsletter
+slug: roman-imankulov-blog-a-backdoor-in-a-linkedin-job-offer
+tags: 
+description: "A fake recruiter, a crypto repo, and a remote code execution payload hidden in a test file."
+title: "Roman Imankulov Blog: A backdoor in a Linkedin Job offer"
 link: "https://roman.pt/posts/linkedin-backdoor/"
 status: published
 image_url: "https://roman.pt/posts/linkedin-backdoor/splash.png"
-source: newsletter
-newsletter: techstructive-weekly-99
-type: links
-slug: roman-imankulov-blog-a-backdoor-in-a-linkedin-job-offer
-tags:
-description: "A fake recruiter, a crypto repo, and a remote code execution payload hidden in a test file."
-hash: 31e1d7198697ee5fb7d3f3ea98baf1ea16499a4bf5cf54f0cdac975653230a26
 ---
 My thoughts on [Roman Imankulov Blog: A backdoor in a Linkedin Job offer](https://roman.pt/posts/linkedin-backdoor/): Roman Imankulov Blog: A backdoor in a Linkedin Job offer
 

@@ -1,16 +1,16 @@
 ---
 title: "Theo Reacts: AI makes junior engineers less harmful"
-date: 2026-06-19
 link: "https://youtu.be/rTMRlqT8Q8c"
+type: links
+hash: 8a3fce8f07a83357b0e700f63cc61e1e3c888fe738899c4e043e0b54275bfba2
+date: 2026-06-19
 status: published
 image_url: "https://i.ytimg.com/vi/rTMRlqT8Q8c/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-99
-type: links
 slug: theo-reacts-ai-makes-junior-engineers-less-harmful
-tags:
+tags: 
 description: "Theo Reacts: AI makes junior engineers less harmful"
-hash: 917c9bdd87c2bdc6fcf572b15699670853345e97ac1c337014e64bf17560f00b
 ---
 My thoughts on [Theo Reacts: AI makes junior engineers less harmful](https://youtu.be/rTMRlqT8Q8c): Theo Reacts: AI makes junior engineers less harmful
 

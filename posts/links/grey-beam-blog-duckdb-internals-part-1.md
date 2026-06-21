@@ -1,16 +1,16 @@
 ---
+image_url: "https://storage.ghost.io/c/eb/37/eb37738a-77f2-4eaf-9de2-43f9b30fffd5/content/images/2026/05/image--16-.png"
+newsletter: techstructive-weekly-99
+slug: grey-beam-blog-duckdb-internals-part-1
+tags: 
 title: "Grey Beam Blog: DuckDB Internals - Part 1"
 date: 2026-06-19
+source: newsletter
+type: links
+description: "Walk through DuckDB's internals: how it skips serialization overhead, parses and optimizes SQL, and stores data in columnar row groups with zone maps."
+hash: 3bd1f053d48dcb709fcfd1ed5c2c372f6a2451cc06abe9898e68412807ccff13
 link: "https://www.greybeam.ai/blog/duckdb-internals-part-1"
 status: published
-image_url: "https://storage.ghost.io/c/eb/37/eb37738a-77f2-4eaf-9de2-43f9b30fffd5/content/images/2026/05/image--16-.png"
-source: newsletter
-newsletter: techstructive-weekly-99
-type: links
-slug: grey-beam-blog-duckdb-internals-part-1
-tags:
-description: "Walk through DuckDB's internals: how it skips serialization overhead, parses and optimizes SQL, and stores data in columnar row groups with zone maps."
-hash: a808e6b7949203855ea9f54da29e314c674f8b2606ce1d2d566c61b036810d1f
 ---
 My thoughts on [Grey Beam Blog: DuckDB Internals - Part 1](https://www.greybeam.ai/blog/duckdb-internals-part-1): Grey Beam Blog: DuckDB Internals - Part 1
 

@@ -1,24 +1,18 @@
 ---
+slug: ai-creativity-and-discovery-thoughts-by-richard-sutton
+description: "A new and possibly controversial perspective:
+https: //t.co/LhAU6AyDkh
+hash: eeb483de018c4f91890c3656998d100bfee19395a7f61b1ce3d2d22061a5252f
 title: "AI Creativity and Discovery - Thoughts by Richard Sutton"
-date: 2026-06-19
-link: "https://x.com/RichardSSutton/status/2061216087744946656"
 status: published
 image_url: "https://pbs.twimg.com/profile_images/1797759934811254786/XsJes4Sk_200x200.jpg"
-source: newsletter
 newsletter: techstructive-weekly-99
+tags: 
+The text of the speech: 
+date: 2026-06-19
+link: "https://x.com/RichardSSutton/status/2061216087744946656"
+source: newsletter
 type: links
-slug: ai-creativity-and-discovery-thoughts-by-richard-sutton
-tags:
-description: "A new and possibly controversial perspective:
-In this video, I explain the sense in which generative AI trained by supervised learning is incapable of making novel discoveries.
-https://t.co/LhAU6AyDkh
-
-The text of the speech:
-
-AI Creativity and Discovery
-
-Good day ladies and"
-hash: fb2bd72bb78343dbceaee7840801e7125c85f49a2af6580656f41e35e3eb30c6
 ---
 My thoughts on [AI Creativity and Discovery - Thoughts by Richard Sutton](https://x.com/RichardSSutton/status/2061216087744946656): AI Creativity and Discovery - Thoughts by Richard Sutton
 

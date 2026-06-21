@@ -1,16 +1,16 @@
 ---
 title: "RFC 10008: The HTTP Query Method"
 date: 2026-06-19
+source: newsletter
+newsletter: techstructive-weekly-99
+hash: b53a1275d6d1b9e067fa1529de66d17ef210105f635c0cc9df226d8e0e3a22fe
 link: "https://www.rfc-editor.org/info/rfc10008/"
 status: published
 image_url: "https://www.rfc-editor.org/api/v1/meta-thumbnail/rfc10008.png"
-source: newsletter
-newsletter: techstructive-weekly-99
 type: links
 slug: rfc-10008-the-http-query-method
-tags:
+tags: 
 description: "This specification defines the QUERY method for HTTP. A QUERY requests that the request target process the enclosed content in a safe and idempotent manner and then respond with the result of that processing. This is similar to POST requests, but QUERY requests can be automatically repeated or restarted without concern for partial state changes."
-hash: ab5e4a8b3f7223bad3376db7806e6764d8d005190aad0cba94d3df57a72b396d
 ---
 My thoughts on [RFC 10008: The HTTP Query Method](https://www.rfc-editor.org/info/rfc10008/): RFC 10008: The HTTP Query Method
 

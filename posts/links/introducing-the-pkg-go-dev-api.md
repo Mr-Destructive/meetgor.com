@@ -1,16 +1,16 @@
 ---
+tags: 
+hash: 1ee77d8a3f28bb5a2edca763032d197a8047c857a2ce77bea94f7dab7bf53d37
 title: "Introducing the pkg.go dev API"
-date: 2026-06-19
-link: "https://go.dev/blog/pkgsite-api"
 status: published
-image_url: "https://go.dev/doc/gopher/runningsquare.jpg"
 source: newsletter
 newsletter: techstructive-weekly-99
+description: "Introducing the new programmatic API for pkg.go.dev, allowing developers to fetch package and module data directly."
+date: 2026-06-19
+link: "https://go.dev/blog/pkgsite-api"
+image_url: "https://go.dev/doc/gopher/runningsquare.jpg"
 type: links
 slug: introducing-the-pkg-go-dev-api
-tags:
-description: "Introducing the new programmatic API for pkg.go.dev, allowing developers to fetch package and module data directly."
-hash: e7e36b5682ae9ec03e826d1a405830630940e8c6f1dd62d89b1c646f7b7f2b2a
 ---
 My thoughts on [Introducing the pkg.go dev API](https://go.dev/blog/pkgsite-api): Introducing the pkg.go dev API
 
