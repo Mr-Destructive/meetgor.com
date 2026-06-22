@@ -6,9 +6,9 @@ tags:
 link: 'https://waylonwalker.com/just-fucking-use-kubernetes/'
 type: links
 title: 'Just fucking use Kubernetes'
+status: published
 description: 'Just fucking use Kubernetes'
 date: 2025-07-05
-status: published
 source: newsletter
 newsletter: 2025-07-05-techstructive-weekly-49
 ---
