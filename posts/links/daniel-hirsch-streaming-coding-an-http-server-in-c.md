@@ -1,0 +1,21 @@
+---
+title: "Daniel Hirsch Streaming: Coding an HTTP Server in C"
+date: 2026-06-26
+link: "https://youtu.be/WmZi1yrOD0Q"
+status: published
+image_url: "https://i.ytimg.com/vi/WmZi1yrOD0Q/hqdefault.jpg"
+source: newsletter
+newsletter: techstructive-weekly-100
+type: links
+slug: daniel-hirsch-streaming-coding-an-http-server-in-c
+tags:
+description: "Daniel Hirsch Streaming: Coding an HTTP Server in C"
+hash: c4234c20947792d7c5775036ecb9bad4644c898d65c373cdc57c1fd12aedc400
+---
+My thoughts on [Daniel Hirsch Streaming: Coding an HTTP Server in C](https://youtu.be/WmZi1yrOD0Q): Daniel Hirsch Streaming: Coding an HTTP Server in C
+
+## Commentary
+
+- Daniel Hirsch Streaming: Coding an HTTP Server in C
+- This was a great learning experience. I wanted to understand what a socket connection really does in a http server. So its basically a file descriptor just like pipe, socket, or terminal descriptior in unix. That is just like a file streaming. That makes sense. The interface is unified for accessing the network and the file.
+- I feel like building this in Golang. Maybe this weekend it will be a stream to build a http server from scratch in Golang. I want to see how we connect to sockets and listen and then accpet and then process the request and response to the client. It feels great to just be able to do things low level.
