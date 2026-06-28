@@ -1,16 +1,16 @@
 ---
-title: "Debugging in the age of ai agents"
-date: 2026-06-26
 link: "https://www.akashtandon.in/ai/2026-06-24-debugging-in-the-age-of-agents/"
-status: published
 image_url: ""
+type: links
+tags: 
+description: "Coding agents can hand you a confident, detailed, and wrong explanation backed by persuasive evidence. The craft of debugging - building hypotheses, gathering evidence, and knowing a system’s internals - matters as much as ever."
+title: "Debugging in the age of ai agents"
+status: published
 source: newsletter
 newsletter: techstructive-weekly-100
-type: links
 slug: debugging-in-the-age-of-ai-agents
-tags:
-description: "Coding agents can hand you a confident, detailed, and wrong explanation backed by persuasive evidence. The craft of debugging - building hypotheses, gathering evidence, and knowing a system’s internals - matters as much as ever."
-hash: 5f4eaf98df0935d9ae4bee9bfb7f141f94927cbeb9692dec861c1c98a09c6861
+hash: 83bd5a454e1905982581aa66c5e8b286237435b0d5168a8db051a5e443e76aa6
+date: 2026-06-26
 ---
 My thoughts on [Debugging in the age of ai agents](https://www.akashtandon.in/ai/2026-06-24-debugging-in-the-age-of-agents/): Debugging in the age of ai agents
 

@@ -1,16 +1,16 @@
 ---
+slug: robbie-coomber-wrote-a-70x-faster-sql-parser-while-barely-looking-at-the-code-agentic-coding-and-not-vibe-coding
+hash: 392d77245b289034db71f9ce77c575a22b0794c65506589ccf50676e77a108a5
 title: "Robbie Coomber wrote a 70x faster SQL parser while barely looking at the code (agentic coding and not vibe coding)"
+status: published
+source: newsletter
+tags: 
+description: "After the success of using agents to  improve query performance through autoresearch , I wanted to try something more ambitious. I rewrote PostHog's…"
 date: 2026-06-26
 link: "https://posthog.com/blog/sql-parser"
-status: published
 image_url: "https://d36j3rcgc2qfsv.cloudfront.net/blogsql-parser.jpeg"
-source: newsletter
 newsletter: techstructive-weekly-100
 type: links
-slug: robbie-coomber-wrote-a-70x-faster-sql-parser-while-barely-looking-at-the-code-agentic-coding-and-not-vibe-coding
-tags:
-description: "After the success of using agents to  improve query performance through autoresearch , I wanted to try something more ambitious. I rewrote PostHog's…"
-hash: 195e395bf7e5636d82464d05c1aadc4c83108254879ac78e33203e24aaaac964
 ---
 My thoughts on [Robbie Coomber wrote a 70x faster SQL parser while barely looking at the code (agentic coding and not vibe coding)](https://posthog.com/blog/sql-parser): Robbie Coomber wrote a 70x faster SQL parser while barely looking at the code (agentic coding and not vibe coding)
 

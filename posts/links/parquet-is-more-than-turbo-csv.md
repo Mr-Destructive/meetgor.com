@@ -2,15 +2,15 @@
 title: "Parquet is more than Turbo CSV"
 date: 2026-06-26
 link: "https://csvbase.com/blog/3"
-status: published
 image_url: "https://csvbase.com/blog-static/tjentiste.jpg"
 source: newsletter
 newsletter: techstructive-weekly-100
-type: links
 slug: parquet-is-more-than-turbo-csv
-tags:
+tags: 
+status: published
+type: links
 description: "Quicker, but also more convenient"
-hash: 6261834358462991a2347dc40626cc5d3a3e3da5aeaa53314cd83c7e876390c2
+hash: d83d02bc085b5a64cb682346b1ce13c91a363ee953164c335cc04ffdc9f50200
 ---
 My thoughts on [Parquet is more than Turbo CSV](https://csvbase.com/blog/3): Parquet is more than Turbo CSV
 

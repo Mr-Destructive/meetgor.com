@@ -1,16 +1,16 @@
 ---
 title: "Sentdex: There has been a situation in AI"
-date: 2026-06-26
-link: "https://youtu.be/DA2E8szXjoA"
 status: published
 image_url: "https://i.ytimg.com/vi/DA2E8szXjoA/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-100
 type: links
 slug: sentdex-there-has-been-a-situation-in-ai
-tags:
+tags: 
 description: "Sentdex: There has been a situation in AI"
-hash: 0e3316c9feef64c8bc20593c61eb9528a3894214f8fc16c739e939f08c39b708
+date: 2026-06-26
+link: "https://youtu.be/DA2E8szXjoA"
+source: newsletter
+hash: 841b51539fe27078a589aa8d09dbf3d55955fae0bda197e7c630a3d7d3a4b71f
 ---
 My thoughts on [Sentdex: There has been a situation in AI](https://youtu.be/DA2E8szXjoA): Sentdex: There has been a situation in AI
 

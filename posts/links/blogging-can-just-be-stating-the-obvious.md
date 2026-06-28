@@ -1,16 +1,16 @@
 ---
+slug: blogging-can-just-be-stating-the-obvious
+hash: a59d00ad8917e3848d1269f247c8c17ffa7eedc27d40888d9dc4ef209d121940
 title: "Blogging can just be stating the obvious"
 date: 2026-06-26
 link: "https://blog.jim-nielsen.com/2026/blogging-stating-the-obvious/"
-status: published
-image_url: ""
 source: newsletter
 newsletter: techstructive-weekly-100
 type: links
-slug: blogging-can-just-be-stating-the-obvious
-tags:
+tags: 
 description: "Writing about the big beautiful mess that is making things for the world wide web."
-hash: 43627d1ae1b764782d0743b4fe24aec503d8d615d212c71ce18ff9ff6168156a
+status: published
+image_url: ""
 ---
 My thoughts on [Blogging can just be stating the obvious](https://blog.jim-nielsen.com/2026/blogging-stating-the-obvious/): Blogging can just be stating the obvious
 

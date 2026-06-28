@@ -1,16 +1,16 @@
 ---
 title: "Linux kills strncpy"
-date: 2026-06-26
 link: "https://smist08.wordpress.com/2026/06/25/linux-kills-strncpy/"
-status: published
 image_url: "https://i0.wp.com/smist08.wordpress.com/wp-content/uploads/2026/06/image-2.png?fit=1200%2C800&ssl=1"
-source: newsletter
 newsletter: techstructive-weekly-100
 type: links
+tags: 
+hash: 1f2bbe409e7f68513e130b5a4839d5a589028cb4e1c4ed41c0ad7243b4070050
+date: 2026-06-26
+status: published
+source: newsletter
 slug: linux-kills-strncpy
-tags:
 description: "Introduction The C string library is compact, fast and efficient. However, if not used correctly and carefully, it leads to buffer overrun errors which either cause programs to crash or worse allow…"
-hash: f9e97b25bfa73b0949613e5226f7e62e59ba92ae4912acbb25a65667432f9558
 ---
 My thoughts on [Linux kills strncpy](https://smist08.wordpress.com/2026/06/25/linux-kills-strncpy/): Linux kills strncpy
 

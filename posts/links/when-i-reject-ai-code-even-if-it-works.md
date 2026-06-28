@@ -1,16 +1,16 @@
 ---
 title: "When I reject AI code even if it works"
 date: 2026-06-26
-link: "https://vinibrasil.com/when-i-reject-ai-code-even-if-it-works/"
-status: published
 image_url: "https://vinibrasil.com/og/when-i-reject-ai-code-even-if-it-works.png"
 source: newsletter
 newsletter: techstructive-weekly-100
+tags: 
+description: "AI can make implementation cheap while making review and judgment more expensive."
+link: "https://vinibrasil.com/when-i-reject-ai-code-even-if-it-works/"
+status: published
 type: links
 slug: when-i-reject-ai-code-even-if-it-works
-tags:
-description: "AI can make implementation cheap while making review and judgment more expensive."
-hash: 471ed1baf1738e915ccaa0d3e644b3dc1faf36aea3a8dff55848fd5bfe9d2745
+hash: 65bf89a32518cba1df48e98347f63ff802ef92b25e545518fed0ca98891a6f4e
 ---
 My thoughts on [When I reject AI code even if it works](https://vinibrasil.com/when-i-reject-ai-code-even-if-it-works/): When I reject AI code even if it works
 

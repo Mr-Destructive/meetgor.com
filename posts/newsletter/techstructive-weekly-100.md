@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #100"
+canonical_url: https://techstructively.substack.com/p/techstructive-weekly-100
+tags: ["newsletter", "substack"]
 date: 2026-06-26
 slug: techstructive-weekly-100
-type: newsletter
 status: published
 source: newsletter
-canonical_url: https://techstructively.substack.com/p/techstructive-weekly-100
 description: "A first century edition of the newsletter for the things created read, watched, and explored from the week 21st to 27th June 2026"
-tags: ["newsletter", "substack"]
+hash: c50acfb121b207286b9110127f6a329ab5e43432b7750d5c6448c9d11d60b08b
+title: "Techstructive Weekly #100"
+type: newsletter
 ---
-
 ## Week #100
 
 Well! This feels unreal. 100 weeks have pased since I started writing this newsletter. I am still writing them. Unbroken saturday streak. Feels like time travel.

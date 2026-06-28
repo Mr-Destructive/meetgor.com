@@ -1,16 +1,16 @@
 ---
-title: "Whom does ChatGPT serve? Jonathan Pageau talks"
-date: 2026-06-26
-link: "https://youtu.be/yZUuKzDQSsI"
 status: published
+newsletter: techstructive-weekly-100
+description: "Whom does ChatGPT serve? Jonathan Pageau talks"
+hash: fd58e509ce3b70bb5eaba651acba6cf0c6aa2c8452b49a9606feb2aaab912649
+link: "https://youtu.be/yZUuKzDQSsI"
 image_url: "https://i.ytimg.com/vi/yZUuKzDQSsI/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-100
 type: links
 slug: whom-does-chatgpt-serve-jonathan-pageau-talks
-tags:
-description: "Whom does ChatGPT serve? Jonathan Pageau talks"
-hash: 9616d1379bcfa452f523defcb9272f5b58134e96bbb9126abdd13fdc1225e1c4
+tags: 
+title: "Whom does ChatGPT serve? Jonathan Pageau talks"
+date: 2026-06-26
 ---
 My thoughts on [Whom does ChatGPT serve? Jonathan Pageau talks](https://youtu.be/yZUuKzDQSsI): Whom does ChatGPT serve? Jonathan Pageau talks
 

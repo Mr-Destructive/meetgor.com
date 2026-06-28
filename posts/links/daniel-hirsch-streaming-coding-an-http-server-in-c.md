@@ -1,16 +1,16 @@
 ---
-title: "Daniel Hirsch Streaming: Coding an HTTP Server in C"
-date: 2026-06-26
 link: "https://youtu.be/WmZi1yrOD0Q"
 status: published
 image_url: "https://i.ytimg.com/vi/WmZi1yrOD0Q/hqdefault.jpg"
+type: links
+hash: 801cd5d8f5d0dfacfb1eccf2818cb1444c68904fa3b5782b7329a484670206c0
+title: "Daniel Hirsch Streaming: Coding an HTTP Server in C"
+date: 2026-06-26
 source: newsletter
 newsletter: techstructive-weekly-100
-type: links
 slug: daniel-hirsch-streaming-coding-an-http-server-in-c
-tags:
+tags: 
 description: "Daniel Hirsch Streaming: Coding an HTTP Server in C"
-hash: c4234c20947792d7c5775036ecb9bad4644c898d65c373cdc57c1fd12aedc400
 ---
 My thoughts on [Daniel Hirsch Streaming: Coding an HTTP Server in C](https://youtu.be/WmZi1yrOD0Q): Daniel Hirsch Streaming: Coding an HTTP Server in C
 

@@ -3,14 +3,14 @@ title: "Mark Round’s Blog: Its only when you look back after 25 years on a blo
 date: 2026-06-26
 link: "https://www.markround.com/blog/2026/06/17/25-its-only-when-you-look-back/"
 status: published
-image_url: ""
 source: newsletter
+description: "I remember talking to my Grandfather shortly before he passed away about the changes he’d seen in his lifetime. Born in 1911, the thing he said that really stuck with me was that when he was a child people were barely puttering around off the ground in aeroplanes; A few years before his 60th birthday, men walked on the moon. When I look back at the simple 8-bit microcomputers of my childhood, compared to the modern world in which my daughter is growing up, I can’t help but feel like I’ve seen a similar step change. But just as my Poppa said “When it’s happening you don’t notice it. It’s only when you look back you see how much everything has changed.”"
+image_url: ""
 newsletter: techstructive-weekly-100
 type: links
 slug: mark-round-s-blog-its-only-when-you-look-back-after-25-years-on-a-blog
-tags:
-description: "I remember talking to my Grandfather shortly before he passed away about the changes he’d seen in his lifetime. Born in 1911, the thing he said that really stuck with me was that when he was a child people were barely puttering around off the ground in aeroplanes; A few years before his 60th birthday, men walked on the moon. When I look back at the simple 8-bit microcomputers of my childhood, compared to the modern world in which my daughter is growing up, I can’t help but feel like I’ve seen a similar step change. But just as my Poppa said “When it’s happening you don’t notice it. It’s only when you look back you see how much everything has changed.”"
-hash: b96aa5b5221b8e497f54f78dcb7be5c5d92e0452e1616c065f5228832e024d8f
+tags: 
+hash: 6fd768a1eae71ba08a3f610100d446ef9097ae8f2c81df5a135072984fd217d7
 ---
 My thoughts on [Mark Round’s Blog: Its only when you look back after 25 years on a blog](https://www.markround.com/blog/2026/06/17/25-its-only-when-you-look-back/): Mark Round’s Blog: Its only when you look back after 25 years on a blog
 

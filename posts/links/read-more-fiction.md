@@ -1,16 +1,16 @@
 ---
+hash: 0c754c952d2c7db6448ccd3566aaff3e59e99fe9d4149be5168bc980ce3a58cd
 title: "Read more fiction"
 date: 2026-06-26
 link: "https://pilk.website/5/read-more-fiction"
 status: published
-image_url: "https://pilk.website/5/read-more-fiction-wide.png"
-source: newsletter
 newsletter: techstructive-weekly-100
 type: links
-slug: read-more-fiction
-tags:
+tags: 
 description: "Skip the 'idea books' and pick up a novel"
-hash: eb852bca265b7e9996e5c64f418c803286c8c87e0bb2cd556baf0d7990c57d53
+image_url: "https://pilk.website/5/read-more-fiction-wide.png"
+source: newsletter
+slug: read-more-fiction
 ---
 My thoughts on [Read more fiction](https://pilk.website/5/read-more-fiction): Read more fiction
 

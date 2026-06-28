@@ -1,16 +1,16 @@
 ---
+tags: 
+hash: e76f9babdce3ab7d2d6cd92a1e54b0ceb038b160fa536e8a15154b750c4498fc
 title: "AI Loop Engineering take from Neetcode"
 date: 2026-06-26
-link: "https://youtu.be/vM6DNlsdpsg"
 status: published
-image_url: "https://i.ytimg.com/vi/vM6DNlsdpsg/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-100
 type: links
-slug: ai-loop-engineering-take-from-neetcode
-tags:
 description: "AI Loop Engineering take from Neetcode"
-hash: 1be2ab55bd39d936c912553c288235cfc0b816f305789477b89fae516046b4e0
+link: "https://youtu.be/vM6DNlsdpsg"
+image_url: "https://i.ytimg.com/vi/vM6DNlsdpsg/hqdefault.jpg"
+slug: ai-loop-engineering-take-from-neetcode
 ---
 My thoughts on [AI Loop Engineering take from Neetcode](https://youtu.be/vM6DNlsdpsg): AI Loop Engineering take from Neetcode
 

@@ -1,16 +1,16 @@
 ---
+description: "Wagtail as Django admin on steroids."
+hash: f5eaae8fd4b8d2e754ff196e11355093f9298177869cbaa899510240f02c095c
 title: "Wagtail as Django Admin on Steroids"
 date: 2026-06-26
-link: "https://timonweb.com/wagtail/wagtail-as-django-admin-on-steroids/"
-status: published
-image_url: "https://timonweb.com/media/posts/covers/29/wagtail-as-django-admin-on-steroids.png"
 source: newsletter
 newsletter: techstructive-weekly-100
 type: links
+link: "https://timonweb.com/wagtail/wagtail-as-django-admin-on-steroids/"
+status: published
+image_url: "https://timonweb.com/media/posts/covers/29/wagtail-as-django-admin-on-steroids.png"
 slug: wagtail-as-django-admin-on-steroids
-tags:
-description: "Wagtail as Django admin on steroids."
-hash: 7fc68bc049b19e3c981cce85defea4416595c87f232812921910dbd2060fcabb
+tags: 
 ---
 My thoughts on [Wagtail as Django Admin on Steroids](https://timonweb.com/wagtail/wagtail-as-django-admin-on-steroids/): Wagtail as Django Admin on Steroids
 

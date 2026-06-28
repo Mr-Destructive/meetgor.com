@@ -1,16 +1,16 @@
 ---
-title: "Tsoding Streams: Let’s talk about AppImage"
-date: 2026-06-26
 link: "https://youtu.be/sRGT90fqh4g"
-status: published
 image_url: "https://i.ytimg.com/vi/sRGT90fqh4g/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-100
-type: links
 slug: tsoding-streams-let-s-talk-about-appimage
-tags:
+tags: 
 description: "Tsoding Streams: Let’s talk about AppImage"
-hash: cabec787671ffe7d0c2634a01657ed468cd21cfc471115fa36f7855618fcc22f
+hash: 85301ec22b97d7836bc4c370ac4941156e089ebc75a4b70daef90992bfaff3d7
+title: "Tsoding Streams: Let’s talk about AppImage"
+date: 2026-06-26
+status: published
+type: links
 ---
 My thoughts on [Tsoding Streams: Let’s talk about AppImage](https://youtu.be/sRGT90fqh4g): Tsoding Streams: Let’s talk about AppImage
 
