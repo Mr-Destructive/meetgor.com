@@ -1,16 +1,16 @@
 ---
+newsletter: techstructive-weekly-101
+slug: corey-schafer-python-asyncio-a-complete-guide-to-asynchronous-programming-with-visualisations
 title: "Corey Schafer: Python AsyncIO, a complete guide to asynchronous programming with visualisations"
-date: 2026-07-03
 link: "https://youtu.be/oAkLSJNr5zY"
 status: published
+type: links
+tags: 
+description: "Corey Schafer: Python AsyncIO, a complete guide to asynchronous programming with visualisations"
+hash: 0b9399518a7b907a0c213e86ef0224f9b1aceb84143c09f2ab2f88460cf83e45
+date: 2026-07-03
 image_url: "https://i.ytimg.com/vi/oAkLSJNr5zY/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-101
-type: links
-slug: corey-schafer-python-asyncio-a-complete-guide-to-asynchronous-programming-with-visualisations
-tags:
-description: "Corey Schafer: Python AsyncIO, a complete guide to asynchronous programming with visualisations"
-hash: c6b6417d5faf68a6897d484fe4d41ecce4ae7c3dd12f48a1fcacfe93cd353bd3
 ---
 My thoughts on [Corey Schafer: Python AsyncIO, a complete guide to asynchronous programming with visualisations](https://youtu.be/oAkLSJNr5zY): Corey Schafer: Python AsyncIO, a complete guide to asynchronous programming with visualisations
 

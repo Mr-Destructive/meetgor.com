@@ -1,16 +1,16 @@
 ---
+type: links
+slug: university-in-the-ai-era
+description: "In this essay, Carson Gross thinks about the best way for the university to prepare students in the AI era."
 title: "University in the AI Era"
 date: 2026-07-03
 link: "https://htmx.org/essays/universities-and-ai/#automate-everything"
+tags: 
+hash: 89dd0d702d529f04a29781174ee5743c860395061c8d8a6f0dd38ba5b9e327df
 status: published
 image_url: ""
 source: newsletter
 newsletter: techstructive-weekly-101
-type: links
-slug: university-in-the-ai-era
-tags:
-description: "In this essay, Carson Gross thinks about the best way for the university to prepare students in the AI era."
-hash: aff6b71963bb3aaaed41ec13bf805dad937e6b3ba2f5da07eee3545ef2ef2379
 ---
 My thoughts on [University in the AI Era](https://htmx.org/essays/universities-and-ai/#automate-everything): University in the AI Era
 

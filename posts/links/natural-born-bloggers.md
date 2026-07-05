@@ -1,16 +1,16 @@
 ---
+type: links
+tags: 
+description: "Rest in peace, Om Malik."
 title: "Natural Born Bloggers"
-date: 2026-07-03
-link: "https://spyglass.org/om/"
 status: published
 image_url: "https://storage.ghost.io/c/af/ca/afcaa655-46e2-45b8-889a-2881de5cce69/content/images/size/w1200/2026/06/ChatGPT-Image-Jun-28--2026--08_00_15-PM.png"
 source: newsletter
-newsletter: techstructive-weekly-101
-type: links
 slug: natural-born-bloggers
-tags:
-description: "Rest in peace, Om Malik."
-hash: aa06c72c2335f74e849b4fe3bcd38b767c264bbafcff47213b623a868bdb72ef
+hash: fe9ca3cb2297d63f65fee62feac883507c7474fa817e3c1e3755523079f8e069
+date: 2026-07-03
+link: "https://spyglass.org/om/"
+newsletter: techstructive-weekly-101
 ---
 My thoughts on [Natural Born Bloggers](https://spyglass.org/om/): Natural Born Bloggers
 

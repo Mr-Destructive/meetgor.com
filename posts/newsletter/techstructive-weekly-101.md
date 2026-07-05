@@ -1,15 +1,15 @@
 ---
+status: published
+source: newsletter
+description: "A code-heavy week. Writing about the things learnt, read and watched over the week from 28th June to 4th July 2026"
+tags: ["newsletter", "substack"]
+hash: adb46f6d0097090a31737a253a2e03c2e63d2d4a3d5f673ce18594a38d67102f
 title: "Techstructive Weekly #101"
 date: 2026-07-03
 slug: techstructive-weekly-101
 type: newsletter
-status: published
-source: newsletter
 canonical_url: https://techstructively.substack.com/p/techstructive-weekly-101
-description: "A code-heavy week. Writing about the things learnt, read and watched over the week from 28th June to 4th July 2026"
-tags: ["newsletter", "substack"]
 ---
-
 ## Week #101
 
 I will be quick this week. I had barely anytime to read or watch content. I was back in code. Deep not careless as people are pretending to be. I am not writing loops or vibe coding into production. I am using chat mode in Cursor to spawning parallel agents to solve issues that I find it cumbersome for me to tackle. I don’t skim through the suggested code, I read line by line, understand the flow. Write some code myself, to understand what is actually happening and to make myself realize the complexity.

@@ -1,16 +1,16 @@
 ---
 title: "Building Go-Gin: Simple over Easy"
-date: 2026-07-03
-link: "https://manualmeida.dev/articles/gin-simple-over-easy/"
-status: published
 image_url: "https://manualmeida.dev/og/gin-simple-over-easy.png"
-source: newsletter
 newsletter: techstructive-weekly-101
 type: links
 slug: building-go-gin-simple-over-easy
-tags:
+tags: 
+date: 2026-07-03
+link: "https://manualmeida.dev/articles/gin-simple-over-easy/"
+status: published
+source: newsletter
 description: "A stalled startup in 2014 became Gin: a Go web framework shaped by simple-over-easy design, a radix-tree router, and an API that still works ten years later."
-hash: 5b3dc8d25ddcf3daed11b7b845ca50ea4b76548ab05f0f5a6349818cd9588148
+hash: e4f3c799569d8ad21fa59559eb569c318d49b38dc54e2c02167be639755b5400
 ---
 My thoughts on [Building Go-Gin: Simple over Easy](https://manualmeida.dev/articles/gin-simple-over-easy/): Building Go-Gin: Simple over Easy
 

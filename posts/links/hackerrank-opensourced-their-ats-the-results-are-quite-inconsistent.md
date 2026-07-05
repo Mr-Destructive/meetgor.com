@@ -1,16 +1,16 @@
 ---
-title: "HackerRank opensourced their ATS, the results are quite inconsistent"
-date: 2026-07-03
-link: "https://danunparsed.com/p/hackerrank-open-source-ats"
-status: published
 image_url: "https://substackcdn.com/image/fetch/$s_!S-dx!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fbab22a57-acb5-4fe4-929f-132059bcb466_1800x900.png"
+slug: hackerrank-opensourced-their-ats-the-results-are-quite-inconsistent
+hash: a7b64bcb91a195df2becb9939795bdde0dcb9b5471b5ee0dbddfdb651d7bccc7
+link: "https://danunparsed.com/p/hackerrank-open-source-ats"
 source: newsletter
 newsletter: techstructive-weekly-101
 type: links
-slug: hackerrank-opensourced-their-ats-the-results-are-quite-inconsistent
-tags:
+tags: 
 description: "How hiring is becoming a luck filter."
-hash: f823186245f7d333348297d87d96943d3076a3bd15333e13f1c31f54d77c169d
+title: "HackerRank opensourced their ATS, the results are quite inconsistent"
+date: 2026-07-03
+status: published
 ---
 My thoughts on [HackerRank opensourced their ATS, the results are quite inconsistent](https://danunparsed.com/p/hackerrank-open-source-ats): HackerRank opensourced their ATS, the results are quite inconsistent
 

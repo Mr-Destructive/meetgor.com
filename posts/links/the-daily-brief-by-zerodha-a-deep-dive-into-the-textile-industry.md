@@ -2,15 +2,15 @@
 title: "The daily brief by Zerodha: A deep dive into the textile industry"
 date: 2026-07-03
 link: "https://thedailybrief.zerodha.com/p/a-deep-dive-into-the-textile-industry"
-status: published
-image_url: "https://substackcdn.com/image/fetch/$s_!82V-!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fccd932e6-5f48-41d3-a490-551ec9ea7b28_1536x1024.png"
 source: newsletter
-newsletter: techstructive-weekly-101
 type: links
 slug: the-daily-brief-by-zerodha-a-deep-dive-into-the-textile-industry
-tags:
+tags: 
 description: "And how will we find jobs for the next 100 crore workers?"
-hash: 9e980590f2dd1b6e9e89be708967e8accadbe7124bd5d039ca99345e00fb2727
+status: published
+image_url: "https://substackcdn.com/image/fetch/$s_!82V-!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fccd932e6-5f48-41d3-a490-551ec9ea7b28_1536x1024.png"
+newsletter: techstructive-weekly-101
+hash: c5d012b5053f4258b9d9aa35be452d35eeeebcbc5d2ce50e77be9ec66d5c8c6c
 ---
 My thoughts on [The daily brief by Zerodha: A deep dive into the textile industry](https://thedailybrief.zerodha.com/p/a-deep-dive-into-the-textile-industry): The daily brief by Zerodha: A deep dive into the textile industry
 
