@@ -1,14 +1,14 @@
 ---
 title: 'Thoughts on motivation and my 40 year-old career'
-tags: 
 newsletter: 2025-07-12-techstructive-weekly-50
-slug: thoughts-on-motivation-and-my-40-year-old-career
-date: 2025-07-12
 link: 'https://charity.wtf/2025/07/09/thoughts-on-motivation-and-my-40-year-career/'
 source: newsletter
 type: links
 hash: 41db6293471341b9d4ecc571c8dbf691539e019bde36e6823487c3e470f9925f
 description: 'Thoughts on motivation and my 40 year-old career'
+tags: 
+slug: thoughts-on-motivation-and-my-40-year-old-career
+date: 2025-07-12
 status: published
 ---
 ## Commentary
