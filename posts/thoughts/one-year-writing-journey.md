@@ -1,11 +1,11 @@
 ---
 slug: one-year-writing-journey
 link: https://eric-sandosham.medium.com/my-one-year-writing-journey-9dc4104676b4
-type: links
 status: published
-hash: 6fe4d7f7af5fa20327786a4821081bbbfbb9cff69597b0c371870426e1614d06
 title: One-Year Writing Journey
 date: 2026-01-24
+type: links
+hash: 6fe4d7f7af5fa20327786a4821081bbbfbb9cff69597b0c371870426e1614d06
 tags: 
 ---
 # One-Year Writing Journey
