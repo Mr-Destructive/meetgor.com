@@ -4,8 +4,8 @@ description: ""
 tags: ["pdf","document","forensics","security"]
 type: links
 title: "Typical PDF document"
-status: published
 date: 2026-01-12
+status: published
 slug: a-typical-pdf-document
 ---
 This is cool, i've read a lot of these and working at docsumo, makes me want to read about them more.
