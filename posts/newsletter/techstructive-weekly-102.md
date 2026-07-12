@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #102"
-date: 2026-07-10
-slug: techstructive-weekly-102
-type: newsletter
 status: published
-source: newsletter
 canonical_url: https://techstructively.substack.com/p/techstructive-weekly-102
 description: "Learning the hard rules of life and development, very less reading and watching among the other things learnt in the week from 5th to 11th July 2026"
 tags: ["newsletter", "substack"]
+title: "Techstructive Weekly #102"
+type: newsletter
+source: newsletter
+hash: c6caa240d72d23c314fed6dc2417cfb56e881bf980d069ea6419e5ac2a7fde64
+date: 2026-07-10
+slug: techstructive-weekly-102
 ---
-
 ## Week #102
 
 I am on a roll here. I have been close to customers and solving some really intricate problems, not deep into code, but deep into understanding the user flow and what kind of specific things they might want to see. Documents are really the back bone of some people’s life and being able to reduce that review time is really a satisfying problem to solve. I need to sink that thing that I just said there. Its hard to compact it further I think. But I have been loving the process of it, not that its a great solution, but being able to come so close that users gets frustrated on how can the system miss it. Its like the last mile changes right. Being in tech teaches you grit and the curiosity is the one that fires to push you through the tough ones.

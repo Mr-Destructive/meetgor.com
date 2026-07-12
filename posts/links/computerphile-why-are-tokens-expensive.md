@@ -1,16 +1,16 @@
 ---
+description: "Computerphile: Why are tokens expensive"
 title: "Computerphile: Why are tokens expensive"
-date: 2026-07-10
-link: "https://youtu.be/-0HRzXk8vlk"
 status: published
 image_url: "https://i.ytimg.com/vi/-0HRzXk8vlk/hqdefault.jpg"
+type: links
+tags: 
+hash: 31c5a9802379b99aa640e8bf2e4f924f4472e5984670ee1ed8f553f35306c32c
+date: 2026-07-10
+link: "https://youtu.be/-0HRzXk8vlk"
 source: newsletter
 newsletter: techstructive-weekly-102
-type: links
 slug: computerphile-why-are-tokens-expensive
-tags:
-description: "Computerphile: Why are tokens expensive"
-hash: 8cbfef13d45c5d65077e49ef0c31e80c74a2bb9c3c6ceab8440abc5cec94f232
 ---
 My thoughts on [Computerphile: Why are tokens expensive](https://youtu.be/-0HRzXk8vlk): Computerphile: Why are tokens expensive
 

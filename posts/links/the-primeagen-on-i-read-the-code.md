@@ -1,16 +1,16 @@
 ---
-title: "The Primeagen on “I read the code”"
-date: 2026-07-10
+slug: the-primeagen-on-i-read-the-code
+hash: 23261f3d55156e732025d123656bbcaff70d1049f12d258f4798328cb8c09e78
 link: "https://youtu.be/k13q6ecZLrw"
 status: published
-image_url: "https://i.ytimg.com/vi/k13q6ecZLrw/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-102
 type: links
-slug: the-primeagen-on-i-read-the-code
-tags:
+tags: 
 description: "The Primeagen on “I read the code”"
-hash: ccf5502f402b53aa3fd6adc171041cd8060419c964259ae39943f9e65b9bc309
+title: "The Primeagen on “I read the code”"
+date: 2026-07-10
+image_url: "https://i.ytimg.com/vi/k13q6ecZLrw/hqdefault.jpg"
+source: newsletter
 ---
 My thoughts on [The Primeagen on “I read the code”](https://youtu.be/k13q6ecZLrw): The Primeagen on “I read the code”
 

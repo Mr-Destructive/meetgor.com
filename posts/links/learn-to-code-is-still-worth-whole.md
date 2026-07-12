@@ -1,16 +1,16 @@
 ---
-title: "Learn to code is still worth whole"
-date: 2026-07-10
-link: "https://stevekrouse.com/learn-to-code"
-status: published
 image_url: ""
 source: newsletter
+slug: learn-to-code-is-still-worth-whole
+hash: ec99768ca62eec8ec392c86ec05b48d320b9164db22502f64b4b7a1bdfda5aea
+title: "Learn to code is still worth whole"
+date: 2026-07-10
 newsletter: techstructive-weekly-102
 type: links
-slug: learn-to-code-is-still-worth-whole
-tags:
+tags: 
 description: "Learn to code is still worth whole"
-hash: 94873f3a7eee346408d8612963ee3e00893e47632e4e0fe73d9a249eae73ae30
+link: "https://stevekrouse.com/learn-to-code"
+status: published
 ---
 My thoughts on [Learn to code is still worth whole](https://stevekrouse.com/learn-to-code): Learn to code is still worth whole
 
