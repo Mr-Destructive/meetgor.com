@@ -1,16 +1,16 @@
 ---
-title: "houghts on people and blog"
-slug: houghts-on-people-and-blog
-date: 2026-05-22
 description: "Independent projects only survive if we make them happen. Responding to Manu Moreale’s honest reflection on the struggle of \"People & Blogs\"."
-status: published
 newsletter: techstructive-weekly-95
 type: links
 tags: 
 hash: 18d44249dac9a54c8611324aa539670fb830aa98015e1cdcd57efb9131c9663b
+status: published
 source: newsletter
 image_url: "https://images.unsplash.com/photo-1461088945293-0c17689e48ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDIzfHxwZW9wbGV8ZW58MHx8fHwxNzY4ODMxMzQ4fDA&ixlib=rb-4.1.0&q=80&w=2000"
 link: "https://afranca.com.br/thoughts-on-people-and-blogs/"
+title: "houghts on people and blog"
+slug: houghts-on-people-and-blog
+date: 2026-05-22
 ---
 My thoughts on [houghts on people and blog](https://afranca.com.br/thoughts-on-people-and-blogs/): houghts on people and blog
 
