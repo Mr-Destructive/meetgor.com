@@ -2,13 +2,13 @@
 hash: 030cac211ea14f18c2dad36252054037e3fad8d690328c07e72357c11f7768de
 title: "People who don’t use AI will get left behind"
 slug: people-who-don-t-use-ai-will-get-left-behind
-source: newsletter
-date: 2026-05-01
 status: published
 description: "\"People who don't use AI will be left behind\", they say.
+type: links
+source: newsletter
+date: 2026-05-01
 tags: 
 link: "https://migrainebrain.bearblog.dev/people-who-dont-use-ai-will-be-left-behind/"
-type: links
 newsletter: techstructive-weekly-92
 image_url: "/static/og-image.png"
 ---
