@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #103"
-date: 2026-07-17
-slug: techstructive-weekly-103
-type: newsletter
 status: published
 source: newsletter
+tags: ["newsletter", "substack"]
+date: 2026-07-17
+type: newsletter
 canonical_url: https://techstructively.substack.com/p/techstructive-weekly-103
 description: "Reading books instead of tech things, understanding and solving problems with AI, among the other things watching and learning from the week 12th to 18th July 2026"
-tags: ["newsletter", "substack"]
+hash: dc93aa335c82df6bbad287d045ee31d198dcabd826a2c8e136f36f884578b820
+title: "Techstructive Weekly #103"
+slug: techstructive-weekly-103
 ---
-
 ## Week #103
 
 Another week with love for solving problems as a developers, just the leverage has changed. Instead of hand coding, we hand it off to an agent and focus on the broader problem. That might be not sustainable as I have said before. But if the problem is big, then it becomes just like the coding challenge, you don’t want to get bugged down by small pesky bugs on code rather think on the bigger problem.

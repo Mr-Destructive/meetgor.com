@@ -1,16 +1,16 @@
 ---
 title: "GPT Models in Claude code are better than in codex?"
 date: 2026-07-17
-link: "https://youtu.be/Noo0NWD0gHU"
 status: published
-image_url: "https://i.ytimg.com/vi/Noo0NWD0gHU/hqdefault.jpg"
 source: newsletter
+slug: gpt-models-in-claude-code-are-better-than-in-codex
+tags: 
+description: "GPT Models in Claude code are better than in codex?"
+link: "https://youtu.be/Noo0NWD0gHU"
+image_url: "https://i.ytimg.com/vi/Noo0NWD0gHU/hqdefault.jpg"
 newsletter: techstructive-weekly-103
 type: links
-slug: gpt-models-in-claude-code-are-better-than-in-codex
-tags:
-description: "GPT Models in Claude code are better than in codex?"
-hash: fff4e6b70d25dedeccb42083ba7fad345180ee81621351cb8666f3af352880a2
+hash: 32708e2207cb915626f31c994d5b58b1abf86e8dd1a3cc5d283b0f743f80c0d4
 ---
 My thoughts on [GPT Models in Claude code are better than in codex?](https://youtu.be/Noo0NWD0gHU): GPT Models in Claude code are better than in codex?
 

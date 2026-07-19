@@ -1,5 +1,4 @@
 ---
-title: "The end of creativity"
 date: 2026-07-17
 link: "https://hugodaniel.com/posts/the-end-of-creativity/"
 status: published
@@ -8,9 +7,10 @@ source: newsletter
 newsletter: techstructive-weekly-103
 type: links
 slug: the-end-of-creativity
-tags:
+tags: 
 description: "A story on AI median regression"
-hash: 4f6e4e923dac4fdd2250e2865851058e473cb9fa576e550535123738ffe2c93d
+hash: d0ecaf5140c5ab135efdf517cbdbe94846e7c8c100b95cde16800fbf4c8bf8a0
+title: "The end of creativity"
 ---
 My thoughts on [The end of creativity](https://hugodaniel.com/posts/the-end-of-creativity/): The end of creativity
 

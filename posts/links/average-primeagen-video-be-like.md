@@ -2,15 +2,15 @@
 title: "Average Primeagen video be like"
 date: 2026-07-17
 link: "https://youtu.be/oSXhF0C7Jpg"
-status: published
 image_url: "https://i.ytimg.com/vi/oSXhF0C7Jpg/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-103
+tags: 
+status: published
+source: newsletter
 type: links
 slug: average-primeagen-video-be-like
-tags:
 description: "Average Primeagen video be like"
-hash: 2bbcf5d2984cd6680f95d7fc90ffe5d6792b23461996c100448320a50d2b6afb
+hash: ba843162c34e7869e03e860b68284ef5b98190deb3a2c54088f8de7d90b9f0e6
 ---
 My thoughts on [Average Primeagen video be like](https://youtu.be/oSXhF0C7Jpg): Average Primeagen video be like
 

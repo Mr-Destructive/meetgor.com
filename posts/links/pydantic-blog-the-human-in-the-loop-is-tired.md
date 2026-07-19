@@ -1,16 +1,16 @@
 ---
-title: "Pydantic Blog: The human in the loop is tired"
-date: 2026-07-17
-link: "https://pydantic.dev/articles/the-human-in-the-loop-is-tired"
-status: published
-image_url: "https://pydantic.dev/articles/the-human-in-the-loop-is-tired/og.png"
 source: newsletter
 newsletter: techstructive-weekly-103
 type: links
 slug: pydantic-blog-the-human-in-the-loop-is-tired
-tags:
+title: "Pydantic Blog: The human in the loop is tired"
+date: 2026-07-17
+link: "https://pydantic.dev/articles/the-human-in-the-loop-is-tired"
+image_url: "https://pydantic.dev/articles/the-human-in-the-loop-is-tired/og.png"
+tags: 
 description: "On reward functions, dopamine, and what it actually feels like when the code starts writing itself"
-hash: 0a606c878fc136e8cb00b66e412c558a169fd46fd39d799f4b1afb8e83c611e7
+hash: 9ccc7b2aca1cc4556a2ec284886246b6f7015e9cc8a4cc58c878a48a9c8c6405
+status: published
 ---
 My thoughts on [Pydantic Blog: The human in the loop is tired](https://pydantic.dev/articles/the-human-in-the-loop-is-tired): Pydantic Blog: The human in the loop is tired
 

@@ -1,16 +1,16 @@
 ---
-title: "Why write code in 2026"
+tags: 
 date: 2026-07-17
-link: "https://softwaredoug.com/blog/2026/07/09/write-code"
 status: published
+description: "A bunch of reasons to write code in 2026"
+hash: 331e86e83d86cb08056b87063dc403b2c298268ba7bfe260cef49b2196a69616
+title: "Why write code in 2026"
+link: "https://softwaredoug.com/blog/2026/07/09/write-code"
 image_url: "https://softwaredoug.com//assets/media/2026/write-code/image1.png"
 source: newsletter
 newsletter: techstructive-weekly-103
 type: links
 slug: why-write-code-in-2026
-tags:
-description: "A bunch of reasons to write code in 2026"
-hash: 10d1f7f37fdd220dd48687f430ed86b7924701ff3221aaedcd09ace7ff2c0a5e
 ---
 My thoughts on [Why write code in 2026](https://softwaredoug.com/blog/2026/07/09/write-code): Why write code in 2026
 
