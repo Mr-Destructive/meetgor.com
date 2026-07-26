@@ -1,10 +1,10 @@
 ---
-date: 2026-01-12
-description: ""
 title: "Typical PDF document"
 status: published
-tags: ["pdf","document","forensics","security"]
 type: links
+date: 2026-01-12
+description: ""
+tags: ["pdf","document","forensics","security"]
 slug: a-typical-pdf-document
 hash: 94634ffcf77cb4d3621d8fa8e43f463f35997f407dd30a0e18f7da089345730a
 ---

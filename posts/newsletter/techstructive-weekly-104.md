@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #104"
 date: 2026-07-24
 slug: techstructive-weekly-104
-type: newsletter
 status: published
 source: newsletter
 canonical_url: https://techstructively.substack.com/p/techstructive-weekly-104
-description: "Too tired to write this, taking it slightly short, among the other things form the week of 19th to 25th July 2026"
 tags: ["newsletter", "substack"]
+hash: f005bda5bc4fc404e5c9c0fc522b32a8689ebc6de836e8e54e038f5237e581b3
+title: "Techstructive Weekly #104"
+type: newsletter
+description: "Too tired to write this, taking it slightly short, among the other things form the week of 19th to 25th July 2026"
 ---
-
 ## Week #104
 
 A soul sucking week, draining nonetheless. Worked almost everyday from 9 to 10. More than 10 hours definitely. Not that its not fun, but it gets unsustainable if I just forget what I am doing with my back and body.
