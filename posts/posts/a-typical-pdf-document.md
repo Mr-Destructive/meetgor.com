@@ -1,8 +1,8 @@
 ---
 type: links
-tags: ["pdf","document","forensics","security"]
 date: 2026-01-12
 title: "Typical PDF document"
+tags: ["pdf","document","forensics","security"]
 description: ""
 slug: a-typical-pdf-document
 status: published
