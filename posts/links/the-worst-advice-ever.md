@@ -1,16 +1,16 @@
 ---
-title: "The worst advice ever"
 date: 2026-07-31
+image_url: "https://i.ytimg.com/vi/L_JgETH8zKM/hqdefault.jpg"
+newsletter: techstructive-weekly-105
+slug: the-worst-advice-ever
+hash: b591645c64f1071637965e6fc8ebc56c04aa2789658f8df10d515c587bda769f
+title: "The worst advice ever"
 link: "https://youtu.be/L_JgETH8zKM?si=-8qQPVkM6R795CMh"
 status: published
-image_url: "https://i.ytimg.com/vi/L_JgETH8zKM/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-105
 type: links
-slug: the-worst-advice-ever
-tags:
+tags: 
 description: "The worst advice ever"
-hash: 13532c2dbf3eebf9cb354b7d9f9ba46183b6ec8351507cde6320c18c46c9d33b
 ---
 My thoughts on [The worst advice ever](https://youtu.be/L_JgETH8zKM?si=-8qQPVkM6R795CMh): The worst advice ever
 

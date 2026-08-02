@@ -1,16 +1,16 @@
 ---
+hash: d75a0222cd002e8974d32514b91cf159763adf01a233b9867061d204c2fb795b
 title: "Finally some truth about loop engineering"
 date: 2026-07-31
-link: "https://youtu.be/xhIQ-ijUmB4?si=OWtcphq9TvZPf0ET"
 status: published
 image_url: "https://i.ytimg.com/vi/xhIQ-ijUmB4/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-105
 type: links
+tags: 
+link: "https://youtu.be/xhIQ-ijUmB4?si=OWtcphq9TvZPf0ET"
+source: newsletter
 slug: finally-some-truth-about-loop-engineering
-tags:
 description: "Finally some truth about loop engineering"
-hash: 2402e59084847da7647870f70c88a70c56f289bc1ded47119191fc5a9488547a
 ---
 My thoughts on [Finally some truth about loop engineering](https://youtu.be/xhIQ-ijUmB4?si=OWtcphq9TvZPf0ET): Finally some truth about loop engineering
 

@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #105"
-date: 2026-07-31
-slug: techstructive-weekly-105
-type: newsletter
 status: published
 source: newsletter
+hash: 1c2e650d7037f99452bdca3ce7d23c45c30567e0c67aff2f17de0bb596c399f9
+title: "Techstructive Weekly #105"
+slug: techstructive-weekly-105
+type: newsletter
 canonical_url: https://techstructively.substack.com/p/techstructive-weekly-105
 description: "A bit high focused work week, not.much in reading or insights but a lot of working through problems among the other things learnt in the week from 26th July to 1st August 2026"
 tags: ["newsletter", "substack"]
+date: 2026-07-31
 ---
-
 ## Week #105
 
 Another week of heavy toiling to get things right. Really heavy 9 to 11 daily. Exhaustive. Agentic engineering looks sloppy on outside but drains rhe brain really quick. Som many decisions to make, so many things to overlook and squeeze much information in compact way is not easy thing.
