@@ -1,7 +1,7 @@
 ---
 date: 2026-01-12
-title: "Typical PDF document"
 tags: ["pdf","document","forensics","security"]
+title: "Typical PDF document"
 description: ""
 slug: a-typical-pdf-document
 status: published
