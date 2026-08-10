@@ -1,16 +1,16 @@
 ---
-title: "Typecraft: I almost quit youtube"
-date: 2026-08-07
 link: "https://youtu.be/0Lo6MSGrxEA"
-status: published
-image_url: "https://i.ytimg.com/vi/0Lo6MSGrxEA/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-106
+tags: 
+date: 2026-08-07
+status: published
+image_url: "https://i.ytimg.com/vi/0Lo6MSGrxEA/hqdefault.jpg"
 type: links
 slug: typecraft-i-almost-quit-youtube
-tags:
 description: "Typecraft: I almost quit youtube"
-hash: 7413e4785ef0fc2427c7ee0d7124ecb1c7337cc9b398269e76ba5e5540bfec04
+hash: 8129002ac9a263741c66c23aa24bbfa1f2b2b13d9fb5bfbaa38a0c09634407be
+title: "Typecraft: I almost quit youtube"
 ---
 My thoughts on [Typecraft: I almost quit youtube](https://youtu.be/0Lo6MSGrxEA): Typecraft: I almost quit youtube
 

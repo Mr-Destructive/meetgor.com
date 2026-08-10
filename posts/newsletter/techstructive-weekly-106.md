@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #106"
 date: 2026-08-07
 slug: techstructive-weekly-106
 type: newsletter
 status: published
 source: newsletter
-canonical_url: https://techstructively.substack.com/p/techstructive-weekly-106
 description: "Reading a bit, working hard on output tc code and agentic extraction, among the other things watched and observed in the week from 2nd to 8th August 2026"
 tags: ["newsletter", "substack"]
+hash: c47a5d986de8a0a3afd17a745cfa251be82f379c89fbb514943bf3ed6ff3f381
+title: "Techstructive Weekly #106"
+canonical_url: https://techstructively.substack.com/p/techstructive-weekly-106
 ---
-
 ## Week #106
 
 It was another continuous week of working hard. Weekends had no limit on work too. Didn’t sleep properly during week, was too anxious about the client, the project, the thoughts of how to solve it. Just a exciting but exhilarating week. AI can write code yes, but the judgement and taste is still driven by the human behind it. And expressing that is exhaustive task. Its like spending a days worth of work in a single hour. Plus a constant context switching also drains the battery. Anyways, pumping into action back on Monday.

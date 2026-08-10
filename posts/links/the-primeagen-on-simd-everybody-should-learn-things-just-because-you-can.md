@@ -1,16 +1,16 @@
 ---
-title: "The Primeagen on SIMD, everybody should learn things, just because you can"
-date: 2026-08-07
-link: "https://youtu.be/4nJ2tEPD4-k?"
+description: "The Primeagen on SIMD, everybody should learn things, just because you can"
+hash: e41e8f79cec94b69a4f43e1bf1d28cd896dbf6605d0138b9bb1b7061d515f26a
 status: published
 image_url: "https://i.ytimg.com/vi/4nJ2tEPD4-k/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-106
 type: links
+title: "The Primeagen on SIMD, everybody should learn things, just because you can"
+date: 2026-08-07
+link: "https://youtu.be/4nJ2tEPD4-k?"
+newsletter: techstructive-weekly-106
 slug: the-primeagen-on-simd-everybody-should-learn-things-just-because-you-can
-tags:
-description: "The Primeagen on SIMD, everybody should learn things, just because you can"
-hash: dd7a2a279be50c669c1ce94bd7f50971fc160616a86d86d6199589ec13ac1541
+tags: 
 ---
 My thoughts on [The Primeagen on SIMD, everybody should learn things, just because you can](https://youtu.be/4nJ2tEPD4-k?): The Primeagen on SIMD, everybody should learn things, just because you can
 

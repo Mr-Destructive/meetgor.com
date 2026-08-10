@@ -1,16 +1,16 @@
 ---
+status: published
+image_url: "https://www.seangoedecke.com/og-image.jpg"
+newsletter: techstructive-weekly-106
+type: links
+tags: 
 title: "LLMs Rewards expertise"
 date: 2026-08-07
 link: "https://www.seangoedecke.com/llms-reward-expertise/"
-status: published
-image_url: "https://www.seangoedecke.com/og-image.jpg"
 source: newsletter
-newsletter: techstructive-weekly-106
-type: links
 slug: llms-rewards-expertise
-tags:
 description: "LLMs Rewards expertise"
-hash: 6d013f0204867914d572ebb594138700faaed2c2037c77bc8d24a191dc5e7f61
+hash: 0fa51ce71965a07a9be0c97ca25f646d8480ec50af8222e933f215f81802e7b8
 ---
 My thoughts on [LLMs Rewards expertise](https://www.seangoedecke.com/llms-reward-expertise/): LLMs Rewards expertise
 
