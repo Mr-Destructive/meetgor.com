@@ -1,6 +1,9 @@
 ---
+hash: 0bd88c77d9473e9d72aeb31bde180ee67a7a0ae8132abfcd2c1d7fabe2863c81
 title: "Why is everyone in tech so sad"
 date: 2026-08-14
+tags: 
+description: "A lot of people seem to be realizing that knowledge work is mostly pointless. AI might give us the pleasure of finding out what happens if an entire class of workers loses faith in their careers."
 link: "https://www.noemamag.com/why-is-everyone-in-tech-so-sad/"
 status: published
 image_url: "https://noemamag.imgix.net/2026/08/HR_Knitting_Noema_LeonieBos-copy.jpg?fit=crop&fm=pjpg&h=628&ixlib=php-3.3.1&rect=0%2C32%2C945%2C495&w=1200&wpsize=noema-social-facebook&s=ff77fe7391cba53b40080273232ce909"
@@ -8,9 +11,6 @@ source: newsletter
 newsletter: techstructive-weekly-107
 type: links
 slug: why-is-everyone-in-tech-so-sad
-tags:
-description: "A lot of people seem to be realizing that knowledge work is mostly pointless. AI might give us the pleasure of finding out what happens if an entire class of workers loses faith in their careers."
-hash: 1d0c8c11af7100c492bfb97965aabc37c94b7c26c9337308661092d9df379402
 ---
 My thoughts on [Why is everyone in tech so sad](https://www.noemamag.com/why-is-everyone-in-tech-so-sad/): Why is everyone in tech so sad
 

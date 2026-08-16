@@ -1,16 +1,16 @@
 ---
+hash: 492d2a176c6b709fd5b15e6e8dab0367c2908d2155e9fa82e0ee9244ffba10d0
 title: "Casey and Dimitri on Wading through AI Episode 8: What new jobs will AI create"
 date: 2026-08-14
 link: "https://youtu.be/loaKh75eXM8"
+description: "Casey and Dimitri on Wading through AI Episode 8: What new jobs will AI create"
 status: published
 image_url: "https://i.ytimg.com/vi/loaKh75eXM8/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-107
 type: links
 slug: casey-and-dimitri-on-wading-through-ai-episode-8-what-new-jobs-will-ai-create
-tags:
-description: "Casey and Dimitri on Wading through AI Episode 8: What new jobs will AI create"
-hash: 037730f5c51e4b02b1eaffccfa8dec229c387c49be5cacb01924c847bb3811a1
+tags: 
 ---
 My thoughts on [Casey and Dimitri on Wading through AI Episode 8: What new jobs will AI create](https://youtu.be/loaKh75eXM8): Casey and Dimitri on Wading through AI Episode 8: What new jobs will AI create
 

@@ -1,16 +1,16 @@
 ---
-title: "AI is removing the middle class of software engineering"
-date: 2026-08-14
-link: "https://blog.florianherrengt.com/ai-removing-middle-class-software-engineering.html"
-status: published
-image_url: ""
-source: newsletter
 newsletter: techstructive-weekly-107
 type: links
 slug: ai-is-removing-the-middle-class-of-software-engineering
-tags:
+hash: 6f40f6d66e22852321afdedcd10334f58e5ccada027b17eb8fca6db7cffb97e7
+title: "AI is removing the middle class of software engineering"
+date: 2026-08-14
+source: newsletter
+tags: 
 description: "AI makes projects with weak engineering culture fail much faster."
-hash: ae8390a8ae9c2e1f8c97b8f43ec4f0f4f97aae0ea11a2606f53982b456884ef3
+link: "https://blog.florianherrengt.com/ai-removing-middle-class-software-engineering.html"
+status: published
+image_url: ""
 ---
 My thoughts on [AI is removing the middle class of software engineering](https://blog.florianherrengt.com/ai-removing-middle-class-software-engineering.html): AI is removing the middle class of software engineering
 

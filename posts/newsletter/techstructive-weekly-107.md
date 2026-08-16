@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #107"
+description: "Reading books, enjoying the fruits of labour, he shift in work of a software development and adapting mentality with it among the other things watched and learnt in the week from 9th to 15 August 2026"
+tags: ["newsletter", "substack"]
 date: 2026-08-14
 slug: techstructive-weekly-107
 type: newsletter
 status: published
+hash: 69285f4bdb60cd63e4c9f0fbbada6a3dadba1acb523b901726b7f8fca905e369
+title: "Techstructive Weekly #107"
 source: newsletter
 canonical_url: https://techstructively.substack.com/p/techstructive-weekly-107
-description: "Reading books, enjoying the fruits of labour, he shift in work of a software development and adapting mentality with it among the other things watched and learnt in the week from 9th to 15 August 2026"
-tags: ["newsletter", "substack"]
 ---
-
 ## Week #107
 
 It was finally a rewarding week, after maybe a month of slog and working. I found peace or I should say the customer gave up and become friendly and found the system helpful. Either ways, it was a win.

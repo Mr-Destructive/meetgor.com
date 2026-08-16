@@ -1,16 +1,16 @@
 ---
+tags: 
 title: "Code was never the hard part is a insult to programmers"
+newsletter: techstructive-weekly-107
+description: "The software development profession is in the midst of upheaval. Nobody knows how the AI revolution will play out in the end, but it is c..."
+hash: e7d18c05b62e37f09baa318c817a80749e645a17774e34198bf63c26010df303
 date: 2026-08-14
 link: "https://blog.senko.net/code-was-never-the-hard-part-is-an-insult-to-all-programmers"
 status: published
 image_url: "https://cdn.writeas.net/img/w-sq-light.png"
 source: newsletter
-newsletter: techstructive-weekly-107
 type: links
 slug: code-was-never-the-hard-part-is-a-insult-to-programmers
-tags:
-description: "The software development profession is in the midst of upheaval. Nobody knows how the AI revolution will play out in the end, but it is c..."
-hash: 16bec8d1e36051b612df1556fd6b689ddf3abc98c514b2b48fd4155d9ba32d9b
 ---
 My thoughts on [Code was never the hard part is a insult to programmers](https://blog.senko.net/code-was-never-the-hard-part-is-an-insult-to-all-programmers): Code was never the hard part is a insult to programmers
 

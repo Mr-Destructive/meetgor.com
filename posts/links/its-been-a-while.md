@@ -1,16 +1,16 @@
 ---
+type: links
+tags: 
+description: "Wow. It’s been over fourteen years since the last time I wrote a post on this blog. In those fourteen years, the world has changed, and so have I. So this isn't going to be a technical post, it's going to be personal. One of those subtle changes that quietly crept into my life over"
+link: "https://themech.net/2026/08/hello-me-its-been-a-while/"
+image_url: "https://secure.gravatar.com/avatar/10ab3895f5f788f14b825d1269010060?s=32&d=mm&r=g"
+slug: its-been-a-while
+hash: 6a097c12b8470c981015eac52fc68aebaa90df1825ae6bd004bff0f0434bcf0b
 title: "Its been a while"
 date: 2026-08-14
-link: "https://themech.net/2026/08/hello-me-its-been-a-while/"
 status: published
-image_url: "https://secure.gravatar.com/avatar/10ab3895f5f788f14b825d1269010060?s=32&d=mm&r=g"
 source: newsletter
 newsletter: techstructive-weekly-107
-type: links
-slug: its-been-a-while
-tags:
-description: "Wow. It’s been over fourteen years since the last time I wrote a post on this blog. In those fourteen years, the world has changed, and so have I. So this isn't going to be a technical post, it's going to be personal. One of those subtle changes that quietly crept into my life over"
-hash: 65298bcde533d696ed43128e9d1065917798fbbbffb3f5fbc5c6afd753c5c5cc
 ---
 My thoughts on [Its been a while](https://themech.net/2026/08/hello-me-its-been-a-while/): Its been a while
 
