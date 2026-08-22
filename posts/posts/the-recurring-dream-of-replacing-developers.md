@@ -1,12 +1,12 @@
 ---
 type: links
 title: "The recurring dream of replacing developers"
+tags: ["ai","developers"]
+hash: b967015d344012840ff695a3847064e3b90f6fceeb7552e88fc2dba825be1565
 description: ""
 date: 2026-01-19
 slug: the-recurring-dream-of-replacing-developers
-tags: ["ai","developers"]
 status: published
-hash: b967015d344012840ff695a3847064e3b90f6fceeb7552e88fc2dba825be1565
 ---
 - what a flashback, everything makes sense.
 - Programming is not mechanical
