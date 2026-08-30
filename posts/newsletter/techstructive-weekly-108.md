@@ -1,15 +1,15 @@
 ---
 title: "Techstructive Weekly #108"
-date: 2026-08-28
 slug: techstructive-weekly-108
-type: newsletter
 status: published
 source: newsletter
-canonical_url: https://techstructively.substack.com/p/techstructive-weekly-108
 description: "Resting in sickness, watching and consuming being helpless on bed among the other things barely did in the week from 16th to 29th August 2026"
+date: 2026-08-28
+type: newsletter
+canonical_url: https://techstructively.substack.com/p/techstructive-weekly-108
 tags: ["newsletter", "substack"]
+hash: 4f35e295da36350c0d62331c1adaef21502b7756b13663acb88d6d72d7c2b62a
 ---
-
 ## Week #108
 
 Well, that was fun while it lasted, a 107 week streak broken. I was hospitalized. Period. First time in life. It was a weird feeling for sure, but coming back next week with this edition is even better. I didn’t read or watched anything during that week, was down with fever and chills right from the evening of Sunday. There was nothing to reflect on such a gloomy week of tech, but a lot to learn from life.
