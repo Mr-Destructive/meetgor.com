@@ -4,8 +4,8 @@ slug: one-year-writing-journey
 title: One-Year Writing Journey
 date: 2026-01-24
 link: https://eric-sandosham.medium.com/my-one-year-writing-journey-9dc4104676b4
-status: published
 tags: 
+status: published
 type: links
 ---
 # One-Year Writing Journey
