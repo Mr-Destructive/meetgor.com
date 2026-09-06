@@ -1,16 +1,16 @@
 ---
-title: "Sriniously: HTTP for backend engineers"
+description: "Sriniously: HTTP for backend engineers"
+hash: c08114f129df684a81e1d251a5cc419604d0f28ad1edeb0bc09a3645977457cf
 date: 2026-09-04
+source: newsletter
+type: links
+tags: 
+title: "Sriniously: HTTP for backend engineers"
 link: "https://youtu.be/a3C1DMswClQ"
 status: published
 image_url: "https://i.ytimg.com/vi/a3C1DMswClQ/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-109
-type: links
 slug: sriniously-http-for-backend-engineers
-tags:
-description: "Sriniously: HTTP for backend engineers"
-hash: 53fbc7f4eae64fdc8f9869e967a602ff9d5329e92d76c598e908837507f78300
 ---
 My thoughts on [Sriniously: HTTP for backend engineers](https://youtu.be/a3C1DMswClQ): Sriniously: HTTP for backend engineers
 

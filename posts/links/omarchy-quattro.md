@@ -1,16 +1,16 @@
 ---
-title: "Omarchy Quattro"
 date: 2026-09-04
 link: "https://youtu.be/F7fe9pa8OeE"
 status: published
 image_url: "https://i.ytimg.com/vi/F7fe9pa8OeE/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-109
-type: links
 slug: omarchy-quattro
-tags:
 description: "Omarchy Quattro"
-hash: 0677ff922e363a7909de0130b5ae28496465feb54c811e4b1fe2584284f5b898
+title: "Omarchy Quattro"
+type: links
+tags: 
+hash: 004d5be84f64a4a76f012f5f451cef12a5d1ac4d3941817a3647a27489a1813b
 ---
 My thoughts on [Omarchy Quattro](https://youtu.be/F7fe9pa8OeE): Omarchy Quattro
 

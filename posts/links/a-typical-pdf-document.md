@@ -1,16 +1,16 @@
 ---
+tags: 
 description: 'A typical PDF document'
-newsletter: 2026-01-17-techstructive-weekly-77
-slug: a-typical-pdf-document
 status: published
 hash: d3f7973af00667b491437507775ce4433dedebe289e8b9e5bd2615844efb55bc
+image_url: ''
+link: 'https://hackerfactor.com/blog/index.php?/archives/1085-A-Typical-PDF.html'
+newsletter: 2026-01-17-techstructive-weekly-77
+slug: a-typical-pdf-document
 type: links
 date: 2026-01-17
 source: newsletter
 title: 'A typical PDF document'
-image_url: ''
-link: 'https://hackerfactor.com/blog/index.php?/archives/1085-A-Typical-PDF.html'
-tags: 
 ---
 ## Commentary
 

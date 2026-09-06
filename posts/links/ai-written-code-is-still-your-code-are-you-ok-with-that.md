@@ -1,16 +1,16 @@
 ---
-title: "AI written code is still your code, are you ok with that?"
-date: 2026-09-04
-link: "https://martiansoftware.com/articles/ai-written-code-is-still-yours"
-status: published
-image_url: ""
-source: newsletter
 newsletter: techstructive-weekly-109
 type: links
+tags: 
+title: "AI written code is still your code, are you ok with that?"
+status: published
+source: newsletter
 slug: ai-written-code-is-still-your-code-are-you-ok-with-that
-tags:
 description: "We’ve never needed to treat understanding our own code as a separate cost from writing it, because writing it largely forced us to understand it."
-hash: 9501d64521c1010e7c764a9eb2db1e747adf7c380d47f0124f5c2276e41fda46
+hash: 77be85452e062765581933a04b26b9bd7d2c72cd319fa825669d0d5fd204f4cd
+date: 2026-09-04
+link: "https://martiansoftware.com/articles/ai-written-code-is-still-yours"
+image_url: ""
 ---
 My thoughts on [AI written code is still your code, are you ok with that?](https://martiansoftware.com/articles/ai-written-code-is-still-yours): AI written code is still your code, are you ok with that?
 

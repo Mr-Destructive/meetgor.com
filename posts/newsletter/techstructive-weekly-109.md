@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #109"
-date: 2026-09-04
-slug: techstructive-weekly-109
-type: newsletter
 status: published
-source: newsletter
 canonical_url: https://techstructively.substack.com/p/techstructive-weekly-109
 description: "Not much reading, but watching and learning a lot of things, working with AI to build and refactor systems, among the other things did in the week from 30th August to 5th September 2026"
 tags: ["newsletter", "substack"]
+hash: 85f592f99d2dda95ca135e4cee30bc8b988735c26e68f5401afa924e218152b2
+title: "Techstructive Weekly #109"
+slug: techstructive-weekly-109
+type: newsletter
+source: newsletter
+date: 2026-09-04
 ---
-
 ## Week #109
 
 A bit of back to work week. Enjoyed the process maybe. Not sure, still figuring out the agentic engineering environment. I am actually lucky to have peers and colleagues that respect each other and understand the current trend of agentic work. “You don’t have to know everything, but you have to own it” that’s a bit hard to digest pill, If you know what I mean. Generating code, but not knowing the details but knowing enough of it to steer the issues. I felt good, not comfortable but not stressed or disrespected the least. I understand not everyone might have the privilege to be in this ai-change-friendly environment.
