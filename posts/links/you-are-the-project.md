@@ -1,16 +1,16 @@
 ---
-title: "You are the project"
-date: 2026-09-11
-link: "https://youtu.be/8faAKQeFkgk"
-status: published
 image_url: "https://i.ytimg.com/vi/8faAKQeFkgk/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-110
 type: links
-slug: you-are-the-project
-tags:
 description: "You are the project"
-hash: f06e35437182275a7b40bf674eecf8663561d0249459b689d13a6851d95f9e95
+title: "You are the project"
+date: 2026-09-11
+status: published
+newsletter: techstructive-weekly-110
+slug: you-are-the-project
+tags: 
+hash: 2a8cb0e7fcf63428b3d6e6ea6d1cd9d8dabaa837874ac9a7b55ca1a746aa2e2b
+link: "https://youtu.be/8faAKQeFkgk"
 ---
 My thoughts on [You are the project](https://youtu.be/8faAKQeFkgk): You are the project
 

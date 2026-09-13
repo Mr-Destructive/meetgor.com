@@ -1,16 +1,16 @@
 ---
-title: "AGI is here, and its bad right?"
 date: 2026-09-11
 link: "https://youtu.be/4B4R2T4w7Kg"
-status: published
-image_url: "https://i.ytimg.com/vi/4B4R2T4w7Kg/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-110
 type: links
 slug: agi-is-here-and-its-bad-right
-tags:
 description: "AGI is here, and its bad right?"
-hash: eadbf9e6fdde0c77191414342f4d5d959da1865013ab48e8f61a519d8b551039
+title: "AGI is here, and its bad right?"
+status: published
+image_url: "https://i.ytimg.com/vi/4B4R2T4w7Kg/hqdefault.jpg"
+newsletter: techstructive-weekly-110
+tags: 
+hash: b47d8d7df953346f9f6c96cdbc2a4e4dcf99b8733b737f8b1b0c18b91bb5dea5
 ---
 My thoughts on [AGI is here, and its bad right?](https://youtu.be/4B4R2T4w7Kg): AGI is here, and its bad right?
 

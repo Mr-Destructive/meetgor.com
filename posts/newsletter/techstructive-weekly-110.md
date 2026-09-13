@@ -3,13 +3,13 @@ title: "Techstructive Weekly #110"
 date: 2026-09-11
 slug: techstructive-weekly-110
 type: newsletter
-status: published
 source: newsletter
-canonical_url: https://techstructively.substack.com/p/techstructive-weekly-110
 description: "Created free llm router, annoyed with gemini models, among the other things read, watched and learnt in the week from 6th to 12th September 2026"
 tags: ["newsletter", "substack"]
+hash: 2cc704af26126404c52a58a3bd3954c9e1a276180897f0a8a0a6262a1247620e
+status: published
+canonical_url: https://techstructively.substack.com/p/techstructive-weekly-110
 ---
-
 ## Week #110
 
 It was a hammering week. 3k lines shipped to prod, no issues. Agentic coding on the move. I am not sure, I should be proud or not, but not bragging about it, it was a win for me. The code was obviously reviewed from me :| and no one else even spent an second of eye on it, shipped, nothing broke. It was a model updation + some tracing and standardization of model routing. There were 2 major things at once, if you are updating models, that could lead to unknowns that you even don’t know, and that’s what happened only 3 instances among 3k requests in the week. The other being tracing and model standardization library addition. It worked in the end, there are improvements to be done, there always are. But a fair learning after recovering from sick 2 week leave. I call it a comeback motivation from nature. Thanking and grateful for it.

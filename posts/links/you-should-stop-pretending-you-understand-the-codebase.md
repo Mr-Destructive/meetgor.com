@@ -1,16 +1,16 @@
 ---
-title: "You should stop pretending you understand the codebase"
-date: 2026-09-11
-link: "https://youtu.be/5KvY8CnBB3w"
-status: published
 image_url: "https://i.ytimg.com/vi/5KvY8CnBB3w/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-110
 type: links
 slug: you-should-stop-pretending-you-understand-the-codebase
-tags:
+tags: 
+link: "https://youtu.be/5KvY8CnBB3w"
+status: published
+newsletter: techstructive-weekly-110
 description: "You should stop pretending you understand the codebase"
-hash: 64a87bf79e1c24f2f0ee69864a23b1c11e4e4ae419047a69823aefd9b6e64356
+hash: 6b29014472d910c6297d06242d451560a5821f6d6e4dc7950a42d9a6f2cf1fdb
+title: "You should stop pretending you understand the codebase"
+date: 2026-09-11
 ---
 My thoughts on [You should stop pretending you understand the codebase](https://youtu.be/5KvY8CnBB3w): You should stop pretending you understand the codebase
 
