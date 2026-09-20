@@ -1,16 +1,16 @@
 ---
 title: "Pedagogy with AI"
-date: 2026-09-18
-link: "https://youtu.be/jGzxkUXhwvY"
 status: published
-image_url: "https://i.ytimg.com/vi/jGzxkUXhwvY/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-111
 type: links
 slug: pedagogy-with-ai
-tags:
 description: "Pedagogy with AI"
-hash: 786be4428a3dfc6754388181b09ca4463667811ad59f7279280644df44d183ef
+hash: c0d38150b6e9807393dfe849676f2a1328331cf034ee56370c2161a412b8bd14
+date: 2026-09-18
+link: "https://youtu.be/jGzxkUXhwvY"
+image_url: "https://i.ytimg.com/vi/jGzxkUXhwvY/hqdefault.jpg"
+newsletter: techstructive-weekly-111
+tags: 
 ---
 My thoughts on [Pedagogy with AI](https://youtu.be/jGzxkUXhwvY): Pedagogy with AI
 

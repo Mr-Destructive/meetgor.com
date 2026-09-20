@@ -1,15 +1,15 @@
 ---
 title: "Techstructive Weekly #111"
+type: newsletter
+canonical_url: https://techstructively.substack.com/p/techstructive-weekly-111
+hash: c0500077d138b973fc70db3bb67db2b66f195243b81413db71ff0f326eba05f6
 date: 2026-09-18
 slug: techstructive-weekly-111
-type: newsletter
 status: published
 source: newsletter
-canonical_url: https://techstructively.substack.com/p/techstructive-weekly-111
 description: "Watching long talks, human curiosity, ai research assistant is a nay, read about ai among the other things learnt and worked form the week 13th to 19th September 2026"
 tags: ["newsletter", "substack"]
 ---
-
 ## Week #111
 
 It was a fun week. A rollercoaster to be honest, the weekend was depressing a good take off in the work, but a dip of sickness and back to work in the end. So, a lot happened this week, the gist is, I have a lot to learn, learning and exploring just in spite is still a thing that humans do and will continue doing, no matter how bad the AI situation gets. That’s a positive thing I am making myself believe from this week.

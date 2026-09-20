@@ -1,16 +1,16 @@
 ---
+link: "https://youtu.be/hpj6r6CjJf8"
+source: newsletter
+type: links
+tags: 
+description: "The root of the root of all evil - BSC 2026, talk from Casey Muratori, Legendary Game Programmer"
 title: "The root of the root of all evil - BSC 2026, talk from Casey Muratori, Legendary Game Programmer"
 date: 2026-09-18
-link: "https://youtu.be/hpj6r6CjJf8"
 status: published
 image_url: "https://i.ytimg.com/vi/hpj6r6CjJf8/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-111
-type: links
 slug: the-root-of-the-root-of-all-evil-bsc-2026-talk-from-casey-muratori-legendary-game-programmer
-tags:
-description: "The root of the root of all evil - BSC 2026, talk from Casey Muratori, Legendary Game Programmer"
-hash: b284cbf01188eb1aac53488e82ded95d68a2840e4300bf9a6b442c8dcfbba7f4
+hash: f5f1d96662e987bc651e580c2b0ade996a53a9e1f1ba929c61a7642c11e73c26
 ---
 My thoughts on [The root of the root of all evil - BSC 2026, talk from Casey Muratori, Legendary Game Programmer](https://youtu.be/hpj6r6CjJf8): The root of the root of all evil - BSC 2026, talk from Casey Muratori, Legendary Game Programmer
 

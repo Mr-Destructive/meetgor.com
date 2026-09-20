@@ -1,16 +1,16 @@
 ---
-title: "I am not addicted to my smartphone or social media, I am addicted to information, to thinking while consuming"
 date: 2026-09-18
 link: "https://explorator.dev/addiction/"
-status: published
-image_url: "/static/og-image.png"
 source: newsletter
-newsletter: techstructive-weekly-111
 type: links
 slug: i-am-not-addicted-to-my-smartphone-or-social-media-i-am-addicted-to-information-to-thinking-while-consuming
-tags:
 description: "At first, I thought I was addicted to internet forums. Then Facebook appeared and soon after I discovered Reddit, Hacker News, 9GAG, Instagram and other form..."
-hash: 5da9db3b3e789ea0af5a7f602d86a34c28bea70f2ca424cbddec3cd820a5d5e3
+hash: 6521240df44efd1e9256abbc80e42c0d9c5df14d5bd8d1c37a469cf5b448c6b0
+title: "I am not addicted to my smartphone or social media, I am addicted to information, to thinking while consuming"
+status: published
+image_url: "/static/og-image.png"
+newsletter: techstructive-weekly-111
+tags: 
 ---
 My thoughts on [I am not addicted to my smartphone or social media, I am addicted to information, to thinking while consuming](https://explorator.dev/addiction/): I am not addicted to my smartphone or social media, I am addicted to information, to thinking while consuming
 

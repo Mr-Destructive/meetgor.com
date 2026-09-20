@@ -1,16 +1,16 @@
 ---
-title: "How to write with an LLM"
-date: 2026-09-18
-link: "https://sockpuppet.org/blog/2026/09/17/how-to-write-with-an-llm/"
-status: published
-image_url: "https://sockpuppet.org/blog/2026/09/17/how-to-write-with-an-llm/workshop_hu_1de7cdec7d0e03c9.jpg"
-source: newsletter
 newsletter: techstructive-weekly-111
+link: "https://sockpuppet.org/blog/2026/09/17/how-to-write-with-an-llm/"
+source: newsletter
 type: links
 slug: how-to-write-with-an-llm
-tags:
+tags: 
 description: "Two rules keep an LLM from pasteurizing your writing: never take a word it suggests, and never let it encourage you. Then hand it all the tedious work."
-hash: 6a5de14508dd5c40c3bd9c33652c1f060dcc56c7c75680cd64322e191f8a3c63
+hash: a64f27a234f57df05815df4fb9fb159eb27e689170dea34dd6a022580edf2ce4
+title: "How to write with an LLM"
+date: 2026-09-18
+status: published
+image_url: "https://sockpuppet.org/blog/2026/09/17/how-to-write-with-an-llm/workshop_hu_1de7cdec7d0e03c9.jpg"
 ---
 My thoughts on [How to write with an LLM](https://sockpuppet.org/blog/2026/09/17/how-to-write-with-an-llm/): How to write with an LLM
 

@@ -1,16 +1,16 @@
 ---
-title: "Is AI a good research assistant"
 date: 2026-09-18
 link: "https://youtu.be/qEd9DTMXAOk"
 status: published
 image_url: "https://i.ytimg.com/vi/qEd9DTMXAOk/hqdefault.jpg"
 source: newsletter
+tags: 
+description: "Is AI a good research assistant"
 newsletter: techstructive-weekly-111
 type: links
 slug: is-ai-a-good-research-assistant
-tags:
-description: "Is AI a good research assistant"
-hash: b7fb75d9ef7aedd2ef3ce06a418fee51fcd9678c278da48b306b6a47d2db3a5e
+hash: fab9ac64750931f20cd6936b553155380ec5bae92ff425cd7cdc8027655abebd
+title: "Is AI a good research assistant"
 ---
 My thoughts on [Is AI a good research assistant](https://youtu.be/qEd9DTMXAOk): Is AI a good research assistant
 

@@ -2,15 +2,15 @@
 title: "Please stop using stupid Models"
 date: 2026-09-18
 link: "https://youtu.be/iBrAWpjXNxs"
+source: newsletter
+tags: 
 status: published
 image_url: "https://i.ytimg.com/vi/iBrAWpjXNxs/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-111
 type: links
 slug: please-stop-using-stupid-models
-tags:
 description: "Please stop using stupid Models"
-hash: fa24d37af2d835e8d14583d7b64f6703295cabd3a6307b0a65fb2cb536f8598c
+hash: 4dd61ada6b167ed339cd84534cdedd56fcc6f5b1095a9f76eb98059434bcc5a9
 ---
 My thoughts on [Please stop using stupid Models](https://youtu.be/iBrAWpjXNxs): Please stop using stupid Models
 

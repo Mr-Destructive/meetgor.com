@@ -1,16 +1,16 @@
 ---
+type: links
 title: "Did AI Kill React Native?"
-date: 2026-09-18
 link: "https://youtu.be/oPZLPUtmROo"
+newsletter: techstructive-weekly-111
+slug: did-ai-kill-react-native
+tags: 
+description: "Did AI Kill React Native?"
+hash: 6641e9b2a2cbf1bd61bded4a62d4199d87ef76aa62968be88d9ae1a73a6bf733
+date: 2026-09-18
 status: published
 image_url: "https://i.ytimg.com/vi/oPZLPUtmROo/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-111
-type: links
-slug: did-ai-kill-react-native
-tags:
-description: "Did AI Kill React Native?"
-hash: 0f294d1665d438afa521e5fa1dd7a4cd5464b879a46eece9e7003baf357fe8b9
 ---
 My thoughts on [Did AI Kill React Native?](https://youtu.be/oPZLPUtmROo): Did AI Kill React Native?
 

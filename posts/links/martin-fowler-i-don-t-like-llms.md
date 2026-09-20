@@ -6,11 +6,11 @@ status: published
 image_url: "https://martinfowler.com/logo-sq.png"
 source: newsletter
 newsletter: techstructive-weekly-111
-type: links
 slug: martin-fowler-i-don-t-like-llms
-tags:
+type: links
+tags: 
 description: "a short post"
-hash: 93076778147fc819872e2a77c5fa9c15994c20ce577e2a43cdfd130e99060930
+hash: e7903bb4f67e40ce1b1b56d125f8a5713de08924e69714272bddc557df16aa7c
 ---
 My thoughts on [Martin Fowler: I don’t like LLMs](https://martinfowler.com/articles/2026-dont-like-llms.html): Martin Fowler: I don’t like LLMs
 
