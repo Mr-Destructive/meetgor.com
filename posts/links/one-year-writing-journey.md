@@ -1,8 +1,5 @@
 ---
-slug: one-year-writing-journey
-date: 2024-09-14
 newsletter: 2024-09-14-techstructive-weekly-7
-status: published
 description: 'One-Year Writing Journey'
 type: links
 tags: 
@@ -10,6 +7,9 @@ title: 'One-Year Writing Journey'
 hash: ff624d486cded5972eae67461c90f62d8020ba785806009efa364ca7329d6b26
 source: newsletter
 link: 'https://eric-sandosham.medium.com/my-one-year-writing-journey-9dc4104676b4'
+slug: one-year-writing-journey
+date: 2024-09-14
+status: published
 ---
 ## Commentary
 
