@@ -1,16 +1,16 @@
 ---
+hash: 030cac211ea14f18c2dad36252054037e3fad8d690328c07e72357c11f7768de
+type: links
+title: "People who don’t use AI will get left behind"
+status: published
+tags: 
+link: "https://migrainebrain.bearblog.dev/people-who-dont-use-ai-will-be-left-behind/"
+date: 2026-05-01
+description: "\"People who don't use AI will be left behind\", they say.
 newsletter: techstructive-weekly-92
 slug: people-who-don-t-use-ai-will-get-left-behind
 source: newsletter
 image_url: "/static/og-image.png"
-hash: 030cac211ea14f18c2dad36252054037e3fad8d690328c07e72357c11f7768de
-type: links
-tags: 
-title: "People who don’t use AI will get left behind"
-link: "https://migrainebrain.bearblog.dev/people-who-dont-use-ai-will-be-left-behind/"
-date: 2026-05-01
-description: "\"People who don't use AI will be left behind\", they say.
-status: published
 ---
 My thoughts on [People who don’t use AI will get left behind](https://migrainebrain.bearblog.dev/people-who-dont-use-ai-will-be-left-behind/): People who don’t use AI will get left behind
 
