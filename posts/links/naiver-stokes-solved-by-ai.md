@@ -1,16 +1,16 @@
 ---
-title: "Naiver Stokes solved by AI"
-date: 2026-09-25
-link: "https://youtu.be/3geDF-DAwpg"
-status: published
 image_url: "https://i.ytimg.com/vi/3geDF-DAwpg/hqdefault.jpg"
+tags: 
+date: 2026-09-25
+status: published
 source: newsletter
 newsletter: techstructive-weekly-112
 type: links
 slug: naiver-stokes-solved-by-ai
-tags:
 description: "Naiver Stokes solved by AI"
-hash: c66398ff27a83e786d97647846ace6072863fcee0f701d9de6d8cc0fdf571717
+hash: 3a456595451ece595ef2293e8d3ea74f2832c5e300e85b2d54f69a3b1e8207bc
+title: "Naiver Stokes solved by AI"
+link: "https://youtu.be/3geDF-DAwpg"
 ---
 My thoughts on [Naiver Stokes solved by AI](https://youtu.be/3geDF-DAwpg): Naiver Stokes solved by AI
 

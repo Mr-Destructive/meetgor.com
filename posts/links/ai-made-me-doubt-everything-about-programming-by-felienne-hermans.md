@@ -2,15 +2,15 @@
 title: "AI made me doubt everything about Programming by Felienne Hermans"
 date: 2026-09-25
 link: "https://youtu.be/0-6-f94n_9M"
-status: published
 image_url: "https://i.ytimg.com/vi/0-6-f94n_9M/hqdefault.jpg"
 source: newsletter
+status: published
 newsletter: techstructive-weekly-112
 type: links
 slug: ai-made-me-doubt-everything-about-programming-by-felienne-hermans
-tags:
+tags: 
 description: "AI made me doubt everything about Programming by Felienne Hermans"
-hash: 48e253c7c333edf618ed914fecb2e62a3b27c8d130b4fb742db63dccbe17aa15
+hash: 0bc7e63f1908f4714228b7a7b618cde24584130d1becab064c11e97eeecd6f39
 ---
 My thoughts on [AI made me doubt everything about Programming by Felienne Hermans](https://youtu.be/0-6-f94n_9M): AI made me doubt everything about Programming by Felienne Hermans
 

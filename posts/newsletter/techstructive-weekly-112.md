@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #112"
+type: newsletter
+canonical_url: https://techstructively.substack.com/p/techstructive-weekly-112
+tags: ["newsletter", "substack"]
 date: 2026-09-25
 slug: techstructive-weekly-112
-type: newsletter
 status: published
 source: newsletter
-canonical_url: https://techstructively.substack.com/p/techstructive-weekly-112
 description: "Reading and watching stuff to keep positive among the other things thought and discovered in the week from 20th to 26th September 2026"
-tags: ["newsletter", "substack"]
+hash: 54fb57c179b88a38b770eff3189fea66444e3aa77d933530b0c211eb2f547d36
+title: "Techstructive Weekly #112"
 ---
-
 ## Week #112
 
 It was a great week. A bit working hard and slow. The call is to increase the pace, but I want to make sure I keep the quality and my agency.
