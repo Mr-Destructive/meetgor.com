@@ -1,8 +1,8 @@
 ---
 post_dir: links
 hash: b2530ff96aba13625bab18e9f058b560ab23cb76144aac321a3f0e9d874cb4b8
-type: links
 title: "Is Tom Riddle's Diary like an LLM?"
+type: links
 tags: 
 status: published
 date: 2025-12-13
