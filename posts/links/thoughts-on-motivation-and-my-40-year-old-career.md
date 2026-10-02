@@ -4,12 +4,12 @@ date: 2025-07-12
 type: links
 newsletter: 2025-07-12-techstructive-weekly-50
 status: published
-slug: thoughts-on-motivation-and-my-40-year-old-career
 description: 'Thoughts on motivation and my 40 year-old career'
+source: newsletter
+slug: thoughts-on-motivation-and-my-40-year-old-career
 title: 'Thoughts on motivation and my 40 year-old career'
 tags: 
 hash: 41db6293471341b9d4ecc571c8dbf691539e019bde36e6823487c3e470f9925f
-source: newsletter
 ---
 ## Commentary
 
