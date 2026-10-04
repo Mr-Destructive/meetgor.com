@@ -1,16 +1,16 @@
 ---
-title: "Scaling 7M Tables in Postgres, talk from Kailash Nadh CTO at Zerodha"
-date: 2026-10-02
 link: "https://youtu.be/4TE1xErXwGc"
 status: published
 image_url: "https://i.ytimg.com/vi/4TE1xErXwGc/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-113
+description: "Scaling 7M Tables in Postgres, talk from Kailash Nadh CTO at Zerodha"
+title: "Scaling 7M Tables in Postgres, talk from Kailash Nadh CTO at Zerodha"
+date: 2026-10-02
 type: links
 slug: scaling-7m-tables-in-postgres-talk-from-kailash-nadh-cto-at-zerodha
-tags:
-description: "Scaling 7M Tables in Postgres, talk from Kailash Nadh CTO at Zerodha"
-hash: eac859c66e8319a49af59a5854b0bc25eb69edd26ef4331197d2fb5a47be141f
+tags: 
+hash: f7d2b3079afed9cfa00bf0df3aaa211baf59802b7a1a6678e8375f4a3c785e04
 ---
 My thoughts on [Scaling 7M Tables in Postgres, talk from Kailash Nadh CTO at Zerodha](https://youtu.be/4TE1xErXwGc): Scaling 7M Tables in Postgres, talk from Kailash Nadh CTO at Zerodha
 

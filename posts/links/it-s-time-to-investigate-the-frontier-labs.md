@@ -1,16 +1,16 @@
 ---
 title: "It’s time to investigate the frontier labs"
+source: newsletter
+type: links
+tags: 
+hash: 39cf049c8c40abc047993df07f92453d3725907974798b2e3600d1ebc21678dd
 date: 2026-10-02
 link: "https://calnewport.com/its-time-to-investigate-the-ai-labs/"
 status: published
 image_url: "https://calnewport.com/wp-content/uploads/2026/09/16ALTMAN-sub-bzfh-superJumbo-v2-e1790369119788.webp"
-source: newsletter
 newsletter: techstructive-weekly-113
-type: links
 slug: it-s-time-to-investigate-the-frontier-labs
-tags:
 description: "Over the last several months, the two leading frontier AI labs have shown some brazen behavior. It started with a series of​ carefully planned announcements​ ... Read more"
-hash: 5e084757ee2bc29ef878b58b3568b6035920a85991eefebbc99d2dd7e6e1ce24
 ---
 My thoughts on [It’s time to investigate the frontier labs](https://calnewport.com/its-time-to-investigate-the-ai-labs/): It’s time to investigate the frontier labs
 

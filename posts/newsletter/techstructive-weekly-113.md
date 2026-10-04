@@ -1,15 +1,15 @@
 ---
+description: "Reading AI slop for learning systems, watching some useful tricks, among the other things observed and learnt in the week from 27th September to 3rd October 2026"
+tags: ["newsletter", "substack"]
 title: "Techstructive Weekly #113"
 date: 2026-10-02
 slug: techstructive-weekly-113
-type: newsletter
 status: published
 source: newsletter
 canonical_url: https://techstructively.substack.com/p/techstructive-weekly-113
-description: "Reading AI slop for learning systems, watching some useful tricks, among the other things observed and learnt in the week from 27th September to 3rd October 2026"
-tags: ["newsletter", "substack"]
+hash: d650524b07321ea53038062dd23078349f7551403bd1d2fe5ff544832fe12da7
+type: newsletter
 ---
-
 ## Week #113
 
 A week with a lot of maturing on as a developer. Learnt a lot of stuff, pondered over things.
