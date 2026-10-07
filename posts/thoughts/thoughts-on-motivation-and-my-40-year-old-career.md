@@ -5,9 +5,9 @@ link: https://charity.wtf/2025/07/09/thoughts-on-motivation-and-my-40-year-caree
 status: published
 title: Thoughts on motivation and my 40 year-old career
 hash: 1ac07543f57f31c0c90d41c894dfeba555ae3a38ac6c0de5d5a40d95d727c760
+tags: 
 type: links
 date: 2026-01-24T00:00:00Z
-tags: 
 ---
 # Thoughts on motivation and my 40 year-old career
 
