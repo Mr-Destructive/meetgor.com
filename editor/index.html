@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor | Meet Gor</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/code-block.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.2/purify.min.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EET2ZX4QY1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EET2ZX4QY1');
+    </script>
+    <style>
+        .editor-container { max-width: 700px; margin: 0 auto; }
+        .section { border: 1px solid var(--border-color); padding: 1.5rem; margin-bottom: 1.5rem; background: var(--bg-color); }
+        .section h2 { font-size: 1rem; font-weight: 600; margin: 0 0 1rem; color: var(--text-color); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+        .field { margin-bottom: 1rem; }
+        .field label { display: block; font-size: 0.85rem; color: var(--secondary-text-color); margin-bottom: 0.25rem; }
+        .field input, .field textarea, .field select { width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-family: inherit; font-size: 0.9rem; box-sizing: border-box; }
+        .field input:focus, .field textarea:focus { border-color: var(--link-normal); outline: none; }
+        .field textarea { resize: vertical; min-height: 150px; }
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .type-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 1.5rem; }
+        .type-btn { padding: 0.75rem 0.5rem; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); cursor: pointer; font-size: 0.8rem; transition: all 0.15s; text-align: center; }
+        .type-btn:hover { border-color: var(--link-normal); color: var(--link-normal); }
+        .type-btn.selected { border-color: var(--link-normal); background: var(--link-normal); color: #fff; }
+        .type-btn input { display: none; }
+        .type-label { font-weight: 600; display: block; }
+        .type-desc { font-size: 0.7rem; color: var(--secondary-text-color); margin-top: 0.25rem; }
+        .type-btn.selected .type-desc { color: rgba(255,255,255,0.8); }
+        .hidden { display: none; }
+        .link-fields, .project-fields { margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border-color); }
+        .field-row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+        .preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .preview-toggle { background: none; border: 1px solid var(--border-color); color: var(--link-normal); padding: 0.25rem 0.5rem; cursor: pointer; font-size: 0.75rem; }
+        .preview-toggle:hover { background: var(--border-color); }
+        .preview-box { border: 1px solid var(--border-color); padding: 1rem; min-height: 150px; background: var(--code-bg-color); margin-top: 0.5rem; }
+        .preview-box.hidden { display: none; }
+        .link-preview { border: 1px solid var(--border-color); padding: 1rem; margin-top: 0.5rem; background: var(--code-bg-color); }
+        .link-preview.hidden { display: none; }
+        .link-preview-grid { display: grid; grid-template-columns: 100px 1fr; gap: 1rem; }
+        .link-preview-img { width: 100px; height: 75px; object-fit: cover; border-radius: 4px; }
+        .link-preview-placeholder { width: 100px; height: 75px; background: var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--secondary-text-color); }
+        .link-meta { font-size: 0.8rem; }
+        .link-meta .source { color: var(--link-normal); }
+        .link-meta .desc { color: var(--secondary-text-color); margin-top: 0.25rem; }
+        .btn-row { display: flex; gap: 0.5rem; margin-top: 1rem; }
+        .btn { padding: 0.75rem 1.5rem; border: 1px solid var(--border-color); cursor: pointer; font-size: 0.85rem; font-family: inherit; transition: all 0.15s; }
+        .btn-primary { background: var(--link-normal); color: #fff; border-color: var(--link-normal); }
+        .btn-primary:hover { background: var(--link-hover); border-color: var(--link-hover); }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-secondary { background: var(--bg-color); color: var(--text-color); }
+        .btn-secondary:hover { background: var(--border-color); }
+        .btn-fetch { background: var(--link-normal); color: #fff; border-color: var(--link-normal); padding: 0.5rem 0.75rem; white-space: nowrap; }
+        .btn-fetch:hover { background: var(--link-hover); }
+        .btn-fetch:disabled { opacity: 0.6; }
+        .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid transparent; border-top-color: currentColor; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 0.25rem; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .error-border { border-color: #e53e3e !important; }
+        .toast { position: fixed; bottom: 20px; right: 20px; padding: 0.75rem 1rem; background: var(--text-color); color: var(--bg-color); font-size: 0.85rem; z-index: 1000; animation: toastIn 0.2s ease; }
+        .toast.hidden { display: none; }
+        .toast.error { background: #e53e3e; color: #fff; }
+        .toast.success { background: #38a169; color: #fff; }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } }
+        .slug-preview { font-size: 0.75rem; color: var(--secondary-text-color); margin-top: 0.25rem; }
+        .section-num { display: inline-block; width: 1.5rem; height: 1.5rem; line-height: 1.5rem; text-align: center; border-radius: 50%; background: var(--link-normal); color: #fff; font-size: 0.75rem; margin-right: 0.5rem; }
+    </style>
+</head>
+<body>
+    <header class="header">
+  <a class="site-title" href="/" aria-label="Meet Gor - Home">Meet Gor</a>
+  <nav class="site-nav">
+    <ul>
+      <li><a href="/" aria-label="Home">Home</a></li>
+      <li><a href="/posts" aria-label="Posts">Posts</a></li>
+      <li><a href="/all-content" aria-label="All Content">All Content</a></li>
+      <li><a href="/about" aria-label="About">About</a></li>
+      <li><a href="/now" aria-label="Now">Now</a></li>
+      <li><a href="/contact" aria-label="Contact">Contact</a></li>
+    </ul>
+  </nav>
+  <form class="site-search" action="/search" method="get" role="search" onsubmit="addPageContextToSearch(event)">
+    <label class="visually-hidden" for="site-search-input">Search</label>
+    <input id="site-search-input" name="q" type="search" placeholder="Search..." autocomplete="off">
+    <input type="hidden" id="has-posts-input" name="context" value="">
+  </form>
+  <script>
+    function addPageContextToSearch(event) {
+      
+      const hasPostsOnPage = document.querySelectorAll('[data-search-entry]').length > 0;
+      const contextInput = document.getElementById('has-posts-input');
+      contextInput.value = hasPostsOnPage ? 'page' : 'full';
+    }
+  </script>
+  <div class="theme-switch">
+    <input type="checkbox" id="theme-toggle" aria-label="Toggle Theme">
+    <label for="theme-toggle"></label>
+  </div>
+  
+</header>
+
+    
+    <main class="editor-container">
+        <h1 style="font-size: 1.5rem; margin-bottom: 1.5rem;">Create Post</h1>
+
+        <div class="section">
+            <h2><span class="section-num">1</span>Post Type</h2>
+            <div class="type-grid">
+                <label class="type-btn selected" data-type="posts">
+                    <input type="radio" name="postType" value="posts" checked>
+                    <span class="type-label">Posts</span>
+                    <span class="type-desc">Long-form content</span>
+                </label>
+                <label class="type-btn" data-type="til">
+                    <input type="radio" name="postType" value="til">
+                    <span class="type-label">TIL</span>
+                    <span class="type-desc">Quick tips</span>
+                </label>
+                <label class="type-btn" data-type="links">
+                    <input type="radio" name="postType" value="links">
+                    <span class="type-label">Links</span>
+                    <span class="type-desc">External finds</span>
+                </label>
+                <label class="type-btn" data-type="projects">
+                    <input type="radio" name="postType" value="projects">
+                    <span class="type-label">Projects</span>
+                    <span class="type-desc">Showcase work</span>
+                </label>
+            </div>
+
+            <div class="field">
+                <label for="title">Title *</label>
+                <input type="text" id="title" required placeholder="Post title">
+                <div id="slugPreview" class="slug-preview"></div>
+            </div>
+
+            <div id="linkFields" class="link-fields hidden">
+                <div class="field">
+                    <label for="linkUrl">URL *</label>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="url" id="linkUrl" placeholder="https://..." style="flex: 1;">
+                        <button type="button" id="fetchBtn" class="btn-fetch" onclick="fetchMetadata()">
+                            <span class="btn-text">Fetch</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="linkPreview" class="link-preview hidden">
+                    <div class="link-preview-grid">
+                        <div>
+                            <img id="previewImage" class="link-preview-img hidden" alt="">
+                            <div id="imagePlaceholder" class="link-preview-placeholder">--</div>
+                        </div>
+                        <div class="link-meta">
+                            <div class="source" id="previewSource">-</div>
+                            <div class="desc" id="previewDescription">-</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="commentary">Commentary (optional)</label>
+                    <textarea id="commentary" rows="2" placeholder="What did you learn or find interesting?"></textarea>
+                </div>
+            </div>
+
+            <div id="projectFields" class="project-fields hidden">
+                <div class="field-row-3">
+                    <div class="field">
+                        <label for="githubLink">GitHub URL</label>
+                        <input type="url" id="githubLink" placeholder="https://github.com/...">
+                    </div>
+                    <div class="field">
+                        <label for="liveLink">Live Demo</label>
+                        <input type="url" id="liveLink" placeholder="https://...">
+                    </div>
+                    <div class="field">
+                        <label for="docsLink">Docs</label>
+                        <input type="url" id="docsLink" placeholder="https://...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label for="postDate">Date</label>
+                    <input type="date" id="postDate">
+                </div>
+                <div class="field">
+                    <label for="tags">Tags</label>
+                    <input type="text" id="tags" placeholder="golang, tutorial">
+                    <div style="font-size: 0.7rem; color: var(--secondary-text-color); margin-top: 0.25rem;">Comma-separated</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="contentSection" class="section">
+            <h2>
+                <span class="section-num">2</span>Content
+                <button type="button" class="preview-toggle" onclick="togglePreview()" style="float: right; margin-left: auto;">Show Preview</button>
+            </h2>
+            <textarea id="content" rows="12" placeholder="Write your content in Markdown..."></textarea>
+            <div id="markdownPreview" class="preview-box hidden"></div>
+        </div>
+
+        <div class="section">
+            <h2><span class="section-num">3</span>Authentication</h2>
+            <div class="field-row">
+                <div class="field">
+                    <label for="username">Username *</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="field">
+                    <label for="password">Password *</label>
+                    <input type="password" id="password" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-row">
+            <button type="submit" form="postForm" class="btn btn-primary" id="submitBtn">Publish</button>
+            <button type="button" class="btn btn-secondary" onclick="saveDraft()">Save Draft</button>
+        </div>
+
+        <form id="postForm" style="display: none;"></form>
+    </main>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <div class="footer-top">
+      <p>&copy; Meet Gor. All rights reserved.</p>
+      <div class="social-links">
+        <a href="/contact" aria-label="Connect with me">Connect with me</a>
+      </div>
+    </div>
+    
+    <div class="footer-archive">
+      <span class="footer-label">Archive</span>
+      <div class="year-links">
+        
+          <a href="/2026">2026</a>
+        
+          <a href="/2025">2025</a>
+        
+          <a href="/2024">2024</a>
+        
+          <a href="/2023">2023</a>
+        
+          <a href="/2022">2022</a>
+        
+          <a href="/2021">2021</a>
+        
+      </div>
+    </div>
+    
+  </div>
+</footer>
+<script src="/theme.js"></script>
+
+
+    <script>
+        let currentPostType = 'posts';
+        let previewVisible = false;
+
+        function previewSlugBase(type) {
+            const normalized = type === 'blog' ? 'posts' : type;
+            return '/' + (normalized || 'posts') + '/';
+        }
+
+        document.getElementById('postDate').valueAsDate = new Date();
+
+        document.querySelectorAll('.type-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                currentPostType = btn.dataset.type === 'blog' ? 'posts' : btn.dataset.type;
+                document.getElementById('linkFields').classList.toggle('hidden', currentPostType !== 'links');
+                document.getElementById('projectFields').classList.toggle('hidden', currentPostType !== 'projects');
+                document.getElementById('contentSection').classList.toggle('hidden', currentPostType === 'links');
+                document.getElementById('title').dispatchEvent(new Event('input'));
+            });
+        });
+
+        document.getElementById('title').addEventListener('input', function() {
+            const slug = this.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+            document.getElementById('slugPreview').textContent = slug ? previewSlugBase(currentPostType) + slug : '';
+        });
+
+        function togglePreview() {
+            previewVisible = !previewVisible;
+            const preview = document.getElementById('markdownPreview');
+            const toggle = document.querySelector('.preview-toggle');
+            if (previewVisible) {
+                const raw = document.getElementById('content').value;
+                preview.innerHTML = DOMPurify.sanitize(marked.parse(raw || '<em>Preview will appear here...</em>'));
+                preview.classList.remove('hidden');
+                toggle.textContent = 'Hide Preview';
+            } else {
+                preview.classList.add('hidden');
+                toggle.textContent = 'Show Preview';
+            }
+        }
+
+        document.getElementById('content').addEventListener('input', function() {
+            if (previewVisible) {
+                document.getElementById('markdownPreview').innerHTML = DOMPurify.sanitize(marked.parse(this.value || '<em>Preview will appear here...</em>'));
+            }
+        });
+
+        async function fetchMetadata() {
+            const url = document.getElementById('linkUrl').value;
+            if (!url) { showToast('Enter a URL first', 'error'); return; }
+            const btn = document.getElementById('fetchBtn');
+            btn.disabled = true;
+            btn.querySelector('.btn-text').textContent = '...';
+            try {
+                const resp = await fetch('/.netlify/functions/metadata', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                if (!resp.ok) throw new Error('Failed to fetch');
+                const data = await resp.json();
+                if (data.error) throw new Error(data.error);
+                if (!document.getElementById('title').value && data.title) {
+                    document.getElementById('title').value = data.title;
+                    document.getElementById('title').dispatchEvent(new Event('input'));
+                }
+                document.getElementById('previewSource').textContent = data.source || '-';
+                document.getElementById('previewDescription').textContent = data.description || '-';
+                if (data.image) {
+                    document.getElementById('previewImage').src = data.image;
+                    document.getElementById('previewImage').classList.remove('hidden');
+                    document.getElementById('imagePlaceholder').classList.add('hidden');
+                } else {
+                    document.getElementById('previewImage').classList.add('hidden');
+                    document.getElementById('imagePlaceholder').classList.remove('hidden');
+                }
+                document.getElementById('linkPreview').classList.remove('hidden');
+                showToast('Metadata fetched', 'success');
+            } catch (e) {
+                showToast('Could not fetch metadata', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.querySelector('.btn-text').textContent = 'Fetch';
+            }
+        }
+
+        function showToast(msg, type) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast ' + type;
+            setTimeout(() => t.classList.add('hidden'), 3000);
+        }
+
+        document.getElementById('postForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            await submitPost();
+        });
+
+        function clearErrors() {
+            document.querySelectorAll('.error-border').forEach(el => el.classList.remove('error-border'));
+        }
+        document.querySelectorAll('#title, #content, #username, #password, #linkUrl').forEach(el => {
+            el.addEventListener('input', () => el.classList.remove('error-border'));
+        });
+
+        function setLoading(loading) {
+            document.querySelectorAll('#postForm input, #postForm textarea, .btn-primary, .btn-secondary, .btn-fetch').forEach(el => el.disabled = loading);
+            const btn = document.getElementById('submitBtn');
+            if (loading) {
+                btn.dataset.text = btn.textContent;
+                btn.innerHTML = '<span class="spinner"></span>Publishing...';
+            } else {
+                btn.textContent = btn.dataset.text || 'Publish';
+            }
+        }
+
+        async function submitPost() {
+            clearErrors();
+            const errors = [];
+            const title = document.getElementById('title').value.trim();
+            const content = document.getElementById('content').value.trim();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!title) { errors.push('Title required'); document.getElementById('title').classList.add('error-border'); }
+            if (currentPostType !== 'links' && !content) { errors.push('Content required'); document.getElementById('content').classList.add('error-border'); }
+            if (!username) { errors.push('Username required'); document.getElementById('username').classList.add('error-border'); }
+            if (!password) { errors.push('Password required'); document.getElementById('password').classList.add('error-border'); }
+            if (currentPostType === 'links' && !document.getElementById('linkUrl').value.trim()) {
+                errors.push('URL required'); document.getElementById('linkUrl').classList.add('error-border');
+            }
+            if (errors.length) { showToast(errors[0], 'error'); return; }
+
+            setLoading(true);
+            const metadata = { type: currentPostType, date: document.getElementById('postDate').value ? new Date(document.getElementById('postDate').value).toISOString() : new Date().toISOString() };
+            const tags = document.getElementById('tags').value;
+            if (tags) metadata.tags = tags.split(',').map(t => t.trim()).filter(t => t);
+            if (currentPostType === 'links') {
+                const u = document.getElementById('linkUrl').value; if (u) metadata.link = u;
+                const img = document.getElementById('previewImage').src; if (img) metadata.image_url = img;
+                const c = document.getElementById('commentary').value; if (c) metadata.commentary = c;
+            }
+            if (currentPostType === 'projects') {
+                const gh = document.getElementById('githubLink').value; if (gh) metadata.github_link = gh;
+                const live = document.getElementById('liveLink').value; if (live) metadata.live_link = live;
+                const docs = document.getElementById('docsLink').value; if (docs) metadata.docs_link = docs;
+            }
+
+            const body = currentPostType === 'links' ? '' : content;
+
+            try {
+                const resp = await fetch("https:\/\/devmeetgor.netlify.app/.netlify/functions/posts", {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, body, metadata, username, password })
+                });
+                const data = await resp.json().catch(() => ({}));
+                if (!resp.ok) throw new Error(data.error || 'Failed to publish');
+                showToast('Post published', 'success');
+                localStorage.removeItem('postDraft');
+                setTimeout(() => window.location.reload(), 1500);
+            } catch (e) {
+                showToast(e.message, 'error');
+                setLoading(false);
+            }
+        }
+
+        function saveDraft() {
+            localStorage.setItem('postDraft', JSON.stringify({
+                type: currentPostType, title: document.getElementById('title').value,
+                content: document.getElementById('content').value, tags: document.getElementById('tags').value,
+                savedAt: new Date().toISOString()
+            }));
+            showToast('Draft saved', 'success');
+        }
+
+        const draft = localStorage.getItem('postDraft');
+        if (draft) {
+            try {
+                const d = JSON.parse(draft);
+                const draftType = d.type === 'blog' ? 'posts' : (d.type || 'posts');
+                if (confirm('Load draft from ' + new Date(d.savedAt).toLocaleDateString() + '?')) {
+                    document.querySelectorAll('.type-btn').forEach(b => {
+                        b.classList.toggle('selected', b.dataset.type === draftType);
+                    });
+                    currentPostType = draftType;
+                    document.getElementById('linkFields').classList.toggle('hidden', currentPostType !== 'links');
+                    document.getElementById('projectFields').classList.toggle('hidden', currentPostType !== 'projects');
+                    document.getElementById('title').value = d.title || '';
+                    document.getElementById('content').value = d.content || '';
+                    document.getElementById('tags').value = d.tags || '';
+                    document.getElementById('slugPreview').textContent = document.getElementById('title').value
+                        ? previewSlugBase(currentPostType) + document.getElementById('title').value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+                        : '';
+                }
+            } catch (e) {}
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                const saved = localStorage.getItem('theme');
+                if (saved === 'secondary') {
+                    document.body.classList.add('secondary-theme');
+                    themeToggle.checked = true;
+                }
+                themeToggle.addEventListener('change', () => {
+                    if (themeToggle.checked) {
+                        document.body.classList.add('secondary-theme');
+                        localStorage.setItem('theme', 'secondary');
+                    } else {
+                        document.body.classList.remove('secondary-theme');
+                        localStorage.setItem('theme', 'default');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
