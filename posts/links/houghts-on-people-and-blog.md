@@ -1,4 +1,6 @@
 ---
+date: 2026-05-22
+title: "houghts on people and blog"
 newsletter: techstructive-weekly-95
 hash: 18d44249dac9a54c8611324aa539670fb830aa98015e1cdcd57efb9131c9663b
 source: newsletter
@@ -9,8 +11,6 @@ slug: houghts-on-people-and-blog
 link: "https://afranca.com.br/thoughts-on-people-and-blogs/"
 tags: 
 description: "Independent projects only survive if we make them happen. Responding to Manu Moreale’s honest reflection on the struggle of \"People & Blogs\"."
-date: 2026-05-22
-title: "houghts on people and blog"
 ---
 My thoughts on [houghts on people and blog](https://afranca.com.br/thoughts-on-people-and-blogs/): houghts on people and blog
 

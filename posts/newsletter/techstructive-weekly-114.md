@@ -8,8 +8,8 @@ source: newsletter
 canonical_url: https://techstructively.substack.com/p/techstructive-weekly-114
 description: "Reading books, understanding architecture than code, agentically evaluating reports, among the other things thought and learnt in the week from 4th October to 10th October 2026"
 tags: ["newsletter", "substack"]
+hash: 66dfd32ae5b74faf3beccefabfb42195d4cbd366c108cf7483a9a4b9a31e114b
 ---
-
 ## Week #114
 
 It was a great week. I am saying this after a while I must admit. It was a review week, so of course it has to be great. Six months before I might have not thought about this, but I backed myself and kept pushing, day in and day out. This year has to be one where I really understand consistency and its payoff. Uncertainty cannot be avoided, but can be overcome by keeping yourself aligned and pushing towards a greater good no matter what. I am grateful then ever to be able to live such a life. What a time to be alive, and also what a time to not rest!

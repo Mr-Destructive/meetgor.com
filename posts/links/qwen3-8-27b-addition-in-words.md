@@ -1,16 +1,16 @@
 ---
-title: "Qwen3.8 27B Addition in words"
-date: 2026-10-09
-link: "https://simonwillison.net/2026/Oct/4/qwen38-addition-in-words/"
 status: published
-image_url: "https://static.simonwillison.net/static/2026/qwen-words-no-reasoning.webp"
 source: newsletter
 newsletter: techstructive-weekly-114
 type: links
 slug: qwen3-8-27b-addition-in-words
-tags:
+tags: 
+title: "Qwen3.8 27B Addition in words"
+image_url: "https://static.simonwillison.net/static/2026/qwen-words-no-reasoning.webp"
 description: "A benchmark tested whether the local `Qwen3.8-27B-Q4_K_M.gguf` model could add positive integers and express exact results solely in English words, using 5,070 reasoning-disabled cases and a paired 169-case comparison with …"
-hash: 5e0f9a45a7c7d913e92f651412b94002ef6fffdf077ebf547d0a68f5aae159ef
+hash: c4f2e226425954848232c864238f2123f7dd9c3ebeffb964006119f09d037b9e
+date: 2026-10-09
+link: "https://simonwillison.net/2026/Oct/4/qwen38-addition-in-words/"
 ---
 My thoughts on [Qwen3.8 27B Addition in words](https://simonwillison.net/2026/Oct/4/qwen38-addition-in-words/): Qwen3.8 27B Addition in words
 

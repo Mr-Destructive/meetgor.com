@@ -1,16 +1,16 @@
 ---
-title: "The paradox of efficiency, AI and science by Terence Tao"
 date: 2026-10-09
 link: "https://youtu.be/svl_1upFpQo"
-status: published
 image_url: "https://i.ytimg.com/vi/svl_1upFpQo/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-114
+hash: a65f51978cd2e13e47af6ab3d66b69dee555000886f5b2935d5178b6d61d9494
+title: "The paradox of efficiency, AI and science by Terence Tao"
+status: published
 type: links
 slug: the-paradox-of-efficiency-ai-and-science-by-terence-tao
-tags:
+tags: 
 description: "The paradox of efficiency, AI and science by Terence Tao"
-hash: e049c62a8f704c9633e6fc521599c025056996b7cbfa32002b222978b833a529
 ---
 My thoughts on [The paradox of efficiency, AI and science by Terence Tao](https://youtu.be/svl_1upFpQo): The paradox of efficiency, AI and science by Terence Tao
 

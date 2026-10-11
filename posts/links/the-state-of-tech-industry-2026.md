@@ -1,16 +1,16 @@
 ---
-title: "The state of tech industry 2026"
-date: 2026-10-09
-link: "https://youtu.be/Ru99FGJ_yuE"
-status: published
 image_url: "https://i.ytimg.com/vi/Ru99FGJ_yuE/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-114
 type: links
-slug: the-state-of-tech-industry-2026
-tags:
 description: "The state of tech industry 2026"
-hash: a25f7bda8ddb66c7ae60ecc36b8ed7d32c70fc810610bf49902d299ce334d34c
+hash: c4db836e6d71d32cb59a445c18f4f9bc9a510ae9d679c6a8dfd6ef9a9204b09b
+title: "The state of tech industry 2026"
+link: "https://youtu.be/Ru99FGJ_yuE"
+status: published
+slug: the-state-of-tech-industry-2026
+tags: 
+date: 2026-10-09
 ---
 My thoughts on [The state of tech industry 2026](https://youtu.be/Ru99FGJ_yuE): The state of tech industry 2026
 

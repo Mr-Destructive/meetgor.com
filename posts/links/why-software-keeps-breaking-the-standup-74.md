@@ -2,15 +2,15 @@
 title: "Why Software keeps breaking, the Standup 74"
 date: 2026-10-09
 link: "https://youtu.be/GmHWJwDMVAY"
+tags: 
+description: "Why Software keeps breaking, the Standup 74"
 status: published
 image_url: "https://i.ytimg.com/vi/GmHWJwDMVAY/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-114
 type: links
 slug: why-software-keeps-breaking-the-standup-74
-tags:
-description: "Why Software keeps breaking, the Standup 74"
-hash: a60cc770c6c215e9acb2637e181171865f1928c5d1a2bd031362c961976b6bbf
+hash: 4d26e4245e4d9d7b8c6955fb49da2221a15a3f5511a21ef45c2983ec3f70b2ad
 ---
 My thoughts on [Why Software keeps breaking, the Standup 74](https://youtu.be/GmHWJwDMVAY): Why Software keeps breaking, the Standup 74
 
