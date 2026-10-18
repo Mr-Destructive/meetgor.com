@@ -1,16 +1,16 @@
 ---
+type: links
+slug: the-emperor-pelican-has-no-clothes
+hash: 344a2f551fb3c9e69fb7ae7d88dcfb923ea25ef9353321080a39f2cbea1735ad
+image_url: "https://arcfu.com/post/the-emperor-pelican-has-no-clothes/diverse-grid.png"
+source: newsletter
+newsletter: techstructive-weekly-115
+tags: 
+description: "Why do LLM pelicans look so alike? A visual look at diversity collapse and our research on creativity in UI design."
 title: "The Emperor Pelican has no clothes"
 date: 2026-10-16
 link: "https://arcfu.com/post/the-emperor-pelican-has-no-clothes/"
 status: published
-image_url: "https://arcfu.com/post/the-emperor-pelican-has-no-clothes/diverse-grid.png"
-source: newsletter
-newsletter: techstructive-weekly-115
-type: links
-slug: the-emperor-pelican-has-no-clothes
-tags:
-description: "Why do LLM pelicans look so alike? A visual look at diversity collapse and our research on creativity in UI design."
-hash: 59b60b7994f7884ece661b2e7655d27051bf643f0cf8504b0958b53fce408416
 ---
 My thoughts on [The Emperor Pelican has no clothes](https://arcfu.com/post/the-emperor-pelican-has-no-clothes/): The Emperor Pelican has no clothes
 

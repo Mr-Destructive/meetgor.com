@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #115"
 date: 2026-10-16
 slug: techstructive-weekly-115
 type: newsletter
-status: published
-source: newsletter
 canonical_url: https://techstructively.substack.com/p/techstructive-weekly-115
 description: "Reading watching the tech world come back with thinking about AI, among the other things learnt and observed in the week of 11th to 17th October 2026"
+hash: b9d0cdf9ee306bcea8b7842c2c6b2f6688ebf2a1fd5b83d10c5d3274d63dd41c
+title: "Techstructive Weekly #115"
+status: published
+source: newsletter
 tags: ["newsletter", "substack"]
 ---
-
 ## Week #115
 
 Its Navratri this week and the coming week. Its a good time to be alive actually. The nostalgia of songs, the memories attached to it, it just makes me feel good. I decided to read “Forest of Enchantment” this week. And oh boy it is a good book. I will devour it this weekend.

@@ -1,16 +1,16 @@
 ---
+hash: 028ef754121d3aed22149022a876bc4555663a1a46fc158d818c174849df911e
+status: published
+image_url: "https://i.ytimg.com/vi/ASY_H2nLG8g/hqdefault.jpg"
+slug: talk-to-your-agent-like-a-human-by-anthropic-take-from-primeagen
+description: "Talk to your agent like a human: By Anthropic take from Primeagen"
 title: "Talk to your agent like a human: By Anthropic take from Primeagen"
 date: 2026-10-16
 link: "https://youtu.be/ASY_H2nLG8g"
-status: published
-image_url: "https://i.ytimg.com/vi/ASY_H2nLG8g/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-115
 type: links
-slug: talk-to-your-agent-like-a-human-by-anthropic-take-from-primeagen
-tags:
-description: "Talk to your agent like a human: By Anthropic take from Primeagen"
-hash: 56d9550f2abda3afb2405911de26bc55be9778c235660377309089d5d9dd3438
+tags: 
 ---
 My thoughts on [Talk to your agent like a human: By Anthropic take from Primeagen](https://youtu.be/ASY_H2nLG8g): Talk to your agent like a human: By Anthropic take from Primeagen
 

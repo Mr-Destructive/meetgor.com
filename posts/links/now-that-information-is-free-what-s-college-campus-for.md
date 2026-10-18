@@ -2,15 +2,15 @@
 title: "Now that information is free, what’s college campus for?"
 date: 2026-10-16
 link: "https://commonedge.org/now-that-information-is-free-whats-a-college-campus-for/"
-status: published
 image_url: "https://commonedge.org/wp-content/uploads/2026/10/Image-1_IILM-Gurgaon-University_Render-Courtesy-of-Gensler--1000x625.jpg"
 source: newsletter
 newsletter: techstructive-weekly-115
+status: published
 type: links
 slug: now-that-information-is-free-what-s-college-campus-for
-tags:
+tags: 
 description: "The internet and AI haven't killed the classroom. Instead, they’ve changed what university buildings can and should be used for."
-hash: 9a5ce2967b4b5bca62e2c6fd92c522f93ff5470fbfa7bf5c97d87901a649e0ac
+hash: 1d49dbb9ae854d9e25dbd65ccf5cd10753deba89239b6f18281a46c78a66b4e2
 ---
 My thoughts on [Now that information is free, what’s college campus for?](https://commonedge.org/now-that-information-is-free-whats-a-college-campus-for/): Now that information is free, what’s college campus for?
 

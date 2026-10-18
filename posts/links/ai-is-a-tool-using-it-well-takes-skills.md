@@ -1,16 +1,16 @@
 ---
 title: "AI is a tool, using it well takes skills"
-date: 2026-10-16
 link: "https://yyhh.org/blog/2026/10/ai-is-a-tool/"
 status: published
 image_url: ""
 source: newsletter
 newsletter: techstructive-weekly-115
+tags: 
+description: "A response to Rich Hickey's \"'AI' is Not a Tool\": automation and tool use can coexist, and wielding an LLM well requires skill, feedback, and judgment."
+date: 2026-10-16
 type: links
 slug: ai-is-a-tool-using-it-well-takes-skills
-tags:
-description: "A response to Rich Hickey's \"'AI' is Not a Tool\": automation and tool use can coexist, and wielding an LLM well requires skill, feedback, and judgment."
-hash: 03fd2936c5f9a9479ccd8746963a59bc3ee43073d67378c8b4cdf28677d7fa8a
+hash: d2c063edeb1719d71adb51ba32f759adc7e547c34abf973b7192aba962858109
 ---
 My thoughts on [AI is a tool, using it well takes skills](https://yyhh.org/blog/2026/10/ai-is-a-tool/): AI is a tool, using it well takes skills
 

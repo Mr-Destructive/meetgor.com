@@ -1,16 +1,16 @@
 ---
-title: "Were software engineers blue collar workers all along"
-date: 2026-10-16
 link: "https://ptrbrynt.com/posts/were-we-blue-collar-workers-all-along"
 status: published
-image_url: "https://ptrbrynt.com/social_previews/posts/were-we-blue-collar-workers-all-along.png"
 source: newsletter
 newsletter: techstructive-weekly-115
-type: links
 slug: were-software-engineers-blue-collar-workers-all-along
-tags:
+tags: 
+image_url: "https://ptrbrynt.com/social_previews/posts/were-we-blue-collar-workers-all-along.png"
+type: links
 description: "There’s a common idea among economists that you can broadly split employees into two categories. “White-collar” workers are typically people who work in offices doing service-based, knowledge-based, managerial, or administrative..."
-hash: 73e6cd1d398b34cd830bec87ac1642630462b90f4194f1ea98c31d1072fea2b9
+hash: b27c0bb7e4a9836e41a32ad98b3c4671e68d7979e94c7e64f68a4b5e34841884
+title: "Were software engineers blue collar workers all along"
+date: 2026-10-16
 ---
 My thoughts on [Were software engineers blue collar workers all along](https://ptrbrynt.com/posts/were-we-blue-collar-workers-all-along): Were software engineers blue collar workers all along
 

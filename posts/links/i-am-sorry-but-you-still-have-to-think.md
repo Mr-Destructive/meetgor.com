@@ -1,16 +1,16 @@
 ---
-title: "I am sorry but you still have to think"
-date: 2026-10-16
-link: "https://itsallaboutthebit.com/i-am-sorry-but-you-still-have-to-think/"
-status: published
-image_url: ""
 source: newsletter
-newsletter: techstructive-weekly-115
 type: links
 slug: i-am-sorry-but-you-still-have-to-think
-tags:
+title: "I am sorry but you still have to think"
+link: "https://itsallaboutthebit.com/i-am-sorry-but-you-still-have-to-think/"
+image_url: ""
+newsletter: techstructive-weekly-115
+tags: 
 description: "I am sorry but you still have to think"
-hash: 4a99b40069890161c91b6b554d0c1a69106b976f68b50236cf45255c04cee842
+hash: 950bb1b8e2cfe7e751aa79717de96c38f3e174f393da634ecaf305f3a9b4e312
+date: 2026-10-16
+status: published
 ---
 My thoughts on [I am sorry but you still have to think](https://itsallaboutthebit.com/i-am-sorry-but-you-still-have-to-think/): I am sorry but you still have to think
 
