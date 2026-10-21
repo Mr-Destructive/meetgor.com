@@ -1,8 +1,8 @@
 ---
 link: https://calv.info/openai-reflections
-status: published
 tags: 
 image_url: https://calv.info/api/og?title=Reflections%20on%20OpenAI
+status: published
 slug: reflections-on-openai
 title: Reflections on OpenAI
 type: links

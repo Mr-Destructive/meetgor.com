@@ -4,12 +4,12 @@ newsletter: 2024-09-14-techstructive-weekly-7
 date: 2024-09-14
 type: links
 hash: ff624d486cded5972eae67461c90f62d8020ba785806009efa364ca7329d6b26
-title: 'One-Year Writing Journey'
 description: 'One-Year Writing Journey'
-tags: 
 source: newsletter
-status: published
 slug: one-year-writing-journey
+title: 'One-Year Writing Journey'
+tags: 
+status: published
 ---
 ## Commentary
 
