@@ -1,16 +1,16 @@
 ---
-title: "Vector Database"
-date: 2026-10-23
-link: "https://youtu.be/Fq73E8DQprc"
-status: published
 image_url: "https://i.ytimg.com/vi/Fq73E8DQprc/hqdefault.jpg"
 source: newsletter
+slug: vector-database
+tags: 
+description: "Vector Database"
+hash: 07f9e5ce87e65aa3c30eef33e5dec8605efe980b59a95fec099a3bab543ef60a
+title: "Vector Database"
+link: "https://youtu.be/Fq73E8DQprc"
+status: published
 newsletter: techstructive-weekly-116
 type: links
-slug: vector-database
-tags:
-description: "Vector Database"
-hash: 313363a343e35696f5dc592e49ab56357a3d73733a0271b0447e8e31fe6727fc
+date: 2026-10-23
 ---
 My thoughts on [Vector Database](https://youtu.be/Fq73E8DQprc): Vector Database
 

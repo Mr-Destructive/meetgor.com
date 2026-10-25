@@ -1,16 +1,16 @@
 ---
-title: "Be more ambitious with engineering as everything is doable with agents now: Theo on Agents and models adoption in engineering"
-date: 2026-10-23
-link: "https://youtu.be/3OshsLm3_OQ"
 status: published
+tags: 
+link: "https://youtu.be/3OshsLm3_OQ"
 image_url: "https://i.ytimg.com/vi/3OshsLm3_OQ/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-116
 type: links
 slug: be-more-ambitious-with-engineering-as-everything-is-doable-with-agents-now-theo-on-agents-and-models-adoption-in-engineering
-tags:
 description: "Be more ambitious with engineering as everything is doable with agents now: Theo on Agents and models adoption in engineering"
-hash: f093fd803e364f19ea567092f1bf99d13b93433e4f4f15e6eac7a7f831c49bc6
+hash: ab392117ac84827209ef2b0b6cf619efa98ba8326dc9d020d0b35415b63fe3f8
+title: "Be more ambitious with engineering as everything is doable with agents now: Theo on Agents and models adoption in engineering"
+date: 2026-10-23
 ---
 My thoughts on [Be more ambitious with engineering as everything is doable with agents now: Theo on Agents and models adoption in engineering](https://youtu.be/3OshsLm3_OQ): Be more ambitious with engineering as everything is doable with agents now: Theo on Agents and models adoption in engineering
 

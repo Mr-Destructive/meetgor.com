@@ -1,16 +1,16 @@
 ---
-title: "Commune has an API, Substack doesn’t: API Evangelist ("
 date: 2026-10-23
 link: "https://apievangelist.com/2026/10/15/commune-has-an-api-and-substack-does-not/"
 status: published
 image_url: "https://kinlane-images.s3.amazonaws.com/apievangelist/api-evangelist-images/commune-has-an-api-and-substack-does-not.png"
+description: "My first rule for any software I use to run API Evangelist is that it must have an API. Not just because I like APIs, but so that my business can get its dat..."
+hash: da24e071090e9d1c0e13b871c23e3f8b72d0ab58352d56232b35ac77c6b0e7fd
 source: newsletter
 newsletter: techstructive-weekly-116
 type: links
 slug: commune-has-an-api-substack-doesn-t-api-evangelist
-tags:
-description: "My first rule for any software I use to run API Evangelist is that it must have an API. Not just because I like APIs, but so that my business can get its dat..."
-hash: 6614fa5001929104e77b84e35f011ca1171a10f0a6670067f109e76de597b72b
+tags: 
+title: "Commune has an API, Substack doesn’t: API Evangelist ("
 ---
 My thoughts on [Commune has an API, Substack doesn’t: API Evangelist (](https://apievangelist.com/2026/10/15/commune-has-an-api-and-substack-does-not/): Commune has an API, Substack doesn’t: API Evangelist (
 

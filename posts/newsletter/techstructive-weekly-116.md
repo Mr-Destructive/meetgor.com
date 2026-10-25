@@ -1,15 +1,15 @@
 ---
+type: newsletter
+canonical_url: https://techstructively.substack.com/p/techstructive-weekly-116
+description: "Reading and exploring the world, where AI has taken grip among the other things watched and learnt in the week from 18th to 24th October 2026"
 title: "Techstructive Weekly #116"
 date: 2026-10-23
 slug: techstructive-weekly-116
-type: newsletter
 status: published
 source: newsletter
-canonical_url: https://techstructively.substack.com/p/techstructive-weekly-116
-description: "Reading and exploring the world, where AI has taken grip among the other things watched and learnt in the week from 18th to 24th October 2026"
 tags: ["newsletter", "substack"]
+hash: 5fadf5a1c933ac330231f0e06bb802c109795823640b148579885202f33edec1
 ---
-
 ## Week #116
 
 Well, it was kind of a boring week. No collegues to talk to, everyone on leave. Sigh! But it was Dusherra week. I read and learnt a lot about Ramayana. Completed a book of Ramayana from Sita’s perspective, Sitayan, Forest of Enchantment whatever you call it. It was beautiful.

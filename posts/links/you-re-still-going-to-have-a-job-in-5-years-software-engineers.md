@@ -1,16 +1,16 @@
 ---
-title: "You’re still going to have a job in 5 years, software engineers"
 date: 2026-10-23
-link: "https://dev.fast/blog/youre-still-going-to-have-a-job-in-5-years/"
 status: published
 image_url: "https://dev.fast/og.png"
 source: newsletter
+slug: you-re-still-going-to-have-a-job-in-5-years-software-engineers
+tags: 
+hash: fdea5d5498cd392b56f9bd58440bd40bd3f0d10c1253c798640ba0c3960d73e2
+title: "You’re still going to have a job in 5 years, software engineers"
+link: "https://dev.fast/blog/youre-still-going-to-have-a-job-in-5-years/"
 newsletter: techstructive-weekly-116
 type: links
-slug: you-re-still-going-to-have-a-job-in-5-years-software-engineers
-tags:
 description: "Automating coding is not the same as automating engineering. Engineering is not solved, and it's not even close."
-hash: 734b3cc651d301d87050c1c4f918a18527ebc3d72803d3df595f60c9861bf9d3
 ---
 My thoughts on [You’re still going to have a job in 5 years, software engineers](https://dev.fast/blog/youre-still-going-to-have-a-job-in-5-years/): You’re still going to have a job in 5 years, software engineers
 

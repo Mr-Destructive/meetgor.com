@@ -1,16 +1,16 @@
 ---
 title: "I’m tired or pretending"
-date: 2026-10-23
 link: "https://youtu.be/H0HwFqBG9KE"
 status: published
 image_url: "https://i.ytimg.com/vi/H0HwFqBG9KE/hqdefault.jpg"
+slug: i-m-tired-or-pretending
+tags: 
+description: "I’m tired or pretending"
+date: 2026-10-23
 source: newsletter
 newsletter: techstructive-weekly-116
 type: links
-slug: i-m-tired-or-pretending
-tags:
-description: "I’m tired or pretending"
-hash: 76e857bb1a6cde0525c60e5718253d2b4d56e914b84dd22f0fb109ca6a11d253
+hash: 2c0911c4a786963fbffc0f2ed1ad75cea4bedf6dc84631b8aaac79d6146bd30f
 ---
 My thoughts on [I’m tired or pretending](https://youtu.be/H0HwFqBG9KE): I’m tired or pretending
 

@@ -1,16 +1,16 @@
 ---
+link: "https://www.chrisfinke.com/2026/10/22/do-we-have-a-moral-obligation-to-use-ai-to-improve-software/"
+newsletter: techstructive-weekly-116
+slug: do-we-have-a-moral-obligation-to-improve-software-with-ai
+tags: 
+description: "Do we have a moral obligation to improve software with AI"
+hash: 7ec7dee25324fb024a2269a649d3916ffe381e9e67ebcbaac14463bc71796cf8
 title: "Do we have a moral obligation to improve software with AI"
 date: 2026-10-23
-link: "https://www.chrisfinke.com/2026/10/22/do-we-have-a-moral-obligation-to-use-ai-to-improve-software/"
 status: published
 image_url: ""
 source: newsletter
-newsletter: techstructive-weekly-116
 type: links
-slug: do-we-have-a-moral-obligation-to-improve-software-with-ai
-tags:
-description: "Do we have a moral obligation to improve software with AI"
-hash: e99890df95999c1b35aa8c23009a806d8308cc3b7f4ddc0630d75c6c851885ab
 ---
 My thoughts on [Do we have a moral obligation to improve software with AI](https://www.chrisfinke.com/2026/10/22/do-we-have-a-moral-obligation-to-use-ai-to-improve-software/): Do we have a moral obligation to improve software with AI
 

@@ -1,16 +1,16 @@
 ---
+hash: 2744de3a515d326da7797fc6fa1d915cca938bcd9d02a19a35031eab6c29e4a9
 title: "Demitri Spanos on A Life Engineered Podcast about AI and changing software"
-date: 2026-10-23
 link: "https://youtu.be/DF5M5CJi9sM"
+source: newsletter
+description: "Demitri Spanos on A Life Engineered Podcast about AI and changing software"
+date: 2026-10-23
 status: published
 image_url: "https://i.ytimg.com/vi/DF5M5CJi9sM/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-116
 type: links
 slug: demitri-spanos-on-a-life-engineered-podcast-about-ai-and-changing-software
-tags:
-description: "Demitri Spanos on A Life Engineered Podcast about AI and changing software"
-hash: 16fcc019749d8f46402cdfd55f608b1ffca03e4a1c82092f34ee3ae7dd6252d8
+tags: 
 ---
 My thoughts on [Demitri Spanos on A Life Engineered Podcast about AI and changing software](https://youtu.be/DF5M5CJi9sM): Demitri Spanos on A Life Engineered Podcast about AI and changing software
 
