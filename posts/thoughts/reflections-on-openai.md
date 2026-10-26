@@ -5,8 +5,8 @@ image_url: https://calv.info/api/og?title=Reflections%20on%20OpenAI
 title: Reflections on OpenAI
 tags: 
 slug: reflections-on-openai
-link: https://calv.info/openai-reflections
 date: 2026-01-24T00:00:00Z
+link: https://calv.info/openai-reflections
 type: links
 ---
 # Reflections on OpenAI
