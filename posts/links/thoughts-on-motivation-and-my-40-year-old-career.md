@@ -1,15 +1,15 @@
 ---
-source: newsletter
-description: 'Thoughts on motivation and my 40 year-old career'
+tags: 
+type: links
+link: 'https://charity.wtf/2025/07/09/thoughts-on-motivation-and-my-40-year-career/'
+hash: 41db6293471341b9d4ecc571c8dbf691539e019bde36e6823487c3e470f9925f
 status: published
 newsletter: 2025-07-12-techstructive-weekly-50
-tags: 
 date: 2025-07-12
-type: links
 title: 'Thoughts on motivation and my 40 year-old career'
-link: 'https://charity.wtf/2025/07/09/thoughts-on-motivation-and-my-40-year-career/'
 slug: thoughts-on-motivation-and-my-40-year-old-career
-hash: 41db6293471341b9d4ecc571c8dbf691539e019bde36e6823487c3e470f9925f
+source: newsletter
+description: 'Thoughts on motivation and my 40 year-old career'
 ---
 ## Commentary
 
