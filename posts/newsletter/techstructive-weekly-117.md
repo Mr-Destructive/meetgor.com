@@ -1,15 +1,15 @@
 ---
+hash: 4e8d040863065666e54b32b2e5397b552012cf440e74fd5121dc6582dbd064ed
 title: "Techstructive Weekly #117"
 date: 2026-10-30
-slug: techstructive-weekly-117
 type: newsletter
 status: published
-source: newsletter
 canonical_url: https://techstructively.substack.com/p/techstructive-weekly-117
 description: "Reading a bit, working with agents and watching a few resourceful videos among the other things learnt in the week from 25th to 31st October 2026"
+slug: techstructive-weekly-117
+source: newsletter
 tags: ["newsletter", "substack"]
 ---
-
 ## Week #117
 
 It was a busy week after a festive week. I worked on with an agent trying to replace code with an LLM call, that was weird but there are a lot of things I can learn from that. Like setting up so that an agent can make the transition better, having the understanding of the problem and actually able to solve it. That level of skill I haven’t yet gotten. Maybe I am too narrow-minded and still working with the mindset of walking when riding a race-car right? Working with agents is like being in a race car but not able to fully use it, because we haven’t fully appreciated the normal car enough?

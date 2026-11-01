@@ -1,16 +1,16 @@
 ---
+type: links
+slug: cs50-show-with-david-malan
+tags: 
+status: published
+image_url: "https://i.ytimg.com/vi/4t23RAQNrPk/hqdefault.jpg"
+description: "CS50 Show with David Malan"
+hash: 10bf86bc69c9f7bab572cc4d29479728f211be9daf77308022ca129a2a591162
 title: "CS50 Show with David Malan"
 date: 2026-10-30
 link: "https://youtu.be/4t23RAQNrPk"
-status: published
-image_url: "https://i.ytimg.com/vi/4t23RAQNrPk/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-117
-type: links
-slug: cs50-show-with-david-malan
-tags:
-description: "CS50 Show with David Malan"
-hash: e09cf5f0cb12117820998d644c1cf0f2a17415b9cb777f339239c4787277a60e
 ---
 My thoughts on [CS50 Show with David Malan](https://youtu.be/4t23RAQNrPk): CS50 Show with David Malan
 

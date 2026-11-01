@@ -1,16 +1,16 @@
 ---
-title: "Danluu Blog: We should be more ambitious with software"
 date: 2026-10-30
 link: "https://danluu.com/ambitious/"
 status: published
+tags: 
+hash: a8dcedc412b2d37ce6a9fc8585bdfb123fca7cb3ea8d85539b8ef19962e4e162
+title: "Danluu Blog: We should be more ambitious with software"
 image_url: ""
 source: newsletter
 newsletter: techstructive-weekly-117
 type: links
 slug: danluu-blog-we-should-be-more-ambitious-with-software
-tags:
 description: "Danluu Blog: We should be more ambitious with software"
-hash: 1f2868f8ced8bbc780320da7503762282f21dd8409c7ef6f1b8cb133e6675b46
 ---
 My thoughts on [Danluu Blog: We should be more ambitious with software](https://danluu.com/ambitious/): Danluu Blog: We should be more ambitious with software
 

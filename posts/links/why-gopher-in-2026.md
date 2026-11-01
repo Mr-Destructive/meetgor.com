@@ -1,16 +1,16 @@
 ---
-title: "Why Gopher in 2026"
+status: published
+source: newsletter
+tags: 
 date: 2026-10-30
 link: "https://gopher.muffinlabs.com/sdf.org/users/nervtoji/phlog/001.txt"
-status: published
 image_url: ""
-source: newsletter
 newsletter: techstructive-weekly-117
 type: links
 slug: why-gopher-in-2026
-tags:
 description: "Why Gopher in 2026"
-hash: b5a7549ad93b4163fb5739f5c9dc2e8034cdc83d230f3bd9853bd61eb9978421
+hash: fe06cfeb8f2c41f093127101a5139b17ce475186d7d070d6161bfb9b16a6ebc1
+title: "Why Gopher in 2026"
 ---
 My thoughts on [Why Gopher in 2026](https://gopher.muffinlabs.com/sdf.org/users/nervtoji/phlog/001.txt): Why Gopher in 2026
 
