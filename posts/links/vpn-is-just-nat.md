@@ -1,16 +1,16 @@
 ---
-title: "VPN is just NAT"
-date: 2026-11-06
-link: "https://youtu.be/MCbMko4IXKw"
+newsletter: techstructive-weekly-118
+type: links
+description: "VPN is just NAT"
 status: published
 image_url: "https://i.ytimg.com/vi/MCbMko4IXKw/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-118
-type: links
 slug: vpn-is-just-nat
-tags:
-description: "VPN is just NAT"
-hash: 9b63ddc0b1145978c243bb61efb208759c2324f329217955ccbb872250a1222b
+tags: 
+hash: 936bd81dd3e9bd0f71421beb0c49f2e5c14be5cea4a87354f16d88acafddd0ba
+title: "VPN is just NAT"
+date: 2026-11-06
+link: "https://youtu.be/MCbMko4IXKw"
 ---
 My thoughts on [VPN is just NAT](https://youtu.be/MCbMko4IXKw): VPN is just NAT
 

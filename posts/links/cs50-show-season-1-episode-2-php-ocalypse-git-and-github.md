@@ -1,16 +1,16 @@
 ---
+type: links
+slug: cs50-show-season-1-episode-2-php-ocalypse-git-and-github
+hash: 2ca587e44dfd59c6015f63e00add3a02fac4ed5c1054f67292bb715a1a0030ed
 title: "CS50 Show Season 1 Episode 2: PHP-ocalypse, Git and GitHub"
 date: 2026-11-06
 link: "https://youtu.be/C_UwDG2JKBQ"
-status: published
 image_url: "https://i.ytimg.com/vi/C_UwDG2JKBQ/hqdefault.jpg"
-source: newsletter
 newsletter: techstructive-weekly-118
-type: links
-slug: cs50-show-season-1-episode-2-php-ocalypse-git-and-github
-tags:
+tags: 
 description: "CS50 Show Season 1 Episode 2: PHP-ocalypse, Git and GitHub"
-hash: f5412fd41d322430273acb11e9cf92b5e8b3c3a48252724c1404b4efeeed6142
+status: published
+source: newsletter
 ---
 My thoughts on [CS50 Show Season 1 Episode 2: PHP-ocalypse, Git and GitHub](https://youtu.be/C_UwDG2JKBQ): CS50 Show Season 1 Episode 2: PHP-ocalypse, Git and GitHub
 

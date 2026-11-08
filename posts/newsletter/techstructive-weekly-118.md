@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #118"
-date: 2026-11-06
-slug: techstructive-weekly-118
-type: newsletter
-status: published
 source: newsletter
 canonical_url: https://techstructively.substack.com/p/techstructive-weekly-118
+hash: 988e3c01ef8e564c4f1da5522ff24d4edec63e54fc3b21e8fd82c7cf758e2906
+slug: techstructive-weekly-118
 description: "Reading and watching the software industry fall into security apocalypse, among the other things learnt and observed in the week from 1st to 7th November 2026 (a perfect start month)"
 tags: ["newsletter", "substack"]
+title: "Techstructive Weekly #118"
+date: 2026-11-06
+type: newsletter
+status: published
 ---
-
 ## Week #118
 
 It was a normal week. Worked with agents to get improvements and fixes for things. I will be quick in this one, its festive time. Diwali weekend. I was busy with the cleaning and dusting and other chores the previous week, this week it will be the actual celebration, nothing much, but expecting a cheerful time with the family and friends.

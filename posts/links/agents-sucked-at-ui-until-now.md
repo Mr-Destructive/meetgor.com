@@ -1,16 +1,16 @@
 ---
-title: "Agents sucked at UI until now?"
-date: 2026-11-06
-link: "https://youtu.be/xq0eB8vxeqk"
-status: published
 image_url: "https://i.ytimg.com/vi/xq0eB8vxeqk/hqdefault.jpg"
+description: "Agents sucked at UI until now?"
+link: "https://youtu.be/xq0eB8vxeqk"
 source: newsletter
 newsletter: techstructive-weekly-118
 type: links
 slug: agents-sucked-at-ui-until-now
-tags:
-description: "Agents sucked at UI until now?"
-hash: 58433259c7a6ca77aaea8617d1cfc719aacbd9812a589e2f65ad6983921d8738
+tags: 
+hash: 8b2657757aa2034e0d7b75b86487232148e4a997980602bab529d8e86a87278e
+title: "Agents sucked at UI until now?"
+date: 2026-11-06
+status: published
 ---
 My thoughts on [Agents sucked at UI until now?](https://youtu.be/xq0eB8vxeqk): Agents sucked at UI until now?
 

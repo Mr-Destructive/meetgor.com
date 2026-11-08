@@ -1,16 +1,16 @@
 ---
-title: "Who is richer? Sonic or Mario"
-date: 2026-11-06
 link: "https://youtu.be/vCAD3W43lIk"
 status: published
 image_url: "https://i.ytimg.com/vi/vCAD3W43lIk/hqdefault.jpg"
+slug: who-is-richer-sonic-or-mario
+description: "Who is richer? Sonic or Mario"
+hash: e77e1e65af53460b58c33454e9f42c67f945a617fdf0e008b24118dd03727df4
 source: newsletter
 newsletter: techstructive-weekly-118
 type: links
-slug: who-is-richer-sonic-or-mario
-tags:
-description: "Who is richer? Sonic or Mario"
-hash: 75ab8eea4a0d1862876b4144fe5e9771fa8521f38e9ba2abec223aaa31800725
+tags: 
+title: "Who is richer? Sonic or Mario"
+date: 2026-11-06
 ---
 My thoughts on [Who is richer? Sonic or Mario](https://youtu.be/vCAD3W43lIk): Who is richer? Sonic or Mario
 
