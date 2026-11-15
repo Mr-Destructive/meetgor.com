@@ -1,16 +1,16 @@
 ---
-title: "Crypto bros are having a time now due to lack of crypto or security?"
 date: 2026-11-13
 link: "https://youtu.be/KMOyP_ArDMo"
 status: published
 image_url: "https://i.ytimg.com/vi/KMOyP_ArDMo/hqdefault.jpg"
+slug: crypto-bros-are-having-a-time-now-due-to-lack-of-crypto-or-security
+tags: 
 source: newsletter
 newsletter: techstructive-weekly-119
 type: links
-slug: crypto-bros-are-having-a-time-now-due-to-lack-of-crypto-or-security
-tags:
 description: "Crypto bros are having a time now due to lack of crypto or security?"
-hash: d4f9f5ac39132dc9ce243bac1ce2c1b35d8df51561757c14fc56f00488f8aa6e
+hash: 3eb01d8861376984f66e09bc1189705dee43d8cb9dd54eae25ff2db493a45568
+title: "Crypto bros are having a time now due to lack of crypto or security?"
 ---
 My thoughts on [Crypto bros are having a time now due to lack of crypto or security?](https://youtu.be/KMOyP_ArDMo): Crypto bros are having a time now due to lack of crypto or security?
 

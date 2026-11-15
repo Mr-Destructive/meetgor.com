@@ -1,16 +1,16 @@
 ---
 title: "Our software engineering interviews are changing a little"
-date: 2026-11-13
 link: "https://blog.janestreet.com/software-engineering-interviews-are-changing-a-little/"
 status: published
-image_url: "https://blog.janestreet.com/static/img/header.png"
 source: newsletter
-newsletter: techstructive-weekly-119
 type: links
-slug: our-software-engineering-interviews-are-changing-a-little
-tags:
+tags: 
 description: "Over the last few years, LLMs have changed how software gets built and that’s no different for us at Jane Street. Most of our engineers now use them every da..."
-hash: 2a18f9b31ded7b7d7a5731d8f3f94f2c82899ff9d9cd17ada41fdcf99de4a74c
+date: 2026-11-13
+image_url: "https://blog.janestreet.com/static/img/header.png"
+newsletter: techstructive-weekly-119
+slug: our-software-engineering-interviews-are-changing-a-little
+hash: b579885cd59db32dfecc3b58d6f2df1810ca0ffda88ca519c4b4d53bd2d29847
 ---
 My thoughts on [Our software engineering interviews are changing a little](https://blog.janestreet.com/software-engineering-interviews-are-changing-a-little/): Our software engineering interviews are changing a little
 

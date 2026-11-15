@@ -2,14 +2,14 @@
 title: "Techstructive Weekly #119"
 date: 2026-11-13
 slug: techstructive-weekly-119
+canonical_url: https://techstructively.substack.com/p/techstructive-weekly-119
+tags: ["newsletter", "substack"]
 type: newsletter
 status: published
 source: newsletter
-canonical_url: https://techstructively.substack.com/p/techstructive-weekly-119
 description: "Reading, learning and watching abut AI and the software apocalypse continues, among the other things I observed in the week from 8th to 14th November 2026"
-tags: ["newsletter", "substack"]
+hash: f6ea915b09bfd0e6e23d39016a740d5f5dbe9350330c22d8fd3422147ba5a18e
 ---
-
 ## Week #119
 
 It was a slow week. A week and weekend of Diwali. I spent some time reading and enjoying with family. Hence you will see a lot less read and watched content here this and next week too.

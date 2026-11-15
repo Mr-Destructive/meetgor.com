@@ -1,16 +1,16 @@
 ---
 title: "Engineers are gardeners now"
 date: 2026-11-13
-link: "https://youtu.be/GtJKFhztgdM"
-status: published
 image_url: "https://i.ytimg.com/vi/GtJKFhztgdM/hqdefault.jpg"
 source: newsletter
-newsletter: techstructive-weekly-119
 type: links
 slug: engineers-are-gardeners-now
-tags:
 description: "Engineers are gardeners now"
-hash: d48d823d32367d75191352eff55bd1e71c7d0446f1949b5bf989eb4ebefbe1a5
+link: "https://youtu.be/GtJKFhztgdM"
+status: published
+newsletter: techstructive-weekly-119
+tags: 
+hash: 44203662ce70a72cb40edfa80ec1b3ea0920af0db527a8678aaff98093e0a3eb
 ---
 My thoughts on [Engineers are gardeners now](https://youtu.be/GtJKFhztgdM): Engineers are gardeners now
 

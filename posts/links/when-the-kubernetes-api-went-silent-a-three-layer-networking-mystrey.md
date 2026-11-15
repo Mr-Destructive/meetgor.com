@@ -1,16 +1,16 @@
 ---
+slug: when-the-kubernetes-api-went-silent-a-three-layer-networking-mystrey
+tags: 
 title: "When the Kubernetes API went silent: A three layer networking mystrey"
 date: 2026-11-13
 link: "https://cloud.google.com/blog/products/networking/the-three-layer-gke-network-mystery"
 status: published
 image_url: "https://storage.googleapis.com/gweb-cloudblog-publish/images/Networking.max-2500x2500.jpg"
 source: newsletter
+description: "A tricky Google Cloud support ticket that spanned GKE, Private Service Connect (PSC), Networking, Hostnet, Kernel, and the Linux kernel itself."
+hash: e7758c84f3fcef4e885c3c3d83013af593c356a3c22f2212dee090cfe9641eeb
 newsletter: techstructive-weekly-119
 type: links
-slug: when-the-kubernetes-api-went-silent-a-three-layer-networking-mystrey
-tags:
-description: "A tricky Google Cloud support ticket that spanned GKE, Private Service Connect (PSC), Networking, Hostnet, Kernel, and the Linux kernel itself."
-hash: db77d153e8cfebd59d1200c772d53515dd83dc83696594d0009b608f7836b506
 ---
 My thoughts on [When the Kubernetes API went silent: A three layer networking mystrey](https://cloud.google.com/blog/products/networking/the-three-layer-gke-network-mystery): When the Kubernetes API went silent: A three layer networking mystrey
 

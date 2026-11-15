@@ -1,16 +1,16 @@
 ---
-title: "On being engineer in 2026"
-date: 2026-11-13
+tags: 
+description: "We all feel it. Every other week, we lose or delegate another part of our work to agents. It started with giving up on writing code. Then it expanded to pretty much any writing - Slack messages,…"
 link: "https://shahar.blog/2026/11/08/on-being-an-engineer-in-2026/"
-status: published
 image_url: "https://shahar.blog/images/on-being-an-engineer-in-2026.jpg"
 source: newsletter
 newsletter: techstructive-weekly-119
+hash: 28b3c3961a3beb461a7f36fdb2faaa23e23d9ea774d32c7df4fac00adeb12cd6
+title: "On being engineer in 2026"
+date: 2026-11-13
+status: published
 type: links
 slug: on-being-engineer-in-2026
-tags:
-description: "We all feel it. Every other week, we lose or delegate another part of our work to agents. It started with giving up on writing code. Then it expanded to pretty much any writing - Slack messages,…"
-hash: b308d39143e2d825eba7665f2e0b21343c543153b82ab3f171e2d8bbcfb94f0c
 ---
 My thoughts on [On being engineer in 2026](https://shahar.blog/2026/11/08/on-being-an-engineer-in-2026/): On being engineer in 2026
 
