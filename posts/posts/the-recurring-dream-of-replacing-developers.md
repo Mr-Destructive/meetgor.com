@@ -2,10 +2,10 @@
 date: 2026-01-19
 status: published
 hash: b967015d344012840ff695a3847064e3b90f6fceeb7552e88fc2dba825be1565
-tags: ["ai","developers"]
 title: "The recurring dream of replacing developers"
 type: links
 description: ""
+tags: ["ai","developers"]
 slug: the-recurring-dream-of-replacing-developers
 ---
 - what a flashback, everything makes sense.
