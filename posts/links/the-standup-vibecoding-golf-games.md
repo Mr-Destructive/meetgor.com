@@ -1,16 +1,16 @@
 ---
-title: "The Standup: Vibecoding golf games"
-date: 2026-11-20
 link: "https://youtu.be/IXoSzZbZ4jw"
-status: published
-image_url: "https://i.ytimg.com/vi/IXoSzZbZ4jw/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-120
+description: "The Standup: Vibecoding golf games"
+hash: 0262fb42031e3d1683ec0bdb7fd97e5e75bab90e72ec2debc2fadbb84bb1209e
+title: "The Standup: Vibecoding golf games"
+date: 2026-11-20
+status: published
+image_url: "https://i.ytimg.com/vi/IXoSzZbZ4jw/hqdefault.jpg"
 type: links
 slug: the-standup-vibecoding-golf-games
-tags:
-description: "The Standup: Vibecoding golf games"
-hash: f90ed53e08cc928f3f72f7b7f0957a618ab8cf094999f4fbe50f7ac57dd64249
+tags: 
 ---
 My thoughts on [The Standup: Vibecoding golf games](https://youtu.be/IXoSzZbZ4jw): The Standup: Vibecoding golf games
 

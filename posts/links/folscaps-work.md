@@ -1,16 +1,16 @@
 ---
-title: "Folscaps work"
+slug: folscaps-work
+tags: 
+description: "Foolscap uses AI to help you write, without writing for you. Foolscap does not generate text for you. Your writing is entirely yours."
 date: 2026-11-20
 link: "https://foolscap.works/"
 status: published
+newsletter: techstructive-weekly-120
+hash: bf44e80b866ef2c5fd5c58eaba85a8375122e542b9b3e2db94f2999083bfb9aa
+title: "Folscaps work"
 image_url: "https://foolscap.works/share.png?v=3"
 source: newsletter
-newsletter: techstructive-weekly-120
 type: links
-slug: folscaps-work
-tags:
-description: "Foolscap uses AI to help you write, without writing for you. Foolscap does not generate text for you. Your writing is entirely yours."
-hash: 683d04abb565040db51244247987fc724b09fee6c54c4c7bb538a89aa7f739e2
 ---
 My thoughts on [Folscaps work](https://foolscap.works/): Folscaps work
 

@@ -1,15 +1,15 @@
 ---
-title: "Techstructive Weekly #120"
 date: 2026-11-20
 slug: techstructive-weekly-120
-type: newsletter
 status: published
-source: newsletter
 canonical_url: https://techstructively.substack.com/p/techstructive-weekly-120
 description: "Read, watched and learnt about AI engineering amongst the other things while observing the choas of the internet with CVEs, RCEs discovered like crazy in the week from 15th to 21st November 2026"
 tags: ["newsletter", "substack"]
+title: "Techstructive Weekly #120"
+type: newsletter
+source: newsletter
+hash: 64651349bdc47f35546ffaea4c140224904d5d910aee2aa9d246ee03457fa685
 ---
-
 ## Week #120
 
 It was a action packed week, I mean not physical, but the drama around tech and things. Nvidia blockbusters, Outages and RCE after RCEs in major software tools and products, wierd model releases from Gemini and OpenAI, and more RCEs. This is exciting and scary too. On one hand, I feel, software development is here to stay with the slop and mess the AIs are creating, and on the other hand I am scared too by getting hit by one of the RCEs at some point. Also there is a fear that the vulnerabilities will eventually plateau and all software will be perfect? Maybe that’s a scifi possibility. But having personal agents was a fictional scene too, a year ago! It just turned tides within few months right?

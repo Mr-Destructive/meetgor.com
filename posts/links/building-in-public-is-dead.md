@@ -1,16 +1,16 @@
 ---
+status: published
+image_url: ""
+type: links
+slug: building-in-public-is-dead
+tags: 
 title: "Building in public is dead"
 date: 2026-11-20
 link: "https://pudlog.substack.com/p/is-building-in-public-dead"
-status: published
-image_url: ""
 source: newsletter
 newsletter: techstructive-weekly-120
-type: links
-slug: building-in-public-is-dead
-tags:
 description: "Building in public is dead"
-hash: a0b4a7215497b2fe4f9c4710c2aa3339afcad34e3b69ca83a27a557d5991dda1
+hash: ad00490a8e24824f094a2b6fdc7fa969aeb653b69fceb2999368115c1e8e0a35
 ---
 My thoughts on [Building in public is dead](https://pudlog.substack.com/p/is-building-in-public-dead): Building in public is dead
 

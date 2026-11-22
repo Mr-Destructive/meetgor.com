@@ -1,16 +1,16 @@
 ---
-title: "The CS50 Show: Season 1, Episode 3"
 date: 2026-11-20
-link: "https://youtu.be/KSZz4DPIj50"
 status: published
+type: links
+slug: the-cs50-show-season-1-episode-3
+tags: 
+description: "The CS50 Show: Season 1, Episode 3"
+hash: a0874eadfa74aef745abcae1bef22a749af1d4ef451419f530ff886a54e8177d
+title: "The CS50 Show: Season 1, Episode 3"
+link: "https://youtu.be/KSZz4DPIj50"
 image_url: "https://i.ytimg.com/vi/KSZz4DPIj50/hqdefault.jpg"
 source: newsletter
 newsletter: techstructive-weekly-120
-type: links
-slug: the-cs50-show-season-1-episode-3
-tags:
-description: "The CS50 Show: Season 1, Episode 3"
-hash: 272100b78c7ff3b1320dcf68005718157c3f3a677d32dc735099d88af242a4b7
 ---
 My thoughts on [The CS50 Show: Season 1, Episode 3](https://youtu.be/KSZz4DPIj50): The CS50 Show: Season 1, Episode 3
 
